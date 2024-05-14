@@ -86,7 +86,7 @@ public class GClass52
             }
 
             var str7 = gclass56.ReadStringFromDecryptedStream();
-            StartupClass.int_1 = gclass56.ReadIntFromDecryptedStream();
+            StartupClass.InitializationCount = gclass56.ReadIntFromDecryptedStream();
             int_0 = gclass56.ReadIntFromDecryptedStream();
             var s = gclass56.ReadStringFromDecryptedStream();
             if (s.Length > 0)

@@ -12,24 +12,24 @@ using Glider.Common;
 
 public class GClass3
 {
-    public NetCheckResult netCheckResult_0;
-    public string string_0;
-    public string string_1;
-    public string string_2;
+    public NetCheckResult NetworkStatus;
+    public string WarningMessage;
+    public string WarningTimestamp;
+    public string WarningDetailsUrl;
 
     public GClass3()
     {
         try
         {
-            method_0();
+            InitializeNetworkSafetyCheck();
         }
         catch (Exception ex)
         {
             GClass37.smethod_0("! Exception creating NetCheck: " + ex.Message + "\r\n" + ex.StackTrace);
-            netCheckResult_0 = NetCheckResult.Unknown;
-            string_0 = "Unable to complete NetCheck.";
-            string_1 = DateTime.Now.ToString();
-            string_2 = null;
+            NetworkStatus = NetCheckResult.Unknown;
+            WarningMessage = "Unable to complete NetCheck.";
+            WarningTimestamp = DateTime.Now.ToString();
+            WarningDetailsUrl = null;
         }
 
         GClass37.smethod_1(ToString());
@@ -37,88 +37,88 @@ public class GClass3
 
     public override string ToString()
     {
-        return "NetCheck: Result=" + netCheckResult_0 + ",LinkTo=" + string_2 + ",WarningText=" + string_0 +
-               ",WarningDate=" + string_1;
+        return "NetCheck: Result=" + NetworkStatus + ",LinkTo=" + WarningDetailsUrl + ",WarningText=" + WarningMessage +
+               ",WarningDate=" + WarningTimestamp;
     }
 
-    private void method_0()
+    private void InitializeNetworkSafetyCheck()
     {
-        netCheckResult_0 = NetCheckResult.Unknown;
-        string_0 = null;
-        string_1 = null;
-        string_2 = null;
-        var gclass56_0 = new GDataEncryptionManager(2);
-        gclass56_0.MarkAsProcessed();
-        gclass56_0.PrepareDataStream();
-        gclass56_0.SendAndReceiveData();
-        if (StartupClass.smethod_57(gclass56_0))
+        NetworkStatus = NetCheckResult.Unknown;
+        WarningMessage = null;
+        WarningTimestamp = null;
+        WarningDetailsUrl = null;
+        var dataEncryptionManager = new GDataEncryptionManager(2);
+        dataEncryptionManager.MarkAsProcessed();
+        dataEncryptionManager.PrepareDataStream();
+        dataEncryptionManager.SendAndReceiveData();
+        if (StartupClass.IsDecryptedStreamEmpty(dataEncryptionManager))
         {
             StartupClass.smethod_37(GEnum0.const_3);
-            netCheckResult_0 = NetCheckResult.Safe;
+            NetworkStatus = NetCheckResult.Safe;
         }
         else
         {
-            var str = gclass56_0.ReadStringFromDecryptedStream();
-            string_0 = gclass56_0.ReadStringFromDecryptedStream();
-            string_1 = gclass56_0.ReadStringFromDecryptedStream();
-            string_2 = gclass56_0.ReadStringFromDecryptedStream();
-            switch (str)
+            var status = dataEncryptionManager.ReadStringFromDecryptedStream();
+            WarningMessage = dataEncryptionManager.ReadStringFromDecryptedStream();
+            WarningTimestamp = dataEncryptionManager.ReadStringFromDecryptedStream();
+            WarningDetailsUrl = dataEncryptionManager.ReadStringFromDecryptedStream();
+            switch (status)
             {
                 case "Warning":
-                    netCheckResult_0 = NetCheckResult.Warning;
+                    NetworkStatus = NetCheckResult.Warning;
                     break;
                 case "Stop":
-                    netCheckResult_0 = NetCheckResult.Stop;
+                    NetworkStatus = NetCheckResult.Stop;
                     break;
                 case "Safe":
-                    netCheckResult_0 = NetCheckResult.Safe;
+                    NetworkStatus = NetCheckResult.Safe;
                     break;
                 default:
-                    throw new Exception("Unknown status in NetCheck: \"" + str + "\"");
+                    throw new Exception("Unknown status in NetCheck: \"" + status + "\"");
             }
         }
     }
     
-    public bool method_1(bool bool_0)
+    public bool ValidateNetworkSafety(bool showDialogs)
     {
-        if (netCheckResult_0 == NetCheckResult.Safe)
+        if (NetworkStatus == NetCheckResult.Safe)
             return true;
-        if (netCheckResult_0 == NetCheckResult.Unknown)
-            return !bool_0 || MessageBox.Show(null,
+        if (NetworkStatus == NetCheckResult.Unknown)
+            return !showDialogs || MessageBox.Show(null,
                 "NetCheck was unable to complete, using Glider may not be safe.  Please check your logs and Glider support forums for more information.\r\n\r\nDo you want to continue with your current action?",
                 GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes;
-        if (netCheckResult_0 == NetCheckResult.Stop)
+        if (NetworkStatus == NetCheckResult.Stop)
         {
             StartupClass.bool_7 = true;
-            if (bool_0)
-                method_2();
+            if (showDialogs)
+                TerminateWowProcesses();
             else
-                method_3();
-            var text = "Stop: " + string_1 + "\r\n\r\n" + string_0.Replace("|", "\r\n");
-            if (string_2.Length > 0)
+                StopGlider();
+            var warningText = "Stop: " + WarningTimestamp + "\r\n\r\n" + WarningMessage.Replace("|", "\r\n");
+            if (WarningDetailsUrl.Length > 0)
             {
-                if (MessageBox.Show(null, text + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.smethod_0(),
+                if (MessageBox.Show(null, warningText + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.smethod_0(),
                         MessageBoxButtons.YesNo, MessageBoxIcon.Hand) == DialogResult.Yes)
-                    Process.Start(string_2);
-                method_3();
+                    Process.Start(WarningDetailsUrl);
+                StopGlider();
                 return false;
             }
 
-            var num = (int)MessageBox.Show(null, text, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            method_3();
+            var messageBoxResult = (int)MessageBox.Show(null, warningText, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            StopGlider();
             return false;
         }
 
-        if (netCheckResult_0 == NetCheckResult.Warning)
+        if (NetworkStatus == NetCheckResult.Warning)
         {
-            if (bool_0)
+            if (showDialogs)
             {
-                var text = "Warning: " + string_1 + "\r\n\r\n" + string_0.Replace("|", "\r\n");
-                if (string_2.Length > 0)
+                var text = "Warning: " + WarningTimestamp + "\r\n\r\n" + WarningMessage.Replace("|", "\r\n");
+                if (WarningDetailsUrl.Length > 0)
                 {
                     if (MessageBox.Show(null, text + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.smethod_0(),
                             MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-                        Process.Start(string_2);
+                        Process.Start(WarningDetailsUrl);
                     return false;
                 }
 
@@ -127,13 +127,13 @@ public class GClass3
                 return false;
             }
 
-            GClass37.smethod_0("Warning from NetCheck: " + string_0);
+            GClass37.smethod_0("Warning from NetCheck: " + WarningMessage);
         }
 
         return true;
     }
 
-    public void method_2()
+    public void TerminateWowProcesses()
     {
         var gclass65 = new GClass65();
         gclass65.method_0();
@@ -142,7 +142,7 @@ public class GClass3
                 gclass66.method_0();
     }
 
-    public void method_3()
+    public void StopGlider()
     {
         if (StartupClass.gclass71_0 != null && !StartupClass.bool_33)
             StartupClass.gclass71_0.method_11();

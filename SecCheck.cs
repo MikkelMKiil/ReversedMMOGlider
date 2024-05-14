@@ -37,7 +37,7 @@ public class SecCheck : Form
     {
         if (disposing)
         {
-            StartupClass.bool_0 = false;
+            StartupClass.IsInitialized = false;
             if (container_0 != null)
             {
                 container_0.Dispose();

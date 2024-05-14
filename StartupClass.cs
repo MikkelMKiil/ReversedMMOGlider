@@ -21,16 +21,16 @@ using Microsoft.Win32;
 
 public class StartupClass
 {
-    public const string string_0 = "January 21, 2009";
-    public const string string_1 = "1.8.0";
-    public const string string_2 = "Release";
-    public const int int_0 = 6703;
-    public static bool bool_0;
-    public static bool bool_1;
-    public static SecCheck secCheck_0;
-    public static int int_1 = 0;
+    public const string releaseDate = "January 21, 2009";
+    public const string versionNumber = "1.8.0";
+    public const string releaseType = "Release";
+    public const int releaseId = 6703;
+    public static bool IsInitialized;
+    public static bool IsSecCheckEnabled;
+    public static SecCheck SecurityCheckInstance;
+    public static int InitializationCount = 0;
 
-    public static string[] classes_string = new string[10]
+    public static string[] ClassesString = new string[10]
     {
         "Deathknight",
         "Druid",
@@ -246,7 +246,7 @@ public class StartupClass
             }
 
             if (GClass61.gclass61_0.method_5("AllowNetCheck") && !bool_2)
-                new GClass3().method_1(true);
+                new GClass3().ValidateNetworkSafety(true);
             if (GClass61.gclass61_0.method_2("LastProfile") != null)
             {
                 smethod_1(GClass61.gclass61_0.method_2("LastProfile"));
@@ -592,7 +592,7 @@ public class StartupClass
         bool_27 = true;
         ginterface0_0.imethod_0();
         bool_15 = false;
-        if (bool_1)
+        if (IsSecCheckEnabled)
             return;
         smethod_61();
     }
@@ -892,7 +892,7 @@ public class StartupClass
             return false;
         }
 
-        if (GClass61.gclass61_0.method_5("AllowNetCheck") && !new GClass3().method_1(true))
+        if (GClass61.gclass61_0.method_5("AllowNetCheck") && !new GClass3().ValidateNetworkSafety(true))
             return false;
         if (glideMode_0 != GlideMode.None)
         {
@@ -1230,7 +1230,7 @@ public class StartupClass
             gspellTimer_2.Reset();
             var gclass3 = new GClass3();
             if (GClass61.gclass61_0.method_5("AllowNetCheck"))
-                gclass3.method_1(false);
+                gclass3.ValidateNetworkSafety(false);
         }
 
         if (gspellTimer_0.IsReady)
@@ -1559,23 +1559,23 @@ public class StartupClass
         }
     }
 
-    public static bool smethod_57(GDataEncryptionManager gclass56_0)
+    public static bool IsDecryptedStreamEmpty(GDataEncryptionManager gclass56_0)
     {
         return gclass56_0.ReadIntFromDecryptedStream() == 0;
     }
 
     public static void smethod_58()
     {
-        if (bool_0)
+        if (IsInitialized)
         {
-            secCheck_0.Focus();
-            secCheck_0.method_0();
+            SecurityCheckInstance.Focus();
+            SecurityCheckInstance.method_0();
         }
         else
         {
-            bool_0 = true;
-            secCheck_0 = new SecCheck();
-            secCheck_0.Show();
+            IsInitialized = true;
+            SecurityCheckInstance = new SecCheck();
+            SecurityCheckInstance.Show();
             GClass61.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
             GClass61.gclass61_0.method_8();
         }
@@ -1607,8 +1607,8 @@ public class StartupClass
 
     private static void smethod_61()
     {
-        bool_1 = true;
-        if (int.Parse("1.8.0".Replace(".", "")) >= int_1)
+        IsSecCheckEnabled = true;
+        if (int.Parse("1.8.0".Replace(".", "")) >= InitializationCount)
             return;
         if (GClass61.gclass61_0.method_5("NoVersionPop"))
         {

@@ -193,7 +193,7 @@ public class GClass16
                     method_18(byte_1);
                 var gclass56_0 = method_9(3, "", byte_1);
                 gclass56_0.SendAndReceiveData();
-                if (StartupClass.smethod_57(gclass56_0))
+                if (StartupClass.IsDecryptedStreamEmpty(gclass56_0))
                 {
                     gclass71_0.method_30();
                     flag1 = true;
