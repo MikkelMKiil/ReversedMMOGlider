@@ -13,8 +13,8 @@ public class GClass38
 {
     private const int int_0 = 8;
     public bool bool_0;
-    public GClass43 gclass43_0;
-    public GClass43 gclass43_1;
+    public OffsetManager gclass43_0;
+    public OffsetManager gclass43_1;
     public int int_1;
     public SortedList sortedList_0;
 
@@ -41,7 +41,7 @@ public class GClass38
         }
 
         var num1 = (int)sortedList_0[string_0] - 1;
-        var num2 = StartupClass.gclass43_0.method_1("PLAYER_FIELD_INV_SLOT_HEAD");
+        var num2 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD");
         return GProcessMemoryManipulator.smethod_12(GPlayerSelf.Me.StorageAddress + num2 + num1 * 8, "Equipped/" + string_0);
     }
 
@@ -56,7 +56,7 @@ public class GClass38
         Logger.smethod_1("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
         for (var index = 0; index < 8; ++index)
         {
-            var num = StartupClass.gclass43_3.method_1("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
+            var num = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
             var int_2 = GProcessMemoryManipulator.smethod_11(gobject_0.StorageAddress + num, "EnchantID");
             if (int_2 > 0)
             {
@@ -102,11 +102,11 @@ public class GClass38
     public GClass39[] method_4()
     {
         var list_0 = new List<GClass39>();
-        var int_4_1 = StartupClass.gclass43_0.method_1("PLAYER_FIELD_PACK_SLOT_1");
+        var int_4_1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_PACK_SLOT_1");
         method_5(list_0, GPlayerSelf.Me.StorageAddress, 16, int_4_1);
         for (var index = 1; index < 5; ++index)
         {
-            var num = StartupClass.gclass43_0.method_1("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
+            var num = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
             var GUID = GProcessMemoryManipulator.smethod_12(GPlayerSelf.Me.StorageAddress + num, "BagGuid1");
             if (GUID != 0L)
             {
@@ -118,9 +118,9 @@ public class GClass38
                 else
                 {
                     var int_3 = GProcessMemoryManipulator.smethod_11(
-                        gobject.StorageAddress + StartupClass.gclass43_4.method_1("CONTAINER_FIELD_NUM_SLOTS"),
+                        gobject.StorageAddress + StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_NUM_SLOTS"),
                         "NumSlots");
-                    var int_4_2 = StartupClass.gclass43_4.method_1("CONTAINER_FIELD_SLOT_1");
+                    var int_4_2 = StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
                     method_5(list_0, gobject.StorageAddress, int_3, int_4_2);
                 }
             }
@@ -145,7 +145,7 @@ public class GClass38
                 else
                 {
                     var int_1 = GProcessMemoryManipulator.smethod_11(
-                        gobject.StorageAddress + StartupClass.gclass43_3.method_1("OBJECT_FIELD_ENTRY"), "ItemEntry");
+                        gobject.StorageAddress + StartupClass.gclass43_3.GetOffsetValue("OBJECT_FIELD_ENTRY"), "ItemEntry");
                     var string_1 = "(unknown)";
                     var gclass39 = new GClass39(num2, int_1, string_1);
                     list_0.Add(gclass39);

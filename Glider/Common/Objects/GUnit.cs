@@ -873,7 +873,7 @@ namespace Glider.Common.Objects
         {
             var gbuffList = new List<GBuff>();
             var num1 = 16;
-            var num2 = StorageAddress + StartupClass.gclass43_1.method_1("UNIT_FIELD_AURA");
+            var num2 = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
             if (IsPlayer)
                 num1 = 40;
             for (var index = 0; index < 56; ++index)

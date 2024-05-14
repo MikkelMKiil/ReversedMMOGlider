@@ -14,7 +14,7 @@ namespace Glider.Common.Objects
     {
         protected static int PawSpeedMS;
         protected bool _culled;
-        protected GClass43 _descriptor;
+        protected OffsetManager _descriptor;
         protected GLocation _location;
         protected string _name;
         protected int _tickFirstSeen;
@@ -161,7 +161,7 @@ namespace Glider.Common.Objects
 
         protected int FindDescriptorOffset(string FieldName)
         {
-            return _descriptor == null ? 0 : _descriptor.method_1(FieldName);
+            return _descriptor == null ? 0 : _descriptor.GetOffsetValue(FieldName);
         }
 
         protected int GetStorageInt(string Name)

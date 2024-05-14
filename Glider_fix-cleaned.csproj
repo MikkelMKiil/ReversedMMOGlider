@@ -149,7 +149,7 @@
     <Compile Include="GClass40.cs" />
     <Compile Include="GClass41.cs" />
     <Compile Include="GClass42.cs" />
-    <Compile Include="GClass43.cs" />
+    <Compile Include="OffsetManager.cs" />
     <Compile Include="GEnum4.cs" />
     <Compile Include="GClass44.cs" />
     <Compile Include="GClass45.cs" />

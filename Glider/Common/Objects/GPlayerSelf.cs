@@ -259,7 +259,7 @@ namespace Glider.Common.Objects
             get
             {
                 var bagContents = new long[16];
-                var num = _descriptor.method_1("PLAYER_FIELD_PACK_SLOT_1");
+                var num = _descriptor.GetOffsetValue("PLAYER_FIELD_PACK_SLOT_1");
                 for (var index = 0; index < 16; ++index)
                     bagContents[index] = GProcessMemoryManipulator.smethod_12(StorageAddress + num + index * 8, "pbagc");
                 return bagContents;
@@ -288,7 +288,7 @@ namespace Glider.Common.Objects
             SetupBags();
             if (_equippedItems == null)
                 _equippedItems = new long[18];
-            var int_29 = StorageAddress + _descriptor.method_1("PLAYER_FIELD_INV_SLOT_HEAD");
+            var int_29 = StorageAddress + _descriptor.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD");
             var index = 0;
             while (index < 18)
             {
@@ -349,7 +349,7 @@ namespace Glider.Common.Objects
             var longList = new List<long>();
             for (var index = 1; index < 5; ++index)
             {
-                var num1 = StartupClass.gclass43_0.method_1("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
+                var num1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
                 var num2 = GProcessMemoryManipulator.smethod_12(Me.StorageAddress + num1, "BagGuid1");
                 longList.Add(num2);
             }

@@ -82,11 +82,11 @@ public class StartupClass
     public static string string_5;
     public static bool bool_14 = false;
     public static GClass68 gclass68_0;
-    public static GClass43 gclass43_0;
-    public static GClass43 gclass43_1;
-    public static GClass43 gclass43_2;
-    public static GClass43 gclass43_3;
-    public static GClass43 gclass43_4;
+    public static OffsetManager gclass43_0;
+    public static OffsetManager gclass43_1;
+    public static OffsetManager gclass43_2;
+    public static OffsetManager gclass43_3;
+    public static OffsetManager gclass43_4;
     public static int int_4;
     public static long long_0;
     public static int int_5;
@@ -625,11 +625,11 @@ public class StartupClass
             IsForegroundEnabled = false;
             gclass36_2.method_4();
             GProcessMemoryManipulator.bool_2 = false;
-            gclass43_0 = new GClass43("Player", GClass18.gclass18_0.method_4("D_Player"));
-            gclass43_3 = new GClass43("Item", GClass18.gclass18_0.method_4("D_Items"));
-            gclass43_1 = new GClass43("NPC", GClass18.gclass18_0.method_4("D_NPC"));
-            gclass43_2 = new GClass43("Object", GClass18.gclass18_0.method_4("D_Object"));
-            gclass43_4 = new GClass43("Container", GClass18.gclass18_0.method_4("D_Container"));
+            gclass43_0 = new OffsetManager("Player", GClass18.gclass18_0.method_4("D_Player"));
+            gclass43_3 = new OffsetManager("Item", GClass18.gclass18_0.method_4("D_Items"));
+            gclass43_1 = new OffsetManager("NPC", GClass18.gclass18_0.method_4("D_NPC"));
+            gclass43_2 = new OffsetManager("Object", GClass18.gclass18_0.method_4("D_Object"));
+            gclass43_4 = new OffsetManager("Container", GClass18.gclass18_0.method_4("D_Container"));
             gclass63_0 = new GClass63();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)

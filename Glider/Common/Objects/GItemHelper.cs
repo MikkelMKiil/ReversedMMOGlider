@@ -32,7 +32,7 @@ namespace Glider.Common.Objects
 
             for (var index = 0; index < 12; ++index)
             {
-                var num1 = StartupClass.gclass43_3.method_1("ITEM_FIELD_ENCHANTMENT_" + (index + 1) + "_1");
+                var num1 = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT_" + (index + 1) + "_1");
                 var num2 = GProcessMemoryManipulator.smethod_11(gobject.StorageAddress + num1, "EnchantID");
                 if (num2 > 0)
                     intList.Add(num2);
