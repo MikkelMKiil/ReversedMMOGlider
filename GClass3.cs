@@ -47,10 +47,10 @@ public class GClass3
         string_0 = null;
         string_1 = null;
         string_2 = null;
-        var gclass56_0 = new GClass56(2);
-        gclass56_0.method_6();
-        gclass56_0.method_5();
-        gclass56_0.method_7();
+        var gclass56_0 = new GDataEncryptionManager(2);
+        gclass56_0.MarkAsProcessed();
+        gclass56_0.PrepareDataStream();
+        gclass56_0.SendAndReceiveData();
         if (StartupClass.smethod_57(gclass56_0))
         {
             StartupClass.smethod_37(GEnum0.const_3);
@@ -58,10 +58,10 @@ public class GClass3
         }
         else
         {
-            var str = gclass56_0.method_12();
-            string_0 = gclass56_0.method_12();
-            string_1 = gclass56_0.method_12();
-            string_2 = gclass56_0.method_12();
+            var str = gclass56_0.ReadStringFromDecryptedStream();
+            string_0 = gclass56_0.ReadStringFromDecryptedStream();
+            string_1 = gclass56_0.ReadStringFromDecryptedStream();
+            string_2 = gclass56_0.ReadStringFromDecryptedStream();
             switch (str)
             {
                 case "Warning":

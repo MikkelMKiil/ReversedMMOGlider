@@ -168,7 +168,7 @@
     <Compile Include="GEnum7.cs" />
     <Compile Include="GClass54.cs" />
     <Compile Include="GClass55.cs" />
-    <Compile Include="GClass56.cs" />
+    <Compile Include="GDataEncryptionManager.cs" />
     <Compile Include="GClass57.cs" />
     <Compile Include="GClass58.cs" />
     <Compile Include="GClass59.cs" />

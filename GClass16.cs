@@ -192,7 +192,7 @@ public class GClass16
                 if (bool_0)
                     method_18(byte_1);
                 var gclass56_0 = method_9(3, "", byte_1);
-                gclass56_0.method_7();
+                gclass56_0.SendAndReceiveData();
                 if (StartupClass.smethod_57(gclass56_0))
                 {
                     gclass71_0.method_30();
@@ -201,8 +201,8 @@ public class GClass16
                     return GEnum0.const_3;
                 }
 
-                var str = gclass56_0.method_12();
-                var string_2_1 = gclass56_0.method_12();
+                var str = gclass56_0.ReadStringFromDecryptedStream();
+                var string_2_1 = gclass56_0.ReadStringFromDecryptedStream();
                 if (string_2_1.Length > 1)
                     smethod_0(string_2_1);
                 GEnum0 int_3;
@@ -223,10 +223,10 @@ public class GClass16
                     case "ReqFP":
                         int_3 = method_20(byte_1);
                         var gclass56 = method_9((int)int_3, string_1, byte_1);
-                        gclass56.method_7();
-                        gclass56.method_11();
-                        gclass56.method_12();
-                        var string_2_2 = gclass56.method_12();
+                        gclass56.SendAndReceiveData();
+                        gclass56.ReadIntFromDecryptedStream();
+                        gclass56.ReadStringFromDecryptedStream();
+                        var string_2_2 = gclass56.ReadStringFromDecryptedStream();
                         if (string_2_2.Length > 1)
                             smethod_0(string_2_2);
                         gclass71_0.method_30();
@@ -255,16 +255,16 @@ public class GClass16
         }
     }
 
-    private GClass56 method_9(int int_3, string string_2, byte[] byte_1)
+    private GDataEncryptionManager method_9(int int_3, string string_2, byte[] byte_1)
     {
-        var gclass56 = new GClass56(3);
-        gclass56.method_5();
-        gclass56.method_2(int_3);
-        gclass56.method_2((int)(DateTime.Now - dateTime_0).TotalSeconds);
-        gclass56.method_2(byte_1.Length);
-        gclass56.method_4(method_17(byte_1));
-        gclass56.method_4(method_16(byte_1));
-        gclass56.method_3(string_2);
+        var gclass56 = new GDataEncryptionManager(3);
+        gclass56.PrepareDataStream();
+        gclass56.WriteIntToStream(int_3);
+        gclass56.WriteIntToStream((int)(DateTime.Now - dateTime_0).TotalSeconds);
+        gclass56.WriteIntToStream(byte_1.Length);
+        gclass56.WriteBytesToStream(method_17(byte_1));
+        gclass56.WriteBytesToStream(method_16(byte_1));
+        gclass56.WriteStringToStream(string_2);
         return gclass56;
     }
 
@@ -426,11 +426,11 @@ public class GClass16
         if (!File.Exists(string_2))
             return;
         var byte_1 = File.ReadAllBytes(string_2);
-        var gclass56 = new GClass56(4);
-        gclass56.method_5();
-        gclass56.method_3(string_2);
-        gclass56.method_4(byte_1);
-        gclass56.method_7();
+        var gclass56 = new GDataEncryptionManager(4);
+        gclass56.PrepareDataStream();
+        gclass56.WriteStringToStream(string_2);
+        gclass56.WriteBytesToStream(byte_1);
+        gclass56.SendAndReceiveData();
     }
 
     private RijndaelManaged method_21()

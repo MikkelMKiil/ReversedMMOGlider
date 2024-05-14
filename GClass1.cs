@@ -9,18 +9,18 @@ public class GClass1
 {
     public static byte[] smethod_0()
     {
-        var gclass56 = new GClass56(5);
-        gclass56.method_5();
-        gclass56.method_7();
-        return gclass56.method_13();
+        var gclass56 = new GDataEncryptionManager(5);
+        gclass56.PrepareDataStream();
+        gclass56.SendAndReceiveData();
+        return gclass56.ReadBytesFromDecryptedStream();
     }
 
     public static byte[] smethod_1(int int_0)
     {
-        var gclass56 = new GClass56(9);
-        gclass56.method_5();
-        gclass56.method_2(int_0);
-        gclass56.method_7();
-        return gclass56.method_13();
+        var gclass56 = new GDataEncryptionManager(9);
+        gclass56.PrepareDataStream();
+        gclass56.WriteIntToStream(int_0);
+        gclass56.SendAndReceiveData();
+        return gclass56.ReadBytesFromDecryptedStream();
     }
 }

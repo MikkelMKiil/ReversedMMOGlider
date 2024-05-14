@@ -28,18 +28,18 @@ public class GClass52
         {
             dateTime_0 = DateTime.Now;
             int_0 = 0;
-            var gclass56 = new GClass56(7);
-            gclass56.method_5();
-            gclass56.method_3("Release");
-            gclass56.method_2(0);
-            gclass56.method_2(!bool_1 ? 1 : 0);
-            gclass56.method_3(StartupClass.WowVersionLabel_string);
+            var gclass56 = new GDataEncryptionManager(7);
+            gclass56.PrepareDataStream();
+            gclass56.WriteStringToStream("Release");
+            gclass56.WriteIntToStream(0);
+            gclass56.WriteIntToStream(!bool_1 ? 1 : 0);
+            gclass56.WriteStringToStream(StartupClass.WowVersionLabel_string);
             if (bool_1)
                 StartupClass.bool_12 = false;
-            gclass56.method_7();
-            var str1 = gclass56.method_12();
-            var str2 = gclass56.method_12();
-            var fileName = gclass56.method_12();
+            gclass56.SendAndReceiveData();
+            var str1 = gclass56.ReadStringFromDecryptedStream();
+            var str2 = gclass56.ReadStringFromDecryptedStream();
+            var fileName = gclass56.ReadStringFromDecryptedStream();
             if (str1 != "Good" && bool_1)
             {
                 if (fileName.Length == 0)
@@ -57,11 +57,11 @@ public class GClass52
 
             if (!bool_1)
                 return true;
-            var num1 = gclass56.method_11();
+            var num1 = gclass56.ReadIntFromDecryptedStream();
             if (StartupClass.StartupMode == AppMode.Invisible || StartupClass.StartupMode == AppMode.Normal)
                 StartupClass.int_4 = num1;
-            var str3 = gclass56.method_12();
-            var string_1_1 = gclass56.method_12();
+            var str3 = gclass56.ReadStringFromDecryptedStream();
+            var string_1_1 = gclass56.ReadStringFromDecryptedStream();
             if (str3.Length > 0)
             {
                 var string_0 = str3.Replace("|", "\r\n");
@@ -72,7 +72,7 @@ public class GClass52
                     GliderWarning.smethod_0(GClass30.smethod_2(691, string_0), string_1_1);
             }
 
-            var str4 = gclass56.method_12();
+            var str4 = gclass56.ReadStringFromDecryptedStream();
             if (str4.Length > 0)
             {
                 var str5 = smethod_4().ToLower().Replace("\"", "").Replace("'", "");
@@ -85,10 +85,10 @@ public class GClass52
                 }
             }
 
-            var str7 = gclass56.method_12();
-            StartupClass.int_1 = gclass56.method_11();
-            int_0 = gclass56.method_11();
-            var s = gclass56.method_12();
+            var str7 = gclass56.ReadStringFromDecryptedStream();
+            StartupClass.int_1 = gclass56.ReadIntFromDecryptedStream();
+            int_0 = gclass56.ReadIntFromDecryptedStream();
+            var s = gclass56.ReadStringFromDecryptedStream();
             if (s.Length > 0)
             {
                 dateTime_0 = DateTime.Parse(s);
@@ -99,13 +99,13 @@ public class GClass52
                 dateTime_0 = DateTime.Now;
             }
 
-            var num3 = gclass56.method_11();
+            var num3 = gclass56.ReadIntFromDecryptedStream();
             GClass18.gclass18_0.method_0();
-            var num4 = gclass56.method_11();
+            var num4 = gclass56.ReadIntFromDecryptedStream();
             for (var index = 0; index < num4; ++index)
             {
-                var str8 = gclass56.method_12();
-                var str9 = gclass56.method_12();
+                var str8 = gclass56.ReadStringFromDecryptedStream();
+                var str9 = gclass56.ReadStringFromDecryptedStream();
                 try
                 {
                     if (str8 == "SF")

@@ -1559,9 +1559,9 @@ public class StartupClass
         }
     }
 
-    public static bool smethod_57(GClass56 gclass56_0)
+    public static bool smethod_57(GDataEncryptionManager gclass56_0)
     {
-        return gclass56_0.method_11() == 0;
+        return gclass56_0.ReadIntFromDecryptedStream() == 0;
     }
 
     public static void smethod_58()
