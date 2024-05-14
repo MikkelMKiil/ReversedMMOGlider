@@ -9,21 +9,21 @@ using System.Collections;
 
 public class OffsetManager
 {
-    private readonly int int_0;
+    private readonly int initialOffset;
     private readonly SortedList OffsetList;
-    private string string_0;
+    private string descriptorName;
 
-    public OffsetManager(string string_1, int int_1)
+    public OffsetManager(string descriptorName, int initialOffset)
     {
-        string_0 = string_1;
-        int_0 = int_1;
+        this.descriptorName = descriptorName;
+        this.initialOffset = initialOffset;
         OffsetList = new SortedList();
         PopulateOffsetList();
     }
 
     public void PopulateOffsetList()
     {
-        var currentOffset = int_0;
+        var currentOffset = initialOffset;
         var descriptorCount = 0;
         while (true)
         {
