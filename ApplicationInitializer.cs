@@ -75,7 +75,7 @@ public class ApplicationInitializer
             var thirdDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
             if (thirdDecryptedString.Length > 0)
             {
-                var cleanedRealmList = smethod_4().ToLower().Replace("\"", "").Replace("'", "");
+                var cleanedRealmList = GetRealmFromConfigFile().ToLower().Replace("\"", "").Replace("'", "");
                 var cleanedThirdDecryptedString = thirdDecryptedString.Replace("\"", "").Replace("'", "");
                 if (!cleanedRealmList.ToLower().StartsWith(cleanedThirdDecryptedString))
                 {
@@ -85,7 +85,7 @@ public class ApplicationInitializer
                 }
             }
 
-            var fourthDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
+            var applicationStatus = dataEncryptionManager.ReadStringFromDecryptedStream();
             StartupClass.InitializationCount = dataEncryptionManager.ReadIntFromDecryptedStream();
             InitializationCount = dataEncryptionManager.ReadIntFromDecryptedStream();
             var dateString = dataEncryptionManager.ReadStringFromDecryptedStream();
@@ -99,7 +99,7 @@ public class ApplicationInitializer
                 InitializationTime = DateTime.Now;
             }
 
-            var streamIntValue2 = dataEncryptionManager.ReadIntFromDecryptedStream();
+            var secondsToAdd = dataEncryptionManager.ReadIntFromDecryptedStream();
             GClass18.gclass18_0.method_0();
             var streamIntValue3 = dataEncryptionManager.ReadIntFromDecryptedStream();
             for (var index = 0; index < streamIntValue3; ++index)
@@ -118,7 +118,7 @@ public class ApplicationInitializer
                     }
                     else if (fifthDecryptedString.StartsWith("_"))
                     {
-                        smethod_1(fifthDecryptedString, sixthDecryptedString);
+                        ProcessInitializationParameters(fifthDecryptedString, sixthDecryptedString);
                     }
                     else
                     {
@@ -136,21 +136,21 @@ public class ApplicationInitializer
             StartupClass.isInitializationSuccessful = true;
             StartupClass.isInputStringFourCharacters = inputString.Length == 4;
             Logger.LogMessage(MessageProvider.GetMessage(289));
-            if (streamIntValue2 > 0)
+            if (secondsToAdd > 0)
             {
-                StartupClass.bool_25 = true;
-                StartupClass.dateTime_1 = DateTime.Now.AddSeconds(streamIntValue2);
+                StartupClass.isTimeAdded = true;
+                StartupClass.expiryTime = DateTime.Now.AddSeconds(secondsToAdd);
             }
             else
             {
-                StartupClass.bool_25 = false;
+                StartupClass.isTimeAdded = false;
             }
 
-            switch (fourthDecryptedString)
+            switch (applicationStatus)
             {
                 case "Beta":
-                    StartupClass.bool_17 = true;
-                    StartupClass.bool_18 = true;
+                    StartupClass.IsBetaVersion = true;
+                    StartupClass.IsBetaAccessGranted = true;
                     Logger.LogMessage(MessageProvider.GetMessage(290));
                     break;
                 case "Old":
@@ -174,7 +174,7 @@ public class ApplicationInitializer
         return true;
     }
 
-    private static void smethod_1(string string_1, string string_2)
+    private static void ProcessInitializationParameters(string string_1, string string_2)
     {
         switch (string_1)
         {
@@ -189,14 +189,14 @@ public class ApplicationInitializer
         }
     }
 
-    public static int smethod_2(XmlDocument xmlDocument_0, string string_1)
+    public static int ReadOffsetFromXml(XmlDocument xmlDocument_0, string string_1)
     {
         return int.Parse(
             (xmlDocument_0.SelectSingleNode("/Offsets/" + string_1) ??
              throw new Exception(MessageProvider.smethod_2(293, string_1))).InnerText.Trim(), NumberStyles.HexNumber);
     }
 
-    public static byte[] smethod_3(XmlDocument xmlDocument_0, string string_1)
+    public static byte[] ParseOffsetValuesFromXml(XmlDocument xmlDocument_0, string string_1)
     {
         var strArray = xmlDocument_0.SelectSingleNode("/Offsets/" + string_1).InnerText.Trim().Split(' ');
         var numArray = new byte[strArray.Length];
@@ -205,15 +205,15 @@ public class ApplicationInitializer
         return numArray;
     }
 
-    public static string smethod_4()
+    public static string GetRealmFromConfigFile()
     {
         var path = StartupClass.SomeStringData + "\\realmlist.wtf";
         try
         {
             var streamReader = new StreamReader(path);
-            var str = streamReader.ReadToEnd().Trim().Split(' ')[2];
+            var realmInfo = streamReader.ReadToEnd().Trim().Split(' ')[2];
             streamReader.Close();
-            return str;
+            return realmInfo;
         }
         catch (Exception ex)
         {

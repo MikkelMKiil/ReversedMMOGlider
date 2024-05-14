@@ -96,8 +96,8 @@ public class StartupClass
     public static DateTime dateTime_0;
     public static string WowVersionLabel_string = "";
     public static bool bool_16;
-    public static bool bool_17 = false;
-    public static bool bool_18;
+    public static bool IsBetaVersion = false;
+    public static bool IsBetaAccessGranted;
     public static GClass36 gclass36_0;
     public static GlideMode glideMode_0;
     public static int int_7;
@@ -116,8 +116,8 @@ public class StartupClass
     public static GameClass gameClass_0;
     public static bool bool_23;
     public static bool isInputStringFourCharacters = true;
-    public static DateTime dateTime_1;
-    public static bool bool_25;
+    public static DateTime expiryTime;
+    public static bool isTimeAdded;
     public static bool bool_26 = false;
     public static GInterface0 ginterface0_0;
     public static bool bool_27;
@@ -206,7 +206,7 @@ public class StartupClass
         {
             Logger.LogMessage("Glider 1.8.0 starting up (Release)");
             GClass61.gclass61_0 = new GClass61();
-            bool_18 = true;
+            IsBetaAccessGranted = true;
             if (Environment.CommandLine.ToLower().IndexOf("/l1") != -1)
                 bool_34 = true;
             if (Environment.CommandLine.ToLower().IndexOf("/mach") != -1)
@@ -535,8 +535,8 @@ public class StartupClass
         if (!isInputStringFourCharacters)
         {
             Logger.LogMessage(MessageProvider.GetMessage(76));
-            if (bool_25)
-                Logger.LogMessage(MessageProvider.smethod_2(77, dateTime_1.ToString()));
+            if (isTimeAdded)
+                Logger.LogMessage(MessageProvider.smethod_2(77, expiryTime.ToString()));
             if (IsSomeConditionMet)
             {
                 GClass74.smethod_12();
@@ -578,9 +578,9 @@ public class StartupClass
         else
         {
             IsSomeConditionMet = false;
-            if (bool_17)
+            if (IsBetaVersion)
             {
-                bool_18 = true;
+                IsBetaAccessGranted = true;
                 Logger.LogMessage(MessageProvider.GetMessage(78));
                 smethod_39(2000);
                 gclass36_0.method_5();
@@ -886,7 +886,7 @@ public class StartupClass
     {
         if (!bool_27)
             return false;
-        if (bool_25 && DateTime.Now > dateTime_1)
+        if (isTimeAdded && DateTime.Now > expiryTime)
         {
             Logger.LogMessage(MessageProvider.GetMessage(116));
             return false;

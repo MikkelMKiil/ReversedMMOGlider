@@ -995,7 +995,7 @@ public class GliderForm : Form, GInterface0
 
   void GInterface0.imethod_3(string string_2)
   {
-    if (!StartupClass.bool_18)
+    if (!StartupClass.IsBetaAccessGranted)
       return;
     ((GInterface0)this).imethod_2("[Debug] " + string_2);
   }

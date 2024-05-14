@@ -166,7 +166,7 @@ public class GClass73
                     Logger.LogMessage(MessageProvider.smethod_2(149, dateTime_0.ToShortTimeString()));
                 }
 
-                if (StartupClass.bool_25 && DateTime.Now > StartupClass.dateTime_1)
+                if (StartupClass.isTimeAdded && DateTime.Now > StartupClass.expiryTime)
                     return;
                 int_8 = 0;
                 StartupClass.dateTime_0 = DateTime.Now;

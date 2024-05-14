@@ -20,7 +20,7 @@ public class GClass81 : GInterface0
 
     public void imethod_3(string string_0)
     {
-        if (!StartupClass.bool_18)
+        if (!StartupClass.IsBetaAccessGranted)
             return;
         this.imethod_2("[Debug] " + string_0);
     }
@@ -94,7 +94,7 @@ public class GClass81 : GInterface0
         try
         {
             var streamWriter = File.AppendText(path);
-            if (StartupClass.bool_18)
+            if (StartupClass.IsBetaAccessGranted)
                 streamWriter.WriteLine(now.ToLongTimeString() + " (" + now.Millisecond + ") " + string_0);
             else
                 streamWriter.WriteLine(now.ToLongTimeString() + " " + string_0);
