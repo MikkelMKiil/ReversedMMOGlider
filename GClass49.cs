@@ -53,8 +53,8 @@ public class GClass49
 
     private void method_3()
     {
-        if (StartupClass.gclass71_0 != null)
-            StartupClass.gclass71_0.method_33(true);
+        if (StartupClass.GliderManager != null)
+            StartupClass.GliderManager.method_33(true);
         new GClass40().method_0();
     }
 }

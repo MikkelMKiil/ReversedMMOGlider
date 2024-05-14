@@ -112,7 +112,7 @@ namespace Glider.Common.Objects
         public bool IsCorpseNearby => GClass5.smethod_1();
 
         public bool IsGliderRunning =>
-            StartupClass.StartupMode == AppMode.Invisible || StartupClass.StartupMode == AppMode.Normal;
+            StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal;
 
         public GMoveHelper MoveHelper { get; private set; }
 
@@ -545,13 +545,13 @@ namespace Glider.Common.Objects
                 return GCombatResult.OtherPlayerTag;
             }
 
-            if (StartupClass.ggameClass_0.TicksSinceCombatStart > MaxCombatDuration)
+            if (StartupClass.CurrentGameClass.TicksSinceCombatStart > MaxCombatDuration)
             {
                 Log("Monster is taking too long to die, ending combat");
                 return GCombatResult.Bugged;
             }
 
-            if (GPlayerSelf.Me.IsInCombat || StartupClass.ggameClass_0.TicksSinceCombatStart <= 10000)
+            if (GPlayerSelf.Me.IsInCombat || StartupClass.CurrentGameClass.TicksSinceCombatStart <= 10000)
                 return GCombatResult.Unknown;
             Log("We're not in combat, this can't be working out, ending combat");
             return GCombatResult.Bugged;
@@ -686,12 +686,12 @@ namespace Glider.Common.Objects
 
         public void ExecuteScript(string EventName, bool ForceBase)
         {
-            StartupClass.gclass47_0.method_2(EventName, ForceBase);
+            StartupClass.GameMemoryWriter.method_2(EventName, ForceBase);
         }
 
         public void EnsureGameSelected()
         {
-            if (StartupClass.bool_11)
+            if (StartupClass.IsGliderInitialized)
                 return;
             StartupClass.smethod_22();
         }
@@ -757,16 +757,16 @@ namespace Glider.Common.Objects
 
         public void EnableCursorHook()
         {
-            if (StartupClass.gclass71_0 == null)
+            if (StartupClass.GliderManager == null)
                 return;
-            StartupClass.gclass71_0.method_33(true);
+            StartupClass.GliderManager.method_33(true);
         }
 
         public void DisableCursorHook()
         {
-            if (StartupClass.gclass71_0 == null)
+            if (StartupClass.GliderManager == null)
                 return;
-            StartupClass.gclass71_0.method_33(false);
+            StartupClass.GliderManager.method_33(false);
         }
 
         public void WaitForNotFiring(string KeyName)

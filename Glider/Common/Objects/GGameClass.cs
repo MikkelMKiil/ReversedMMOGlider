@@ -154,7 +154,7 @@ namespace Glider.Common.Objects
                 Context.CastSpell("Common.Eat");
             if (flag2)
                 Context.CastSpell("Common.Drink");
-            StartupClass.ggameClass_0.EnterStealth(false);
+            StartupClass.CurrentGameClass.EnterStealth(false);
             var gspellTimer = new GSpellTimer(27000);
             var flag3 = !flag1;
             var flag4 = !flag2;

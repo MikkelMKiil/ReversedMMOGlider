@@ -19,7 +19,7 @@ public class GClass40
         int_0 = 100;
         StartupClass.smethod_22();
         Thread.Sleep(500);
-        var num = smethod_0(StartupClass.intptr_1, "Solitaire.exe");
+        var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
             StartupClass.smethod_27(false, "NoSolitaireModuleInSolitaire");
         var int_1 = GProcessMemoryManipulator.smethod_11(num + GClass41.int_0, "md0");

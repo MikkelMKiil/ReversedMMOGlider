@@ -168,8 +168,8 @@ namespace Glider.Common.Objects
 
         public GConfigResult DoShow(IWin32Window owner)
         {
-            if (owner == null && StartupClass.iwin32Window_0 != null)
-                owner = StartupClass.iwin32Window_0;
+            if (owner == null && StartupClass.MainWindowHandle != null)
+                owner = StartupClass.MainWindowHandle;
             if (HelpDelegate == null)
                 MyHelpButton.Enabled = false;
             return ShowDialog(owner) == DialogResult.OK ? GConfigResult.Accept : GConfigResult.Cancel;

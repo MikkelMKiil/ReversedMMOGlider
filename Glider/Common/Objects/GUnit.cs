@@ -277,13 +277,13 @@ namespace Glider.Common.Objects
                     return true;
                 }
 
-                if (Health > 0.99 && StartupClass.ggameClass_0.TicksSinceCombatStart > DYING_SANITY_TIME)
+                if (Health > 0.99 && StartupClass.CurrentGameClass.TicksSinceCombatStart > DYING_SANITY_TIME)
                 {
                     GClass37.smethod_1("Undamaged and combat taking too long");
                     return true;
                 }
 
-                if (StartupClass.gclass69_0.method_10() >= 4)
+                if (StartupClass.GameClass69Instance.method_10() >= 4)
                     return false;
                 GClass37.smethod_1("Recent evade entry in combat log");
                 return true;

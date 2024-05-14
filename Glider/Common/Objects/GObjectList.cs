@@ -440,9 +440,9 @@ namespace Glider.Common.Objects
             if (gmonster == null)
                 return null;
             var num2 = GClass61.gclass61_0.method_3("ExtraPull");
-            return gmonster.DistanceToSelf <= (double)(StartupClass.ggameClass_0.PullDistance + num2) &&
+            return gmonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + num2) &&
                    (StartupClass.gprofile_0.Wander || StartupClass.gprofile_0.GetDistanceTo(gmonster.Location) <=
-                       StartupClass.ggameClass_0.PullDistance + num2)
+                       StartupClass.CurrentGameClass.PullDistance + num2)
                 ? gmonster
                 : null;
         }

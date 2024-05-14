@@ -746,7 +746,7 @@ public class GClass42
             }
 
         var array = gkeyList.ToArray();
-        StartupClass.ggameClass_0.UpdateKeys(array);
+        StartupClass.CurrentGameClass.UpdateKeys(array);
         method_24(array);
         method_3();
     }

@@ -148,7 +148,7 @@ namespace Glider.Common.Objects
                 Member.Approach(30.0);
             if (Member.DistanceToSelf > 30.0)
                 return;
-            StartupClass.ggameClass_0.LeaveForm();
+            StartupClass.CurrentGameClass.LeaveForm();
             TargetPartyMember(Member);
             GContext.Main.CastSpell(SpellName);
             if (OriginalTarget != null)

@@ -35,7 +35,7 @@ public class GClass52
             gclass56.WriteIntToStream(!bool_1 ? 1 : 0);
             gclass56.WriteStringToStream(StartupClass.WowVersionLabel_string);
             if (bool_1)
-                StartupClass.bool_12 = false;
+                StartupClass.IsSomeConditionMet = false;
             gclass56.SendAndReceiveData();
             var str1 = gclass56.ReadStringFromDecryptedStream();
             var str2 = gclass56.ReadStringFromDecryptedStream();
@@ -58,7 +58,7 @@ public class GClass52
             if (!bool_1)
                 return true;
             var num1 = gclass56.ReadIntFromDecryptedStream();
-            if (StartupClass.StartupMode == AppMode.Invisible || StartupClass.StartupMode == AppMode.Normal)
+            if (StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal)
                 StartupClass.int_4 = num1;
             var str3 = gclass56.ReadStringFromDecryptedStream();
             var string_1_1 = gclass56.ReadStringFromDecryptedStream();
@@ -162,7 +162,7 @@ public class GClass52
                 StartupClass.bool_24 = true;
             if (DateTime.Now < dateTime_0)
                 if (bool_1)
-                    StartupClass.bool_12 = true;
+                    StartupClass.IsSomeConditionMet = true;
         }
         catch (Exception ex)
         {
@@ -180,7 +180,7 @@ public class GClass52
         {
             case "_SED":
                 dateTime_0 = DateTime.Parse(string_2);
-                StartupClass.bool_12 = true;
+                StartupClass.IsSomeConditionMet = true;
                 bool_0 = true;
                 break;
             case "_STI":
@@ -207,7 +207,7 @@ public class GClass52
 
     public static string smethod_4()
     {
-        var path = StartupClass.string_4 + "\\realmlist.wtf";
+        var path = StartupClass.SomeStringData + "\\realmlist.wtf";
         try
         {
             var streamReader = new StreamReader(path);

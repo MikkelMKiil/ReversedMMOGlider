@@ -65,18 +65,18 @@ public class GClass47
                         thread_0.Join();
                     }
 
-                    if (!StartupClass.bool_11 && GClass61.gclass61_0.method_5("BackgroundEnable") &&
-                        StartupClass.gclass71_0 != null && StartupClass.intptr_1 != IntPtr.Zero && !StartupClass.bool_2)
+                    if (!StartupClass.IsGliderInitialized && GClass61.gclass61_0.method_5("BackgroundEnable") &&
+                        StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.intptr_0 = GProcessMemoryManipulator.smethod_27(StartupClass.int_3);
-                        if (StartupClass.intptr_0 == IntPtr.Zero)
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_27(StartupClass.AnotherIntegerValue);
+                        if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
                             GClass37.smethod_0("No game window, no background mode!");
                         }
                         else
                         {
-                            StartupClass.gclass71_0.method_34(StartupClass.int_3, StartupClass.intptr_0);
-                            StartupClass.bool_11 = true;
+                            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                            StartupClass.IsGliderInitialized = true;
                             GClass37.smethod_0("Setting up for background mode!");
                         }
                     }
@@ -87,8 +87,8 @@ public class GClass47
                     }
 
                     GClass37.smethod_1("Firing up script on new thread");
-                    if (StartupClass.gclass71_0 != null)
-                        StartupClass.gclass71_0.method_33(true);
+                    if (StartupClass.GliderManager != null)
+                        StartupClass.GliderManager.method_33(true);
                     thread_0 = new Thread(method_3);
                     thread_0.Start(new Class1
                     {
@@ -120,9 +120,9 @@ public class GClass47
             thread_0 = null;
         StartupClass.gclass68_0.method_7();
         GClass55.smethod_21(false);
-        if (StartupClass.gclass71_0 == null)
+        if (StartupClass.GliderManager == null)
             return;
-        StartupClass.gclass71_0.method_33(false);
+        StartupClass.GliderManager.method_33(false);
     }
 
     protected void method_4(string string_0, bool bool_0)
@@ -131,7 +131,7 @@ public class GClass47
             method_5(string_0);
         try
         {
-            if (sortedList_0[string_0] != null && !bool_0 && StartupClass.bool_12)
+            if (sortedList_0[string_0] != null && !bool_0 && StartupClass.IsSomeConditionMet)
             {
                 sortedList_0[string_0].Setup();
                 sortedList_0[string_0].Execute();
@@ -157,7 +157,7 @@ public class GClass47
 
     private void method_5(string string_0)
     {
-        if (StartupClass.bool_12)
+        if (StartupClass.IsSomeConditionMet)
         {
             var str1 = GClass61.gclass61_0.method_2("ScriptsFolder");
             if (GContext.Main.Profile != null && GContext.Main.Profile.ScriptOverride != null)

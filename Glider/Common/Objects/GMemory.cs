@@ -12,7 +12,7 @@ namespace Glider.Common.Objects
 {
     public class GMemory
     {
-        public IntPtr ProcessHandle => StartupClass.intptr_1;
+        public IntPtr ProcessHandle => StartupClass.AdditionalApplicationHandle;
 
         public bool WriteBytes(
             int StartAddress,

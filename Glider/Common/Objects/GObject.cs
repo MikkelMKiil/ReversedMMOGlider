@@ -246,9 +246,9 @@ namespace Glider.Common.Objects
         {
             PawSpeedMS = GClass61.gclass61_0.method_3("PawSpeed");
             StartupClass.gclass68_0.method_3(true);
-            if (StartupClass.bool_11)
+            if (StartupClass.IsGliderInitialized)
                 GClass55.smethod_18(GClass55.double_0, GClass55.double_1);
-            if ((IsCursorOnObject && !StartupClass.bool_11) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
+            if ((IsCursorOnObject && !StartupClass.IsGliderInitialized) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
                 TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
                 return true;
             foreach (var glocation in StartupClass.gclass33_0.list_0)

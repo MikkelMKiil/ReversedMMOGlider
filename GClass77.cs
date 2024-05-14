@@ -332,7 +332,7 @@ public class GClass77
             else if (lower1 == "/grabmouse" && strArray1.Length > 1)
             {
                 var lower3 = strArray1[1].ToLower();
-                if (!StartupClass.bool_12)
+                if (!StartupClass.IsSomeConditionMet)
                 {
                     method_6("Not Elite, can't grab mouse\r\n");
                 }
@@ -340,29 +340,29 @@ public class GClass77
                 {
                     method_6("BackgroundEnable not set, can't grab mouse\r\n");
                 }
-                else if (StartupClass.gclass71_0 == null)
+                else if (StartupClass.GliderManager == null)
                 {
                     method_6("No Shadow driver, can't grab mouse\r\n");
                 }
                 else
                 {
-                    if (!StartupClass.bool_11)
+                    if (!StartupClass.IsGliderInitialized)
                     {
                         GClass37.smethod_1("Setting up bg stuff");
-                        StartupClass.intptr_0 = GProcessMemoryManipulator.smethod_29(StartupClass.int_3);
-                        StartupClass.gclass71_0.method_34(StartupClass.int_3, StartupClass.intptr_0);
-                        StartupClass.bool_11 = true;
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_29(StartupClass.AnotherIntegerValue);
+                        StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                        StartupClass.IsGliderInitialized = true;
                     }
 
                     switch (lower3)
                     {
                         case "true":
-                            StartupClass.gclass71_0.method_33(true);
+                            StartupClass.GliderManager.method_33(true);
                             method_6("Mouse grabbed\r\n");
                             break;
                         case "false":
                             GClass55.smethod_21(false);
-                            StartupClass.gclass71_0.method_33(false);
+                            StartupClass.GliderManager.method_33(false);
                             method_6("Mouse released\r\n");
                             break;
                         default:
@@ -435,7 +435,7 @@ public class GClass77
                     }
                     else
                     {
-                        if (StartupClass.bool_11 || !GClass55.bool_0)
+                        if (StartupClass.IsGliderInitialized || !GClass55.bool_0)
                         {
                             GClass55.smethod_9(13);
                             StartupClass.smethod_39(300);
@@ -526,7 +526,7 @@ public class GClass77
                     {
                         method_6("Version: 1.8.0\r\n");
                         method_6("Subversion: Release\r\n");
-                        method_6("Elite: " + StartupClass.bool_12 + "\r\n");
+                        method_6("Elite: " + StartupClass.IsSomeConditionMet + "\r\n");
                         method_6("Game: " + StartupClass.WowVersionLabel_string + "\r\n");
                     }
 
@@ -632,8 +632,8 @@ public class GClass77
                             if (GPlayerSelf.Me.IsDead)
                                 num = 0.0;
                             method_6("Health: " + num + "\r\n");
-                            if (StartupClass.ggameClass_0 != null)
-                                method_6("Mana: " + StartupClass.ggameClass_0.PowerValue + "\r\n");
+                            if (StartupClass.CurrentGameClass != null)
+                                method_6("Mana: " + StartupClass.CurrentGameClass.PowerValue + "\r\n");
                             method_6("Name: " + GPlayerSelf.Me.Name + "\r\n");
                             method_6("Class: " + GPlayerSelf.Me.PlayerClass + "\r\n");
                             method_6("Level: " + GPlayerSelf.Me.Level + "\r\n");

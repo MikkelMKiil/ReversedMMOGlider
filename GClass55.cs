@@ -166,11 +166,11 @@ public class GClass55
                     dictionary_0.Remove(short_0);
             }
 
-        if (StartupClass.bool_11)
+        if (StartupClass.IsGliderInitialized)
         {
             var uint_5 = bool_3 ? 256U : 257U;
             var uint_7 = bool_3 ? 1U : 3221225473U;
-            PostMessage(StartupClass.intptr_0, uint_5, (uint)short_0, uint_7);
+            PostMessage(StartupClass.MainApplicationHandle, uint_5, (uint)short_0, uint_7);
             if (gclass36_0.method_3())
             {
                 smethod_2();
@@ -270,10 +270,10 @@ public class GClass55
 
     public static void smethod_11(short short_0, char char_0)
     {
-        if (StartupClass.bool_11)
+        if (StartupClass.IsGliderInitialized)
         {
             smethod_0(16, true);
-            PostMessage(StartupClass.intptr_0, 258U, char_0, 0U);
+            PostMessage(StartupClass.MainApplicationHandle, 258U, char_0, 0U);
             smethod_0(16, false);
         }
         else
@@ -307,7 +307,7 @@ public class GClass55
 
     public static void smethod_15(out int int_25, out int int_26)
     {
-        StartupClass.gclass71_0.method_36(out int_21, out int_22);
+        StartupClass.GliderManager.method_36(out int_21, out int_22);
         int_25 = int_21;
         int_26 = int_22;
     }
@@ -334,21 +334,21 @@ public class GClass55
     {
         lock (gspellTimer_0)
         {
-            if (!StartupClass.bool_2)
+            if (!StartupClass.IsAttached)
                 SetCursorPos(int_25 + 5000, int_26 + 5000);
             int_21 = int_25;
             int_22 = int_26;
             GStruct12 gstruct12_0;
             gstruct12_0.int_0 = int_25;
             gstruct12_0.int_1 = int_26;
-            ScreenToClient(StartupClass.intptr_0, ref gstruct12_0);
-            var windowThreadProcessId = GetWindowThreadProcessId(StartupClass.intptr_0, out var _);
+            ScreenToClient(StartupClass.MainApplicationHandle, ref gstruct12_0);
+            var windowThreadProcessId = GetWindowThreadProcessId(StartupClass.MainApplicationHandle, out var _);
             var currentThreadId = GetCurrentThreadId();
             AttachThreadInput(currentThreadId, windowThreadProcessId, true);
-            SendMessage(StartupClass.intptr_0, 512U, 0U, smethod_32((uint)gstruct12_0.int_0, (uint)gstruct12_0.int_1));
+            SendMessage(StartupClass.MainApplicationHandle, 512U, 0U, smethod_32((uint)gstruct12_0.int_0, (uint)gstruct12_0.int_1));
             AttachThreadInput(currentThreadId, windowThreadProcessId, false);
             smethod_20();
-            if (!StartupClass.bool_2)
+            if (!StartupClass.IsAttached)
                 return;
             Thread.Sleep(100);
         }
@@ -359,7 +359,7 @@ public class GClass55
         int int_29;
         int int_30;
         GProcessMemoryManipulator.smethod_25(double_2, double_3, out int_29, out int_30);
-        if (StartupClass.bool_11 && !GClass61.gclass61_0.method_5("NoCursorHook"))
+        if (StartupClass.IsGliderInitialized && !GClass61.gclass61_0.method_5("NoCursorHook"))
         {
             double_0 = double_2;
             double_1 = double_3;
@@ -370,7 +370,7 @@ public class GClass55
 
     public static void smethod_19(int int_25, int int_26)
     {
-        if (StartupClass.bool_11 && !GClass61.gclass61_0.method_5("NoCursorHook"))
+        if (StartupClass.IsGliderInitialized && !GClass61.gclass61_0.method_5("NoCursorHook"))
             smethod_17(int_25, int_26);
         else
             SetCursorPos(int_25, int_26);
@@ -394,8 +394,8 @@ public class GClass55
             if (bool_1 || (bool_3 && !bool_2))
                 return;
             bool_2 = true;
-            if (!StartupClass.bool_11 || GClass61.gclass61_0.method_5("NoCursorHook") ||
-                !StartupClass.gclass68_0.method_2() || (!gspellTimer_0.IsReady && !StartupClass.bool_2))
+            if (!StartupClass.IsGliderInitialized || GClass61.gclass61_0.method_5("NoCursorHook") ||
+                !StartupClass.gclass68_0.method_2() || (!gspellTimer_0.IsReady && !StartupClass.IsAttached))
                 return;
             bool_1 = true;
             SetCursorPos(5000, 5000);
@@ -416,7 +416,7 @@ public class GClass55
     public static void smethod_23(bool bool_3)
     {
         smethod_24(bool_3);
-        Thread.Sleep(StartupClass.bool_2 ? 100 : 10);
+        Thread.Sleep(StartupClass.IsAttached ? 100 : 10);
         smethod_25(bool_3);
     }
 
@@ -432,7 +432,7 @@ public class GClass55
 
     public static int smethod_26(int int_25)
     {
-        if (StartupClass.bool_11)
+        if (StartupClass.IsGliderInitialized)
         {
             uint uint_5;
             uint uint_6;
@@ -461,8 +461,8 @@ public class GClass55
             GStruct12 gstruct12_0;
             gstruct12_0.int_0 = int_21;
             gstruct12_0.int_1 = int_22;
-            ScreenToClient(StartupClass.intptr_0, ref gstruct12_0);
-            SendMessage(StartupClass.intptr_0, uint_5, uint_6,
+            ScreenToClient(StartupClass.MainApplicationHandle, ref gstruct12_0);
+            SendMessage(StartupClass.MainApplicationHandle, uint_5, uint_6,
                 smethod_32((uint)gstruct12_0.int_0, (uint)gstruct12_0.int_1));
             gspellTimer_0.Reset();
             return 1;
@@ -494,7 +494,7 @@ public class GClass55
     {
         string_1 = string_1.Replace("\r", "");
         string_1 = string_1.Replace("\n", "");
-        if (bool_0 && !StartupClass.bool_11)
+        if (bool_0 && !StartupClass.IsGliderInitialized)
         {
             GClass37.smethod_1(GClass30.smethod_2(689, string_1));
             Class2.smethod_0(string_1);
@@ -530,7 +530,7 @@ public class GClass55
 
     public static void smethod_30(string string_1)
     {
-        if (bool_0 && !StartupClass.bool_11)
+        if (bool_0 && !StartupClass.IsGliderInitialized)
         {
             smethod_28(string_1);
         }

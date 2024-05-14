@@ -54,11 +54,11 @@ public class GClass60
 
     public void method_2()
     {
-        if (!StartupClass.bool_11 && GClass61.gclass61_0.method_5("BackgroundEnable") &&
-            StartupClass.gclass71_0 != null)
+        if (!StartupClass.IsGliderInitialized && GClass61.gclass61_0.method_5("BackgroundEnable") &&
+            StartupClass.GliderManager != null)
         {
-            StartupClass.bool_11 = true;
-            StartupClass.gclass71_0.method_34(StartupClass.int_3, StartupClass.intptr_0);
+            StartupClass.IsGliderInitialized = true;
+            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
         }
 
         var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);
@@ -68,8 +68,8 @@ public class GClass60
         }
         else
         {
-            if (unit.DistanceToSelf > (double)StartupClass.ggameClass_0.PullDistance)
-                unit.Approach(StartupClass.ggameClass_0.PullDistance - 2.0, true);
+            if (unit.DistanceToSelf > (double)StartupClass.CurrentGameClass.PullDistance)
+                unit.Approach(StartupClass.CurrentGameClass.PullDistance - 2.0, true);
             if (unit.Health == 0.0)
             {
                 GClass37.smethod_0(GClass30.smethod_1(307));
@@ -77,12 +77,12 @@ public class GClass60
             else
             {
                 StartupClass.smethod_17(1, GClass30.smethod_1(308));
-                StartupClass.gclass69_0.method_9(unit.Name);
+                StartupClass.GameClass69Instance.method_9(unit.Name);
                 GClass42.gclass42_0.method_23();
                 GContext.Main.Me.SetTargetName(unit.Name);
                 unit.TouchHealthDrop();
-                StartupClass.ggameClass_0.StartCombat();
-                var num = (int)StartupClass.ggameClass_0.KillTarget(unit, false);
+                StartupClass.CurrentGameClass.StartCombat();
+                var num = (int)StartupClass.CurrentGameClass.KillTarget(unit, false);
             }
         }
     }

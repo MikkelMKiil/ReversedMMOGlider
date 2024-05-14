@@ -237,7 +237,7 @@ public class GClass68
         int int_5;
         double double_2;
         double double_3;
-        if (!StartupClass.bool_11)
+        if (!StartupClass.IsGliderInitialized)
         {
             method_15(out int_4, out int_5);
             if (int_4 == int_2 && int_5 == int_3)
@@ -270,7 +270,7 @@ public class GClass68
 
     private void method_13(int int_4, int int_5)
     {
-        if (StartupClass.bool_11)
+        if (StartupClass.IsGliderInitialized)
         {
             GClass55.smethod_16(int_4, int_5);
         }
@@ -284,7 +284,7 @@ public class GClass68
     private void method_14(int int_4, int int_5)
     {
         method_0("SetMousePosition: " + int_4 + "," + int_5);
-        if (StartupClass.bool_11)
+        if (StartupClass.IsGliderInitialized)
             GClass55.smethod_17(int_4, int_5);
         else
             SetCursorPos(int_4, int_5);

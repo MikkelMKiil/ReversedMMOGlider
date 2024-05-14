@@ -43,7 +43,7 @@ public class GClass31
         {
             string_0 = string_1;
             gclass14_0 = new GClass14();
-            if (!StartupClass.bool_12)
+            if (!StartupClass.IsSomeConditionMet)
                 return false;
             if (!gclass14_0.method_1("Accounts\\" + string_1 + ".xml"))
                 throw new Exception("Unable to read XML file (encrypted on another machine?)");

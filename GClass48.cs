@@ -87,7 +87,7 @@ public class GClass48
                 list_0.Add(gclass72);
             }
 
-            if (StartupClass.StartupMode == AppMode.Invisible || StartupClass.StartupMode == AppMode.Normal)
+            if (StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal)
                 method_5();
             return true;
         }
@@ -541,7 +541,7 @@ public class GClass48
             Thread.Sleep(500);
         }
 
-        StartupClass.ggameClass_0.LeaveForm();
+        StartupClass.CurrentGameClass.LeaveForm();
         GContext.Main.ReleaseAllKeys();
         Thread.Sleep(1500);
         var buffSnapshot = GPlayerSelf.Me.GetBuffSnapshot();

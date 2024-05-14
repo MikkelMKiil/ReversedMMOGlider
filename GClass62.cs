@@ -30,12 +30,12 @@ public class GClass62
         {
             bool_0 = true;
             GClass37.smethod_0("TestoThread starting");
-            if (!StartupClass.bool_11 && GClass61.gclass61_0.method_5("BackgroundEnable") &&
-                StartupClass.gclass71_0 != null)
+            if (!StartupClass.IsGliderInitialized && GClass61.gclass61_0.method_5("BackgroundEnable") &&
+                StartupClass.GliderManager != null)
             {
-                StartupClass.intptr_0 = GProcessMemoryManipulator.smethod_29(StartupClass.int_3);
-                StartupClass.gclass71_0.method_34(StartupClass.int_3, StartupClass.intptr_0);
-                StartupClass.bool_11 = true;
+                StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_29(StartupClass.AnotherIntegerValue);
+                StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                StartupClass.IsGliderInitialized = true;
                 GClass37.smethod_0("Setting up for background mode!");
             }
             else
@@ -44,14 +44,14 @@ public class GClass62
                 Thread.Sleep(2000);
             }
 
-            if (StartupClass.gclass71_0 != null)
-                StartupClass.gclass71_0.method_33(true);
+            if (StartupClass.GliderManager != null)
+                StartupClass.GliderManager.method_33(true);
             smethod_52();
             Thread.Sleep(4000);
             StartupClass.gclass68_0.method_7();
             GClass55.smethod_21(false);
-            if (StartupClass.gclass71_0 != null)
-                StartupClass.gclass71_0.method_33(false);
+            if (StartupClass.GliderManager != null)
+                StartupClass.GliderManager.method_33(false);
             GClass37.smethod_0("TestoThread done");
         }
         catch (Exception ex)
@@ -68,7 +68,7 @@ public class GClass62
     {
         if (GContext.Main.Me.Target != null)
         {
-            if (!StartupClass.bool_11)
+            if (!StartupClass.IsGliderInitialized)
                 Thread.Sleep(3000);
             var gspellTimer = new GSpellTimer(5000, false);
             StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));

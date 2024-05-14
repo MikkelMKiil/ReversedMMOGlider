@@ -44,39 +44,39 @@ public class StartupClass
         "Warrior"
     };
 
-    public static bool bool_2;
-    public static bool bool_3;
-    public static GClass49 gclass49_0;
-    public static GStance gstance_0 = GStance.Unknown;
-    public static bool bool_4 = true;
-    public static bool bool_5 = false;
-    public static IWin32Window iwin32Window_0 = null;
-    public static bool bool_6;
-    public static GClass16 gclass16_0;
-    public static GClass47 gclass47_0;
-    public static bool bool_7;
-    public static GClass71 gclass71_0;
-    public static SortedList<string, GClass22> ProfileList;
-    public static GGameClass ggameClass_0;
-    public static GClass22 gclass22_0;
-    public static GClass9 gclass9_0;
-    private static readonly GSpellTimer gspellTimer_0 = new GSpellTimer(37000, false);
-    public static bool bool_8;
-    public static Form form_0 = null;
-    public static bool bool_9;
-    public static bool bool_10;
-    public static bool bool_11;
-    public static GClass32 gclass32_0;
-    public static int int_2;
-    public static GClass8 gclass8_0;
-    public static GClass69 gclass69_0;
-    public static bool bool_12;
-    public static SortedList<long, GClass5> ProfileMap;
-    public static AppMode StartupMode;
-    public static IntPtr intptr_0 = IntPtr.Zero;
-    public static string string_4;
-    public static int int_3;
-    public static IntPtr intptr_1;
+    public static bool IsAttached;
+    public static bool IsDetached;
+    public static GClass49 GameProcessManager;
+    public static GStance CurrentStance = GStance.Unknown;
+    public static bool IsForegroundEnabled = true;
+    public static bool IsBackgroundEnabled = false;
+    public static IWin32Window MainWindowHandle = null;
+    public static bool IsStopRequested;
+    public static GClass16 GameMemoryReader;
+    public static GClass47 GameMemoryWriter;
+    public static bool IsExitRequested;
+    public static GClass71 GliderManager;
+    public static SortedList<string, GClass22> ProfileMapping;
+    public static GGameClass CurrentGameClass;
+    public static GClass22 CurrentProfile;
+    public static GClass9 GliderUIManager;
+    private static readonly GSpellTimer SpellCooldownTimer = new GSpellTimer(37000, false);
+    public static bool IsGliderAttached;
+    public static Form MainForm = null;
+    public static bool IsGliderRunning;
+    public static bool IsGliderPaused;
+    public static bool IsGliderInitialized;
+    public static GClass32 GameClass32Instance;
+    public static int SomeIntegerValue;
+    public static GClass8 GameClass8Instance;
+    public static GClass69 GameClass69Instance;
+    public static bool IsSomeConditionMet;
+    public static SortedList<long, GClass5> ProfileIdToProfileMap;
+    public static AppMode ApplicationStartupMode;
+    public static IntPtr MainApplicationHandle = IntPtr.Zero;
+    public static string SomeStringData;
+    public static int AnotherIntegerValue;
+    public static IntPtr AdditionalApplicationHandle;
     public static bool bool_13;
     public static GProfile gprofile_0;
     public static string string_5;
@@ -165,9 +165,9 @@ public class StartupClass
 
     public static void InitStartupMode(AppMode appMode_1)
     {
-        StartupMode = appMode_1;
-        ProfileList = new SortedList<string, GClass22>();
-        ProfileMap = new SortedList<long, GClass5>();
+        ApplicationStartupMode = appMode_1;
+        ProfileMapping = new SortedList<string, GClass22>();
+        ProfileIdToProfileMap = new SortedList<long, GClass5>();
         if (appMode_1 == AppMode.PGEdit)
         {
             GClass61.gclass61_0 = new GClass61();
@@ -211,7 +211,7 @@ public class StartupClass
                 bool_34 = true;
             if (Environment.CommandLine.ToLower().IndexOf("/mach") != -1)
             {
-                bool_2 = true;
+                IsAttached = true;
                 GClass37.smethod_0("Mach flag, using open memory model");
             }
 
@@ -220,7 +220,7 @@ public class StartupClass
             GClass30.smethod_0(".\\");
             gclass11_0 = new GClass11();
             gclass11_0.method_1();
-            gclass32_0 = null;
+            GameClass32Instance = null;
             random_0 = new Random();
             gclass36_0 = new GClass36(10000);
             glideMode_0 = GlideMode.None;
@@ -237,15 +237,15 @@ public class StartupClass
             gclass36_0 = new GClass36(660000);
             bool_21 = false;
             gclass36_1 = new GClass36(30000);
-            bool_11 = false;
+            IsGliderInitialized = false;
             gclass68_0 = new GClass68();
-            if (!bool_2)
+            if (!IsAttached)
             {
                 smethod_54();
                 smethod_55();
             }
 
-            if (GClass61.gclass61_0.method_5("AllowNetCheck") && !bool_2)
+            if (GClass61.gclass61_0.method_5("AllowNetCheck") && !IsAttached)
                 new GClass3().ValidateNetworkSafety(true);
             if (GClass61.gclass61_0.method_2("LastProfile") != null)
             {
@@ -257,9 +257,9 @@ public class StartupClass
                 string_5 = GClass30.smethod_1(70);
             }
 
-            gclass9_0 = new GClass9();
+            GliderUIManager = new GClass9();
             var gcontext = new GContext();
-            if (!bool_2)
+            if (!IsAttached)
                 GClass74.smethod_10();
             GClass55.smethod_31(GClass61.gclass61_0);
             smethod_5();
@@ -270,11 +270,11 @@ public class StartupClass
             GClass42.gclass42_0.method_12();
             gclass24_0 = new GClass24();
             gclass36_0.method_4();
-            if (!bool_2)
+            if (!IsAttached)
                 smethod_7();
             else
                 WowVersionLabel_string = "EvoStub";
-            if (!bool_2)
+            if (!IsAttached)
                 smethod_8();
             bool_19 = int_7 != int_8;
             if (gclass11_0.string_0 != null)
@@ -283,8 +283,8 @@ public class StartupClass
                 Environment.Exit(1);
             }
 
-            gclass47_0 = new GClass47();
-            gclass69_0 = new GClass69();
+            GameMemoryWriter = new GClass47();
+            GameClass69Instance = new GClass69();
             smethod_30();
             smethod_53();
             smethod_9();
@@ -342,7 +342,7 @@ public class StartupClass
 
     public static void smethod_5()
     {
-        if (bool_2)
+        if (IsAttached)
             return;
         numbers_string = GClass61.gclass61_0.method_2("BarCharacters");
         if (GContext.Main != null)
@@ -354,13 +354,13 @@ public class StartupClass
             smethod_8();
         }
 
-        if (ggameClass_0 != null)
-            ggameClass_0.LoadConfig();
+        if (CurrentGameClass != null)
+            CurrentGameClass.LoadConfig();
         GClass50.double_2 = smethod_6(GClass61.gclass61_0.method_2("MeleeDistance"));
         GClass50.double_3 = smethod_6(GClass61.gclass61_0.method_2("RangedDistance"));
         double_0 = smethod_6(GClass61.gclass61_0.method_2("AutoAddDistance"));
         GClass20.bool_0 = GClass61.gclass61_0.method_5("Silent");
-        if (StartupMode == AppMode.PGEdit)
+        if (ApplicationStartupMode == AppMode.PGEdit)
             return;
         if (!GClass61.gclass61_0.method_5("ListenEnabled"))
         {
@@ -390,7 +390,7 @@ public class StartupClass
 
         string_8 = GClass61.gclass61_0.method_2("FriendWhitelist").Split(' ');
         gclass33_0 = new GClass33(GClass61.gclass61_0.method_2("LootPattern"));
-        gclass9_0.method_2();
+        GliderUIManager.method_2();
         if (GClass61.gclass61_0.method_5("UseHook") && !GClass24.bool_0)
         {
             gclass24_0 = new GClass24();
@@ -431,8 +431,8 @@ public class StartupClass
             }
             else
             {
-                string_4 = obj.ToString();
-                var fileName = string_4 + "WoW.exe";
+                SomeStringData = obj.ToString();
+                var fileName = SomeStringData + "WoW.exe";
                 GClass37.smethod_1(GClass30.smethod_2(84, fileName));
                 registryKey.Close();
                 var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
@@ -458,7 +458,7 @@ public class StartupClass
         {
             var gameClass = (GameClass)GClass61.gclass61_0.method_3("Class");
             str = gameClass + ".cs (internal)";
-            if (!ProfileList.ContainsKey(str))
+            if (!ProfileMapping.ContainsKey(str))
             {
                 GClass37.smethod_1("No dynamic class: \"" + str + "\"");
                 str = gameClass.ToString();
@@ -468,10 +468,10 @@ public class StartupClass
             GClass61.gclass61_0.method_0("CustomClassName", str);
         }
 
-        if (!ProfileList.ContainsKey(str))
+        if (!ProfileMapping.ContainsKey(str))
         {
             GClass37.smethod_0("!! No class defined for: \"" + str + "\"");
-            if (ProfileList.ContainsKey(str + ".cs (internal)"))
+            if (ProfileMapping.ContainsKey(str + ".cs (internal)"))
             {
                 str += ".cs (internal)";
                 GClass37.smethod_0("Promoted to real internal class: " + str);
@@ -479,23 +479,23 @@ public class StartupClass
             }
             else
             {
-                str = ProfileList.Keys[0];
+                str = ProfileMapping.Keys[0];
                 if (!bool_37)
                     GClass37.smethod_0("Switching to: " + str);
             }
         }
 
-        ProfileList[str].method_0();
-        var object0 = (GGameClass)ProfileList[str].object_0;
+        ProfileMapping[str].method_0();
+        var object0 = (GGameClass)ProfileMapping[str].object_0;
         if (bool_13)
         {
             GClass37.smethod_1("Calling OnAttach for new class");
             object0.OnAttach();
         }
 
-        gstance_0 = GStance.Unknown;
-        ggameClass_0 = object0;
-        gclass22_0 = ProfileList[str];
+        CurrentStance = GStance.Unknown;
+        CurrentGameClass = object0;
+        CurrentProfile = ProfileMapping[str];
     }
 
     public static void smethod_9()
@@ -537,11 +537,11 @@ public class StartupClass
             GClass37.smethod_0(GClass30.smethod_1(76));
             if (bool_25)
                 GClass37.smethod_0(GClass30.smethod_2(77, dateTime_1.ToString()));
-            if (bool_12)
+            if (IsSomeConditionMet)
             {
                 GClass74.smethod_12();
-                if (gclass47_0 != null)
-                    gclass47_0.method_7();
+                if (GameMemoryWriter != null)
+                    GameMemoryWriter.method_7();
                 switch (GClass52.int_0)
                 {
                     case 0:
@@ -563,21 +563,21 @@ public class StartupClass
             }
 
             bool_19 = false;
-            if (GClass61.gclass61_0.method_5("AllowWW") && gclass71_0 != null && gclass16_0 == null && !bool_2)
+            if (GClass61.gclass61_0.method_5("AllowWW") && GliderManager != null && GameMemoryReader == null && !IsAttached)
             {
                 GClass37.smethod_0("Starting Tripwire");
-                gclass16_0 = new GClass16(gclass71_0, GClass61.gclass61_0.method_5("LogWW"),
+                GameMemoryReader = new GClass16(GliderManager, GClass61.gclass61_0.method_5("LogWW"),
                     GClass18.gclass18_0.method_4("VAPeek"));
             }
 
-            if (bool_12 && !bool_37 && !bool_2)
+            if (IsSomeConditionMet && !bool_37 && !IsAttached)
                 bool_38 = true;
-            if (gclass47_0 != null)
-                gclass47_0.method_2("OnGliderStart", false);
+            if (GameMemoryWriter != null)
+                GameMemoryWriter.method_2("OnGliderStart", false);
         }
         else
         {
-            bool_12 = false;
+            IsSomeConditionMet = false;
             if (bool_17)
             {
                 bool_18 = true;
@@ -587,7 +587,7 @@ public class StartupClass
             }
         }
 
-        if (StartupMode == AppMode.Normal)
+        if (ApplicationStartupMode == AppMode.Normal)
             GClass37.smethod_0(GClass30.smethod_1(79));
         bool_27 = true;
         ginterface0_0.imethod_0();
@@ -614,15 +614,15 @@ public class StartupClass
     public static void smethod_14()
     {
         GClass37.smethod_1("--- Attach code in");
-        if (bool_2)
+        if (IsAttached)
         {
             GClass20.smethod_0("Attach.wav");
-            bool_3 = true;
+            IsDetached = true;
             ginterface0_0.imethod_0();
         }
         else
         {
-            bool_4 = false;
+            IsForegroundEnabled = false;
             gclass36_2.method_4();
             GProcessMemoryManipulator.bool_2 = false;
             gclass43_0 = new GClass43("Player", GClass18.gclass18_0.method_4("D_Player"));
@@ -632,25 +632,25 @@ public class StartupClass
             gclass43_4 = new GClass43("Container", GClass18.gclass18_0.method_4("D_Container"));
             gclass63_0 = new GClass63();
             GContext.Main.OnAttach();
-            if (ggameClass_0 != null)
-                ggameClass_0.OnAttach();
+            if (CurrentGameClass != null)
+                CurrentGameClass.OnAttach();
             GClass8.smethod_2("UIParent");
             smethod_17(1, GClass30.smethod_1(98));
             ginterface0_0.imethod_0();
             gclass38_0 = new GClass38();
             gclass38_0.method_0();
-            gclass69_0.method_0();
+            GameClass69Instance.method_0();
             GClass67.smethod_0();
-            gclass8_0 = GClass8.smethod_2("GameMenuFrame");
-            bool_10 = false;
+            GameClass8Instance = GClass8.smethod_2("GameMenuFrame");
+            IsGliderPaused = false;
             if (gclass48_0 != null)
                 gclass48_0.method_6();
             bool_13 = true;
             GClass20.smethod_0("Attach.wav");
-            if (gclass16_0 != null)
+            if (GameMemoryReader != null)
             {
-                gclass16_0.method_5();
-                gclass16_0.method_4();
+                GameMemoryReader.method_5();
+                GameMemoryReader.method_4();
             }
             else
             {
@@ -659,9 +659,9 @@ public class StartupClass
 
             bool_36 = false;
             GClass37.smethod_1("--- Attach code out");
-            if (!bool_6)
+            if (!IsStopRequested)
                 return;
-            bool_6 = false;
+            IsStopRequested = false;
             smethod_24(false);
         }
     }
@@ -673,16 +673,16 @@ public class StartupClass
         bool_20 = false;
         bool_32 = true;
         GClass37.smethod_1("AppContext.Detach invoked");
-        if (int_12 == 0 && !GProcessMemoryManipulator.smethod_56(int_3))
+        if (int_12 == 0 && !GProcessMemoryManipulator.smethod_56(AnotherIntegerValue))
         {
-            GProcessMemoryManipulator.smethod_7(intptr_1);
-            intptr_1 = IntPtr.Zero;
-            int_3 = 0;
+            GProcessMemoryManipulator.smethod_7(AdditionalApplicationHandle);
+            AdditionalApplicationHandle = IntPtr.Zero;
+            AnotherIntegerValue = 0;
         }
 
         bool_13 = false;
-        gclass69_0.method_3();
-        gclass8_0 = null;
+        GameClass69Instance.method_3();
+        GameClass8Instance = null;
         smethod_17(1, GClass30.smethod_1(99));
     }
 
@@ -709,13 +709,13 @@ public class StartupClass
     {
         if (gclass79_0 != null)
             gclass79_0.method_5(int_14, string_11);
-        if (gclass9_0 == null)
+        if (GliderUIManager == null)
             return;
         if ((int_14 & 32) > 0)
-            gclass9_0.method_1(string_11);
+            GliderUIManager.method_1(string_11);
         if ((int_14 & 2) <= 0)
             return;
-        gclass9_0.method_0(string_11);
+        GliderUIManager.method_0(string_11);
     }
 
     public static int smethod_18()
@@ -830,7 +830,7 @@ public class StartupClass
     public static void smethod_22()
     {
         smethod_39(500);
-        GProcessMemoryManipulator.SetForegroundWindow(intptr_0);
+        GProcessMemoryManipulator.SetForegroundWindow(MainApplicationHandle);
         smethod_39(500);
     }
 
@@ -900,7 +900,7 @@ public class StartupClass
             return false;
         }
 
-        if (!bool_13 && !bool_3)
+        if (!bool_13 && !IsDetached)
         {
             smethod_13();
             if (!bool_13)
@@ -913,7 +913,7 @@ public class StartupClass
             return false;
         }
 
-        if (bool_3)
+        if (IsDetached)
             return smethod_25();
         if (gclass48_0 == null && (gprofile_0 == null || (gprofile_0.Waypoints.Count < 2 && !gprofile_0.Fishing)))
         {
@@ -928,7 +928,7 @@ public class StartupClass
             return false;
         }
 
-        if (!bool_11)
+        if (!IsGliderInitialized)
             smethod_22();
         glideMode_0 = GlideMode.Auto;
         gclass73_0 = new GClass73();
@@ -940,8 +940,8 @@ public class StartupClass
 
     private static bool smethod_25()
     {
-        gclass49_0 = new GClass49();
-        if (!gclass49_0.method_0())
+        GameProcessManager = new GClass49();
+        if (!GameProcessManager.method_0())
         {
             glideMode_0 = GlideMode.None;
             return false;
@@ -1036,12 +1036,12 @@ public class StartupClass
             {
                 if (bool_42)
                     bool_36 = true;
-                if (ggameClass_0 != null)
-                    ggameClass_0.OnStopGlide();
+                if (CurrentGameClass != null)
+                    CurrentGameClass.OnStopGlide();
                 smethod_17(1, GClass30.smethod_1(100));
-                if (bool_2)
+                if (IsAttached)
                 {
-                    if (Thread.CurrentThread == gclass49_0.thread_0)
+                    if (Thread.CurrentThread == GameProcessManager.thread_0)
                         flag = true;
                 }
                 else if (Thread.CurrentThread == gclass73_0.thread_0)
@@ -1051,10 +1051,10 @@ public class StartupClass
 
                 GClass37.smethod_1(GClass30.smethod_1(100));
                 glideMode_0 = GlideMode.None;
-                if (bool_2)
+                if (IsAttached)
                 {
-                    gclass49_0.method_1();
-                    gclass49_0 = null;
+                    GameProcessManager.method_1();
+                    GameProcessManager = null;
                 }
                 else
                 {
@@ -1079,8 +1079,8 @@ public class StartupClass
                 smethod_15();
             ginterface0_0.imethod_0();
             GContext.Main.ReleaseAllKeys();
-            if (gclass71_0 != null)
-                gclass71_0.method_33(false);
+            if (GliderManager != null)
+                GliderManager.method_33(false);
             if (flag)
                 throw new ThreadInterruptedException();
         }
@@ -1113,11 +1113,11 @@ public class StartupClass
 
     public static void smethod_31()
     {
-        if (gclass16_0 != null)
-            gclass16_0.method_0();
-        gclass47_0.method_0();
+        if (GameMemoryReader != null)
+            GameMemoryReader.method_0();
+        GameMemoryWriter.method_0();
         GClass74.smethod_4();
-        gclass9_0.method_5();
+        GliderUIManager.method_5();
     }
 
     private static void smethod_32()
@@ -1143,8 +1143,8 @@ public class StartupClass
         GClass20.smethod_1("GliderExit.wav");
         DebuffsKnown_string.method_10();
         ginterface0_0.imethod_4();
-        if (gclass71_0 != null && !bool_33)
-            gclass71_0.method_11();
+        if (GliderManager != null && !bool_33)
+            GliderManager.method_11();
         smethod_31();
         Environment.Exit(0);
     }
@@ -1205,24 +1205,24 @@ public class StartupClass
             File.WriteAllText("TWunsafe.txt", "guh!");
         if (genum0_0 == GEnum0.const_3)
             File.WriteAllText("DeadSession.txt", "guh!");
-        bool_7 = true;
-        if (gclass16_0 != null)
-            gclass16_0.method_0();
-        if (!bool_33 && gclass71_0 != null)
-            gclass71_0.method_11();
+        IsExitRequested = true;
+        if (GameMemoryReader != null)
+            GameMemoryReader.method_0();
+        if (!bool_33 && GliderManager != null)
+            GliderManager.method_11();
         ginterface0_0.imethod_4();
     }
 
     public static void smethod_38()
     {
-        if (bool_7)
+        if (IsExitRequested)
             return;
         smethod_45();
         if (bool_30 && bool_27)
         {
             GProcessMemoryManipulator.smethod_53();
-            if (gclass47_0 != null && (StartupMode == AppMode.Normal || StartupMode == AppMode.Invisible))
-                gclass47_0.method_2("OnGliderStart", false);
+            if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
+                GameMemoryWriter.method_2("OnGliderStart", false);
         }
 
         if (gspellTimer_2.IsReady)
@@ -1233,14 +1233,14 @@ public class StartupClass
                 gclass3.ValidateNetworkSafety(false);
         }
 
-        if (gspellTimer_0.IsReady)
+        if (SpellCooldownTimer.IsReady)
         {
-            gspellTimer_0.Reset();
+            SpellCooldownTimer.Reset();
             GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.smethod_28();
             GProcessMemoryManipulator.smethod_31();
         }
 
-        if (bool_38 && !bool_2 && !bool_37)
+        if (bool_38 && !IsAttached && !bool_37)
         {
             bool_37 = true;
             GClass74.smethod_14();
@@ -1255,21 +1255,21 @@ public class StartupClass
             DebuffsKnown_string.method_8();
         }
 
-        if (GPlayerSelf.Me.Stance != gstance_0)
+        if (GPlayerSelf.Me.Stance != CurrentStance)
         {
-            if (gstance_0 != GStance.Unknown)
+            if (CurrentStance != GStance.Unknown)
                 GContext.Main.Interface.UnFillAllKeys();
-            gstance_0 = GPlayerSelf.Me.Stance;
+            CurrentStance = GPlayerSelf.Me.Stance;
         }
 
-        gclass69_0.method_4();
+        GameClass69Instance.method_4();
         GClass67.smethod_1();
-        if (gclass8_0 != null && gclass8_0.method_10() && glideMode_0 == GlideMode.Auto)
+        if (GameClass8Instance != null && GameClass8Instance.method_10() && glideMode_0 == GlideMode.Auto)
             GClass55.smethod_9(27);
-        if (glideMode_0 == GlideMode.Auto && bool_11 && GClass61.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
-            (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !bool_9)
+        if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && GClass61.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
+            (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !IsGliderRunning)
         {
-            bool_9 = true;
+            IsGliderRunning = true;
             smethod_46();
         }
 
@@ -1295,7 +1295,7 @@ public class StartupClass
     {
         if (gunit_0 != null && gunit_0.IsValid)
         {
-            if (gclass69_0 == null || gclass69_0.method_10() >= 10)
+            if (GameClass69Instance == null || GameClass69Instance.method_10() >= 10)
                 return false;
             GClass37.smethod_0(GClass30.smethod_1(830));
             if (glideMode_0 == GlideMode.Auto)
@@ -1329,22 +1329,22 @@ public class StartupClass
 
     public static bool smethod_44()
     {
-        int_3 = GProcessMemoryManipulator.smethod_1();
-        if (int_3 == 0)
+        AnotherIntegerValue = GProcessMemoryManipulator.smethod_1();
+        if (AnotherIntegerValue == 0)
         {
             bool_35 = true;
             return false;
         }
 
-        bool_8 = true;
-        if (intptr_1 == IntPtr.Zero && !bool_14)
+        IsGliderAttached = true;
+        if (AdditionalApplicationHandle == IntPtr.Zero && !bool_14)
         {
-            intptr_1 = GProcessMemoryManipulator.smethod_6(int_3);
-            if (intptr_1 == IntPtr.Zero)
+            AdditionalApplicationHandle = GProcessMemoryManipulator.smethod_6(AnotherIntegerValue);
+            if (AdditionalApplicationHandle == IntPtr.Zero)
             {
-                if (!bool_10)
+                if (!IsGliderPaused)
                 {
-                    bool_10 = true;
+                    IsGliderPaused = true;
                     GClass37.smethod_0(GClass30.smethod_2(96, Marshal.GetLastWin32Error()));
                 }
 
@@ -1352,32 +1352,32 @@ public class StartupClass
             }
 
             GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.smethod_28();
-            if (gclass71_0 != null && !gclass71_0.method_26(int_3))
+            if (GliderManager != null && !GliderManager.method_26(AnotherIntegerValue))
             {
                 GClass37.smethod_0(
                     "Some other Glider is already open on that game, maybe we'll attach to some other one");
-                CloseHandle(intptr_1);
-                intptr_1 = IntPtr.Zero;
-                GProcessMemoryManipulator.smethod_5(int_3);
-                int_3 = 0;
+                CloseHandle(AdditionalApplicationHandle);
+                AdditionalApplicationHandle = IntPtr.Zero;
+                GProcessMemoryManipulator.smethod_5(AnotherIntegerValue);
+                AnotherIntegerValue = 0;
                 return false;
             }
 
             GProcessMemoryManipulator.smethod_31();
-            if (gclass47_0 != null)
-                gclass47_0.method_2("OnGameFirstSeen", false);
+            if (GameMemoryWriter != null)
+                GameMemoryWriter.method_2("OnGameFirstSeen", false);
         }
 
-        if (bool_2)
+        if (IsAttached)
             return true;
         if (GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("UIParent"), "probeuip") == 0 && !bool_20 &&
-            ((bool_31 && gspellTimer_1.IsReady) || bool_4))
+            ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
             var str = GClass61.gclass61_0.method_2("AutoLog");
-            if (str != null && str.Length > 0 && bool_12 && new GClass31().method_2())
+            if (str != null && str.Length > 0 && IsSomeConditionMet && new GClass31().method_2())
             {
                 bool_20 = true;
-                gclass47_0.method_2("DoAutoLog", false);
+                GameMemoryWriter.method_2("DoAutoLog", false);
             }
 
             return false;
@@ -1389,9 +1389,9 @@ public class StartupClass
         var numArray = GProcessMemoryManipulator.smethod_20(GClass18.gclass18_0.method_4("PlayerIdAddr"), 8);
         if (numArray == null)
         {
-            if (intptr_1 != IntPtr.Zero)
-                CloseHandle(intptr_1);
-            intptr_1 = IntPtr.Zero;
+            if (AdditionalApplicationHandle != IntPtr.Zero)
+                CloseHandle(AdditionalApplicationHandle);
+            AdditionalApplicationHandle = IntPtr.Zero;
             return false;
         }
 
@@ -1404,7 +1404,7 @@ public class StartupClass
 
     public static void smethod_45()
     {
-        if (bool_13 || bool_3 || !bool_22 || !smethod_44())
+        if (bool_13 || IsDetached || !bool_22 || !smethod_44())
             return;
         smethod_14();
     }
@@ -1426,7 +1426,7 @@ public class StartupClass
     {
         if (bool_40)
             return;
-        GProcessMemoryManipulator.smethod_38(intptr_0);
+        GProcessMemoryManipulator.smethod_38(MainApplicationHandle);
         bool_40 = true;
     }
 
@@ -1435,9 +1435,9 @@ public class StartupClass
         if (bool_41)
             return;
         double width = GClass61.gclass61_0.method_3("ShrinkWidth");
-        GProcessMemoryManipulator.smethod_40(intptr_0, out size_0);
+        GProcessMemoryManipulator.smethod_40(MainApplicationHandle, out size_0);
         var height = size_0.Height / (double)size_0.Width * width;
-        GProcessMemoryManipulator.smethod_42(intptr_0, new Size((int)width, (int)height));
+        GProcessMemoryManipulator.smethod_42(MainApplicationHandle, new Size((int)width, (int)height));
         bool_41 = true;
     }
 
@@ -1445,7 +1445,7 @@ public class StartupClass
     {
         if (!bool_40)
             return;
-        GProcessMemoryManipulator.smethod_37(intptr_0);
+        GProcessMemoryManipulator.smethod_37(MainApplicationHandle);
         bool_40 = false;
     }
 
@@ -1453,7 +1453,7 @@ public class StartupClass
     {
         if (!bool_41)
             return;
-        GProcessMemoryManipulator.smethod_42(intptr_0, size_0);
+        GProcessMemoryManipulator.smethod_42(MainApplicationHandle, size_0);
         bool_41 = false;
     }
 
@@ -1477,9 +1477,9 @@ public class StartupClass
         if (Environment.CommandLine.ToLower().IndexOf("/driver") != -1)
         {
             GClass20.smethod_1("Kill.wav");
-            gclass71_0 = new GClass71(smethod_36("/driver"));
+            GliderManager = new GClass71(smethod_36("/driver"));
             GClass37.smethod_1("Sending data to shadow driver");
-            if (!gclass71_0.method_38())
+            if (!GliderManager.method_38())
             {
                 if (MessageBox.Show(null, GClass30.smethod_1(862), "Glider", MessageBoxButtons.YesNo,
                         MessageBoxIcon.Hand) == DialogResult.Yes)
@@ -1509,10 +1509,10 @@ public class StartupClass
             GClass37.smethod_0("/attachpid specified, looking for: " + int_12);
         }
 
-        if (!GClass61.gclass61_0.method_5("UnloadShadow") || gclass71_0 == null)
+        if (!GClass61.gclass61_0.method_5("UnloadShadow") || GliderManager == null)
             return;
-        gclass71_0.method_11();
-        gclass71_0 = null;
+        GliderManager.method_11();
+        GliderManager = null;
     }
 
     private static void smethod_54()
@@ -1523,8 +1523,8 @@ public class StartupClass
                 "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
             DialogResult.No)
             return;
-        if (gclass71_0 != null && !bool_33)
-            gclass71_0.method_11();
+        if (GliderManager != null && !bool_33)
+            GliderManager.method_11();
         Environment.Exit(0);
     }
 
@@ -1535,15 +1535,15 @@ public class StartupClass
                 "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
             DialogResult.No)
             return;
-        if (gclass71_0 != null && !bool_33)
-            gclass71_0.method_11();
+        if (GliderManager != null && !bool_33)
+            GliderManager.method_11();
         Environment.Exit(0);
     }
 
     public static void smethod_56()
     {
-        bool_6 = false;
-        if (!bool_12)
+        IsStopRequested = false;
+        if (!IsSomeConditionMet)
         {
             GClass37.smethod_0(GClass30.smethod_1(868));
             GClass73.smethod_0(869);
@@ -1555,7 +1555,7 @@ public class StartupClass
                 return;
             string_9 = string_1;
             GClass37.smethod_1("Autolog is good!");
-            bool_6 = true;
+            IsStopRequested = true;
         }
     }
 
@@ -1599,7 +1599,7 @@ public class StartupClass
 
     private static void smethod_60()
     {
-        if (MessageBox.Show(form_0, GClass30.smethod_1(875), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+        if (MessageBox.Show(MainForm, GClass30.smethod_1(875), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         smethod_58();
@@ -1616,7 +1616,7 @@ public class StartupClass
         }
         else
         {
-            if (MessageBox.Show(form_0, GClass30.smethod_1(876), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+            if (MessageBox.Show(MainForm, GClass30.smethod_1(876), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
                     MessageBoxIcon.Exclamation) != DialogResult.Yes)
                 return;
             Process.Start("http://www.mmoglider.com/Download.aspx?Update=True");
@@ -1625,12 +1625,12 @@ public class StartupClass
 
     public static void smethod_62()
     {
-        if (!bool_11 && GClass61.gclass61_0.method_5("BackgroundEnable") && gclass71_0 != null && bool_12)
+        if (!IsGliderInitialized && GClass61.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
         {
             GClass37.smethod_1("Setting up bg stuff");
-            intptr_0 = GProcessMemoryManipulator.smethod_29(int_3);
-            gclass71_0.method_34(int_3, intptr_0);
-            bool_11 = true;
+            MainApplicationHandle = GProcessMemoryManipulator.smethod_29(AnotherIntegerValue);
+            GliderManager.method_34(AnotherIntegerValue, MainApplicationHandle);
+            IsGliderInitialized = true;
         }
         else
         {

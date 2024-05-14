@@ -89,7 +89,7 @@ public class GClass3
                 GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes;
         if (NetworkStatus == NetCheckResult.Stop)
         {
-            StartupClass.bool_7 = true;
+            StartupClass.IsExitRequested = true;
             if (showDialogs)
                 TerminateWowProcesses();
             else
@@ -144,8 +144,8 @@ public class GClass3
 
     public void StopGlider()
     {
-        if (StartupClass.gclass71_0 != null && !StartupClass.bool_33)
-            StartupClass.gclass71_0.method_11();
+        if (StartupClass.GliderManager != null && !StartupClass.bool_33)
+            StartupClass.GliderManager.method_11();
         StartupClass.ginterface0_0.imethod_4();
     }
 }

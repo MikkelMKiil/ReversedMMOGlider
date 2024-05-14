@@ -137,7 +137,7 @@ public class GClass75
                         GClass37.smethod_1("! Chat read failed (" + GProcessMemoryManipulator.int_27 + ") for " + string_0 + " @ 0x" +
                                            num6.ToString("x") + ", ri/ca/ip=" + num5 + "/" + num2 + "/" + num3);
                         GStruct20 gstruct20_0;
-                        if (VirtualQueryEx(StartupClass.intptr_1, num6, out gstruct20_0, 28) != 28)
+                        if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, num6, out gstruct20_0, 28) != 28)
                         {
                             GClass37.smethod_1("! VirtualQueryEx failed at 0x" + num6.ToString("x") +
                                                ", can't get more debug, last error = " + Marshal.GetLastWin32Error());

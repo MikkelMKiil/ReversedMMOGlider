@@ -497,7 +497,7 @@ public class ProfileWizard : Form
             case Enum0.const_4:
                 gprofile_0.Save(string_0);
                 method_2(PanelVendorStart);
-                SkipVendorBox.Checked = !StartupClass.bool_12;
+                SkipVendorBox.Checked = !StartupClass.IsSomeConditionMet;
                 break;
             case Enum0.const_5:
                 if (SkipVendorBox.Checked)
@@ -883,7 +883,7 @@ public class ProfileWizard : Form
 
     private void SkipVendorBox_CheckedChanged(object sender, EventArgs e)
     {
-        if (SkipVendorBox.Checked || StartupClass.bool_12 || MessageBox.Show(this,
+        if (SkipVendorBox.Checked || StartupClass.IsSomeConditionMet || MessageBox.Show(this,
                 GClass30.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             return;

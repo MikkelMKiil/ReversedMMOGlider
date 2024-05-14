@@ -96,24 +96,24 @@ public class GProcessMemoryManipulator
         {
             if (gclass65.method_2(StartupClass.int_12) == 0)
                 return 0;
-            StartupClass.int_3 = StartupClass.int_12;
-            StartupClass.intptr_0 = smethod_29(StartupClass.int_3);
-            return StartupClass.int_3;
+            StartupClass.AnotherIntegerValue = StartupClass.int_12;
+            StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
+            return StartupClass.AnotherIntegerValue;
         }
 
-        if (StartupClass.intptr_1 != IntPtr.Zero)
+        if (StartupClass.AdditionalApplicationHandle != IntPtr.Zero)
         {
-            if (smethod_56(StartupClass.int_3))
-                return StartupClass.int_3;
-            CloseHandle(StartupClass.intptr_1);
-            StartupClass.intptr_1 = IntPtr.Zero;
-            StartupClass.int_3 = 0;
-            StartupClass.bool_4 = true;
-            StartupClass.bool_11 = false;
+            if (smethod_56(StartupClass.AnotherIntegerValue))
+                return StartupClass.AnotherIntegerValue;
+            CloseHandle(StartupClass.AdditionalApplicationHandle);
+            StartupClass.AdditionalApplicationHandle = IntPtr.Zero;
+            StartupClass.AnotherIntegerValue = 0;
+            StartupClass.IsForegroundEnabled = true;
+            StartupClass.IsGliderInitialized = false;
         }
 
         var str = GClass61.gclass61_0.method_2("AttachEXE");
-        if (StartupClass.bool_2)
+        if (StartupClass.IsAttached)
             str = "Solitaire.exe";
         if (gclass65.method_1(str) == 0)
             return 0;
@@ -127,27 +127,27 @@ public class GProcessMemoryManipulator
 
         if (num == 0)
             return 0;
-        StartupClass.int_3 = num;
-        StartupClass.intptr_0 = smethod_29(StartupClass.int_3);
-        return StartupClass.int_3;
+        StartupClass.AnotherIntegerValue = num;
+        StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
+        return StartupClass.AnotherIntegerValue;
     }
 
     public static Rectangle smethod_2()
     {
         var gstruct22_0 = new GStruct22();
-        GetWindowRect(smethod_29(StartupClass.int_3), out gstruct22_0);
+        GetWindowRect(smethod_29(StartupClass.AnotherIntegerValue), out gstruct22_0);
         return new Rectangle(gstruct22_0.int_0, gstruct22_0.int_1, gstruct22_0.int_2 - gstruct22_0.int_0,
             gstruct22_0.int_3 - gstruct22_0.int_1);
     }
 
     public static IntPtr smethod_3()
     {
-        return smethod_29(StartupClass.int_3);
+        return smethod_29(StartupClass.AnotherIntegerValue);
     }
 
     public static GStruct22 smethod_4()
     {
-        var intptr_2 = smethod_29(StartupClass.int_3);
+        var intptr_2 = smethod_29(StartupClass.AnotherIntegerValue);
         var gstruct22_0 = new GStruct22(0, 0, 0, 0);
         if (!GetClientRect(intptr_2, out gstruct22_0))
         {
@@ -171,14 +171,14 @@ public class GProcessMemoryManipulator
 
     public static IntPtr smethod_6(int int_29)
     {
-        var num = !StartupClass.bool_2
+        var num = !StartupClass.IsAttached
             ? !GClass61.gclass61_0.method_5("AllowWriteBytes")
                 ? OpenProcess(24U, false, int_29)
                 : OpenProcess(1080U, false, int_29)
             : OpenProcess(1048U, false, int_29);
         if (!(num == IntPtr.Zero))
             return num;
-        return StartupClass.gclass71_0 != null ? StartupClass.gclass71_0.method_20(int_29) : IntPtr.Zero;
+        return StartupClass.GliderManager != null ? StartupClass.GliderManager.method_20(int_29) : IntPtr.Zero;
     }
 
     public static void smethod_7(IntPtr intptr_2)
@@ -206,7 +206,7 @@ public class GProcessMemoryManipulator
     public static string smethod_10(int int_29, int int_30, string string_0)
     {
         GStruct21 gstruct21_0;
-        if (VirtualQueryEx(StartupClass.intptr_1, int_29, out gstruct21_0, 28) > 0)
+        if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) > 0)
         {
             var num = gstruct21_0.int_2 - (int_29 - gstruct21_0.int_0);
             if (num < int_30)
@@ -260,7 +260,7 @@ public class GProcessMemoryManipulator
     public static int smethod_16(int int_29, byte[] byte_0, int int_30)
     {
         int int_31;
-        return WriteProcessMemory(StartupClass.intptr_1, int_29, byte_0, int_30, out int_31) != 0 ? int_31 : 0;
+        return WriteProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31) != 0 ? int_31 : 0;
     }
 
     public static byte[] smethod_17(int int_29, int int_30, string string_0)
@@ -270,14 +270,14 @@ public class GProcessMemoryManipulator
 
     private static int smethod_18(int int_29, byte[] byte_0, int int_30, out int int_31)
     {
-        if (StartupClass.bool_14 && StartupClass.gclass71_0 != null)
+        if (StartupClass.bool_14 && StartupClass.GliderManager != null)
         {
-            var num = StartupClass.gclass71_0.method_41(int_29, byte_0, int_30, out int_31);
+            var num = StartupClass.GliderManager.method_41(int_29, byte_0, int_30, out int_31);
             int_27 = num < int_30 ? 299 : 0;
             return num;
         }
 
-        var num1 = ReadProcessMemory(StartupClass.intptr_1, int_29, byte_0, int_30, out int_31);
+        var num1 = ReadProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31);
         if (num1 != 0)
             int_27 = Marshal.GetLastWin32Error();
         return num1;
@@ -499,7 +499,7 @@ public class GProcessMemoryManipulator
 
     public static int smethod_31()
     {
-        if (!GClass18.gclass18_0.method_5("Julie") || StartupClass.intptr_1 == IntPtr.Zero || !bool_3)
+        if (!GClass18.gclass18_0.method_5("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
             return 0;
         var num1 = GClass18.gclass18_0.method_4("DS1");
         var num2 = GClass18.gclass18_0.method_4("DS2");
@@ -514,7 +514,7 @@ public class GProcessMemoryManipulator
             ++num5;
             int_29 += 4096;
             int int_31;
-            ReadProcessMemory(StartupClass.intptr_1, int_29, byte_0, 4096, out int_31);
+            ReadProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, 4096, out int_31);
             if (4096 == int_31 && int_29 <= num3 && int_29 + int_31 > num3)
             {
                 var startIndex = num3 - int_29;
@@ -523,8 +523,8 @@ public class GProcessMemoryManipulator
             }
         }
 
-        if (num4 > 0 && StartupClass.gclass16_0 != null && GClass18.gclass18_0.method_5("AllowFS"))
-            StartupClass.gclass16_0.method_6(GClass18.gclass18_0.method_4("JulieDrop"),
+        if (num4 > 0 && StartupClass.GameMemoryReader != null && GClass18.gclass18_0.method_5("AllowFS"))
+            StartupClass.GameMemoryReader.method_6(GClass18.gclass18_0.method_4("JulieDrop"),
                 GClass18.gclass18_0.method_4("JulieSize"));
         if (num4 > 0)
             StartupClass.smethod_37(GEnum0.const_1);
@@ -533,7 +533,7 @@ public class GProcessMemoryManipulator
 
     public static string smethod_32()
     {
-        var path = StartupClass.string_4 + "wtf\\config.wtf";
+        var path = StartupClass.SomeStringData + "wtf\\config.wtf";
         var str1 = "(unknown)";
         try
         {
@@ -565,7 +565,7 @@ public class GProcessMemoryManipulator
 
     public static void smethod_33()
     {
-        SetWindowPos(StartupClass.intptr_0, new IntPtr(0), 0, 0, 0, 0, 259U);
+        SetWindowPos(StartupClass.MainApplicationHandle, new IntPtr(0), 0, 0, 0, 0, 259U);
     }
 
     public static int smethod_34()
@@ -590,7 +590,7 @@ public class GProcessMemoryManipulator
     public static bool smethod_35(int int_29)
     {
         GStruct21 gstruct21_0;
-        if (VirtualQueryEx(StartupClass.intptr_1, int_29, out gstruct21_0, 28) != 28)
+        if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) != 28)
         {
             GClass37.smethod_1("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
             return false;
@@ -602,7 +602,7 @@ public class GProcessMemoryManipulator
     public static int smethod_36(int int_29, int int_30, int int_31)
     {
         int int_32;
-        VirtualProtectEx(StartupClass.intptr_1, int_29, int_30, int_31, out int_32);
+        VirtualProtectEx(StartupClass.AdditionalApplicationHandle, int_29, int_30, int_31, out int_32);
         return int_32;
     }
 
@@ -771,7 +771,7 @@ public class GProcessMemoryManipulator
         int_29 = 0;
         var gclass65 = new GClass65();
         gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.int_3);
+        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         if (numArray.Length == 0)
             return false;
         var num1 = smethod_11(GClass18.gclass18_0.method_4("TLSSlot"), "TLSSlot");
@@ -811,12 +811,12 @@ public class GProcessMemoryManipulator
 
     public static void smethod_53()
     {
-        if (StartupClass.int_3 == 0)
+        if (StartupClass.AnotherIntegerValue == 0)
             return;
         StartupClass.bool_30 = false;
         var gclass65 = new GClass65();
         gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.int_3);
+        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         var intptr_2 = numArray.Length == 1
             ? OpenThread(2U, false, numArray[0])
             : throw new Exception("!! Unexpected number of threads in game: " + numArray.Length);
@@ -828,7 +828,7 @@ public class GProcessMemoryManipulator
 
     public static void smethod_54()
     {
-        smethod_55(StartupClass.int_3);
+        smethod_55(StartupClass.AnotherIntegerValue);
     }
 
     public static void smethod_55(int int_29)

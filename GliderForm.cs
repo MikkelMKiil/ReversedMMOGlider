@@ -145,7 +145,7 @@ public class GliderForm : Form, GInterface0
     StartupClass.ginterface0_0 = (GInterface0) this;
     this.string_0 = "";
     this.method_13();
-    StartupClass.form_0 = (Form) this;
+    StartupClass.MainForm = (Form) this;
     StartupClass.InitStartupMode(AppMode.Normal);
     new GClass65().method_0();
     this.method_5();
@@ -193,7 +193,7 @@ public class GliderForm : Form, GInterface0
       this.rectangle_0.X += 3;
     }
     this.method_24();
-    StartupClass.form_0 = (Form) this;
+    StartupClass.MainForm = (Form) this;
     this.method_1();
     StartupClass.smethod_59();
   }
@@ -265,7 +265,7 @@ public class GliderForm : Form, GInterface0
   {
     if (disposing)
     {
-      if (!StartupClass.bool_2)
+      if (!StartupClass.IsAttached)
         StartupClass.DebuffsKnown_string.method_10();
       StartupClass.smethod_35();
       GClass61.gclass61_0.method_8();
@@ -1125,8 +1125,8 @@ public class GliderForm : Form, GInterface0
       this.XPHour_1.Text = StartupClass.smethod_29().ToString();
       if (GPlayerSelf.Me.IsCasting)
         this.LabelKills_1.Text += " *";
-      if (StartupClass.ggameClass_0 != null)
-        this.LabelMana_1.Text = StartupClass.ggameClass_0.PowerValue;
+      if (StartupClass.CurrentGameClass != null)
+        this.LabelMana_1.Text = StartupClass.CurrentGameClass.PowerValue;
       GUnit target = GPlayerSelf.Me.Target;
       if (target != null)
       {
@@ -1167,16 +1167,16 @@ public class GliderForm : Form, GInterface0
       ((GInterface0)this).imethod_2(GClass30.smethod_1(105));
       GClass55.smethod_28(GClass30.smethod_1(655));
     }
-    if (StartupClass.int_3 == 0 && StartupClass.int_12 != 0 && StartupClass.bool_8)
+    if (StartupClass.AnotherIntegerValue == 0 && StartupClass.int_12 != 0 && StartupClass.IsGliderAttached)
       this.method_25();
-    if (!this.gclass36_0.method_3() || !(StartupClass.intptr_0 != IntPtr.Zero))
+    if (!this.gclass36_0.method_3() || !(StartupClass.MainApplicationHandle != IntPtr.Zero))
       return;
     this.method_9();
   }
 
   private void method_8()
   {
-    if (this.bool_6 || !GClass61.gclass61_0.method_5("ManageGamePos") || !(StartupClass.intptr_0 != IntPtr.Zero) || GClass61.gclass61_0.method_2("GameWindowPos") == null)
+    if (this.bool_6 || !GClass61.gclass61_0.method_5("ManageGamePos") || !(StartupClass.MainApplicationHandle != IntPtr.Zero) || GClass61.gclass61_0.method_2("GameWindowPos") == null)
       return;
     string[] strArray1 = GClass61.gclass61_0.method_2("GameWindowPos").Split(',');
     Point point_0 = new Point(int.Parse(strArray1[0]), int.Parse(strArray1[1]));
@@ -1186,7 +1186,7 @@ public class GliderForm : Form, GInterface0
     if (size_0.Height <= 32 || size_0.Width <= 32)
       return;
     GClass37.smethod_0("Positioning game window: location=" + point_0.ToString() + ", size=" + size_0.ToString());
-    GProcessMemoryManipulator.smethod_43(StartupClass.intptr_0, size_0, point_0);
+    GProcessMemoryManipulator.smethod_43(StartupClass.MainApplicationHandle, size_0, point_0);
   }
 
   private void method_9()
@@ -1194,7 +1194,7 @@ public class GliderForm : Form, GInterface0
     this.gclass36_0.method_4();
     Point point_0;
     Size size_0;
-    if (StartupClass.bool_41 || !this.bool_6 && GClass61.gclass61_0.method_2("GameWindowPos") != null || !GProcessMemoryManipulator.smethod_39(StartupClass.intptr_0, out point_0) || !GProcessMemoryManipulator.smethod_40(StartupClass.intptr_0, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
+    if (StartupClass.bool_41 || !this.bool_6 && GClass61.gclass61_0.method_2("GameWindowPos") != null || !GProcessMemoryManipulator.smethod_39(StartupClass.MainApplicationHandle, out point_0) || !GProcessMemoryManipulator.smethod_40(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
       return;
     GClass61.gclass61_0.method_0("GameWindowPos", point_0.X.ToString() + "," + (object) point_0.Y);
     GClass61.gclass61_0.method_0("GameWindowSize", size_0.Width.ToString() + "," + (object) size_0.Height);
@@ -1224,7 +1224,7 @@ public class GliderForm : Form, GInterface0
 
   private void ConfigButton_Click(object sender, EventArgs e)
   {
-    if (StartupClass.bool_2)
+    if (StartupClass.IsAttached)
     {
       this.method_10();
     }
@@ -1254,8 +1254,8 @@ public class GliderForm : Form, GInterface0
         StartupClass.smethod_15();
         StartupClass.smethod_9();
       }
-      if (StartupClass.ggameClass_0 != null)
-        this.LabelManaHeader_1.Text = StartupClass.ggameClass_0.PowerLabel + ":";
+      if (StartupClass.CurrentGameClass != null)
+        this.LabelManaHeader_1.Text = StartupClass.CurrentGameClass.PowerLabel + ":";
       this.method_16();
       this.method_24();
     }
@@ -1326,7 +1326,7 @@ public class GliderForm : Form, GInterface0
 
   private void GlideButton_Click(object sender, EventArgs e)
   {
-    if ((StartupClass.gprofile_0.Factions == null || StartupClass.gprofile_0.Factions.Length == 0) && GClass61.gclass61_0.method_2("RemindFaction") == null && !StartupClass.bool_2 && new FactionReminder().ShowDialog((IWin32Window) this) == DialogResult.No)
+    if ((StartupClass.gprofile_0.Factions == null || StartupClass.gprofile_0.Factions.Length == 0) && GClass61.gclass61_0.method_2("RemindFaction") == null && !StartupClass.IsAttached && new FactionReminder().ShowDialog((IWin32Window) this) == DialogResult.No)
       return;
     GContext.Main.ResetAutoStop();
     if (GClass61.gclass61_0.method_2("AutoStop") == "True")
@@ -1365,7 +1365,7 @@ public class GliderForm : Form, GInterface0
     this.ConfigButton.Enabled = bool_11;
     if (!GClass61.gclass61_0.method_5("AltLayout"))
       this.StopButton.Enabled = !bool_11;
-    if (!StartupClass.bool_11 || GClass61.gclass61_0.method_5("AltLayout"))
+    if (!StartupClass.IsGliderInitialized || GClass61.gclass61_0.method_5("AltLayout"))
       return;
     this.GlideButton.Visible = bool_11;
     this.KillButton.Visible = bool_11;
@@ -1378,7 +1378,7 @@ public class GliderForm : Form, GInterface0
   public void method_16()
   {
     this.LabelAttached.Text = GClass30.smethod_4("GliderForm.LabelAttached!" + StartupClass.bool_13.ToString());
-    if (StartupClass.bool_3)
+    if (StartupClass.IsDetached)
       this.LabelAttached.Text = "Yes*";
     if (!StartupClass.bool_24)
       StartupClass.gclass36_0 = (GClass36) null;
@@ -1391,7 +1391,7 @@ public class GliderForm : Form, GInterface0
       this.AddFactionButton.Enabled = false;
       this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!Idle");
     }
-    else if (StartupClass.bool_3)
+    else if (StartupClass.IsDetached)
       this.method_15(StartupClass.glideMode_0 == GlideMode.None);
     else if (!StartupClass.bool_13)
     {
@@ -1517,7 +1517,7 @@ public class GliderForm : Form, GInterface0
     this.notifyIcon_0 = (NotifyIcon) null;
     GClass37.smethod_1("Shutdown: SavePos");
     GClass61.gclass61_0.method_0("WindowPos", this.Location.X.ToString() + "," + (object) this.Location.Y);
-    if (!StartupClass.bool_2)
+    if (!StartupClass.IsAttached)
     {
       GClass37.smethod_1("Shutdown: NewDebuffs");
       StartupClass.DebuffsKnown_string.method_10();
@@ -1537,9 +1537,9 @@ public class GliderForm : Form, GInterface0
     GClass37.smethod_1("Shutdown: KillAction");
     StartupClass.smethod_27(true, "WindowClosing");
     GClass37.smethod_1("Shutdown: Done");
-    if (StartupClass.gclass71_0 != null && !StartupClass.bool_33)
+    if (StartupClass.GliderManager != null && !StartupClass.bool_33)
     {
-      StartupClass.gclass71_0.method_11();
+      StartupClass.GliderManager.method_11();
     }
     base.OnClosing(cancelEventArgs_0);
   }
@@ -1561,9 +1561,9 @@ public class GliderForm : Form, GInterface0
     else
       this.method_4();
     this.method_16();
-    if (StartupClass.ggameClass_0 == null)
+    if (StartupClass.CurrentGameClass == null)
       return;
-    this.LabelManaHeader_1.Text = StartupClass.ggameClass_0.PowerLabel + ":";
+    this.LabelManaHeader_1.Text = StartupClass.CurrentGameClass.PowerLabel + ":";
   }
 
   void GInterface0.imethod_1() => this.label11.Checked = !this.label11.Checked;
@@ -1715,7 +1715,7 @@ public class GliderForm : Form, GInterface0
 
   private void method_25()
   {
-    if (this.bool_10 || StartupClass.bool_7)
+    if (this.bool_10 || StartupClass.IsExitRequested)
       return;
     this.bool_10 = true;
     GClass37.smethod_1("HandleGameGone invoked!");

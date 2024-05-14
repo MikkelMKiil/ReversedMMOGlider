@@ -279,10 +279,10 @@ public class ConfigForm : Form
     {
         InitializeComponent();
         GClass30.smethod_7(PartyHealMode, "Common.PartyHealMode");
-        for (var index = 0; index < StartupClass.ProfileList.Keys.Count; ++index)
+        for (var index = 0; index < StartupClass.ProfileMapping.Keys.Count; ++index)
         {
-            var key = StartupClass.ProfileList.Keys[index];
-            var profile = StartupClass.ProfileList[key];
+            var key = StartupClass.ProfileMapping.Keys[index];
+            var profile = StartupClass.ProfileMapping[key];
             if (profile.genum1_0 == GEnum1.const_1 &&
                 (profile.object_0 == null || ((GGameClass)profile.object_0).IsSelectable))
             {
@@ -305,7 +305,7 @@ public class ConfigForm : Form
         WebNotifyURL.Text = GClass61.gclass61_0.method_2(nameof(WebNotifyURL));
         UseTray.Checked = GClass61.gclass61_0.method_2(nameof(UseTray)) == "True";
         BackgroundEnable.Checked = GClass61.gclass61_0.method_2(nameof(BackgroundEnable)) == "True";
-        BackgroundEnable.Enabled = StartupClass.gclass71_0 != null;
+        BackgroundEnable.Enabled = StartupClass.GliderManager != null;
         ShiftLoot.Checked = GClass61.gclass61_0.method_2(nameof(ShiftLoot)) == "True";
         UseHook.Checked = GClass61.gclass61_0.method_2(nameof(UseHook)) == "True";
         MouseSpin.Checked = GClass61.gclass61_0.method_2(nameof(MouseSpin)) == "True";
@@ -470,7 +470,7 @@ public class ConfigForm : Form
         GProcessMemoryManipulator.smethod_51(helpProvider_0);
         StartupClass.gclass54_0.bool_4 = false;
         bool_3 = true;
-        StartupClass.iwin32Window_0 = this;
+        StartupClass.MainWindowHandle = this;
     }
 
     private void method_0(string string_0, Label label_0)
@@ -3069,9 +3069,9 @@ public class ConfigForm : Form
             str3 = index != stringList2.Count - 1 ? str3 + stringList2[index] + "," : str3 + stringList2[index];
         GClass61.gclass61_0.method_0("VendMailList", str3);
         GClass61.gclass61_0.method_8();
-        StartupClass.bool_11 = false;
+        StartupClass.IsGliderInitialized = false;
         method_18();
-        StartupClass.iwin32Window_0 = null;
+        StartupClass.MainWindowHandle = null;
         DialogResult = DialogResult.OK;
     }
 
@@ -3097,7 +3097,7 @@ public class ConfigForm : Form
 
     private void MyCancelButton_Click(object sender, EventArgs e)
     {
-        StartupClass.iwin32Window_0 = null;
+        StartupClass.MainWindowHandle = null;
         DialogResult = DialogResult.Cancel;
     }
 
@@ -3293,7 +3293,7 @@ public class ConfigForm : Form
 
     private void EditDebuffs_Click(object sender, EventArgs e)
     {
-        if (StartupClass.StartupMode == AppMode.Normal)
+        if (StartupClass.ApplicationStartupMode == AppMode.Normal)
             StartupClass.DebuffsKnown_string.method_10();
         var debuffList = new DebuffList();
         debuffList.method_0();
@@ -3333,7 +3333,7 @@ public class ConfigForm : Form
         foreach (var string_0 in files)
         {
             var key = method_13(string_0);
-            ClassFilesList.Items.Add(key, StartupClass.ProfileList.ContainsKey(key));
+            ClassFilesList.Items.Add(key, StartupClass.ProfileMapping.ContainsKey(key));
         }
     }
 
@@ -3380,7 +3380,7 @@ public class ConfigForm : Form
         else
         {
             var str = "";
-            if (StartupClass.ProfileList.ContainsKey(selectedItem))
+            if (StartupClass.ProfileMapping.ContainsKey(selectedItem))
                 str = "\r\n\r\nClass is already loaded in Glider, refreshing with new code.";
             if (string_1.Length > 0)
             {
@@ -3393,9 +3393,9 @@ public class ConfigForm : Form
                     MessageBoxIcon.Asterisk);
             }
 
-            if (!StartupClass.ProfileList.ContainsKey(selectedItem))
+            if (!StartupClass.ProfileMapping.ContainsKey(selectedItem))
                 return;
-            var profile = StartupClass.ProfileList[selectedItem];
+            var profile = StartupClass.ProfileMapping[selectedItem];
             ((GGameClass)profile.object_0).Shutdown();
             profile.object_0 = GClass74.smethod_7(selectedItem, assembly_0, false, true);
         }
@@ -3413,9 +3413,9 @@ public class ConfigForm : Form
         var selectedItem = (string)ClassFilesList.SelectedItem;
         if (GClass61.gclass61_0.method_11("CustomClasses", selectedItem))
         {
-            if (!StartupClass.ProfileList.ContainsKey(selectedItem))
+            if (!StartupClass.ProfileMapping.ContainsKey(selectedItem))
                 return;
-            var profile = StartupClass.ProfileList[selectedItem];
+            var profile = StartupClass.ProfileMapping[selectedItem];
             if (ClassList.Items.Contains(profile))
             {
                 if (ClassList.SelectedItem == profile)
@@ -3439,7 +3439,7 @@ public class ConfigForm : Form
             if (GClass74.smethod_13(selectedItem, out string_1))
             {
                 GClass61.gclass61_0.method_12("CustomClasses", selectedItem);
-                ClassList.Items.Add(StartupClass.ProfileList[selectedItem]);
+                ClassList.Items.Add(StartupClass.ProfileMapping[selectedItem]);
             }
             else
             {

@@ -100,8 +100,8 @@ public class GClass74
 
     public static void smethod_4()
     {
-        var array = new string[StartupClass.ProfileList.Keys.Count];
-        StartupClass.ProfileList.Keys.CopyTo(array, 0);
+        var array = new string[StartupClass.ProfileMapping.Keys.Count];
+        StartupClass.ProfileMapping.Keys.CopyTo(array, 0);
         foreach (var string_0 in array)
             smethod_5(string_0);
     }
@@ -109,7 +109,7 @@ public class GClass74
     public static void smethod_5(string string_0)
     {
         GClass37.smethod_1("Unloading custom class: \"" + string_0 + "\"");
-        if (!StartupClass.ProfileList.ContainsKey(string_0))
+        if (!StartupClass.ProfileMapping.ContainsKey(string_0))
         {
             GClass37.smethod_0("Can't unload \"" + string_0 + "\", it isn't loaded!");
         }
@@ -118,12 +118,12 @@ public class GClass74
             try
             {
                 if (smethod_15())
-                    if (StartupClass.ProfileList[string_0].object_0 != null)
-                        if (!StartupClass.ProfileList[string_0].bool_0)
+                    if (StartupClass.ProfileMapping[string_0].object_0 != null)
+                        if (!StartupClass.ProfileMapping[string_0].bool_0)
                         {
-                            StartupClass.ProfileList[string_0].method_0();
-                            if (StartupClass.ProfileList[string_0].genum1_0 == GEnum1.const_1)
-                                ((GGameClass)StartupClass.ProfileList[string_0].object_0).Shutdown();
+                            StartupClass.ProfileMapping[string_0].method_0();
+                            if (StartupClass.ProfileMapping[string_0].genum1_0 == GEnum1.const_1)
+                                ((GGameClass)StartupClass.ProfileMapping[string_0].object_0).Shutdown();
                         }
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ public class GClass74
                 GClass37.smethod_0("** Exception shutting down \"" + string_0 + "\": " + ex.Message + ex.StackTrace);
             }
 
-            StartupClass.ProfileList.Remove(string_0);
+            StartupClass.ProfileMapping.Remove(string_0);
         }
     }
 
@@ -199,7 +199,7 @@ public class GClass74
             }
 
             if (bool_0)
-                StartupClass.ProfileList.Add(string_0, new GClass22(instance.DisplayName)
+                StartupClass.ProfileMapping.Add(string_0, new GClass22(instance.DisplayName)
                 {
                     string_1 = string_0,
                     object_0 = instance,
@@ -279,7 +279,7 @@ public class GClass74
         gclass22.string_1 = string_0;
         gclass22.genum1_0 = GEnum1.const_1;
         GClass37.smethod_0("Adding class stub: \"" + string_1 + "\" on source file \"" + string_0 + "\"");
-        StartupClass.ProfileList.Add(string_0, gclass22);
+        StartupClass.ProfileMapping.Add(string_0, gclass22);
     }
 
     public static void smethod_12()
@@ -301,7 +301,7 @@ public class GClass74
     public static bool smethod_13(string string_0, out string string_1)
     {
         string_1 = "";
-        if (StartupClass.ProfileList.ContainsKey(string_0))
+        if (StartupClass.ProfileMapping.ContainsKey(string_0))
             return true;
         var assembly_0 = smethod_0(string_0, out string_1);
         if (assembly_0 == null)
@@ -336,12 +336,12 @@ public class GClass74
     [SpecialName]
     private static bool smethod_15()
     {
-        return StartupClass.StartupMode == AppMode.Invisible || StartupClass.StartupMode == AppMode.Normal;
+        return StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal;
     }
 
     public static GClass22 smethod_16(GGameClass ggameClass_0)
     {
-        foreach (var gclass22 in StartupClass.ProfileList.Values)
+        foreach (var gclass22 in StartupClass.ProfileMapping.Values)
             if (gclass22.object_0 == ggameClass_0)
                 return gclass22;
         return null;

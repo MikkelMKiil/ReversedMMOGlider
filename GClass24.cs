@@ -323,18 +323,18 @@ public class GClass24
         var foregroundWindow = GProcessMemoryManipulator.GetForegroundWindow();
         StartupClass.bool_21 = false;
         if (StartupClass.glideMode_0 != GlideMode.None && (foregroundWindow == intptr_0 ||
-                                                           foregroundWindow == StartupClass.intptr_0 ||
-                                                           !StartupClass.bool_11))
+                                                           foregroundWindow == StartupClass.MainApplicationHandle ||
+                                                           !StartupClass.IsGliderInitialized))
         {
             GClass37.smethod_1("Escape key picked up in hook, shutting action down");
             StartupClass.bool_28 = false;
             StartupClass.smethod_27(false, "EscapeFromHook");
         }
 
-        if (!(foregroundWindow == intptr_0) || !StartupClass.gclass47_0.method_1())
+        if (!(foregroundWindow == intptr_0) || !StartupClass.GameMemoryWriter.method_1())
             return;
         GClass37.smethod_1("Killing background script from Escape key");
-        StartupClass.gclass47_0.method_0();
+        StartupClass.GameMemoryWriter.method_0();
     }
 
     private void method_3()

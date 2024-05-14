@@ -171,9 +171,9 @@ public class GClass21
             return true;
         StartupClass.gclass73_0.bool_1 = true;
         GClass20.smethod_0("BadTag.wav");
-        ++StartupClass.int_2;
+        ++StartupClass.SomeIntegerValue;
         GClass42.gclass42_0.method_0("Common.PetFollow");
-        if (StartupClass.int_2 >= GClass61.gclass61_0.method_3("BadTagLimit"))
+        if (StartupClass.SomeIntegerValue >= GClass61.gclass61_0.method_3("BadTagLimit"))
         {
             StartupClass.gclass73_0.bool_2 = true;
             GClass37.smethod_0(GClass30.smethod_1(808));

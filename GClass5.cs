@@ -53,15 +53,15 @@ public class GClass5
 
     public static void smethod_0(GClass5 gclass5_0, string string_0)
     {
-        if (!StartupClass.ProfileMap.ContainsKey(gclass5_0.long_0))
+        if (!StartupClass.ProfileIdToProfileMap.ContainsKey(gclass5_0.long_0))
         {
             GClass37.smethod_1("Queueing new lootable corpse: 0x" + gclass5_0.long_0.ToString("x") + ", IsMine=" +
                                gclass5_0.bool_0 + ", name = \"" + string_0 + "\"");
-            StartupClass.ProfileMap.Add(gclass5_0.long_0, gclass5_0);
+            StartupClass.ProfileIdToProfileMap.Add(gclass5_0.long_0, gclass5_0);
         }
         else
         {
-            StartupClass.ProfileMap[gclass5_0.long_0].glocation_0 = gclass5_0.glocation_0;
+            StartupClass.ProfileIdToProfileMap[gclass5_0.long_0].glocation_0 = gclass5_0.glocation_0;
         }
     }
 
@@ -69,7 +69,7 @@ public class GClass5
     {
         var gclass5 = smethod_2(GPlayerSelf.Me.Location);
         return gclass5 != null && gclass5.glocation_0.DistanceToSelf <
-            (double)(StartupClass.ggameClass_0.PullDistance + StartupClass.gclass73_0.int_5);
+            (double)(StartupClass.CurrentGameClass.PullDistance + StartupClass.gclass73_0.int_5);
     }
 
     public static GClass5 smethod_2(GLocation glocation_1)
@@ -78,7 +78,7 @@ public class GClass5
             return null;
         GClass5 gclass5 = null;
         var num = 9999.0;
-        foreach (var gclass5_0 in StartupClass.ProfileMap.Values)
+        foreach (var gclass5_0 in StartupClass.ProfileIdToProfileMap.Values)
             if (gclass5_0.method_0())
             {
                 var unit = GObjectList.FindUnit(gclass5_0.long_0);
@@ -107,7 +107,7 @@ public class GClass5
     public static void smethod_3()
     {
         GClass5 gclass5_1 = null;
-        foreach (var gclass5_2 in StartupClass.ProfileMap.Values)
+        foreach (var gclass5_2 in StartupClass.ProfileIdToProfileMap.Values)
             if ((DateTime.Now - gclass5_2.dateTime_0).TotalMinutes > 20.0)
             {
                 gclass5_1 = gclass5_2;
@@ -116,7 +116,7 @@ public class GClass5
 
         if (gclass5_1 == null)
             return;
-        StartupClass.ProfileMap.Remove(gclass5_1.long_0);
+        StartupClass.ProfileIdToProfileMap.Remove(gclass5_1.long_0);
     }
 
     private static bool smethod_4(GUnit gunit_0, GClass5 gclass5_0)
