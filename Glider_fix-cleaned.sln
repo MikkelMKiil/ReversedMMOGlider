@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glider_fix-cleaned", "Glider_fix-cleaned.csproj", "{BC1CD084-3AF2-44FC-8B51-8E4646020949}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC1CD084-3AF2-44FC-8B51-8E4646020949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1CD084-3AF2-44FC-8B51-8E4646020949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1CD084-3AF2-44FC-8B51-8E4646020949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1CD084-3AF2-44FC-8B51-8E4646020949}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0F4656EF-D6DD-4DCF-B062-EBD341CC2C94}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="notifyIcon1.Icon" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0ZW0uRHJhd2luZy5JY29uAgAAAAhJY29uRGF0YQhJY29uU2l6ZQcEAhNTeXN0ZW0uRHJhd2luZy5TaXplAgAAAAIAAAAJAwAAAAX8////E1N5c3RlbS5EcmF3aW5nLlNpemUCAAAABXdpZHRoBmhlaWdodAAACAgCAAAAAAAAAAAAAAAPAwAAADYOAAACAAABAAIAICAAAAAAAACoCAAAJgAAABAQAAAAAAAAaAUAAM4IAAAoAAAAIAAAAEAAAAABAAgAAAAAAIAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wAScPIAf39/AG7Y/wAHR2AAra+vAA7B/gAKdp8AT1BOALjr/wBRl/UAGiowAIKWrwCXw/gAOMn/AAyPwAB0rfgAAB9MAAZgfgAEDh8A2PT/AC+A8wCU4v8AQT8/ALPU+wAAY/MALy8vACPF/wAfHx8AQIz2AAMvQABb0/0A6/n/AA8PDwCFtvoAzeX7AAhsjwBLzv8AhqSvAGmn9QDE7/8AWpz1AIrg/gDF3/0AB2ryAJ/I+QAvx/4A4fL/AH20+QCRv/kAYdX+AGjX/wAKDw4AE8D+AEbN/wAADB4AA2TwAIi4+AAEAAAAuu7+AI3e/wC21P0A6Pj+AABl8AAAAAMAWJv3ABC//gAIRV8AxuH8ADHG/wACAAEAAQIAAOr3/wAHXn4AAWPxACTD/wA/ivYADQ8PAM3l/QAAZfMA6fn/AIvh/wACZPIAAWbxAA/A/QAAAQEAAQACALns/wAAZPIAD7//AAABAAACAAAAAAABAAACAAABAQEAD7/+AABk8wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF0AACIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABcVw1JPCszRgVXCQAAAAAAAAAAAAAAAAAAAAAAAAAAXyMsP1g9XABbAFofAAAAAAAAAAAAAAAAAAAAAAAbXUIyTxUAWwBMYENgVUQlXQAAAAAAS1M4OwAAAAAAABQqDiROAFYmHAdIAFxeAAAIAAAAAAAAUFlZYRJcWwAWKC4wBgMENzZbX1wAAAAAAAAAAAAAAAAAOVNZWVlUHhE+SScMAEFfXV4AWwAdAAAAAAAAAAAAAABcGkBZLU0xGSEpFzQPQ0NDQ0NDQ0NKRwAAR1wAAAAAAABOQAILOkVRClIgL0NDQ0NDQ0MQE1tcABgAAAAAAAAAAAA7CzpFUQpSIENDQzs7Ozs7OwAAAAAAAAAAAAAAAAAAAAAAAAA1AAAANTU1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////////////////////////////////////////////////////4P///wAf//wAD4/wAAeB4AADwAAB/+AAAH/wAAAA+AAAB/wAAH/+AH///////////////////////////////////////////////////////ygAAAAQAAAAIAAAAAEACAAAAAAAQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AB518ACBhYcABk1mAIO19wAXgacAXYzKAMLg8gBCbHsAi6izACSo2AABQJsAqL7WAFO12ABZeqUAAF7jAOTk5AAQa4wAQFdfAILJ4wA5r9oAhZmnAE53hgBDsNgAAGDqAKS70QAzrNgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaCgASBAAAAAAMAAAAAAcNEwAGAAAJAAAAABkQAA8WFwAAAAADAAAAAAAAAgUIFBULGxgOAAAAAAAAAAAAERsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD//wAA//8AAP//AAD//wAA/wcAADwDAAAIAQAAgAcAAMAAAADgDwAA8f8AAP//AAD//wAA//8AAP//AAAL
+        </value>
+    </data>
+    <data name="QuickLoadButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAMgUAAAJHSUY4OWEgACAA9wAAAL0QWlpaY1pKY1pSY2Nja2M5a2NCa2NKa2NSa2trc2Mxc2NCc2s5c3Nrc3Nze2Mpe2sxe2s5e3t7hGsphISEjGshjHMhjIyMlHMhlJSUnHsYnHshnJycpXsQpYQppZRapaWlrYQQrYwYra2ttYQItZQptaWEtbW1vZQIvb29xpQIxqUpxsbGzqUxzq1CzrVjzs7O1qUI1qUQ1qUY1q051rVC1rVK1r1j1tbW3q0Y3q0h3q0p3q0x3rUh3rUp3rU53rVK3r053r1C3r1K3r1S3r1a3r1j3r1r3r1z3sZz3sZ73t7e57Ux57U5570x571C571a58Za58Zj58Zr58Zz585K585j585z5857586E59a15+fn77U5771C771K78ZK785S785z79aM795a796M796t796179697+e9971K98ZS985a99Zj995r996l996t9+dz9+ec9+e19+e99+/O9+/W9/fe/85a/85j/9Zr/9Zz/9Z7/9aE/9aM/95r/95z/957/96E/96M/96U/+d7/+eE/+eU/+ec/++E/++U/++t/+/O//eM//eU//el//et//fW//fe//fn//+U//+c//+l//+t//+1//+9///G///O///W///e///n///v///3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAAAsAAAAACAAIAAACP8AAQgcSLCgwYMIEypcaNDOGTMMIxZRYiNJljJoXOCImBANFk+cMmWytAnNh40A6JxRcsRIkSk2lii0IakSpZs3Iyl5YQRLFjN0OGka+SODzIN2qGjCibMSJEiZLllietNHApQGy5SZSrVrV6sbHdYhaMaNo0lo06pdywjOGBklblhE0wKrFrOM8urd29aHFSMX0YAaPFiSBw4DzVBJVKix48dtpoD65MlTp058Pmn+lEUAYoFmpBgiRLo0ITZgnkjepKl1az6XL5dIkIKglEN6cn/xEQUwGjufNGEaTnwPp+NiFFA4KhDKoDx5mogBZXlTJkyXsmvPvmeT9xUEThT/hNIHD54inixVWs++PXs9reNAkIBV4A4+eLyIWeq1qx6RNQwAgkE09KEGE3Y40siCDDbYoB6YOFKBAzAYVEQfXvzgCV8c7qWHJUJ4dlARfDSRBSSIpKjiiizmQckGCbBwkA176ECHIizmuGIeVRRg1EE06MHDJ48VaWQhbYgQHkI37JEEJIBEKeWUUf4BRhAzhMDABcwVhIQXZSjyx5hkjsnGbjKEYMECBCRAQW0IIfEDKHvkltsaT+igggYTHNAmBRykAEOXBiEhBSR5qNHEDChoAAECBDhwAQgp4EBoQkgQAUQIGEQAqQQZjMCCpRwRpIUJDSQgAQcnjLpFqQjhD8DCoLDWauutuOaq660BAQA7Cw==
+        </value>
+    </data>
+    <data name="ConfigButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAMAUAAAJHSUY4OWEgAB8A9wAAAL0Qa2tra2tzc3Nzc3N7e3t7e3uEhHuEhISEhISMjIyMjIyUlJSUnJScnJycnJylpZylpaWlpaWtra2tra21ta21tbW1tbW9vbW9vb29vb3Gxr3GxsbGzsbOzs7Ozs7W1s7W1tbW1tbe3tbe3t7e3t7n597n5+fn5+fv7+fv7+/v7+/39+/39/f3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAAAsAAAAACAAHwAACP8AAQgcSHAgCQ8IERZcyLAhggAHDCAQMKGhxYYGLKjYOCHCRYsZCh7I4KKkBY8CTzTw8BFAhAEKBoYQQNIkA4EkEDBAEOLiAwUnJCSYgMAABRUlXZxAoMACAQstOBT40JDBghMuWlRw0AFp0pIqMCjg0KIkBwQsC3II4CFpi7cqPGSwkKHDibJewSpwwHBCgRBJT8z1cELFiRAZMpD4qvJmQwsIsJ6wEKLs1xYkKJds4cCxRQQkJmPNeqKwZa2AW1DwzJDDAhUZUotIzCHx6BMTsKpAcCFECBICOUiQQFRjhbIhLNzNSiJ3SYRmCxQd0BOBgwkTNHpIrfGrUqjfvav/MMAS6NcMkmteRp/VgnjyABSU+No9BAfvWTksbgE+6fjyJLxVFnuC4dcCe/y9x1JRCiTAwAnbZVVBCt5NVtZkm8FVAEuH+daUCuAltxxmzrkAXQsLDFDAisARxAEDsMlGm20l4YaCCxkkUMJFoIm2GQqmbVYBYEtxcBEIBhBJmWVuZTYCWA7w1VAIGVkmmAUemGAYYop9pUIDUhZEwgAUuFVYXBlckAFhby0HllEMOWDegQg0wJ5bHDhwAHj8ISBCQxEAlYEBtSkwVVIXFGCBVFBZYECLDU1AAGgDGaBeBBUBkJMCCJjQkmIEjZQUpgY5AGlLBGW0kQoPZIrqRQwUDaDArAWE9OpHvuWKakAAOws=
+        </value>
+    </data>
+    <data name="$this.BackgroundImage" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAgAMAAAL/2P/gABBKRklGAAEBAQEsASwAAP/bAEMABQMEBAQDBQQEBAUFBQYHDAgHBwcHDwsLCQwRDxISEQ8RERMWHBcTFBoVEREYIRgaHR0fHx8TFyIkIh4kHB4fHv/bAEMBBQUFBwYHDggIDh4UERQeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHv/AABEIAAECUQMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/ALFFFFfjJ+9BRRRQAUUUUAFB6UUUAA6VPD2oopGcy3F1FWoutFFb0zjmXIatw0UV6NI4qhbi7Vahoor0KR59QuQ1bjoortpnHMtRVajoorsgefVLUXSrcXSiiuqBwVSzF2q5F2oorpicMy1FVqOiit4nFMnHSmN0oopy2MkRNUb0UVyTNIkbVG1FFcVQ6IkZqNqKK4qhtEiaomooriqG8SM1E1FFcNQ1iRvUT0UVw1DeJE1RtRRXDUOiBE1RPRRXn1djeJG9QPRRXnVTVET1GeooorgmaoWiiisygooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//2Qs=
+        </value>
+    </data>
+    <data name="MyHelpButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAA8AMAAAJHSUY4OWEgACAA9wAAxq2txrW1xr29xsbGzpSUzpyczqWl1nt71oSE1oyM3lpa3mNj3mtr3nNz50JC50pK51JS51pa7zEx7zk570JC9xAQ9xgY9yEh9ykp/wAA/wgI/xAQ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAgAsAAAAACAAIAAACM0ABQgcSLCgwYMIDwJgIKFChgwaLjxIkLCiwAUaHmrceKGAxYMTNorUqAHBR4IQNlaAcOAAg5AbCZwUUGCjAoMELGi8MNOBRggIATh8SPFjxgwVAiQ8oPGmxZoPH1QMoNHBRwANFky0WHXmSQIaF3j9iEGjgbEJA8DMIBWtQgk7lbotaEDnQwsA5hYkMDTDhbx6BxroK0FuYIFlH04wfJjpQwyHC66VGXng0AqVCWqUkHmgxgmdBSIYTTm06dMGHahmYLpraNedYaOePTMgADsL
+        </value>
+    </data>
+    <data name="KillButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAsQQAAAJHSUY4OWEgACAA9wAAAAAACAAACAgIEBAQGBgYIRgYISEhKSEhKSkpMSkpMTExOTExOTk5QkJCSkpKUkpKUlJSWlpaa2Nja2trc2tre3NzhHt7jISElIyMlJSUnJSUpZycraWlra2tta2tvbW1xrW1xr29////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAIQAsAAAAACAAIAAACP8AQwgcSDDEhw0WJDSgcIFDwYcQCX640GAAgIsXCUDI8CGiRw4UEgQAIMBAAwAMDIwUwMBCR48EMRjI6ABDRwAhPFhgYDEAA4cwQ2AggLICUIE4B26QgACAgqMQhwKA8JJgUoIcFDiFGpMo1YIYLxbMuvUhh5lfIV4dq7VBVYEUnHrwuLbgBgICMkhMAKBCxLB1BzqYSvBCAAJcwcI0jFjgh5MOggYm6OEAgAkCNwwQgCGoZwkAEHS0AMDA3BBJJ1tFKlCDgAEbQoBuMDC1ZNY5DXAOMRgw4Nq1ff+OywA46tvHc+LVEOICAAKnbcOUjuG1Qw5ELXgOCgHAgpfdi0+Oh4kdgHaBGV7HpguzQunTBhkAkPA3LMQP8ukTtBDAQGLjEF0gAAHrDYRfWWpFJFUEEJH1FFj2dTXVW1hppUCBADp2gVcUsvWcAxfAd5VODAgwoWccNGBiAAdIoIEHAHiAAQREPRdBhxF9kAGNF5X0nImlSYDhdgKBpMBmJA3QEnxEPnTQBhhs8F+TVEYUEAA7Cw==
+        </value>
+    </data>
+    <data name="HideButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAA3gQAAAJHSUY4OWEgACAA9wAAAAAAAP//GDHeIQAAMSnGhISElHNzvQAAxgg5xq2txrW1xr29xsbGzpSUzpyczqWl1nt71oSE1oyM1pSU3iEh3mNj3mtr3nNz50pK51JS51pa7ykp7zEx7zk570JC70pK9xAQ9xgY9yEh9ykp/wAA/wgI/xAQ/0JC/97e////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAACwAsAAAAACAAIAAACP8AFwgcSFCgAwgVPFiI8KCgw4cEFUTwAIKERYshMjSAyHFBAgsbSpAoIQKDhg4iRJboAEFBR4ISRGDE0MClQAUQOlRc2fClhBAkWPZ86AAkCQ5DH/4kgcHmywccjiaFCTQE0pcDoUp1mEAmhqhXsS7Q6sGhhaMKtIbF6gBEiY0DFWwgAUGg2qkcMZDIQDBCiRAJsiIggYCAgMOHAwgIUNBviKEemBYkcIDEgQEAMmsWUFAuCQsG3UooKGBA5cuaM3MuWIHEBpcQSIhwKlAAANOWUaReTbBBCRANW2NwaPt25RO6VTtUkHK0Xg3ENeNGDYA3wah1z3aIrhnFaczWBSa7CPF2QQQSgEmnNm55QPgFEn43fAC0LsHiqacTcJjh6MD+291XwIAEFmAABYQlNR5dA/kGggP3ISahAAQMtlZsIgQ2UAckVCDWWGD1xKGHBEFAEl4Q3eXXg51xuNZTUW0AFHQO3fXhA3MxRRtBakGIVQRAcbBjQVqBgEEEQ3qUk0hNYfWAByptUEFNHkmQAVAkgKBBkhA1cKVFJHFAnkUiVODjh1lZwIFbJfzGkoZoLveAAxI4gGKceDoUEAA7Cw==
+        </value>
+    </data>
+    <data name="StopButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAjQQAAAJHSUY4OWEgACAA9wAAxr29zpyczqWlzq2tzrW11oSE1oyM1pSU1pyc3mtr3nNz3nt73oSE51JS51pa52Nj7zEx7zk570JC70pK9xgY9yEh9ykp9zEx/wAA/wgI/xAQ/xgY////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAAAsAAAAACAAIAAACP8AAQgcSFBggAUPJCQoIKCgw4cECRSQoAGDRYsUGhyAyBGAgAQWLGaoIMFBhAoiIywg0JGgAZQYKEwwwFLggAURKmKI0LClAQo7FfR8GAAkBghDH/7EMKFmSwEQjiZ1CZQC0pYDoUp1KADlhKhXsXqMKsFhgqMDtIbFGoBCho0DCYRUIFDtVI4TMDQgWCDmULti+1IYKoFpQcAtB6BMYFBDBgNcwd51+ACDBZYLMFQY8BAxxwMZNAQAULksRM8PFT8GkNdBR9QOo9I9G+GpZIgD3G4UzPn1bYcGMgz2CHQBVtgAGhytqbz28d91iw8ELVqsZwWaewuMgOGB2LFbAXBq904wc4XJnSUXED46Ive1tjUDdR05/HGYTU+Dbd+yAFAI2qUX0wQFBDjQTRFkoJdTHAkggYKaPXAAZwMY0ABQMTnAYEsHXChSBRC4ZVEFD/D3XV0JQOAYBsKpZOCJcQUQgAEBoAfjjQUFBAA7Cw==
+        </value>
+    </data>
+    <data name="GlideButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAARAQAAAJHSUY4OWEgACAA9wAACAgICNZaEAgIEBAIEBAQEHs5EK1KEK1SGBgYGLVaIRgAIRgIIRgQIRgYISEYIVIxIcZjKRgQKSEAKSEYKSkYKSkhKSkpKZRaKcZjKcZrMRAAMSkAMSkhMTExMWNCMZxaMc5zOSkAOTEAOTkpOTkxOTk5OWtKOXNSOZQxOZxCOZxKOZxSOaVjOdZ7Od57QhgAQjEAQnNaQq1rQq1zSjkASkI5SkpCSkpKSntaSrVzUjkAUjkxUkIAUkIYUntSUrV7Ur17WjkhWlpSWlpaWsaEY1IhY1pKY4xjY8aMazEIa1IAa2M5a2NSa5x7a9aUa9acc0Ihc1oIc2Mxc2NSc2s5c3Nrc5RCe2MAe6VSe62MhDkIhHtrjDkIjHMxlEIYlHMAlHMIlHshlHtrnEIInHMAnHsYnIQhpUoQpaWlrXNarYQIrYwIrYwQrZRCraWctUoQtWs5tZQItZxStZxjtaVjtaVztaWEta2lvVIIvZwIxpwIxrWtzlIIzq1Szs691lII1msp1qWM1q0I1q0x1r1z3loI3q0Q3q0h3tbO55Rj57UI59bG72MQ78Za93MY93Mh95Ra95xj96V7962E972c972l98YI98YQ98at986199a9997O9+fW9+/e/8YQ/84h/845/9ZS/96M/+eM/++1/++9//fe//fn////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAQAsAAAAACAAIAAACP8AAwgcSLCgwYMIEypcyLChw4cQI0qcSLGixYsYM2o8KCMHEScbfQBKFGjPHTt15siRMwcLihQrWHgEqfAIH0aPIlXi1ImUqFCfLgkdqkiQnjhszHShYoTFwCZ4GEl9BInSpk6lRDU6lEcNmCtKeMCQsMBBhxtDTBgQmOWNVEZ8tCQJsqNGCQQWCAxYQGIIjCtbWiA8cIZRIS4aShS4wAHOJE1u0FDoA8qQFAQ0wISxouLDjIEJvIx5YSEGkoEZSkCRlAlRFQBFBl3SE0WEBBg0NtgYWKKBhx8IcUxIg4mTHyYEFvBQokSHDhglQAyUvhDDgwliFvUk1KaM1xAeBEshxHDCQgchU5b0YDAECEYQMj58AL6xvv37+PPr38+/f8OAADsL
+        </value>
+    </data>
+    <data name="ShrinkButton.Image" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>
+            AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABVTeXN0ZW0uRHJhd2luZy5CaXRtYXABAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAwAMAAAJHSUY4OWEgACAA9wAAAAAAAP8AAP//GDHehISE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////IfkEAQAAAQAsAAAAACAAIAAACJ0AAwgcSLCgwYMIEypcyLChw4cLAQSQSHGixYoYL1qEyHGgxI4eBX4ECXEkR5MmSTZMeTAlS5YqFcIsOHLmzJgtGVZMeBMnTZ0aX/psOKCoUaMCBghwmHIAgKdQow4g6TSq1akrC1aFWkAq1agFwkLFCpTg1qddx37lCiAtALIRtVq9unbuU7gytRLYy7cv3odHAxvNSHjj0MOIOwYEADsL
+        </value>
+    </data>
+</root>

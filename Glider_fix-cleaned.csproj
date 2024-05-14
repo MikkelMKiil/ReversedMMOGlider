@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BC1CD084-3AF2-44FC-8B51-8E4646020949}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>Glider</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationVersion>0.0.0.1</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>default</LangVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GClass0.cs" />
+    <Compile Include="GClass1.cs" />
+    <Compile Include="GClass2.cs" />
+    <Compile Include="GClass3.cs" />
+    <Compile Include="GClass4.cs" />
+    <Compile Include="DebuffList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass5.cs" />
+    <Compile Include="GClass6.cs" />
+    <Compile Include="ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShamanConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GliderWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass7.cs" />
+    <Compile Include="DebuffPick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeathknightConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GInterface0.cs" />
+    <Compile Include="GClass8.cs" />
+    <Compile Include="ProfileWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LaunchpadReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass9.cs" />
+    <Compile Include="GClass10.cs" />
+    <Compile Include="GClass11.cs" />
+    <Compile Include="GException0.cs" />
+    <Compile Include="GClass12.cs" />
+    <Compile Include="GClass13.cs" />
+    <Compile Include="EvoConfigWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaladinConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass14.cs" />
+    <Compile Include="GClass15.cs" />
+    <Compile Include="GEnum0.cs" />
+    <Compile Include="GClass16.cs" />
+    <Compile Include="GClass17.cs" />
+    <Compile Include="GClass18.cs" />
+    <Compile Include="Class0.cs" />
+    <Compile Include="GClass19.cs" />
+    <Compile Include="GClass20.cs" />
+    <Compile Include="ProfileProps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass21.cs" />
+    <Compile Include="GEnum1.cs" />
+    <Compile Include="GClass22.cs" />
+    <Compile Include="PriestConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GStruct9.cs" />
+    <Compile Include="GStruct10.cs" />
+    <Compile Include="GStruct11.cs" />
+    <Compile Include="GClass23.cs" />
+    <Compile Include="GClass24.cs" />
+    <Compile Include="GClass28.cs" />
+    <Compile Include="HunterConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass29.cs" />
+    <Compile Include="PickWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass30.cs" />
+    <Compile Include="GClass31.cs" />
+    <Compile Include="WarriorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass32.cs" />
+    <Compile Include="GClass33.cs" />
+    <Compile Include="GClass34.cs" />
+    <Compile Include="GEnum2.cs" />
+    <Compile Include="GEnum3.cs" />
+    <Compile Include="StartupClass.cs" />
+    <Compile Include="GClass36.cs" />
+    <Compile Include="RemindBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass37.cs" />
+    <Compile Include="GClass38.cs" />
+    <Compile Include="GClass39.cs" />
+    <Compile Include="GClass40.cs" />
+    <Compile Include="GClass41.cs" />
+    <Compile Include="GClass42.cs" />
+    <Compile Include="GClass43.cs" />
+    <Compile Include="GEnum4.cs" />
+    <Compile Include="GClass44.cs" />
+    <Compile Include="GClass45.cs" />
+    <Compile Include="GEnum5.cs" />
+    <Compile Include="GClass46.cs" />
+    <Compile Include="GClass47.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="GException1.cs" />
+    <Compile Include="GClass48.cs" />
+    <Compile Include="GClass49.cs" />
+    <Compile Include="GClass50.cs" />
+    <Compile Include="GEnum6.cs" />
+    <Compile Include="GClass51.cs" />
+    <Compile Include="GClass52.cs" />
+    <Compile Include="GClass53.cs" />
+    <Compile Include="GEnum7.cs" />
+    <Compile Include="GClass54.cs" />
+    <Compile Include="GClass55.cs" />
+    <Compile Include="GClass56.cs" />
+    <Compile Include="GClass57.cs" />
+    <Compile Include="GClass58.cs" />
+    <Compile Include="GClass59.cs" />
+    <Compile Include="GClass60.cs" />
+    <Compile Include="GClass61.cs" />
+    <Compile Include="Class2.cs" />
+    <Compile Include="DruidConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass62.cs" />
+    <Compile Include="GClass63.cs" />
+    <Compile Include="GClass64.cs" />
+    <Compile Include="SecCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass65.cs" />
+    <Compile Include="GClass66.cs" />
+    <Compile Include="GClass67.cs" />
+    <Compile Include="GClass68.cs" />
+    <Compile Include="RogueConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass69.cs" />
+    <Compile Include="GClass70.cs" />
+    <Compile Include="GEnum9.cs" />
+    <Compile Include="GClass71.cs" />
+    <Compile Include="GEnum15.cs" />
+    <Compile Include="GClass72.cs" />
+    <Compile Include="GClass73.cs" />
+    <Compile Include="GClass74.cs" />
+    <Compile Include="MageConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass75.cs" />
+    <Compile Include="GClass76.cs" />
+    <Compile Include="GClass77.cs" />
+    <Compile Include="GProcessMemoryManipulator.cs" />
+    <Compile Include="GClass79.cs" />
+    <Compile Include="GClass80.cs" />
+    <Compile Include="GEnum16.cs" />
+    <Compile Include="WarlockConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Class4.cs" />
+    <Compile Include="LaunchpadReminder_1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GliderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GClass81.cs" />
+    <Compile Include="FactionReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Class5.cs" />
+    <Compile Include="Glider\Common\NetCheckResult.cs" />
+    <Compile Include="Glider\Common\GlideMode.cs" />
+    <Compile Include="Glider\Common\GameClass.cs" />
+    <Compile Include="Glider\Common\AppMode.cs" />
+    <Compile Include="Glider\Common\WFConditionType.cs" />
+    <Compile Include="Glider\Common\HealMode.cs" />
+    <Compile Include="Glider\Common\Objects\GMerchant.cs" />
+    <Compile Include="Glider\Common\Objects\GConfigWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Glider\Common\Objects\ConfigFieldType.cs" />
+    <Compile Include="Glider\Common\Objects\GConfigField.cs" />
+    <Compile Include="Glider\Common\Objects\GObject.cs" />
+    <Compile Include="Glider\Common\Objects\GUnit.cs" />
+    <Compile Include="Glider\Common\Objects\GTendency.cs" />
+    <Compile Include="Glider\Common\Objects\GLocation.cs" />
+    <Compile Include="Glider\Common\Objects\GItemHelper.cs" />
+    <Compile Include="Glider\Common\Objects\GPlayer.cs" />
+    <Compile Include="Glider\Common\Objects\GMoveHelper.cs" />
+    <Compile Include="Glider\Common\Objects\GGameCamera.cs" />
+    <Compile Include="Glider\Common\Objects\GPartyHelper.cs" />
+    <Compile Include="Glider\Common\Objects\PartyBuff.cs" />
+    <Compile Include="Glider\Common\Objects\PartyBuffBucket.cs" />
+    <Compile Include="Glider\Common\Objects\GSpells.cs" />
+    <Compile Include="Glider\Common\Objects\GKey.cs" />
+    <Compile Include="Glider\Common\Objects\GPlayerSelf.cs" />
+    <Compile Include="Glider\Common\Objects\GNode.cs" />
+    <Compile Include="Glider\Common\Objects\GItem.cs" />
+    <Compile Include="Glider\Common\Objects\GProfile.cs" />
+    <Compile Include="Glider\Common\Objects\GScript.cs" />
+    <Compile Include="Glider\Common\Objects\GMonster.cs" />
+    <Compile Include="Glider\Common\Objects\GGameClass.cs" />
+    <Compile Include="Glider\Common\Objects\GContext.cs" />
+    <Compile Include="Glider\Common\Objects\GBuff.cs" />
+    <Compile Include="Glider\Common\Objects\GBagItem.cs" />
+    <Compile Include="Glider\Common\Objects\GObjectList.cs" />
+    <Compile Include="Glider\Common\Objects\GSpellTimer.cs" />
+    <Compile Include="Glider\Common\Objects\GInterfaceObject.cs" />
+    <Compile Include="Glider\Common\Objects\GShortcut.cs" />
+    <Compile Include="Glider\Common\Objects\GMemory.cs" />
+    <Compile Include="Glider\Common\Objects\GContainer.cs" />
+    <Compile Include="Glider\Common\Objects\GGlideMode.cs" />
+    <Compile Include="Glider\Common\Objects\GBarState.cs" />
+    <Compile Include="Glider\Common\Objects\GBuffType.cs" />
+    <Compile Include="Glider\Common\Objects\GObjectType.cs" />
+    <Compile Include="Glider\Common\Objects\GReaction.cs" />
+    <Compile Include="Glider\Common\Objects\GConfigResult.cs" />
+    <Compile Include="Glider\Common\Objects\GCombatResult.cs" />
+    <Compile Include="Glider\Common\Objects\GHealDisposition.cs" />
+    <Compile Include="Glider\Common\Objects\GPartyMode.cs" />
+    <Compile Include="Glider\Common\Objects\GPlayerClass.cs" />
+    <Compile Include="Glider\Common\Objects\GPlayerRace.cs" />
+    <Compile Include="Glider\Common\Objects\GPlayerFaction.cs" />
+    <Compile Include="Glider\Common\Objects\GItemQuality.cs" />
+    <Compile Include="Glider\Common\Objects\GCreatureType.cs" />
+    <Compile Include="Glider\Common\Objects\GRaidTargetIcon.cs" />
+    <Compile Include="Glider\Common\Objects\GItemBagAction.cs" />
+    <Compile Include="Glider\Common\Objects\GShortcutType.cs" />
+    <Compile Include="Glider\Common\Objects\GCursorItemTypes.cs" />
+    <Compile Include="Glider\Common\Objects\GKeyType.cs" />
+    <Compile Include="Glider\Common\Objects\GStance.cs" />
+    <Compile Include="Glider\Common\Objects\GMovement.cs" />
+    <Compile Include="Glider\Common\Objects\GInterfaceHelper.cs" />
+    <Compile Include="Glider\Common\Objects\GItemDefinition.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AccountInfo.resx" />
+    <EmbeddedResource Include="Class5.resx" />
+    <EmbeddedResource Include="ConfigForm.resx" />
+    <EmbeddedResource Include="DeathknightConfig.resx" />
+    <EmbeddedResource Include="DebuffList.resx" />
+    <EmbeddedResource Include="DebuffPick.resx" />
+    <EmbeddedResource Include="DruidConfig.resx" />
+    <EmbeddedResource Include="EvoConfigWindow.resx" />
+    <EmbeddedResource Include="FactionReminder.resx" />
+    <EmbeddedResource Include="Glider\Common\Objects\GConfigWindow.resx" />
+    <EmbeddedResource Include="Glider\en-US.xml" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Deathknight.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Druid.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Hunter.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Mage.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Paladin.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Priest.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Rogue.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Shaman.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Warlock.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultClasses\Warrior.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultScripts\DoAutoLog.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultScripts\OnGameFirstSeen.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultScripts\OnGliderStart.cs" />
+    <EmbeddedResource Include="GliderCommon\DefaultScripts\OnHearth.cs" />
+    <EmbeddedResource Include="GliderForm.resx" />
+    <EmbeddedResource Include="GliderWarning.resx" />
+    <EmbeddedResource Include="HunterConfig.resx" />
+    <EmbeddedResource Include="KeyEditor.resx" />
+    <EmbeddedResource Include="LaunchpadReminder.resx" />
+    <EmbeddedResource Include="LaunchpadReminder_1.resx" />
+    <EmbeddedResource Include="MageConfig.resx" />
+    <EmbeddedResource Include="PaladinConfig.resx" />
+    <EmbeddedResource Include="PickWindow.resx" />
+    <EmbeddedResource Include="PriestConfig.resx" />
+    <EmbeddedResource Include="ProfileProps.resx" />
+    <EmbeddedResource Include="ProfileWizard.resx" />
+    <EmbeddedResource Include="RemindBar.resx" />
+    <EmbeddedResource Include="RogueConfig.resx" />
+    <EmbeddedResource Include="SecCheck.resx" />
+    <EmbeddedResource Include="ShamanConfig.resx" />
+    <EmbeddedResource Include="WarlockConfig.resx" />
+    <EmbeddedResource Include="WarriorConfig.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

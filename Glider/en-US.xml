@@ -1,0 +1,1542 @@
+<?xml version="1.0"?>
+<GliderStrings>
+    <S id="Common.ClassDruid" text="Druid"/>
+    <S id="Common.ClassHunter" text="Hunter"/>
+    <S id="Common.ClassMage" text="Mage"/>
+    <S id="Common.ClassPaladin" text="Paladin"/>
+    <S id="Common.ClassPriest" text="Priest"/>
+    <S id="Common.ClassRogue" text="Rogue"/>
+    <S id="Common.ClassShaman" text="Shaman"/>
+    <S id="Common.ClassWarlock" text="Warlock"/>
+    <S id="Common.ClassWarrior" text="Warrior"/>
+    <S id="Common.ClassDeathknight" text="Death knight"/>
+    <S id="Common.ShockMode0" text="Spam"/>
+    <S id="Common.ShockMode1" text="Runners"/>
+    <S id="Common.ShockMode2" text="Interrupt"/>
+    <S id="Common.PartyHealMode0" text="Dedicated"/>
+    <S id="Common.PartyHealMode1" text="Normal"/>
+    <S id="Common.PartyHealMode2" text="Never"/>
+    <S id="GliderForm.label1" text="Health:"/>
+    <S id="GliderForm.LabelManaHeader" text="Mana:"/>
+    <S id="GliderForm.label3" text="Kills:"/>
+    <S id="GliderForm.label2" text="Speed:"/>
+    <S id="GliderForm.label4" text="T-Health:"/>
+    <S id="GliderForm.label5" text="T-Distance:"/>
+    <S id="GliderForm.label6" text="T-Faction:"/>
+    <S id="GliderForm.label7" text="XP/Hour:"/>
+    <S id="GliderForm.label8" text="Closest:"/>
+    <S id="GliderForm.label9" text="Previous:"/>
+    <S id="GliderForm.label10" text="Next:"/>
+    <S id="GliderForm.label11" text="Add waypoints as:"/>
+    <S id="GliderForm.WPTypeAuto" text="Automatic"/>
+    <S id="GliderForm.WPTypeNormal" text="Normal"/>
+    <S id="GliderForm.WPTypeGhost" text="Ghost"/>
+    <S id="GliderForm.WPTypeVendor" text="Vendor"/>
+    <S id="GliderForm.AutoAddToggle" text="Auto-add waypoints"/>
+    <S id="GliderForm.NewProfileButton" text="New Profile"/>
+    <S id="GliderForm.EditProfileButton" text="Edit Profile"/>
+    <S id="GliderForm.LoadProfileButton" text="Load Profile"/>
+    <S id="GliderForm.SaveProfileButton" text="Save Profile"/>
+    <S id="GliderForm.ShowNPCInfoButton" text="Show Faction"/>
+    <S id="GliderForm.AddWaypointButton" text="Add Waypoint"/>
+    <S id="GliderForm.ShrinkButton!Tooltip" text="Shrink/grow game window"/>
+    <S id="GliderForm.HideButton!Tooltip" text="Hide/show game window"/>
+    <S id="GliderForm.GlideButton!Tooltip" text="Start gliding"/>
+    <S id="GliderForm.KillButton!Tooltip" text="1-Kill current target"/>
+    <S id="GliderForm.StopButton!Tooltip" text="Stop action"/>
+    <S id="GliderForm.StopButton.Stop" text="Stop"/>
+    <S id="GliderForm.StopButton.Waypoints" text="Waypoints"/>
+    <S id="GliderForm.StopButton.Default" text="Default"/>
+    <S id="GliderForm.QuickLoadButton!Tooltip" text="Load profile"/>
+    <S id="GliderForm.ConfigButton!Tooltip" text="Configuration"/>
+    <S id="GliderForm.MyHelpButton!Tooltip" text="Help"/>
+    <S id="GliderForm.FactionLabel!Idle" text="(not attached to game)"/>
+    <S id="GliderForm.FactionLabel!NoTarget" text="(no NPC target selected)"/>
+    <S id="GliderForm.FactionLabel!AlreadyGot" text="Profile contains faction of target."/>
+    <S id="GliderForm.FactionLabel!NotFound" text="Profile does not contain faction of target."/>
+    <S id="GliderForm.LabelAttached!True" text="Yes"/>
+    <S id="GliderForm.LabelAttached!False" text="No"/>
+    <S id="GliderForm.StatusLabel" text="Starting up..."/>
+    <S id="GliderForm.StatusLabel!NewProfile" text="(new profile)"/>
+    <S id="GliderWarning.MyOKButton" text="OK"/>
+    <S id="GliderWarning.MyYesButton" text="Yes"/>
+    <S id="GliderWarning.MyNoButton" text="No"/>
+    <S id="NoMoreWarning" text="Don't show me this warning again"/>
+    <S id="ConfigWindow.True" text="Yes"/>
+    <S id="KeyType.SS_Shift" text="Shift"/>
+    <S id="KeyType.SS_Ctrl" text="Ctrl"/>
+    <S id="KeyType.SS_Alt" text="Alt"/>
+    <S id="KeyType.Char" text="Character"/>
+    <S id="KeyType.VChar" text="V-Character"/>
+    <S id="KeyType.Spell" text="Spell"/>
+    <S id="KeyType.Item" text="Item"/>
+    <S id="KeyType.Macro" text="Macro"/>
+    <S id="KeyEditor" text="Edit Keys:"/>
+    <S id="PickWindow.label1" text="Press the key you want to record.  Do not use Alt, Shift, or Control!"/>
+    <S id="KeyEditor.Error.CharLength" text="Please enter a single character for &quot;Char&quot; types of keys."/>
+    <S id="KeyEditor.Error.VCharLength"
+       text="Please enter a virtual character code starting with 0x or click the &quot;Pick&quot; button."/>
+    <S id="KeyEditor.Error.VCharValue"
+       text="Please enter a virtual character code starting with 0x or click the &quot;Pick&quot; button."/>
+    <S id="KeyEditor.Error.NoSpell"
+       text="No spell is selected.  Use a Char/VChar for this key or open up the game and attach Glider to load the list of spells."/>
+    <S id="KeyEditor.AutoUpdate" text="Automatic key selection"/>
+    <S id="KeyEditor.groupBox1" text="Keys"/>
+    <S id="KeyEditor.groupBox2" text="Key Properties"/>
+    <S id="KeyEditor.label1" text="Name:"/>
+    <S id="KeyEditor.label2" text="Type:"/>
+    <S id="KeyEditor.label3" text="Bar:"/>
+    <S id="KeyEditor.label4" text="Char:"/>
+    <S id="KeyEditor.label4.Alt" text="VChar:"/>
+    <S id="KeyEditor.label5" text="Spell:"/>
+    <S id="KeyEditor.MySaveButton" text="Save"/>
+    <S id="KeyEditor.MyCancelButton" text="Cancel"/>
+    <S id="ProfileWizard.NextButton" text="Next &gt;&gt;"/>
+    <S id="ProfileWizard.PrevButton" text="&lt;&lt; Previous"/>
+    <S id="ProfileWizard.StartupLabel"
+       text="Welcome to the profile wizard!  To begin creating a profile, move your character in the game to where you wish the profile to begin.&#13;&#10;&#13;&#10;In addition, choose a name for the profile below so you can load it again later."/>
+    <S id="ProfileWizard.FilenameLabel" text="Profile name:"/>
+    <S id="ProfileWizard.StdWaypointsLabel"
+       text="Walk around and kill the monsters you want Glider to kill when you run this profile.  Glider is recording your movements, so avoid moving off of your path if possible."/>
+    <S id="ProfileWizard.StdWaypointsLabelAway"
+       text="Continue walking your path and killing monsters.  When you have returned to your starting location, Glider will move to the next step of the wizard.  If you don't want your profile to run in a circle, click &quot;Next;&quot; when you have reached the end of your path."/>
+    <S id="ProfileWizard.StdWaypointsClose"
+       text="Your starting location is {0} yards away and {1} degrees to the {2} of your character."/>
+    <S id="ProfileWizard.WaypointsClose"
+       text="The closest waypoint is {0} yards away and {1} degrees to the {2} of your character."/>
+    <S id="ProfileWizard.GhostWPNotDone" text="Run from your current location to the profile in order to continue."/>
+    <S id="ProfileWizard.LabelVendorStart"
+       text="Finally, you may choose to record vendor waypoints, which is how Glider finds its way from your hearth location back to the profile.  Along the way, you can select merchants for repair/ammo and food/water.&#13;&#10;&#13;&#10;To begin, move your character to your hearth location and click &quot;Next;&quot;&#13;&#10;&#13;&#10;Note: make sure you know where the food/water and ammo/repair vendors are in your area before beginning!"/>
+    <S id="ProfileWizard.SkipVendorBox" text="Skip vendor waypoints for this profile."/>
+    <S id="ProfileWizard.LabelProfileDone" text="All done!  The profile has been saved and is now ready for use."/>
+    <S id="ProfileWizard.LabelVendorRecordFW"
+       text="To record vendor waypoints, begin by moving up to the merchant who sells food and water.  Right-click on the vendor to open talk and then &quot;Next;&quot;."/>
+    <S id="ProfileWizard.VendorFoodWater" text="Vendor for food/water: "/>
+    <S id="ProfileWizard.CurrentFWLabel" text="(no vendor selected yet)"/>
+    <S id="ProfileWizard.LabelVendorRecordAR"
+       text="Now move carefully to the vendor who repairs and, if you have a hunter, sells your ammunition.  Right-click on the vendor to talk and then click &quot;Next;&quot;."/>
+    <S id="ProfileWizard.VendorAmmoRepair" text="Vendor for ammo/repair: "/>
+    <S id="ProfileWizard.NoVendorFW" text="Select a vendor for food/water before clicking &quot;Next;&quot;."/>
+    <S id="ProfileWizard.NoVendorAR" text="Select a vendor for ammo/repair before clicking &quot;Next;&quot;."/>
+    <S id="ProfileWizard.CurrentARLabel" text="(no vendor selected yet)"/>
+    <S id="ProfileWizard.LabelVendorConnect"
+       text="Now move carefully to the closest profile waypoint.  Do not mount or otherwise speed up your character during this process."/>
+    <S id="ProfileWizard.VendorWPDone" text="Run from your current location to the profile in order to continue."/>
+    <S id="ProfileWizard.Elite"
+       text="Vendor waypoints are a feature of Glider Elite.  You can create a profile with them without Elite, but your version of Glider will not be able to use them.&#13;&#10;&#13;&#10;Do you want to record vendor waypoints anyway?"/>
+    <S id="ProfileWizard.Finished" text="Finish"/>
+    <S id="ProfileWizard.Yards" text="yards"/>
+    <S id="ProfileWizard.Left" text="left"/>
+    <S id="ProfileWizard.Right" text="right"/>
+    <S id="ProfileWizard.SkipWizardBox" text="Create this profile without the wizard."/>
+    <S id="ProfileWizard.PauseStdBox" text="Pause recording"/>
+    <S id="ProfileWizard.NoProfileName" text="Please enter a profile name before continuing."/>
+    <S id="ProfileWizard.NoKillsError"
+       text="Kill at least one monster before continuing so that Glider knows what you want it to kill."/>
+    <S id="ProfileWizard.NoWPs"
+       text="Move around in the game to create a path for Glider to follow before continuing."/>
+    <S id="ProfileWizard.ProfileExists"
+       text="The profile named &quot;{0}&quot; already exists.  Do you want to overwrite it with a new profile?"/>
+    <S id="ProfileWizard.LabelGhostWPStart"
+       text="To add ghost waypoints to this profile and allow Glider to resurrect when you die, move your character to the nearest graveyard now.  Or simply get killed (don't forget to remove your gear first!) and the game will move you to the closest graveyard automatically.&#13;&#10;&#13;&#10;When you are at the graveyard, click &quot;Next &gt;&gt;&quot; to begin recording ghost waypoints."/>
+    <S id="ProfileWizard.LabelGhostWPRecord"
+       text="Glider is now recording the path from the graveyard to your profile.  Run to the closest waypoint and be careful to avoid obstructions or dropoffs."/>
+    <S id="ProfileWizard.label1" text="Waypoints stored:"/>
+    <S id="ProfileWizard.label2" text="Level range:"/>
+    <S id="ProfileWizard.label3" text="Faction list:"/>
+    <S id="ProfileWizard.NoKills" text="(no kills yet)"/>
+    <S id="ProfileWizard.SkipGhostWPBox" text="Skip ghost waypoints for this profile."/>
+    <S id="ConfigWindow.False" text="No"/>
+    <S id="ConfigWindow.NoHelp" text="This custom class does not support the help function."/>
+    <S id="ConfigWindow.RequiredField" text="Please enter a value for &quot;{0}&quot;."/>
+    <S id="ConfigWindow.BadIntReq" text="Please enter a valid numeric value for &quot;{0}&quot;."/>
+    <S id="ConfigWindow.BadIntNoReq" text="Please enter a valid numeric value for &quot;{0}&quot; or leave it blank."/>
+    <S id="ProfileProps.groupbox1" text="Levels"/>
+    <S id="ProfileProps.groupbox2" text="Factions"/>
+    <S id="ProfileProps.groupbox3" text="Waypoints"/>
+    <S id="ProfileProps.groupbox4" text="Ghost Waypoints"/>
+    <S id="ProfileProps.groupbox5" text="Options"/>
+    <S id="ProfileProps.groupbox6" text="Avoid"/>
+    <S id="ProfileProps.groupbox7" text="Vendor Waypoints"/>
+    <S id="ProfileProps.label2" text="Min:"/>
+    <S id="ProfileProps.label3" text="Max:"/>
+    <S id="ProfileProps.label4" text="Factions:"/>
+    <S id="ProfileProps.Circle" text="Wander circle"/>
+    <S id="ProfileProps.Wander" text="Wander"/>
+    <S id="ProfileProps.OutAndBack" text="Wander out-n-back"/>
+    <S id="ProfileProps.WaypointsLabel" text="This profile has no waypoints yet."/>
+    <S id="ProfileProps.WaypointsLabel.Contains" text="This profile has {0} waypoints."/>
+    <S id="ProfileProps.GhostWaypointsLabel" text="This profile has no ghost waypoints yet."/>
+    <S id="ProfileProps.GhostWaypointsLabel.Contains" text="This profile has {0} ghost waypoints."/>
+    <S id="ProfileProps.VendorWaypointsLabel" text="This profile has no vendor waypoints yet."/>
+    <S id="ProfileProps.VendorWaypointsLabel.Contains" text="This profile has {0} vendor waypoints."/>
+    <S id="ProfileProps.BlacklistOn" text="Blacklist enabled"/>
+    <S id="ProfileProps.NaturalRun" text="Natural running"/>
+    <S id="ProfileProps.ReverseWaypoints" text="Reverse waypoints"/>
+    <S id="ProfileProps.SkipWaypoints" text="Skip waypoints"/>
+    <S id="ProfileProps.Beach" text="Beach"/>
+    <S id="ProfileProps.RunFromAvoids" text="Run from avoids"/>
+    <S id="ProfileProps.IgnoreAttackers" text="Ignore attackers"/>
+    <S id="ProfileProps.UseBreadcrumbs" text="Breadcrumbs"/>
+    <S id="ProfileProps.AllowShortCircuit" text="Short-circuit on resume"/>
+    <S id="ProfileProps.OneShot" text="Stop after one pass"/>
+    <S id="ProfileProps.Fishing" text="Fishing"/>
+    <S id="ProfileProps.label5" text="Lure every"/>
+    <S id="ProfileProps.label77" text="minutes"/>
+    <S id="ProfileProps.label6" text="Monster names containing:"/>
+    <S id="ProfileProps.ClearWaypoints" text="Clear"/>
+    <S id="ProfileProps.ClearGhostWaypoints" text="Clear"/>
+    <S id="ProfileProps.MyOKButton" text="OK"/>
+    <S id="ProfileProps.MyOKButton.Save" text="Save"/>
+    <S id="ProfileProps.MyCancelButton" text="Cancel"/>
+    <S id="ProfileProps.MyHelpButton" text="Help"/>
+    <S id="FactionReminder" text="No factions for this profile!"/>
+    <S id="FactionReminder.label1"
+       text="This profile is configured without a faction list, which may cause Glider to attack warlock/hunter pets and friendly totems.&#13;&#10;&#13;&#10;For more information on factions, click &quot;Help&quot;.&#13;&#10;&#13;&#10;Do you want to continue?"/>
+    <S id="FactionReminder.DontRemindMe" text="Don't remind me about this again."/>
+    <S id="RemindBar" text="Don't forget to set action bars!"/>
+    <S id="RemindBar.label1"
+       text="In order for Glider to run properly, you need to set up two action bars in the game with spells and abilities for your character.&#13;&#10;&#13;&#10;Do you want to open the help file for this class' action bar now?"/>
+    <S id="RemindBar.DontRemindMe" text="Don't remind me about this again."/>
+    <S id="LaunchpadReminder.WarningLabel"
+       text="Glider was not started with Launchpad.  For maximum safety, only start Glider (and the game) by clicking &quot;Launch WoW&quot; from the Launchpad window."/>
+    <S id="LaunchpadReminder.DontRemindMe" text="Don't remind me about this again."/>
+    <S id="Config.BackgroundEnable" text="Background enable"/>
+    <S id="Config.UseHook" text="Install keyboard hook"/>
+    <S id="Config.ShiftLoot" text="Shift to autoloot"/>
+    <S id="Config.ClassOptionsButton" text="Options"/>
+    <S id="Config.groupBox2" text="Miscellaneous"/>
+    <S id="Config.BypassLootSanity" text="Skip sanity on loot"/>
+    <S id="Config.RestNearMobs" text="Rest near monsters"/>
+    <S id="Config.EscapeClear" text="Clear target with Escape"/>
+    <S id="Config.FightPlayers" text="Fight back against players"/>
+    <S id="Config.MouseSpin" text="Spin with mouse"/>
+    <S id="Config.SitWhenBored" text="Sit when bored"/>
+    <S id="Config.SkipLoot" text="Skip all looting"/>
+    <S id="Config.SpeedyKeys" text="Use speedy macros"/>
+    <S id="Config.groupBox32" text="Vendoring"/>
+    <S id="Config.label2" text="Food amount:"/>
+    <S id="Config.label3" text="Water amount:"/>
+    <S id="Config.AutoSkin" text="Skin corpses"/>
+    <S id="Config.MediaKeysBox" text="Use media keys"/>
+    <S id="Config.ResetBuffs" text="Reset buffs"/>
+    <S id="Config.WalkLoot" text="Walk to loot"/>
+    <S id="Config.ResLabel" text="Stop after this many:"/>
+    <S id="Config.groupBox22" text="Resurrection"/>
+    <S id="Config.groupBox30" text="Hostile Monsters"/>
+    <S id="Config.LootCheckHostiles" text="Avoid hostiles when looting and resting"/>
+    <S id="Config.ScriptRes" text="Resurrect through /script commands"/>
+    <S id="Config.label61" text="Class:"/>
+    <S id="Config.label50" text="windows"/>
+    <S id="Config.label51" text="Safe distance:"/>
+    <S id="Config.label54" text="yards"/>
+    <S id="Config.label55" text="yards"/>
+    <S id="Config.label56" text="yards"/>
+    <S id="Config.label57" text="yards"/>
+    <S id="Config.Resurrect" text="Auto resurrect if profile has ghost waypoints"/>
+    <S id="Config.MyHelpButton" text="Help"/>
+    <S id="Config.StopAfter" text="Stop after:"/>
+    <S id="Config.ChatDelete" text="Delete prior chat log on start"/>
+    <S id="Config.ChatLogEnabled" text="Enabled"/>
+    <S id="Config.PlayWhisper" text="Play sound on whisper"/>
+    <S id="Config.PlaySay" text="Play sound on say"/>
+    <S id="Config.AutoReply" text="Auto-reply to GM:"/>
+    <S id="Config.ProcessNameDisabled" text="Disabled"/>
+    <S id="Config.ProcessNameRandom" text="Random"/>
+    <S id="Config.ProcessNameThis" text="Use name:"/>
+    <S id="Config.TitleNameThis" text="Use name:"/>
+    <S id="Config.TitleNameRandom" text="Random"/>
+    <S id="Config.TitleNameDisabled" text="Disabled"/>
+    <S id="Config.UseBandages" text="Use bandages at:"/>
+    <S id="Config.FastEat" text="Fast eat/drink"/>
+    <S id="Config.UseClipboard" text="Paste via Windows clipboard"/>
+    <S id="Config.LoadKeymap" text="Reload from disk"/>
+    <S id="Config.EditKeymap" text="Edit"/>
+    <S id="Config.PickupJunk" text="Pickup junk"/>
+    <S id="Config.PartyAdds" text="Handle extras"/>
+    <S id="Config.PartyFollower" text="Follower"/>
+    <S id="Config.PartyLeader" text="Leader"/>
+    <S id="Config.PartySolo" text="Solo"/>
+    <S id="Config.PartyBuff" text="Buff others"/>
+    <S id="Config.PartySlashFollow" text="Use /follow"/>
+    <S id="Config.ListenEnabled" text="Enabled"/>
+    <S id="Config.StopLootingWhenFull" text="Stop looting when inventory is full"/>
+    <S id="Config.StopWhenFull" text="Stop gliding when inventory is full"/>
+    <S id="Config.groupBox3" text="Registration"/>
+    <S id="Config.groupBox27" text="Mouse"/>
+    <S id="Config.label1" text="Product key:"/>
+    <S id="Config.groupBox4" text="Auto-Stop"/>
+    <S id="Config.label4" text="minutes"/>
+    <S id="Config.groupBox5" text="Rest Percentages"/>
+    <S id="Config.label6" text="Mana:"/>
+    <S id="Config.label5" text="Health:"/>
+    <S id="Config.TabGeneral" text="General"/>
+    <S id="Config.groupBox19" text="Remote Control"/>
+    <S id="Config.label42" text="Port:"/>
+    <S id="Config.label41" text="Password:"/>
+    <S id="Config.groupBox7" text="Information"/>
+    <S id="Config.WowVersionLabel" text="{0}"/>
+    <S id="Config.GliderVersionLabel" text="{0} ({1})"/>
+    <S id="Config.linkLabel1" text="http://www.mmoglider.com/"/>
+    <S id="Config.label10" text="WoW version:"/>
+    <S id="Config.label9" text="Glider version:"/>
+    <S id="Config.TabLimits" text="Limits"/>
+    <S id="Config.TabDistances" text="Distances"/>
+    <S id="Config.TabClasses" text="Classes"/>
+    <S id="Config.TabInvisible" text="Invisible"/>
+    <S id="Config.groupBox18" text="Party"/>
+    <S id="Config.OKButton" text="OK"/>
+    <S id="Config.MyCancelButton" text="Cancel"/>
+    <S id="Config.groupBox1" text="Class"/>
+    <S id="Config.label37" text="Follower walk to:"/>
+    <S id="Config.label36" text="Follower walk start:"/>
+    <S id="Config.label35" text="Leader wait:"/>
+    <S id="Config.groupBox16" text="Combat Range"/>
+    <S id="Config.label22" text="yards"/>
+    <S id="Config.label23" text="Ranged:"/>
+    <S id="Config.label14" text="yards"/>
+    <S id="Config.label8" text="Melee:"/>
+    <S id="Config.groupBox13" text="Rest Options"/>
+    <S id="Config.groupBox21" text="Other"/>
+    <S id="Config.label17" text="health"/>
+    <S id="Config.groupBox12" text="Wandering"/>
+    <S id="Config.label13" text="yards"/>
+    <S id="Config.label7" text="Walk-to-pull:"/>
+    <S id="Config.label16" text="yards"/>
+    <S id="Config.label15" text="Harvest range:"/>
+    <S id="Config.TabDetection" text="Detection"/>
+    <S id="Config.groupBox9" text="Movement"/>
+    <S id="Config.Strafe" text="Strafe"/>
+    <S id="Config.JumpMore" text="Jump more"/>
+    <S id="Config.TeleportLogout" text="Also log out on teleport"/>
+    <S id="Config.groupBox14" text="Followers"/>
+    <S id="Config.AvoidOtherFaction" text="Avoid other faction"/>
+    <S id="Config.AvoidSameFaction" text="Avoid same faction"/>
+    <S id="Config.label21" text="minutes"/>
+    <S id="Config.label20" text="Log out after:"/>
+    <S id="Config.label19" text="minutes"/>
+    <S id="Config.label18" text="Alert after:"/>
+    <S id="Config.TeleportStop" text="Stop on unexpected teleport"/>
+    <S id="Config.groupBox11" text="Title Renaming"/>
+    <S id="Config.groupBox10" text="Process Renaming"/>
+    <S id="Config.TabKeys" text="Keys"/>
+    <S id="Config.groupBox15" text="Key Mapping"/>
+    <S id="Config.groupBox8" text="Timing"/>
+    <S id="Config.label12" text="milliseconds"/>
+    <S id="Config.label11" text="Keystroke delay:"/>
+    <S id="Config.TabRDistances" text="Distances"/>
+    <S id="Config.TabChat" text="Chat"/>
+    <S id="Config.groupBox6" text="Reaction"/>
+    <S id="Config.ChatLog" text="Logging"/>
+    <S id="Config.TabParty" text="Party"/>
+    <S id="Config.FollowerOptionsBox" text="Follower"/>
+    <S id="Config.label29" text="seconds"/>
+    <S id="Config.label28" text="Attack delay:"/>
+    <S id="Config.label27" text="Leader name:"/>
+    <S id="Config.LeaderOptionsBox" text="Leader"/>
+    <S id="Config.AllowAutoSecCheck" text="Prompt for SecCheck occasionally"/>
+    <S id="Config.label33" text="4."/>
+    <S id="Config.label32" text="3."/>
+    <S id="Config.label31" text="2."/>
+    <S id="Config.label30" text="1."/>
+    <S id="Config.label26" text="Auto Login character:"/>
+    <S id="Config.label25" text="Member name"/>
+    <S id="Config.PartyOptionsBox" text="Options"/>
+    <S id="Config.label34" text="Heal:"/>
+    <S id="Config.label24" text="Loot position:"/>
+    <S id="Config.Looters" text="Looters:"/>
+    <S id="Config.groupBox17" text="Mode"/>
+    <S id="Config.TabMisc" text="Miscellaneous"/>
+    <S id="Config.TabBackground" text="Background"/>
+    <S id="Config.TabDev" text="Dev"/>
+    <S id="Config.DisplayNormal" text="Leave game as normal"/>
+    <S id="Config.DisplayHide" text="Hide game window"/>
+    <S id="Config.DisplayShrink" text="Shrink game window"/>
+    <S id="Config.groupBox23" text="Debuff Removal"/>
+    <S id="Config.groupBox24" text="Options"/>
+    <S id="Config.groupBox25" text="Display"/>
+    <S id="Config.EditDebuffs" text="Manage"/>
+    <S id="Config.DebuffsKnown" text="{0} known"/>
+    <S id="Config.label43" text="Buffs:"/>
+    <S id="Config.ManageGamePos" text="Remember game window size"/>
+    <S id="Config.TurboLoot" text="Turbo loot when safe"/>
+    <S id="Config.label52" text="Chat log frame:"/>
+    <S id="Config.label53" text="Combat log frame:"/>
+    <S id="Config.SoundKill" text="Beep on kill"/>
+    <S id="Config.NinjaSkin" text="Ninja skin"/>
+    <S id="Config.UseTray" text="Icon in system tray"/>
+    <S id="Config.RemoveDebuffs" text="Remove debuffs"/>
+    <S id="Config.StrafeObstacles" text="Strafe around obstacles"/>
+    <S id="Druid.UseStarfire" text="Use Starfire"/>
+    <S id="Druid.UseMangle" text="Use Mangle"/>
+    <S id="Druid.DetectBuffs" text="Detect buffs"/>
+    <S id="Druid.BashCasters" text="Save Bash for casters/heal"/>
+    <S id="Druid.MyOKButton" text="OK"/>
+    <S id="Druid.MyCancelButton" text="Cancel"/>
+    <S id="Druid.label3" text="Pull distance:"/>
+    <S id="Druid.label4" text="yards"/>
+    <S id="Druid.MyHelpButton" text="Help"/>
+    <S id="Druid.UseDemo" text="Use Demoralizing Roar"/>
+    <S id="Druid.UseFaerie" text="Use Faerie Fire"/>
+    <S id="Druid.UseBarkskin" text="Use Barkskin"/>
+    <S id="Druid.UseBash" text="Use Bash"/>
+    <S id="Druid.ShootRunners" text="Shoot runners"/>
+    <S id="Druid.UseCharge" text="Use Feral Charge"/>
+    <S id="Druid.UseSwiftness" text="Nature's Swiftness on heal"/>
+    <S id="Druid.CurePoison" text="Cure Poison/Remove Curse"/>
+    <S id="Druid.UseEnrage" text="Use Enrage"/>
+    <S id="Druid.UseBearForm" text="Use Bear Form"/>
+    <S id="Druid.UseCatForm" text="Use Cat Form"/>
+    <S id="Druid.UseSwipe" text="Use Swipe"/>
+    <S id="Druid.UseFury" text="Use Tiger's Fury"/>
+    <S id="Druid.UseRip" text="Use Rip"/>
+    <S id="Druid.label1" text="Maul cost:"/>
+    <S id="Druid.label2" text="rage"/>
+    <S id="Druid.BearFormBox" text="Bear Form"/>
+    <S id="Druid.CatFormBox" text="Cat Form"/>
+    <S id="Druid.label7" text="Bite multiplier:"/>
+    <S id="Druid.label5" text="Claw energy cost:"/>
+    <S id="Druid.UseStealth" text="Use Stealth"/>
+    <S id="Druid.StealthNear" text="Stealth only on pull"/>
+    <S id="Druid" text="Config: Druid"/>
+    <S id="Hunter.MyOKButton" text="OK"/>
+    <S id="Hunter.MyCancelButton" text="Cancel"/>
+    <S id="Hunter.label3" text="Pull distance:"/>
+    <S id="Hunter.label4" text="yards"/>
+    <S id="Hunter.MyHelpButton" text="Help"/>
+    <S id="Hunter.DotShot" text="Two-shot pull"/>
+    <S id="Hunter.ApproachPull" text="Approach on long pull"/>
+    <S id="Hunter.FeedMacro" text="Feed pet with macro"/>
+    <S id="Hunter.SetTrap" text="Set trap before pull"/>
+    <S id="Hunter.UseIntimidate" text="Use Intimidation"/>
+    <S id="Hunter.UseWrath" text="Use Bestial Wrath"/>
+    <S id="Hunter.SeparateGroups" text="Try to separate groups"/>
+    <S id="Hunter.PetAttack" text="Pet attack"/>
+    <S id="Hunter.TrapAdds" text="Trap additional attackers"/>
+    <S id="Hunter.AvoidMelee" text="Avoid melee when possible"/>
+    <S id="Hunter.UseViper" text="Use Aspect of the Viper"/>
+    <S id="Hunter.label1" text="Feed pet at:"/>
+    <S id="Hunter.label2" text="happiness %"/>
+    <S id="Hunter.NoPet" text="Play without pet"/>
+    <S id="Hunter" text="Config: Hunter"/>
+    <S id="Mage.UseEvocation" text="Use Evocation"/>
+    <S id="Mage.MyOKButton" text="OK"/>
+    <S id="Mage.MyCancelButton" text="Cancel"/>
+    <S id="Mage.UseCombustion" text="Use Combustion"/>
+    <S id="Mage.UseDampen" text="Use Dampen Magic"/>
+    <S id="Mage.groupBox1" text="Options"/>
+    <S id="Mage.groupBox2" text="Limits"/>
+    <S id="Mage.label1" text="Fireblast cooldown:"/>
+    <S id="Mage.label2" text="seconds"/>
+    <S id="Mage.label3" text="Pull distance:"/>
+    <S id="Mage.label4" text="yards"/>
+    <S id="Mage.MyHelpButton" text="Help"/>
+    <S id="Mage.ArcaneMissile" text="Arcane Missile on pull"/>
+    <S id="Mage.ArcaneCombat" text="Arcane Missile in combat"/>
+    <S id="Mage.UseManaStones" text="Use mana stones"/>
+    <S id="Mage.SaveBlast" text="Save Fireblast for runners"/>
+    <S id="Mage.AutoFood" text="Auto-detect food/water"/>
+    <S id="Mage.UseFrostNova" text="Use Frost Nova"/>
+    <S id="Mage.UsePoly" text="Use Polymorph on adds"/>
+    <S id="Mage.ApproachFireblast" text="Approach for Fireblast"/>
+    <S id="Mage.UseMeleeSpell" text="Use melee-range spell"/>
+    <S id="Mage.UseCounterspell" text="Use Counterspell"/>
+    <S id="Mage.label5" text="Finisher:"/>
+    <S id="Mage.label6" text="life"/>
+    <S id="Mage.label7" text="life"/>
+    <S id="Mage.label8" text="Shield below:"/>
+    <S id="Mage.label9" text="Finish at:"/>
+    <S id="Mage.label11" text="Fireblast distance:"/>
+    <S id="Mage.label12" text="yards"/>
+    <S id="Mage.label10" text="Counterspell below:"/>
+    <S id="Mage.label13" text="seconds"/>
+    <S id="Mage.label14" text="Melee spell cooldown:"/>
+    <S id="Mage.label16" text="Ice Barrier mode:"/>
+    <S id="Mage.WaitOnPull" text="Wait for approach on pull"/>
+    <S id="Mage.Finisher0" text="None"/>
+    <S id="Mage.Finisher1" text="Wand"/>
+    <S id="Mage.Finisher2" text="Scorch"/>
+    <S id="Mage.IceBarrier0" text="None"/>
+    <S id="Mage.IceBarrier1" text="Always"/>
+    <S id="Mage.IceBarrier2" text="On Hit"/>
+    <S id="Mage.IceBarrier3" text="Panic"/>
+    <S id="Mage.Text" text="Config: Mage"/>
+    <S id="Paladin.MyOKButton" text="OK"/>
+    <S id="Paladin.MyCancelButton" text="Cancel"/>
+    <S id="Paladin.label3" text="Pull distance:"/>
+    <S id="Paladin.label4" text="yards"/>
+    <S id="Paladin.label5" text="Avoid add distance:"/>
+    <S id="Paladin.label6" text="yards"/>
+    <S id="Paladin.AvoidAdds" text="Avoid adds"/>
+    <S id="Paladin.UseCrusaderStrike" text="Use Crusader Strike"/>
+    <S id="Paladin.MyHelpButton" text="Help"/>
+    <S id="Paladin.UseDivineFavor" text="Use Divine Favor"/>
+    <S id="Paladin.SaveHammer" text="Save Hammer of Justice"/>
+    <S id="Paladin.UseWrath" text="Use Hammer of Wrath"/>
+    <S id="Paladin.label1" text="Finish w/judge:"/>
+    <S id="Paladin.label2" text="percent life"/>
+    <S id="Paladin" text="Config: Paladin"/>
+    <S id="Priest.MyOKButton" text="OK"/>
+    <S id="Priest.MyCancelButton" text="Cancel"/>
+    <S id="Priest.label1" text="Mind Blast cooldown:"/>
+    <S id="Priest.label2" text="seconds"/>
+    <S id="Priest.UseWand" text="Wand between Mind Blasts"/>
+    <S id="Priest.MindFlay" text="Mind Flay on pull"/>
+    <S id="Priest.label3" text="Pull distance:"/>
+    <S id="Priest.label4" text="yards"/>
+    <S id="Priest.MyHelpButton" text="Help"/>
+    <S id="Priest.ShadowWordCooldown" text=""/>
+    <S id="Priest.PreShield" text="PW:Shield at combat start"/>
+    <S id="Priest.AlwaysShield" text="PW:Shield always on"/>
+    <S id="Priest.SkipFlayRange" text="Skip flay if too far"/>
+    <S id="Priest.FlayRunners" text="Mind Flay runners"/>
+    <S id="Priest.label5" text="SW:Pain cooldown:"/>
+    <S id="Priest.label6" text="seconds"/>
+    <S id="Priest.label7" text="PW:Shield cooldown:"/>
+    <S id="Priest.label8" text="seconds"/>
+    <S id="Priest.UseShadowform" text="Use Shadowform"/>
+    <S id="Priest.UseVampiric" text="Use Vampiric Embrace"/>
+    <S id="Priest.ExtraFlay" text="Extra flay after DoT"/>
+    <S id="Priest" text="Config: Priest"/>
+    <S id="Rogue.PoisonMain" text="Poison main hand"/>
+    <S id="Rogue.PoisonOff" text="Poison off hand"/>
+    <S id="Rogue.UseKidneyShot" text="Use Kidney Shot"/>
+    <S id="Rogue.UseGhostly" text="Use Ghostly Strike"/>
+    <S id="Rogue.UseRush" text="Use Adrenaline Rush"/>
+    <S id="Rogue.SaveRush" text="Save Rush for adds"/>
+    <S id="Rogue.UseRiposte" text="Use Riposte"/>
+    <S id="Rogue.UseBladeFlurry" text="Use Blade Flurry"/>
+    <S id="Rogue.SaveBladeFlurry" text="Save Flurry for adds"/>
+    <S id="Rogue.MyOKButton" text="OK"/>
+    <S id="Rogue.MyCancelButton" text="Cancel"/>
+    <S id="Rogue.label3" text="Pull distance:"/>
+    <S id="Rogue.label4" text="yards"/>
+    <S id="Rogue.MyHelpButton" text="Help"/>
+    <S id="Rogue.SinisterCost" text=""/>
+    <S id="Rogue.UseColdblood" text="Use Cold Blood"/>
+    <S id="Rogue.CheapShot" text="Open with Cheap Shot"/>
+    <S id="Rogue.UseBackstab" text="Use Backstab"/>
+    <S id="Rogue.ChaseRunners" text="Chase runners"/>
+    <S id="Rogue.UseVanish" text="Use Vanish"/>
+    <S id="Rogue.UseKick" text="Use Kick"/>
+    <S id="Rogue.label1" text="energy"/>
+    <S id="Rogue.label2" text="Sinister strike cost:"/>
+    <S id="Rogue.label5" text="minutes"/>
+    <S id="Rogue.label6" text="Poison main hand every:"/>
+    <S id="Rogue.label7" text="Poison off-hand every:"/>
+    <S id="Rogue.label8" text="minutes"/>
+    <S id="Rogue.label9" text="Evasion cooldown:"/>
+    <S id="Rogue.label10" text="seconds"/>
+    <S id="Rogue.label11" text="Eviscerate multiplier:"/>
+    <S id="Rogue.label12" text="Kick below:"/>
+    <S id="Rogue.label13" text="life"/>
+    <S id="Rogue.UseStealth" text="Use Stealth"/>
+    <S id="Rogue.StealthNear" text="Stealth only on pull"/>
+    <S id="Rogue" text="Config: Rogue"/>
+    <S id="Shaman.AvoidAdds" text="Avoid possible adds"/>
+    <S id="Shaman.label10" text="yards"/>
+    <S id="Shaman.UseStormstrike" text="Use Stormstrike"/>
+    <S id="Shaman.ExtraShield" text="Extra Lightning Shield"/>
+    <S id="Shaman.UseRage" text="Use Shamanistic Rage"/>
+    <S id="Shaman.UseStoneclaw" text="Use Stoneclaw on adds"/>
+    <S id="Shaman.label11" text="Avoid add distance:"/>
+    <S id="Shaman.UseTotemicCall" text="Use Totemic Call"/>
+    <S id="Shaman.DualWield" text="Dual wield"/>
+    <S id="Shaman.MyOKButton" text="OK"/>
+    <S id="Shaman.MyCancelButton" text="Cancel"/>
+    <S id="Shaman.label3" text="Pull distance:"/>
+    <S id="Shaman.label4" text="yards"/>
+    <S id="Shaman.MyHelpButton" text="Help"/>
+    <S id="Shaman.ShootRunners" text="Shoot runners"/>
+    <S id="Shaman.UseSwiftness" text="Nature's Swiftness on heal"/>
+    <S id="Shaman.StartTotem" text="Start fight with totem"/>
+    <S id="Shaman.FastMelee" text="Fast melee"/>
+    <S id="Shaman.ShockPull" text="Pull with shock"/>
+    <S id="Shaman.UseHealTotem" text="Use totem when healing"/>
+    <S id="Shaman.UseEarthbind" text="Earthbind runners"/>
+    <S id="Shaman.label1" text="Totem duration:"/>
+    <S id="Shaman.label2" text="seconds"/>
+    <S id="Shaman.label5" text="Shock mode:"/>
+    <S id="Shaman.label6" text="Shock mana:"/>
+    <S id="Shaman.label7" text="percent"/>
+    <S id="Shaman.label8" text="Interrupt below:"/>
+    <S id="Shaman.label9" text="life"/>
+    <S id="Shaman" text="Config: Shaman"/>
+    <S id="Warlock.Jump" text="Jump"/>
+    <S id="Warlock.RunPull" text="Pull while running"/>
+    <S id="Warlock.MyOKButton" text="OK"/>
+    <S id="Warlock.MyCancelButton" text="Cancel"/>
+    <S id="Warlock.MyHelpButton" text="Help"/>
+    <S id="Warlock.ShardOneKill" text="Shard on 1-Kill"/>
+    <S id="Warlock.DarkPact" text="Dark Pact"/>
+    <S id="Warlock.PetAttack" text="Pet attack"/>
+    <S id="Warlock.UseReckless" text="Prevent runners"/>
+    <S id="Warlock.UseFear" text="Fear additional attackers"/>
+    <S id="Warlock.UseNightfall" text="Detect Nightfall"/>
+    <S id="Warlock.UseDeathCoil" text="Use Death Coil"/>
+    <S id="Warlock.UseWand" text="Use wand"/>
+    <S id="Warlock.ThreeDotPull" text="Use Third DoT"/>
+    <S id="Warlock.groupBox1" text="Shards"/>
+    <S id="Warlock.label2" text="Maintain shards:"/>
+    <S id="Warlock.groupBox2" text="General"/>
+    <S id="Warlock.label6" text="life"/>
+    <S id="Warlock.label5" text="Spell Lock at:"/>
+    <S id="Warlock.label1" text="Pet:"/>
+    <S id="Warlock.label4" text="yards"/>
+    <S id="Warlock.label3" text="Pull distance:"/>
+    <S id="Warlock.Pet0" text="Imp"/>
+    <S id="Warlock.Pet1" text="Voidie"/>
+    <S id="Warlock.Pet2" text="Felhunter"/>
+    <S id="Warlock.Pet3" text="Succubus"/>
+    <S id="Warlock.Pet4" text="Felguard"/>
+    <S id="Warlock.Pet5" text="No Demon"/>
+    <S id="Warlock.UseSoulLink" text="Use Soul Link"/>
+    <S id="Warlock.StopShards" text="Stop when shards ok"/>
+    <S id="Warlock" text="Config: Warlock"/>
+    <S id="Warrior.UseMortalStrike" text="Use Mortal Strike"/>
+    <S id="Warrior.AvoidAdds" text="Avoid possible adds"/>
+    <S id="Warrior.label10" text="Avoid add distance:"/>
+    <S id="Warrior.label9" text="yards"/>
+    <S id="Warrior.MyOKButton" text="OK"/>
+    <S id="Warrior.MyCancelButton" text="Cancel"/>
+    <S id="Warrior.label3" text="Pull distance:"/>
+    <S id="Warrior.label4" text="yards"/>
+    <S id="Warrior.ChargePull" text="Pull with Charge"/>
+    <S id="Warrior.UseConcussion" text="Use Concussion Blow"/>
+    <S id="Warrior.UseExecute" text="Use Execute"/>
+    <S id="Warrior.UseSunder" text="Use Sunder Armor"/>
+    <S id="Warrior.label1" text="Heroic Strike cooldown:"/>
+    <S id="Warrior.label2" text="seconds"/>
+    <S id="Warrior.MyHelpButton" text="Help"/>
+    <S id="Warrior.ChaseRunners" text="Chase runners"/>
+    <S id="Warrior.UseHamstring" text="Hamstring at low health"/>
+    <S id="Warrior.UseBloodrage" text="Use Bloodrage"/>
+    <S id="Warrior.UseDemoralizing" text="Use Demoralizing Shout"/>
+    <S id="Warrior.UseCleave" text="Use Cleave on adds"/>
+    <S id="Warrior.UseOverpower" text="Use Overpower"/>
+    <S id="Warrior.label5" text="Heroic Strike cost:"/>
+    <S id="Warrior.label6" text="rage"/>
+    <S id="Warrior.label7" text="Shield Bash below:"/>
+    <S id="Warrior.label8" text="life"/>
+    <S id="Warrior.ShieldBashLife" text=""/>
+    <S id="Warrior.UseShieldBash" text="Use Shield Bash"/>
+    <S id="Warrior" text="Config: Warrior"/>
+    <S id="DebuffList" text="Manage Debuffs"/>
+    <S id="DebuffList.MyOKButton" text="Done"/>
+    <S id="DebuffList.MyHelpButton" text="Help"/>
+    <S id="DebuffList.NoneNew"
+       text="There are no unidentified debuffs to be managed.  Check the help file for &quot;Debuffs&quot; under Advanced topics."/>
+    <S id="DebuffList.NoneNewTitle" text="No New Debuffs"/>
+    <S id="DebuffList.label1"
+       text="The following new effects were on your character after the last use of Glider.&#13;&#10;For any that are debuffs you want to remove, double-click the name of &#13;&#10;the spell to tell Glider what kind of debuff it is.&#13;&#10;&#13;&#10;Note: do not add positive buffs, such as Demon Armor, to the list!"/>
+    <S id="DebuffPick.label1"
+       text="Select the type of debuff for this spell from the buttons below.  If this&#13;&#10;spell is not one of the choices below, click &quot;Cancel&quot;"/>
+    <S id="DebuffPick.ButtonMagic" text="Magic"/>
+    <S id="DebuffPick.ButtonPoison" text="Poison"/>
+    <S id="DebuffPick.ButtonDisease" text="Disease"/>
+    <S id="DebuffPick.ButtonCurse" text="Curse"/>
+    <S id="DebuffPick.ButtonCancel" text="Cancel"/>
+    <S id="1" text="(unknown)"/>
+    <S id="2" text="1234567890-="/>
+    <S id="3" text="Combat key, bar number: {0}"/>
+    <S id="4" text="Rest key, bar number: {0}"/>
+    <S id="5" text="!! Can't check for buff, list or spellbook is null!"/>
+    <S id="6" text="(read failed!)"/>
+    <S id="7" text="Red message in no-damage check: {0}"/>
+    <S id="8" text="!! Health still not dropping after too long, breaking off combat"/>
+    <S id="9" text="Looks like we're too far away, tweaking distance"/>
+    <S id="10" text="Tweaking distance, not close enough"/>
+    <S id="11" text="CastInstant: {0}"/>
+    <S id="12" text="CastInstantNoCooldown: {0}"/>
+    <S id="13" text="CastSpell: {0}"/>
+    <S id="14" text="Gave up waiting for spell to finish casting: {0}"/>
+    <S id="15" text="Already close enough, skipping move"/>
+    <S id="16" text="Target vanished while approaching!"/>
+    <S id="17" text="Reached monster"/>
+    <S id="18" text="Heading is too far off, stopping run to adjust"/>
+    <S id="19" text="Stuck on something in MoveToMonster, trying to get around"/>
+    <S id="20" text="Mana:"/>
+    <S id="21" text="Base config invoked!  Oops, no dialog."/>
+    <S id="22" text="Mobs too close, skipping rest"/>
+    <S id="23" text="[open]"/>
+    <S id="24" text="Been sitting awhile - maybe time to drink/eat?"/>
+    <S id="25" text="Eating"/>
+    <S id="26" text="Drinking"/>
+    <S id="27" text="Health below bandage level"/>
+    <S id="28" text="Bandages left: {0}"/>
+    <S id="29" text="Attacked while bandaging!  Cripes!"/>
+    <S id="30" text="All healed up from bandage"/>
+    <S id="31" text="Player vanished while approaching!"/>
+    <S id="32" text="Leader has a target, stopping follow"/>
+    <S id="33" text="Creating new chat reader"/>
+    <S id="34" text="whispers:"/>
+    <S id="35" text="Whisper from: {0}"/>
+    <S id="36" text=" begins to cast"/>
+    <S id="37" text="you dodge"/>
+    <S id="38" text="you parry"/>
+    <S id="39" text="!! Whisper is likely from GM!"/>
+    <S id="40" text="Auto-replying and ending process"/>
+    <S id="41" text="Auto-reply disabled, killing Glide"/>
+    <S id="42" text="Exception saving chat: {0}"/>
+    <S id="43" text="Deleting chat log"/>
+    <S id="44" text="Unable to delete chat log: {0}"/>
+    <S id="45" text="says"/>
+    <S id="46" text="whispers"/>
+    <S id="47" text="ou receive loot"/>
+    <S id="48" text="has increased"/>
+    <S id="49" text="waves"/>
+    <S id="50" text="pokes"/>
+    <S id="51" text="Attached, maybe buffs"/>
+    <S id="52" text="buff list is not null"/>
+    <S id="53" text="Hash check ok"/>
+    <S id="54" text="Scanning for friends"/>
+    <S id="55" text="Removing friend: {0}"/>
+    <S id="56" text="Missing base list pointer!  Game still loading or in transition?"/>
+    <S id="57" text="Skipping null key: {0}"/>
+    <S id="58" text="!! Attempted to send unknown key: {0}"/>
+    <S id="59" text="!! Exception loading keys, probably while parsing {0}: {1}"/>
+    <S id="60" text="!! Exception saving keys: {0}"/>
+    <S id="61" text="Keymap saved to: Keys.xml"/>
+    <S id="62" text="Keymap loaded from: Keys.xml"/>
+    <S id="63" text="[open]"/>
+    <S id="64" text="Exception loading profile: {0}"/>
+    <S id="65" text="Hit waypoint end, reversing"/>
+    <S id="66" text="Starting from waypoint list beginning"/>
+    <S id="67" text="Hit waypoint start, reversing"/>
+    <S id="68" text="Starting from waypoint list end"/>
+    <S id="69" text="Launchpad start mode"/>
+    <S id="70" text="(new profile)"/>
+    <S id="71" text="No GliderExtensions.dll, skipping external class check"/>
+    <S id="72" text="!! Access control failed, Secure.LastError = {0}"/>
+    <S id="73" text="* Exception in KeyThread: {0}"/>
+    <S id="74" text="Party keys validated, leader mode enabled"/>
+    <S id="75" text="Starting Glider in demo mode, please wait..."/>
+    <S id="76" text="Full version of Glider, thanks for registering!"/>
+    <S id="77" text="Temporary key expires: {0}"/>
+    <S id="78" text="Demo key does not work in beta mode, please register or install standard Glider!"/>
+    <S id="79" text="Glider started, press F1 for help"/>
+    <S id="80" text="Can't create class for unknown: {0}"/>
+    <S id="81" text="Forcing WoW client version: {0}"/>
+    <S id="82" text="Unable to open WoW key in registry!"/>
+    <S id="83" text="Unable to read GamePath from registry!"/>
+    <S id="84" text="GamePath: {0}"/>
+    <S id="85" text="Unable to get version info from executable: {0}"/>
+    <S id="86" text="WoW client version: {0}"/>
+    <S id="87" text="&lt;attached&gt; "/>
+    <S id="88" text="[Debug] {0}"/>
+    <S id="89" text="[Debug]"/>
+    <S id="90" text="Unable to write to log: {0}"/>
+    <S id="91" text="!! Unable to manage privs, last error: {0}"/>
+    <S id="92" text="(this is ok if you are not logged in as admin or game is running as alternate user)"/>
+    <S id="93" text="Privs adjusted successfully"/>
+    <S id="94" text="Warning from privs: {0}"/>
+    <S id="95" text="Unable to find WoW process to attach!"/>
+    <S id="96" text="Unable to open process, last error: {0}"/>
+    <S id="97" text="Unable to find character object - is this a new patch?"/>
+    <S id="98" text="Attached"/>
+    <S id="99" text="Detached"/>
+    <S id="100" text="Stopping glide"/>
+    <S id="101" text="Stopping manual kill"/>
+    <S id="102" text="Stopping one-kill"/>
+    <S id="103" text="Demo version of Glider can only run a few minutes, stopping process"/>
+    <S id="104" text="%"/>
+    <S id="105" text="Exiting game after hearth"/>
+    <S id="106" text="Applying new configuration"/>
+    <S id="107" text="Must be attached to WoW process to add a waypoint!"/>
+    <S id="108" text="You must have a profile before adding waypoints"/>
+    <S id="109" text="Loaded successfully: {0}"/>
+    <S id="110" text="Reset party buffs"/>
+    <S id="111" text="Unable to load profile: {0}"/>
+    <S id="112" text="Saved successfully: {0}"/>
+    <S id="113" text="Demo is done, restart app to continue evaluating"/>
+    <S id="114" text="Stop current activity before manual kill"/>
+    <S id="115" text="Select a target before manual kill"/>
+    <S id="116" text="Temporary key is expired, cannot begin glide"/>
+    <S id="117" text="Stop current activity before starting glide"/>
+    <S id="118" text="Can't begin gliding in demo mode - restart Glider to continue evaluating"/>
+    <S id="119" text="Create a profile with at least two waypoints before starting glide"/>
+    <S id="120" text="You are dead!  Resurrect before beginning glide."/>
+    <S id="121" text="-- Done comparing"/>
+    <S id="122" text="Red message: {0}"/>
+    <S id="123" text="Attach before trying to view faction"/>
+    <S id="124" text="Select a target before trying to view faction"/>
+    <S id="125" text="Found target, attempting field load!"/>
+    <S id="126" text="Debug info: {0}"/>
+    <S id="127" text="Select an NPC target to view faction, not a player or corpse!"/>
+    <S id="128" text="Faction is already valid for this profile"/>
+    <S id="129" text="Added faction to current profile"/>
+    <S id="130" text="Attach before trying to add faction"/>
+    <S id="131" text="Select a target before trying to add faction"/>
+    <S id="132" text="Select an NPC target to add faction, not a player or corpse!"/>
+    <S id="133" text="Create or load a profile before adding faction!"/>
+    <S id="134" text="Chaining Glider startup to: {0}"/>
+    <S id="135" text="Too many extra exes, skipping clean process (shortcut has bogus working dir?)"/>
+    <S id="136" text="Deleting: {0}"/>
+    <S id="137" text="Unable to remove old renamed exe: {0}"/>
+    <S id="138" text="Adding waypoints automatically"/>
+    <S id="139" text="Automatic waypoint adding turned off"/>
+    <S id="140" text="Missing /handle= parameter!"/>
+    <S id="141" text="Stopping listener"/>
+    <S id="142" text="Stopping listener on port {0}"/>
+    <S id="143" text="Starting listener on port {0}"/>
+    <S id="144" text="! Bogus #VK# in chat keys, message was: {0}"/>
+    <S id="145" text="Setting up class: {0}"/>
+    <S id="146" text="Setting up custom class: {0}"/>
+    <S id="147" text="!! Attempt to refer to bogus key for item count: {0}"/>
+    <S id="148" text="(unknown mob)"/>
+    <S id="149" text="Auto-stop enabled, will glide until: {0}"/>
+    <S id="150" text="Natural running enabled for glide"/>
+    <S id="151" text="Beginning glide"/>
+    <S id="152" text="Gliding started"/>
+    <S id="153" text="First char refresh"/>
+    <S id="154" text="Cannot begin glide as leader, keys not set correctly"/>
+    <S id="155" text="Setting up lure timer"/>
+    <S id="156" text="No lure on this profile"/>
+    <S id="157" text="Died while gliding"/>
+    <S id="158" text="Resurrection disabled, stopping glide"/>
+    <S id="159" text="No ghost waypoints for this profile, stopping glide"/>
+    <S id="160" text="Resurrected too many times already, stopping glide"/>
+    <S id="161" text="Haven't seen any monsters in awhile, sitting down"/>
+    <S id="162" text="Automatic time expired, stopping glide"/>
+    <S id="163" text="Attacked in custom prerest!"/>
+    <S id="164" text="Attacked in custom rest!"/>
+    <S id="165" text="Attacked in custom postrest!"/>
+    <S id="166" text="Moving to waypoint: {0}"/>
+    <S id="167" text="Reached next waypoint"/>
+    <S id="168" text="-- KillGuysNearby invoked"/>
+    <S id="169" text="Exiting KillsGuysNearby loop on death"/>
+    <S id="170" text="Exiting KillsGuysNearby loop on nobody nearby to kill"/>
+    <S id="171" text="Exiting KillGuysNearby loop on everyone too far away to kill"/>
+    <S id="172" text="Approaching monster with walk-to-pull"/>
+    <S id="173" text="Never got close enough, giving up"/>
+    <S id="174" text="Got no target on Tab - ?!  Guess we won't attack that one."/>
+    <S id="175" text="Got some other target on Tab - bad faction?!  Guess we won't attack that one."/>
+    <S id="176" text="Exiting KillGuysNearby loop on everyone bogus tab"/>
+    <S id="177" text="Got unsolicited target!  Ambush?"/>
+    <S id="178" text="Targeting self somehow, clearing!"/>
+    <S id="179" text="Targeting another party member somehow, clearing!"/>
+    <S id="180" text="! Being attacked by player: {0}"/>
+    <S id="181" text="Vanished before we could kill him!"/>
+    <S id="182" text="It's the pet, don't attack that - oops!"/>
+    <S id="183" text="It's already dead, don't attack that!"/>
+    <S id="184" text="Combat done"/>
+    <S id="185" text="Queueing corpse for pickup"/>
+    <S id="186" text="Loot delay"/>
+    <S id="187" text="Gained {0} experience."/>
+    <S id="188" text="Releasing spirit"/>
+    <S id="189" text="Beginning ghost walk process"/>
+    <S id="190" text="!! Never found ghost waypoint close to me!"/>
+    <S id="191" text="Moving to ghost waypoint: {0}"/>
+    <S id="192" text="Within range of regular waypoints, yards: {0}"/>
+    <S id="193" text="Reached close ghost waypoint, switching to regular waypoints"/>
+    <S id="194" text="ThisWaypoint: {0}"/>
+    <S id="195" text="CorpseWaypoint: {0}"/>
+    <S id="196" text="Reached closest waypoint, moving to corpse"/>
+    <S id="197" text="Died too recently, sitting near corpse for a few minutes"/>
+    <S id="198" text="Reached corpse"/>
+    <S id="199" text="Nobody close to corpse, attempting safe resurrection"/>
+    <S id="200" text="Monster too close to corpse, looking for safer spot"/>
+    <S id="201" text="Monster still too close, waiting a bit before trying again, closest distance: {0}"/>
+    <S id="202" text="Extra attacker, range: {0}"/>
+    <S id="203" text="Click at loop exit: {0}"/>
+    <S id="204" text="Attacked while hearthing, killing off guy!"/>
+    <S id="205" text="Sending chat.txt file"/>
+    <S id="206" text="No corpses nearby"/>
+    <S id="207" text="LootCorpses invoked"/>
+    <S id="208" text="Loot complete"/>
+    <S id="209" text="No corpse object!  Guess we won't loot this guy..."/>
+    <S id="210" text="Corpse too far away, walk to loot disabled"/>
+    <S id="211" text="Approaching corpse"/>
+    <S id="212" text="Couldn't approach corpse"/>
+    <S id="213" text="Couldn't get close enough to loot"/>
+    <S id="214" text="Corpse is close, skipping approach for loot"/>
+    <S id="215" text="Corpse is targeted, no big whoop"/>
+    <S id="216" text="Attacked while getting ready to loot!"/>
+    <S id="217" text="Got after positioning"/>
+    <S id="218" text="Got after heading"/>
+    <S id="219" text="Got after final delay attempt"/>
+    <S id="220" text="Looting failed"/>
+    <S id="221" text="Skinning skill detected in loot"/>
+    <S id="222" text="No target, no skin!"/>
+    <S id="223" text="Body skinnable after delay: {0}"/>
+    <S id="224" text="Going in for skin"/>
+    <S id="225" text="Attacked at pre-skin!"/>
+    <S id="226" text="Got some kind of target, skipping skin"/>
+    <S id="227" text="Attacked while skinning!"/>
+    <S id="228" text="Got some kind of other target, skipping skin"/>
+    <S id="229" text="Skinning corpse, too"/>
+    <S id="230" text="inventory is full"/>
+    <S id="231" text="Inventory is full, stopping Glide"/>
+    <S id="232" text="Unsolicited target from inner loot loop!"/>
+    <S id="233" text="Applying more lure"/>
+    <S id="234" text="Lure stack is empty, oh well"/>
+    <S id="235" text="Positioning mouse on bobber done, found: {0}"/>
+    <S id="236" text="Equal object count, looking for stray"/>
+    <S id="237" text="Never found stray"/>
+    <S id="238" text="Found stray object"/>
+    <S id="239" text="--- Fishing started"/>
+    <S id="240" text="Casting"/>
+    <S id="241" text="Waiting for new game object to appear"/>
+    <S id="242" text="Too many new objects created, skipping this attempt"/>
+    <S id="243" text="New game object not created from cast... !?"/>
+    <S id="244" text="Got bobber object"/>
+    <S id="245" text="Never found bobber"/>
+    <S id="246" text="Got target while fishing?!  Cripes!"/>
+    <S id="247" text="Bobber never moved"/>
+    <S id="248" text="Something else under cursor (player?), skipping click"/>
+    <S id="249" text="Caught fish!"/>
+    <S id="250" text="Spin: {0}"/>
+    <S id="251" text="Release spin"/>
+    <S id="252" text="Run"/>
+    <S id="253" text="Release run"/>
+    <S id="254" text="Got a target while waiting for player to leave!  Crap!"/>
+    <S id="255" text="Player nearby of faction we should avoid, stopping patrol"/>
+    <S id="256" text="Feels like we're stuck, trying something strange"/>
+    <S id="257" text="Hit end of one-shot profile, stopping glide"/>
+    <S id="258" text="Whoa, new target closer!  Switching to that one..."/>
+    <S id="259" text="Got nothing on tab, oh well"/>
+    <S id="260" text="Got someone else on tab!"/>
+    <S id="261" text="Next waypoint is ahead, skipping current waypoint"/>
+    <S id="262" text="Avoiding: {0}"/>
+    <S id="263" text="Backing up to avoid"/>
+    <S id="264" text="Running away to avoid"/>
+    <S id="265" text="Got a target while avoiding - not good!"/>
+    <S id="266" text="!! Futility timer in running away from avoid!"/>
+    <S id="267" text="Reached safe distance from avoided monster"/>
+    <S id="268" text="Never got close enough, blacklisting object"/>
+    <S id="269" text="Attacked inside harvest check, bailing out for now"/>
+    <S id="270" text="Never able to position cursor over object, blacklisting"/>
+    <S id="271" text="Attacked while pawing at harvest, will try again later"/>
+    <S id="272" text="Animation set, must be harvesting!"/>
+    <S id="273" text="Attacked while starting harvest, will try again later"/>
+    <S id="274" text="Never went into animation, must be unharvestable - blacklist"/>
+    <S id="275" text="Attacked while harvesting, will try again later"/>
+    <S id="276" text="Animation done, harvest must have finished!"/>
+    <S id="277" text="!! Stuck casting while harvesting - BoP item?  Blacklisting!"/>
+    <S id="278" text="Attacked while finishing harvest, will try again later"/>
+    <S id="279" text="Object disappeared after harvest, must have been consumed"/>
+    <S id="280" text="Object is still here, will harvest again"/>
+    <S id="281" text="Harvested too many times, blacklisting"/>
+    <S id="282" text="Going into follower main loop"/>
+    <S id="283" text="Waiting for combat to be established"/>
+    <S id="284" text="Combat established, assisting leader"/>
+    <S id="285" text="Leader switched targets!  Skipping this one..."/>
+    <S id="286" text="!! Leader's target vanished before we could help!"/>
+    <S id="287" text="Beginning text entry"/>
+    <S id="288" text="Message from server detected"/>
+    <S id="289" text="Key validated successfully"/>
+    <S id="290" text="Glider version newer than current - beta mode!"/>
+    <S id="291" text="New version of Glider is available, please check http://www.mmoglider.com for info."/>
+    <S id="292" text="New version of Glider is available"/>
+    <S id="293" text="Missing XML node: {0}"/>
+    <S id="294" text="Bogus response from server, was expecting Rijn stream"/>
+    <S id="295" text="Unable to start remote listener!  Exception: {0}"/>
+    <S id="296" text="!! Exception in listen thread: {0}"/>
+    <S id="297" text="Connected on remote from {0}"/>
+    <S id="298" text="Couldn't delete chat log (probably ok): {0}"/>
+    <S id="299" text="Detecting for: {0}"/>
+    <S id="300" text="Couldn't find chat buffer for: {0}"/>
+    <S id="301" text="! Never found chat log buffer for: {0}"/>
+    <S id="302" text=" [snipped]"/>
+    <S id="303" text="Chat bytes went down, grabbing file tail"/>
+    <S id="304" text="!! Chat read failed from: {0}"/>
+    <S id="305" text="Manual kill interrupted"/>
+    <S id="306" text="Unable to acquire target - player or corpse?"/>
+    <S id="307" text="Target is already dead, no need to kill it again"/>
+    <S id="308" text="Beginning manual kill"/>
+    <S id="309" text="Futility, walking for too long!"/>
+    <S id="310" text="Futility, never hit on spin (?!)"/>
+    <S id="311" text="!! Never hit on mousespin!"/>
+    <S id="312" text="Monster is blacklisted, skipping"/>
+    <S id="313" text="Skinnable: {0}"/>
+    <S id="314" text="Missing offset!  Name: {0}"/>
+    <S id="315" text="Monster attacking leader: {0}"/>
+    <S id="316" text="Monster attacking leader's pet: {0}"/>
+    <S id="317" text="Monster attacking follower: {0}"/>
+    <S id="318" text="Monster attacking follower's pet: {0}"/>
+    <S id="319" text="Got a target waiting for leader!"/>
+    <S id="320" text="! Never able to approach leader (may disregard if running for awhile)"/>
+    <S id="321" text="! Leader attacked while waiting around for followers!"/>
+    <S id="322" text="Can't use demo key for a party member"/>
+    <S id="323" text="Must have a key for each party member"/>
+    <S id="324" text="Duplicate key used in party list"/>
+    <S id="325" text="Key validation failed for: {0}"/>
+    <S id="326" text="Adding party member without name (!?)"/>
+    <S id="327" text="Unable to reacquire original target - did it die?"/>
+    <S id="328" text="Failed to look up SeDebugPrivilege id, last error: {0}"/>
+    <S id="329" text="OpenProcess token failed, last error: {0}"/>
+    <S id="330" text="GetTokenInformation failed, last error: {0}"/>
+    <S id="331" text="Priv count: {0}"/>
+    <S id="332" text="Missing SeDebugPrivilege from process token!"/>
+    <S id="333" text="Debug priv enabled, skipping token adjust"/>
+    <S id="334" text="AdjustTokenPrivileges failed, last error: {0}"/>
+    <S id="335" text="AdjustTokenPrivileges returned successfully"/>
+    <S id="336" text="ProcessHelper.Load"/>
+    <S id="337" text="No matching process: {0}"/>
+    <S id="338" text="Multiple copies running!  Process name: {0}"/>
+    <S id="339" text="OpenProcess in, last error = {0}"/>
+    <S id="340" text="OpenProcess out, last error = {0}"/>
+    <S id="341" text="ReadProcessMemory [{1}] failed to read @ {0:x} - did WoW exit?"/>
+    <S id="342" text="Bogus playerid, trying other values"/>
+    <S id="343" text="Alt addresses failed, too, can't get playerid!"/>
+    <S id="344" text="Got playerid successfully"/>
+    <S id="345" text="Unable to find player by GUID in list!"/>
+    <S id="346" text="Done searching"/>
+    <S id="347" text="Exception in help rename thread: {0}"/>
+    <S id="348" text="Help - {0}"/>
+    <S id="349" text="Create New Profile"/>
+    <S id="350" text="Loading external classes"/>
+    <S id="351" text="Loading custom class: {0}"/>
+    <S id="352" text="{0} refused initialization - is this Glider version too old?"/>
+    <S id="353" text="Unable to load class: {0}"/>
+    <S id="354" text="!! Exception in remote worker thread: {0}"/>
+    <S id="355" text="Invalid remote password: {0}"/>
+    <S id="356" text="Authenticated ok\r\n"/>
+    <S id="357" text="Remote authenticated ok"/>
+    <S id="358" text="Disconnected"/>
+    <S id="359" text="! Lost socket connection inside notify!"/>
+    <S id="360" text="Socket disconnected"/>
+    <S id="361" text="/exit issued"/>
+    <S id="362" text="ConvertSecurityDescriptorToStringSecurityDescriptor failed: {0}"/>
+    <S id="363" text="ConvertStringSecurityDescriptorToSecurityDescriptor failed: {0}"/>
+    <S id="364" text="GetSecurityDescriptorDacl failed: {0}"/>
+    <S id="365" text="OpenProcess failed in StripPriv, last error: {0}"/>
+    <S id="366" text="OpenProcessToken failed, last error: {0}"/>
+    <S id="367" text="Token does not have debug priv - already stripped or game running limited access?"/>
+    <S id="368" text="!! Exception reading spells: {0}"/>
+    <S id="369" text="! Bogus skill id: {0}"/>
+    <S id="370" text="!! Unknown form: {0}"/>
+    <S id="371" text="Target disappeared in pre-combat!"/>
+    <S id="372" text="Target walked out of range"/>
+    <S id="373" text="Target isn't approaching, must be bogus"/>
+    <S id="374" text="Casting Healing Touch"/>
+    <S id="375" text="Casting Regrowth"/>
+    <S id="376" text="Casting Rejuvenation"/>
+    <S id="377" text="Target died in pull"/>
+    <S id="378" text="Enrage"/>
+    <S id="379" text="Health isn't dropping at all, giving up"/>
+    <S id="380" text="Monster is running away, chasing"/>
+    <S id="381" text="Monster is running away, taking shot at back"/>
+    <S id="382" text="Monster is running, catching with feral charge"/>
+    <S id="383" text="Taking longer shot at runner"/>
+    <S id="384" text="Re-entering bear form in combat loop"/>
+    <S id="385" text="Approaching for charge"/>
+    <S id="386" text="Charging"/>
+    <S id="387" text="Wrong distance for charge, approaching on foot"/>
+    <S id="388" text="Bashing"/>
+    <S id="389" text="Roaring"/>
+    <S id="390" text="Mauling"/>
+    <S id="391" text="Druid combat done"/>
+    <S id="392" text="Armor went up, bear form successful"/>
+    <S id="393" text="Armor never went up, bear form failed!"/>
+    <S id="394" text="Armor went down, caster form successful"/>
+    <S id="395" text="Armor never went down, caster form failed!"/>
+    <S id="396" text="Not enough mana to enter cat form!"/>
+    <S id="397" text="Mana is low, drinking before resuming cat"/>
+    <S id="398" text="Not enough mana for cat form after rest, waiting"/>
+    <S id="399" text="Got a target waiting for cat form mana!"/>
+    <S id="400" text="Target health went down, must have been tagged"/>
+    <S id="401" text="Unable to approach target"/>
+    <S id="402" text="Behind target"/>
+    <S id="403" text="Heading diff: {0}"/>
+    <S id="404" text="Energy didn't drop from ravage - wrong heading?  Switching to claw"/>
+    <S id="405" text="Not behind target"/>
+    <S id="406" text="Established target"/>
+    <S id="407" text="Monster still full health and not targeting us, must be out of range or bugged!"/>
+    <S id="408" text="Starting cat combat"/>
+    <S id="409" text="Approach on initial check"/>
+    <S id="410" text="Unable to use initial approach in combat (!?)"/>
+    <S id="411" text="!! Not in cat form at combat start?!"/>
+    <S id="412" text="!! Not in cat form in combat - !?"/>
+    <S id="413" text="Monster is running away"/>
+    <S id="414" text="Shooting runner"/>
+    <S id="415" text="Chasing down"/>
+    <S id="416" text="Monster is in melee range, fighting"/>
+    <S id="417" text="Leaving form to buff someone!"/>
+    <S id="418" text="Target vanished while fighting player"/>
+    <S id="419" text="Died while fighting player"/>
+    <S id="420" text="Killed player"/>
+    <S id="421" text="Player got too far away, bailing out of combat"/>
+    <S id="422" text="Melee range, toggling combat"/>
+    <S id="423" text="Pet detected"/>
+    <S id="424" text="Pet never showed up, will resurrect at next rest"/>
+    <S id="425" text="Target has a friend, attempting to separate"/>
+    <S id="426" text="Skipping complex hunter pull, target too close"/>
+    <S id="427" text="Approaching for pull shot"/>
+    <S id="428" text="Target wandered out of pull distance after mark"/>
+    <S id="429" text="Skipping mark, must have tagged last time"/>
+    <S id="430" text="Waiting for guy to close distance"/>
+    <S id="431" text="Monster is close, sending pet and backing up"/>
+    <S id="432" text="Backed up to safe range"/>
+    <S id="433" text="Never got close, giving up on separation"/>
+    <S id="434" text="Target vanished during pull!"/>
+    <S id="435" text="Monster under ranged distance, pull is done"/>
+    <S id="436" text="Killed at range"/>
+    <S id="437" text="Target isn't dying, must be bugged"/>
+    <S id="438" text="Target health hasn't gone down in 5 seconds"/>
+    <S id="439" text="Too far away, aborting combat"/>
+    <S id="440" text="Backing monster up to trap"/>
+    <S id="441" text="Monster appears to be standing in deadzone"/>
+    <S id="442" text="Drinking Potion"/>
+    <S id="443" text="Hunter combat done"/>
+    <S id="444" text="Pet happiness never went up - food all gone?"/>
+    <S id="445" text="Pet happiness going up, food must be good"/>
+    <S id="446" text="Happiness didn't go up, trying next bag slot"/>
+    <S id="447" text="Bestial Wrath"/>
+    <S id="448" text="Intimidate"/>
+    <S id="449" text="Target in dead zone"/>
+    <S id="450" text="Approaching"/>
+    <S id="451" text="Backing up"/>
+    <S id="452" text="Pet missing, calling"/>
+    <S id="453" text="Pet showed up"/>
+    <S id="454" text="Pet is missing, but mana too low to revive, skipping for now"/>
+    <S id="455" text="Pet is missing from game object list!  Reviving..."/>
+    <S id="456" text="Got target while reviving pet!"/>
+    <S id="457" text="Never got pet after revive... ?!"/>
+    <S id="458" text="Healing pet"/>
+    <S id="459" text="Got target while healing pet!"/>
+    <S id="460" text="Pet happiness: {0}"/>
+    <S id="461" text="Can't feed pet - food is all gone"/>
+    <S id="462" text="Feeding pet with macro"/>
+    <S id="463" text="Feeding pet from backpack"/>
+    <S id="464" text="Creating new manastone"/>
+    <S id="465" text="Casting Arcane Missiles (pull)"/>
+    <S id="466" text="Target disappeared in pre-combat2!"/>
+    <S id="467" text="Target didn't pull, skipping"/>
+    <S id="468" text="Mage combat"/>
+    <S id="469" text="Mage combat loop..."/>
+    <S id="470" text="Checking quit, health: {0}"/>
+    <S id="471" text="Target health isn't dropping - futile combat."/>
+    <S id="472" text="Target too close, skipping first fireball"/>
+    <S id="473" text="Target is running!"/>
+    <S id="474" text="Casting Fireblast at runner"/>
+    <S id="475" text="Counterspell"/>
+    <S id="476" text="Handled extra attacker"/>
+    <S id="477" text="Did frost nova"/>
+    <S id="478" text="Drinking potion"/>
+    <S id="479" text="Using mana stone"/>
+    <S id="480" text="Did fireblast"/>
+    <S id="481" text="Casting Scorch"/>
+    <S id="482" text="Casting Arcane Missiles (in combat)"/>
+    <S id="483" text="Casting Fireball (in combat)"/>
+    <S id="484" text="Frost Nova!"/>
+    <S id="485" text="Monster is moving, must have resisted"/>
+    <S id="486" text="Couldn't get distance - backed up against a tree?"/>
+    <S id="487" text="Backed up ok, firing big spell"/>
+    <S id="488" text="Extra attacker detected, attempting poly"/>
+    <S id="489" text="Couldn't get extra attacker on Tab!"/>
+    <S id="490" text="Couldn't get original target back on Tab!"/>
+    <S id="491" text="Poly successful"/>
+    <S id="492" text="Could not approach target"/>
+    <S id="493" text="Judging target"/>
+    <S id="494" text="Health below 20%, casting Hammer of Wrath"/>
+    <S id="495" text="Monster is running, casting Hammer of Justice"/>
+    <S id="496" text="Approaching monster"/>
+    <S id="497" text="Too many regular heals, taking drastic measures"/>
+    <S id="498" text="Re-casting Seal"/>
+    <S id="499" text="Mana good, judging target"/>
+    <S id="500" text="Casting Hammer of Justice"/>
+    <S id="501" text="Paladin combat done"/>
+    <S id="502" text="Casting Divine Shield"/>
+    <S id="503" text="Casting Lay on Hands"/>
+    <S id="504" text="Drinking potion (this can't be good)"/>
+    <S id="505" text="Casting Heal (rest)"/>
+    <S id="506" text="rest"/>
+    <S id="507" text="Mind Blast pull"/>
+    <S id="508" text="Pull spell failed"/>
+    <S id="509" text="Throwing on Vampiric Embrace for health"/>
+    <S id="510" text="Waiting for flay range"/>
+    <S id="511" text="Flaying"/>
+    <S id="512" text="Initial Shadow Word: Pain"/>
+    <S id="513" text="Priest combat, shadowform = {0}"/>
+    <S id="514" text="Initial combat shield"/>
+    <S id="515" text="Shield isn't cooled down at combat start"/>
+    <S id="516" text="combat start"/>
+    <S id="517" text="!! Lost target in combat"/>
+    <S id="518" text="Target health is zero"/>
+    <S id="519" text="I'm dead"/>
+    <S id="520" text="Pulled aggro, attempting fade"/>
+    <S id="521" text="Re-casting Shield"/>
+    <S id="522" text="Casting Mind Blast"/>
+    <S id="523" text="Re-casting SW:Pain"/>
+    <S id="524" text="Stopping wand autofire"/>
+    <S id="525" text="Starting wand autofire"/>
+    <S id="526" text="Health too low, dropping out of Shadowform for a heal"/>
+    <S id="527" text="Flash Heal"/>
+    <S id="528" text="Doing Shield/Heal combo"/>
+    <S id="529" text="Doing Flash Heal (shield timer is ticking)"/>
+    <S id="530" text="Not enough mana for heal, drinking potion"/>
+    <S id="531" text="Low health, but no mana/potion ready!"/>
+    <S id="532" text="combat"/>
+    <S id="533" text="Poison1 remaining: {0}"/>
+    <S id="534" text="Applying poison to primary hand"/>
+    <S id="535" text="Poison2 remaining: {0}"/>
+    <S id="536" text="Applying poison to secondary hand"/>
+    <S id="537" text="Approached target, distance; {0}"/>
+    <S id="538" text="Firing off cheap shot"/>
+    <S id="539" text="Pulling with thrown weapon"/>
+    <S id="540" text="Waiting for approach"/>
+    <S id="541" text="Approach wait done, distance: {0}"/>
+    <S id="542" text="Starting rogue combat"/>
+    <S id="543" text="Setting IsClose"/>
+    <S id="544" text="Clearing IsClose"/>
+    <S id="545" text="Clearing IsClose in ranged"/>
+    <S id="546" text="Monster is running away, shooting"/>
+    <S id="547" text="Adjusting distance"/>
+    <S id="548" text="Evasion"/>
+    <S id="549" text="Kick"/>
+    <S id="550" text="Pre-eviscerate Cold Blood"/>
+    <S id="551" text="Rogue combat done"/>
+    <S id="552" text="Didn't get combo point from Gouge, skipping Backstab"/>
+    <S id="553" text="Pre-backstab Cold Blood"/>
+    <S id="554" text="Waiting for energy regen"/>
+    <S id="555" text="Backstab"/>
+    <S id="556" text="Didn't get combo point from Cheap Shot, skipping Backstab"/>
+    <S id="557" text="Health too low, vanishing"/>
+    <S id="558" text="Nobody around to vanish... !?"/>
+    <S id="559" text="No enemy close by, must have died... !?"/>
+    <S id="560" text="Got far enough away, feel safe now"/>
+    <S id="561" text="Ran for a long time, time's up!"/>
+    <S id="562" text="Lurking in stealth for awhile"/>
+    <S id="563" text="Got attacked while in vanish wait!  Crap!"/>
+    <S id="564" text="Shaman precombat in, ambush = {0}, manual = {1}"/>
+    <S id="565" text="Monster wandered out of pull range"/>
+    <S id="566" text="Shaman precombat done"/>
+    <S id="567" text="Already got a good totem nearby, skipping drop"/>
+    <S id="568" text="Dropping fresh start totem"/>
+    <S id="569" text="Approaching target"/>
+    <S id="570" text="Interrupt shock mode"/>
+    <S id="571" text="Combat is not on, toggling"/>
+    <S id="572" text="Monster has entered melee range"/>
+    <S id="573" text="Monster is running, new distance: {0}"/>
+    <S id="574" text="Earth Shock on runner"/>
+    <S id="575" text="Interrupting with Earth Shock"/>
+    <S id="576" text="Casting heal-friendly totem"/>
+    <S id="577" text="Casting Heal"/>
+    <S id="578" text="Dropping Earthbind"/>
+    <S id="579" text="Casting Earth Shock"/>
+    <S id="580" text="Shaman combat done"/>
+    <S id="581" text="No pet detected, starting glide in solo mode"/>
+    <S id="582" text="Casting Soul Link"/>
+    <S id="583" text="Attacked while summoning!"/>
+    <S id="584" text="Summoned pet successfully"/>
+    <S id="585" text="Pet health is low, casting Health Funnel"/>
+    <S id="586" text="Creating fresh healthstone"/>
+    <S id="587" text="1-Kill, will attempt to harvest shard"/>
+    <S id="588" text="Need shard to replace from pet, will attempt to drain"/>
+    <S id="589" text="Shard farm mode, will attempt to drain"/>
+    <S id="590" text="Target vanished in combat start, dang!"/>
+    <S id="591" text="Target health isn't dropping, must be out of range"/>
+    <S id="592" text="Entering combat loop"/>
+    <S id="593" text="Using healthstone"/>
+    <S id="594" text="Sacrificing voidie"/>
+    <S id="595" text="Spell Lock!"/>
+    <S id="596" text="Casting Curse of Recklessness"/>
+    <S id="597" text="Re-casting Corruption"/>
+    <S id="598" text="Re-casting Curse"/>
+    <S id="599" text="Wand not ready in combat loop"/>
+    <S id="600" text="Casting Drain Life"/>
+    <S id="601" text="Time to drain soul"/>
+    <S id="602" text="Monster died before Drain Soul could start"/>
+    <S id="603" text="Draining soul"/>
+    <S id="604" text="Monster died in drain soul timer"/>
+    <S id="605" text="Shard farming done, going home"/>
+    <S id="606" text="Extra attacker detected!"/>
+    <S id="607" text="Suffering"/>
+    <S id="608" text="Fear successful"/>
+    <S id="609" text="Warrior precombat"/>
+    <S id="610" text="Bloodrage (before)"/>
+    <S id="611" text="Bloodrage (after)"/>
+    <S id="612" text="Warrior combat"/>
+    <S id="613" text="Hamstring"/>
+    <S id="614" text="Shield Bash"/>
+    <S id="615" text="Overpower"/>
+    <S id="616" text="Demoralizing Shout"/>
+    <S id="617" text="Battle Shout"/>
+    <S id="618" text="Execute"/>
+    <S id="619" text="Rend"/>
+    <S id="620" text="Concussion Blow"/>
+    <S id="621" text="Heroic Strike"/>
+    <S id="622" text="Sunder Armor"/>
+    <S id="623" text="Thunderclap on extra"/>
+    <S id="624" text="Cleave on extra"/>
+    <S id="625" text=" dodges."/>
+    <S id="626" text="was dodged by "/>
+    <S id="627" text="Get action inventory: {0}, charcode = {1}"/>
+    <S id="628" text="!! Couldn't read action slot {0}!  Exception: {1}"/>
+    <S id="629" text="too far away"/>
+    <S id="630" text="out of range"/>
+    <S id="631" text="Approaching monster: {0}"/>
+    <S id="632" text="{0} ({1}%)"/>
+    <S id="633" text="Attacker: {0}, health = {1}, GUID = {2}"/>
+    <S id="634" text="!!! Unexpected sudden movement, moved {0} yards since combat start!"/>
+    <S id="635" text="wowchatlog.txt"/>
+    <S id="636" text="wowcombatlog.txt"/>
+    <S id="637" text="/chatlog"/>
+    <S id="638" text="/combatlog"/>
+    <S id="639" text="Setting chat target to: &quot;{0}&quot;"/>
+    <S id="640" text="&lt;GM&gt;"/>
+    <S id="641" text="New friend: {0}: {1} {2}"/>
+    <S id="642" text="!! Being followed for {0} seconds by: {1} ({2})"/>
+    <S id="643" text="!! Being followed for {0} seconds by: {1} ({2}), logging out now!"/>
+    <S id="644" text="Strange object @ {0}, type = {1}"/>
+    <S id="645" text="Unknown bar state for key: {0} must be Indifferent/Rest/Combat"/>
+    <S id="646" text="!! Could not decode key: {0}, exception: {1}"/>
+    <S id="647" text="Blacklisted!  Don't want to mess with: {0}"/>
+    <S id="648" text="Add to blacklist: {0}"/>
+    <S id="649" text="Software\Blizzard Entertainment\World of Warcraft"/>
+    <S id="650"
+       text="Sorry, the configured key for Glider is incorrect.  Please update the key to the correct value and re-start the program."/>
+    <S id="651" text="Glider {0} {1}"/>
+    <S id="652" text="KillAction -&gt; {0}, Mode = {1}, Note = {2}"/>
+    <S id="653" text="{0} ({1}%)"/>
+    <S id="654" text="{0} / {1} / {2}"/>
+    <S id="655" text="/exit"/>
+    <S id="656"
+       text="Creating a new profile will cause changes you've made to the current one to be discarded.  You should save any changes you wish to keep before continuing.&#13;&#10;&#13;&#10;Discard changes and create new profile?"/>
+    <S id="657" text="Glider"/>
+    <S id="658" text="Waypoint #{0} stored"/>
+    <S id="659" text="Ghost waypoint #{0} stored"/>
+    <S id="660"
+       text="Loading a profile will cause changes you've made to the current one to be discarded.  You should save any changes you wish to keep before continuing.&#13;&#10;&#13;&#10;Discard changes and create new profile?"/>
+    <S id="661" text="xml files (*.xml)|*.xml|All files (*.*)|*.*"/>
+    <S id="662" text="Faction of target: {0}, distance: {1} yards"/>
+    <S id="663"
+       text="Glider requires a screen resolution of at least 1024x768 to display properly.  Please adjust your resolution accordingly."/>
+    <S id="664" text="Left, {0} degrees"/>
+    <S id="665" text="Right, {0} degrees"/>
+    <S id="666" text="(#{0}) {1}, {2} yards"/>
+    <S id="667" text="!! Unable to find custom class: {0}, defaulting to previous internal class"/>
+    <S id="668" text="* Exception in GlideThread: {0}&#13;&#10;{1}"/>
+    <S id="669" text="Closest waypoint is too far away!  Move {0} yards in current direction!"/>
+    <S id="670" text="Expected target on tab: {0}, but got: {1} instead"/>
+    <S id="671" text="Monster LootPos: {0}, my lootpos: {1}"/>
+    <S id="672" text="/script RepopMe();"/>
+    <S id="673" text="/script RetrieveCorpse();"/>
+    <S id="674" text="/script ClearTarget();"/>
+    <S id="675" text="Couldn't delete chat file: {0}, chat processing stopped"/>
+    <S id="676" text="Queue corpse: {0}"/>
+    <S id="677" text="Missing corpse: {0}"/>
+    <S id="678" text="New closest corpse: {0}"/>
+    <S id="679" text="Closest corpse: {0}"/>
+    <S id="680" text="Loot corpse: {0}"/>
+    <S id="681" text="DoMainLoot: {0}"/>
+    <S id="682" text="/script PickupInventoryItem(GetInventorySlotInfo(&quot;MainHandSlot&quot;));"/>
+    <S id="683" text="Let's kill {0} ({1})"/>
+    <S id="684" text="!! Teleport detected in regular patrol, moved {0} yards!"/>
+    <S id="685" text="Old coords: {0}, new coords: {1}"/>
+    <S id="686" text="Harvestable object nearby!  Distance: {0} yards"/>
+    <S id="687" text="Leader is targeting: {0}"/>
+    <S id="688" text="! Unable to acquire leader's target: &quot;{0}&quot;"/>
+    <S id="689" text="Pasting: [{0}]"/>
+    <S id="690" text="Unable to retrieve offsets from Glider server, status = {0}&#13;&#10;&#13;&#10;{1}"/>
+    <S id="691" text="{0}&#13;&#10;&#13;&#10;Do you want to open a new browser window to the linked message?"/>
+    <S id="692" text=""/>
+    <S id="693" text="&#13;&#10;&#13;&#10;New version notes:&#13;&#10;&#13;&#10;{0}"/>
+    <S id="694" text="Glider Update Available"/>
+    <S id="695" text="http://www.mmoglider.com/Download.aspx"/>
+    <S id="696" text="Exception occurred requesting offsets!&#13;&#10;&#13;&#10;{0}&#13;&#10;&#13;&#10;"/>
+    <S id="697" text="Found chat buffer for: {0} ({1})"/>
+    <S id="698" text="Base address for {0} zero, detecting"/>
+    <S id="699" text="! Exception reading {0}: {1}"/>
+    <S id="700" text="Opened {0}, length: {1}, tail bytes: {2}"/>
+    <S id="701" text="!! Exception reading log tail from {0}: {1}"/>
+    <S id="702" text="* Exception in kill thread: {0}&#13;&#10;{1}"/>
+    <S id="703" text="Target is too far away to pull, get closer (distance = {0}, max pull = {1}"/>
+    <S id="704" text="Party leader &quot;{0}&quot; not nearby, waiting..."/>
+    <S id="705" text="/follow {0}"/>
+    <S id="706" text="Missing party member: &quot;{0}&quot;"/>
+    <S id="707" text="Waiting for &quot;{0}&quot; to catch up or stand up (range={1} yards)"/>
+    <S id="708" text="Adding party member: &quot;{0}&quot;"/>
+    <S id="709" text="Casting {0} on party member {1}"/>
+    <S id="710" text="Create tool32help snapshot failed: {0}"/>
+    <S id="711" text="PE -&gt; {0} = &quot;{1}&quot;"/>
+    <S id="712" text="Read failed @ {0} [{1}] ({2})"/>
+    <S id="713" text="Help - {0}"/>
+    <S id="714" text="GetSecurityInfo failed, error: {0}"/>
+    <S id="715" text="SetSecurityInfo failed, error: {0}"/>
+    <S id="716" text="Spell row count: {0}"/>
+    <S id="717" text="&quot;{0}&quot; -&gt; {1}"/>
+    <S id="718" text="??"/>
+    <S id="719" text=" [R = {0}]"/>
+    <S id="720" text=" E={0}, CP={1}"/>
+    <S id="721" text="/script PickupContainerItem(0, {0});"/>
+    <S id="722" text="Food/drink: {0}/{1}"/>
+    <S id="723" text="Extra attacker: {0}"/>
+    <S id="724" text="Original attacker: {0}"/>
+    <S id="725" text="Casting Renew ({0})"/>
+    <S id="726" text="Energy"/>
+    <S id="727" text="{0} (CP = {1})"/>
+    <S id="728" text="[open]"/>
+    <S id="729" text="[open]"/>
+    <S id="730" text="/script AutoEquipCursorItem();"/>
+    <S id="731" text="Could not approach target for Cheap Shot (distance is now: {0} yards)"/>
+    <S id="732" text="Eviscerate (saving {0} energy)"/>
+    <S id="733" text="Sinister Strike (saving {0} energy)"/>
+    <S id="734" text="Farmed a shard, {0} left before done"/>
+    <S id="735" text="Rage"/>
+    <S id="736" text="Enter a valid number for minimum level, or leave it blank."/>
+    <S id="737" text="Enter a valid number for maximum level, or leave it blank."/>
+    <S id="738" text="Enter a valid number for lure time, or leave it blank."/>
+    <S id="739" text="Enter a space-separated series of faction numbers to target, or leave it blank."/>
+    <S id="740" text="Lightning shield not ready in shaman precombat"/>
+    <S id="741" text="Forcing shield ready in combat (under .50 health)"/>
+    <S id="742" text="Attempting strafe around obstacle"/>
+    <S id="743" text="says:"/>
+    <S id="744" text="{0} is talking nearby."/>
+    <S id="745" text="Too many failed attempts to hearth, giving up."/>
+    <S id="746" text="Monster dodged!"/>
+    <S id="747" text="Monster casting!"/>
+    <S id="748" text="Target vanished during fast loot!"/>
+    <S id="749" text="Target never became lootable!"/>
+    <S id="750" text="Target never became skinnable"/>
+    <S id="751" text="Target under cursor switched!  Should be {0}, but it's {1} instead!"/>
+    <S id="752" text="Gave up waiting for skin animation to stop"/>
+    <S id="753" text="Loot timer exited without lootable/window"/>
+    <S id="754" text="Loot window visible"/>
+    <S id="755" text="Loot window gone, done"/>
+    <S id="756" text="Lootable flag cleared, done"/>
+    <S id="757" text="No skin, loot process complete"/>
+    <S id="758" text="Target is lootable"/>
+    <S id="759" text="No /driver on command-line, skipping shadow!"/>
+    <S id="760" text="Shadowing process"/>
+    <S id="761" text="Driver name: {0}"/>
+    <S id="762" text="!! Error communicating with shadow driver, last error: {0}"/>
+    <S id="763" text="Shadow process enabled"/>
+    <S id="764" text="!! Exception in shadow process: {0} {1}"/>
+    <S id="765" text="!! Error opening shadow driver, last error: {0}"/>
+    <S id="766" text="Removed waypoint #{0}"/>
+    <S id="767" text="Removed ghost waypoint #{0}"/>
+    <S id="768" text="Saving profile to: {0}"/>
+    <S id="769" text="Can't remove waypoint - not attached!  Are you logged into a character?"/>
+    <S id="770" text="Cleared faction list for this profile"/>
+    <S id="771" text="(none defined yet)"/>
+    <S id="772" text="Mouse position: X = {0}, Y = {1}"/>
+    <S id="773" text="Never teleported trying to release spirit, stopping glide"/>
+    <S id="774" text="Body under cursor moved, trying new position!"/>
+    <S id="775" text="Behind target, opening with Backstab"/>
+    <S id="776" text="Target is tagged by someone else, aborting attack"/>
+    <S id="777" text="ammo"/>
+    <S id="778" text="!! Don't seem to have anything equipped in: {0}!"/>
+    <S id="779" text="!! Could not find equipped item: {0}!"/>
+    <S id="780" text="No poison left on action bar, anyway, skipping..."/>
+    <S id="781" text="poison"/>
+    <S id="782" text="/script PickupInventoryItem(GetInventorySlotInfo(&quot;{0}&quot;));"/>
+    <S id="783" text="Out of ammo, exiting soon"/>
+    <S id="784" text="Target is tagged by another player, attempting to disengage"/>
+    <S id="785" text="Couldn't shake target, finishing combat anyway"/>
+    <S id="786" text="Harvesting object name: {0}"/>
+    <S id="787" text="** Exception in loot process: {0}"/>
+    <S id="788" text="This key is only usable for realms at: {0}."/>
+    <S id="789" text="Can't find a close regular or ghost waypoint, gliding stopped"/>
+    <S id="790" text="Closer to ghost waypoint, beginning walk there"/>
+    <S id="791"
+       text="Unable to retrieve offsets from Glider server, status = {0}&#13;&#10;&#13;&#10;{1}&#13;&#10;&#13;&#10;Open link to more information on this error?"/>
+    <S id="792" text="Inventory is full (auto-stop disabled)"/>
+    <S id="793" text="Approach timer was busy, waiting for global cooldown"/>
+    <S id="794" text="FastCast: {0} (channel = {1})"/>
+    <S id="795" text="too far away to loot"/>
+    <S id="796" text="Too far away to loot, creeping up a bit"/>
+    <S id="797" text="Loaded debuffs: {0} unique, {1} duplicates"/>
+    <S id="798" text="Buff id: {0} = {1}"/>
+    <S id="799" text="* Exception loading debuffs.xml: {0} {1}"/>
+    <S id="800" text="New effect: {0} = &quot;{1}&quot;"/>
+    <S id="801" text="Loot: never able to position cursor on {0}"/>
+    <S id="802" text="Loot: corpse {0} never became lootable"/>
+    <S id="803" text="Loot: no loot window or corpse never unlootable after click for {0}"/>
+    <S id="804" text="Loot: never started skinning corpse {0}"/>
+    <S id="805" text="Monster &quot;{0}&quot; tagged by someone else, stopping attack"/>
+    <S id="806" text="Monster &quot;{0}&quot; tagged by someone else, trying to disengage"/>
+    <S id="807" text="Monster &quot;{0}&quot; tagged by someone else, can't disengage"/>
+    <S id="808" text="Too many consecutive bad tags, stopping glide"/>
+    <S id="809" text="Drawing ranged attacker back from original spot"/>
+    <S id="810" text="(some error here)"/>
+    <S id="811" text="Never started channeling!"/>
+    <S id="812" text="Monster is frostbitten, backing up"/>
+    <S id="813" text="{0} is afflicted by Frostbite"/>
+    <S id="814" text="Chat reader detected Frostbite!"/>
+    <S id="815" text="Found chat frame &quot;{0}&quot; at {1}"/>
+    <S id="816" text="! Exception reading from &quot;{0}&quot;: {1} {2}"/>
+    <S id="817" text="! Exception processing chat: {0} {1}"/>
+    <S id="818" text="Unable to read from chat frame &quot;{0}&quot; last error was: {1}"/>
+    <S id="819" text="Found game menu @ {0}"/>
+    <S id="820" text="Could not find UI object: {0}!"/>
+    <S id="821" text="Looking at chat frame #{0}: &quot;{1}&quot;"/>
+    <S id="822" text="Never able to find chat frame: {0}"/>
+    <S id="823" text="Corpse is still skinnable, trying again."/>
+    <S id="824" text="Giving up after too many tries at skinning."/>
+    <S id="825"
+       text="For Glider to interrupt spells, you must enable a combat log option inside the game.  Would you like to open the help file topic now on how to enable this?"/>
+    <S id="826" text="Trade window opened, cancelling."/>
+    <S id="827" text="Popup window visible, cancelling."/>
+    <S id="828"
+       text="Enabling &quot;Stop when shards ok&quot; will cause Glider to collect up to your maintained number of shards and then immediately log off.  Is this what you want?"/>
+    <S id="829" text=" evade"/>
+    <S id="830" text="Monster evaded, stopping combat."/>
+    <S id="831" text="Profile group switching to step #{0} on condition: {1}"/>
+    <S id="832" text="Can't switch yet, nearby corpse/attacker to deal with first"/>
+    <S id="833" text="Moving to best transition waypoint in existing profile, #{0}"/>
+    <S id="834" text="Took too long to reach next step while traversing to next profile, must be stuck/hung!"/>
+    <S id="835" text="!! Unable to find flightmaster &quot;{0}&quot; at end of profile: {1}"/>
+    <S id="836" text="!! Unable to find gossip frame near &quot;{0}&quot; at end of profile: {1}"/>
+    <S id="837" text="!! Gossip frame never become visible after clicking &quot;{0}&quot; at end of profile: {1}"/>
+    <S id="838" text="has challenged you to a duel"/>
+    <S id="839" text="Declining duel challenge."/>
+    <S id="840" text="New static popup: &quot;{0}&quot;"/>
+    <S id="841" text="invites you to a group"/>
+    <S id="842" text="Declining group invitation."/>
+    <S id="843" text="Mounting up again."/>
+    <S id="844" text="Switch after step: {0}"/>
+    <S id="845" text="&quot;UseTray&quot; option is not set, cannot minimize."/>
+    <S id="846" text="Glider Elite features enabled!"/>
+    <S id="847"
+       text="The game has stopped.  Since Glider was started in Launchpad mode, it will not be able to attach again unless you restart via Launchpad.&#13;&#10;&#13;&#10;Do you want to close the Glider window now?"/>
+    <S id="848"
+       text="Background mode requires Launchpad options &quot;Shadow enable&quot; to be enabled and &quot;Unload after hide&quot; to be disabled.  Do you want Glider to make those changes now?"/>
+    <S id="849"
+       text="Background mode requires Launchpad options &quot;Shadow enable&quot; to be enabled and &quot;Unload after hide&quot; to be disabled.  Do you want Glider to make those changes now?&#13;&#10;&#13;&#10;Note: you must restart Launchpad from scratch for this change to take effect."/>
+    <S id="850" text="Added faction to profile: {0}"/>
+    <S id="851" text="Removed faction from profile: {0}"/>
+    <S id="852" text="This custom class does not support configuration."/>
+    <S id="853" text="you receive loot"/>
+    <S id="854" text="Cannot start glide with custom class - elite features not enabled!"/>
+    <S id="855" text="Too many windows popping up (max = {0}, current = {1}), stopping glide"/>
+    <S id="856" text="Dismissing popup window"/>
+    <S id="857" text="Inventory is full, both stop options disabled - will continue looting"/>
+    <S id="858" text="Background mode is not functional on Windows 2000.  It requires Windows XP or Windows Vista."/>
+    <S id="859" text="Popup is non-threatening, dismissing"/>
+    <S id="860"
+       text="Tripwire requires Launchpad options &quot;Shadow enable&quot; to be enabled and &quot;Unload after hide&quot; to be disabled.  Do you want Glider to make those changes now?"/>
+    <S id="861"
+       text="Tripwire requires Launchpad options &quot;Shadow enable&quot; to be enabled and &quot;Unload after hide&quot; to be disabled.  Do you want Glider to make those changes now?&#13;&#10;&#13;&#10;Note: you must restart Launchpad from scratch for this change to take effect."/>
+    <S id="862"
+       text="Glider was unable to confirm the Shadow driver is loaded properly.&#13;&#10;&#13;&#10;Do you want to open the help file for more information on this error?"/>
+    <S id="863" text="Monster is not targetting me, no big deal"/>
+    <S id="864" text="Your Glider Elite time will expire in {0} days!"/>
+    <S id="865"
+       text="Background mode requires Glider Elite, an optional upgrade to Glider.  Please disable background mode in the configuration window before gliding.  Do you want to open a browser window with more information about Glider Elite?"/>
+    <S id="866"
+       text="Gliding with a custom class requires Glider Elite, an optional upgrade to Glider.  Please select one of the default classes for Glider from the configuration window before gliding.&#13;&#10;&#13;&#10;Do you want to open a browser window with more information about Glider Elite?"/>
+    <S id="867"
+       text="Auto Login is an advanced feature of Glider Elite.  Please read the introduction in the help file before using this option.&#13;&#10;&#13;&#10;Do you want to open the help file now?"/>
+    <S id="868" text="Auto Login is only enabled in Glider Elite, skipping process."/>
+    <S id="869"
+       text="Auto Login is only enabled in Glider Elite, an optional upgrade to Glider.  Do you want to open a browser window with more information about Glider Elite?"/>
+    <S id="870" text="Vendor waypoint #{0} stored"/>
+    <S id="871" text="looting this item will bind"/>
+    <S id="872" text="A new version of Glider is available for download."/>
+    <S id="873" text="resurrect now"/>
+    <S id="874" text="(no auto login)"/>
+    <S id="875" text="It has been 7 days or more since your last SecCheck.  Do you want to run one now?"/>
+    <S id="876"
+       text="A new version of Glider is available for download, would you like to go to the Download page to learn more?"/>
+    <S id="877" text="Warning: Glider started without shadow driver."/>
+    <S id="878" text="browse your goods"/>
+    <S id="879" text="Skipping ghostwalk, seems like we're already there."/>
+    <S id="880" text="Glider Elite enabled, will expire on {0}."/>
+    <S id="881" text="Glider Elite enabled on PayPal subscription."/>
+    <S id="882" text="Glider Elite enabled on credit card subscription."/>
+    <S id="883" text="Glider Elite enabled on lifetime ElitePass."/>
+    <S id="884"
+       text="Unable to find suitable button for {0}, see help section &quot;Re-Assigning Keys&quot; under Key Mappings."/>
+</GliderStrings>
