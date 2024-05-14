@@ -113,14 +113,14 @@ public class GClass11
             out intptr_5);
         if (securityInfo != 0U)
         {
-            string_0 = GClass30.smethod_2(714, securityInfo);
+            string_0 = MessageProvider.smethod_2(714, securityInfo);
             return false;
         }
 
         string string_2;
         if (!ConvertSecurityDescriptorToStringSecurityDescriptor(intptr_5, 1, 4, out string_2, out var _))
         {
-            string_0 = GClass30.smethod_2(362, Marshal.GetLastWin32Error());
+            string_0 = MessageProvider.smethod_2(362, Marshal.GetLastWin32Error());
             return false;
         }
 
@@ -128,21 +128,21 @@ public class GClass11
         if (!ConvertStringSecurityDescriptorToSecurityDescriptor("D:" + "(D;;RPWD;;;WD)" + string_2.Substring(2), 1,
                 out intptr_0_2, out var _))
         {
-            string_0 = GClass30.smethod_2(363, Marshal.GetLastWin32Error());
+            string_0 = MessageProvider.smethod_2(363, Marshal.GetLastWin32Error());
             return false;
         }
 
         IntPtr intptr_1;
         if (!GetSecurityDescriptorDacl(intptr_0_2, out var _, out intptr_1, out var _))
         {
-            string_0 = GClass30.smethod_2(364, Marshal.GetLastWin32Error());
+            string_0 = MessageProvider.smethod_2(364, Marshal.GetLastWin32Error());
             return false;
         }
 
         var num = SetSecurityInfo(intptr_0_1, 6, 4, IntPtr.Zero, IntPtr.Zero, intptr_1, IntPtr.Zero);
         if (num == 0U)
             return true;
-        string_0 = GClass30.smethod_2(715, num);
+        string_0 = MessageProvider.smethod_2(715, num);
         return false;
     }
 
@@ -151,7 +151,7 @@ public class GClass11
         method_0();
         if (LookupPrivilegeValue("", "SeDebugPrivilege", out var _))
             return true;
-        string_0 = GClass30.smethod_2(328, Marshal.GetLastWin32Error());
+        string_0 = MessageProvider.smethod_2(328, Marshal.GetLastWin32Error());
         return false;
     }
 

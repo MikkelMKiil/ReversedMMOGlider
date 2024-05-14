@@ -49,16 +49,16 @@ public class KeyEditor : Form
             GClass42.gclass42_0.method_23();
         string_0 = string_2;
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(KeyEditor));
+        MessageProvider.smethod_3(this, nameof(KeyEditor));
         var keyEditor = this;
         keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.smethod_0() + "]";
         foreach (var key in GClass42.gclass42_0.sortedList_0.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
-        KeyType.Items.Add(GClass30.smethod_4("KeyType.Char"));
-        KeyType.Items.Add(GClass30.smethod_4("KeyType.VChar"));
-        KeyType.Items.Add(GClass30.smethod_4("KeyType.Spell"));
-        KeyType.Items.Add(GClass30.smethod_4("KeyType.Item"));
+        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Char"));
+        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.VChar"));
+        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Spell"));
+        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Item"));
         BarState.Items.Add("Any");
         BarState.Items.Add("1");
         BarState.Items.Add("2");
@@ -347,13 +347,13 @@ public class KeyEditor : Form
         {
             if (gkey_0.VK != 0)
                 KeyChar.Text = "0x" + gkey_0.VK.ToString("x");
-            label4.Text = GClass30.smethod_4("KeyEditor.label4.Alt");
+            label4.Text = MessageProvider.smethod_4("KeyEditor.label4.Alt");
         }
         else
         {
             if (gkey_0.CharCode != char.MinValue)
                 KeyChar.Text = "" + gkey_0.CharCode;
-            label4.Text = GClass30.smethod_4("KeyEditor.label4");
+            label4.Text = MessageProvider.smethod_4("KeyEditor.label4");
         }
 
         SS_Shift.Checked = (gkey_0.ShiftState & 1) > 0;
@@ -555,7 +555,7 @@ public class KeyEditor : Form
     {
         if (!bool_0)
             return false;
-        var num = (int)MessageBox.Show(this, GClass30.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.smethod_0() + "]",
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.smethod_0() + "]",
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
         return true;

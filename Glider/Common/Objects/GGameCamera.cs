@@ -22,7 +22,7 @@ namespace Glider.Common.Objects
                 return;
             BaseAddress = GProcessMemoryManipulator.smethod_11(num + GClass18.gclass18_0.method_4("CameraOff1"), "CameraOff1");
             _valid = true;
-            GClass37.smethod_1(ToString());
+            Logger.smethod_1(ToString());
         }
 
         public float Yaw =>

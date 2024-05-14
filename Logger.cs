@@ -5,9 +5,9 @@
 // Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
 
 #nullable disable
-public class GClass37
+public class Logger
 {
-    public static void smethod_0(string string_0)
+    public static void LogMessage(string string_0)
     {
         StartupClass.ginterface0_0.imethod_2(string_0);
     }

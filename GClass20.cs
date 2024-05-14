@@ -32,10 +32,10 @@ public class GClass20
     {
         if (bool_0)
             return;
-        GClass37.smethod_1("Sounds.Play: \"" + string_0 + "\" (last error now is " + Marshal.GetLastWin32Error() + ")");
+        Logger.smethod_1("Sounds.Play: \"" + string_0 + "\" (last error now is " + Marshal.GetLastWin32Error() + ")");
         for (var index = 0; index < 5 && !PlaySound(".\\" + string_0, 0, int_1 | int_10 | int_7); ++index)
         {
-            GClass37.smethod_1("PlaySound failed, last error = " + Marshal.GetLastWin32Error() + ", current dir = " +
+            Logger.smethod_1("PlaySound failed, last error = " + Marshal.GetLastWin32Error() + ", current dir = " +
                                Environment.CurrentDirectory);
             Thread.Sleep(700);
         }
@@ -43,13 +43,13 @@ public class GClass20
 
     public static void smethod_1(string string_0)
     {
-        GClass37.smethod_1("Sounds.PlayWait: \"" + string_0 + "\"");
+        Logger.smethod_1("Sounds.PlayWait: \"" + string_0 + "\"");
         PlaySound(string_0, 0, int_2 | int_10 | int_7);
     }
 
     public static void smethod_2(string string_0)
     {
-        GClass37.smethod_1("Sounds.PlayAlias: \"" + string_0 + "\"");
+        Logger.smethod_1("Sounds.PlayAlias: \"" + string_0 + "\"");
         PlaySound(string_0, 0, int_1 | int_8 | int_7);
     }
 

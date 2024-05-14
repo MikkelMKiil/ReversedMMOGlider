@@ -142,12 +142,12 @@ public class GClass72
         gprofile_0 = new GProfile();
         if (!gprofile_0.Load(string_0))
         {
-            GClass37.smethod_0("Can't load profile: \"" + gprofile_0 + "\", giving up!");
+            Logger.LogMessage("Can't load profile: \"" + gprofile_0 + "\", giving up!");
             StartupClass.smethod_27(false, "LoadProfileFail");
         }
         else
         {
-            GClass37.smethod_1("Loaded profile: " + string_0);
+            Logger.smethod_1("Loaded profile: " + string_0);
         }
     }
 }

@@ -37,7 +37,7 @@ public class GClass18
     {
         if (sortedList_0.ContainsKey(string_0))
             return (string)sortedList_0[string_0];
-        GClass37.smethod_0(GClass30.smethod_2(314, string_0));
+        Logger.LogMessage(MessageProvider.smethod_2(314, string_0));
         return "";
     }
 
@@ -45,7 +45,7 @@ public class GClass18
     {
         if (sortedList_0.ContainsKey(string_0))
             return (int)sortedList_0[string_0];
-        GClass37.smethod_0(GClass30.smethod_2(314, string_0));
+        Logger.LogMessage(MessageProvider.smethod_2(314, string_0));
         return 0;
     }
 

@@ -35,7 +35,7 @@ public class DeathknightConfig : Form
         AvoidAdds.Checked = GClass61.gclass61_0.method_5("Deathknight.AvoidAdds");
         UseGhoul.Checked = GClass61.gclass61_0.method_5("Deathknight.UseGhoul");
         UseCorpseDust.Checked = GClass61.gclass61_0.method_5("Deathknight.UseCorpseDust");
-        GClass30.smethod_3(this, "Deathknight");
+        MessageProvider.smethod_3(this, "Deathknight");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

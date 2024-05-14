@@ -145,7 +145,7 @@ namespace Glider.Common.Objects
                 foreach (var str2 in str1.Split(chArray))
                     if (Name.ToLower() == str2.ToLower())
                     {
-                        GClass37.smethod_1("Protected: " + str2);
+                        Logger.smethod_1("Protected: " + str2);
                         return true;
                     }
 

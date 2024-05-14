@@ -20,7 +20,7 @@ public class GClass13
     {
         var num = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("Language"), "Language");
         int_0 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("UIFlightpointCount"), "fpcount");
-        GClass37.smethod_1("Flight point count: " + int_0);
+        Logger.smethod_1("Flight point count: " + int_0);
         if (int_0 == 0)
         {
             string_0 = null;
@@ -37,12 +37,12 @@ public class GClass13
                 if (int_29 != 0)
                 {
                     string_0[index] = GProcessMemoryManipulator.smethod_9(int_29, 150, "fpnamebytes");
-                    GClass37.smethod_1(index + " = \"" + string_0[index] + "\"");
+                    Logger.smethod_1(index + " = \"" + string_0[index] + "\"");
                 }
                 else
                 {
                     string_0[index] = "";
-                    GClass37.smethod_1(index + " = (null flightpoint name!)");
+                    Logger.smethod_1(index + " = (null flightpoint name!)");
                 }
             }
         }
@@ -53,7 +53,7 @@ public class GClass13
         for (var index = 0; index < int_0; ++index)
             if (string_0[index].ToLower().Contains(string_1.ToLower()))
                 return index + 1;
-        GClass37.smethod_0("! Could not find \"" + string_1 + "\" in list of flightpoints!");
+        Logger.LogMessage("! Could not find \"" + string_1 + "\" in list of flightpoints!");
         return 0;
     }
 }

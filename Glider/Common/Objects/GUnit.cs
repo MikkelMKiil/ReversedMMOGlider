@@ -91,7 +91,7 @@ namespace Glider.Common.Objects
                     }
                     catch (GException1 ex)
                     {
-                        GClass37.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
+                        Logger.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
                                            ")");
                         Cull();
                         _reaction = GReaction.Unknown;
@@ -273,19 +273,19 @@ namespace Glider.Common.Objects
             {
                 if (Health < 1.0 && TicksSinceHealthDrop > DYING_SANITY_TIME)
                 {
-                    GClass37.smethod_1("Damaged and not dropping");
+                    Logger.smethod_1("Damaged and not dropping");
                     return true;
                 }
 
                 if (Health > 0.99 && StartupClass.CurrentGameClass.TicksSinceCombatStart > DYING_SANITY_TIME)
                 {
-                    GClass37.smethod_1("Undamaged and combat taking too long");
+                    Logger.smethod_1("Undamaged and combat taking too long");
                     return true;
                 }
 
                 if (StartupClass.GameClass69Instance.method_10() >= 4)
                     return false;
-                GClass37.smethod_1("Recent evade entry in combat log");
+                Logger.smethod_1("Recent evade entry in combat log");
                 return true;
             }
         }
@@ -502,24 +502,24 @@ namespace Glider.Common.Objects
 
         public bool Approach(double Distance, bool LeaveRunning)
         {
-            GClass37.smethod_1("Approaching \"" + Name + "\" to distance of " + Distance);
+            Logger.smethod_1("Approaching \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool ApproachSafe(double Distance, bool LeaveRunning)
         {
-            GClass37.smethod_1("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
+            Logger.smethod_1("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool GetBehind(bool Sneaking)
         {
-            GClass37.smethod_1("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
+            Logger.smethod_1("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
             if (IsFacingAway && DistanceToSelf < GClass61.gclass61_0.method_4("MeleeDistance"))
                 return true;
             if (DistanceToSelf > 20.0)
             {
-                GClass37.smethod_1("Too far away to GetBehind: \"" + Name + "\"");
+                Logger.smethod_1("Too far away to GetBehind: \"" + Name + "\"");
                 return false;
             }
 

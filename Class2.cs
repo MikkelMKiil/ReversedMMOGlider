@@ -49,18 +49,18 @@ internal class Class2
         GlobalUnlock(intptr_0);
         if (!OpenClipboard(IntPtr.Zero))
         {
-            GClass37.smethod_0("Unable to open clipboard!");
+            Logger.LogMessage("Unable to open clipboard!");
             return false;
         }
 
         if (!EmptyClipboard())
         {
-            GClass37.smethod_0("Unable to empty clipboard!");
+            Logger.LogMessage("Unable to empty clipboard!");
             return false;
         }
 
         if (SetClipboardData(13U, intptr_0) == IntPtr.Zero)
-            GClass37.smethod_0("SetClipboardData failed, last error: " + Marshal.GetLastWin32Error());
+            Logger.LogMessage("SetClipboardData failed, last error: " + Marshal.GetLastWin32Error());
         CloseClipboard();
         return true;
     }

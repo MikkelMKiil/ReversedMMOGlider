@@ -42,12 +42,12 @@ public class GClass67
             {
                 int_0 = Environment.TickCount;
                 bool_0 = true;
-                GClass37.smethod_0("Trade window is visible");
+                Logger.LogMessage("Trade window is visible");
             }
         }
         else if (bool_0)
         {
-            GClass37.smethod_0("Trade window is gone");
+            Logger.LogMessage("Trade window is gone");
             bool_0 = false;
         }
 
@@ -60,13 +60,13 @@ public class GClass67
             var gclass8 = gclass8_1.method_6("StaticPopup1Text");
             if (gclass8 != null)
                 string_0 = gclass8.method_3();
-            GClass37.smethod_1("Static popup is visible: \"" + string_0 + "\"");
+            Logger.smethod_1("Static popup is visible: \"" + string_0 + "\"");
         }
         else
         {
             if (!bool_1)
                 return;
-            GClass37.smethod_1("Static popup is gone");
+            Logger.smethod_1("Static popup is gone");
             bool_1 = false;
         }
     }
@@ -84,19 +84,19 @@ public class GClass67
 
     private static bool smethod_3(string string_1)
     {
-        return string_1 != null && (string_1.ToLower().IndexOf(GClass30.smethod_1(871)) > -1 ||
-                                    string_1.ToLower().IndexOf(GClass30.smethod_1(873)) > -1);
+        return string_1 != null && (string_1.ToLower().IndexOf(MessageProvider.GetMessage(871)) > -1 ||
+                                    string_1.ToLower().IndexOf(MessageProvider.GetMessage(873)) > -1);
     }
 
     private static void smethod_4(string string_1)
     {
         if (smethod_3(string_1))
         {
-            GClass37.smethod_0(GClass30.smethod_1(859));
+            Logger.LogMessage(MessageProvider.GetMessage(859));
         }
         else
         {
-            GClass37.smethod_0(GClass30.smethod_1(856));
+            Logger.LogMessage(MessageProvider.GetMessage(856));
             if (GClass61.gclass61_0.method_5("AlertOnPopup"))
                 GClass20.smethod_0("Whisper.wav");
             if (int_3 > 0 && Environment.TickCount - int_2 >= 120000)
@@ -113,7 +113,7 @@ public class GClass67
         int_2 = Environment.TickCount;
         if (int_3 < GClass61.gclass61_0.method_3("MaxPopups"))
             return;
-        GClass37.smethod_0(GClass30.smethod_2(855, GClass61.gclass61_0.method_3("MaxPopups"), int_3));
+        Logger.LogMessage(MessageProvider.smethod_2(855, GClass61.gclass61_0.method_3("MaxPopups"), int_3));
         StartupClass.gclass73_0.method_21(true);
     }
 }

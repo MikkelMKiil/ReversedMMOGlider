@@ -136,12 +136,12 @@ public class GClass71
 
     private static void smethod_0(string string_2)
     {
-        GClass37.smethod_0(string_2);
+        Logger.LogMessage(string_2);
     }
 
     private static void smethod_1(string string_2)
     {
-        GClass37.smethod_1(string_2);
+        Logger.smethod_1(string_2);
     }
 
     public void method_0()
@@ -675,11 +675,11 @@ public class GClass71
         uint uint_7 = 489335;
         if (VirtualAlloc(IntPtr.Zero, ref uint_7, 4096U, 23U).ToInt32() != 21841)
         {
-            GClass37.smethod_0("VAP not right in CVA");
+            Logger.LogMessage("VAP not right in CVA");
             return false;
         }
 
-        GClass37.smethod_1("VAP is good in CVA");
+        Logger.smethod_1("VAP is good in CVA");
         return true;
     }
 

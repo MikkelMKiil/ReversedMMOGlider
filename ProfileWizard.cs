@@ -75,7 +75,7 @@ public class ProfileWizard : Form
     public ProfileWizard()
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(ProfileWizard));
+        MessageProvider.smethod_3(this, nameof(ProfileWizard));
     }
 
     protected override void Dispose(bool disposing)
@@ -451,9 +451,9 @@ public class ProfileWizard : Form
     public DialogResult method_0(Form form_0)
     {
         Text = GProcessMemoryManipulator.smethod_0();
-        string_2 = GClass30.smethod_4("ProfileWizard.Left");
-        string_3 = GClass30.smethod_4("ProfileWizard.Right");
-        string_4 = GClass30.smethod_4("ProfileWizard.Yards");
+        string_2 = MessageProvider.smethod_4("ProfileWizard.Left");
+        string_3 = MessageProvider.smethod_4("ProfileWizard.Right");
+        string_4 = MessageProvider.smethod_4("ProfileWizard.Yards");
         enum0_0 = Enum0.const_0;
         method_1();
         return ShowDialog(form_0);
@@ -524,7 +524,7 @@ public class ProfileWizard : Form
                 StartupClass.smethod_1(string_0);
                 method_2(PanelDone);
                 PrevButton.Enabled = false;
-                NextButton.Text = GClass30.smethod_4("ProfileWizard.Finished");
+                NextButton.Text = MessageProvider.smethod_4("ProfileWizard.Finished");
                 break;
         }
     }
@@ -568,7 +568,7 @@ public class ProfileWizard : Form
                 DialogResult = DialogResult.OK;
                 return true;
             default:
-                GClass37.smethod_0("! Unable to validate current state in profile wiz: " + (int)enum0_0);
+                Logger.LogMessage("! Unable to validate current state in profile wiz: " + (int)enum0_0);
                 return false;
         }
     }
@@ -608,7 +608,7 @@ public class ProfileWizard : Form
 
         var path = GClass61.gclass61_0.method_2("ProfilesDir") + ProfileNameBox.Text.Trim() + ".xml";
         if (File.Exists(path))
-            if (MessageBox.Show(this, GClass30.smethod_6("ProfileWizard.ProfileExists", ProfileNameBox.Text.Trim()),
+            if (MessageBox.Show(this, MessageProvider.smethod_6("ProfileWizard.ProfileExists", ProfileNameBox.Text.Trim()),
                     GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
             {
                 ProfileNameBox.Focus();
@@ -630,7 +630,7 @@ public class ProfileWizard : Form
 
     private void method_6(string string_5, Control control_0)
     {
-        var num = (int)MessageBox.Show(this, GClass30.smethod_4("ProfileWizard." + string_5), GProcessMemoryManipulator.smethod_0(),
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4("ProfileWizard." + string_5), GProcessMemoryManipulator.smethod_0(),
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
     }
@@ -678,7 +678,7 @@ public class ProfileWizard : Form
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1("* Exception in profile wizard timer: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.smethod_1("* Exception in profile wizard timer: " + ex.Message + "\r\n" + ex.StackTrace);
             timer_0.Enabled = false;
         }
     }
@@ -708,7 +708,7 @@ public class ProfileWizard : Form
             str = string_3;
         }
 
-        VendorConnectClosest.Text = GClass30.smethod_6("ProfileWizard.WaypointsClose",
+        VendorConnectClosest.Text = MessageProvider.smethod_6("ProfileWizard.WaypointsClose",
             Math.Round(GPlayerSelf.Me.Location.GetDistanceTo(closestWaypoint), 0), Math.Round(num / Math.PI * 180.0, 0),
             str);
         method_7(double_2);
@@ -757,7 +757,7 @@ public class ProfileWizard : Form
                     StdWaypointsClose.Visible = true;
                     if (!bool_0)
                     {
-                        StdWaypointsLabel.Text = GClass30.smethod_4("ProfileWizard.StdWaypointsLabelAway");
+                        StdWaypointsLabel.Text = MessageProvider.smethod_4("ProfileWizard.StdWaypointsLabelAway");
                         GClass20.smethod_0("PlayerNear.wav");
                         bool_0 = true;
                     }
@@ -796,12 +796,12 @@ public class ProfileWizard : Form
         if (gprofile_0.MinLevel > 0 && gprofile_0.MaxLevel > 0)
             LabelLevelRange.Text = gprofile_0.MinLevel + " - " + gprofile_0.MaxLevel;
         else
-            LabelLevelRange.Text = GClass30.smethod_4("ProfileWizard.NoKills");
+            LabelLevelRange.Text = MessageProvider.smethod_4("ProfileWizard.NoKills");
         var factionsAsString = gprofile_0.GetFactionsAsString();
         if (factionsAsString.Length > 0)
             LabelFactions.Text = factionsAsString;
         else
-            LabelLevelRange.Text = GClass30.smethod_4("ProfileWizard.NoKills");
+            LabelLevelRange.Text = MessageProvider.smethod_4("ProfileWizard.NoKills");
         if (!StdWaypointsClose.Visible)
             return;
         double headingTo = GPlayerSelf.Me.Location.GetHeadingTo(gprofile_0.Waypoints[0]);
@@ -817,7 +817,7 @@ public class ProfileWizard : Form
             str = string_3;
         }
 
-        StdWaypointsClose.Text = GClass30.smethod_6("ProfileWizard.StdWaypointsClose",
+        StdWaypointsClose.Text = MessageProvider.smethod_6("ProfileWizard.StdWaypointsClose",
             Math.Round(GPlayerSelf.Me.Location.GetDistanceTo(gprofile_0.Waypoints[0]), 0),
             Math.Round(num1 / Math.PI * 180.0, 0), str);
     }
@@ -845,7 +845,7 @@ public class ProfileWizard : Form
             str1 = string_3;
         }
 
-        var str2 = GClass30.smethod_6("ProfileWizard.WaypointsClose",
+        var str2 = MessageProvider.smethod_6("ProfileWizard.WaypointsClose",
             Math.Round(GPlayerSelf.Me.Location.GetDistanceTo(closestWaypoint), 0), Math.Round(num / Math.PI * 180.0, 0),
             str1);
         if (glocation_0 == null || GPlayerSelf.Me.GetDistanceTo(glocation_0) > double_2)
@@ -884,7 +884,7 @@ public class ProfileWizard : Form
     private void SkipVendorBox_CheckedChanged(object sender, EventArgs e)
     {
         if (SkipVendorBox.Checked || StartupClass.IsSomeConditionMet || MessageBox.Show(this,
-                GClass30.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+                MessageProvider.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             return;
         SkipVendorBox.Checked = true;

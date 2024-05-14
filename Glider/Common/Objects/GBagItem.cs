@@ -31,7 +31,7 @@ namespace Glider.Common.Objects
             var byName = GContext.Main.Interface.GetByName(ObjectName);
             if (byName == null)
             {
-                GClass37.smethod_0("! Could not find interface object: " + ObjectName);
+                Logger.LogMessage("! Could not find interface object: " + ObjectName);
                 GContext.Main.KillAction("NoMail1", false);
             }
             else
@@ -39,12 +39,12 @@ namespace Glider.Common.Objects
                 if (!byName.IsVisible)
                 {
                     GContext.Main.SendKey("Common.BackpackAll");
-                    GClass37.smethod_0("Only one bag - hit key again!");
+                    Logger.LogMessage("Only one bag - hit key again!");
                 }
 
                 if (!byName.IsVisible)
                 {
-                    GClass37.smethod_0("! Interface object not visible (default backpack key wrong?): " + byName);
+                    Logger.LogMessage("! Interface object not visible (default backpack key wrong?): " + byName);
                     GContext.Main.KillAction("NoMail2", false);
                 }
                 else

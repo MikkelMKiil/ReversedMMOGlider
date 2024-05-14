@@ -55,7 +55,7 @@ public class GClass5
     {
         if (!StartupClass.ProfileIdToProfileMap.ContainsKey(gclass5_0.long_0))
         {
-            GClass37.smethod_1("Queueing new lootable corpse: 0x" + gclass5_0.long_0.ToString("x") + ", IsMine=" +
+            Logger.smethod_1("Queueing new lootable corpse: 0x" + gclass5_0.long_0.ToString("x") + ", IsMine=" +
                                gclass5_0.bool_0 + ", name = \"" + string_0 + "\"");
             StartupClass.ProfileIdToProfileMap.Add(gclass5_0.long_0, gclass5_0);
         }
@@ -153,7 +153,7 @@ public class GClass5
             if (unit.DistanceToSelf < 10.0 && !unit.IsDead && unit.GUID != GContext.Main.Me.PetGUID &&
                 unit.GUID != GPlayerSelf.Me.GUID && !GClass54.gclass54_0.method_13(unit.GUID))
             {
-                GClass37.smethod_1("Skipping TurboLoot, this guy is too close: " + unit);
+                Logger.smethod_1("Skipping TurboLoot, this guy is too close: " + unit);
                 return false;
             }
 
@@ -162,7 +162,7 @@ public class GClass5
 
     public bool method_4(GUnit gunit_0)
     {
-        GClass37.smethod_0("Turbo loot!");
+        Logger.LogMessage("Turbo loot!");
         if (!method_3())
             return false;
         var gspellTimer1 = new GSpellTimer(4000, false);
@@ -171,7 +171,7 @@ public class GClass5
         var flag2 = false;
         while (!gspellTimer1.IsReady)
         {
-            GClass37.smethod_1("LootFute loop top");
+            Logger.smethod_1("LootFute loop top");
             if (GContext.Main.Me.IsUnderAttack || !gunit_0.Hover())
                 return false;
             StartupClass.gclass73_0.method_56();
@@ -180,7 +180,7 @@ public class GClass5
                 if (gunit_0.WasLootable && !gunit_0.IsLootable)
                 {
                     flag1 = true;
-                    GClass37.smethod_0("Lootable is gone, looks good");
+                    Logger.LogMessage("Lootable is gone, looks good");
                     break;
                 }
 
@@ -189,16 +189,16 @@ public class GClass5
                 GClass67.smethod_1();
                 if (GClass67.bool_1)
                 {
-                    if (GClass67.string_0.ToLower().IndexOf(GClass30.smethod_1(871)) != -1)
+                    if (GClass67.string_0.ToLower().IndexOf(MessageProvider.GetMessage(871)) != -1)
                     {
-                        GClass37.smethod_0("Bind-on-pickup dialog is visible, accepting");
+                        Logger.LogMessage("Bind-on-pickup dialog is visible, accepting");
                         Thread.Sleep(600);
                         GClass8.smethod_2("StaticPopup1Button1").method_16(false);
                         Thread.Sleep(600);
                     }
                     else
                     {
-                        GClass37.smethod_0("Unknown dialog visible during loot: \"" + GClass67.string_0 +
+                        Logger.LogMessage("Unknown dialog visible during loot: \"" + GClass67.string_0 +
                                            "\", dismissing");
                         GClass67.smethod_2();
                     }
@@ -206,7 +206,7 @@ public class GClass5
             }
             else
             {
-                GClass37.smethod_1("Breaking out of LootFute");
+                Logger.smethod_1("Breaking out of LootFute");
                 break;
             }
         }
@@ -222,17 +222,17 @@ public class GClass5
         ++StartupClass.int_8;
         if (!GClass61.gclass61_0.method_5("AutoSkin"))
         {
-            GClass37.smethod_1("Skinning disabled, won't try it");
+            Logger.smethod_1("Skinning disabled, won't try it");
             return true;
         }
 
         if (GContext.Main.T_Skinnable.GetCount(gunit_0.Name) < -2)
         {
-            GClass37.smethod_1("This guy is never skinnable, won't try it");
+            Logger.smethod_1("This guy is never skinnable, won't try it");
             return true;
         }
 
-        GClass37.smethod_1("Going to try skinning it, too!");
+        Logger.smethod_1("Going to try skinning it, too!");
         gspellTimer1.Reset();
         var gspellTimer3 = new GSpellTimer(2000, false);
         while (!gspellTimer1.IsReady)
@@ -246,7 +246,7 @@ public class GClass5
                     if (GContext.Main.Me.IsCasting)
                     {
                         flag2 = true;
-                        GClass37.smethod_1("Channeling detected in skin paw");
+                        Logger.smethod_1("Channeling detected in skin paw");
                         break;
                     }
 
@@ -255,7 +255,7 @@ public class GClass5
             }
             else
             {
-                GClass37.smethod_1("Been too long and monster is still not skinnable");
+                Logger.smethod_1("Been too long and monster is still not skinnable");
                 break;
             }
 
@@ -268,7 +268,7 @@ public class GClass5
 
         GContext.Main.T_Skinnable.Increment(gunit_0.Name);
         var gspellTimer4 = new GSpellTimer(5000, false);
-        GClass37.smethod_1("Waiting for skinning flag to clear");
+        Logger.smethod_1("Waiting for skinning flag to clear");
         var flag3 = false;
         while (!gspellTimer4.IsReadySlow)
         {
@@ -283,20 +283,20 @@ public class GClass5
                         return false;
                     if (!GPlayerSelf.Me.IsCasting)
                     {
-                        GClass37.smethod_1("I stopped casting, skinning must be good (gulp!)");
+                        Logger.smethod_1("I stopped casting, skinning must be good (gulp!)");
                         Thread.Sleep(1371);
                         break;
                     }
                 }
                 else
                 {
-                    GClass37.smethod_1("Skinnable flag gone!");
+                    Logger.smethod_1("Skinnable flag gone!");
                     break;
                 }
             }
             else
             {
-                GClass37.smethod_1("Loot window gone!");
+                Logger.smethod_1("Loot window gone!");
                 break;
             }
         }

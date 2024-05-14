@@ -30,7 +30,7 @@ namespace Glider.Common.Objects
             var flag = false;
             if (IncludeCombatCheck && !GContext.Main.Me.IsMeleeing)
             {
-                GClass37.smethod_0("Combat is not on, toggling");
+                Logger.LogMessage("Combat is not on, toggling");
                 GContext.Main.SendKey("Common.ToggleCombat");
                 Thread.Sleep(500);
                 GContext.Main.Me.Refresh(true);
@@ -40,13 +40,13 @@ namespace Glider.Common.Objects
             if (Target.DistanceToSelf < GContext.Main.MeleeDistance &&
                 Target.DistanceToSelf > GContext.Main.MeleeDistance - 1.0 && Target.TicksSinceHealthDrop > 6000)
             {
-                GClass37.smethod_0("Tweaking for mini-melee deadzone");
+                Logger.LogMessage("Tweaking for mini-melee deadzone");
                 GContext.Main.Movement.MoveToUnit(Target, GContext.Main.MeleeDistance - 1.4, false);
                 LastTweak.Reset();
             }
             else if (Target.DistanceToSelf > GContext.Main.MeleeDistance)
             {
-                GClass37.smethod_1("TweakMelee: too far away to tweak, ignoring");
+                Logger.smethod_1("TweakMelee: too far away to tweak, ignoring");
             }
             else
             {
@@ -54,7 +54,7 @@ namespace Glider.Common.Objects
                     return;
                 if (Math.Abs(GContext.Main.Me.GetHeadingDelta(Target.Location)) > 9.0 * Math.PI / 10.0)
                 {
-                    GClass37.smethod_0("Ahead of monster, backing up");
+                    Logger.LogMessage("Ahead of monster, backing up");
                     GContext.Main.PressKey("Common.Back");
                     var gspellTimer = new GSpellTimer(3000);
                     while (!gspellTimer.IsReady)
@@ -71,7 +71,7 @@ namespace Glider.Common.Objects
 
                 if (Target.DistanceToSelf < 2.0)
                 {
-                    GClass37.smethod_0("Backing up");
+                    Logger.LogMessage("Backing up");
                     flag = true;
                     GContext.Main.PressKey("Common.Back");
                 }
@@ -174,7 +174,7 @@ namespace Glider.Common.Objects
                     goto label_8;
             } while (Environment.TickCount - tickCount <= 4000);
 
-            GClass37.smethod_0(GClass30.smethod_1(310));
+            Logger.LogMessage(MessageProvider.GetMessage(310));
             label_8:
             GContext.Main.ReleaseSpin();
         }
@@ -239,7 +239,7 @@ namespace Glider.Common.Objects
                 var flag2 = false;
                 if (Math.Abs(CompareHeadings(GContext.Main.Me.GetHeadingTo(Target), GContext.Main.Me.Heading)) > 1.0)
                 {
-                    GClass37.smethod_1(GClass30.smethod_1(18));
+                    Logger.smethod_1(MessageProvider.GetMessage(18));
                     flag2 = true;
                 }
 
@@ -267,7 +267,7 @@ namespace Glider.Common.Objects
                         else
                         {
                             ++num1;
-                            GClass37.smethod_0(GClass30.smethod_1(19));
+                            Logger.LogMessage(MessageProvider.GetMessage(19));
                             GContext.Main.ReleaseRun();
                             var num2 = StartupClass.random_0.Next() % 2 != 0
                                 ? GPlayerSelf.Me.Heading + Math.PI / 2.0
@@ -291,7 +291,7 @@ namespace Glider.Common.Objects
                 StartupClass.smethod_39(107);
                 if (num1 >= 4)
                 {
-                    GClass37.smethod_0("Stuck too many times in MoveToMonster, giving up");
+                    Logger.LogMessage("Stuck too many times in MoveToMonster, giving up");
                     break;
                 }
             }
@@ -319,7 +319,7 @@ namespace Glider.Common.Objects
                 GContext.Main.StartRun();
             if (Math.Abs(Delta) < Math.PI / 18.0)
             {
-                GClass37.smethod_1("Heading close enough, releasing spin");
+                Logger.smethod_1("Heading close enough, releasing spin");
                 GContext.Main.ReleaseSpin();
             }
             else
@@ -358,7 +358,7 @@ namespace Glider.Common.Objects
                 if (Math.Abs(CompareHeadings(GPlayerSelf.Me.Location.GetHeadingTo(Target), GContext.Main.Me.Heading)) >
                     1.0)
                 {
-                    GClass37.smethod_1(GClass30.smethod_1(18));
+                    Logger.smethod_1(MessageProvider.GetMessage(18));
                     flag2 = true;
                 }
 
@@ -384,7 +384,7 @@ namespace Glider.Common.Objects
                         }
                         else
                         {
-                            GClass37.smethod_0("Still stuck, trying a different angle");
+                            Logger.LogMessage("Still stuck, trying a different angle");
                             GContext.Main.ReleaseRun();
                             GContext.Main.PressKey("Common.Back");
                             Thread.Sleep(600);
@@ -396,7 +396,7 @@ namespace Glider.Common.Objects
                                 NewHeading -= 2.0 * Math.PI;
                             if (NewHeading < 0.0)
                                 NewHeading += 2.0 * Math.PI;
-                            GClass37.smethod_1("Current: " + GPlayerSelf.Me.Heading + ", new: " + NewHeading);
+                            Logger.smethod_1("Current: " + GPlayerSelf.Me.Heading + ", new: " + NewHeading);
                             SetHeading(NewHeading, Distance > 20.0 ? 0.5 : 0.3);
                             GContext.Main.StartRun();
                             Thread.Sleep(1000 + StartupClass.random_0.Next() % 1500);
@@ -518,7 +518,7 @@ namespace Glider.Common.Objects
             var flag = false;
             if (Target.DistanceToSelf > GContext.Main.MeleeDistance)
             {
-                GClass37.smethod_1("TweakSpell: too far away to tweak, ignoring");
+                Logger.smethod_1("TweakSpell: too far away to tweak, ignoring");
             }
             else
             {
@@ -526,7 +526,7 @@ namespace Glider.Common.Objects
                     return;
                 if (Math.Abs(GContext.Main.Me.GetHeadingDelta(Target.Location)) > 9.0 * Math.PI / 10.0)
                 {
-                    GClass37.smethod_0("Ahead of monster, backing up");
+                    Logger.LogMessage("Ahead of monster, backing up");
                     GContext.Main.PressKey("Common.Back");
                     var gspellTimer = new GSpellTimer(3000);
                     while (!gspellTimer.IsReady)
@@ -543,7 +543,7 @@ namespace Glider.Common.Objects
 
                 if (Target.DistanceToSelf < 2.0)
                 {
-                    GClass37.smethod_0("Backing up");
+                    Logger.LogMessage("Backing up");
                     flag = true;
                     GContext.Main.PressKey("Common.Back");
                 }

@@ -74,7 +74,7 @@ public class GClass48
     public bool method_4(string string_1)
     {
         string_0 = string_1;
-        GClass37.smethod_0("Reading profile group: " + string_1);
+        Logger.LogMessage("Reading profile group: " + string_1);
         try
         {
             var xmlDocument = new XmlDocument();
@@ -93,7 +93,7 @@ public class GClass48
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("!! Exception loading " + string_1 + "!  " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("!! Exception loading " + string_1 + "!  " + ex.Message + ex.StackTrace);
             list_0.Clear();
             string_0 = "(new profile group)";
             return false;
@@ -110,7 +110,7 @@ public class GClass48
     {
         GClass72 gclass72_1 = null;
         var num = 99999.0;
-        GClass37.smethod_1("Looking for closest profile in group");
+        Logger.smethod_1("Looking for closest profile in group");
         foreach (var gclass72_2 in list_0)
             if (gclass72_2.gprofile_0.Waypoints.Count > 0 && gclass72_2.bool_2)
             {
@@ -126,11 +126,11 @@ public class GClass48
         gclass72_0 = gclass72_1;
         if (gclass72_0 == null)
         {
-            GClass37.smethod_0("No closest profile!");
+            Logger.LogMessage("No closest profile!");
             return null;
         }
 
-        GClass37.smethod_0("Closest profile: " + gclass72_0.string_0 + ", distance: " + num);
+        Logger.LogMessage("Closest profile: " + gclass72_0.string_0 + ", distance: " + num);
         StartupClass.gprofile_0 = gclass72_0.gprofile_0;
         return gclass72_0.gprofile_0;
     }
@@ -140,7 +140,7 @@ public class GClass48
         if (StartupClass.gclass48_0 == null)
             return;
         ++StartupClass.gclass48_0.int_2;
-        GClass37.smethod_1("LogDeath, new count: " + StartupClass.gclass48_0.int_2);
+        Logger.smethod_1("LogDeath, new count: " + StartupClass.gclass48_0.int_2);
     }
 
     public static void smethod_1()
@@ -148,7 +148,7 @@ public class GClass48
         if (StartupClass.gclass48_0 == null)
             return;
         ++StartupClass.gclass48_0.int_1;
-        GClass37.smethod_1("LogFollower, new count: " + StartupClass.gclass48_0.int_1);
+        Logger.smethod_1("LogFollower, new count: " + StartupClass.gclass48_0.int_1);
     }
 
     public static void smethod_2()
@@ -156,7 +156,7 @@ public class GClass48
         if (StartupClass.gclass48_0 == null)
             return;
         ++StartupClass.gclass48_0.int_0;
-        GClass37.smethod_1("LogLoop, new count: " + StartupClass.gclass48_0.int_0);
+        Logger.smethod_1("LogLoop, new count: " + StartupClass.gclass48_0.int_0);
     }
 
     public static bool smethod_3()
@@ -170,7 +170,7 @@ public class GClass48
         if (gclass51_0 == null || GPlayerSelf.Me.TargetGUID != 0L)
             return false;
         while (StartupClass.gclass73_0.method_19() || StartupClass.gclass73_0.method_52(true))
-            GClass37.smethod_0(GClass30.smethod_1(832));
+            Logger.LogMessage(MessageProvider.GetMessage(832));
         if (gclass72_0.bool_0)
             method_9();
         if (gclass51_0.int_1 < 0)
@@ -180,7 +180,7 @@ public class GClass48
         {
             if (gclass72_0.gprofile_0.Waypoints.Count != 0 && gclass72.gprofile_0.Waypoints.Count != 0)
             {
-                GClass37.smethod_1("Looking for waypoint match between: " + gclass72_0.string_0 + " and " +
+                Logger.smethod_1("Looking for waypoint match between: " + gclass72_0.string_0 + " and " +
                                    gclass72.string_0);
                 var num = method_10(gclass72_0.gprofile_0, gclass72.gprofile_0);
                 var waypoint = gclass72_0.gprofile_0.Waypoints[num];
@@ -192,7 +192,7 @@ public class GClass48
             }
             else
             {
-                GClass37.smethod_1("One profile is missing waypoints, assuming we're already there");
+                Logger.smethod_1("One profile is missing waypoints, assuming we're already there");
             }
         }
 
@@ -212,7 +212,7 @@ public class GClass48
         var gclass51_1 = gclass72_0.method_6(GEnum6.const_0);
         if (gclass51_1 != null && int_0 > 0)
         {
-            GClass37.smethod_0(GClass30.smethod_2(831, gclass51_1.int_1, "Always"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_1.int_1, "Always"));
             gclass51_0 = gclass51_1;
             return true;
         }
@@ -220,7 +220,7 @@ public class GClass48
         var gclass51_2 = gclass72_0.method_6(GEnum6.const_4);
         if (gclass51_2 != null && int_1 >= gclass51_2.int_0)
         {
-            GClass37.smethod_0(GClass30.smethod_2(831, gclass51_2.int_1, "Alerts"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_2.int_1, "Alerts"));
             gclass51_0 = gclass51_2;
             return true;
         }
@@ -228,7 +228,7 @@ public class GClass48
         var gclass51_3 = gclass72_0.method_6(GEnum6.const_5);
         if (gclass51_3 != null && int_2 >= gclass51_3.int_0)
         {
-            GClass37.smethod_0(GClass30.smethod_2(831, gclass51_3.int_1, "Deaths"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_3.int_1, "Deaths"));
             gclass51_0 = gclass51_3;
             return true;
         }
@@ -236,7 +236,7 @@ public class GClass48
         var gclass51_4 = gclass72_0.method_6(GEnum6.const_1);
         if (gclass51_4 != null && GPlayerSelf.Me.Level >= gclass51_4.int_0)
         {
-            GClass37.smethod_0(GClass30.smethod_2(831, gclass51_4.int_1, "Level"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_4.int_1, "Level"));
             gclass51_0 = gclass51_4;
             return true;
         }
@@ -244,7 +244,7 @@ public class GClass48
         var gclass51_5 = gclass72_0.method_6(GEnum6.const_2);
         if (gclass51_5 != null && int_0 >= gclass51_5.int_0)
         {
-            GClass37.smethod_0(GClass30.smethod_2(831, gclass51_5.int_1, "Loops"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_5.int_1, "Loops"));
             gclass51_0 = gclass51_5;
             return true;
         }
@@ -252,7 +252,7 @@ public class GClass48
         var gclass51_6 = gclass72_0.method_6(GEnum6.const_3);
         if (gclass51_6 == null || (DateTime.Now - dateTime_0).TotalMinutes < gclass51_6.int_0)
             return false;
-        GClass37.smethod_0(GClass30.smethod_2(831, gclass51_6.int_1, "Time"));
+        Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_6.int_1, "Time"));
         gclass51_0 = gclass51_6;
         return true;
     }
@@ -263,14 +263,14 @@ public class GClass48
         var unit = GObjectList.FindUnit(gclass72_0.string_1);
         if (unit == null)
         {
-            GClass37.smethod_0(GClass30.smethod_2(835, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(835, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.smethod_27(false, "NoFlightMaster");
         }
 
         unit.Approach();
         if (!unit.Interact())
         {
-            GClass37.smethod_0(GClass30.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.smethod_27(false, "CantClickFM");
         }
 
@@ -278,13 +278,13 @@ public class GClass48
         var gclass8 = GClass8.smethod_2("GossipTitleButton1");
         if (gclass8 == null)
         {
-            GClass37.smethod_0(GClass30.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.smethod_27(false, "NoGossipFrame");
         }
 
         if (gclass8.method_10())
         {
-            GClass37.smethod_0("Gossip title is visible, positioning cursor");
+            Logger.LogMessage("Gossip title is visible, positioning cursor");
             Thread.Sleep(1000);
             gclass8.method_16(false);
             Thread.Sleep(5000);
@@ -295,7 +295,7 @@ public class GClass48
         var num = gclass13.method_1(gclass72_0.string_2);
         if (num == 0)
         {
-            GClass37.smethod_0("Couldn't activate flight, stopping");
+            Logger.LogMessage("Couldn't activate flight, stopping");
             StartupClass.smethod_27(false, "NoTaxiButton");
         }
 
@@ -303,17 +303,17 @@ public class GClass48
         Thread.Sleep(5000);
         if (!method_11())
         {
-            GClass37.smethod_0("!! Clicked on flightpoint, but we don't seem to be flying");
+            Logger.LogMessage("!! Clicked on flightpoint, but we don't seem to be flying");
             StartupClass.smethod_27(false, "NotFlyingVeryWell");
         }
 
-        GClass37.smethod_0("Flight is underway");
+        Logger.LogMessage("Flight is underway");
         do
         {
             ;
         } while (method_11());
 
-        GClass37.smethod_0("Flight complete");
+        Logger.LogMessage("Flight complete");
         Thread.Sleep(500);
         GClass42.gclass42_0.method_0("Common.Forward");
         Thread.Sleep(500);
@@ -334,7 +334,7 @@ public class GClass48
             }
         }
 
-        GClass37.smethod_1("Best match is waypoint " + num1 + " in this profile");
+        Logger.smethod_1("Best match is waypoint " + num1 + " in this profile");
         return num1;
     }
 
@@ -347,7 +347,7 @@ public class GClass48
 
     private void method_12(int int_4)
     {
-        GClass37.smethod_0(GClass30.smethod_2(833, int_4 + 1));
+        Logger.LogMessage(MessageProvider.smethod_2(833, int_4 + 1));
         gclass72_0.gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
         var currentIndex = gclass72_0.gprofile_0.CurrentIndex;
         var flag1 = false;
@@ -358,7 +358,7 @@ public class GClass48
         }
         else
         {
-            GClass37.smethod_1("MyIndex: " + currentIndex + ", DestIndex: " + int_4);
+            Logger.smethod_1("MyIndex: " + currentIndex + ", DestIndex: " + int_4);
             var num2 = currentIndex - int_4;
             var num3 = int_4 - currentIndex;
             if (num2 < 0)
@@ -366,10 +366,10 @@ public class GClass48
             if (num3 < 0)
                 num3 += gclass72_0.gprofile_0.Waypoints.Count;
             num1 = num2 >= num3 ? 1 : -1;
-            GClass37.smethod_1("LeftSteps: " + num2 + ", RightSteps: " + num3 + ", Delta: " + num1);
+            Logger.smethod_1("LeftSteps: " + num2 + ", RightSteps: " + num3 + ", Delta: " + num1);
             if (num3 == 0 && num2 == 0)
             {
-                GClass37.smethod_1("Must be close to that waypoint, skipping move action");
+                Logger.smethod_1("Must be close to that waypoint, skipping move action");
                 return;
             }
         }
@@ -441,7 +441,7 @@ public class GClass48
                     {
                         if (GClass61.gclass61_0.method_5("StrafeObstacles") && !flag2)
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(742));
+                            Logger.LogMessage(MessageProvider.GetMessage(742));
                             var string_1 = "Common.StrafeLeft";
                             if (StartupClass.random_0.Next() % 2 == 0)
                                 string_1 = "Common.StrafeRight";
@@ -452,7 +452,7 @@ public class GClass48
                         }
                         else
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(256));
+                            Logger.LogMessage(MessageProvider.GetMessage(256));
                             GContext.Main.ReleaseSpinRun();
                             StartupClass.smethod_39(600);
                             GContext.Main.PressKey("Common.Back");
@@ -483,7 +483,7 @@ public class GClass48
                 GContext.Main.Movement.SetHeading(waypoint2);
             if (flag3 && !method_13() && !GPlayerSelf.Me.IsInCombat)
             {
-                GClass37.smethod_0(GClass30.smethod_1(843));
+                Logger.LogMessage(MessageProvider.GetMessage(843));
                 GContext.Main.ReleaseSpinRun();
                 method_15();
                 flag3 = method_13();
@@ -492,7 +492,7 @@ public class GClass48
             Thread.Sleep(200);
             continue;
             label_41:
-            GClass37.smethod_0(GClass30.smethod_1(834));
+            Logger.LogMessage(MessageProvider.GetMessage(834));
             StartupClass.smethod_27(false, "FutileStepInMoveToWP");
             goto label_9;
         }
@@ -553,7 +553,7 @@ public class GClass48
         while (!gclass36.method_3())
         {
             int_3 = method_16(buffSnapshot);
-            GClass37.smethod_1("Looking for new mount buff id: " + int_3.ToString("x"));
+            Logger.smethod_1("Looking for new mount buff id: " + int_3.ToString("x"));
             if (int_3 == 0)
                 Thread.Sleep(100);
             else
@@ -562,7 +562,7 @@ public class GClass48
 
         if (int_3 != 0)
             return;
-        GClass37.smethod_0("! Never got a new buff after trying to mount");
+        Logger.LogMessage("! Never got a new buff after trying to mount");
     }
 
     private int method_16(GBuff[] gbuff_0)
@@ -570,7 +570,7 @@ public class GClass48
         var gbuffArray = method_20(gbuff_0, GPlayerSelf.Me.GetBuffSnapshot());
         if (gbuffArray.Length != 1)
             return 0;
-        GClass37.smethod_1("Mounted buffid: " + gbuffArray[0].SpellID + ", name =\"" + gbuffArray[0].SpellName + "\"");
+        Logger.smethod_1("Mounted buffid: " + gbuffArray[0].SpellID + ", name =\"" + gbuffArray[0].SpellName + "\"");
         return gbuffArray[0].SpellID;
     }
 
@@ -586,14 +586,14 @@ public class GClass48
         switch (genum15_0)
         {
             case GEnum15.const_2:
-                GClass37.smethod_0(GClass30.smethod_2(844, "HearthAndLog"));
+                Logger.LogMessage(MessageProvider.smethod_2(844, "HearthAndLog"));
                 StartupClass.gclass73_0.method_21(true);
                 break;
             case GEnum15.const_1:
                 StartupClass.gclass73_0.method_22();
                 break;
             case GEnum15.const_0:
-                GClass37.smethod_0(GClass30.smethod_2(844, "Stop"));
+                Logger.LogMessage(MessageProvider.smethod_2(844, "Stop"));
                 StartupClass.smethod_27(false, "ForceStepStop");
                 break;
         }
@@ -606,7 +606,7 @@ public class GClass48
             StartupClass.gclass73_0.gprofile_0 = gclass72_0.gprofile_0;
             gclass72_0.gprofile_0.Select();
             gclass72_0.gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
-            GClass37.smethod_1("Going into run loop for: " + gclass72_0.string_0);
+            Logger.smethod_1("Going into run loop for: " + gclass72_0.string_0);
             if (!gclass72_0.gprofile_0.Fishing)
             {
                 if (gclass72_0.gprofile_0.NaturalRun)

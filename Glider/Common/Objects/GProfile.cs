@@ -108,7 +108,7 @@ namespace Glider.Common.Objects
         public void Save(string OutputFile)
         {
             Name = OutputFile;
-            GClass37.smethod_0(GClass30.smethod_2(768, OutputFile));
+            Logger.LogMessage(MessageProvider.smethod_2(768, OutputFile));
             var xmlDocument_0 = new XmlDocument();
             xmlDocument_0.AppendChild(xmlDocument_0.CreateXmlDeclaration("1.0", null, null));
             xmlDocument_0.AppendChild(xmlDocument_0.CreateElement("GlideProfile"));
@@ -212,7 +212,7 @@ namespace Glider.Common.Objects
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0(GClass30.smethod_2(64, ex.Message));
+                Logger.LogMessage(MessageProvider.smethod_2(64, ex.Message));
                 return false;
             }
         }
@@ -237,7 +237,7 @@ namespace Glider.Common.Objects
         {
             if (GPlayerSelf.Me.TargetGUID == GUID)
                 GContext.Main.ClearTarget();
-            GClass37.smethod_0(GClass30.smethod_2(648, GUID.ToString("x")));
+            Logger.LogMessage(MessageProvider.smethod_2(648, GUID.ToString("x")));
             Blacklist.Add(GUID);
         }
 
@@ -247,7 +247,7 @@ namespace Glider.Common.Objects
                 GContext.Main.ClearTarget();
             if (!BlacklistOn)
                 return;
-            GClass37.smethod_0(GClass30.smethod_2(648, GUID.ToString("x")));
+            Logger.LogMessage(MessageProvider.smethod_2(648, GUID.ToString("x")));
             Blacklist.Add(GUID);
         }
 
@@ -407,11 +407,11 @@ namespace Glider.Common.Objects
                 var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                 if (closestWaypointIndex == CurrentIndex)
                     return;
-                GClass37.smethod_1("## Way off course, re-syncing to closest waypoint (current wp is #" + CurrentIndex +
+                Logger.smethod_1("## Way off course, re-syncing to closest waypoint (current wp is #" + CurrentIndex +
                                    ", distance = " + CurrentWaypoint.GetDistanceTo(GPlayerSelf.Me.Location) +
                                    " yards)");
                 CurrentIndex = closestWaypointIndex;
-                GClass37.smethod_1("## New is #" + CurrentIndex + ", distance = " +
+                Logger.smethod_1("## New is #" + CurrentIndex + ", distance = " +
                                    CurrentWaypoint.GetDistanceTo(GPlayerSelf.Me.Location) + " yards)");
             }
             else
@@ -434,7 +434,7 @@ namespace Glider.Common.Objects
 
                     if (num2 < 18.3 && num3 < Breadcrumbs.Count - 1)
                     {
-                        GClass37.smethod_1("## Looped back, tearing down breadcrumb list to #" + (num3 + 1));
+                        Logger.smethod_1("## Looped back, tearing down breadcrumb list to #" + (num3 + 1));
                         while (Breadcrumbs.Peek() != glocation)
                             Breadcrumbs.Pop();
                         return;
@@ -442,26 +442,26 @@ namespace Glider.Common.Objects
 
                     distanceTo = Breadcrumbs.Peek().GetDistanceTo(GPlayerSelf.Me.Location);
                     num1 = 18.3;
-                    GClass37.smethod_1("## Distance to last breadcrumb: " + distanceTo + " yards");
+                    Logger.smethod_1("## Distance to last breadcrumb: " + distanceTo + " yards");
                 }
                 else
                 {
                     index1 = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                     num1 = 27.6;
                     distanceTo = Waypoints[index1].GetDistanceTo(GPlayerSelf.Me.Location);
-                    GClass37.smethod_1("## Distance to profile: " + distanceTo + " yards");
+                    Logger.smethod_1("## Distance to profile: " + distanceTo + " yards");
                 }
 
                 if (distanceTo < num1)
                     return;
                 if (Breadcrumbs.Count == 0)
                 {
-                    GClass37.smethod_1("## Starting breadcrumbs, syncing profile to closest waypoint");
+                    Logger.smethod_1("## Starting breadcrumbs, syncing profile to closest waypoint");
                     CurrentIndex = index1;
                 }
 
                 Breadcrumbs.Push(GPlayerSelf.Me.Location);
-                GClass37.smethod_0("Placing breadcrumb #" + Breadcrumbs.Count);
+                Logger.LogMessage("Placing breadcrumb #" + Breadcrumbs.Count);
             }
         }
 
@@ -496,7 +496,7 @@ namespace Glider.Common.Objects
             var ghostWaypointIndex = GetClosestGhostWaypointIndex(GPlayerSelf.Me.Location);
             var lastGhostIndex = GetLastGhostIndex(ghostWaypointIndex);
             var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-            GClass37.smethod_1("## Creating ghost walk path (GhostIndex=" + ghostWaypointIndex + ", LastGhostIndex=" +
+            Logger.smethod_1("## Creating ghost walk path (GhostIndex=" + ghostWaypointIndex + ", LastGhostIndex=" +
                                lastGhostIndex + ", Me.Location=" + GPlayerSelf.Me.Location + ")");
             int index1;
             if (GPlayerSelf.Me.Location.GetDistanceTo(Waypoints[closestWaypointIndex]) >
@@ -504,7 +504,7 @@ namespace Glider.Common.Objects
             {
                 for (var index2 = ghostWaypointIndex; index2 <= lastGhostIndex; ++index2)
                 {
-                    GClass37.smethod_1("## Queueing gwp #" + index2 + ": " + GhostWaypoints[index2]);
+                    Logger.smethod_1("## Queueing gwp #" + index2 + ": " + GhostWaypoints[index2]);
                     ghostwalkPath.Enqueue(GhostWaypoints[index2]);
                 }
 
@@ -512,7 +512,7 @@ namespace Glider.Common.Objects
             }
             else
             {
-                GClass37.smethod_1("## Real waypoint is closer than ghost, skipping GWP's");
+                Logger.smethod_1("## Real waypoint is closer than ghost, skipping GWP's");
                 index1 = closestWaypointIndex;
             }
 
@@ -520,12 +520,12 @@ namespace Glider.Common.Objects
             if (Breadcrumbs.Count == 0)
             {
                 num1 = GetClosestWaypointIndex(Corpse);
-                GClass37.smethod_1("## No breadcrumbs, last waypoint index = " + num1);
+                Logger.smethod_1("## No breadcrumbs, last waypoint index = " + num1);
             }
             else
             {
                 num1 = CurrentIndex;
-                GClass37.smethod_1("## Breadcrumbs present, last waypoint index = " + num1);
+                Logger.smethod_1("## Breadcrumbs present, last waypoint index = " + num1);
             }
 
             int num2;
@@ -541,15 +541,15 @@ namespace Glider.Common.Objects
                     num3 += Waypoints.Count;
                 if (num4 < 0)
                     num4 += Waypoints.Count;
-                GClass37.smethod_1("## LGI: " + lastGhostIndex + ", LWI: " + num1 + ", PSteps: " + num3 + ", NSteps: " +
+                Logger.smethod_1("## LGI: " + lastGhostIndex + ", LWI: " + num1 + ", PSteps: " + num3 + ", NSteps: " +
                                    num4);
                 num2 = num3 >= num4 ? 1 : -1;
             }
 
-            GClass37.smethod_1("## CurrentWPI: " + index1 + ", LastWPI: " + num1 + ", Vector: " + num2);
+            Logger.smethod_1("## CurrentWPI: " + index1 + ", LastWPI: " + num1 + ", Vector: " + num2);
             while (index1 != num1)
             {
-                GClass37.smethod_1("## Queuing rwp #" + index1 + ": " + Waypoints[index1]);
+                Logger.smethod_1("## Queuing rwp #" + index1 + ": " + Waypoints[index1]);
                 ghostwalkPath.Enqueue(Waypoints[index1]);
                 index1 += num2;
                 if (index1 == Waypoints.Count)
@@ -563,7 +563,7 @@ namespace Glider.Common.Objects
                 var array = Breadcrumbs.ToArray();
                 for (var index3 = 0; index3 < array.Length; ++index3)
                 {
-                    GClass37.smethod_1("## Queuing bwp #" + (index3 + 1) + ": " + array[index3]);
+                    Logger.smethod_1("## Queuing bwp #" + (index3 + 1) + ": " + array[index3]);
                     ghostwalkPath.Enqueue(array[index3]);
                 }
             }
@@ -583,10 +583,10 @@ namespace Glider.Common.Objects
             var num = GContext.Main.Movement.CompareHeadings(GPlayerSelf.Me.Heading, headingTo);
             string str;
             if (num < 0.0)
-                str = GClass30.smethod_2(664, Math.Round(Math.Abs(num) / Math.PI * 180.0, 1));
+                str = MessageProvider.smethod_2(664, Math.Round(Math.Abs(num) / Math.PI * 180.0, 1));
             else
-                str = GClass30.smethod_2(665, Math.Round(num / Math.PI * 180.0, 1));
-            return GClass30.smethod_2(666, WPIndex, str, Math.Round(distanceTo, 2));
+                str = MessageProvider.smethod_2(665, Math.Round(num / Math.PI * 180.0, 1));
+            return MessageProvider.smethod_2(666, WPIndex, str, Math.Round(distanceTo, 2));
         }
 
         public string[] GetWaypointNotes()
@@ -626,7 +626,7 @@ namespace Glider.Common.Objects
 
             if (closestWaypointIndex == -1)
             {
-                GClass37.smethod_0("Could not find closest waypoint to " + Source + "!  Checked " + Waypoints.Count +
+                Logger.LogMessage("Could not find closest waypoint to " + Source + "!  Checked " + Waypoints.Count +
                                    " waypoints!  Adding temp waypoint.");
                 Waypoints.Add(GPlayerSelf.Me.Location);
                 closestWaypointIndex = 0;
@@ -654,7 +654,7 @@ namespace Glider.Common.Objects
 
         public GLocation BeginProfile(GLocation Source)
         {
-            GClass37.smethod_1("## BeginProfile invoked");
+            Logger.smethod_1("## BeginProfile invoked");
             var closestWaypointIndex = GetClosestWaypointIndex(Source);
             var L = Waypoints[closestWaypointIndex];
             CurrentIndex = closestWaypointIndex;
@@ -663,18 +663,18 @@ namespace Glider.Common.Objects
                 if (GPlayerSelf.Me.Location.GetDistanceTo(Breadcrumbs.Peek()) <
                     (double)GPlayerSelf.Me.Location.GetDistanceTo(L))
                 {
-                    GClass37.smethod_1("## Closest spot is a breadcrumb, taking that instead");
+                    Logger.smethod_1("## Closest spot is a breadcrumb, taking that instead");
                     L = Breadcrumbs.Peek();
                 }
                 else
                 {
-                    GClass37.smethod_1("## Got crumbs, but they're too far away, wiping trail");
+                    Logger.smethod_1("## Got crumbs, but they're too far away, wiping trail");
                     ClearBreadcrumbs();
                 }
             }
             else
             {
-                GClass37.smethod_1("## No breadcrumbs to start profile");
+                Logger.smethod_1("## No breadcrumbs to start profile");
             }
 
             return L;
@@ -689,13 +689,13 @@ namespace Glider.Common.Objects
 
         public void ConsumeCurrentWaypoint()
         {
-            GClass37.smethod_1("## ConsumeCurrentWaypoint invoked");
+            Logger.smethod_1("## ConsumeCurrentWaypoint invoked");
             if (Breadcrumbs.Count > 0)
             {
                 if (AllowShortCircuit &&
                     GetClosestWaypoint(GPlayerSelf.Me.Location).GetDistanceTo(GPlayerSelf.Me.Location) < 27.6)
                 {
-                    GClass37.smethod_1("## Short-circuiting back onto regular waypoints");
+                    Logger.smethod_1("## Short-circuiting back onto regular waypoints");
                     ClearBreadcrumbs();
                     CurrentIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                 }
@@ -704,13 +704,13 @@ namespace Glider.Common.Objects
                     Breadcrumbs.Pop();
                     if (Breadcrumbs.Count > 0)
                     {
-                        GClass37.smethod_1("## On crumbs, next waypoint is bwp #" + Breadcrumbs.Count + ": " +
+                        Logger.smethod_1("## On crumbs, next waypoint is bwp #" + Breadcrumbs.Count + ": " +
                                            Breadcrumbs.Peek());
                     }
                     else
                     {
                         CurrentIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-                        GClass37.smethod_1("## Off crumbs, next waypoint is rwp #" + CurrentIndex + ": " +
+                        Logger.smethod_1("## Off crumbs, next waypoint is rwp #" + CurrentIndex + ": " +
                                            Waypoints[CurrentIndex]);
                     }
                 }
@@ -728,14 +728,14 @@ namespace Glider.Common.Objects
                 {
                     if (Reversible)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(67));
+                        Logger.LogMessage(MessageProvider.GetMessage(67));
                         CurrentIndex = 1;
                         StartupClass.int_6 = 1;
                     }
                     else
                     {
                         CurrentIndex = Waypoints.Count - 1;
-                        GClass37.smethod_0(GClass30.smethod_1(68));
+                        Logger.LogMessage(MessageProvider.GetMessage(68));
                     }
                 }
 
@@ -743,18 +743,18 @@ namespace Glider.Common.Objects
                 {
                     if (Reversible)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(65));
+                        Logger.LogMessage(MessageProvider.GetMessage(65));
                         CurrentIndex = Waypoints.Count - 2;
                         StartupClass.int_6 = -1;
                     }
                     else
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(66));
+                        Logger.LogMessage(MessageProvider.GetMessage(66));
                         CurrentIndex = 0;
                     }
                 }
 
-                GClass37.smethod_1("## Next waypoint is rwp #" + CurrentIndex + ": " + Waypoints[CurrentIndex]);
+                Logger.smethod_1("## Next waypoint is rwp #" + CurrentIndex + ": " + Waypoints[CurrentIndex]);
             }
         }
 

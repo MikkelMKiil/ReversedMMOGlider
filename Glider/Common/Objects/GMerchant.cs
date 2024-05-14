@@ -72,18 +72,18 @@ namespace Glider.Common.Objects
             Thread.Sleep(777);
             if (IsVisible)
             {
-                GClass37.smethod_1("Merchant frame visible, skipping gossip check");
+                Logger.smethod_1("Merchant frame visible, skipping gossip check");
             }
             else if (!GContext.Main.Interface.GetByName("GossipFrame").IsVisible)
             {
-                GClass37.smethod_0("No gossip frame, skipping gossip check");
+                Logger.LogMessage("No gossip frame, skipping gossip check");
             }
             else
             {
                 var num = 0;
                 if (ForceGossipIndex == -1)
                 {
-                    GClass30.smethod_1(878).ToLower();
+                    MessageProvider.GetMessage(878).ToLower();
                     for (var index = 1; index < 5; ++index)
                     {
                         var ObjectName = "GossipTitleButton" + index;
@@ -101,7 +101,7 @@ namespace Glider.Common.Objects
 
                     if (num == 0)
                     {
-                        GClass37.smethod_0("No gossip buttons visible, skipping gossip check");
+                        Logger.LogMessage("No gossip buttons visible, skipping gossip check");
                         return;
                     }
                 }

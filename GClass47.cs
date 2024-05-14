@@ -51,7 +51,7 @@ public class GClass47
 
     public void method_2(string string_0, bool bool_0)
     {
-        GClass37.smethod_1("ScriptHelper.Execute: " + string_0);
+        Logger.smethod_1("ScriptHelper.Execute: " + string_0);
         if (StartupClass.glideMode_0 == GlideMode.None)
         {
             if (thread_0 != null && thread_0 == Thread.CurrentThread)
@@ -61,7 +61,7 @@ public class GClass47
                 {
                     if (thread_0 != null)
                     {
-                        GClass37.smethod_0("Waiting for prior script to finish");
+                        Logger.LogMessage("Waiting for prior script to finish");
                         thread_0.Join();
                     }
 
@@ -71,13 +71,13 @@ public class GClass47
                         StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_27(StartupClass.AnotherIntegerValue);
                         if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
-                            GClass37.smethod_0("No game window, no background mode!");
+                            Logger.LogMessage("No game window, no background mode!");
                         }
                         else
                         {
                             StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
                             StartupClass.IsGliderInitialized = true;
-                            GClass37.smethod_0("Setting up for background mode!");
+                            Logger.LogMessage("Setting up for background mode!");
                         }
                     }
                     else
@@ -86,7 +86,7 @@ public class GClass47
                         Thread.Sleep(2000);
                     }
 
-                    GClass37.smethod_1("Firing up script on new thread");
+                    Logger.smethod_1("Firing up script on new thread");
                     if (StartupClass.GliderManager != null)
                         StartupClass.GliderManager.method_33(true);
                     thread_0 = new Thread(method_3);
@@ -148,7 +148,7 @@ public class GClass47
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("!! Unhandled exception in script for \"" + string_0 + "\": " + ex.Message + "\r\n" +
+            Logger.LogMessage("!! Unhandled exception in script for \"" + string_0 + "\": " + ex.Message + "\r\n" +
                                ex.StackTrace);
             sortedList_0.Remove(string_0);
             throw ex;
@@ -162,21 +162,21 @@ public class GClass47
             var str1 = GClass61.gclass61_0.method_2("ScriptsFolder");
             if (GContext.Main.Profile != null && GContext.Main.Profile.ScriptOverride != null)
             {
-                GClass37.smethod_1("Using profile's script override folder");
+                Logger.smethod_1("Using profile's script override folder");
                 str1 = GContext.Main.Profile.ScriptOverride;
             }
 
             if (!str1.EndsWith("\\"))
                 str1 += "\\";
             var str2 = str1 + string_0 + ".cs";
-            GClass37.smethod_1("Considering: \"" + str2 + "\"");
+            Logger.smethod_1("Considering: \"" + str2 + "\"");
             if (File.Exists(str2))
             {
                 sortedList_0[string_0] = method_11(str2);
             }
             else
             {
-                GClass37.smethod_1("No such file, skipping");
+                Logger.smethod_1("No such file, skipping");
                 sortedList_0[string_0] = null;
             }
         }
@@ -218,7 +218,7 @@ public class GClass47
         var manifestResourceStream = Assembly.GetCallingAssembly().GetManifestResourceStream(name);
         if (manifestResourceStream == null)
         {
-            GClass37.smethod_0("! Couldn't get default script: \"" + name + "\"");
+            Logger.LogMessage("! Couldn't get default script: \"" + name + "\"");
             return null;
         }
 
@@ -241,12 +241,12 @@ public class GClass47
 
     private GScript method_12(string string_0)
     {
-        GClass37.smethod_1("Compiling script, length = " + string_0.Length + " bytes");
+        Logger.smethod_1("Compiling script, length = " + string_0.Length + " bytes");
         string string_1;
         var assembly_0 = method_13(string_0, out string_1);
         if (assembly_0 == null)
         {
-            GClass37.smethod_0("Unable to compile script:\r\n" + string_1);
+            Logger.LogMessage("Unable to compile script:\r\n" + string_1);
             return null;
         }
 
@@ -256,7 +256,7 @@ public class GClass47
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("Unable to get script instance: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("Unable to get script instance: " + ex.Message + "\r\n" + ex.StackTrace);
         }
 
         return null;
@@ -296,7 +296,7 @@ public class GClass47
         foreach (var exportedType in assembly_0.GetExportedTypes())
             if (exportedType.IsSubclassOf(typeof(GScript)))
                 return (GScript)assembly_0.CreateInstance(exportedType.FullName);
-        GClass37.smethod_0("No GScripts in assembly (?!)");
+        Logger.LogMessage("No GScripts in assembly (?!)");
         return null;
     }
 }

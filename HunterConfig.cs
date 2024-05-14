@@ -53,7 +53,7 @@ public class HunterConfig : Form
         TrapAdds.Checked = GClass61.gclass61_0.method_5("Hunter.TrapAdds");
         FeedMacro.Checked = GClass61.gclass61_0.method_5("Hunter.FeedMacro");
         UseViper.Checked = GClass61.gclass61_0.method_5("Hunter.UseViper");
-        GClass30.smethod_3(this, "Hunter");
+        MessageProvider.smethod_3(this, "Hunter");
         GProcessMemoryManipulator.smethod_48(this);
     }
     

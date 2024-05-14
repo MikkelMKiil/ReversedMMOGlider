@@ -120,7 +120,7 @@ namespace Glider.Common.Objects
         {
             if (CharCode == char.MinValue && VK == 0)
             {
-                GClass37.smethod_1(GClass30.smethod_2(57, KeyName));
+                Logger.smethod_1(MessageProvider.smethod_2(57, KeyName));
             }
             else
             {
@@ -148,7 +148,7 @@ namespace Glider.Common.Objects
         {
             if (CharCode == char.MinValue && VK == 0)
             {
-                GClass37.smethod_1(GClass30.smethod_2(57, KeyName));
+                Logger.smethod_1(MessageProvider.smethod_2(57, KeyName));
             }
             else
             {
@@ -257,7 +257,7 @@ namespace Glider.Common.Objects
                     }
 
                     if (!FailQuietly)
-                        GClass37.smethod_1("! Could not find this spell on any action bar: " + ToString());
+                        Logger.smethod_1("! Could not find this spell on any action bar: " + ToString());
                     Filled = true;
                 }
             }
@@ -346,7 +346,7 @@ namespace Glider.Common.Objects
             if (!ComplainedVisible)
             {
                 ComplainedVisible = true;
-                GClass37.smethod_1("Could not find interface object for " + KeyName +
+                Logger.smethod_1("Could not find interface object for " + KeyName +
                                    ", make sure it's visible somewhere!");
             }
 

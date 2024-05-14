@@ -103,7 +103,7 @@ public class GClass81 : GInterface0
         }
         catch (IOException ex)
         {
-            Console.WriteLine(GClass30.smethod_2(90, ex.Message));
+            Console.WriteLine(MessageProvider.smethod_2(90, ex.Message));
         }
     }
 
@@ -131,13 +131,13 @@ public class GClass81 : GInterface0
             if (bool_0 && StartupClass.bool_13)
                 goto label_6;
             label_1:
-            if (!StartupClass.bool_24)
+            if (!StartupClass.isInputStringFourCharacters)
                 StartupClass.gclass36_0 = null;
             if (StartupClass.gclass36_0 != null && StartupClass.gclass36_0.method_3())
             {
                 StartupClass.gclass36_0 = null;
                 StartupClass.bool_19 = true;
-                GClass37.smethod_0(GClass30.smethod_1(103));
+                Logger.LogMessage(MessageProvider.GetMessage(103));
                 StartupClass.smethod_27(false, "Timer2Up");
             }
 

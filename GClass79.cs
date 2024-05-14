@@ -47,7 +47,7 @@ public class GClass79
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(295, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(295, ex.Message));
             thread_0 = null;
         }
     }
@@ -81,7 +81,7 @@ public class GClass79
         {
             if (bool_0)
                 return;
-            GClass37.smethod_0(GClass30.smethod_2(296, ex.Message + ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(296, ex.Message + ex.StackTrace));
         }
     }
 
@@ -98,7 +98,7 @@ public class GClass79
         while (true)
         {
             var socket_1 = socket_0.Accept();
-            GClass37.smethod_0(GClass30.smethod_2(297, socket_1.RemoteEndPoint.ToString()));
+            Logger.LogMessage(MessageProvider.smethod_2(297, socket_1.RemoteEndPoint.ToString()));
             lock (list_0)
             {
                 var gclass77 = new GClass77(this, socket_1);

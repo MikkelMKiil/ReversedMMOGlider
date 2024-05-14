@@ -37,7 +37,7 @@ public class GClass0
 
     public static void smethod_1(string string_0)
     {
-        GClass37.smethod_1(string_0);
+        Logger.smethod_1(string_0);
     }
 
     private void method_0()

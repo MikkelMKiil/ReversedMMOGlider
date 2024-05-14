@@ -380,7 +380,7 @@ public class GClass55
     {
         lock (gspellTimer_0)
         {
-            GClass37.smethod_1("#- Grabbing cursor!");
+            Logger.smethod_1("#- Grabbing cursor!");
             bool_2 = false;
             bool_1 = false;
             gspellTimer_0.Reset();
@@ -496,7 +496,7 @@ public class GClass55
         string_1 = string_1.Replace("\n", "");
         if (bool_0 && !StartupClass.IsGliderInitialized)
         {
-            GClass37.smethod_1(GClass30.smethod_2(689, string_1));
+            Logger.smethod_1(MessageProvider.smethod_2(689, string_1));
             Class2.smethod_0(string_1);
             smethod_9(13);
             StartupClass.smethod_39(300 + StartupClass.random_0.Next() % 300);

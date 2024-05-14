@@ -40,17 +40,17 @@ public class GClass40
 
     private void method_1(string string_0)
     {
-        GClass37.smethod_0(string_0);
+        Logger.LogMessage(string_0);
     }
 
     private void method_2(string string_0)
     {
-        GClass37.smethod_1(string_0);
+        Logger.smethod_1(string_0);
     }
 
     private bool method_3(GClass34 gclass34_0)
     {
-        GClass37.smethod_1("--- DoGameMove invoked");
+        Logger.smethod_1("--- DoGameMove invoked");
         if (method_4(gclass34_0) || method_5(gclass34_0) || method_8(gclass34_0) || method_6(gclass34_0) ||
             method_7(gclass34_0) || method_9(gclass34_0))
             return true;
@@ -248,7 +248,7 @@ public class GClass40
         uint uint_2;
         if (!EnumProcessModules(intptr_0, uint_0, 4096U, out uint_2))
         {
-            GClass37.smethod_0("EnumProcessModules failed!  Last error = " + Marshal.GetLastWin32Error());
+            Logger.LogMessage("EnumProcessModules failed!  Last error = " + Marshal.GetLastWin32Error());
             return 0;
         }
 
@@ -257,12 +257,12 @@ public class GClass40
         for (var index = 0; index < num; ++index)
         {
             var moduleFileNameEx = (int)GetModuleFileNameEx(intptr_0, new IntPtr(uint_0[index]), stringBuilder_0, 200U);
-            GClass37.smethod_0("0x" + uint_0[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
+            Logger.LogMessage("0x" + uint_0[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
             if (stringBuilder_0.ToString().ToLower().EndsWith(string_0.ToLower()))
                 return (int)uint_0[index];
         }
 
-        GClass37.smethod_0("GetModuleAddress never found what we wanted!");
+        Logger.LogMessage("GetModuleAddress never found what we wanted!");
         return 0;
     }
 }

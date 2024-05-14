@@ -50,7 +50,7 @@ namespace Glider.Common.Objects
                 var int5 = StartupClass.int_5;
                 if (int5 == 0)
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(56));
+                    Logger.LogMessage(MessageProvider.GetMessage(56));
                     StartupClass.smethod_27(true, "GetObjectsMainTableEmpty");
                     return null;
                 }
@@ -97,7 +97,7 @@ namespace Glider.Common.Objects
                     LastSnapshot[guid].FrameNumber = FrameNumber;
                     continue;
                     label_13:
-                    GClass37.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
+                    Logger.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
                 }
 
                 label_15:
@@ -107,7 +107,7 @@ namespace Glider.Common.Objects
                     if (gobject.FrameNumber != FrameNumber)
                     {
                         if (LogObjects)
-                            GClass37.smethod_1("+ Culling old object: " + gobject);
+                            Logger.smethod_1("+ Culling old object: " + gobject);
                         gobject.Cull();
                         LastSnapshot.RemoveAt(index);
                         --index;
@@ -347,16 +347,16 @@ namespace Glider.Common.Objects
             var num2 = 0;
             lock (LastSnapshot)
             {
-                GClass37.smethod_1("-- GObjectList.DumpDebug invoked, LastUpdate = " + LastUpdate + ", Current = " +
+                Logger.smethod_1("-- GObjectList.DumpDebug invoked, LastUpdate = " + LastUpdate + ", Current = " +
                                    Environment.TickCount);
                 var lastSnapshot = LastSnapshot;
                 foreach (var key in lastSnapshot.Keys)
                 {
                     ++num1;
-                    GClass37.smethod_1(key.ToString("x16") + " --> " + lastSnapshot[key]);
+                    Logger.smethod_1(key.ToString("x16") + " --> " + lastSnapshot[key]);
                 }
 
-                GClass37.smethod_1("-- Object dump done, hits: " + num1 + ", unit hits: " + num2);
+                Logger.smethod_1("-- Object dump done, hits: " + num1 + ", unit hits: " + num2);
             }
         }
 
@@ -436,7 +436,7 @@ namespace Glider.Common.Objects
                 }
 
             if (gmonster == null && GClass61.gclass61_0.method_5("LogMonsterChecks"))
-                GClass37.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
+                Logger.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
             if (gmonster == null)
                 return null;
             var num2 = GClass61.gclass61_0.method_3("ExtraPull");
@@ -504,7 +504,7 @@ namespace Glider.Common.Objects
                 {
                     if (GProcessMemoryManipulator.smethod_12(num2 + 48, "GameObjGUID") == SeekPlayerID)
                     {
-                        GClass37.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
+                        Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;
                     }
 
@@ -517,7 +517,7 @@ namespace Glider.Common.Objects
             }
 
             if (num1 > 0)
-                GClass37.smethod_1("Stealth object count: " + num1 + ", hitme = " + flag);
+                Logger.smethod_1("Stealth object count: " + num1 + ", hitme = " + flag);
             return !flag ? 0 : num1;
         }
     }

@@ -94,13 +94,13 @@ namespace Glider.Common.Objects
                 }
             }
 
-            GClass37.smethod_1("!! Spun out trying to find item: 0x" + ItemID.ToString("x"));
+            Logger.smethod_1("!! Spun out trying to find item: 0x" + ItemID.ToString("x"));
             return 0;
             label_7:
-            GClass37.smethod_1("! SubitemPointer is null for 0x" + ItemID.ToString("x"));
+            Logger.smethod_1("! SubitemPointer is null for 0x" + ItemID.ToString("x"));
             return 0;
             label_8:
-            GClass37.smethod_1("! SubitemPointer is not right (0x" + int_29.ToString("x") + ") for 0x" +
+            Logger.smethod_1("! SubitemPointer is not right (0x" + int_29.ToString("x") + ") for 0x" +
                                ItemID.ToString("x"));
             return 0;
             label_9:

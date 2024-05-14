@@ -84,7 +84,7 @@ public class GClass9
 
     private void method_4(string string_2)
     {
-        GClass37.smethod_0("WN: " + string_2);
+        Logger.LogMessage("WN: " + string_2);
     }
 
     public void method_5()
@@ -163,7 +163,7 @@ public class GClass9
         var array = w1.ToArray();
         var str = Encoding.ASCII.GetString(array);
         if (GClass61.gclass61_0.method_5("LogNotifyQuery"))
-            GClass37.smethod_1("xmlText:\r\n" + str);
+            Logger.smethod_1("xmlText:\r\n" + str);
         if (method_9(array))
             lock (this)
             {
@@ -190,7 +190,7 @@ public class GClass9
             var streamReader = new StreamReader(response.GetResponseStream());
             var end = streamReader.ReadToEnd();
             if (GClass61.gclass61_0.method_5("LogNotifyResponse"))
-                GClass37.smethod_1("Response from post:\r\n" + end);
+                Logger.smethod_1("Response from post:\r\n" + end);
             method_4("Response received from post: " + end.Length + " bytes");
             streamReader.Close();
             response.Close();

@@ -21,7 +21,7 @@ public class RemindBar : Form
     public RemindBar()
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(RemindBar));
+        MessageProvider.smethod_3(this, nameof(RemindBar));
     }
 
     protected override void Dispose(bool disposing)

@@ -74,7 +74,7 @@ public class RogueConfig : Form
         UseRush.Checked = GClass61.gclass61_0.method_2("Rogue.UseRush") == "True";
         SaveRush.Checked = GClass61.gclass61_0.method_2("Rogue.SaveRush") == "True";
         UseGhostly.Checked = GClass61.gclass61_0.method_2("Rogue.UseGhostly") == "True";
-        GClass30.smethod_3(this, "Rogue");
+        MessageProvider.smethod_3(this, "Rogue");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

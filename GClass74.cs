@@ -87,7 +87,7 @@ public class GClass74
         var manifestResourceStream = Assembly.GetCallingAssembly().GetManifestResourceStream(name);
         if (manifestResourceStream == null)
         {
-            GClass37.smethod_0("! Couldn't get default class: \"" + name + "\"");
+            Logger.LogMessage("! Couldn't get default class: \"" + name + "\"");
             return null;
         }
 
@@ -108,10 +108,10 @@ public class GClass74
 
     public static void smethod_5(string string_0)
     {
-        GClass37.smethod_1("Unloading custom class: \"" + string_0 + "\"");
+        Logger.smethod_1("Unloading custom class: \"" + string_0 + "\"");
         if (!StartupClass.ProfileMapping.ContainsKey(string_0))
         {
-            GClass37.smethod_0("Can't unload \"" + string_0 + "\", it isn't loaded!");
+            Logger.LogMessage("Can't unload \"" + string_0 + "\", it isn't loaded!");
         }
         else
         {
@@ -128,7 +128,7 @@ public class GClass74
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("** Exception shutting down \"" + string_0 + "\": " + ex.Message + ex.StackTrace);
+                Logger.LogMessage("** Exception shutting down \"" + string_0 + "\": " + ex.Message + ex.StackTrace);
             }
 
             StartupClass.ProfileMapping.Remove(string_0);
@@ -144,7 +144,7 @@ public class GClass74
             {
                 var num = str2.IndexOf(' ');
                 str1 = str2.Substring(num + 1).Trim();
-                GClass37.smethod_1("Override class to instantiate: \"" + str1 + "\"");
+                Logger.smethod_1("Override class to instantiate: \"" + str1 + "\"");
             }
 
         return str1;
@@ -168,13 +168,13 @@ public class GClass74
                 {
                     type1 = type2;
                     str = type1.FullName;
-                    GClass37.smethod_1("Guessed class name: \"" + str + "\"");
+                    Logger.smethod_1("Guessed class name: \"" + str + "\"");
                     break;
                 }
 
             if (type1 == null)
             {
-                GClass37.smethod_0("Never found any good classes in: \"" + string_0 + "\"");
+                Logger.LogMessage("Never found any good classes in: \"" + string_0 + "\"");
                 return null;
             }
         }
@@ -194,7 +194,7 @@ public class GClass74
             var method = type1.GetMethod("Patrol");
             if (method != null && method.DeclaringType != typeof(GGameClass))
             {
-                GClass37.smethod_0("This class contains an override for Patrol, will use it when gliding (oh no!)");
+                Logger.LogMessage("This class contains an override for Patrol, will use it when gliding (oh no!)");
                 flag = true;
             }
 
@@ -211,7 +211,7 @@ public class GClass74
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception initializing: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("** Exception initializing: " + ex.Message + ex.StackTrace);
             return null;
         }
     }
@@ -233,27 +233,27 @@ public class GClass74
     public static void smethod_9(GClass22 gclass22_0)
     {
         var string_0 = gclass22_0.string_1.Substring(0, gclass22_0.string_1.IndexOf(' '));
-        GClass37.smethod_0("Compiling internal: \"" + string_0 + "\"");
+        Logger.LogMessage("Compiling internal: \"" + string_0 + "\"");
         string string_1;
         var assembly_0 =
             smethod_2(
                 smethod_3(string_0) ?? throw new Exception("Can't get default class source: \"" + string_0 + "\""),
                 out string_1);
         if (assembly_0 == null)
-            GClass37.smethod_0("!! Exception compiling internal class \"" + string_0 + "\": " + string_1);
+            Logger.LogMessage("!! Exception compiling internal class \"" + string_0 + "\": " + string_1);
         else
             try
             {
                 var ggameClass = smethod_7("(Internal) " + string_0, assembly_0, false, false);
                 if (ggameClass == null)
                     return;
-                GClass37.smethod_0("Compiled internal class: \"" + string_0 + "\", displayname = \"" +
+                Logger.LogMessage("Compiled internal class: \"" + string_0 + "\", displayname = \"" +
                                    ggameClass.DisplayName + "\"");
                 gclass22_0.object_0 = ggameClass;
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("!! Exception instantiating internal class \"" + string_0 + "\": " + ex.Message +
+                Logger.LogMessage("!! Exception instantiating internal class \"" + string_0 + "\": " + ex.Message +
                                    ex.StackTrace);
             }
     }
@@ -274,11 +274,11 @@ public class GClass74
 
     private static void smethod_11(string string_0, string string_1)
     {
-        var gclass22 = new GClass22(GClass30.smethod_4("Common.Class" + string_1));
+        var gclass22 = new GClass22(MessageProvider.smethod_4("Common.Class" + string_1));
         gclass22.bool_0 = true;
         gclass22.string_1 = string_0;
         gclass22.genum1_0 = GEnum1.const_1;
-        GClass37.smethod_0("Adding class stub: \"" + string_1 + "\" on source file \"" + string_0 + "\"");
+        Logger.LogMessage("Adding class stub: \"" + string_1 + "\" on source file \"" + string_0 + "\"");
         StartupClass.ProfileMapping.Add(string_0, gclass22);
     }
 
@@ -306,14 +306,14 @@ public class GClass74
         var assembly_0 = smethod_0(string_0, out string_1);
         if (assembly_0 == null)
         {
-            GClass37.smethod_0("Compile failed on \"" + string_0 + "\": " + string_1);
+            Logger.LogMessage("Compile failed on \"" + string_0 + "\": " + string_1);
             return false;
         }
 
         if (string_1.Length > 0)
-            GClass37.smethod_0("Compile successful with warnings on \"" + string_0 + "\": " + string_1);
+            Logger.LogMessage("Compile successful with warnings on \"" + string_0 + "\": " + string_1);
         else
-            GClass37.smethod_0("Compile successful on \"" + string_0 + "\"");
+            Logger.LogMessage("Compile successful on \"" + string_0 + "\"");
         var ggameClass = smethod_7(string_0, assembly_0, true, true);
         if (ggameClass != null && StartupClass.bool_13)
             ggameClass.OnAttach();

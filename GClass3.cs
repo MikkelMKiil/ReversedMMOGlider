@@ -25,14 +25,14 @@ public class GClass3
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("! Exception creating NetCheck: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("! Exception creating NetCheck: " + ex.Message + "\r\n" + ex.StackTrace);
             NetworkStatus = NetCheckResult.Unknown;
             WarningMessage = "Unable to complete NetCheck.";
             WarningTimestamp = DateTime.Now.ToString();
             WarningDetailsUrl = null;
         }
 
-        GClass37.smethod_1(ToString());
+        Logger.smethod_1(ToString());
     }
 
     public override string ToString()
@@ -127,7 +127,7 @@ public class GClass3
                 return false;
             }
 
-            GClass37.smethod_0("Warning from NetCheck: " + WarningMessage);
+            Logger.LogMessage("Warning from NetCheck: " + WarningMessage);
         }
 
         return true;

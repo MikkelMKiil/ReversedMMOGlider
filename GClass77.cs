@@ -73,7 +73,7 @@ public class GClass77
     {
         try
         {
-            GClass37.smethod_1("Stopping a remoteguy");
+            Logger.smethod_1("Stopping a remoteguy");
             bool_0 = true;
             if (socket_0 != null)
             {
@@ -83,16 +83,16 @@ public class GClass77
 
             if (thread_0 != null)
             {
-                GClass37.smethod_1("Waiting for work thread");
+                Logger.smethod_1("Waiting for work thread");
                 thread_0.Join();
-                GClass37.smethod_1("Done waiting for work thread");
+                Logger.smethod_1("Done waiting for work thread");
             }
 
-            GClass37.smethod_1("Done with stopping a remoteguy");
+            Logger.smethod_1("Done with stopping a remoteguy");
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("!! Exception stopping a remoteguy: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("!! Exception stopping a remoteguy: " + ex.Message + "\r\n" + ex.StackTrace);
         }
     }
 
@@ -112,7 +112,7 @@ public class GClass77
                 }
                 catch (Exception ex2)
                 {
-                    GClass37.smethod_1("Exception tossing socket in cleanup, no big deal");
+                    Logger.smethod_1("Exception tossing socket in cleanup, no big deal");
                 }
 
                 socket_0 = null;
@@ -120,8 +120,8 @@ public class GClass77
 
             if (!bool_0)
             {
-                GClass37.smethod_0(GClass30.smethod_2(354, ex1.Message));
-                GClass37.smethod_1("** " + ex1.Message + ex1.StackTrace);
+                Logger.LogMessage(MessageProvider.smethod_2(354, ex1.Message));
+                Logger.smethod_1("** " + ex1.Message + ex1.StackTrace);
             }
         }
 
@@ -135,7 +135,7 @@ public class GClass77
         if (!(str != GClass61.gclass61_0.method_2("ListenPassword")))
         {
             method_6("Authenticated ok\r\n");
-            GClass37.smethod_0(GClass30.smethod_1(357));
+            Logger.LogMessage(MessageProvider.GetMessage(357));
             bool_1 = true;
             while (true)
             {
@@ -148,13 +148,13 @@ public class GClass77
                 lock (this)
                 {
                     method_7(string_1);
-                    GClass37.smethod_1(int_12 + " <- processing complete");
+                    Logger.smethod_1(int_12 + " <- processing complete");
                     method_6("---\r\n");
                 }
             }
         }
 
-        GClass37.smethod_0(GClass30.smethod_2(355, str));
+        Logger.LogMessage(MessageProvider.smethod_2(355, str));
         socket_0.Close();
         socket_0 = null;
     }
@@ -191,9 +191,9 @@ public class GClass77
         }
 
         label_6:
-        GClass37.smethod_1(int_10 + " -- Lost connection in read");
+        Logger.smethod_1(int_10 + " -- Lost connection in read");
         bool_0 = true;
-        throw new Exception(GClass30.smethod_1(358));
+        throw new Exception(MessageProvider.GetMessage(358));
         label_7:
         return stringBuilder.ToString();
     }
@@ -210,12 +210,12 @@ public class GClass77
             }
             else
             {
-                GClass37.smethod_1("(skipping notify on dead/unauthed connection #" + int_12 + ")");
+                Logger.smethod_1("(skipping notify on dead/unauthed connection #" + int_12 + ")");
             }
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1(GClass30.smethod_1(359));
+            Logger.smethod_1(MessageProvider.GetMessage(359));
             method_1();
         }
     }
@@ -271,13 +271,13 @@ public class GClass77
             bool_0 = true;
             socket_0.Close();
             socket_0 = null;
-            throw new Exception(GClass30.smethod_1(360));
+            throw new Exception(MessageProvider.GetMessage(360));
         }
     }
 
     private void method_7(string string_1)
     {
-        GClass37.smethod_1(int_12 + " -> Remote cmd: [" + string_1 + "]");
+        Logger.smethod_1(int_12 + " -> Remote cmd: [" + string_1 + "]");
         var strArray1 = string_1.Split(' ');
         var lower1 = strArray1[0].ToLower();
         if (lower1 == "/exit")
@@ -288,7 +288,7 @@ public class GClass77
             bool_0 = true;
             socket_0.Close();
             socket_0 = null;
-            throw new Exception(GClass30.smethod_1(361));
+            throw new Exception(MessageProvider.GetMessage(361));
         }
 
         if (!(lower1 == "/help") && !(lower1 == "/?"))
@@ -348,7 +348,7 @@ public class GClass77
                 {
                     if (!StartupClass.IsGliderInitialized)
                     {
-                        GClass37.smethod_1("Setting up bg stuff");
+                        Logger.smethod_1("Setting up bg stuff");
                         StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_29(StartupClass.AnotherIntegerValue);
                         StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
                         StartupClass.IsGliderInitialized = true;
@@ -590,7 +590,7 @@ public class GClass77
                             StartupClass.smethod_5();
                             StartupClass.gclass54_0.method_0(GClass61.gclass61_0);
                             if (str != GClass61.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 ||
-                                !StartupClass.bool_22)
+                                !StartupClass.isInitializationSuccessful)
                             {
                                 StartupClass.gclass54_0.bool_4 = false;
                                 StartupClass.smethod_15();
@@ -866,7 +866,7 @@ public class GClass77
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception in SendFile: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("** Exception in SendFile: " + ex.Message + ex.StackTrace);
             throw ex;
         }
     }
@@ -875,7 +875,7 @@ public class GClass77
     {
         var position = (int)memoryStream_0.Position;
         var offset = 0;
-        GClass37.smethod_1("Stream length: " + position);
+        Logger.smethod_1("Stream length: " + position);
         try
         {
             socket_0.Send(BitConverter.GetBytes(position), 0, 4, SocketFlags.None);
@@ -897,7 +897,7 @@ public class GClass77
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception in SendStream: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("** Exception in SendStream: " + ex.Message + ex.StackTrace);
             throw ex;
         }
     }
@@ -1003,15 +1003,15 @@ public class GClass77
                 if (method_16() < 100)
                 {
                     image_0 = GClass57.smethod_2(image_0, method_16());
-                    GClass37.smethod_1("Resizing to pct: " + method_16());
+                    Logger.smethod_1("Resizing to pct: " + method_16());
                 }
                 else
                 {
-                    GClass37.smethod_1("Not resizing, pct = " + method_16());
+                    Logger.smethod_1("Not resizing, pct = " + method_16());
                 }
 
                 var encoderParams = new EncoderParameters(1);
-                GClass37.smethod_1("CaptureQuality: " + method_14());
+                Logger.smethod_1("CaptureQuality: " + method_14());
                 encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, method_14());
                 if (imageCodecInfo_0 == null)
                     imageCodecInfo_0 = GClass57.smethod_1("image/jpeg");
@@ -1021,7 +1021,7 @@ public class GClass77
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("Capture failed: " + ex.Message);
+                Logger.LogMessage("Capture failed: " + ex.Message);
                 int_13 = 0;
             }
             finally
@@ -1037,7 +1037,7 @@ public class GClass77
             if (int_13 <= 0)
                 return;
             method_6("Success, 4-byte length and JPG image stream follow\r\n");
-            GClass37.smethod_1("Sending image size: " + int_13 + " bytes");
+            Logger.smethod_1("Sending image size: " + int_13 + " bytes");
             socket_0.Send(BitConverter.GetBytes(int_13), 0, 4, SocketFlags.None);
             for (var offset = 0; offset < int_13; offset += Math.Min(8192, int_13 - offset))
                 socket_0.Send(byte_1, offset, Math.Min(8192, int_13 - offset), SocketFlags.None);

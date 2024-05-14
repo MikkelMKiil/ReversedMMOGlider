@@ -62,27 +62,27 @@ public class GClass17
         GStruct5 gstruct5_0;
         if (!LookupPrivilegeValue("", "SeDebugPrivilege", out gstruct5_0))
         {
-            GClass37.smethod_1(GClass30.smethod_2(328, Marshal.GetLastWin32Error()));
+            Logger.smethod_1(MessageProvider.smethod_2(328, Marshal.GetLastWin32Error()));
         }
         else
         {
-            GClass37.smethod_1("SeDebugPrivilege LUID: " + gstruct5_0.uint_0.ToString("x") + "/" +
+            Logger.smethod_1("SeDebugPrivilege LUID: " + gstruct5_0.uint_0.ToString("x") + "/" +
                                gstruct5_0.uint_1.ToString("x"));
             if (!OpenProcessToken(GetCurrentProcess(), 40U, out intptr_0))
             {
-                GClass37.smethod_1(GClass30.smethod_2(329, Marshal.GetLastWin32Error()));
+                Logger.smethod_1(MessageProvider.smethod_2(329, Marshal.GetLastWin32Error()));
             }
             else
             {
                 var byte_0 = new byte[512];
                 if (!GetTokenInformation(intptr_0, Enum2.const_2, byte_0, 512U, out var _))
                 {
-                    GClass37.smethod_1(GClass30.smethod_2(330, Marshal.GetLastWin32Error()));
+                    Logger.smethod_1(MessageProvider.smethod_2(330, Marshal.GetLastWin32Error()));
                 }
                 else
                 {
                     var int32_1 = BitConverter.ToInt32(byte_0, 0);
-                    GClass37.smethod_1(GClass30.smethod_2(331, int32_1));
+                    Logger.smethod_1(MessageProvider.smethod_2(331, int32_1));
                     var flag1 = true;
                     var flag2 = false;
                     for (var index = 0; index < int32_1; ++index)
@@ -101,11 +101,11 @@ public class GClass17
 
                     if (!flag1)
                     {
-                        GClass37.smethod_1(GClass30.smethod_1(332));
+                        Logger.smethod_1(MessageProvider.GetMessage(332));
                     }
                     else if (flag2)
                     {
-                        GClass37.smethod_1(GClass30.smethod_1(333));
+                        Logger.smethod_1(MessageProvider.GetMessage(333));
                     }
                     else
                     {
@@ -115,9 +115,9 @@ public class GClass17
                         gstruct6_0.uint_1 = 2U;
                         if (!AdjustTokenPrivileges(intptr_0, false, ref gstruct6_0, Marshal.SizeOf(gstruct6_0),
                                 IntPtr.Zero, IntPtr.Zero))
-                            GClass37.smethod_1(GClass30.smethod_2(334, Marshal.GetLastWin32Error()));
+                            Logger.smethod_1(MessageProvider.smethod_2(334, Marshal.GetLastWin32Error()));
                         else
-                            GClass37.smethod_1(GClass30.smethod_1(335));
+                            Logger.smethod_1(MessageProvider.GetMessage(335));
                     }
                 }
             }

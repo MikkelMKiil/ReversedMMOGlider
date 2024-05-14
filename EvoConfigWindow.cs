@@ -44,7 +44,7 @@ public class EvoConfigWindow : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GClass37.smethod_0("Help button not implemented in Evo config yet");
+        Logger.LogMessage("Help button not implemented in Evo config yet");
     }
 
     private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

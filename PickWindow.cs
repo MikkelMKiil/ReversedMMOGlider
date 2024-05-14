@@ -59,7 +59,7 @@ public class PickWindow : Form
 
     private void PickWindow_Load(object sender, EventArgs e)
     {
-        GClass30.smethod_3(this, nameof(PickWindow));
+        MessageProvider.smethod_3(this, nameof(PickWindow));
     }
 
     private void PickWindow_KeyUp(object sender, KeyEventArgs e)

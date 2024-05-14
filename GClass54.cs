@@ -122,7 +122,7 @@ public class GClass54
                 var unitByTarget1 = GObjectList.FindUnitByTarget(gplayer.GUID);
                 if (unitByTarget1 != null && !method_13(unitByTarget1.GUID))
                 {
-                    GClass37.smethod_1(GClass30.smethod_2(315, unitByTarget1.Name));
+                    Logger.smethod_1(MessageProvider.smethod_2(315, unitByTarget1.Name));
                     return unitByTarget1;
                 }
 
@@ -131,7 +131,7 @@ public class GClass54
                     var unitByTarget2 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                     if (unitByTarget2 != null && !method_13(unitByTarget2.GUID))
                     {
-                        GClass37.smethod_1(GClass30.smethod_2(316, unitByTarget2.Name));
+                        Logger.smethod_1(MessageProvider.smethod_2(316, unitByTarget2.Name));
                         return unitByTarget2;
                     }
                 }
@@ -153,14 +153,14 @@ public class GClass54
                                 var unitByTarget4 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                                 if (unitByTarget4 != null && !method_13(unitByTarget4.GUID))
                                 {
-                                    GClass37.smethod_1(GClass30.smethod_2(318, unitByTarget4.Name));
+                                    Logger.smethod_1(MessageProvider.smethod_2(318, unitByTarget4.Name));
                                     return unitByTarget4;
                                 }
                             }
                         }
                         else
                         {
-                            GClass37.smethod_1(GClass30.smethod_2(317, unitByTarget3.Name));
+                            Logger.smethod_1(MessageProvider.smethod_2(317, unitByTarget3.Name));
                             return unitByTarget3;
                         }
                     }
@@ -184,12 +184,12 @@ public class GClass54
                     if (!flag)
                     {
                         flag = true;
-                        GClass37.smethod_0(GClass30.smethod_2(704, string_1));
+                        Logger.LogMessage(MessageProvider.smethod_2(704, string_1));
                     }
 
                     if (GPlayerSelf.Me.TargetGUID != 0L)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(319));
+                        Logger.LogMessage(MessageProvider.GetMessage(319));
                         StartupClass.gclass73_0.method_12(true);
                     }
 
@@ -210,12 +210,12 @@ public class GClass54
         {
             if (!gplayer.Approach(int_6, false))
             {
-                GClass37.smethod_0(GClass30.smethod_1(320));
+                Logger.LogMessage(MessageProvider.GetMessage(320));
                 return null;
             }
 
             if (bool_3)
-                GClass55.smethod_28(GClass30.smethod_2(705, string_1));
+                GClass55.smethod_28(MessageProvider.smethod_2(705, string_1));
         }
 
         return gplayer;
@@ -242,14 +242,14 @@ public class GClass54
                     if (gplayer_2[index] == null)
                     {
                         if (!flag1)
-                            GClass37.smethod_0(GClass30.smethod_2(706, string_0[index]));
+                            Logger.LogMessage(MessageProvider.smethod_2(706, string_0[index]));
                         flag2 = false;
                         GContext.Main.ReleaseSpinRun();
                     }
                     else if (gplayer_2[index].DistanceToSelf > (double)int_4 || gplayer_2[index].IsSitting)
                     {
                         if (!flag1)
-                            GClass37.smethod_0(GClass30.smethod_2(707, string_0[index],
+                            Logger.LogMessage(MessageProvider.smethod_2(707, string_0[index],
                                 Math.Round(gplayer_2[index].DistanceToSelf, 2)));
                         flag2 = false;
                         GContext.Main.ReleaseSpinRun();
@@ -278,12 +278,12 @@ public class GClass54
         label_15:
         return;
         label_19:
-        GClass37.smethod_0(GClass30.smethod_1(321));
+        Logger.LogMessage(MessageProvider.GetMessage(321));
     }
 
     public bool method_7(GUnit gunit_0)
     {
-        GClass37.smethod_0(GClass30.smethod_2(202, Math.Round(gunit_0.DistanceToSelf, 2)));
+        Logger.LogMessage(MessageProvider.smethod_2(202, Math.Round(gunit_0.DistanceToSelf, 2)));
         GContext.Main.ReleaseSpinRun();
         gunit_0.Face();
         gunit_0.SetAsTarget(false);
@@ -337,14 +337,14 @@ public class GClass54
             {
                 var unit = (GPlayer)GObjectList.FindUnit(GPlayerSelf.Me.TargetGUID);
                 if (unit != null)
-                    GClass37.smethod_0(GClass30.smethod_2(708, unit.Name));
+                    Logger.LogMessage(MessageProvider.smethod_2(708, unit.Name));
                 else
-                    GClass37.smethod_0(GClass30.smethod_1(326));
+                    Logger.LogMessage(MessageProvider.GetMessage(326));
                 arrayList.Add(GPlayerSelf.Me.TargetGUID);
                 if (genum7_0 == GEnum7.const_2 && unit.Name.ToLower() == string_1.ToLower())
                 {
                     int_7 = index;
-                    GClass37.smethod_1("Found leader in slot: " + index);
+                    Logger.smethod_1("Found leader in slot: " + index);
                 }
             }
             else
@@ -384,7 +384,7 @@ public class GClass54
 
     public void method_14(int int_8, string string_2, GUnit gunit_0)
     {
-        GClass37.smethod_1(GClass30.smethod_2(709, string_2, int_8 + 1));
+        Logger.smethod_1(MessageProvider.smethod_2(709, string_2, int_8 + 1));
         GClass42.gclass42_0.method_0("Common.TargetParty" + (int_8 + 1));
         StartupClass.smethod_39(300);
         if (gplayer_0[int_8].DistanceToSelf > 29.0)
@@ -395,7 +395,7 @@ public class GClass54
             gunit_0.SetAsTarget(true);
             if (GPlayerSelf.Me.TargetGUID == gunit_0.GUID)
                 return;
-            GClass37.smethod_0(GClass30.smethod_1(327));
+            Logger.LogMessage(MessageProvider.GetMessage(327));
             gunit_0.SetAsTarget(true);
         }
         else
@@ -438,10 +438,10 @@ public class GClass54
 
     public bool method_17(GUnit gunit_0)
     {
-        GClass37.smethod_1("Assisting on target: " + gunit_0);
+        Logger.smethod_1("Assisting on target: " + gunit_0);
         if (int_7 != 0)
         {
-            GClass37.smethod_1("Using assist key to pick up target");
+            Logger.smethod_1("Using assist key to pick up target");
             GClass42.gclass42_0.method_0("Common.TargetParty" + int_7);
             Thread.Sleep(100);
             GClass42.gclass42_0.method_0("Common.Assist");
@@ -454,11 +454,11 @@ public class GClass54
                     return true;
             }
 
-            GClass37.smethod_1("Never got target with assist key, using tab");
+            Logger.smethod_1("Never got target with assist key, using tab");
             return gunit_0.SetAsTarget(false);
         }
 
-        GClass37.smethod_1("LeaderSlot is empty, attempting to pick up target with tab");
+        Logger.smethod_1("LeaderSlot is empty, attempting to pick up target with tab");
         return gunit_0.SetAsTarget(false);
     }
 }

@@ -14,7 +14,7 @@ public class GClass49
 
     public bool method_0()
     {
-        GClass37.smethod_1("Starting mach glide thread");
+        Logger.smethod_1("Starting mach glide thread");
         thread_0 = new Thread(method_2);
         thread_0.Start();
         return true;
@@ -42,11 +42,11 @@ public class GClass49
         }
         catch (ThreadInterruptedException ex)
         {
-            GClass37.smethod_0("Mach thread stopped");
+            Logger.LogMessage("Mach thread stopped");
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("! Exception in MachThreadBody: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("! Exception in MachThreadBody: " + ex.Message + "\r\n" + ex.StackTrace);
             StartupClass.smethod_27(true, "MTBExcep");
         }
     }

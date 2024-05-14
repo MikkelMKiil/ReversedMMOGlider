@@ -41,7 +41,7 @@ public class PaladinConfig : Form
         UseCrusaderStrike.Checked = GClass61.gclass61_0.method_2("Paladin.UseCrusaderStrike") == "True";
         AvoidAdds.Checked = GClass61.gclass61_0.method_2("Paladin.AvoidAdds") == "True";
         AvoidAddDistance.Text = GClass61.gclass61_0.method_2("Paladin.AvoidAddDistance");
-        GClass30.smethod_3(this, "Paladin");
+        MessageProvider.smethod_3(this, "Paladin");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

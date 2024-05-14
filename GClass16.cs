@@ -43,20 +43,20 @@ public class GClass16
         bool_1 = false;
         sortedList_0 = new SortedList<string, int>();
         method_1();
-        GClass37.smethod_1("TW: Setting up VAP");
+        Logger.smethod_1("TW: Setting up VAP");
         gclass71_1.method_24(int_3);
         if (GClass18.gclass18_0.method_5("FLPeek"))
             gclass71_1.method_25(GClass18.gclass18_0.method_4("FLPeek"));
         int_0 = 0;
         method_5();
-        GClass37.smethod_0("New TW instance created");
+        Logger.LogMessage("New TW instance created");
     }
 
     public void method_0()
     {
         if (bool_1)
             return;
-        GClass37.smethod_0("Cleaning up TW");
+        Logger.LogMessage("Cleaning up TW");
         bool_1 = true;
         gclass71_0.method_31();
         if (intptr_0 != IntPtr.Zero)
@@ -89,17 +89,17 @@ public class GClass16
         {
             if (!bool_1)
             {
-                GClass37.smethod_0("* Exception in event thread: " + ex.Message + "\r\n" + ex.StackTrace);
+                Logger.LogMessage("* Exception in event thread: " + ex.Message + "\r\n" + ex.StackTrace);
                 thread_0 = null;
                 CloseHandle(intptr_0);
             }
             else
             {
-                GClass37.smethod_0("Exception in shutting down, no big deal: " + ex.Message);
+                Logger.LogMessage("Exception in shutting down, no big deal: " + ex.Message);
             }
         }
 
-        GClass37.smethod_1("TW event guy is done");
+        Logger.smethod_1("TW event guy is done");
     }
 
     private void method_3()
@@ -112,7 +112,7 @@ public class GClass16
             var genum0_0 = method_8();
             if (genum0_0 != GEnum0.const_0)
             {
-                GClass37.smethod_1("ThisPoll is bad");
+                Logger.smethod_1("ThisPoll is bad");
                 StartupClass.smethod_37(genum0_0);
             }
         }
@@ -127,17 +127,17 @@ public class GClass16
             var num = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("Warden1"), "twsanity");
             if (num != 0)
             {
-                GClass37.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
+                Logger.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
                 StartupClass.smethod_37(GEnum0.const_2);
             }
             else
             {
-                GClass37.smethod_0("Tripwire: nothing to analyze at attach");
+                Logger.LogMessage("Tripwire: nothing to analyze at attach");
             }
         }
         else
         {
-            GClass37.smethod_0("TW initial check on attach is ok (" + int_0 + ")");
+            Logger.LogMessage("TW initial check on attach is ok (" + int_0 + ")");
         }
     }
 
@@ -162,7 +162,7 @@ public class GClass16
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception processing bsb: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("** Exception processing bsb: " + ex.Message + "\r\n" + ex.StackTrace);
         }
 
         GProcessMemoryManipulator.smethod_54();
@@ -248,7 +248,7 @@ public class GClass16
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("TW: Exception in poller: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("TW: Exception in poller: " + ex.Message + "\r\n" + ex.StackTrace);
             if (!flag1)
                 gclass71_0.method_30();
             return GEnum0.const_2;
@@ -339,7 +339,7 @@ public class GClass16
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("Exception saving data: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("Exception saving data: " + ex.Message + "\r\n" + ex.StackTrace);
             return null;
         }
     }
@@ -382,7 +382,7 @@ public class GClass16
             if (byte_0 == null)
             {
                 string_1 = "(getwdf)";
-                GClass37.smethod_0("Unable to get TW data from Glider server!");
+                Logger.LogMessage("Unable to get TW data from Glider server!");
                 return GEnum0.const_2;
             }
 
@@ -394,7 +394,7 @@ public class GClass16
         gclass19_0.method_1(byte_0);
         if (int_0 != 2 && int_0 != 4)
         {
-            GClass37.smethod_1("Unexpected Warden rev from TW: " + int_0);
+            Logger.smethod_1("Unexpected Warden rev from TW: " + int_0);
             var gclass16 = this;
             gclass16.string_1 = gclass16.string_1 + "(nocorer=" + int_0 + ")";
             return GEnum0.const_1;
@@ -406,15 +406,15 @@ public class GClass16
         {
             case GEnum5.const_0:
                 string_1 += "(error)";
-                GClass37.smethod_1("TW error during match, not safe, last error = " + gclass46.string_0);
+                Logger.smethod_1("TW error during match, not safe, last error = " + gclass46.string_0);
                 return GEnum0.const_2;
             case GEnum5.const_1:
                 string_1 += "(match)";
-                GClass37.smethod_1("TW matched ok");
+                Logger.smethod_1("TW matched ok");
                 return GEnum0.const_0;
             case GEnum5.const_2:
                 string_1 += "(unsafe)";
-                GClass37.smethod_1("TW mismatched, not safe, last error = " + gclass46.string_0);
+                Logger.smethod_1("TW mismatched, not safe, last error = " + gclass46.string_0);
                 return GEnum0.const_1;
             default:
                 return GEnum0.const_0;

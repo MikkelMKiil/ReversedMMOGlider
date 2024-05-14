@@ -49,12 +49,12 @@ public class GClass63
 
     private void method_3(string string_0)
     {
-        GClass37.smethod_1(string_0);
+        Logger.smethod_1(string_0);
     }
 
     private void method_4(string string_0)
     {
-        GClass37.smethod_0(string_0);
+        Logger.LogMessage(string_0);
     }
 
     private int method_5(string string_0)

@@ -292,7 +292,7 @@ public class GClass61
             stringList = list_0;
         if (stringList == null)
         {
-            GClass37.smethod_0("!! Attempt to lookupstring in unknown stringlist: \"" + string_3 + "\"");
+            Logger.LogMessage("!! Attempt to lookupstring in unknown stringlist: \"" + string_3 + "\"");
             return false;
         }
 
@@ -308,7 +308,7 @@ public class GClass61
         if (string_3 == "CustomClasses")
             stringList = list_0;
         if (stringList == null)
-            GClass37.smethod_0("!! Attempt to add to unknown stringlist: \"" + string_3 + "\"");
+            Logger.LogMessage("!! Attempt to add to unknown stringlist: \"" + string_3 + "\"");
         else
             stringList.Add(string_4);
     }
@@ -320,7 +320,7 @@ public class GClass61
             stringList = list_0;
         if (stringList == null)
         {
-            GClass37.smethod_0("!! Attempt to remove from unknown stringlist: \"" + string_3 + "\"");
+            Logger.LogMessage("!! Attempt to remove from unknown stringlist: \"" + string_3 + "\"");
             return false;
         }
 

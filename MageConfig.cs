@@ -60,9 +60,9 @@ public class MageConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 4; ++index)
-            IceBarrier.Items.Add(GClass30.smethod_4("Mage.IceBarrier" + index));
+            IceBarrier.Items.Add(MessageProvider.smethod_4("Mage.IceBarrier" + index));
         for (var index = 0; index < 3; ++index)
-            Finisher.Items.Add(GClass30.smethod_4("Mage.Finisher" + index));
+            Finisher.Items.Add(MessageProvider.smethod_4("Mage.Finisher" + index));
         FireblastCooldown.Text = GClass61.gclass61_0.method_2("Mage.FireblastCooldownSec");
         PullDistance.Text = GClass61.gclass61_0.method_2("Mage.PullDistance");
         FinishLife.Text = GClass61.gclass61_0.method_2("Mage.FinishLife");
@@ -83,7 +83,7 @@ public class MageConfig : Form
         UseDampen.Checked = GClass61.gclass61_0.method_2("Mage.UseDampen") == "True";
         IceBarrier.SelectedIndex = GClass61.gclass61_0.method_3("Mage.IceBarrier");
         Finisher.SelectedIndex = GClass61.gclass61_0.method_3("Mage.Finisher");
-        GClass30.smethod_3(this, "Mage");
+        MessageProvider.smethod_3(this, "Mage");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

@@ -22,7 +22,7 @@ public class FactionReminder : Form
     public FactionReminder()
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(FactionReminder));
+        MessageProvider.smethod_3(this, nameof(FactionReminder));
     }
 
     protected override void Dispose(bool disposing)

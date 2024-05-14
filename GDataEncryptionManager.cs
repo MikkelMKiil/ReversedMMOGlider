@@ -104,7 +104,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1("Could not parse game version, must be alphanumeric.  Using placeholder.");
+            Logger.smethod_1("Could not parse game version, must be alphanumeric.  Using placeholder.");
             int_3_2 = 0;
         }
 
@@ -141,7 +141,7 @@ public class GDataEncryptionManager
         var inputBuffer = SendDataWithInternalStack(string_3);
         if (inputBuffer == null)
         {
-            GClass37.smethod_1("Internal stack didn't work, switching to IE");
+            Logger.smethod_1("Internal stack didn't work, switching to IE");
             inputBuffer = SendDataWithIE(string_3);
         }
 
@@ -155,7 +155,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1("Exception decrypting response from server, no good");
+            Logger.smethod_1("Exception decrypting response from server, no good");
             return false;
         }
     }
@@ -168,7 +168,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1("Exception getting message from server with internal stack:\r\n" + ex.Message + "\r\n" +
+            Logger.smethod_1("Exception getting message from server with internal stack:\r\n" + ex.Message + "\r\n" +
                                ex.StackTrace);
             return null;
         }
@@ -206,7 +206,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("Exception posting EM, uh-oh!");
+            Logger.LogMessage("Exception posting EM, uh-oh!");
             return null;
         }
     }

@@ -52,7 +52,7 @@ public class ShamanConfig : Form
     public ShamanConfig()
     {
         InitializeComponent();
-        GClass30.smethod_7(ShockMode, "Common.ShockMode");
+        MessageProvider.smethod_7(ShockMode, "Common.ShockMode");
         PullDistance.Text = GClass61.gclass61_0.method_2("Shaman.PullDistance");
         ShockLife.Text = GClass61.gclass61_0.method_2("Shaman.ShockLife");
         ShockMana.Text = GClass61.gclass61_0.method_2("Shaman.ShockMana");
@@ -85,7 +85,7 @@ public class ShamanConfig : Form
                 break;
         }
 
-        GClass30.smethod_3(this, "Shaman");
+        MessageProvider.smethod_3(this, "Shaman");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

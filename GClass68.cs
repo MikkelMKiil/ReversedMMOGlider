@@ -29,7 +29,7 @@ public class GClass68
 
     private void method_0(string string_0)
     {
-        GClass37.smethod_1(string_0);
+        Logger.smethod_1(string_0);
     }
 
     public void method_1()
@@ -313,13 +313,13 @@ public class GClass68
             var num2 = pitch - (double)float_0;
             if ((num2 >= 0.0 || num1 <= 0.0) && (num2 <= 0.0 || num1 >= 0.0) && Math.Abs(num2) >= Math.PI / 36.0)
             {
-                GClass37.smethod_1("Delta on pulse: " + num2 + ", oldpitch: " + pitch);
+                Logger.smethod_1("Delta on pulse: " + num2 + ", oldpitch: " + pitch);
                 var int_5 = method_10(Math.Abs(num2), false) * double_3;
                 if (int_5 > 120.0)
                     int_5 = 120.0;
                 if (num2 > 0.0)
                     int_5 *= -1.0;
-                GClass37.smethod_1("Pulsing cursor: " + int_5);
+                Logger.smethod_1("Pulsing cursor: " + int_5);
                 method_13(0, (int)int_5);
                 var gspellTimer2 = new GSpellTimer(1000, false);
                 while (!gspellTimer2.IsReady && ggameCamera_0.Pitch == (double)pitch)
@@ -335,7 +335,7 @@ public class GClass68
 
         gspellTimer1.Wait();
         GClass55.smethod_25(false);
-        GClass37.smethod_0("SetCameraPitch all done!");
+        Logger.LogMessage("SetCameraPitch all done!");
     }
 
     [DllImport("user32.dll")]

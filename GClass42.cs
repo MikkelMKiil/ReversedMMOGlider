@@ -30,8 +30,8 @@ public class GClass42
     {
         if (!sortedList_0.ContainsKey(string_1))
         {
-            GClass37.smethod_0(GClass30.smethod_2(58, string_1));
-            GClass37.smethod_1(Environment.StackTrace);
+            Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
+            Logger.smethod_1(Environment.StackTrace);
         }
         else
         {
@@ -46,8 +46,8 @@ public class GClass42
     {
         if (!sortedList_0.ContainsKey(string_1))
         {
-            GClass37.smethod_0(GClass30.smethod_2(58, string_1));
-            GClass37.smethod_1(Environment.StackTrace);
+            Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
+            Logger.smethod_1(Environment.StackTrace);
         }
         else
         {
@@ -62,8 +62,8 @@ public class GClass42
     {
         if (!sortedList_0.ContainsKey(string_1))
         {
-            GClass37.smethod_0(GClass30.smethod_2(58, string_1));
-            GClass37.smethod_1(Environment.StackTrace);
+            Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
+            Logger.smethod_1(Environment.StackTrace);
         }
         else
         {
@@ -435,7 +435,7 @@ public class GClass42
             {
                 if (!File.Exists("Keys.backup.xml"))
                 {
-                    GClass37.smethod_0("Saving old Keys.xml file to Keys.backup.xml");
+                    Logger.LogMessage("Saving old Keys.xml file to Keys.backup.xml");
                     File.Copy("Keys.xml", "Keys.backup.xml");
                 }
 
@@ -447,7 +447,7 @@ public class GClass42
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(59, string_0, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(59, string_0, ex.Message));
         }
     }
 
@@ -467,7 +467,7 @@ public class GClass42
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(60, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(60, ex.Message));
         }
     }
 
@@ -489,7 +489,7 @@ public class GClass42
         if (File.Exists(string_1))
             File.Delete(string_1);
         xmlDocument_0.Save(string_1);
-        GClass37.smethod_0(GClass30.smethod_1(61));
+        Logger.LogMessage(MessageProvider.GetMessage(61));
     }
 
     protected void method_17(string string_1)
@@ -498,7 +498,7 @@ public class GClass42
         xmlDocument.Load(string_1);
         foreach (XmlNode selectNode in xmlDocument.SelectNodes("/Keys/*"))
             method_20(selectNode, true);
-        GClass37.smethod_0(GClass30.smethod_1(62));
+        Logger.LogMessage(MessageProvider.GetMessage(62));
     }
 
     protected void method_18(XmlDocument xmlDocument_0, GKey gkey_0)
@@ -507,7 +507,7 @@ public class GClass42
         xmlDocument_0.DocumentElement.AppendChild(element);
         method_19(element, "KeyName", gkey_0.KeyName);
         string_0 = gkey_0.KeyName;
-        GClass37.smethod_1(string_0);
+        Logger.smethod_1(string_0);
         var stringBuilder = new StringBuilder();
         if (gkey_0.ShiftState == 0)
         {
@@ -643,7 +643,7 @@ public class GClass42
                         gkey.BarState = GBarState.Bar6;
                         break;
                     default:
-                        throw new Exception(GClass30.smethod_2(645, str2));
+                        throw new Exception(MessageProvider.smethod_2(645, str2));
                 }
 
             if (xmlNode_0.Attributes["Char"] != null && (str1 == null || str1 == "Char"))
@@ -701,7 +701,7 @@ public class GClass42
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(646, str2, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(646, str2, ex.Message));
         }
     }
 
@@ -731,7 +731,7 @@ public class GClass42
         sortedList_0.Remove("Common.BarCombat");
         sortedList_0.Remove("Common.BarRest");
         sortedList_0.Remove("Common.CooldownProbe");
-        GClass37.smethod_0("Updated Keys.xml to new style, saving to disk.");
+        Logger.LogMessage("Updated Keys.xml to new style, saving to disk.");
         method_14();
     }
 
@@ -876,7 +876,7 @@ public class GClass42
         {
             if (!bool_1)
                 return;
-            GClass37.smethod_0(GClass30.smethod_2(884, gkey_0.KeyName));
+            Logger.LogMessage(MessageProvider.smethod_2(884, gkey_0.KeyName));
         }
         else
         {

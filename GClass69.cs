@@ -33,14 +33,14 @@ public class GClass69
         dateTime_4 = new DateTime(2000, 1, 1);
         dateTime_3 = new DateTime(2000, 1, 1);
         dateTime_5 = new DateTime(2000, 1, 1);
-        string_0 = GClass30.smethod_1(853).ToLower();
+        string_0 = MessageProvider.GetMessage(853).ToLower();
         method_3();
         method_17();
     }
 
     public void method_0()
     {
-        GClass37.smethod_1("Chat Manager connecting");
+        Logger.smethod_1("Chat Manager connecting");
         lock (this)
         {
             method_1();
@@ -72,7 +72,7 @@ public class GClass69
     {
         lock (this)
         {
-            GClass37.smethod_1("Chat Manager disconnecting");
+            Logger.smethod_1("Chat Manager disconnecting");
             gclass75_0 = null;
             gclass75_1 = null;
         }
@@ -93,7 +93,7 @@ public class GClass69
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(817, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(817, ex.Message, ex.StackTrace));
             method_3();
         }
     }
@@ -103,7 +103,7 @@ public class GClass69
         var string_3 = gclass75_0.method_1();
         if (string_3 == null)
         {
-            GClass37.smethod_0(GClass30.smethod_2(818, "Chat", gclass75_0.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(818, "Chat", gclass75_0.string_1));
             gclass75_0.method_0();
         }
         else
@@ -116,7 +116,7 @@ public class GClass69
                 foreach (var str1 in string_3)
                     if (str1 == null)
                     {
-                        GClass37.smethod_1("* Null chat entry... !?");
+                        Logger.smethod_1("* Null chat entry... !?");
                     }
                     else
                     {
@@ -128,16 +128,16 @@ public class GClass69
                         var strArray = str2.Split(' ');
                         if (strArray.Length >= 2)
                         {
-                            if (strArray[1].Trim() == GClass30.smethod_1(34))
+                            if (strArray[1].Trim() == MessageProvider.GetMessage(34))
                             {
-                                GClass37.smethod_0(GClass30.smethod_2(35, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.smethod_2(35, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_7(strArray[1].Trim(), str1);
                             }
 
-                            if (strArray[1].Trim() == GClass30.smethod_1(743))
+                            if (strArray[1].Trim() == MessageProvider.GetMessage(743))
                             {
-                                GClass37.smethod_0(GClass30.smethod_2(744, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.smethod_2(744, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_6(strArray[1].Trim(), str1);
                             }
@@ -150,7 +150,7 @@ public class GClass69
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("** Exception in chat checking: " + ex.Message + ex.StackTrace);
+                Logger.LogMessage("** Exception in chat checking: " + ex.Message + ex.StackTrace);
             }
         }
     }
@@ -164,7 +164,7 @@ public class GClass69
 
     protected void method_7(string string_2, string string_3)
     {
-        if (!string_2.StartsWith(GClass30.smethod_1(640)) && string_3.ToLower().IndexOf("this is game master") <= -1 &&
+        if (!string_2.StartsWith(MessageProvider.GetMessage(640)) && string_3.ToLower().IndexOf("this is game master") <= -1 &&
             string_3.ToLower().IndexOf("this is account administrator") <= -1 &&
             string_3.ToLower().IndexOf("failure to respond") <= -1 &&
             string_3.ToLower().IndexOf("type /r to reply") <= -1)
@@ -175,11 +175,11 @@ public class GClass69
         }
         else
         {
-            GClass37.smethod_0(GClass30.smethod_1(39));
+            Logger.LogMessage(MessageProvider.GetMessage(39));
             GClass20.smethod_0("GMWhisper.wav");
             if (GClass61.gclass61_0.method_2("ChatAutoReply") == "True")
             {
-                GClass37.smethod_0(GClass30.smethod_1(40));
+                Logger.LogMessage(MessageProvider.GetMessage(40));
                 var str = GClass61.gclass61_0.method_2("ChatAutoReplyText");
                 if (str.Length > 0)
                     GClass55.smethod_28("/r " + str);
@@ -188,7 +188,7 @@ public class GClass69
             }
             else
             {
-                GClass37.smethod_0(GClass30.smethod_1(41));
+                Logger.LogMessage(MessageProvider.GetMessage(41));
                 StartupClass.smethod_27(false, "GMTalk");
             }
         }
@@ -199,7 +199,7 @@ public class GClass69
         var string_3 = gclass75_1.method_1();
         if (string_3 == null)
         {
-            GClass37.smethod_0(GClass30.smethod_2(818, "Combat", gclass75_1.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(818, "Combat", gclass75_1.string_1));
             gclass75_1.method_0();
         }
         else
@@ -207,44 +207,44 @@ public class GClass69
             if (string_3.Length == 0)
                 return;
             method_16("Combat.log", string_3);
-            var lower1 = GClass30.smethod_2(813, string_1).ToLower();
+            var lower1 = MessageProvider.smethod_2(813, string_1).ToLower();
             foreach (var str in string_3)
             {
                 StartupClass.smethod_17(4, str);
                 if (string_1 != null)
                 {
                     var lower2 = str.ToLower();
-                    if (lower2.IndexOf(GClass30.smethod_1(829)) > 0 && lower2.IndexOf(string_1.ToLower()) > 0)
+                    if (lower2.IndexOf(MessageProvider.GetMessage(829)) > 0 && lower2.IndexOf(string_1.ToLower()) > 0)
                         dateTime_5 = DateTime.Now;
-                    if (lower2.EndsWith(string_1.ToLower() + GClass30.smethod_1(625).ToLower()) ||
-                        lower2.IndexOf(GClass30.smethod_1(626) + string_1) > -1)
+                    if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
+                        lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        GClass37.smethod_1(GClass30.smethod_1(746));
+                        Logger.smethod_1(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
-                    if (lower2.EndsWith(string_1.ToLower() + GClass30.smethod_1(625).ToLower()) ||
-                        lower2.IndexOf(GClass30.smethod_1(626) + string_1) > -1)
+                    if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
+                        lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        GClass37.smethod_1(GClass30.smethod_1(746));
+                        Logger.smethod_1(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
                     if (lower2.IndexOf(lower1) > -1)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(814));
+                        Logger.LogMessage(MessageProvider.GetMessage(814));
                         dateTime_0 = DateTime.Now;
                     }
 
-                    if (lower2.IndexOf(string_1.ToLower() + GClass30.smethod_1(36).ToLower()) > -1)
+                    if (lower2.IndexOf(string_1.ToLower() + MessageProvider.GetMessage(36).ToLower()) > -1)
                     {
-                        GClass37.smethod_1(GClass30.smethod_1(747));
+                        Logger.smethod_1(MessageProvider.GetMessage(747));
                         dateTime_2 = DateTime.Now;
                     }
 
-                    if (lower2.IndexOf(GClass30.smethod_1(37).ToLower()) > -1)
+                    if (lower2.IndexOf(MessageProvider.GetMessage(37).ToLower()) > -1)
                         dateTime_3 = DateTime.Now;
-                    if (lower2.IndexOf(GClass30.smethod_1(38).ToLower()) > -1)
+                    if (lower2.IndexOf(MessageProvider.GetMessage(38).ToLower()) > -1)
                         dateTime_4 = DateTime.Now;
                 }
 
@@ -255,7 +255,7 @@ public class GClass69
 
     public void method_9(string string_2)
     {
-        GClass37.smethod_1(GClass30.smethod_2(639, string_2));
+        Logger.smethod_1(MessageProvider.smethod_2(639, string_2));
         string_1 = string_2;
     }
 
@@ -308,7 +308,7 @@ public class GClass69
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(42, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(42, ex.Message));
         }
     }
 
@@ -316,7 +316,7 @@ public class GClass69
     {
         if (!(GClass61.gclass61_0.method_2("ChatDelete") == "True"))
             return;
-        GClass37.smethod_0(GClass30.smethod_1(43));
+        Logger.LogMessage(MessageProvider.GetMessage(43));
         try
         {
             File.Delete("Chat.log");
@@ -324,7 +324,7 @@ public class GClass69
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(44, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(44, ex.Message));
         }
     }
 
@@ -336,7 +336,7 @@ public class GClass69
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1("! Couldn't clean chat line: " + string_2);
+            Logger.smethod_1("! Couldn't clean chat line: " + string_2);
             return string_2;
         }
     }
@@ -392,12 +392,12 @@ public class GClass69
         for (var index = 0; index <= 10; ++index)
         {
             var str = GProcessMemoryManipulator.smethod_9(num1 + index * num2, 100, "ChatFrameName");
-            GClass37.smethod_1(GClass30.smethod_2(821, index + 1, str));
+            Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;
         }
 
-        GClass37.smethod_0(GClass30.smethod_2(822, string_2));
+        Logger.LogMessage(MessageProvider.smethod_2(822, string_2));
         return 1;
     }
 }

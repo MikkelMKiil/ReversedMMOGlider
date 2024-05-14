@@ -45,19 +45,19 @@ public class GClass65
     {
         var toolhelp32Snapshot = CreateToolhelp32Snapshot(2U, 0U);
         if (toolhelp32Snapshot == IntPtr.Zero)
-            throw new Exception(GClass30.smethod_2(710, Marshal.GetLastWin32Error()));
+            throw new Exception(MessageProvider.smethod_2(710, Marshal.GetLastWin32Error()));
         var arrayList = new ArrayList();
         var struct0_0 = new Struct0();
         struct0_0.uint_0 = 296U;
         if (!bool_0)
-            GClass37.smethod_1(GClass30.smethod_1(336));
+            Logger.smethod_1(MessageProvider.GetMessage(336));
         for (var index = Process32First(toolhelp32Snapshot, ref struct0_0);
              index != 0;
              index = Process32Next(toolhelp32Snapshot, ref struct0_0))
         {
             var gclass66 = new GClass66((int)struct0_0.uint_2, struct0_0.string_0);
             if (!bool_0)
-                GClass37.smethod_1(GClass30.smethod_2(711, gclass66.int_0, gclass66.string_0));
+                Logger.smethod_1(MessageProvider.smethod_2(711, gclass66.int_0, gclass66.string_0));
             if (gclass66.string_0 == "glider_loader.exe")
                 bool_1 = true;
             arrayList.Add(gclass66);

@@ -69,7 +69,7 @@ public class WarriorConfig : Form
         UseShieldBash.Checked = GClass61.gclass61_0.method_2("Warrior.UseShieldBash") == "True";
         AvoidAdds.Checked = GClass61.gclass61_0.method_2("Warrior.AvoidAdds") == "True";
         UseMortalStrike.Checked = GClass61.gclass61_0.method_2("Warrior.UseMortalStrike") == "True";
-        GClass30.smethod_3(this, "Warrior");
+        MessageProvider.smethod_3(this, "Warrior");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

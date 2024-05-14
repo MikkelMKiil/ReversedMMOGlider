@@ -47,7 +47,7 @@ public class GClass60
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(702, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(702, ex.Message, ex.StackTrace));
             StartupClass.smethod_27(false, "GlideThreadExcep");
         }
     }
@@ -64,7 +64,7 @@ public class GClass60
         var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);
         if (unit == null)
         {
-            GClass37.smethod_0(GClass30.smethod_1(306));
+            Logger.LogMessage(MessageProvider.GetMessage(306));
         }
         else
         {
@@ -72,11 +72,11 @@ public class GClass60
                 unit.Approach(StartupClass.CurrentGameClass.PullDistance - 2.0, true);
             if (unit.Health == 0.0)
             {
-                GClass37.smethod_0(GClass30.smethod_1(307));
+                Logger.LogMessage(MessageProvider.GetMessage(307));
             }
             else
             {
-                StartupClass.smethod_17(1, GClass30.smethod_1(308));
+                StartupClass.smethod_17(1, MessageProvider.GetMessage(308));
                 StartupClass.GameClass69Instance.method_9(unit.Name);
                 GClass42.gclass42_0.method_23();
                 GContext.Main.Me.SetTargetName(unit.Name);

@@ -72,7 +72,7 @@ namespace Glider.Common.Objects
                     return matchingShortcut;
             }
 
-            GClass37.smethod_1("! Never found anything to match: \"" + PossibleIDs + "\"");
+            Logger.smethod_1("! Never found anything to match: \"" + PossibleIDs + "\"");
             return null;
         }
 

@@ -158,17 +158,17 @@ public class GliderForm : Form, GInterface0
     }
     if (!GClass61.gclass61_0.bool_0)
       GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "Welcome.html");
-    GClass30.smethod_3((Form) this, nameof (GliderForm));
+    MessageProvider.smethod_3((Form) this, nameof (GliderForm));
     GClass24.intptr_0 = this.Handle;
     this.VersionLabel.Text = "Glider 1.8.0 (Release) -- January 21, 2009";
-    this.toolTip_0.SetToolTip((Control) this.GlideButton, GClass30.smethod_4("GliderForm.GlideButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.KillButton, GClass30.smethod_4("GliderForm.KillButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.StopButton, GClass30.smethod_4("GliderForm.StopButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.QuickLoadButton, GClass30.smethod_4("GliderForm.QuickLoadButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.ConfigButton, GClass30.smethod_4("GliderForm.ConfigButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.MyHelpButton, GClass30.smethod_4("GliderForm.MyHelpButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.ShrinkButton, GClass30.smethod_4("GliderForm.ShrinkButton!Tooltip"));
-    this.toolTip_0.SetToolTip((Control) this.HideButton, GClass30.smethod_4("GliderForm.HideButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.GlideButton, MessageProvider.smethod_4("GliderForm.GlideButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.KillButton, MessageProvider.smethod_4("GliderForm.KillButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.StopButton, MessageProvider.smethod_4("GliderForm.StopButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.QuickLoadButton, MessageProvider.smethod_4("GliderForm.QuickLoadButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.ConfigButton, MessageProvider.smethod_4("GliderForm.ConfigButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.MyHelpButton, MessageProvider.smethod_4("GliderForm.MyHelpButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.ShrinkButton, MessageProvider.smethod_4("GliderForm.ShrinkButton!Tooltip"));
+    this.toolTip_0.SetToolTip((Control) this.HideButton, MessageProvider.smethod_4("GliderForm.HideButton!Tooltip"));
     if (GClass61.gclass61_0.method_2("WindowPos") != null && GClass61.gclass61_0.method_2("WindowPos").Length > 0)
     {
       string[] strArray = GClass61.gclass61_0.method_2("WindowPos").Split(',');
@@ -181,13 +181,13 @@ public class GliderForm : Form, GInterface0
       else
       {
         GClass61.gclass61_0.method_0("WindowPos", "");
-        GClass37.smethod_1("Glider saved window position is not visible, using default position instead");
+        Logger.smethod_1("Glider saved window position is not visible, using default position instead");
       }
     }
     if (!this.bool_7)
     {
       GliderForm.SendMessage(this.tabControl1.Handle, 4874U, 2U, ref this.rectangle_0);
-      GClass37.smethod_1("Rectangle for 1: " + this.rectangle_0.ToString());
+      Logger.smethod_1("Rectangle for 1: " + this.rectangle_0.ToString());
       this.tabControl1.TabPages.Remove(this.tabPage1);
       this.bool_7 = true;
       this.rectangle_0.X += 3;
@@ -248,15 +248,15 @@ public class GliderForm : Form, GInterface0
         this.StatusLabel.Text = GClass61.gclass61_0.method_2("TitleBarName") + " " + string_2;
     }
     else
-      this.StatusLabel.Text = GClass30.smethod_2(651, (object) "1.8.0", (object) string_2);
+      this.StatusLabel.Text = MessageProvider.smethod_2(651, (object) "1.8.0", (object) string_2);
   }
 
   public void method_4()
   {
     if (GClass61.gclass61_0.method_5("AltLayout"))
-      this.Text = StartupClass.string_5 == null ? GClass30.smethod_4("GliderForm.StatusLabel!NewProfile") : StartupClass.string_5;
+      this.Text = StartupClass.string_5 == null ? MessageProvider.smethod_4("GliderForm.StatusLabel!NewProfile") : StartupClass.string_5;
     else if (StartupClass.string_5 == null)
-      this.StatusLabel.Text = GClass30.smethod_4("GliderForm.StatusLabel!NewProfile");
+      this.StatusLabel.Text = MessageProvider.smethod_4("GliderForm.StatusLabel!NewProfile");
     else
       this.StatusLabel.Text = GliderForm.smethod_0(StartupClass.string_5);
   }
@@ -1032,7 +1032,7 @@ public class GliderForm : Form, GInterface0
     }
     catch (IOException ex)
     {
-      Console.WriteLine(GClass30.smethod_2(90, (object) ex.Message));
+      Console.WriteLine(MessageProvider.smethod_2(90, (object) ex.Message));
     }
   }
 
@@ -1080,7 +1080,7 @@ public class GliderForm : Form, GInterface0
       catch (Exception ex)
       {
         this.timer_0.Enabled = false;
-        GClass37.smethod_0("Timer exception in Glider: The exception is: " + ex.Message + ", " + ex.StackTrace);
+        Logger.LogMessage("Timer exception in Glider: The exception is: " + ex.Message + ", " + ex.StackTrace);
         int num = (int) MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
         StartupClass.smethod_27(false, "TimerExcep");
         Environment.Exit(0);
@@ -1096,7 +1096,7 @@ public class GliderForm : Form, GInterface0
     {
       StartupClass.gclass36_0 = (GClass36) null;
       StartupClass.bool_19 = true;
-      ((GInterface0)gliderForm_0).imethod_2(GClass30.smethod_1(103));
+      ((GInterface0)gliderForm_0).imethod_2(MessageProvider.GetMessage(103));
       StartupClass.smethod_27(false, "Timer1Up");
     }
     if (this.bool_2)
@@ -1120,8 +1120,8 @@ public class GliderForm : Form, GInterface0
         this.int_3 = Environment.TickCount;
         this.glocation_0 = GPlayerSelf.Me.Location;
       }
-      this.LabelHealth_1.Text = GClass30.smethod_2(653, (object) GPlayerSelf.Me.HealthPoints.ToString(), (object) (int) (GPlayerSelf.Me.Health * 100.0));
-      this.LabelKills_1.Text = GClass30.smethod_2(654, (object) StartupClass.int_7, (object) StartupClass.int_8, (object) StartupClass.int_9);
+      this.LabelHealth_1.Text = MessageProvider.smethod_2(653, (object) GPlayerSelf.Me.HealthPoints.ToString(), (object) (int) (GPlayerSelf.Me.Health * 100.0));
+      this.LabelKills_1.Text = MessageProvider.smethod_2(654, (object) StartupClass.int_7, (object) StartupClass.int_8, (object) StartupClass.int_9);
       this.XPHour_1.Text = StartupClass.smethod_29().ToString();
       if (GPlayerSelf.Me.IsCasting)
         this.LabelKills_1.Text += " *";
@@ -1131,18 +1131,18 @@ public class GliderForm : Form, GInterface0
       if (target != null)
       {
         this.AddFactionButton.Enabled = true;
-        this.THealthLabel_1.Text = target.Health.ToString() + GClass30.smethod_1(104);
+        this.THealthLabel_1.Text = target.Health.ToString() + MessageProvider.GetMessage(104);
         this.TDistanceLabel_1.Text = Math.Round((double) target.DistanceToSelf, 2).ToString();
         this.TFactionLabel_1.Text = target.FactionID.ToString();
         if (StartupClass.gprofile_0.CheckFaction(target.FactionID, true))
         {
           this.AddFactionButton.Text = "Del Faction";
-          this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!AlreadyGot");
+          this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!AlreadyGot");
         }
         else
         {
           this.AddFactionButton.Text = "Add Faction";
-          this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!NotFound");
+          this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!NotFound");
         }
       }
       else
@@ -1151,7 +1151,7 @@ public class GliderForm : Form, GInterface0
         this.TDistanceLabel_1.Text = "";
         this.TFactionLabel_1.Text = "";
         this.AddFactionButton.Enabled = false;
-        this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!NoTarget");
+        this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!NoTarget");
       }
       if (StartupClass.gclass73_0 != null && StartupClass.gclass73_0.int_8 > 0 && StartupClass.gclass73_0.bool_9)
       {
@@ -1164,8 +1164,8 @@ public class GliderForm : Form, GInterface0
     if (StartupClass.bool_21 && StartupClass.gclass36_1.method_3())
     {
       StartupClass.bool_21 = false;
-      ((GInterface0)this).imethod_2(GClass30.smethod_1(105));
-      GClass55.smethod_28(GClass30.smethod_1(655));
+      ((GInterface0)this).imethod_2(MessageProvider.GetMessage(105));
+      GClass55.smethod_28(MessageProvider.GetMessage(655));
     }
     if (StartupClass.AnotherIntegerValue == 0 && StartupClass.int_12 != 0 && StartupClass.IsGliderAttached)
       this.method_25();
@@ -1185,7 +1185,7 @@ public class GliderForm : Form, GInterface0
     this.bool_6 = true;
     if (size_0.Height <= 32 || size_0.Width <= 32)
       return;
-    GClass37.smethod_0("Positioning game window: location=" + point_0.ToString() + ", size=" + size_0.ToString());
+    Logger.LogMessage("Positioning game window: location=" + point_0.ToString() + ", size=" + size_0.ToString());
     GProcessMemoryManipulator.smethod_43(StartupClass.MainApplicationHandle, size_0, point_0);
   }
 
@@ -1206,17 +1206,17 @@ public class GliderForm : Form, GInterface0
     string str = GClass61.gclass61_0.method_2("AppKey");
     if (dialogResult != DialogResult.OK)
       return;
-    ((GInterface0)this).imethod_2(GClass30.smethod_1(106));
+    ((GInterface0)this).imethod_2(MessageProvider.GetMessage(106));
     GClass61.gclass61_0.method_8();
     this.method_4();
-    if (!(str != GClass61.gclass61_0.method_2("AppKey")) && !StartupClass.gclass54_0.bool_4 && StartupClass.bool_22)
+    if (!(str != GClass61.gclass61_0.method_2("AppKey")) && !StartupClass.gclass54_0.bool_4 && StartupClass.isInitializationSuccessful)
       return;
     if (str != GClass61.gclass61_0.method_2("AppKey"))
-      GClass37.smethod_1("- Key changed");
+      Logger.smethod_1("- Key changed");
     if (StartupClass.gclass54_0.bool_4)
-      GClass37.smethod_1("- Party dirty");
-    if (!StartupClass.bool_22)
-      GClass37.smethod_1("- Need offsets");
+      Logger.smethod_1("- Party dirty");
+    if (!StartupClass.isInitializationSuccessful)
+      Logger.smethod_1("- Need offsets");
     StartupClass.gclass54_0.bool_4 = false;
     StartupClass.smethod_15();
     StartupClass.smethod_9();
@@ -1235,21 +1235,21 @@ public class GliderForm : Form, GInterface0
       StartupClass.gclass54_0.bool_4 = false;
       if (new ConfigForm(false).ShowDialog() != DialogResult.OK)
         return;
-      ((GInterface0)this).imethod_2(GClass30.smethod_1(106));
+      ((GInterface0)this).imethod_2(MessageProvider.GetMessage(106));
       GClass61.gclass61_0.method_8();
       this.method_4();
       StartupClass.gclass24_0.method_0();
       GClass55.smethod_31(GClass61.gclass61_0);
       StartupClass.smethod_5();
       StartupClass.gclass54_0.method_0(GClass61.gclass61_0);
-      if (str != GClass61.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.bool_22)
+      if (str != GClass61.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)
       {
         if (str != GClass61.gclass61_0.method_2("AppKey"))
-          GClass37.smethod_1("- Key changed");
+          Logger.smethod_1("- Key changed");
         if (StartupClass.gclass54_0.bool_4)
-          GClass37.smethod_1("- Party dirty");
-        if (!StartupClass.bool_22)
-          GClass37.smethod_1("- Need offsets");
+          Logger.smethod_1("- Party dirty");
+        if (!StartupClass.isInitializationSuccessful)
+          Logger.smethod_1("- Need offsets");
         StartupClass.gclass54_0.bool_4 = false;
         StartupClass.smethod_15();
         StartupClass.smethod_9();
@@ -1263,13 +1263,13 @@ public class GliderForm : Form, GInterface0
 
   private void NewProfileButton_Click(object sender, EventArgs e)
   {
-    if (StartupClass.bool_16 && MessageBox.Show((IWin32Window) this, GClass30.smethod_1(656), GClass30.smethod_1(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes || new ProfileWizard().method_0((Form) this) != DialogResult.No)
+    if (StartupClass.bool_16 && MessageBox.Show((IWin32Window) this, MessageProvider.GetMessage(656), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes || new ProfileWizard().method_0((Form) this) != DialogResult.No)
       return;
     ProfileProps profileProps = new ProfileProps((GProfile) null);
     if (profileProps.ShowDialog() != DialogResult.OK)
       return;
     StartupClass.gprofile_0 = profileProps.gprofile_0;
-    StartupClass.string_5 = GClass30.smethod_1(70);
+    StartupClass.string_5 = MessageProvider.GetMessage(70);
     this.method_4();
     this.method_12(true);
     StartupClass.sortedList_2.Clear();
@@ -1286,13 +1286,13 @@ public class GliderForm : Form, GInterface0
 
   private void method_11()
   {
-    if (StartupClass.bool_16 && MessageBox.Show((IWin32Window) this, GClass30.smethod_1(660), GClass30.smethod_1(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+    if (StartupClass.bool_16 && MessageBox.Show((IWin32Window) this, MessageProvider.GetMessage(660), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
       return;
     this.timer_0.Enabled = false;
     OpenFileDialog openFileDialog = new OpenFileDialog();
     openFileDialog.RestoreDirectory = true;
     openFileDialog.InitialDirectory = ".\\Profiles";
-    openFileDialog.Filter = GClass30.smethod_1(661);
+    openFileDialog.Filter = MessageProvider.GetMessage(661);
     if (openFileDialog.ShowDialog((IWin32Window) this) == DialogResult.OK)
       StartupClass.smethod_1(openFileDialog.FileName);
     this.timer_0.Enabled = true;
@@ -1313,13 +1313,13 @@ public class GliderForm : Form, GInterface0
     SaveFileDialog saveFileDialog = new SaveFileDialog();
     saveFileDialog.RestoreDirectory = true;
     saveFileDialog.InitialDirectory = ".\\Profiles";
-    saveFileDialog.Filter = GClass30.smethod_1(661);
+    saveFileDialog.Filter = MessageProvider.GetMessage(661);
     if (saveFileDialog.ShowDialog() != DialogResult.OK)
       return;
     StartupClass.bool_16 = false;
     StartupClass.gprofile_0.Save(saveFileDialog.FileName);
     StartupClass.string_5 = saveFileDialog.FileName;
-    GClass37.smethod_0(GClass30.smethod_2(112, (object) StartupClass.string_5));
+    Logger.LogMessage(MessageProvider.smethod_2(112, (object) StartupClass.string_5));
     GClass61.gclass61_0.method_0("LastProfile", saveFileDialog.FileName);
     this.method_4();
   }
@@ -1330,7 +1330,7 @@ public class GliderForm : Form, GInterface0
       return;
     GContext.Main.ResetAutoStop();
     if (GClass61.gclass61_0.method_2("AutoStop") == "True")
-      GClass37.smethod_0(GClass30.smethod_2(149, (object) DateTime.Now.AddMinutes((double) int.Parse(GClass61.gclass61_0.method_2("AutoStopMinutes"))).ToShortTimeString()));
+      Logger.LogMessage(MessageProvider.smethod_2(149, (object) DateTime.Now.AddMinutes((double) int.Parse(GClass61.gclass61_0.method_2("AutoStopMinutes"))).ToShortTimeString()));
     StartupClass.smethod_24(false);
   }
 
@@ -1377,10 +1377,10 @@ public class GliderForm : Form, GInterface0
 
   public void method_16()
   {
-    this.LabelAttached.Text = GClass30.smethod_4("GliderForm.LabelAttached!" + StartupClass.bool_13.ToString());
+    this.LabelAttached.Text = MessageProvider.smethod_4("GliderForm.LabelAttached!" + StartupClass.bool_13.ToString());
     if (StartupClass.IsDetached)
       this.LabelAttached.Text = "Yes*";
-    if (!StartupClass.bool_24)
+    if (!StartupClass.isInputStringFourCharacters)
       StartupClass.gclass36_0 = (GClass36) null;
     if (StartupClass.thread_0 != null)
     {
@@ -1389,7 +1389,7 @@ public class GliderForm : Form, GInterface0
       this.method_12(false);
       this.ConfigButton.Enabled = false;
       this.AddFactionButton.Enabled = false;
-      this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!Idle");
+      this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!Idle");
     }
     else if (StartupClass.IsDetached)
       this.method_15(StartupClass.glideMode_0 == GlideMode.None);
@@ -1399,7 +1399,7 @@ public class GliderForm : Form, GInterface0
       this.method_14(false);
       this.method_12(true);
       this.AddFactionButton.Enabled = false;
-      this.FactionLabel.Text = GClass30.smethod_4("GliderForm.FactionLabel!Idle");
+      this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!Idle");
     }
     else
     {
@@ -1407,9 +1407,9 @@ public class GliderForm : Form, GInterface0
       {
         this.StopButton.Enabled = true;
         if (StartupClass.glideMode_0 == GlideMode.None)
-          this.StopButton.Text = this.WaypointsPanel.Visible ? GClass30.smethod_4("GliderForm.StopButton.Default") : GClass30.smethod_4("GliderForm.StopButton.Waypoints");
+          this.StopButton.Text = this.WaypointsPanel.Visible ? MessageProvider.smethod_4("GliderForm.StopButton.Default") : MessageProvider.smethod_4("GliderForm.StopButton.Waypoints");
         else
-          this.StopButton.Text = GClass30.smethod_4("GliderForm.StopButton.Stop");
+          this.StopButton.Text = MessageProvider.smethod_4("GliderForm.StopButton.Stop");
       }
       this.method_15(StartupClass.glideMode_0 == GlideMode.None);
       this.method_12(StartupClass.glideMode_0 == GlideMode.None);
@@ -1420,7 +1420,7 @@ public class GliderForm : Form, GInterface0
   {
     if (SystemInformation.PrimaryMonitorSize.Width >= 1024)
       return;
-    int num = (int) MessageBox.Show((IWin32Window) this, GClass30.smethod_1(663), GClass30.smethod_1(657), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+    int num = (int) MessageBox.Show((IWin32Window) this, MessageProvider.GetMessage(663), MessageProvider.GetMessage(657), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
     this.AddWaypointButton.Location = new Point(this.AddWaypointButton.Location.X - 500, this.AddWaypointButton.Location.Y);
     foreach (Control control in (ArrangedElementCollection) this.Controls)
     {
@@ -1471,30 +1471,30 @@ public class GliderForm : Form, GInterface0
 
   private void label11_CheckedChanged(object sender, EventArgs e)
   {
-    GClass37.smethod_1("AA1");
+    Logger.smethod_1("AA1");
     if (this.label11.Checked)
     {
-      GClass37.smethod_1("AA2");
-      ((GInterface0)gliderForm_0).imethod_2(GClass30.smethod_1(138));
-      GClass37.smethod_1("AA3");
+      Logger.smethod_1("AA2");
+      ((GInterface0)gliderForm_0).imethod_2(MessageProvider.GetMessage(138));
+      Logger.smethod_1("AA3");
       if (StartupClass.bool_13)
       {
-        GClass37.smethod_1("AA4");
+        Logger.smethod_1("AA4");
         this.glocation_1 = GPlayerSelf.Me.Location;
       }
       else
       {
-        GClass37.smethod_1("AA5");
+        Logger.smethod_1("AA5");
         this.glocation_1 = (GLocation) null;
       }
-      GClass37.smethod_1("AA6");
+      Logger.smethod_1("AA6");
     }
     else
     {
-      GClass37.smethod_1("AA7");
-      ((GInterface0)gliderForm_0).imethod_2(GClass30.smethod_1(139));
+      Logger.smethod_1("AA7");
+      ((GInterface0)gliderForm_0).imethod_2(MessageProvider.GetMessage(139));
     }
-    GClass37.smethod_1("AA8");
+    Logger.smethod_1("AA8");
   }
 
   private static void smethod_1(object sender, ThreadExceptionEventArgs e)
@@ -1505,38 +1505,38 @@ public class GliderForm : Form, GInterface0
 
   private void method_19(object sender, ThreadExceptionEventArgs e)
   {
-    GClass37.smethod_0("Exception in Glider: The exception is: " + e.Exception.Message + ", " + e.Exception.StackTrace);
+    Logger.LogMessage("Exception in Glider: The exception is: " + e.Exception.Message + ", " + e.Exception.StackTrace);
     int num = (int) MessageBox.Show(e.Exception.GetType().ToString() + "\n\n" + e.Exception.Message + "\n\n" + e.Exception.StackTrace, "Glider Exception", MessageBoxButtons.OK, MessageBoxIcon.Hand);
     Environment.Exit(0);
   }
 
   protected override void OnClosing(CancelEventArgs cancelEventArgs_0)
   {
-    GClass37.smethod_0("Kills/Loots/Deaths: " + GClass30.smethod_2(654, (object) StartupClass.int_7, (object) StartupClass.int_8, (object) StartupClass.int_9));
+    Logger.LogMessage("Kills/Loots/Deaths: " + MessageProvider.smethod_2(654, (object) StartupClass.int_7, (object) StartupClass.int_8, (object) StartupClass.int_9));
     this.notifyIcon_0.Dispose();
     this.notifyIcon_0 = (NotifyIcon) null;
-    GClass37.smethod_1("Shutdown: SavePos");
+    Logger.smethod_1("Shutdown: SavePos");
     GClass61.gclass61_0.method_0("WindowPos", this.Location.X.ToString() + "," + (object) this.Location.Y);
     if (!StartupClass.IsAttached)
     {
-      GClass37.smethod_1("Shutdown: NewDebuffs");
+      Logger.smethod_1("Shutdown: NewDebuffs");
       StartupClass.DebuffsKnown_string.method_10();
     }
     if (StartupClass.gprofile_0 != null && StartupClass.bool_16)
     {
-      GClass37.smethod_1("Shutdown: SaveProfile");
+      Logger.smethod_1("Shutdown: SaveProfile");
       StartupClass.gprofile_0.Save("Profiles\\LastChangedProfile.xml");
     }
     if (StartupClass.gclass79_0 != null)
     {
-      GClass37.smethod_1("Shutdown: StopRemote");
+      Logger.smethod_1("Shutdown: StopRemote");
       StartupClass.gclass79_0.method_1();
       StartupClass.gclass79_0 = (GClass79) null;
     }
     StartupClass.smethod_31();
-    GClass37.smethod_1("Shutdown: KillAction");
+    Logger.smethod_1("Shutdown: KillAction");
     StartupClass.smethod_27(true, "WindowClosing");
-    GClass37.smethod_1("Shutdown: Done");
+    Logger.smethod_1("Shutdown: Done");
     if (StartupClass.GliderManager != null && !StartupClass.bool_33)
     {
       StartupClass.GliderManager.method_11();
@@ -1573,7 +1573,7 @@ public class GliderForm : Form, GInterface0
   void GInterface0.imethod_4()
   {
     this.bool_5 = true;
-    GClass37.smethod_0("Setting stop flag in Gliderform");
+    Logger.LogMessage("Setting stop flag in Gliderform");
     Thread.Sleep(1200);
   }
 
@@ -1595,14 +1595,14 @@ public class GliderForm : Form, GInterface0
     {
       StartupClass.bool_16 = true;
       StartupClass.gprofile_0.AddFaction(target.FactionID);
-      GClass37.smethod_0(GClass30.smethod_2(850, (object) target.FactionID));
+      Logger.LogMessage(MessageProvider.smethod_2(850, (object) target.FactionID));
       this.AddFactionButton.Text = "Del Faction";
     }
     else
     {
       StartupClass.bool_16 = true;
       StartupClass.gprofile_0.RemoveFaction(target.FactionID);
-      GClass37.smethod_0(GClass30.smethod_2(851, (object) target.FactionID));
+      Logger.LogMessage(MessageProvider.smethod_2(851, (object) target.FactionID));
       this.AddFactionButton.Text = "Add Faction";
     }
   }
@@ -1718,7 +1718,7 @@ public class GliderForm : Form, GInterface0
     if (this.bool_10 || StartupClass.IsExitRequested)
       return;
     this.bool_10 = true;
-    GClass37.smethod_1("HandleGameGone invoked!");
+    Logger.smethod_1("HandleGameGone invoked!");
     this.Activate();
     this.Focus();
     if (StartupClass.bool_33)
@@ -1727,7 +1727,7 @@ public class GliderForm : Form, GInterface0
     }
     else
     {
-      if (MessageBox.Show((IWin32Window) this, GClass30.smethod_1(847), "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+      if (MessageBox.Show((IWin32Window) this, MessageProvider.GetMessage(847), "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
         return;
       this.Close();
     }
@@ -1741,7 +1741,7 @@ public class GliderForm : Form, GInterface0
     }
     catch (Exception ex)
     {
-      GClass37.smethod_0("! Exception setting up horizontal layout: " + ex.Message + ex.StackTrace);
+      Logger.LogMessage("! Exception setting up horizontal layout: " + ex.Message + ex.StackTrace);
     }
   }
 
@@ -1961,7 +1961,7 @@ public class GliderForm : Form, GInterface0
     this.EditProfileButton.Text = "Edit Profile";
     this.AddFactionButton.Location = new Point(520, 8);
     this.AddFactionButton.Size = new Size(96, 24);
-    this.AddFactionButton.Text = GClass30.smethod_4("GliderForm.ShowNPCInfoButton");
+    this.AddFactionButton.Text = MessageProvider.smethod_4("GliderForm.ShowNPCInfoButton");
     this.AddWaypointButton.Location = new Point(520, 40);
     this.AddWaypointButton.Size = new Size(96, 23);
     this.AddWaypointButton.Text = "Add Waypoint";
@@ -2136,7 +2136,7 @@ public class GliderForm : Form, GInterface0
   private void minimizeToTrayToolStripMenuItem_Click(object sender, EventArgs e)
   {
     if (!GClass61.gclass61_0.method_5("UseTray"))
-      GClass37.smethod_0(GClass30.smethod_1(845));
+      Logger.LogMessage(MessageProvider.GetMessage(845));
     else
       this.Visible = false;
   }

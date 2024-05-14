@@ -33,7 +33,7 @@ public class GClass6
         var num2 = GProcessMemoryManipulator.smethod_13(num1 + GClass18.gclass18_0.method_4("CC_FOV"), "camerafov");
         if (GClass2.smethod_2(gclass2_0_2, gclass4.method_1(0)) < 0.0)
         {
-            GClass37.smethod_1("! Screen coord lookup failed, dotproduct is no good");
+            Logger.smethod_1("! Screen coord lookup failed, dotproduct is no good");
             return false;
         }
 
@@ -42,7 +42,7 @@ public class GClass6
         var gclass2_3 = new GClass2(-gclass2_2.float_1, -gclass2_2.float_2, gclass2_2.float_0);
         if (gclass2_3.float_2 <= 0.0)
         {
-            GClass37.smethod_1("! Screen coord lookup failed, cameraz is no good");
+            Logger.smethod_1("! Screen coord lookup failed, cameraz is no good");
             return false;
         }
 
@@ -60,7 +60,7 @@ public class GClass6
             return true;
         }
 
-        GClass37.smethod_1("! Screen coord lookup failed, would be clicking out of window");
+        Logger.smethod_1("! Screen coord lookup failed, would be clicking out of window");
         return false;
     }
 }

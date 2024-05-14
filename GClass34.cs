@@ -57,7 +57,7 @@ public class GClass34
 
     public void method_3()
     {
-        GClass37.smethod_0("SolitaireGame @ 0x" + int_0.ToString("x"));
+        Logger.LogMessage("SolitaireGame @ 0x" + int_0.ToString("x"));
         gclass80_0.method_1("Deck");
         gclass80_1.method_1("Draw");
         for (var index = 0; index < 4; ++index)

@@ -366,7 +366,7 @@ namespace Glider.Common.Objects
                 if (bagContents1[Slot] != 0L)
                 {
                     var gitem = (GItem)GObjectList.FindObject(bagContents1[Slot]);
-                    GClass37.smethod_1("Backpack Item:" + gitem.Name);
+                    Logger.smethod_1("Backpack Item:" + gitem.Name);
                     if (BagAction == GItemBagAction.Mail && gitem.IsMailable)
                         gbagItemList.Add(new GBagItem(gitem, "ContainerFrame1", Slot, SlotCount));
                     if (BagAction == GItemBagAction.Sell && gitem.IsSellable)
@@ -384,7 +384,7 @@ namespace Glider.Common.Objects
                         if (bagContents2[Slot] != 0L)
                         {
                             var gitem = (GItem)GObjectList.FindObject(bagContents2[Slot]);
-                            GClass37.smethod_1("Bag Item:" + gitem.Name);
+                            Logger.smethod_1("Bag Item:" + gitem.Name);
                             if (BagAction == GItemBagAction.Mail && gitem.IsMailable)
                                 gbagItemList.Add(new GBagItem(gitem, "ContainerFrame" + (index + 2), Slot,
                                     gcontainer.SlotCount));

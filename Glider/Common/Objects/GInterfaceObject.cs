@@ -32,12 +32,12 @@ namespace Glider.Common.Objects
                 {
                     _cooldown = GContext.Main.Interface.GetByName(_inner.string_0 + "Cooldown");
                     if (_cooldown == null)
-                        GClass37.smethod_1("Never found cooldown object for: \"" + _inner.string_0 + "\"");
+                        Logger.smethod_1("Never found cooldown object for: \"" + _inner.string_0 + "\"");
                 }
 
                 if (_cooldown == null)
                 {
-                    GClass37.smethod_1("No cooldown for object: " + _inner.string_0 + ", can't check ready!");
+                    Logger.smethod_1("No cooldown for object: " + _inner.string_0 + ", can't check ready!");
                     return false;
                 }
 
@@ -53,14 +53,14 @@ namespace Glider.Common.Objects
                 {
                     var InnerObject = _inner.method_6(_inner.string_0 + "Icon");
                     if (InnerObject == null)
-                        GClass37.smethod_1("Never found icon object for: \"" + _inner.string_0 + "\"");
+                        Logger.smethod_1("Never found icon object for: \"" + _inner.string_0 + "\"");
                     _icon = new GInterfaceObject(InnerObject);
                 }
 
                 if (_icon != null)
                     return GProcessMemoryManipulator.smethod_15(_icon._inner.int_0 + GClass18.gclass18_0.method_4("UIDisabled"),
                         "UIDisabled") == 0;
-                GClass37.smethod_1("No icon for object: " + _inner.string_0 + ", can't check enabled!");
+                Logger.smethod_1("No icon for object: " + _inner.string_0 + ", can't check enabled!");
                 return false;
             }
         }
@@ -104,21 +104,21 @@ namespace Glider.Common.Objects
 
         public void ClickMouse(bool UseRight)
         {
-            GClass37.smethod_1("ClickMouse on: \"" + _inner.string_0 + "\"");
+            Logger.smethod_1("ClickMouse on: \"" + _inner.string_0 + "\"");
             _inner.method_1();
             _inner.method_16(UseRight);
         }
 
         public void BeginDrag(bool UseRight)
         {
-            GClass37.smethod_1("BeginDrag on: \"" + _inner.string_0 + "\"");
+            Logger.smethod_1("BeginDrag on: \"" + _inner.string_0 + "\"");
             _inner.method_1();
             _inner.method_17(UseRight);
         }
 
         public void EndDrag(bool UseRight)
         {
-            GClass37.smethod_1("EndDrag on: \"" + _inner.string_0 + "\"");
+            Logger.smethod_1("EndDrag on: \"" + _inner.string_0 + "\"");
             _inner.method_1();
             _inner.method_18(UseRight);
         }

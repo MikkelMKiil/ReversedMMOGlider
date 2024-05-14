@@ -60,7 +60,7 @@ public class GClass24
     {
         if (!GClass61.gclass61_0.method_5("UseHook"))
         {
-            GClass37.smethod_0("Keyboard hook disabled");
+            Logger.LogMessage("Keyboard hook disabled");
             bool_0 = false;
         }
         else
@@ -173,7 +173,7 @@ public class GClass24
                         if (StartupClass.smethod_12())
                         {
                             method_3();
-                            GClass37.smethod_1(GClass30.smethod_1(287));
+                            Logger.smethod_1(MessageProvider.GetMessage(287));
                             GClass20.smethod_0("Key.wav");
                         }
 
@@ -193,7 +193,7 @@ public class GClass24
                     case Keys.B:
                         if (StartupClass.smethod_12())
                         {
-                            GClass37.smethod_0("Logging debuffs");
+                            Logger.LogMessage("Logging debuffs");
                             StartupClass.DebuffsKnown_string.method_11();
                             GClass20.smethod_0("Key.wav");
                         }
@@ -215,7 +215,7 @@ public class GClass24
                         double double_2;
                         double double_3;
                         GClass55.smethod_22(out double_2, out double_3);
-                        GClass37.smethod_0(GClass30.smethod_2(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
+                        Logger.LogMessage(MessageProvider.smethod_2(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
                         GClass20.smethod_0("Key.wav");
                         break;
                     case Keys.N:
@@ -270,7 +270,7 @@ public class GClass24
                         {
                             if (!StartupClass.smethod_12())
                             {
-                                GClass37.smethod_0(GClass30.smethod_1(769));
+                                Logger.LogMessage(MessageProvider.GetMessage(769));
                                 return;
                             }
 
@@ -280,7 +280,7 @@ public class GClass24
                                 {
                                     if (StartupClass.gprofile_0.GhostWaypoints.Count > 0)
                                     {
-                                        GClass37.smethod_0(GClass30.smethod_2(767,
+                                        Logger.LogMessage(MessageProvider.smethod_2(767,
                                             StartupClass.gprofile_0.GhostWaypoints.Count - 1));
                                         StartupClass.gprofile_0.GhostWaypoints.RemoveAt(
                                             StartupClass.gprofile_0.GhostWaypoints.Count - 1);
@@ -292,7 +292,7 @@ public class GClass24
 
                                 if (StartupClass.gprofile_0.Waypoints.Count > 0)
                                 {
-                                    GClass37.smethod_0(GClass30.smethod_2(766,
+                                    Logger.LogMessage(MessageProvider.smethod_2(766,
                                         StartupClass.gprofile_0.Waypoints.Count - 1));
                                     StartupClass.gprofile_0.Waypoints.RemoveAt(StartupClass.gprofile_0.Waypoints.Count -
                                                                                1);
@@ -303,7 +303,7 @@ public class GClass24
 
                         break;
                     default:
-                        GClass37.smethod_1("** Unknown command key: " + e.KeyCode);
+                        Logger.smethod_1("** Unknown command key: " + e.KeyCode);
                         break;
                 }
 
@@ -326,14 +326,14 @@ public class GClass24
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||
                                                            !StartupClass.IsGliderInitialized))
         {
-            GClass37.smethod_1("Escape key picked up in hook, shutting action down");
+            Logger.smethod_1("Escape key picked up in hook, shutting action down");
             StartupClass.bool_28 = false;
             StartupClass.smethod_27(false, "EscapeFromHook");
         }
 
         if (!(foregroundWindow == intptr_0) || !StartupClass.GameMemoryWriter.method_1())
             return;
-        GClass37.smethod_1("Killing background script from Escape key");
+        Logger.smethod_1("Killing background script from Escape key");
         StartupClass.GameMemoryWriter.method_0();
     }
 
@@ -588,7 +588,7 @@ public class GClass24
         var string_11 = GClass61.gclass61_0.method_2(string_1);
         if (string_11 == null || !StartupClass.smethod_1(string_11))
             return;
-        GClass37.smethod_0("Loaded profile: " + StartupClass.string_5);
+        Logger.LogMessage("Loaded profile: " + StartupClass.string_5);
         GClass20.smethod_0("Key.wav");
         StartupClass.ginterface0_0.imethod_0();
     }
@@ -604,7 +604,7 @@ public class GClass24
         GClass55.smethod_31(GClass61.gclass61_0);
         StartupClass.smethod_5();
         StartupClass.gclass54_0.method_0(GClass61.gclass61_0);
-        if (str != GClass61.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.bool_22)
+        if (str != GClass61.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)
         {
             StartupClass.gclass54_0.bool_4 = false;
             StartupClass.smethod_15();

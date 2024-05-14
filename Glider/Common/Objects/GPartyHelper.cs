@@ -96,7 +96,7 @@ namespace Glider.Common.Objects
             while (index < partyMembers.Length && partyMembers[index] != Target.GUID)
                 ++index;
             if (index == partyMembers.Length)
-                GClass37.smethod_0("!! Never found party member to target: " + Target);
+                Logger.LogMessage("!! Never found party member to target: " + Target);
             else
                 GClass55.smethod_9((short)(113 + (short)index));
         }
@@ -143,7 +143,7 @@ namespace Glider.Common.Objects
 
         public void CastOnMember(GPlayer Member, string SpellName, GUnit OriginalTarget)
         {
-            GClass37.smethod_0("Casting \"" + SpellName + "\" on party member \"" + Member.Name + "\"");
+            Logger.LogMessage("Casting \"" + SpellName + "\" on party member \"" + Member.Name + "\"");
             if (Member.DistanceToSelf > 30.0 && Member.DistanceToSelf < 200.0)
                 Member.Approach(30.0);
             if (Member.DistanceToSelf > 30.0)

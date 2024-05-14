@@ -26,7 +26,7 @@ public class DebuffPick : Form
     public DebuffPick(string string_1)
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(DebuffPick));
+        MessageProvider.smethod_3(this, nameof(DebuffPick));
         GProcessMemoryManipulator.smethod_48(this);
         string_0 = string_1;
         Text = string_1;

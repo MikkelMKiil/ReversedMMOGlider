@@ -48,7 +48,7 @@ public class WarlockConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 6; ++index)
-            PetComboBox.Items.Add(GClass30.smethod_4("Warlock.Pet" + index));
+            PetComboBox.Items.Add(MessageProvider.smethod_4("Warlock.Pet" + index));
         PullDistance.Text = GClass61.gclass61_0.method_2("Warlock.PullDistance");
         SpellLockLife.Text = GClass61.gclass61_0.method_2("Warlock.SpellLockLife");
         FarmShards.Text = GClass61.gclass61_0.method_2("Warlock.FarmShards");
@@ -67,7 +67,7 @@ public class WarlockConfig : Form
         PetComboBox.SelectedIndex = int.Parse(GClass61.gclass61_0.method_2("Warlock.Pet"));
         StopShards.Checked = GClass61.gclass61_0.method_5("Warlock.StopShards");
         Jump.Checked = GClass61.gclass61_0.method_5("Warlock.Jump");
-        GClass30.smethod_3(this, "Warlock");
+        MessageProvider.smethod_3(this, "Warlock");
         GProcessMemoryManipulator.smethod_48(this);
         GProcessMemoryManipulator.smethod_51(helpProvider_0);
     }
@@ -393,7 +393,7 @@ public class WarlockConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         if (StopShards.Checked &&
-            MessageBox.Show(this, GClass30.smethod_1(828), "Glider", MessageBoxButtons.YesNo,
+            MessageBox.Show(this, MessageProvider.GetMessage(828), "Glider", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         DialogResult = DialogResult.OK;

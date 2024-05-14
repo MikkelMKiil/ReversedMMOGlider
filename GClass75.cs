@@ -71,7 +71,7 @@ public class GClass75
         goto label_6;
         label_5:
         int_1 = num;
-        GClass37.smethod_1(GClass30.smethod_2(815, string_0, int_1.ToString("x")));
+        Logger.smethod_1(MessageProvider.smethod_2(815, string_0, int_1.ToString("x")));
         bool_0 = true;
         return true;
         label_6:
@@ -87,7 +87,7 @@ public class GClass75
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(816, string_0, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(816, string_0, ex.Message, ex.StackTrace));
             bool_0 = false;
             return null;
         }
@@ -134,17 +134,17 @@ public class GClass75
                     else
                     {
                         int_2 = num6;
-                        GClass37.smethod_1("! Chat read failed (" + GProcessMemoryManipulator.int_27 + ") for " + string_0 + " @ 0x" +
+                        Logger.smethod_1("! Chat read failed (" + GProcessMemoryManipulator.int_27 + ") for " + string_0 + " @ 0x" +
                                            num6.ToString("x") + ", ri/ca/ip=" + num5 + "/" + num2 + "/" + num3);
                         GStruct20 gstruct20_0;
                         if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, num6, out gstruct20_0, 28) != 28)
                         {
-                            GClass37.smethod_1("! VirtualQueryEx failed at 0x" + num6.ToString("x") +
+                            Logger.smethod_1("! VirtualQueryEx failed at 0x" + num6.ToString("x") +
                                                ", can't get more debug, last error = " + Marshal.GetLastWin32Error());
                             break;
                         }
 
-                        GClass37.smethod_1("! VQEx info: Base=" + gstruct20_0.int_0.ToString("x") + ", Size=0x" +
+                        Logger.smethod_1("! VQEx info: Base=" + gstruct20_0.int_0.ToString("x") + ", Size=0x" +
                                            gstruct20_0.int_2.ToString("x") + ", Flags=0x" +
                                            gstruct20_0.uint_2.ToString("x"));
                         break;

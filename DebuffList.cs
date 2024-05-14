@@ -27,7 +27,7 @@ public class DebuffList : Form
     public DebuffList()
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(DebuffList));
+        MessageProvider.smethod_3(this, nameof(DebuffList));
         GProcessMemoryManipulator.smethod_48(this);
     }
 
@@ -106,7 +106,7 @@ public class DebuffList : Form
         try
         {
             var xmlTextReader = new XmlTextReader(str1);
-            GClass37.smethod_1("Reading from xml");
+            Logger.smethod_1("Reading from xml");
             while (xmlTextReader.Read())
                 if (xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.Name == "Debuff")
                 {
@@ -127,7 +127,7 @@ public class DebuffList : Form
 
                     if (!sortedList_0.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
                     {
-                        GClass37.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
+                        Logger.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
                         sortedList_0.Add(num, str2);
                         DebuffBox.Items.Add(str2 + " (" + num.ToString("x") + ")");
                     }
@@ -137,7 +137,7 @@ public class DebuffList : Form
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
         }
     }
 

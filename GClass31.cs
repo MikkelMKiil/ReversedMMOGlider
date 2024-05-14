@@ -57,7 +57,7 @@ public class GClass31
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("Exception while logging into \"" + string_1 + "\": " + ex.Message + "\r\n" +
+            Logger.LogMessage("Exception while logging into \"" + string_1 + "\": " + ex.Message + "\r\n" +
                                ex.StackTrace);
             return false;
         }
@@ -175,7 +175,7 @@ public class GClass31
         gcontext_0.Interface.GetByNamePreWorld("RealmWizardSuggest").ClickMouse(false);
         if (method_9("GlueDialog", "RealmList") == 0)
         {
-            GClass37.smethod_0("Suggested realm dialog visible after suggest, pawing through it");
+            Logger.LogMessage("Suggested realm dialog visible after suggest, pawing through it");
             var labelText = gcontext_0.Interface.GetByNamePreWorld("GlueDialogBackground")
                 .GetChildObject("GlueDialogText").LabelText;
             var num1 = labelText.IndexOf("|r ");
@@ -193,7 +193,7 @@ public class GClass31
         }
         else
         {
-            GClass37.smethod_0("Realm list visible suggest, clicking for a new realm");
+            Logger.LogMessage("Realm list visible suggest, clicking for a new realm");
         }
 
         method_6();
@@ -331,7 +331,7 @@ public class GClass31
         if (byNamePreWorld == null || !byNamePreWorld.IsVisible)
             return "(no realm selected)";
         var str = byNamePreWorld.GetChildObject("CharSelectRealmName").LabelText.Trim();
-        GClass37.smethod_0("Current realm: \"" + str + "\"");
+        Logger.LogMessage("Current realm: \"" + str + "\"");
         return str;
     }
 }

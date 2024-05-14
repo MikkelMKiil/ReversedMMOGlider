@@ -104,7 +104,7 @@ namespace Glider.Common.Objects
         {
             if (Me.IsDead)
             {
-                GClass37.smethod_1("I'm dead, can't rest");
+                Logger.smethod_1("I'm dead, can't rest");
                 return false;
             }
 
@@ -120,19 +120,19 @@ namespace Glider.Common.Objects
             CheckBandageApply(false);
             if (Me.TargetGUID != 0L && Me.Target != null && !Me.Target.IsDead)
             {
-                GClass37.smethod_1("Got a target, can't rest after bandaging");
+                Logger.smethod_1("Got a target, can't rest after bandaging");
                 return true;
             }
 
             if (Me.IsDead)
             {
-                GClass37.smethod_1("I'm dead, can't rest");
+                Logger.smethod_1("I'm dead, can't rest");
                 return false;
             }
 
             if (GContext.Main.IsHostileNear(Me.Location))
             {
-                GClass37.smethod_0(GClass30.smethod_1(22));
+                Logger.LogMessage(MessageProvider.GetMessage(22));
                 return false;
             }
 
@@ -168,7 +168,7 @@ namespace Glider.Common.Objects
                 }
                 else
                 {
-                    GClass37.smethod_1("Got a target while waiting for food/drink effects!");
+                    Logger.smethod_1("Got a target while waiting for food/drink effects!");
                     Context.SendKey("Common.Sit");
                     return true;
                 }
@@ -184,9 +184,9 @@ namespace Glider.Common.Objects
                 return false;
             if (Me.Health * 100.0 < GClass61.gclass61_0.method_3("BandageHealth"))
             {
-                GClass37.smethod_0(GClass30.smethod_1(27));
+                Logger.LogMessage(MessageProvider.GetMessage(27));
                 var actionInventory = Interface.GetActionInventory("Common.ApplyBandage");
-                GClass37.smethod_1(GClass30.smethod_2(28, actionInventory));
+                Logger.smethod_1(MessageProvider.smethod_2(28, actionInventory));
                 if (actionInventory > 0)
                 {
                     Thread.Sleep(200);

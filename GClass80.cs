@@ -41,10 +41,10 @@ public class GClass80
 
     public void method_1(string string_0)
     {
-        GClass37.smethod_0("CardStack \"" + string_0 + "\" @ 0x" + int_0.ToString("x") + ": depth=" + gclass7_0.Length +
+        Logger.LogMessage("CardStack \"" + string_0 + "\" @ 0x" + int_0.ToString("x") + ": depth=" + gclass7_0.Length +
                            " cards");
         for (var index = 0; index < gclass7_0.Length; ++index)
-            GClass37.smethod_0(index + ": " + gclass7_0[index]);
+            Logger.LogMessage(index + ": " + gclass7_0[index]);
     }
 
     public void method_2()

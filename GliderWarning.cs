@@ -68,7 +68,7 @@ public class GliderWarning : Form
 
     private void GliderWarning_Load(object sender, EventArgs e)
     {
-        GClass30.smethod_3(this, nameof(GliderWarning));
+        MessageProvider.smethod_3(this, nameof(GliderWarning));
         Text = GProcessMemoryManipulator.smethod_0();
     }
 

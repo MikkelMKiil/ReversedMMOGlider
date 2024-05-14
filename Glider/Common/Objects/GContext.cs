@@ -213,12 +213,12 @@ namespace Glider.Common.Objects
 
         public void Log(string What)
         {
-            GClass37.smethod_0(What);
+            Logger.LogMessage(What);
         }
 
         public void Debug(string What)
         {
-            GClass37.smethod_1(What);
+            Logger.smethod_1(What);
         }
 
         public void SetConfigValue(string Name, string Value, bool ReplaceIfPresent)
@@ -389,7 +389,7 @@ namespace Glider.Common.Objects
 
         public void SendKey(string KeyName)
         {
-            GClass37.smethod_1("SendKey: \"" + KeyName + "\"");
+            Logger.smethod_1("SendKey: \"" + KeyName + "\"");
             if (GClass42.gclass42_0.sortedList_0.ContainsKey(KeyName))
             {
                 GClass42.gclass42_0.sortedList_0[KeyName].FilloutKey();
@@ -397,7 +397,7 @@ namespace Glider.Common.Objects
             }
             else
             {
-                GClass37.smethod_0("!! SendKey failed, missing key: \"" + KeyName + "\"");
+                Logger.LogMessage("!! SendKey failed, missing key: \"" + KeyName + "\"");
             }
         }
 
@@ -446,7 +446,7 @@ namespace Glider.Common.Objects
             var num = Movement.CompareHeadings(NewHeading, Me.Heading);
             if (Math.Abs(num) < 0.03)
             {
-                GClass37.smethod_1("Close enough to current, not bothering with spin");
+                Logger.smethod_1("Close enough to current, not bothering with spin");
             }
             else
             {
@@ -462,7 +462,7 @@ namespace Glider.Common.Objects
                     {
                         if (str == SpinningKey)
                             return;
-                        GClass37.smethod_1("Sudden spin change!");
+                        Logger.smethod_1("Sudden spin change!");
                         ReleaseSpin();
                     }
 
@@ -498,7 +498,7 @@ namespace Glider.Common.Objects
                 {
                     if (SpinningKey == null)
                         return;
-                    GClass37.smethod_1("StopSpin");
+                    Logger.smethod_1("StopSpin");
                     ReleaseKey(SpinningKey);
                     SpinningKey = null;
                 }
@@ -592,7 +592,7 @@ namespace Glider.Common.Objects
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("!! Exception processing chat log in custom class: " + ex.Message + ex.StackTrace);
+                Logger.LogMessage("!! Exception processing chat log in custom class: " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -606,20 +606,20 @@ namespace Glider.Common.Objects
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0("!! Exception processing combat log in custom class: " + ex.Message + ex.StackTrace);
+                Logger.LogMessage("!! Exception processing combat log in custom class: " + ex.Message + ex.StackTrace);
             }
         }
 
         public void OnAttach()
         {
-            GClass37.smethod_1("GContext.OnAttach starting");
+            Logger.smethod_1("GContext.OnAttach starting");
             Me = null;
             GObjectList.ClearCache();
             GObjectList.GetObjects();
             Interface.OnAttach();
             Items.OnAttach();
             T_Skinnable.Reset();
-            GClass37.smethod_1("GContext.OnAttach is done");
+            Logger.smethod_1("GContext.OnAttach is done");
         }
 
         public bool IsHostileNear(GLocation Location)
@@ -630,7 +630,7 @@ namespace Glider.Common.Objects
             if (nearestHostile == null)
                 return false;
             var flag = nearestHostile.Location.GetDistanceTo(Location) < (double)GetConfigInt("LootCheckDistance");
-            GClass37.smethod_1("Closest hostile is " + nearestHostile + ", TooClose=" + flag + " (distance = " +
+            Logger.smethod_1("Closest hostile is " + nearestHostile + ", TooClose=" + flag + " (distance = " +
                                nearestHostile.DistanceToSelf + ")");
             return flag;
         }
@@ -676,12 +676,12 @@ namespace Glider.Common.Objects
 
         public string GetLocal(int StringID)
         {
-            return GClass30.smethod_1(StringID);
+            return MessageProvider.GetMessage(StringID);
         }
 
         public string GetLocal(string StringID)
         {
-            return GClass30.smethod_4(StringID) ?? "(bogus string name: \"" + StringID + "\")";
+            return MessageProvider.smethod_4(StringID) ?? "(bogus string name: \"" + StringID + "\")";
         }
 
         public void ExecuteScript(string EventName, bool ForceBase)
@@ -721,11 +721,11 @@ namespace Glider.Common.Objects
             if (MoveHelper == null)
             {
                 MoveHelper = NewGuy;
-                GClass37.smethod_0("Registering GMoveHelper: \"" + DisplayNote + "\"");
+                Logger.LogMessage("Registering GMoveHelper: \"" + DisplayNote + "\"");
                 return true;
             }
 
-            GClass37.smethod_0("Can't register GMoveHelper: \"" + DisplayNote +
+            Logger.LogMessage("Can't register GMoveHelper: \"" + DisplayNote +
                                "\", another helper is already registered!");
             return false;
         }
@@ -734,16 +734,16 @@ namespace Glider.Common.Objects
         {
             if (MoveHelper == null)
             {
-                GClass37.smethod_0("Can't de-register GMoveHelper: \"" + DisplayNote + "\", it wasn't registered!");
+                Logger.LogMessage("Can't de-register GMoveHelper: \"" + DisplayNote + "\", it wasn't registered!");
             }
             else if (MoveHelper != OldGuy)
             {
-                GClass37.smethod_0("Can't de-register GMoveHelper: \"" + DisplayNote +
+                Logger.LogMessage("Can't de-register GMoveHelper: \"" + DisplayNote +
                                    "\", someone else was registered!");
             }
             else
             {
-                GClass37.smethod_0("De-registered GMoveHelper: \"" + DisplayNote + "\"");
+                Logger.LogMessage("De-registered GMoveHelper: \"" + DisplayNote + "\"");
                 MoveHelper = null;
             }
         }

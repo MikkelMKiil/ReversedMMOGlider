@@ -20,7 +20,7 @@ public class LaunchpadReminder : Form
     public LaunchpadReminder()
     {
         InitializeComponent();
-        GClass30.smethod_3(this, nameof(LaunchpadReminder));
+        MessageProvider.smethod_3(this, nameof(LaunchpadReminder));
     }
 
     protected override void Dispose(bool disposing)

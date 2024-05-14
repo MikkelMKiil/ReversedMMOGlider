@@ -75,11 +75,11 @@ public class GClass44
                 }
 
             xmlTextReader.Close();
-            GClass37.smethod_0(GClass30.smethod_2(797, num1, num2));
+            Logger.LogMessage(MessageProvider.smethod_2(797, num1, num2));
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0(GClass30.smethod_2(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
         }
     }
 
@@ -151,7 +151,7 @@ public class GClass44
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("* Exception saving new debuffs: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("* Exception saving new debuffs: " + ex.Message + ex.StackTrace);
         }
     }
 
@@ -192,7 +192,7 @@ public class GClass44
             if (gbuff.SpellID > 0 && !sortedList_0.ContainsKey(gbuff.SpellID) &&
                 !sortedList_1.ContainsKey(gbuff.SpellID) && gbuff.SpellName != null && gbuff.SpellName.Length > 0)
             {
-                GClass37.smethod_1(GClass30.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                Logger.smethod_1(MessageProvider.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
                 sortedList_1.Add(gbuff.SpellID, gbuff.SpellName);
             }
     }
@@ -228,7 +228,7 @@ public class GClass44
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("* Exception saving new debuffs: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("* Exception saving new debuffs: " + ex.Message + ex.StackTrace);
         }
     }
 
@@ -237,11 +237,11 @@ public class GClass44
         try
         {
             foreach (var gbuff in GPlayerSelf.Me.GetBuffSnapshot())
-                GClass37.smethod_0(GClass30.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                Logger.LogMessage(MessageProvider.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception logging debuffs: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("** Exception logging debuffs: " + ex.Message + ex.StackTrace);
         }
     }
 }

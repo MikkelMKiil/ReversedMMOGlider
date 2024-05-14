@@ -182,19 +182,19 @@ public class GClass8
 
     public void method_8()
     {
-        GClass37.smethod_1("Dumping children of \"" + string_0 + "\"");
+        Logger.smethod_1("Dumping children of \"" + string_0 + "\"");
         var gclass8Array = method_9();
         if (gclass8Array != null && gclass8Array.Length != 0)
         {
             foreach (var gclass8 in gclass8Array)
                 if (gclass8.string_0 != "(no name)")
-                    GClass37.smethod_1("- UIObject @ 0x" + gclass8.int_0.ToString("x8") + ", Name=\"" +
+                    Logger.smethod_1("- UIObject @ 0x" + gclass8.int_0.ToString("x8") + ", Name=\"" +
                                        gclass8.string_0 + "\", Visible=" + gclass8.method_10() + ", Label=\"" +
                                        gclass8.method_3() + "\"");
         }
         else
         {
-            GClass37.smethod_1("No children!");
+            Logger.smethod_1("No children!");
         }
     }
 
@@ -254,7 +254,7 @@ public class GClass8
         var int_1 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("UIParent"), "uiparent");
         if (int_1 != 0)
             return smethod_4(int_1, string_1);
-        GClass37.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
+        Logger.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
         return null;
     }
 
@@ -297,12 +297,12 @@ public class GClass8
 
         goto label_7;
         label_5:
-        GClass37.smethod_1("Invalid object in list while searching, giving up");
+        Logger.smethod_1("Invalid object in list while searching, giving up");
         return null;
         label_6:
         return new GClass8(int_1);
         label_7:
-        GClass37.smethod_1(GClass30.smethod_2(820, string_1));
+        Logger.smethod_1(MessageProvider.smethod_2(820, string_1));
         return null;
     }
 
@@ -311,7 +311,7 @@ public class GClass8
         var num1 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("UIParent"), "uiparent");
         if (num1 == 0)
         {
-            GClass37.smethod_1("! UIParent points to nowhere, can't find dump list of object names");
+            Logger.smethod_1("! UIParent points to nowhere, can't find dump list of object names");
             return null;
         }
 

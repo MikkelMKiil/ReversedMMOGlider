@@ -63,26 +63,26 @@ public class GClass50
             return false;
         gspellTimer_1.Reset();
         var str = GProcessMemoryManipulator.smethod_9(GClass18.gclass18_0.method_4("RedMessage"), 128, "RedMessage") ??
-                  GClass30.smethod_1(6);
-        GClass37.smethod_1(GClass30.smethod_2(7, str));
+                  MessageProvider.GetMessage(6);
+        Logger.smethod_1(MessageProvider.smethod_2(7, str));
         ++int_1;
         if (int_1 == 4)
         {
-            GClass37.smethod_0(GClass30.smethod_1(8));
+            Logger.LogMessage(MessageProvider.GetMessage(8));
             return true;
         }
 
-        if (bool_2 && (str.ToLower().IndexOf(GClass30.smethod_1(629)) >= 0 ||
-                       str.ToLower().IndexOf(GClass30.smethod_1(630)) >= 0))
+        if (bool_2 && (str.ToLower().IndexOf(MessageProvider.GetMessage(629)) >= 0 ||
+                       str.ToLower().IndexOf(MessageProvider.GetMessage(630)) >= 0))
         {
-            GClass37.smethod_0(GClass30.smethod_1(9));
+            Logger.LogMessage(MessageProvider.GetMessage(9));
             if (gunit_0.DistanceToSelf > double_2)
             {
                 gunit_0.Approach();
             }
             else
             {
-                GClass37.smethod_0(GClass30.smethod_1(10));
+                Logger.LogMessage(MessageProvider.GetMessage(10));
                 gunit_0.Approach(GContext.Main.MeleeDistance - 2.0);
             }
         }
@@ -123,7 +123,7 @@ public class GClass50
 
     public void method_8(string string_0)
     {
-        GClass37.smethod_1(GClass30.smethod_2(12, string_0));
+        Logger.smethod_1(MessageProvider.smethod_2(12, string_0));
         GClass42.gclass42_0.method_0(string_0);
     }
 
@@ -157,13 +157,13 @@ public class GClass50
 
     public virtual void vmethod_5(Label label_0)
     {
-        label_0.Text = GClass30.smethod_1(20);
+        label_0.Text = MessageProvider.GetMessage(20);
     }
 
     [SpecialName]
     public virtual string vmethod_6()
     {
-        return GClass30.smethod_2(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
+        return MessageProvider.smethod_2(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
     }
 
     public virtual void vmethod_7()
@@ -199,7 +199,7 @@ public class GClass50
 
     public virtual DialogResult vmethod_14()
     {
-        GClass37.smethod_0(GClass30.smethod_1(21));
+        Logger.LogMessage(MessageProvider.GetMessage(21));
         return DialogResult.Cancel;
     }
 
@@ -268,7 +268,7 @@ public class GClass50
         double distanceTo = glocation_0.GetDistanceTo(gplayerSelf_0.Location);
         if (distanceTo <= 100.0)
             return;
-        GClass37.smethod_0(GClass30.smethod_2(634, distanceTo));
+        Logger.LogMessage(MessageProvider.smethod_2(634, distanceTo));
         glocation_0 = gplayerSelf_0.Location;
         StartupClass.gclass73_0.method_58();
     }
@@ -289,9 +289,9 @@ public class GClass50
             return false;
         if (gplayerSelf_0.Health * 100.0 < GClass61.gclass61_0.method_3("BandageHealth") && gspellTimer_0.IsReady)
         {
-            GClass37.smethod_0(GClass30.smethod_1(27));
+            Logger.LogMessage(MessageProvider.GetMessage(27));
             var actionInventory = GContext.Main.Interface.GetActionInventory("Common.ApplyBandage");
-            GClass37.smethod_1(GClass30.smethod_2(28, actionInventory));
+            Logger.smethod_1(MessageProvider.smethod_2(28, actionInventory));
             if (actionInventory == 0)
                 return false;
             var gclass36 = new GClass36(8000);

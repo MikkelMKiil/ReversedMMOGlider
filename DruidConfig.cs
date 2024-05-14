@@ -77,7 +77,7 @@ public class DruidConfig : Form
             UseBearForm.Checked = true;
         if (GClass61.gclass61_0.method_2("Druid.UseForm") == "Cat")
             UseCatForm.Checked = true;
-        GClass30.smethod_3(this, "Druid");
+        MessageProvider.smethod_3(this, "Druid");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

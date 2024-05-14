@@ -55,7 +55,7 @@ public class PriestConfig : Form
         UseShadowform.Checked = GClass61.gclass61_0.method_2("Priest.UseShadowform") == "True";
         UseVampiric.Checked = GClass61.gclass61_0.method_2("Priest.UseVampiric") == "True";
         ExtraFlay.Checked = GClass61.gclass61_0.method_2("Priest.ExtraFlay") == "True";
-        GClass30.smethod_3(this, "Priest");
+        MessageProvider.smethod_3(this, "Priest");
         GProcessMemoryManipulator.smethod_48(this);
     }
 

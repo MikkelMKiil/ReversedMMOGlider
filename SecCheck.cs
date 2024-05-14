@@ -175,7 +175,7 @@ public class SecCheck : Form
     {
         try
         {
-            GClass37.smethod_1("Check profiles: " + string_1);
+            Logger.smethod_1("Check profiles: " + string_1);
             foreach (var file in Directory.GetFiles(string_1, "*.xml"))
                 method_3(int_1, int_2, file, string_2);
             foreach (var directory in Directory.GetDirectories(string_1))
@@ -183,7 +183,7 @@ public class SecCheck : Form
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception checking profiles: " + ex.Message);
+            Logger.LogMessage("** Exception checking profiles: " + ex.Message);
         }
     }
 
@@ -202,7 +202,7 @@ public class SecCheck : Form
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** Exception checking " + string_1 + " -> " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("** Exception checking " + string_1 + " -> " + ex.Message + ex.StackTrace);
         }
     }
 

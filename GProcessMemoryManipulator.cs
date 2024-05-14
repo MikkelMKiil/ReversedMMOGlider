@@ -151,7 +151,7 @@ public class GProcessMemoryManipulator
         var gstruct22_0 = new GStruct22(0, 0, 0, 0);
         if (!GetClientRect(intptr_2, out gstruct22_0))
         {
-            GClass37.smethod_0("GetClientRect failed, last error: " + Marshal.GetLastWin32Error());
+            Logger.LogMessage("GetClientRect failed, last error: " + Marshal.GetLastWin32Error());
             StartupClass.smethod_27(false, "GetClientRectBurp");
         }
 
@@ -165,7 +165,7 @@ public class GProcessMemoryManipulator
 
     public static void smethod_5(int int_29)
     {
-        GClass37.smethod_1("Forgetting app: " + int_29);
+        Logger.smethod_1("Forgetting app: " + int_29);
         sortedList_0.Add(int_29, "");
     }
 
@@ -212,7 +212,7 @@ public class GProcessMemoryManipulator
             if (num < int_30)
             {
                 int_30 = num;
-                GClass37.smethod_1("Cutting down maximum read on region end: 0x" + int_30.ToString("x"));
+                Logger.smethod_1("Cutting down maximum read on region end: 0x" + int_30.ToString("x"));
             }
         }
 
@@ -291,7 +291,7 @@ public class GProcessMemoryManipulator
         {
             if (int_27 == 299 && bool_4)
             {
-                GClass37.smethod_0("! Partial read @ " + int_29.ToString("x") + " for " + string_0 +
+                Logger.LogMessage("! Partial read @ " + int_29.ToString("x") + " for " + string_0 +
                                    ": expected bytes = " + int_30 + ", got bytes = " + int_31);
                 byte_0[int_31] = 0;
             }
@@ -300,13 +300,13 @@ public class GProcessMemoryManipulator
                 if (!bool_2)
                 {
                     bool_2 = true;
-                    GClass37.smethod_1(GClass30.smethod_2(712, int_29.ToString("x"), string_0, int_27));
+                    Logger.smethod_1(MessageProvider.smethod_2(712, int_29.ToString("x"), string_0, int_27));
                 }
 
                 if (bool_1)
                 {
                     if (StartupClass.bool_13)
-                        GClass37.smethod_0(string.Format(GClass30.smethod_1(341), int_29, string_0));
+                        Logger.LogMessage(string.Format(MessageProvider.GetMessage(341), int_29, string_0));
                     StartupClass.smethod_27(true, "ReadBytesFail");
                 }
 
@@ -592,7 +592,7 @@ public class GProcessMemoryManipulator
         GStruct21 gstruct21_0;
         if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) != 28)
         {
-            GClass37.smethod_1("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
+            Logger.smethod_1("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
             return false;
         }
 
@@ -701,7 +701,7 @@ public class GProcessMemoryManipulator
         }
         catch (Exception ex)
         {
-            GClass37.smethod_1(GClass30.smethod_2(347, ex.Message));
+            Logger.smethod_1(MessageProvider.smethod_2(347, ex.Message));
         }
     }
 
@@ -713,9 +713,9 @@ public class GProcessMemoryManipulator
         if (GClass61.gclass61_0.method_2("TitleBarRename") == "True")
         {
             if (GClass61.gclass61_0.method_2("TitleBarRandom") == "True")
-                SetWindowText(intptr_2, GClass30.smethod_2(348, smethod_0()));
+                SetWindowText(intptr_2, MessageProvider.smethod_2(348, smethod_0()));
             else
-                SetWindowText(intptr_2, GClass30.smethod_2(713, "TitleBarName"));
+                SetWindowText(intptr_2, MessageProvider.smethod_2(713, "TitleBarName"));
         }
 
         return true;
@@ -801,7 +801,7 @@ public class GProcessMemoryManipulator
             }
             else
             {
-                GClass37.smethod_1("OpenThread failed, last error = " + Marshal.GetLastWin32Error());
+                Logger.smethod_1("OpenThread failed, last error = " + Marshal.GetLastWin32Error());
                 return false;
             }
         }

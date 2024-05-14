@@ -21,7 +21,7 @@ public class GClass33
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("* Unable to parse loot steps: " + ex.Message);
+            Logger.LogMessage("* Unable to parse loot steps: " + ex.Message);
             method_0(GClass61.string_0);
         }
     }

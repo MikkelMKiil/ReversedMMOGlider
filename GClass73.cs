@@ -95,7 +95,7 @@ public class GClass73
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("!! Exception in GlideThreadStartup: " + ex.Message + ex.StackTrace);
+            Logger.LogMessage("!! Exception in GlideThreadStartup: " + ex.Message + ex.StackTrace);
         }
     }
 
@@ -163,7 +163,7 @@ public class GClass73
                 {
                     bool_8 = true;
                     dateTime_0 = DateTime.Now.AddMinutes(int.Parse(GClass61.gclass61_0.method_2("AutoStopMinutes")));
-                    GClass37.smethod_0(GClass30.smethod_2(149, dateTime_0.ToShortTimeString()));
+                    Logger.LogMessage(MessageProvider.smethod_2(149, dateTime_0.ToShortTimeString()));
                 }
 
                 if (StartupClass.bool_25 && DateTime.Now > StartupClass.dateTime_1)
@@ -186,7 +186,7 @@ public class GClass73
         }
         else
         {
-            GClass37.smethod_0("No CurrentClass (?!), can't start glide!");
+            Logger.LogMessage("No CurrentClass (?!), can't start glide!");
         }
     }
 
@@ -198,7 +198,7 @@ public class GClass73
             StartupClass.MainForm.Activate();
         }
 
-        if (MessageBox.Show(StartupClass.MainForm, GClass30.smethod_1(int_15), GProcessMemoryManipulator.smethod_0(),
+        if (MessageBox.Show(StartupClass.MainForm, MessageProvider.GetMessage(int_15), GProcessMemoryManipulator.smethod_0(),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Hand) != DialogResult.Yes)
             return;
         Process.Start("http://www.mmoglider.com/elitelink");
@@ -226,7 +226,7 @@ public class GClass73
 
     public void method_3()
     {
-        StartupClass.smethod_17(1, GClass30.smethod_1(151));
+        StartupClass.smethod_17(1, MessageProvider.GetMessage(151));
         StartupClass.bool_28 = true;
         StartupClass.bool_32 = false;
         try
@@ -237,19 +237,19 @@ public class GClass73
         }
         catch (ThreadInterruptedException ex)
         {
-            GClass37.smethod_1("Catching ThreadInterrupted in GliderThread");
+            Logger.smethod_1("Catching ThreadInterrupted in GliderThread");
             if (!StartupClass.bool_28)
                 return;
             if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0)
                 GClass20.smethod_0("GlideStop.wav");
-            GClass37.smethod_1("Considering relog, enabled: " + GClass61.gclass61_0.method_5("RelogEnabled") +
+            Logger.smethod_1("Considering relog, enabled: " + GClass61.gclass61_0.method_5("RelogEnabled") +
                                ", elite: " + StartupClass.IsSomeConditionMet + ", AutoLogNickname: " +
                                (StartupClass.string_9 == null ? "(null)" : (object)StartupClass.string_9) +
                                ", consider: " + StartupClass.bool_32);
             if (!GClass61.gclass61_0.method_5("RelogEnabled") || !StartupClass.IsSomeConditionMet ||
                 StartupClass.string_9 == null || !StartupClass.bool_32)
                 return;
-            GClass37.smethod_0("Queuing up relog");
+            Logger.LogMessage("Queuing up relog");
             StartupClass.gspellTimer_1 =
                 new GSpellTimer((int)(StartupClass.random_0.NextDouble() * 8000.0) + 8000, false);
             StartupClass.bool_31 = true;
@@ -258,7 +258,7 @@ public class GClass73
         {
             if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0 && StartupClass.bool_28)
                 GClass20.smethod_0("GlideStop.wav");
-            GClass37.smethod_0(GClass30.smethod_2(668, ex1.Message, ex1.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(668, ex1.Message, ex1.StackTrace));
             try
             {
                 StartupClass.smethod_27(false, "GThreadException");
@@ -281,19 +281,19 @@ public class GClass73
         bool_2 = false;
         bool_3 = false;
         StartupClass.bool_21 = false;
-        GClass37.smethod_0(GClass30.smethod_1(152));
-        GClass37.smethod_1(GClass30.smethod_1(153));
+        Logger.LogMessage(MessageProvider.GetMessage(152));
+        Logger.smethod_1(MessageProvider.GetMessage(153));
         var location = gplayerSelf_0.Location;
         GClass21.smethod_0();
         gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
         if (!GClass74.smethod_16(StartupClass.CurrentGameClass).bool_0 && !StartupClass.IsSomeConditionMet)
         {
-            GClass37.smethod_0(GClass30.smethod_1(854));
+            Logger.LogMessage(MessageProvider.GetMessage(854));
             StartupClass.smethod_27(false, "CCStart");
         }
         else if (GClass74.smethod_16(StartupClass.CurrentGameClass).bool_1)
         {
-            GClass37.smethod_1("Class has patrol override, skipping regular stuff (!!!)");
+            Logger.smethod_1("Class has patrol override, skipping regular stuff (!!!)");
             StartupClass.CurrentGameClass.Patrol();
         }
         else
@@ -311,7 +311,7 @@ public class GClass73
                             GClass61.gclass61_0.method_4("MaxStartDistance") && !gplayerSelf_0.IsDead)
                         {
                             flag = true;
-                            GClass37.smethod_0("Closest waypoint is vendor, resuming from there");
+                            Logger.LogMessage("Closest waypoint is vendor, resuming from there");
                             glocation_1 = closestVendorWaypoint;
                         }
                     }
@@ -319,7 +319,7 @@ public class GClass73
                     if (!flag)
                     {
                         GContext.Main.Movement.SetHeading(gprofile_0.CurrentWaypoint);
-                        GClass37.smethod_0(GClass30.smethod_2(669,
+                        Logger.LogMessage(MessageProvider.smethod_2(669,
                             Math.Round(gplayerSelf_0.Location.GetDistanceTo(gprofile_0.CurrentWaypoint), 0)));
                         StartupClass.smethod_27(false, "TooFarToStart");
                         return;
@@ -328,13 +328,13 @@ public class GClass73
             }
             else if (gprofile_0.LureMinutes > 0)
             {
-                GClass37.smethod_1(GClass30.smethod_1(155));
+                Logger.smethod_1(MessageProvider.GetMessage(155));
                 gclass36_2 = new GClass36(gprofile_0.LureMinutes * 60 * 1000);
                 gclass36_2.method_4();
             }
             else
             {
-                GClass37.smethod_1(GClass30.smethod_1(156));
+                Logger.smethod_1(MessageProvider.GetMessage(156));
             }
 
             if (StartupClass.IsGliderInitialized && StartupClass.MainForm != null &&
@@ -358,17 +358,17 @@ public class GClass73
             if (GClass61.gclass61_0.method_5("ResetBuffs"))
                 StartupClass.CurrentGameClass.ResetBuffs();
             StartupClass.CurrentGameClass.OnStartGlide();
-            GClass37.smethod_1("First clear target");
+            Logger.smethod_1("First clear target");
             smethod_1();
-            GClass37.smethod_1("First rest");
+            Logger.smethod_1("First rest");
             method_8();
             Thread.Sleep(600);
-            GClass37.smethod_1("Second refresh, post-rest");
+            Logger.smethod_1("Second refresh, post-rest");
             if (gplayerSelf_0.Location.GetDistanceTo(location) > 0.5)
                 GClass42.gclass42_0.method_0("Common.Back");
             if (StartupClass.gclass48_0 != null)
             {
-                GClass37.smethod_1("Pass off to main loop");
+                Logger.smethod_1("Pass off to main loop");
                 StartupClass.gclass48_0.method_18();
             }
             else if (gclass54_0.genum7_0 == GEnum7.const_2)
@@ -416,7 +416,7 @@ public class GClass73
 
                         if (gplayerSelf_0.IsDead)
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(157));
+                            Logger.LogMessage(MessageProvider.GetMessage(157));
                             if (!(GClass61.gclass61_0.method_2("Resurrect") != "True"))
                             {
                                 if (gprofile_0.GhostWaypoints.Count != 0)
@@ -456,7 +456,7 @@ public class GClass73
         }
 
         label_13:
-        GClass37.smethod_0(GClass30.smethod_1(161));
+        Logger.LogMessage(MessageProvider.GetMessage(161));
         --int_7;
         GClass42.gclass42_0.method_0("Common.Sit");
         var gclass36 = new GClass36(60000);
@@ -470,17 +470,17 @@ public class GClass73
 
         goto label_17;
         label_18:
-        GClass37.smethod_0(GClass30.smethod_1(158));
+        Logger.LogMessage(MessageProvider.GetMessage(158));
         method_13();
         StartupClass.smethod_27(false, "ResurrectConfigOff");
         return;
         label_19:
-        GClass37.smethod_0(GClass30.smethod_1(159));
+        Logger.LogMessage(MessageProvider.GetMessage(159));
         method_13();
         StartupClass.smethod_27(false, "NoGhostWPs");
         return;
         label_20:
-        GClass37.smethod_0(GClass30.smethod_1(160));
+        Logger.LogMessage(MessageProvider.GetMessage(160));
         method_13();
         StartupClass.smethod_27(false, "TooManyDeaths");
     }
@@ -491,7 +491,7 @@ public class GClass73
             method_21(true);
         if (!bool_8 || !(dateTime_0 < DateTime.Now))
             return;
-        GClass37.smethod_0(GClass30.smethod_1(162));
+        Logger.LogMessage(MessageProvider.GetMessage(162));
         method_21(true);
     }
 
@@ -515,7 +515,7 @@ public class GClass73
             gprofile_0.Waypoints.Clear();
         if (gplayerSelf_0.IsDead)
         {
-            GClass37.smethod_1("Skipping rest, we're dead");
+            Logger.smethod_1("Skipping rest, we're dead");
         }
         else
         {
@@ -538,7 +538,7 @@ public class GClass73
         method_19();
         if (!gprofile_0.Fishing)
         {
-            GClass37.smethod_0(GClass30.smethod_2(166, gprofile_0.CurrentWaypoint));
+            Logger.LogMessage(MessageProvider.smethod_2(166, gprofile_0.CurrentWaypoint));
             GContext.Main.Movement.SetHeading(gprofile_0.CurrentWaypoint);
         }
 
@@ -598,7 +598,7 @@ public class GClass73
         label_19:
         return;
         label_20:
-        GClass37.smethod_0(GClass30.smethod_1(167));
+        Logger.LogMessage(MessageProvider.GetMessage(167));
         method_8();
     }
 
@@ -607,7 +607,7 @@ public class GClass73
         if (gprofile_0.IgnoreAttackers || gprofile_0.Fishing)
             return 0;
         var num = 0;
-        GClass37.smethod_1(GClass30.smethod_1(168));
+        Logger.smethod_1(MessageProvider.GetMessage(168));
         GMonster nextProfileTarget;
         while (true)
         {
@@ -622,7 +622,7 @@ public class GClass73
                     {
                         if (distanceToSelf > StartupClass.CurrentGameClass.PullDistance)
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(172));
+                            Logger.LogMessage(MessageProvider.GetMessage(172));
                             if (!nextProfileTarget.Approach(StartupClass.CurrentGameClass.PullDistance - 1, false))
                                 goto label_13;
                         }
@@ -632,7 +632,7 @@ public class GClass73
                         {
                             if (gplayerSelf_0.TargetGUID == nextProfileTarget.GUID)
                             {
-                                GClass37.smethod_1("Target.Location: " + nextProfileTarget.Location +
+                                Logger.smethod_1("Target.Location: " + nextProfileTarget.Location +
                                                    ", Me.Location: " + gplayerSelf_0.Location);
                                 method_12(false);
                                 method_8();
@@ -663,28 +663,28 @@ public class GClass73
             }
         }
 
-        GClass37.smethod_1(GClass30.smethod_1(169));
+        Logger.smethod_1(MessageProvider.GetMessage(169));
         return num;
         label_11:
-        GClass37.smethod_1(GClass30.smethod_1(170));
+        Logger.smethod_1(MessageProvider.GetMessage(170));
         return num;
         label_12:
-        GClass37.smethod_1(GClass30.smethod_1(171));
+        Logger.smethod_1(MessageProvider.GetMessage(171));
         return num;
         label_13:
-        GClass37.smethod_0(GClass30.smethod_1(173));
+        Logger.LogMessage(MessageProvider.GetMessage(173));
         return num;
         label_14:
-        GClass37.smethod_0(GClass30.smethod_1(174));
+        Logger.LogMessage(MessageProvider.GetMessage(174));
         StartupClass.gprofile_0.AddToBlacklist(nextProfileTarget.GUID);
         return num;
         label_15:
-        GClass37.smethod_1(GClass30.smethod_2(670, nextProfileTarget.GUID.ToString("x"),
+        Logger.smethod_1(MessageProvider.smethod_2(670, nextProfileTarget.GUID.ToString("x"),
             gplayerSelf_0.TargetGUID.ToString("x")));
         StartupClass.gprofile_0.AddToBlacklist(nextProfileTarget.GUID);
-        GClass37.smethod_0(GClass30.smethod_1(175));
+        Logger.LogMessage(MessageProvider.GetMessage(175));
         smethod_1();
-        GClass37.smethod_1(GClass30.smethod_1(176));
+        Logger.smethod_1(MessageProvider.GetMessage(176));
         return num;
     }
 
@@ -706,7 +706,7 @@ public class GClass73
         if (bool_20)
         {
             GContext.Main.ReleaseAllKeys();
-            GClass37.smethod_0(GClass30.smethod_1(177));
+            Logger.LogMessage(MessageProvider.GetMessage(177));
         }
         else
         {
@@ -716,31 +716,31 @@ public class GClass73
         var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);
         if (unit == null)
         {
-            GClass37.smethod_0("Could not find target: 0x" + gplayerSelf_0.TargetGUID.ToString("x") +
+            Logger.LogMessage("Could not find target: 0x" + gplayerSelf_0.TargetGUID.ToString("x") +
                                " in object list... ?!");
             smethod_1();
         }
         else if (unit.GUID == gplayerSelf_0.GUID)
         {
-            GClass37.smethod_0(GClass30.smethod_1(178));
+            Logger.LogMessage(MessageProvider.GetMessage(178));
             smethod_1();
         }
         else if (bool_20 && !unit.IsTargetingMe && !unit.IsTargetingMyPet &&
                  !StartupClass.gclass54_0.method_13(unit.TargetGUID))
         {
-            GClass37.smethod_0(GClass30.smethod_1(863));
+            Logger.LogMessage(MessageProvider.GetMessage(863));
             smethod_1();
         }
         else if (gclass54_0.method_13(gplayerSelf_0.TargetGUID))
         {
-            GClass37.smethod_0(GClass30.smethod_1(179));
+            Logger.LogMessage(MessageProvider.GetMessage(179));
             smethod_1();
         }
         else
         {
             if (unit.IsPlayer)
             {
-                GClass37.smethod_0(GClass30.smethod_2(180, unit.Name));
+                Logger.LogMessage(MessageProvider.smethod_2(180, unit.Name));
                 if (long_0 != gplayerSelf_0.TargetGUID)
                 {
                     long_0 = gplayerSelf_0.TargetGUID;
@@ -759,14 +759,14 @@ public class GClass73
 
             if (unit.GUID == GContext.Main.Me.PetGUID)
             {
-                GClass37.smethod_0(GClass30.smethod_1(182));
+                Logger.LogMessage(MessageProvider.GetMessage(182));
                 smethod_1();
                 StartupClass.smethod_39(1500);
                 method_27();
             }
             else if (unit.IsDead)
             {
-                GClass37.smethod_0(GClass30.smethod_1(183));
+                Logger.LogMessage(MessageProvider.GetMessage(183));
                 smethod_1();
                 StartupClass.smethod_39(1500);
                 method_27();
@@ -787,7 +787,7 @@ public class GClass73
                 StartupClass.CurrentGameClass.StartCombat();
                 GContext.Main.Me.SetTargetName(unit.Name);
                 var gcombatResult = StartupClass.CurrentGameClass.KillTarget(unit, bool_20);
-                GClass37.smethod_1("Combat result: " + gcombatResult);
+                Logger.smethod_1("Combat result: " + gcombatResult);
                 method_27();
                 switch (gcombatResult)
                 {
@@ -833,7 +833,7 @@ public class GClass73
 
                 if (GPlayerSelf.Me.Target == unit && unit.Health == 1.0)
                 {
-                    GClass37.smethod_0("Still targeting full-health mob after combat, clearing it out");
+                    Logger.LogMessage("Still targeting full-health mob after combat, clearing it out");
                     smethod_1();
                 }
 
@@ -849,7 +849,7 @@ public class GClass73
                 if (!flag1)
                 {
                     GClass67.smethod_2();
-                    GClass37.smethod_0(GClass30.smethod_1(184));
+                    Logger.LogMessage(MessageProvider.GetMessage(184));
                     method_26();
                     StartupClass.CurrentGameClass.RunningAction();
                     if (!GClass42.gclass42_0.method_15("Common.PostCombat"))
@@ -857,7 +857,7 @@ public class GClass73
                 }
                 else
                 {
-                    GClass37.smethod_0("Combat done with add, dealing with extra monster");
+                    Logger.LogMessage("Combat done with add, dealing with extra monster");
                     method_12(false);
                 }
 
@@ -868,10 +868,10 @@ public class GClass73
                     if (gclass54_0.int_0 != 0)
                     {
                         var num = (int)Math.Abs(unit.GUID % gclass54_0.int_0);
-                        GClass37.smethod_1(GClass30.smethod_2(671, num, gclass54_0.int_1));
+                        Logger.smethod_1(MessageProvider.smethod_2(671, num, gclass54_0.int_1));
                         if (num == gclass54_0.int_1)
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(185));
+                            Logger.LogMessage(MessageProvider.GetMessage(185));
                             flag3 = true;
                         }
                     }
@@ -879,7 +879,7 @@ public class GClass73
 
                 if (!flag3 && gclass54_0.genum7_0 == GEnum7.const_1)
                 {
-                    GClass37.smethod_1(GClass30.smethod_1(186));
+                    Logger.smethod_1(MessageProvider.GetMessage(186));
                     StartupClass.smethod_39(gclass54_0.int_3 * 1000);
                 }
 
@@ -906,7 +906,7 @@ public class GClass73
                         {
                             if (gplayerSelf_0.Experience > int_9)
                             {
-                                GClass37.smethod_0(GClass30.smethod_2(187, gplayerSelf_0.Experience - int_9));
+                                Logger.LogMessage(MessageProvider.smethod_2(187, gplayerSelf_0.Experience - int_9));
                                 int_8 += gplayerSelf_0.Experience - int_9;
                                 bool_9 = true;
                             }
@@ -946,7 +946,7 @@ public class GClass73
     {
         if (bool_20)
         {
-            GClass37.smethod_0(GClass30.smethod_1(188));
+            Logger.LogMessage(MessageProvider.GetMessage(188));
             ++StartupClass.int_9;
             method_13();
             if (!method_49())
@@ -957,15 +957,15 @@ public class GClass73
         var queue_0 = GContext.Main.MoveHelper != null
             ? GContext.Main.MoveHelper.CreateGhostwalkPath(glocation_3)
             : gprofile_0.CreateGhostwalkPath(glocation_3);
-        GClass37.smethod_0(GClass30.smethod_1(189));
+        Logger.LogMessage(MessageProvider.GetMessage(189));
         gplayerSelf_0.Refresh();
         var num = GClass61.gclass61_0.method_4("CorpseShortCircuit");
         if (gplayerSelf_0.GetDistanceTo(glocation_3) < num)
-            GClass37.smethod_0(GClass30.smethod_1(879));
+            Logger.LogMessage(MessageProvider.GetMessage(879));
         else
             method_15(queue_0, glocation_3);
         gplayerSelf_0.Refresh();
-        GClass37.smethod_0(GClass30.smethod_1(193));
+        Logger.LogMessage(MessageProvider.GetMessage(193));
         method_16(glocation_3);
         var gspellTimer = new GSpellTimer(10000, false);
         do
@@ -975,7 +975,7 @@ public class GClass73
 
         if (gplayerSelf_0.IsDead)
         {
-            GClass37.smethod_0("Still dead - try again");
+            Logger.LogMessage("Still dead - try again");
             method_16(glocation_3);
         }
 
@@ -990,12 +990,12 @@ public class GClass73
 
     private void method_15(Queue<GLocation> queue_0, GLocation glocation_3)
     {
-        GClass37.smethod_1("# Walking GhostWalkPath, queue contains: " + queue_0.Count + " items");
+        Logger.smethod_1("# Walking GhostWalkPath, queue contains: " + queue_0.Count + " items");
         var num = GClass61.gclass61_0.method_4("CorpseShortCircuit");
         while (queue_0.Count > 0)
         {
             var glocation = queue_0.Dequeue();
-            GClass37.smethod_1("# Dequeued loc: " + glocation);
+            Logger.smethod_1("# Dequeued loc: " + glocation);
             if (GContext.Main.Movement.CompareHeadings(gplayerSelf_0.Heading,
                     gplayerSelf_0.Location.GetHeadingTo(glocation)) > 0.9 && GContext.Main.IsRunning)
             {
@@ -1007,24 +1007,24 @@ public class GClass73
             GContext.Main.Movement.MoveToLocation(glocation, 6.0, true);
             if (glocation_3.DistanceToSelf < num)
             {
-                GClass37.smethod_1("# Corpse is close stopping pathing, gwp's left: " + queue_0.Count);
+                Logger.smethod_1("# Corpse is close stopping pathing, gwp's left: " + queue_0.Count);
                 break;
             }
         }
 
         GContext.Main.ReleaseSpinRun();
-        GClass37.smethod_1("# Done with GhostWalkPath");
+        Logger.smethod_1("# Done with GhostWalkPath");
     }
 
     private void method_16(GLocation glocation_3)
     {
         var num1 = 4;
-        GClass37.smethod_0(GClass30.smethod_1(196));
+        Logger.LogMessage(MessageProvider.GetMessage(196));
         var gclass8_1 = GClass8.smethod_2("StaticPopup1");
         GContext.Main.Movement.MoveToLocation(glocation_3, 6.0, false);
         if (Environment.TickCount - int_6 < 600000 && int_6 != 0)
         {
-            GClass37.smethod_0(GClass30.smethod_1(197));
+            Logger.LogMessage(MessageProvider.GetMessage(197));
             for (var index = 0; index < 5; ++index)
             {
                 GClass42.gclass42_0.method_0("Common.RotateLeft");
@@ -1032,7 +1032,7 @@ public class GClass73
             }
         }
 
-        GClass37.smethod_0(GClass30.smethod_1(198));
+        Logger.LogMessage(MessageProvider.GetMessage(198));
         while (true)
         {
             GContext.Main.ReleaseSpinRun();
@@ -1040,7 +1040,7 @@ public class GClass73
             if (nearestHostile1 != null &&
                 (nearestHostile1.DistanceToSelf < 25.0 || nearestHostile1.DistanceToSelf > 30.0))
             {
-                GClass37.smethod_0(GClass30.smethod_1(200));
+                Logger.LogMessage(MessageProvider.GetMessage(200));
                 nearestHostile1.Face();
                 var num2 = 200;
                 GContext.Main.PressKey("Common.Back");
@@ -1066,7 +1066,7 @@ public class GClass73
                 if ((nearestHostile2 != null && nearestHostile2.DistanceToSelf < 25.0) ||
                     gplayerSelf_0.Location.GetDistanceTo(glocation_3) >= 30.0 || !gclass8_1.method_10())
                 {
-                    GClass37.smethod_0(GClass30.smethod_2(201, nearestHostile2.DistanceToSelf.ToString()));
+                    Logger.LogMessage(MessageProvider.smethod_2(201, nearestHostile2.DistanceToSelf.ToString()));
                     --num1;
                     if (num1 > 0 || !gclass8_1.method_10())
                     {
@@ -1089,10 +1089,10 @@ public class GClass73
             }
         }
 
-        GClass37.smethod_0(GClass30.smethod_1(199));
+        Logger.LogMessage(MessageProvider.GetMessage(199));
         goto label_15;
         label_14:
-        GClass37.smethod_0(GClass30.smethod_1(199));
+        Logger.LogMessage(MessageProvider.GetMessage(199));
         label_15:
         var gclass8_2 = GClass8.smethod_2("StaticPopup1Button1");
         if (gclass8_2 == null)
@@ -1104,9 +1104,9 @@ public class GClass73
     {
         if (!GContext.Main.Me.IsUnderAttack)
             return false;
-        GClass37.smethod_1("- GotAttacker returning true:");
+        Logger.smethod_1("- GotAttacker returning true:");
         foreach (object attacker in GObjectList.GetAttackers())
-            GClass37.smethod_1("- " + attacker);
+            Logger.smethod_1("- " + attacker);
         return true;
     }
 
@@ -1114,7 +1114,7 @@ public class GClass73
     {
         if ((int_15 == 13 && gplayerSelf_0.HasHerbalism) || (int_15 == 11 && gplayerSelf_0.HasMining) || int_15 == 5)
             return true;
-        GClass37.smethod_0("Cannot Harvest Item:" + int_15);
+        Logger.LogMessage("Cannot Harvest Item:" + int_15);
         return false;
     }
 
@@ -1143,7 +1143,7 @@ public class GClass73
     {
         if (GPlayerSelf.Me.TargetGUID == 0L)
             return;
-        GClass37.smethod_1("Sending Esc to clear target");
+        Logger.smethod_1("Sending Esc to clear target");
         GClass55.smethod_9(27);
     }
 
@@ -1166,7 +1166,7 @@ public class GClass73
                 StartupClass.smethod_39(500);
             }
 
-            GClass37.smethod_0(GClass30.smethod_2(203, double_3));
+            Logger.LogMessage(MessageProvider.smethod_2(203, double_3));
         }
     }
 
@@ -1187,7 +1187,7 @@ public class GClass73
                 {
                     if (gplayerSelf_0.IsUnderAttack)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(204));
+                        Logger.LogMessage(MessageProvider.GetMessage(204));
                         GContext.Main.SendKey("Common.Back");
                         StartupClass.gclass73_0.method_12(true);
                     }
@@ -1200,7 +1200,7 @@ public class GClass73
                 }
             } while (num <= 3);
 
-            GClass37.smethod_0(GClass30.smethod_1(745));
+            Logger.LogMessage(MessageProvider.GetMessage(745));
             StartupClass.smethod_27(false, "HearthFutility");
         }
 
@@ -1259,7 +1259,7 @@ public class GClass73
             {
                 if (bool_14)
                 {
-                    GClass37.smethod_0("Sending queued keys");
+                    Logger.LogMessage("Sending queued keys");
                     StartupClass.smethod_20(string_0);
                 }
                 else
@@ -1270,11 +1270,11 @@ public class GClass73
                         StartupClass.smethod_39(900);
                     }
 
-                    GClass37.smethod_0("Sending queued chat message");
+                    Logger.LogMessage("Sending queued chat message");
                     GClass55.smethod_28(string_0);
                 }
 
-                GClass37.smethod_0("Queued keys sent.");
+                Logger.LogMessage("Queued keys sent.");
                 string_0 = null;
             }
         }
@@ -1284,7 +1284,7 @@ public class GClass73
             return;
         if (GClass61.gclass61_0.method_5("HandleChatTxt"))
         {
-            GClass37.smethod_0(GClass30.smethod_1(205));
+            Logger.LogMessage(MessageProvider.GetMessage(205));
             var streamReader = new StreamReader(fileInfo.FullName);
             while (true)
             {
@@ -1302,7 +1302,7 @@ public class GClass73
             }
             catch (Exception ex)
             {
-                GClass37.smethod_0(GClass30.smethod_2(675, ex.Message));
+                Logger.LogMessage(MessageProvider.smethod_2(675, ex.Message));
                 bool_4 = false;
             }
         }
@@ -1311,7 +1311,7 @@ public class GClass73
             if (bool_19)
                 return;
             bool_19 = true;
-            GClass37.smethod_0("Chat.txt is present, but HandleChatTxt is not true in config");
+            Logger.LogMessage("Chat.txt is present, but HandleChatTxt is not true in config");
         }
     }
 
@@ -1342,7 +1342,7 @@ public class GClass73
             method_32();
             if (bool_8 && dateTime_0 < DateTime.Now)
             {
-                GClass37.smethod_0(GClass30.smethod_1(162));
+                Logger.LogMessage(MessageProvider.GetMessage(162));
                 method_21(true);
             }
 
@@ -1355,10 +1355,10 @@ public class GClass73
 
             if (gclass36_2 != null && gclass36_2.method_3())
             {
-                GClass37.smethod_0(GClass30.smethod_1(233));
+                Logger.LogMessage(MessageProvider.GetMessage(233));
                 if (GContext.Main.Interface.GetActionInventory("Common.LureSlot") == 0)
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(234));
+                    Logger.LogMessage(MessageProvider.GetMessage(234));
                     gclass36_2 = null;
                 }
                 else
@@ -1374,7 +1374,7 @@ public class GClass73
                             Thread.Sleep(1000);
                             if (!gclass8_1.method_10())
                             {
-                                GClass37.smethod_1("CharFrame never became visible after keystroke!");
+                                Logger.smethod_1("CharFrame never became visible after keystroke!");
                                 break;
                             }
                         }
@@ -1387,7 +1387,7 @@ public class GClass73
                     }
                     else
                     {
-                        GClass37.smethod_1("Couldn't get CharacterFrame or CharacterMainHandSlot");
+                        Logger.smethod_1("Couldn't get CharacterFrame or CharacterMainHandSlot");
                         break;
                     }
                 }
@@ -1399,7 +1399,7 @@ public class GClass73
     {
         var int_29 = GClass18.gclass18_0.method_4("UnderCursor");
         var flag = false;
-        GClass37.smethod_1("Position on bobber: " + double_8 + " -> " + double_9 + ", inc = " + double_10);
+        Logger.smethod_1("Position on bobber: " + double_8 + " -> " + double_9 + ", inc = " + double_10);
         for (var double_3 = 0.08; double_3 < 0.6 && !flag; double_3 += double_10)
         for (var double_2 = double_8; double_2 < double_9; double_2 += double_10)
         {
@@ -1423,7 +1423,7 @@ public class GClass73
             flag = GProcessMemoryManipulator.smethod_12(int_29, "UnderCursor4") == long_1;
         }
 
-        GClass37.smethod_1(GClass30.smethod_2(235, flag));
+        Logger.smethod_1(MessageProvider.smethod_2(235, flag));
         return flag;
     }
 
@@ -1436,17 +1436,17 @@ public class GClass73
 
     public void method_32()
     {
-        GClass37.smethod_1(GClass30.smethod_1(239));
+        Logger.smethod_1(MessageProvider.GetMessage(239));
         GObject gobject = null;
         var num = 20;
         method_26();
         GClass21.smethod_2();
         StartupClass.smethod_39(1000);
-        GClass37.smethod_1(GClass30.smethod_1(240));
+        Logger.smethod_1(MessageProvider.GetMessage(240));
         GClass42.gclass42_0.sortedList_0["Common.Fish"].FilloutKey();
         GClass42.gclass42_0.method_0("Common.Fish");
         StartupClass.smethod_39(1000);
-        GClass37.smethod_1(GClass30.smethod_1(241));
+        Logger.smethod_1(MessageProvider.GetMessage(241));
         for (; num > 0; --num)
         {
             gobject = method_31();
@@ -1458,18 +1458,18 @@ public class GClass73
 
         if (gobject == null)
         {
-            GClass37.smethod_0(GClass30.smethod_1(243));
+            Logger.LogMessage(MessageProvider.GetMessage(243));
             method_33();
         }
         else
         {
-            GClass37.smethod_1(GClass30.smethod_1(244));
+            Logger.smethod_1(MessageProvider.GetMessage(244));
             var gclass36 = new GClass36(32000);
             gclass36.method_4();
             StartupClass.smethod_39(1000);
             if (!gobject.Hover())
             {
-                GClass37.smethod_0(GClass30.smethod_1(245));
+                Logger.LogMessage(MessageProvider.GetMessage(245));
                 method_33();
             }
             else
@@ -1481,14 +1481,14 @@ public class GClass73
                     gplayerSelf_0.Refresh();
                     if (gplayerSelf_0.TargetGUID != 0L)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(246));
+                        Logger.LogMessage(MessageProvider.GetMessage(246));
                         method_12(true);
                     }
                 }
 
                 if (gclass36.method_3())
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(247));
+                    Logger.LogMessage(MessageProvider.GetMessage(247));
                     method_33();
                 }
                 else
@@ -1496,12 +1496,12 @@ public class GClass73
                     method_34(200, 600);
                     if (!gobject.IsCursorOnObject)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(248));
+                        Logger.LogMessage(MessageProvider.GetMessage(248));
                         method_33();
                     }
                     else
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(249));
+                        Logger.LogMessage(MessageProvider.GetMessage(249));
                         ++StartupClass.int_8;
                         method_56();
                         method_34(2000, 5000);
@@ -1555,7 +1555,7 @@ public class GClass73
             GClass21.smethod_2();
             if (gplayerSelf_0.TargetGUID != 0L && gplayerSelf_0.Target != null && !gplayerSelf_0.Target.IsDead)
             {
-                GClass37.smethod_0(GClass30.smethod_1(254));
+                Logger.LogMessage(MessageProvider.GetMessage(254));
                 method_12(true);
             }
         }
@@ -1596,7 +1596,7 @@ public class GClass73
             if (GContext.Main.Overspin)
             {
                 GContext.Main.ReleaseSpinRun();
-                GClass37.smethod_0("Spinning for too long, letting go of key and re-syncing");
+                Logger.LogMessage("Spinning for too long, letting go of key and re-syncing");
                 Thread.Sleep(5000);
                 gmonster = null;
                 gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
@@ -1607,7 +1607,7 @@ public class GClass73
                 gclass36_1.method_4();
                 if (method_37())
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(byte.MaxValue));
+                    Logger.LogMessage(MessageProvider.GetMessage(byte.MaxValue));
                     method_38();
                 }
 
@@ -1636,10 +1636,10 @@ public class GClass73
                 {
                     if (gplayerSelf_0.IsDead)
                     {
-                        GClass37.smethod_1("# IsDead = true in main loop");
+                        Logger.smethod_1("# IsDead = true in main loop");
                         gclass36_7.method_4();
                         GContext.Main.ReleaseSpinRun();
-                        GClass37.smethod_0(GClass30.smethod_1(157));
+                        Logger.LogMessage(MessageProvider.GetMessage(157));
                         glocation_0 = null;
                         if (!(GClass61.gclass61_0.method_2("Resurrect") != "True"))
                         {
@@ -1666,12 +1666,12 @@ public class GClass73
                     {
                         if (gmonster == null || nextProfileTarget.GUID != gmonster.GUID)
                         {
-                            GClass37.smethod_1("## New target = \"" + nextProfileTarget.Name + "\", GUID = 0x" +
+                            Logger.smethod_1("## New target = \"" + nextProfileTarget.Name + "\", GUID = 0x" +
                                                nextProfileTarget.GUID.ToString("x16"));
-                            GClass37.smethod_1("## Profile.Wander = " + gprofile_0.Wander + ", Profile distance = " +
+                            Logger.smethod_1("## Profile.Wander = " + gprofile_0.Wander + ", Profile distance = " +
                                                gprofile_0.GetDistanceTo(nextProfileTarget.Location));
                             if (gmonster != null)
-                                GClass37.smethod_1(GClass30.smethod_1(258));
+                                Logger.smethod_1(MessageProvider.GetMessage(258));
                             gmonster = nextProfileTarget;
                             if (gmonster.DistanceToSelf > (double)StartupClass.CurrentGameClass.PullDistance)
                                 gprofile_0.PlaceBreadcrumb();
@@ -1688,19 +1688,19 @@ public class GClass73
                         if (nextProfileTarget.DistanceToSelf <= (double)StartupClass.CurrentGameClass.PullDistance)
                         {
                             var heading = gplayerSelf_0.Heading;
-                            GClass37.smethod_1(GClass30.smethod_2(683, nextProfileTarget.Name,
+                            Logger.smethod_1(MessageProvider.smethod_2(683, nextProfileTarget.Name,
                                 nextProfileTarget.GUID.ToString("x")));
                             if (GContext.Main.Movement.CompareHeadings(gplayerSelf_0.Heading,
                                     gplayerSelf_0.Location.GetHeadingTo(nextProfileTarget.Location)) > Math.PI / 6.0)
                                 GContext.Main.ReleaseRun();
                             GContext.Main.ReleaseSpin();
-                            GClass37.smethod_1("Facing enemy");
+                            Logger.smethod_1("Facing enemy");
                             nextProfileTarget.Face();
                             gclass36_7.method_4();
                             if (!nextProfileTarget.SetAsTarget(false))
                             {
                                 smethod_1();
-                                GClass37.smethod_1(GClass30.smethod_1(259));
+                                Logger.smethod_1(MessageProvider.GetMessage(259));
                                 StartupClass.gprofile_0.AddToBlacklist(nextProfileTarget.GUID);
                                 continue;
                             }
@@ -1717,7 +1717,7 @@ public class GClass73
                     else
                     {
                         if (gmonster != null)
-                            GClass37.smethod_1("### Old target no longer valid (\"" + gmonster.Name +
+                            Logger.smethod_1("### Old target no longer valid (\"" + gmonster.Name +
                                                "\", distance = " + gmonster.DistanceToSelf + "), skipreason = " +
                                                gmonster.SkipReason);
                         gmonster = null;
@@ -1741,7 +1741,7 @@ public class GClass73
                             {
                                 if (GClass61.gclass61_0.method_5("StrafeObstacles") && !flag1)
                                 {
-                                    GClass37.smethod_0(GClass30.smethod_1(742));
+                                    Logger.LogMessage(MessageProvider.GetMessage(742));
                                     var string_1 = "Common.StrafeLeft";
                                     if (StartupClass.random_0.Next() % 2 == 0)
                                         string_1 = "Common.StrafeRight";
@@ -1752,7 +1752,7 @@ public class GClass73
                                 }
                                 else
                                 {
-                                    GClass37.smethod_0(GClass30.smethod_1(256));
+                                    Logger.LogMessage(MessageProvider.GetMessage(256));
                                     GContext.Main.ReleaseSpinRun();
                                     StartupClass.smethod_39(600);
                                     GContext.Main.PressKey("Common.Back");
@@ -1775,10 +1775,10 @@ public class GClass73
                             glocation_2 = gplayerSelf_0.Location;
                             if (num1 > int_4)
                             {
-                                GClass37.smethod_0("Stuck too many times");
+                                Logger.LogMessage("Stuck too many times");
                                 if (gmonster != null)
                                 {
-                                    GClass37.smethod_0("Blacklisting this target");
+                                    Logger.LogMessage("Blacklisting this target");
                                     gprofile_0.ForceBlacklist(gmonster.GUID);
                                     gmonster = null;
                                     num1 = 0;
@@ -1787,7 +1787,7 @@ public class GClass73
                                 {
                                     if (flag2)
                                         StartupClass.smethod_27(false, "StuckTooMuchOnWP");
-                                    GClass37.smethod_0("Stuck too much, trying previous waypoint");
+                                    Logger.LogMessage("Stuck too much, trying previous waypoint");
                                     flag2 = true;
                                     gprofile_0.SetPreviousWaypoint();
                                 }
@@ -1812,14 +1812,14 @@ public class GClass73
                     if (distanceTo1 < double7 && gmonster == null)
                     {
                         flag2 = false;
-                        GClass37.smethod_1("## Reached current waypoint, it is: " + gprofile_0.DebugCurrentWaypoint());
+                        Logger.smethod_1("## Reached current waypoint, it is: " + gprofile_0.DebugCurrentWaypoint());
                         flag1 = false;
                         ++gprofile_0.OneShotStepCheck;
                         gprofile_0.ConsumeCurrentWaypoint();
                         num1 = 0;
                         if (gprofile_0.OneShotHit && StartupClass.gclass48_0 == null)
                         {
-                            GClass37.smethod_0(GClass30.smethod_1(257));
+                            Logger.LogMessage(MessageProvider.GetMessage(257));
                             GContext.Main.ReleaseSpinRun();
                             StartupClass.smethod_27(false, "EndOfOneShotProfile");
                         }
@@ -1859,7 +1859,7 @@ public class GClass73
                     if (int_7 == gprofile_0.Waypoints.Count * 2 && GClass61.gclass61_0.method_5("SitWhenBored") &&
                         !GContext.Main.IsSpinning)
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(161));
+                        Logger.LogMessage(MessageProvider.GetMessage(161));
                         --int_7;
                         GContext.Main.ReleaseSpinRun();
                         StartupClass.smethod_39(1000);
@@ -1882,8 +1882,8 @@ public class GClass73
                         double distanceTo2 = gplayerSelf_0.Location.GetDistanceTo(glocation_0);
                         if (distanceTo2 > 50.0)
                         {
-                            GClass37.smethod_0(GClass30.smethod_2(684, distanceTo2));
-                            GClass37.smethod_0(GClass30.smethod_2(685, glocation_0.ToString(),
+                            Logger.LogMessage(MessageProvider.smethod_2(684, distanceTo2));
+                            Logger.LogMessage(MessageProvider.smethod_2(685, glocation_0.ToString(),
                                 gplayerSelf_0.Location.ToString()));
                             method_58();
                         }
@@ -1906,15 +1906,15 @@ public class GClass73
         GContext.Main.ReleaseSpinRun();
         return;
         label_94:
-        GClass37.smethod_0(GClass30.smethod_1(158));
+        Logger.LogMessage(MessageProvider.GetMessage(158));
         StartupClass.smethod_27(false, "DeadResurrectOff");
         return;
         label_95:
-        GClass37.smethod_0(GClass30.smethod_1(159));
+        Logger.LogMessage(MessageProvider.GetMessage(159));
         StartupClass.smethod_27(false, "DeadNoGhostWP");
         return;
         label_96:
-        GClass37.smethod_0(GClass30.smethod_1(160));
+        Logger.LogMessage(MessageProvider.GetMessage(160));
         StartupClass.smethod_27(false, "DeadTooMany");
     }
 
@@ -1955,7 +1955,7 @@ public class GClass73
         double headingTo = gmonster_0.Location.GetHeadingTo(gplayerSelf_0.Location);
         var gclass36 = new GClass36(10000);
         gclass36.method_4();
-        GClass37.smethod_0(GClass30.smethod_2(262, gmonster_0.Name));
+        Logger.LogMessage(MessageProvider.smethod_2(262, gmonster_0.Name));
         GContext.Main.ReleaseSpinRun();
         if (gmonster_0.DistanceToSelf > 10.0)
             method_34(500, 1500);
@@ -1967,13 +1967,13 @@ public class GClass73
         string string_1;
         if (flag2)
         {
-            GClass37.smethod_1(GClass30.smethod_1(263));
+            Logger.smethod_1(MessageProvider.GetMessage(263));
             NewHeading = method_43(gplayerSelf_0.Location.GetHeadingTo(gmonster_0.Location));
             string_1 = "Common.Back";
         }
         else
         {
-            GClass37.smethod_1(GClass30.smethod_1(264));
+            Logger.smethod_1(MessageProvider.GetMessage(264));
             NewHeading = method_43(headingTo);
             string_1 = "Common.Forward";
         }
@@ -1989,7 +1989,7 @@ public class GClass73
                 }
                 else
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(265));
+                    Logger.LogMessage(MessageProvider.GetMessage(265));
                     break;
                 }
             }
@@ -2001,10 +2001,10 @@ public class GClass73
 
         GClass42.gclass42_0.method_2(string_1);
         if (gclass36.method_3())
-            GClass37.smethod_0(GClass30.smethod_1(266));
+            Logger.LogMessage(MessageProvider.GetMessage(266));
         if (flag1)
         {
-            GClass37.smethod_0(GClass30.smethod_1(267));
+            Logger.LogMessage(MessageProvider.GetMessage(267));
             method_34(2000, 4500);
         }
 
@@ -2032,12 +2032,12 @@ public class GClass73
         double distanceToSelf = closestHarvestable.Location.DistanceToSelf;
         if (distanceToSelf > int_11)
             return false;
-        GClass37.smethod_0(GClass30.smethod_2(686, Math.Round(distanceToSelf, 2)));
+        Logger.LogMessage(MessageProvider.smethod_2(686, Math.Round(distanceToSelf, 2)));
         GContext.Main.ReleaseSpinRun();
         GContext.Main.Movement.MoveToLocation(closestHarvestable.Location, GContext.Main.MeleeDistance, false);
         if (closestHarvestable.DistanceToSelf > GContext.Main.MeleeDistance)
         {
-            GClass37.smethod_0(GClass30.smethod_1(268));
+            Logger.LogMessage(MessageProvider.GetMessage(268));
             StartupClass.sortedList_2.Add(closestHarvestable.GUID, "");
             return true;
         }
@@ -2045,7 +2045,7 @@ public class GClass73
         gplayerSelf_0.Refresh();
         if (method_19())
         {
-            GClass37.smethod_0(GClass30.smethod_1(269));
+            Logger.LogMessage(MessageProvider.GetMessage(269));
             return true;
         }
 
@@ -2066,12 +2066,12 @@ public class GClass73
         }
         else
         {
-            GClass37.smethod_0(GClass30.smethod_2(786, gnode_0.Name));
+            Logger.LogMessage(MessageProvider.smethod_2(786, gnode_0.Name));
             var num = 0;
             gnode_0.Hover();
             if (!method_18(GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("CursorType"), "CursorType")))
             {
-                GClass37.smethod_0("Can't harvest this, cursor never turned into something acceptable");
+                Logger.LogMessage("Can't harvest this, cursor never turned into something acceptable");
                 StartupClass.sortedList_2.Add(gnode_0.GUID, "");
             }
             else
@@ -2088,22 +2088,22 @@ public class GClass73
                                 while (gplayerSelf_0.IsCasting)
                                     Thread.Sleep(200);
                             Thread.Sleep(2000);
-                            GClass37.smethod_0(GClass30.smethod_1(280));
+                            Logger.LogMessage(MessageProvider.GetMessage(280));
                         }
                         else
                         {
                             StartupClass.sortedList_2.Add(gnode_0.GUID, "");
-                            GClass37.smethod_0("Item not Havestable: " + int_15);
+                            Logger.LogMessage("Item not Havestable: " + int_15);
                             return;
                         }
                     }
                     else
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(271));
+                        Logger.LogMessage(MessageProvider.GetMessage(271));
                         return;
                     }
 
-                GClass37.smethod_0(GClass30.smethod_1(281));
+                Logger.LogMessage(MessageProvider.GetMessage(281));
                 StartupClass.sortedList_2.Add(gnode_0.GUID, "");
             }
         }
@@ -2111,7 +2111,7 @@ public class GClass73
 
     public void method_46()
     {
-        GClass37.smethod_0(GClass30.smethod_1(282));
+        Logger.LogMessage(MessageProvider.GetMessage(282));
         var gclass36_1 = new GClass36(5000);
         var gclass36_2 = new GClass36(2000);
         var gclass36_3 = new GClass36(1000);
@@ -2150,7 +2150,7 @@ public class GClass73
                 if (gplayerSelf_0.IsDead)
                 {
                     GContext.Main.ReleaseSpinRun();
-                    GClass37.smethod_0(GClass30.smethod_1(157));
+                    Logger.LogMessage(MessageProvider.GetMessage(157));
                     if (!(GClass61.gclass61_0.method_2("Resurrect") != "True"))
                     {
                         if (gprofile_0.GhostWaypoints.Count != 0)
@@ -2177,7 +2177,7 @@ public class GClass73
                 gclass36_3.method_4();
                 if (method_37())
                 {
-                    GClass37.smethod_0(GClass30.smethod_1(byte.MaxValue));
+                    Logger.LogMessage(MessageProvider.GetMessage(byte.MaxValue));
                     method_38();
                 }
 
@@ -2186,11 +2186,11 @@ public class GClass73
 
             if (gplayer.TargetGUID != 0L && gplayer.TargetGUID != num)
             {
-                GClass37.smethod_1(GClass30.smethod_2(687, gplayer.TargetGUID.ToString("x")));
+                Logger.smethod_1(MessageProvider.smethod_2(687, gplayer.TargetGUID.ToString("x")));
                 var unit = GObjectList.FindUnit(gplayer.TargetGUID);
                 if (unit != null && unit.Health > 0.0 && !gclass54_0.method_13(unit.GUID))
                 {
-                    GClass37.smethod_1(GClass30.smethod_1(283));
+                    Logger.smethod_1(MessageProvider.GetMessage(283));
                     var gclass36_4 = new GClass36(8000);
                     gclass36_4.method_4();
                     while (!gclass36_4.method_3())
@@ -2203,7 +2203,7 @@ public class GClass73
                         }
                         else
                         {
-                            GClass37.smethod_1(GClass30.smethod_1(284));
+                            Logger.smethod_1(MessageProvider.GetMessage(284));
                             break;
                         }
 
@@ -2221,13 +2221,13 @@ public class GClass73
                         else
                         {
                             smethod_1();
-                            GClass37.smethod_0(GClass30.smethod_2(688, unit.Name));
+                            Logger.LogMessage(MessageProvider.smethod_2(688, unit.Name));
                             num = gplayer.TargetGUID;
                         }
                     }
                     else
                     {
-                        GClass37.smethod_0(GClass30.smethod_1(286));
+                        Logger.LogMessage(MessageProvider.GetMessage(286));
                     }
                 }
             }
@@ -2241,15 +2241,15 @@ public class GClass73
         }
 
         label_36:
-        GClass37.smethod_0(GClass30.smethod_1(158));
+        Logger.LogMessage(MessageProvider.GetMessage(158));
         StartupClass.smethod_27(false, "PDeadNoResurrect");
         return;
         label_37:
-        GClass37.smethod_0(GClass30.smethod_1(159));
+        Logger.LogMessage(MessageProvider.GetMessage(159));
         StartupClass.smethod_27(false, "PDeadNoGhostWP");
         return;
         label_38:
-        GClass37.smethod_0(GClass30.smethod_1(160));
+        Logger.LogMessage(MessageProvider.GetMessage(160));
         StartupClass.smethod_27(false, "PDeadMaxDeaths");
     }
 
@@ -2325,7 +2325,7 @@ public class GClass73
     {
         var location = gplayerSelf_0.Location;
         var gspellTimer = new GSpellTimer(10000, false);
-        GClass37.smethod_1("Waiting for teleport after releasing spirit...");
+        Logger.smethod_1("Waiting for teleport after releasing spirit...");
         while (!gspellTimer.IsReadySlow)
             if (location.GetDistanceTo(gplayerSelf_0.Location) > 5.0)
                 return true;
@@ -2379,7 +2379,7 @@ public class GClass73
         {
             if (!method_17())
                 gclass5_0.method_2();
-            GClass37.smethod_0(GClass30.smethod_1(212));
+            Logger.LogMessage(MessageProvider.GetMessage(212));
         }
         else
         {
@@ -2392,7 +2392,7 @@ public class GClass73
                     return;
                 }
 
-                GClass37.smethod_0("TurboLoot didn't work, doing regular loot");
+                Logger.LogMessage("TurboLoot didn't work, doing regular loot");
             }
 
             var flag = false;
@@ -2445,7 +2445,7 @@ public class GClass73
 
             if (gclass36.method_3())
             {
-                GClass37.smethod_0(GClass30.smethod_2(804, gunit_0.GUID.ToString("x")));
+                Logger.LogMessage(MessageProvider.smethod_2(804, gunit_0.GUID.ToString("x")));
                 return false;
             }
         }
@@ -2471,7 +2471,7 @@ public class GClass73
                             if (num != 0)
                             {
                                 if (!flag)
-                                    GClass37.smethod_1(GClass30.smethod_1(754));
+                                    Logger.smethod_1(MessageProvider.GetMessage(754));
                                 flag = true;
                             }
 
@@ -2480,16 +2480,16 @@ public class GClass73
                                 GClass67.smethod_1();
                                 if (GClass67.bool_1)
                                 {
-                                    if (GClass67.string_0.ToLower().IndexOf(GClass30.smethod_1(871)) != -1)
+                                    if (GClass67.string_0.ToLower().IndexOf(MessageProvider.GetMessage(871)) != -1)
                                     {
-                                        GClass37.smethod_0("Bind-on-pickup dialog is visible, accepting");
+                                        Logger.LogMessage("Bind-on-pickup dialog is visible, accepting");
                                         Thread.Sleep(600);
                                         GClass8.smethod_2("StaticPopup1Button1").method_16(false);
                                         Thread.Sleep(600);
                                     }
                                     else
                                     {
-                                        GClass37.smethod_0("Unknown dialog visible during loot: \"" +
+                                        Logger.LogMessage("Unknown dialog visible during loot: \"" +
                                                            GClass67.string_0 + "\", dismissing");
                                         GClass67.smethod_2();
                                     }
@@ -2500,13 +2500,13 @@ public class GClass73
                         }
                         else
                         {
-                            GClass37.smethod_1(GClass30.smethod_1(755));
+                            Logger.smethod_1(MessageProvider.GetMessage(755));
                             break;
                         }
                     }
                     else
                     {
-                        GClass37.smethod_0("Clicked on pet trying to loot, oops!");
+                        Logger.LogMessage("Clicked on pet trying to loot, oops!");
                         smethod_1();
                         Thread.Sleep(500);
                         method_56();
@@ -2520,29 +2520,29 @@ public class GClass73
             }
             else
             {
-                GClass37.smethod_1(GClass30.smethod_1(756));
+                Logger.smethod_1(MessageProvider.GetMessage(756));
                 break;
             }
 
         var str = GProcessMemoryManipulator.smethod_9(GClass18.gclass18_0.method_4("RedMessage"), 128, "RedMessage");
-        GClass37.smethod_1("Red message after loot: [" + str + "]");
-        if (str.ToLower().IndexOf(GClass30.smethod_1(230)) > -1)
+        Logger.smethod_1("Red message after loot: [" + str + "]");
+        if (str.ToLower().IndexOf(MessageProvider.GetMessage(230)) > -1)
         {
             if (GClass61.gclass61_0.method_5("StopWhenFull"))
             {
-                GClass37.smethod_0(GClass30.smethod_1(231));
+                Logger.LogMessage(MessageProvider.GetMessage(231));
                 bool_2 = true;
                 bool_3 = true;
                 smethod_1();
             }
             else if (GClass61.gclass61_0.method_5("StopLootingWhenFull"))
             {
-                GClass37.smethod_0(GClass30.smethod_1(792));
+                Logger.LogMessage(MessageProvider.GetMessage(792));
                 bool_5 = true;
             }
             else
             {
-                GClass37.smethod_0(GClass30.smethod_1(857));
+                Logger.LogMessage(MessageProvider.GetMessage(857));
             }
         }
 
@@ -2566,24 +2566,24 @@ public class GClass73
 
     public void method_57(GClass5 gclass5_0, GUnit gunit_0, bool bool_20)
     {
-        GClass37.smethod_1("Starting DoLootCorpse on: 0x" + gclass5_0.long_0.ToString("x"));
+        Logger.smethod_1("Starting DoLootCorpse on: 0x" + gclass5_0.long_0.ToString("x"));
         method_60();
         if (!gunit_0.Hover())
         {
             if (GContext.Main.Me.IsUnderAttack)
                 return;
-            GClass37.smethod_1("First pass failed, trying harder by approaching closer");
+            Logger.smethod_1("First pass failed, trying harder by approaching closer");
             if (!gunit_0.Approach(2.0, false))
             {
                 if (!method_17())
                     gclass5_0.method_2();
-                GClass37.smethod_0(GClass30.smethod_1(212));
+                Logger.LogMessage(MessageProvider.GetMessage(212));
                 return;
             }
 
             if (!gunit_0.Hover())
             {
-                GClass37.smethod_0(GClass30.smethod_2(801, gunit_0.GUID.ToString("x")));
+                Logger.LogMessage(MessageProvider.smethod_2(801, gunit_0.GUID.ToString("x")));
                 if (method_17())
                     return;
                 gclass5_0.method_2();
@@ -2594,18 +2594,18 @@ public class GClass73
         method_56();
         if (!method_55(gunit_0, bool_20, true))
         {
-            GClass37.smethod_0(GClass30.smethod_2(803, gunit_0.GUID.ToString("x")));
+            Logger.LogMessage(MessageProvider.smethod_2(803, gunit_0.GUID.ToString("x")));
             if (bool_20)
             {
                 if (int_13 < 4)
                 {
                     ++int_13;
-                    GClass37.smethod_0(GClass30.smethod_1(823));
+                    Logger.LogMessage(MessageProvider.GetMessage(823));
                     method_57(gclass5_0, gunit_0, bool_20);
                     return;
                 }
 
-                GClass37.smethod_0(GClass30.smethod_1(824));
+                Logger.LogMessage(MessageProvider.GetMessage(824));
             }
 
             if (method_17())
@@ -2614,7 +2614,7 @@ public class GClass73
         }
         else if (!bool_20)
         {
-            GClass37.smethod_0(GClass30.smethod_1(208));
+            Logger.LogMessage(MessageProvider.GetMessage(208));
             int_13 = 0;
             if (!GClass42.gclass42_0.method_15("Common.PostLoot"))
             {
@@ -2656,17 +2656,17 @@ public class GClass73
         if (StartupClass.SomeIntegerValue >= GClass61.gclass61_0.method_3("BadTagLimit"))
         {
             StartupClass.gclass73_0.bool_2 = true;
-            GClass37.smethod_0(GClass30.smethod_1(808));
+            Logger.LogMessage(MessageProvider.GetMessage(808));
         }
 
         if (!gunit_0.IsTargetingMe && !GClass61.gclass61_0.method_5("IgnoreTags"))
         {
-            GClass37.smethod_0(GClass30.smethod_2(805, gunit_0.Name));
+            Logger.LogMessage(MessageProvider.smethod_2(805, gunit_0.Name));
             smethod_1();
         }
         else
         {
-            GClass37.smethod_0(GClass30.smethod_2(806, gunit_0.Name));
+            Logger.LogMessage(MessageProvider.smethod_2(806, gunit_0.Name));
             StartupClass.CurrentGameClass.Disengage(gunit_0);
             var gclass36_1 = new GClass36(3000);
             var gclass36_2 = new GClass36(1200);
@@ -2687,12 +2687,12 @@ public class GClass73
                 }
                 else
                 {
-                    GClass37.smethod_0(GClass30.smethod_2(806, gunit_0.Name));
+                    Logger.LogMessage(MessageProvider.smethod_2(806, gunit_0.Name));
                     smethod_1();
                     return;
                 }
 
-            GClass37.smethod_0(GClass30.smethod_2(807, gunit_0.Name));
+            Logger.LogMessage(MessageProvider.smethod_2(807, gunit_0.Name));
         }
     }
 
@@ -2701,8 +2701,8 @@ public class GClass73
         if (!GContext.Main.MouseSpin || ggameCamera_0 == null || float_0 == 0.0 ||
             Math.Abs(ggameCamera_0.Pitch - float_0) <= Math.PI / 36.0)
             return;
-        GClass37.smethod_1("Current camera: " + ggameCamera_0);
-        GClass37.smethod_0("Camera pitch is messed up, fixing");
+        Logger.smethod_1("Current camera: " + ggameCamera_0);
+        Logger.LogMessage("Camera pitch is messed up, fixing");
         GContext.Main.ReleaseSpinRun();
         StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
     }
@@ -2716,7 +2716,7 @@ public class GClass73
             if ((actionInventory1 == 0 && StartupClass.CurrentGameClass.ShouldBuyFood) ||
                 (actionInventory2 == 0 && StartupClass.CurrentGameClass.ShouldBuyWater))
             {
-                GClass37.smethod_0("Food or water is zero, going back for more");
+                Logger.LogMessage("Food or water is zero, going back for more");
                 return true;
             }
         }
@@ -2729,7 +2729,7 @@ public class GClass73
             foreach (var gitem in equippedItems)
                 if (gitem.Durability < num)
                 {
-                    GClass37.smethod_0("Item is in need of repair: \"" + gitem.Name + "\"");
+                    Logger.LogMessage("Item is in need of repair: \"" + gitem.Name + "\"");
                     flag = true;
                 }
 
@@ -2752,7 +2752,7 @@ public class GClass73
         }
         catch (Exception ex)
         {
-            GClass37.smethod_0("** OnHearth inner exception: " + ex.Message + "\r\n" + ex.StackTrace);
+            Logger.LogMessage("** OnHearth inner exception: " + ex.Message + "\r\n" + ex.StackTrace);
             throw ex;
         }
     }
@@ -2762,11 +2762,11 @@ public class GClass73
         if (gprofile_0.IsVendorEnabled && bool_3 && StartupClass.IsSomeConditionMet)
         {
             StartupClass.bool_21 = false;
-            GClass37.smethod_0("Starting up vendor stuff");
+            Logger.LogMessage("Starting up vendor stuff");
             Thread.Sleep(6000);
             if (gprofile_0.VendorWaypoints[0].GetDistanceTo(gplayerSelf_0.Location) > 20.0)
             {
-                GClass37.smethod_0("First vendor waypoint is too far away, skipping resume");
+                Logger.LogMessage("First vendor waypoint is too far away, skipping resume");
                 StartupClass.bool_21 = true;
             }
             else
@@ -2828,11 +2828,11 @@ public class GClass73
             while (bool_16 & bool_17 & bool_18)
                 method_75();
             var Target = vendorPath.Dequeue();
-            GClass37.smethod_1("$ Dequeued loc: " + Target);
+            Logger.smethod_1("$ Dequeued loc: " + Target);
             if (Math.Abs(GContext.Main.Movement.CompareHeadings(gplayerSelf_0.Heading,
                     gplayerSelf_0.Location.GetHeadingTo(Target))) > Tolerance && GContext.Main.IsRunning)
             {
-                GClass37.smethod_0("Lifting off to set heading exact");
+                Logger.LogMessage("Lifting off to set heading exact");
                 GContext.Main.ReleaseRun();
                 double headingTo = gplayerSelf_0.Location.GetHeadingTo(Target);
                 GContext.Main.Movement.SetHeading(headingTo, Tolerance);
@@ -2843,7 +2843,7 @@ public class GClass73
                 --num;
                 if (num == 0)
                 {
-                    GClass37.smethod_0("Got food and repair, switching to faster running");
+                    Logger.LogMessage("Got food and repair, switching to faster running");
                     flag3 = true;
                     Tolerance = Math.PI / 3.0;
                 }
@@ -2856,13 +2856,13 @@ public class GClass73
             }
             else
             {
-                GClass37.smethod_0("Never able to reach next vendor wp, giving up");
+                Logger.LogMessage("Never able to reach next vendor wp, giving up");
                 StartupClass.smethod_27(false, "VendorWPStuck");
                 return;
             }
         }
 
-        GClass37.smethod_0("Vendor waypoints all done, resuming profile");
+        Logger.LogMessage("Vendor waypoints all done, resuming profile");
         bool_2 = false;
         bool_3 = false;
         gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
@@ -2878,18 +2878,18 @@ public class GClass73
             var gmerchant = new GMerchant();
             if (gmerchant.IsVisible)
                 return gmerchant;
-            GClass37.smethod_0("Merchant window didn't open, trying again");
+            Logger.LogMessage("Merchant window didn't open, trying again");
             Thread.Sleep(3000);
         }
 
-        GClass37.smethod_0("Too many failures, giving up");
+        Logger.LogMessage("Too many failures, giving up");
         StartupClass.smethod_27(false, "VendorInteractFailed");
         return null;
     }
 
     private void method_66(GMerchant gmerchant_0, int int_15)
     {
-        GClass37.smethod_0("Loading up on ammo: \"" + GPlayerSelf.Me.AmmoName + "\"");
+        Logger.LogMessage("Loading up on ammo: \"" + GPlayerSelf.Me.AmmoName + "\"");
         for (var int_15_1 = GPlayerSelf.Me.AmmoCount; int_15_1 < int_15; int_15_1 = method_69(int_15_1))
             gmerchant_0.BuyOnAnyPage(GPlayerSelf.Me.AmmoName);
     }
@@ -2899,7 +2899,7 @@ public class GClass73
         var actionInventory = GContext.Main.Interface.GetActionInventory(string_3);
         var int_15_1 = actionInventory;
         if (actionInventory >= int_15)
-            GClass37.smethod_0("Already got enough, don't need to buy any");
+            Logger.LogMessage("Already got enough, don't need to buy any");
         else
             for (; int_15_1 < int_15; int_15_1 = method_68(string_3, int_15_1))
                 gmerchant_0.BuyOnAnyPage(string_2);
@@ -2915,7 +2915,7 @@ public class GClass73
                 return actionInventory;
         }
 
-        GClass37.smethod_0("Inventory doesn't seem to be going up for " + string_2 + " when buying");
+        Logger.LogMessage("Inventory doesn't seem to be going up for " + string_2 + " when buying");
         StartupClass.smethod_27(false, "StockupFailed");
         return 0;
     }
@@ -2930,14 +2930,14 @@ public class GClass73
                 return ammoCount;
         }
 
-        GClass37.smethod_0("Ammo count doesn't seem to be going up!");
+        Logger.LogMessage("Ammo count doesn't seem to be going up!");
         StartupClass.smethod_27(false, "StockupFailed");
         return 0;
     }
 
     private bool method_70(GUnit gunit_0)
     {
-        GClass37.smethod_0("Doing food/water with \"" + gunit_0.Name + "\"");
+        Logger.LogMessage("Doing food/water with \"" + gunit_0.Name + "\"");
         var gmerchant_0 = method_65(gunit_0);
         var flag = false;
         if (gmerchant_0.IsRepairVisible && gmerchant_0.IsRepairEnabled)
@@ -2956,14 +2956,14 @@ public class GClass73
         if (StartupClass.CurrentGameClass.ShouldBuyFood)
         {
             var string_2 = method_73("Common.Eat");
-            GClass37.smethod_0("Loading up on food: \"" + string_2 + "\"");
+            Logger.LogMessage("Loading up on food: \"" + string_2 + "\"");
             method_67(gmerchant_0, string_2, GClass61.gclass61_0.method_3("FoodAmount"), "Common.Eat");
         }
 
         if (StartupClass.CurrentGameClass.ShouldBuyWater)
         {
             var string_2 = method_73("Common.Drink");
-            GClass37.smethod_0("Loading up on water: \"" + string_2 + "\"");
+            Logger.LogMessage("Loading up on water: \"" + string_2 + "\"");
             method_67(gmerchant_0, string_2, GClass61.gclass61_0.method_3("WaterAmount"), "Common.Drink");
         }
 
@@ -2977,7 +2977,7 @@ public class GClass73
 
     private bool method_71(GUnit gunit_0)
     {
-        GClass37.smethod_0("Doing ammo/repair with \"" + gunit_0.Name + "\"");
+        Logger.LogMessage("Doing ammo/repair with \"" + gunit_0.Name + "\"");
         var gmerchant_0 = method_65(gunit_0);
         var flag = false;
         if (gmerchant_0.IsRepairVisible && gmerchant_0.IsRepairEnabled)
@@ -2991,7 +2991,7 @@ public class GClass73
         if (GPlayerSelf.Me.PlayerClass == GPlayerClass.Hunter)
         {
             var int_15 = GClass61.gclass61_0.method_3("AmmoAmount");
-            GClass37.smethod_0("My current ammo: " + GPlayerSelf.Me.AmmoCount + ", required: " + int_15);
+            Logger.LogMessage("My current ammo: " + GPlayerSelf.Me.AmmoCount + ", required: " + int_15);
             if (GPlayerSelf.Me.AmmoCount < int_15)
                 method_66(gmerchant_0, int_15);
         }
@@ -3013,7 +3013,7 @@ public class GClass73
 
     private bool method_72(GUnit gunit_0)
     {
-        GClass37.smethod_0("Doing alt repair with \"" + gunit_0.Name + "\"");
+        Logger.LogMessage("Doing alt repair with \"" + gunit_0.Name + "\"");
         var gmerchant = method_65(gunit_0);
         if (gmerchant.IsRepairVisible && gmerchant.IsRepairEnabled)
             gmerchant.ClickRepairButton();
@@ -3030,7 +3030,7 @@ public class GClass73
         var byKeyName = GContext.Main.Interface.GetByKeyName(string_2);
         if (byKeyName == null)
         {
-            GClass37.smethod_0("Couldn't guess item name, no UI object for: " + string_2);
+            Logger.LogMessage("Couldn't guess item name, no UI object for: " + string_2);
             StartupClass.smethod_27(false, "BadItemN");
             return null;
         }
@@ -3040,7 +3040,7 @@ public class GClass73
         var byName = GContext.Main.Interface.GetByName("GameTooltip");
         if (byName != null && byName.IsVisible)
             return byName.GetChildObject("GameTooltipTextLeft1").LabelText;
-        GClass37.smethod_0("Couldn't find tool tip or tooltip not visible after hovering over: " + string_2);
+        Logger.LogMessage("Couldn't find tool tip or tooltip not visible after hovering over: " + string_2);
         StartupClass.smethod_27(false, "BadToolTip");
         return null;
     }
@@ -3051,12 +3051,12 @@ public class GClass73
         if (gbagItem_1.Length > 0)
             foreach (var gbagItem in gbagItem_1)
             {
-                GClass37.smethod_1("Sell: " + gbagItem.Item.Name);
+                Logger.smethod_1("Sell: " + gbagItem.Item.Name);
                 Thread.Sleep(500 + StartupClass.random_0.Next() % 1000);
                 gbagItem.Click(true);
             }
         else
-            GClass37.smethod_0("No items to sell.");
+            Logger.LogMessage("No items to sell.");
     }
 
     private void method_75()
@@ -3064,22 +3064,22 @@ public class GClass73
         foreach (var node in GObjectList.GetNodes())
             if (node.IsMailBox && node.DistanceToSelf <= (double)int_12)
             {
-                GClass37.smethod_0("We are near a mailbox!");
+                Logger.LogMessage("We are near a mailbox!");
                 bool_15 = true;
                 GContext.Main.ReleaseSpinRun();
                 gbagItem_0 = GPlayerSelf.Me.GetBagCollection(GItemBagAction.Mail);
                 int_14 = 0;
-                GClass37.smethod_1("Bag Count: " + gbagItem_0.Length);
+                Logger.smethod_1("Bag Count: " + gbagItem_0.Length);
                 if (gbagItem_0.Length >= 1)
                 {
                     if (node.DistanceToSelf > GContext.Main.MeleeDistance)
                     {
-                        GClass37.smethod_0("Approaching Mailbox");
+                        Logger.LogMessage("Approaching Mailbox");
                         GContext.Main.ReleaseSpinRun();
                         GContext.Main.Movement.MoveToLocation(node.Location, GContext.Main.MeleeDistance, false);
                         if (node.DistanceToSelf > GContext.Main.MeleeDistance)
                         {
-                            GClass37.smethod_1("cant get to the box...something blocking?");
+                            Logger.smethod_1("cant get to the box...something blocking?");
                             bool_16 = false;
                             break;
                         }
@@ -3106,7 +3106,7 @@ public class GClass73
                     }
                     else
                     {
-                        GClass37.smethod_0("No items to mail.");
+                        Logger.LogMessage("No items to mail.");
                         bool_16 = false;
                     }
 
@@ -3115,7 +3115,7 @@ public class GClass73
                 }
                 else
                 {
-                    GClass37.smethod_0("We have no mail");
+                    Logger.LogMessage("We have no mail");
                     bool_16 = false;
                     break;
                 }
@@ -3147,7 +3147,7 @@ public class GClass73
             }
             else
             {
-                GClass37.smethod_1("max item limit reached (12 items)");
+                Logger.smethod_1("max item limit reached (12 items)");
                 break;
             }
 
@@ -3162,7 +3162,7 @@ public class GClass73
             return true;
         }
 
-        GClass37.smethod_0("No mail to send.");
+        Logger.LogMessage("No mail to send.");
         Thread.Sleep(500);
         GContext.Main.SendKey("Common.BackpackAll");
         return false;

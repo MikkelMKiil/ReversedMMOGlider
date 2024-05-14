@@ -278,7 +278,7 @@ public class ConfigForm : Form
     public ConfigForm(bool bool_4)
     {
         InitializeComponent();
-        GClass30.smethod_7(PartyHealMode, "Common.PartyHealMode");
+        MessageProvider.smethod_7(PartyHealMode, "Common.PartyHealMode");
         for (var index = 0; index < StartupClass.ProfileMapping.Keys.Count; ++index)
         {
             var key = StartupClass.ProfileMapping.Keys[index];
@@ -415,16 +415,16 @@ public class ConfigForm : Form
         BypassLootSanity.Checked = GClass61.gclass61_0.method_5(nameof(BypassLootSanity));
         RelogEnabled.Checked = GClass61.gclass61_0.method_5(nameof(RelogEnabled));
         StrafeObstacles.Checked = GClass61.gclass61_0.method_2(nameof(StrafeObstacles)) == "True";
-        GClass30.smethod_3(this, "Config");
+        MessageProvider.smethod_3(this, "Config");
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
-        GliderVersionLabel.Text = GClass30.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
-        WowVersionLabel.Text = GClass30.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
-        DebuffsKnown.Text = GClass30.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+        GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
+        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
+        DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         if (GClass61.gclass61_0.method_2("LastProfile") != null)
             InitialProfile.Text = GClass61.gclass61_0.method_2("LastProfile");
         else
-            InitialProfile.Text = GClass30.smethod_1(771);
+            InitialProfile.Text = MessageProvider.GetMessage(771);
         method_0(nameof(Profile1), Profile1);
         method_0(nameof(Profile2), Profile2);
         method_0(nameof(Profile3), Profile3);
@@ -462,7 +462,7 @@ public class ConfigForm : Form
         SubjectText.Text = GClass61.gclass61_0.method_2(nameof(SubjectText));
         SendMail.Checked = GClass61.gclass61_0.method_2(nameof(SendMail)) == "True";
         if (GClass61.gclass61_0.method_5(nameof(GliderDebug)))
-            GClass37.smethod_0("Glider debug mode enabled");
+            Logger.LogMessage("Glider debug mode enabled");
         method_11();
         method_16();
         method_18();
@@ -477,7 +477,7 @@ public class ConfigForm : Form
     {
         var str = GClass61.gclass61_0.method_2(string_0);
         if (str == null)
-            label_0.Text = GClass30.smethod_1(771);
+            label_0.Text = MessageProvider.GetMessage(771);
         else
             label_0.Text = str;
     }
@@ -3077,7 +3077,7 @@ public class ConfigForm : Form
 
     private void method_1(string string_0, Label label_0)
     {
-        if (!(label_0.Text != GClass30.smethod_1(771)))
+        if (!(label_0.Text != MessageProvider.GetMessage(771)))
             return;
         GClass61.gclass61_0.method_0(string_0, label_0.Text);
     }
@@ -3106,12 +3106,12 @@ public class ConfigForm : Form
         var selectedItem = (GClass22)ClassList.SelectedItem;
         selectedItem.method_0();
         var object0 = (GGameClass)selectedItem.object_0;
-        GClass37.smethod_0("Calling show config on " + selectedItem.string_0);
+        Logger.LogMessage("Calling show config on " + selectedItem.string_0);
         var gconfigResult = object0.ShowConfiguration();
         switch (gconfigResult)
         {
             case GConfigResult.NotSupported:
-                var num = (int)MessageBox.Show(this, GClass30.smethod_1(852), GProcessMemoryManipulator.smethod_0(),
+                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GProcessMemoryManipulator.smethod_0(),
                     MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 break;
             case GConfigResult.Accept:
@@ -3270,7 +3270,7 @@ public class ConfigForm : Form
         var openFileDialog = new OpenFileDialog();
         openFileDialog.RestoreDirectory = true;
         openFileDialog.InitialDirectory = Environment.CurrentDirectory + "\\Profiles";
-        openFileDialog.Filter = GClass30.smethod_1(661);
+        openFileDialog.Filter = MessageProvider.GetMessage(661);
         if (openFileDialog.ShowDialog(this) != DialogResult.OK)
             return;
         label_0.Text = openFileDialog.FileName;
@@ -3299,13 +3299,13 @@ public class ConfigForm : Form
         debuffList.method_0();
         if (debuffList.sortedList_0.Keys.Count == 0)
         {
-            var num1 = (int)MessageBox.Show(this, GClass30.smethod_4("DebuffList.NoneNew"),
-                GClass30.smethod_4("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            var num1 = (int)MessageBox.Show(this, MessageProvider.smethod_4("DebuffList.NoneNew"),
+                MessageProvider.smethod_4("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         else
         {
             var num2 = (int)debuffList.ShowDialog(this);
-            DebuffsKnown.Text = GClass30.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+            DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         }
     }
 
@@ -3319,7 +3319,7 @@ public class ConfigForm : Form
         groupBox25.Enabled = BackgroundEnable.Checked;
         if (bool_1 || !AllowWW.Checked || GClass71.smethod_2(false) != GEnum9.const_1)
             return;
-        var num = (int)MessageBox.Show(this, GClass30.smethod_1(858), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK,
+        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
         BackgroundEnable.Checked = false;
     }
@@ -3466,7 +3466,7 @@ public class ConfigForm : Form
 
     private void AccountCreate_Click(object sender, EventArgs e)
     {
-        if (Directory.GetFiles("Accounts\\", "*.xml").Length == 0 && MessageBox.Show(this, GClass30.smethod_1(867),
+        if (Directory.GetFiles("Accounts\\", "*.xml").Length == 0 && MessageBox.Show(this, MessageProvider.GetMessage(867),
                 GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
         var num = (int)new AccountInfo().ShowDialog(this);
@@ -3484,7 +3484,7 @@ public class ConfigForm : Form
             Directory.CreateDirectory("Accounts");
         bool_2 = false;
         AutoLogCharacter.Items.Clear();
-        AutoLogCharacter.Items.Add(GClass30.smethod_1(874));
+        AutoLogCharacter.Items.Add(MessageProvider.GetMessage(874));
         AutoLogCharacter.SelectedIndex = 0;
         var files = Directory.GetFiles("Accounts\\", "*.xml");
         var str1 = GClass61.gclass61_0.method_2("AutoLog");
@@ -3535,8 +3535,8 @@ public class ConfigForm : Form
                 {
                     var str = key;
                     var string_6 = "Common.Class" + key;
-                    if (GClass30.smethod_5(string_6))
-                        str = GClass30.smethod_4(string_6);
+                    if (MessageProvider.smethod_5(string_6))
+                        str = MessageProvider.smethod_4(string_6);
                     sortedList_0.Add(key, str);
                     KeyEditClass.Items.Add(str);
                 }
@@ -3570,6 +3570,6 @@ public class ConfigForm : Form
     private bool method_20()
     {
         return GClass61.gclass61_0.method_2("AppKey").StartsWith("02") ||
-               GClass30.gclass30_0.string_0.ToLower().IndexOf("zh") > -1;
+               MessageProvider.gclass30_0.string_0.ToLower().IndexOf("zh") > -1;
     }
 }

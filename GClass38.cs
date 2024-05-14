@@ -36,7 +36,7 @@ public class GClass38
             return 0;
         if (!sortedList_0.ContainsKey(string_0))
         {
-            GClass37.smethod_0("Bogus slot name: " + string_0);
+            Logger.LogMessage("Bogus slot name: " + string_0);
             return 0;
         }
 
@@ -49,20 +49,20 @@ public class GClass38
     {
         if (!bool_0)
         {
-            GClass37.smethod_1("Can't check for buff, setup is not good!");
+            Logger.smethod_1("Can't check for buff, setup is not good!");
             return true;
         }
 
-        GClass37.smethod_1("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
+        Logger.smethod_1("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
         for (var index = 0; index < 8; ++index)
         {
             var num = StartupClass.gclass43_3.method_1("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
             var int_2 = GProcessMemoryManipulator.smethod_11(gobject_0.StorageAddress + num, "EnchantID");
             if (int_2 > 0)
             {
-                GClass37.smethod_1("EnchantID: " + int_2);
+                Logger.smethod_1("EnchantID: " + int_2);
                 var str = method_3(int_2);
-                GClass37.smethod_1("Enchant name: " + str);
+                Logger.smethod_1("Enchant name: " + str);
                 if (str.ToLower().IndexOf(string_0) > -1)
                     return true;
             }
@@ -73,7 +73,7 @@ public class GClass38
 
     public string method_3(int int_2)
     {
-        GClass37.smethod_1("GetEnchantmentName: " + int_2.ToString("x"));
+        Logger.smethod_1("GetEnchantmentName: " + int_2.ToString("x"));
         var num1 = GClass18.gclass18_0.method_4("EnchantRowJump");
         var num2 = GClass18.gclass18_0.method_4("EnchantRowCount");
         var num3 = 0;
@@ -81,13 +81,13 @@ public class GClass38
             num3 = -1;
         var num4 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("EnchantNames") + num1, "EnchantNamesBase");
         var num5 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("EnchantNames") - num2, "EnchantNamesCount");
-        GClass37.smethod_1("Rows @ 0x" + (GClass18.gclass18_0.method_4("EnchantNames") + num1).ToString("x") + " = 0x" +
+        Logger.smethod_1("Rows @ 0x" + (GClass18.gclass18_0.method_4("EnchantNames") + num1).ToString("x") + " = 0x" +
                            num4.ToString("x"));
-        GClass37.smethod_1("Count @ 0x" + (GClass18.gclass18_0.method_4("EnchantNames") - num2).ToString("x") +
+        Logger.smethod_1("Count @ 0x" + (GClass18.gclass18_0.method_4("EnchantNames") - num2).ToString("x") +
                            " = 0x" + num5.ToString("x"));
         if (int_2 > num5)
             return "(enchantid out of range!)";
-        GClass37.smethod_1("The row @ " + (num4 + (int_2 + num3) * 4).ToString("x"));
+        Logger.smethod_1("The row @ " + (num4 + (int_2 + num3) * 4).ToString("x"));
         var num6 = GProcessMemoryManipulator.smethod_11(num4 + (int_2 + num3) * 4, "EnchantRow");
         if (num6 == 0)
             return "(no row for that enchantid: " + int_2 + ")";
@@ -95,7 +95,7 @@ public class GClass38
         if (int_29 == 0)
             return "(null pointer to enchant name!)";
         var str = GProcessMemoryManipulator.smethod_9(int_29, 100, "EnchantName");
-        GClass37.smethod_1("EnchantName: \"" + str + "\"");
+        Logger.smethod_1("EnchantName: \"" + str + "\"");
         return str;
     }
 
@@ -113,7 +113,7 @@ public class GClass38
                 var gobject = GObjectList.FindObject(GUID);
                 if (gobject == null)
                 {
-                    GClass37.smethod_1("! Null bag: " + GUID.ToString("x"));
+                    Logger.smethod_1("! Null bag: " + GUID.ToString("x"));
                 }
                 else
                 {
@@ -140,7 +140,7 @@ public class GClass38
                 var gobject = GObjectList.FindObject(num2);
                 if (gobject == null)
                 {
-                    GClass37.smethod_1("! Couldn't find item in list: " + num2.ToString("x"));
+                    Logger.smethod_1("! Couldn't find item in list: " + num2.ToString("x"));
                 }
                 else
                 {

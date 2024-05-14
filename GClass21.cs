@@ -63,7 +63,7 @@ public class GClass21
                     var gclass21 = smethod_5(gplayer_1.GUID);
                     if (gclass21 == null)
                     {
-                        GClass37.smethod_0(GClass30.smethod_2(641, gplayer_1.Name, gplayer_1.PlayerRace.ToString(),
+                        Logger.LogMessage(MessageProvider.smethod_2(641, gplayer_1.Name, gplayer_1.PlayerRace.ToString(),
                             gplayer_1.PlayerClass.ToString()));
                         list_0.Add(new GClass21(gplayer_1));
                     }
@@ -73,7 +73,7 @@ public class GClass21
                         if (int_0 > 0 && (DateTime.Now - gclass21.dateTime_0).TotalSeconds >= int_0 && !gclass21.bool_0)
                         {
                             gclass21.bool_0 = true;
-                            GClass37.smethod_0(GClass30.smethod_2(642, int_0, gplayer_1.Name,
+                            Logger.LogMessage(MessageProvider.smethod_2(642, int_0, gplayer_1.Name,
                                 gplayer_1.GUID.ToString("x")));
                             GClass20.smethod_0("PlayerNear.wav");
                             GClass48.smethod_1();
@@ -81,7 +81,7 @@ public class GClass21
 
                         if (int_1 > 0 && (DateTime.Now - gclass21.dateTime_0).TotalSeconds >= int_1)
                         {
-                            GClass37.smethod_0(GClass30.smethod_2(643, int_1, gplayer_1.Name,
+                            Logger.LogMessage(MessageProvider.smethod_2(643, int_1, gplayer_1.Name,
                                 gplayer_1.GUID.ToString("x")));
                             GClass20.smethod_0("PlayerNear.wav");
                             StartupClass.gclass73_0.method_21(true);
@@ -130,7 +130,7 @@ public class GClass21
             var gclass21 = list_0[index];
             if (gclass21.bool_1)
             {
-                GClass37.smethod_0(GClass30.smethod_2(55, gclass21.gplayer_0.Name));
+                Logger.LogMessage(MessageProvider.smethod_2(55, gclass21.gplayer_0.Name));
                 list_0.RemoveAt(index);
                 return true;
             }
@@ -176,17 +176,17 @@ public class GClass21
         if (StartupClass.SomeIntegerValue >= GClass61.gclass61_0.method_3("BadTagLimit"))
         {
             StartupClass.gclass73_0.bool_2 = true;
-            GClass37.smethod_0(GClass30.smethod_1(808));
+            Logger.LogMessage(MessageProvider.GetMessage(808));
         }
 
         if (!gmonster.IsTargetingMe && !GClass61.gclass61_0.method_5("IgnoreTags"))
         {
-            GClass37.smethod_0(GClass30.smethod_2(805, gmonster.Name));
+            Logger.LogMessage(MessageProvider.smethod_2(805, gmonster.Name));
             GClass73.smethod_1();
             return false;
         }
 
-        GClass37.smethod_0(GClass30.smethod_2(806, gmonster.Name));
+        Logger.LogMessage(MessageProvider.smethod_2(806, gmonster.Name));
         if (bool_2)
             GClass42.gclass42_0.method_0("Common.Back");
         if (string_0 != null)
@@ -206,12 +206,12 @@ public class GClass21
             }
             else
             {
-                GClass37.smethod_0(GClass30.smethod_2(806, gmonster.Name));
+                Logger.LogMessage(MessageProvider.smethod_2(806, gmonster.Name));
                 GClass73.smethod_1();
                 return false;
             }
 
-        GClass37.smethod_0(GClass30.smethod_2(807, gmonster.Name));
+        Logger.LogMessage(MessageProvider.smethod_2(807, gmonster.Name));
         return true;
     }
 }

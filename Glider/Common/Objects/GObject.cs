@@ -134,7 +134,7 @@ namespace Glider.Common.Objects
                 return false;
             if (!IsValid)
             {
-                GClass37.smethod_1("! Refresh invoked on invalid object: " + ToString());
+                Logger.smethod_1("! Refresh invoked on invalid object: " + ToString());
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace Glider.Common.Objects
             catch (GException1 ex)
             {
                 Cull();
-                GClass37.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
+                Logger.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
                                    ", object data: " + ToString() + ")");
                 return false;
             }

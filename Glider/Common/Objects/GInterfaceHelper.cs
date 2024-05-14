@@ -113,7 +113,7 @@ namespace Glider.Common.Objects
         {
             var gkey = GClass42.gclass42_0.sortedList_0[KeyName];
             gkey.FilloutKey();
-            GClass37.smethod_1(GClass30.smethod_2(627, gkey.KeyName, gkey.CharCode));
+            Logger.smethod_1(MessageProvider.smethod_2(627, gkey.KeyName, gkey.CharCode));
             var num1 = GClass18.gclass18_0.method_4("BarBase");
             var num2 = GClass18.gclass18_0.method_4("BarSize");
             var num3 = 0;
@@ -127,11 +127,11 @@ namespace Glider.Common.Objects
                 {
                     case GBarState.Combat:
                         num3 = int.Parse(new string(GClass42.gclass42_0.sortedList_0["Common.BarCombat"].CharCode, 1));
-                        GClass37.smethod_1(GClass30.smethod_2(3, num3));
+                        Logger.smethod_1(MessageProvider.smethod_2(3, num3));
                         break;
                     case GBarState.Rest:
                         num3 = int.Parse(new string(GClass42.gclass42_0.sortedList_0["Common.BarRest"].CharCode, 1));
-                        GClass37.smethod_1(GClass30.smethod_2(4, num3));
+                        Logger.smethod_1(MessageProvider.smethod_2(4, num3));
                         break;
                     case GBarState.Bar1:
                         num3 = 1;
@@ -189,7 +189,7 @@ namespace Glider.Common.Objects
             }
             catch (KeyNotFoundException ex)
             {
-                GClass37.smethod_0("!! IsKeyFiring failed, missing key: \"" + KeyName + "\"");
+                Logger.LogMessage("!! IsKeyFiring failed, missing key: \"" + KeyName + "\"");
                 return false;
             }
 
@@ -203,7 +203,7 @@ namespace Glider.Common.Objects
             var gkey = GClass42.gclass42_0.sortedList_0[KeyName];
             if (gkey == null)
             {
-                GClass37.smethod_0("!! IsKeyReady failed, missing key: \"" + KeyName + "\"");
+                Logger.LogMessage("!! IsKeyReady failed, missing key: \"" + KeyName + "\"");
                 return false;
             }
 
@@ -229,16 +229,16 @@ namespace Glider.Common.Objects
                 if (gclass8.method_10() || !RequireVisible)
                 {
                     ++num;
-                    GClass37.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
+                    Logger.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
                                        gclass8.method_10() + ", label=\"" + gclass8.method_3() + "\"");
                     gclass8.method_8();
-                    GClass37.smethod_1("");
+                    Logger.smethod_1("");
                 }
 
                 goto label_1;
             } while (int_1 != 0);
 
-            GClass37.smethod_0("DumpUIDebug done, dumped " + num + " named objects");
+            Logger.LogMessage("DumpUIDebug done, dumped " + num + " named objects");
         }
 
         public bool IsKeyPopulated(string KeyName)
@@ -250,7 +250,7 @@ namespace Glider.Common.Objects
             }
             catch (KeyNotFoundException ex)
             {
-                GClass37.smethod_0("!! IsKeyPopulated failed, missing key: \"" + KeyName + "\"");
+                Logger.LogMessage("!! IsKeyPopulated failed, missing key: \"" + KeyName + "\"");
                 return false;
             }
         }
@@ -264,7 +264,7 @@ namespace Glider.Common.Objects
             }
             catch (KeyNotFoundException ex)
             {
-                GClass37.smethod_0("!! IsKeyEnabled failed, missing key: \"" + KeyName + "\"");
+                Logger.LogMessage("!! IsKeyEnabled failed, missing key: \"" + KeyName + "\"");
                 return false;
             }
 
@@ -318,20 +318,20 @@ namespace Glider.Common.Objects
                     if (gclass8.method_10() || !RequireVisible)
                     {
                         ++num5;
-                        GClass37.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
+                        Logger.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
                                            gclass8.method_10());
                         gclass8.method_8();
-                        GClass37.smethod_1("");
+                        Logger.smethod_1("");
                     }
 
                     goto label_2;
                 } while (int_1 != 0);
 
-                GClass37.smethod_0("DumpUIPreWorldDebug done, dumped " + num5 + " named objects");
+                Logger.LogMessage("DumpUIPreWorldDebug done, dumped " + num5 + " named objects");
             }
             else
             {
-                GClass37.smethod_0("Can't do DumpPreWorldUIDebug, no pre-world interface visible!");
+                Logger.LogMessage("Can't do DumpPreWorldUIDebug, no pre-world interface visible!");
             }
         }
 

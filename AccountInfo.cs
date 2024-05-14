@@ -204,7 +204,7 @@ public class AccountInfo : Form
             Nickname.Text.Trim().Length != 0)
         {
             var str = "Accounts\\" + Nickname.Text.Trim() + ".xml";
-            GClass37.smethod_1("Saving to: \"" + str + "\"");
+            Logger.smethod_1("Saving to: \"" + str + "\"");
             if (File.Exists(str) && MessageBox.Show(this,
                     "An Auto Login character by that nickname already exists.  Do you want to overwrite it with this information?",
                     GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
