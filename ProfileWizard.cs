@@ -78,14 +78,14 @@ public class ProfileWizard : Form
         GClass30.smethod_3(this, nameof(ProfileWizard));
     }
 
-    void Form.Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (disposing && icontainer_0 != null)
+        {
             icontainer_0.Dispose();
-        // ISSUE: explicit non-virtual call
-        __nonvirtual(((Form)this).Dispose(disposing));
+        }
+        base.Dispose(disposing);
     }
-
     private void InitializeComponent()
     {
         icontainer_0 = new Container();
@@ -459,13 +459,11 @@ public class ProfileWizard : Form
         return ShowDialog(form_0);
     }
 
-    void Form.OnClosed(EventArgs eventArgs_0)
+    protected override void OnClosed(EventArgs eventArgs_0)
     {
         timer_0.Enabled = false;
-        // ISSUE: explicit non-virtual call
-        __nonvirtual(((Form)this).OnClosed(eventArgs_0));
+        base.OnClosed(eventArgs_0);
     }
-
     private void method_1()
     {
         switch (enum0_0)

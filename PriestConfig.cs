@@ -59,14 +59,14 @@ public class PriestConfig : Form
         GProcessMemoryManipulator.smethod_48(this);
     }
 
-    void Form.Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (disposing && container_0 != null)
+        {
             container_0.Dispose();
-        // ISSUE: explicit non-virtual call
-        __nonvirtual(((Form)this).Dispose(disposing));
+        }
+        base.Dispose(disposing);
     }
-
     private void InitializeComponent()
     {
         MyOKButton = new Button();
