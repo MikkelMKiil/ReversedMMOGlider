@@ -1,1 +1,1 @@
-This is a "working" source file for the old MMOGlider for early Wotlk, currently i am working on reverse engineering the server side offsets. When that is done hopefully we can some gaming history in action!
+This is a "working" source file for the old MMOGlider for early Wotlk, currently i am working on reverse engineering the server side offsets. When that is done hopefully we can see some gaming history in action!
