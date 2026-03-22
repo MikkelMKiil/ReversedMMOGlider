@@ -16,7 +16,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Layout;
-using ILogger = ILogger;
 
 #nullable disable
 public class GliderForm : Form, ILogger

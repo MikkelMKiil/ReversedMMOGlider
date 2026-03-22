@@ -46,14 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PEImageParser.cs" />
-    <Compile Include="GBoolStringOption.cs" />
+    <Compile Include="EncryptedDataTransport.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="NetworkSafetyChecker.cs" />
-    <Compile Include="GCompilerGeneratedCache.cs" />
+    <Compile Include="Matrix3.cs" />
     <Compile Include="DebuffList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GResourceProvider.cs" />
+    <Compile Include="LootableCorpseTracker.cs" />
     <Compile Include="WorldToScreenProjector.cs" />
     <Compile Include="ConfigForm.cs">
       <SubType>Form</SubType>
