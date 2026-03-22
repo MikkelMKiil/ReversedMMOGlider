@@ -1,0 +1,35 @@
+{
+    "version": "3.0.9",
+    "build": 9464,
+    "date": "2009-03-10",
+    "note": "Incomplete offset set - these are examples only. Real offsets need to be researched.",
+    "offsets": {
+        "PlayerBase": "0x00C79CE0",
+        "ObjectManager": "0x00C79C20",
+        "ClientConnection": "0x00C79D18",
+        "WorldMap": "0x00AE6F84",
+        "TargetGUID": "0x00BD07B0",
+        "MouseOverGUID": "0x00BD07C8",
+        "LocalGUID": "0x00CA11F8",
+        "ZoneText": "0x00C0D788",
+        "SubZoneText": "0x00C0D78C",
+        "LastError": "0x00C0E2A8",
+        "GameState": "0x00B499A0",
+        "Corpse": "0x00BD0818",
+        "ClickToMove": "0x00CA1250",
+        "AutoLoot": "0x00BD0854",
+        "CursorType": "0x00CA0CCC",
+        "CursorItem": "0x00CA0CE8",
+        "SpellBook": "0x00BD0638"
+    },
+    "patterns": {
+        "note": "Byte patterns can be used to find offsets dynamically",
+        "PlayerBase": "55 8B EC 83 E4 F8 83 EC 08 56 8B 35"
+    },
+    "todo": [
+        "Complete offset research for WoW 3.0.9",
+        "Add offsets for other WoW 3.0.x/3.1.x builds",
+        "Document offset meanings and data structures",
+        "Add pattern signatures for dynamic offset discovery"
+    ]
+}
