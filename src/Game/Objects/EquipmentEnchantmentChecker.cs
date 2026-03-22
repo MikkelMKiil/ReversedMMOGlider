@@ -16,33 +16,33 @@ public class EquipmentEnchantmentChecker
     public OffsetManager gclass43_0;
     public OffsetManager gclass43_1;
     public int int_1;
-    public SortedList sortedList_0;
+    public SortedList Offsets;
 
     public void method_0()
     {
-        sortedList_0 = new SortedList();
-        var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("SlotNameCount"), "SlotNameCount");
-        var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("SlotName"), "SlotName");
+        Offsets = new SortedList();
+        var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotNameCount"), "SlotNameCount");
+        var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotName"), "SlotName");
         for (var index = 0; index < num1; ++index)
-            sortedList_0.Add(
-                GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(num2 + index * 16, "ItemBase"), 100, "ItemBaseName"),
-                GProcessMemoryManipulator.smethod_11(num2 + index * 16 + 8, "ItemBaseID"));
-        bool_0 = sortedList_0.Count > 0;
+            Offsets.Add(
+                GProcessMemoryManipulator.ReadString(GProcessMemoryManipulator.ReadInt32(num2 + index * 16, "ItemBase"), 100, "ItemBaseName"),
+                GProcessMemoryManipulator.ReadInt32(num2 + index * 16 + 8, "ItemBaseID"));
+        bool_0 = Offsets.Count > 0;
     }
 
     public long method_1(string string_0)
     {
         if (!bool_0)
             return 0;
-        if (!sortedList_0.ContainsKey(string_0))
+        if (!Offsets.ContainsKey(string_0))
         {
             Logger.LogMessage("Bogus slot name: " + string_0);
             return 0;
         }
 
-        var num1 = (int)sortedList_0[string_0] - 1;
+        var num1 = (int)Offsets[string_0] - 1;
         var num2 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD");
-        return GProcessMemoryManipulator.smethod_12(GPlayerSelf.Me.StorageAddress + num2 + num1 * 8, "Equipped/" + string_0);
+        return GProcessMemoryManipulator.ReadInt64(GPlayerSelf.Me.StorageAddress + num2 + num1 * 8, "Equipped/" + string_0);
     }
 
     public bool method_2(GObject gobject_0, string string_0)
@@ -57,7 +57,7 @@ public class EquipmentEnchantmentChecker
         for (var index = 0; index < 8; ++index)
         {
             var num = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
-            var int_2 = GProcessMemoryManipulator.smethod_11(gobject_0.StorageAddress + num, "EnchantID");
+            var int_2 = GProcessMemoryManipulator.ReadInt32(gobject_0.StorageAddress + num, "EnchantID");
             if (int_2 > 0)
             {
                 Logger.smethod_1("EnchantID: " + int_2);
@@ -74,27 +74,27 @@ public class EquipmentEnchantmentChecker
     public string method_3(int int_2)
     {
         Logger.smethod_1("GetEnchantmentName: " + int_2.ToString("x"));
-        var num1 = MemoryOffsetTable.gclass18_0.method_4("EnchantRowJump");
-        var num2 = MemoryOffsetTable.gclass18_0.method_4("EnchantRowCount");
+        var num1 = MemoryOffsetTable.Instance.GetIntOffset("EnchantRowJump");
+        var num2 = MemoryOffsetTable.Instance.GetIntOffset("EnchantRowCount");
         var num3 = 0;
-        if (MemoryOffsetTable.gclass18_0.method_5("SpellNameRLE"))
+        if (MemoryOffsetTable.Instance.HasOffset("SpellNameRLE"))
             num3 = -1;
-        var num4 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("EnchantNames") + num1, "EnchantNamesBase");
-        var num5 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("EnchantNames") - num2, "EnchantNamesCount");
-        Logger.smethod_1("Rows @ 0x" + (MemoryOffsetTable.gclass18_0.method_4("EnchantNames") + num1).ToString("x") + " = 0x" +
+        var num4 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") + num1, "EnchantNamesBase");
+        var num5 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") - num2, "EnchantNamesCount");
+        Logger.smethod_1("Rows @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") + num1).ToString("x") + " = 0x" +
                            num4.ToString("x"));
-        Logger.smethod_1("Count @ 0x" + (MemoryOffsetTable.gclass18_0.method_4("EnchantNames") - num2).ToString("x") +
+        Logger.smethod_1("Count @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") - num2).ToString("x") +
                            " = 0x" + num5.ToString("x"));
         if (int_2 > num5)
             return "(enchantid out of range!)";
         Logger.smethod_1("The row @ " + (num4 + (int_2 + num3) * 4).ToString("x"));
-        var num6 = GProcessMemoryManipulator.smethod_11(num4 + (int_2 + num3) * 4, "EnchantRow");
+        var num6 = GProcessMemoryManipulator.ReadInt32(num4 + (int_2 + num3) * 4, "EnchantRow");
         if (num6 == 0)
             return "(no row for that enchantid: " + int_2 + ")";
-        var int_29 = GProcessMemoryManipulator.smethod_11(num6 + MemoryOffsetTable.gclass18_0.method_4("EnchantRowOffset"), "EnchantNamePtr");
+        var int_29 = GProcessMemoryManipulator.ReadInt32(num6 + MemoryOffsetTable.Instance.GetIntOffset("EnchantRowOffset"), "EnchantNamePtr");
         if (int_29 == 0)
             return "(null pointer to enchant name!)";
-        var str = GProcessMemoryManipulator.smethod_9(int_29, 100, "EnchantName");
+        var str = GProcessMemoryManipulator.ReadString(int_29, 100, "EnchantName");
         Logger.smethod_1("EnchantName: \"" + str + "\"");
         return str;
     }
@@ -107,7 +107,7 @@ public class EquipmentEnchantmentChecker
         for (var index = 1; index < 5; ++index)
         {
             var num = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
-            var GUID = GProcessMemoryManipulator.smethod_12(GPlayerSelf.Me.StorageAddress + num, "BagGuid1");
+            var GUID = GProcessMemoryManipulator.ReadInt64(GPlayerSelf.Me.StorageAddress + num, "BagGuid1");
             if (GUID != 0L)
             {
                 var gobject = GObjectList.FindObject(GUID);
@@ -117,7 +117,7 @@ public class EquipmentEnchantmentChecker
                 }
                 else
                 {
-                    var int_3 = GProcessMemoryManipulator.smethod_11(
+                    var int_3 = GProcessMemoryManipulator.ReadInt32(
                         gobject.StorageAddress + StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_NUM_SLOTS"),
                         "NumSlots");
                     var int_4_2 = StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
@@ -134,7 +134,7 @@ public class EquipmentEnchantmentChecker
         for (var index = 0; index < int_3; ++index)
         {
             var num1 = int_4 + index * 8;
-            var num2 = GProcessMemoryManipulator.smethod_12(int_2 + num1, "ItemGUID");
+            var num2 = GProcessMemoryManipulator.ReadInt64(int_2 + num1, "ItemGUID");
             if (num2 != 0L)
             {
                 var gobject = GObjectList.FindObject(num2);
@@ -144,7 +144,7 @@ public class EquipmentEnchantmentChecker
                 }
                 else
                 {
-                    var int_1 = GProcessMemoryManipulator.smethod_11(
+                    var int_1 = GProcessMemoryManipulator.ReadInt32(
                         gobject.StorageAddress + StartupClass.gclass43_3.GetOffsetValue("OBJECT_FIELD_ENTRY"), "ItemEntry");
                     var string_1 = "(unknown)";
                     var gclass39 = new InventoryItem(num2, int_1, string_1);

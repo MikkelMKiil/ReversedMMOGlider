@@ -228,7 +228,7 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("MonsterDefinition");
             if (baseInt == 0)
                 return;
-            _harvestFlags = GProcessMemoryManipulator.smethod_11(baseInt + MemoryOffsetTable.gclass18_0.method_4("HarvestType"), "harvesttype");
+            _harvestFlags = GProcessMemoryManipulator.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("HarvestType"), "harvesttype");
         }
 
         protected override void SetName()
@@ -240,12 +240,12 @@ namespace Glider.Common.Objects
             if (baseInt == 0)
                 return;
             var num = 0;
-            if (MemoryOffsetTable.gclass18_0.method_5("UnitNameSecond"))
-                num += MemoryOffsetTable.gclass18_0.method_4("UnitNameSecond");
-            var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + num, "UnitNamePtr");
+            if (MemoryOffsetTable.Instance.HasOffset("UnitNameSecond"))
+                num += MemoryOffsetTable.Instance.GetIntOffset("UnitNameSecond");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + num, "UnitNamePtr");
             if (int_29 == 0)
                 return;
-            _name = GProcessMemoryManipulator.smethod_10(int_29, 64, "unitname2");
+            _name = GProcessMemoryManipulator.ReadStringInternal(int_29, 64, "unitname2");
         }
 
         protected override void SetTitle()
@@ -257,12 +257,12 @@ namespace Glider.Common.Objects
             if (baseInt == 0)
                 return;
             var num = 0;
-            if (MemoryOffsetTable.gclass18_0.method_5("UnitTitle"))
-                num += MemoryOffsetTable.gclass18_0.method_4("UnitTitle");
-            var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + num, "UnitTitlePtr");
+            if (MemoryOffsetTable.Instance.HasOffset("UnitTitle"))
+                num += MemoryOffsetTable.Instance.GetIntOffset("UnitTitle");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + num, "UnitTitlePtr");
             if (int_29 == 0)
                 return;
-            _title = GProcessMemoryManipulator.smethod_10(int_29, 64, "unittitle2");
+            _title = GProcessMemoryManipulator.ReadStringInternal(int_29, 64, "unittitle2");
         }
 
         public bool IsInList(string[] Names)

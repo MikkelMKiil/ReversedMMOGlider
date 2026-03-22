@@ -100,7 +100,7 @@ public class ApplicationInitializer
             }
 
             var secondsToAdd = dataEncryptionManager.ReadIntFromDecryptedStream();
-            MemoryOffsetTable.gclass18_0.method_0();
+            MemoryOffsetTable.Instance.Clear();
             var streamIntValue3 = dataEncryptionManager.ReadIntFromDecryptedStream();
             for (var index = 0; index < streamIntValue3; ++index)
             {
@@ -114,7 +114,7 @@ public class ApplicationInitializer
                     }
                     else if (fifthDecryptedString.StartsWith("Buff_"))
                     {
-                        MemoryOffsetTable.gclass18_0.method_1(fifthDecryptedString, sixthDecryptedString);
+                        MemoryOffsetTable.Instance.AddStringOffset(fifthDecryptedString, sixthDecryptedString);
                     }
                     else if (fifthDecryptedString.StartsWith("_"))
                     {
@@ -123,13 +123,13 @@ public class ApplicationInitializer
                     else
                     {
                         var parsedIntValue = int.Parse(sixthDecryptedString, NumberStyles.HexNumber);
-                        MemoryOffsetTable.gclass18_0.method_2(fifthDecryptedString, parsedIntValue);
+                        MemoryOffsetTable.Instance.AddIntOffset(fifthDecryptedString, parsedIntValue);
                     }
                 }
                 catch (Exception ex)
                 {
                     if (fifthDecryptedString == "GH")
-                        MemoryOffsetTable.gclass18_0.sortedList_0.Add("GH", sixthDecryptedString);
+                        MemoryOffsetTable.Instance.Offsets.Add("GH", sixthDecryptedString);
                 }
             }
 

@@ -36,21 +36,21 @@ public class SolitaireGameState
 
     public void method_2()
     {
-        gclass80_0 = new CardStack(GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_8, "md30"), this);
-        gclass80_1 = new CardStack(GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_5, "md31"), this);
+        gclass80_0 = new CardStack(GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_8, "md30"), this);
+        gclass80_1 = new CardStack(GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_5, "md31"), this);
         gclass80_2 = new CardStack[4];
-        var num1 = GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_7, "md20");
+        var num1 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_7, "md20");
         for (var index = 0; index < 4; ++index)
         {
-            var int_3 = GProcessMemoryManipulator.smethod_11(num1 + index * 4, "md21");
+            var int_3 = GProcessMemoryManipulator.ReadInt32(num1 + index * 4, "md21");
             gclass80_2[index] = new CardStack(int_3, this);
         }
 
         gclass80_3 = new CardStack[7];
-        var num2 = GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_6, "md22");
+        var num2 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_6, "md22");
         for (var index = 0; index < 7; ++index)
         {
-            var int_3 = GProcessMemoryManipulator.smethod_11(num2 + index * 4, "md23");
+            var int_3 = GProcessMemoryManipulator.ReadInt32(num2 + index * 4, "md23");
             gclass80_3[index] = new CardStack(int_3, this);
         }
     }

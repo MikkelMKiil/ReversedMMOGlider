@@ -35,7 +35,7 @@ public class PartyManager
     public int int_6;
     public int int_7;
     public long[] long_0;
-    public SortedList[] sortedList_0;
+    public SortedList[] Offsets;
     public string[] string_0;
     public string string_1;
 
@@ -359,9 +359,9 @@ public class PartyManager
         gplayer_0 = new GPlayer[long_0.Length];
         gclass36_0 = new GameTimer[long_0.Length];
         gclass36_1 = new GameTimer[long_0.Length];
-        if (sortedList_0 != null)
+        if (Offsets != null)
             return;
-        sortedList_0 = new SortedList[long_0.Length];
+        Offsets = new SortedList[long_0.Length];
     }
 
     public void method_12()
@@ -406,13 +406,13 @@ public class PartyManager
 
     public bool method_15(int int_8, string string_2, int int_9)
     {
-        if (sortedList_0 == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
+        if (Offsets == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
             return false;
-        if (sortedList_0[int_8] == null)
-            sortedList_0[int_8] = new SortedList();
-        if (sortedList_0[int_8].ContainsKey(string_2))
+        if (Offsets[int_8] == null)
+            Offsets[int_8] = new SortedList();
+        if (Offsets[int_8].ContainsKey(string_2))
         {
-            var gclass12 = (TimedStringEntry)sortedList_0[int_8][string_2];
+            var gclass12 = (TimedStringEntry)Offsets[int_8][string_2];
             if (!gclass12.gclass36_0.method_3())
                 return false;
             method_14(int_8, string_2, null);
@@ -422,18 +422,18 @@ public class PartyManager
 
         var gclass12_1 = new TimedStringEntry(string_2, int_9);
         method_14(int_8, string_2, null);
-        sortedList_0[int_8].Add(string_2, gclass12_1);
+        Offsets[int_8].Add(string_2, gclass12_1);
         return true;
     }
 
     public bool method_16(int int_8, string string_2)
     {
-        if (sortedList_0 == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
+        if (Offsets == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
             return false;
-        if (sortedList_0[int_8] == null)
-            sortedList_0[int_8] = new SortedList();
-        return !sortedList_0[int_8].ContainsKey(string_2) ||
-               ((TimedStringEntry)sortedList_0[int_8][string_2]).gclass36_0.method_3();
+        if (Offsets[int_8] == null)
+            Offsets[int_8] = new SortedList();
+        return !Offsets[int_8].ContainsKey(string_2) ||
+               ((TimedStringEntry)Offsets[int_8][string_2]).gclass36_0.method_3();
     }
 
     public bool method_17(GUnit gunit_0)

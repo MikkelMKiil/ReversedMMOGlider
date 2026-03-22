@@ -29,7 +29,7 @@ public class WardenMonitor
     private int int_1;
     private int int_2;
     private IntPtr intptr_0;
-    private readonly SortedList<string, int> sortedList_0;
+    private readonly SortedList<string, int> Offsets;
     private string string_1;
     private Thread thread_0;
 
@@ -41,12 +41,12 @@ public class WardenMonitor
         intptr_0 = IntPtr.Zero;
         thread_0 = null;
         bool_1 = false;
-        sortedList_0 = new SortedList<string, int>();
+        Offsets = new SortedList<string, int>();
         method_1();
         Logger.smethod_1("TW: Setting up VAP");
         gclass71_1.method_24(int_3);
-        if (MemoryOffsetTable.gclass18_0.method_5("FLPeek"))
-            gclass71_1.method_25(MemoryOffsetTable.gclass18_0.method_4("FLPeek"));
+        if (MemoryOffsetTable.Instance.HasOffset("FLPeek"))
+            gclass71_1.method_25(MemoryOffsetTable.Instance.GetIntOffset("FLPeek"));
         int_0 = 0;
         method_5();
         Logger.LogMessage("New TW instance created");
@@ -124,7 +124,7 @@ public class WardenMonitor
     {
         if (int_0 < 1 && StartupClass.bool_35)
         {
-            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("Warden1"), "twsanity");
+            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
             if (num != 0)
             {
                 Logger.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
@@ -148,7 +148,7 @@ public class WardenMonitor
 
     public void method_6(int int_3, int int_4)
     {
-        var byte_1 = GProcessMemoryManipulator.smethod_17(int_3, int_4, "bsp");
+        var byte_1 = GProcessMemoryManipulator.ReadBytes(int_3, int_4, "bsp");
         if (byte_1 == null)
             return;
         method_7(byte_1);
@@ -180,7 +180,7 @@ public class WardenMonitor
             if (genum10_0 != WardenProtocol.GEnum10.const_2 && genum10_0 != WardenProtocol.GEnum10.const_3)
             {
                 var key = method_13(byte_1);
-                if (sortedList_0.ContainsKey(key))
+                if (Offsets.ContainsKey(key))
                 {
                     gclass71_0.method_30();
                     return WardenCheckStatus.const_0;
@@ -212,7 +212,7 @@ public class WardenMonitor
                     case "Safe":
                         gclass71_0.method_30();
                         flag1 = true;
-                        sortedList_0.Add(key, 1);
+                        Offsets.Add(key, 1);
                         int_3 = WardenCheckStatus.const_0;
                         break;
                     case "Unsafe":

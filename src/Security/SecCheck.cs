@@ -28,7 +28,7 @@ public class SecCheck : Form
     public SecCheck()
     {
         InitializeComponent();
-        Text = GProcessMemoryManipulator.smethod_0();
+        Text = GProcessMemoryManipulator.GenerateRandomString();
         TheList.DoubleClick += TheList_DoubleClick;
         method_0();
     }

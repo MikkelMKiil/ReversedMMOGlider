@@ -43,16 +43,16 @@ public class UIElement
     public void method_1()
     {
         string_0 = "(no name)";
-        var int_29 = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIName"), "onamer");
+        var int_29 = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onamer");
         if (int_29 != 0)
-            string_0 = GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamer");
+            string_0 = GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamer");
         else
             bool_0 = false;
-        var num = MemoryOffsetTable.gclass18_0.method_4("UICoordBase");
-        float_5 = GProcessMemoryManipulator.smethod_13(int_0 + num, "uiobjbottom");
-        float_2 = GProcessMemoryManipulator.smethod_13(int_0 + num + 4, "uiobjleft");
-        float_3 = GProcessMemoryManipulator.smethod_13(int_0 + num + 8, "uiobjtop");
-        float_4 = GProcessMemoryManipulator.smethod_13(int_0 + num + 12, "uiobjright");
+        var num = MemoryOffsetTable.Instance.GetIntOffset("UICoordBase");
+        float_5 = GProcessMemoryManipulator.ReadFloat(int_0 + num, "uiobjbottom");
+        float_2 = GProcessMemoryManipulator.ReadFloat(int_0 + num + 4, "uiobjleft");
+        float_3 = GProcessMemoryManipulator.ReadFloat(int_0 + num + 8, "uiobjtop");
+        float_4 = GProcessMemoryManipulator.ReadFloat(int_0 + num + 12, "uiobjright");
     }
 
     public string method_2()
@@ -64,35 +64,35 @@ public class UIElement
     [SpecialName]
     public string method_3()
     {
-        var int_29 = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UILabelText"), "labeltextptr");
+        var int_29 = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UILabelText"), "labeltextptr");
         if (int_29 == 0 || (int_29 & 1) == 1)
         {
-            var num1 = GProcessMemoryManipulator.smethod_11(int_0, "GameClass");
-            if (num1 == MemoryOffsetTable.gclass18_0.method_4("UITypeLabel1") ||
-                num1 == MemoryOffsetTable.gclass18_0.method_4("UITypeLabel2"))
+            var num1 = GProcessMemoryManipulator.ReadInt32(int_0, "GameClass");
+            if (num1 == MemoryOffsetTable.Instance.GetIntOffset("UITypeLabel1") ||
+                num1 == MemoryOffsetTable.Instance.GetIntOffset("UITypeLabel2"))
             {
-                var num2 = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIFontString"), "fontstringptr");
+                var num2 = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIFontString"), "fontstringptr");
                 if (num2 != 0)
-                    int_29 = GProcessMemoryManipulator.smethod_11(num2 + MemoryOffsetTable.gclass18_0.method_4("UILabelText"), "labeltextptr2");
+                    int_29 = GProcessMemoryManipulator.ReadInt32(num2 + MemoryOffsetTable.Instance.GetIntOffset("UILabelText"), "labeltextptr2");
             }
         }
 
-        return int_29 != 0 && (int_29 & 1) != 1 ? GProcessMemoryManipulator.smethod_10(int_29, 200, "labeltext1") : "(no text)";
+        return int_29 != 0 && (int_29 & 1) != 1 ? GProcessMemoryManipulator.ReadStringInternal(int_29, 200, "labeltext1") : "(no text)";
     }
 
     private void method_4()
     {
         list_0 = new List<UIElement>();
-        var num = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIChildren"), "childrenptr");
+        var num = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIChildren"), "childrenptr");
         if (num == 0)
             return;
         do
         {
-            var int_1 = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.gclass18_0.method_4("UIChildStep"), "childstep");
+            var int_1 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UIChildStep"), "childstep");
             if ((int_1 & ushort.MaxValue) != 0)
             {
                 list_0.Add(new UIElement(int_1));
-                num = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.gclass18_0.method_4("UIChildNext"), "childnext");
+                num = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UIChildNext"), "childnext");
             }
             else
             {
@@ -115,12 +115,12 @@ public class UIElement
     private void method_5()
     {
         list_0 = new List<UIElement>();
-        var num1 = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIChildren"), "uichild1");
+        var num1 = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIChildren"), "uichild1");
         var num2 = 150;
         if (num1 != 0)
             do
             {
-                var int_1 = GProcessMemoryManipulator.smethod_11(num1 + MemoryOffsetTable.gclass18_0.method_4("UIChildStep"), "uichild2");
+                var int_1 = GProcessMemoryManipulator.ReadInt32(num1 + MemoryOffsetTable.Instance.GetIntOffset("UIChildStep"), "uichild2");
                 if ((int_1 & ushort.MaxValue) != 0)
                 {
                     if ((int_1 & 1) == 0)
@@ -139,7 +139,7 @@ public class UIElement
                         }
                     }
 
-                    num1 = GProcessMemoryManipulator.smethod_11(num1 + MemoryOffsetTable.gclass18_0.method_4("UIChildNext"), "uichild3");
+                    num1 = GProcessMemoryManipulator.ReadInt32(num1 + MemoryOffsetTable.Instance.GetIntOffset("UIChildNext"), "uichild3");
                     if (num1 != 0)
                         --num2;
                     else
@@ -151,7 +151,7 @@ public class UIElement
                 }
             } while (num2 != 0);
 
-        var int_1_1 = GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIChildrenOneShot"), "uichild1s");
+        var int_1_1 = GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIChildrenOneShot"), "uichild1s");
         if (int_1_1 == 0 || (int_1_1 & 1) != 0 || smethod_0(list_0, int_1_1))
             return;
         var gclass8_1 = new UIElement(int_1_1);
@@ -209,7 +209,7 @@ public class UIElement
     [SpecialName]
     public bool method_10()
     {
-        return GProcessMemoryManipulator.smethod_11(int_0 + MemoryOffsetTable.gclass18_0.method_4("UIMenuVisible"), "tfvisible") != 0;
+        return GProcessMemoryManipulator.ReadInt32(int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIMenuVisible"), "tfvisible") != 0;
     }
 
     [SpecialName]
@@ -251,7 +251,7 @@ public class UIElement
 
     public static UIElement smethod_2(string string_1)
     {
-        var int_1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "uiparent");
+        var int_1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_1 != 0)
             return smethod_4(int_1, string_1);
         Logger.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
@@ -260,12 +260,12 @@ public class UIElement
 
     public static UIElement smethod_3(string string_1)
     {
-        var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue1"), "uig1");
-        var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue2"), "uig2");
-        var int_29_1 = num1 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-        var int_29_2 = num2 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-        var int_1 = GProcessMemoryManipulator.smethod_11(int_29_1, "uigm1");
-        var num3 = GProcessMemoryManipulator.smethod_11(int_29_2, "uigm2");
+        var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
+        var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
+        var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+        var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+        var int_1 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
+        var num3 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
         return int_1 == num3 && int_1 != 0 ? smethod_4(int_1, string_1) : null;
     }
 
@@ -273,14 +273,14 @@ public class UIElement
     {
         do
         {
-            var int_29 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UIName"), "oname2");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "oname2");
             if (int_29 != 0)
                 goto label_2;
             label_1:
-            int_1 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UINext"), "onextnb");
+            int_1 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onextnb");
             continue;
             label_2:
-            var str = GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamenb");
+            var str = GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamenb");
             switch (str)
             {
                 case "(read failed)":
@@ -308,7 +308,7 @@ public class UIElement
 
     public static string[] smethod_5()
     {
-        var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "uiparent");
+        var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (num1 == 0)
         {
             Logger.smethod_1("! UIParent points to nowhere, can't find dump list of object names");
@@ -319,14 +319,14 @@ public class UIElement
         var num2 = num1;
         do
         {
-            var int_29 = GProcessMemoryManipulator.smethod_11(num2 + MemoryOffsetTable.gclass18_0.method_4("UIName"), "oname3");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(num2 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "oname3");
             if (int_29 != 0)
                 goto label_4;
             label_3:
-            num2 = GProcessMemoryManipulator.smethod_11(num2 + MemoryOffsetTable.gclass18_0.method_4("UINext"), "onextga");
+            num2 = GProcessMemoryManipulator.ReadInt32(num2 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onextga");
             continue;
             label_4:
-            var str = GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamega");
+            var str = GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamega");
             stringList.Add(str);
             goto label_3;
         } while (num2 != 0);

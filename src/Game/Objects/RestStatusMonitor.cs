@@ -62,7 +62,7 @@ public class RestStatusMonitor
         if (!gspellTimer_1.IsReady)
             return false;
         gspellTimer_1.Reset();
-        var str = GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4("RedMessage"), 128, "RedMessage") ??
+        var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage") ??
                   MessageProvider.GetMessage(6);
         Logger.smethod_1(MessageProvider.smethod_2(7, str));
         ++int_1;

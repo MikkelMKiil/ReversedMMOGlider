@@ -35,7 +35,7 @@ public class KeyEditor : Form
     private Button MyHelpButton;
     private Button MySaveButton;
     private Button PickButton;
-    private readonly SortedList<string, GKey> sortedList_0 = new SortedList<string, GKey>();
+    private readonly SortedList<string, GKey> Offsets = new SortedList<string, GKey>();
     private ComboBox Spell;
     private CheckBox SS_Alt;
     private CheckBox SS_Ctrl;
@@ -51,8 +51,8 @@ public class KeyEditor : Form
         InitializeComponent();
         MessageProvider.smethod_3(this, nameof(KeyEditor));
         var keyEditor = this;
-        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.smethod_0() + "]";
-        foreach (var key in SpellcastingManager.gclass42_0.sortedList_0.Keys)
+        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.GenerateRandomString() + "]";
+        foreach (var key in SpellcastingManager.gclass42_0.Offsets.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
         KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Char"));
@@ -298,10 +298,10 @@ public class KeyEditor : Form
         else
         {
             method_3();
-            if (sortedList_0.Keys.Count > 0)
+            if (Offsets.Keys.Count > 0)
             {
-                foreach (var gkey in sortedList_0.Values)
-                    SpellcastingManager.gclass42_0.sortedList_0[gkey.KeyName] = gkey;
+                foreach (var gkey in Offsets.Values)
+                    SpellcastingManager.gclass42_0.Offsets[gkey.KeyName] = gkey;
                 SpellcastingManager.gclass42_0.method_14();
             }
 
@@ -329,14 +329,14 @@ public class KeyEditor : Form
 
         int_0 = KeysList.SelectedIndex;
         var key = KeysList.SelectedItem.ToString();
-        if (sortedList_0.ContainsKey(key))
+        if (Offsets.ContainsKey(key))
         {
-            gkey_0 = sortedList_0[key];
+            gkey_0 = Offsets[key];
         }
         else
         {
-            gkey_0 = SpellcastingManager.gclass42_0.sortedList_0[key].Clone();
-            sortedList_0.Add(key, gkey_0);
+            gkey_0 = SpellcastingManager.gclass42_0.Offsets[key].Clone();
+            Offsets.Add(key, gkey_0);
         }
 
         EditKeyName.Text = gkey_0.KeyName;
@@ -555,7 +555,7 @@ public class KeyEditor : Form
     {
         if (!bool_0)
             return false;
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.smethod_0() + "]",
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.GenerateRandomString() + "]",
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
         return true;
@@ -570,6 +570,6 @@ public class KeyEditor : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
     }
 }

@@ -55,13 +55,13 @@ namespace Glider.Common.Objects
                     return null;
                 }
 
-                var BaseAddress = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
+                var BaseAddress = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
                 while (true)
                 {
                     long guid;
                     do
                     {
-                        BaseAddress = GProcessMemoryManipulator.smethod_11(BaseAddress + 60, "GameObjNext");
+                        BaseAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 60, "GameObjNext");
                         if ((BaseAddress & 1) == 0 && BaseAddress != 0 && BaseAddress != 28)
                         {
                             guid = QuickGetGUID(BaseAddress);
@@ -190,7 +190,7 @@ namespace Glider.Common.Objects
 
         private static long QuickGetGUID(int BaseAddress)
         {
-            return GProcessMemoryManipulator.smethod_12(BaseAddress + 48, "QuickGUID");
+            return GProcessMemoryManipulator.ReadInt64(BaseAddress + 48, "QuickGUID");
         }
 
         public static GUnit FindUnit(long GUID)
@@ -496,13 +496,13 @@ namespace Glider.Common.Objects
             var flag = false;
             if (int5 == 0)
                 return 0;
-            var num2 = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
+            var num2 = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
             while (true)
             {
-                num2 = GProcessMemoryManipulator.smethod_11(num2 + 60, "GameObjNext");
+                num2 = GProcessMemoryManipulator.ReadInt32(num2 + 60, "GameObjNext");
                 if ((num2 & 1) == 0 && num2 != 0 && num2 != 28)
                 {
-                    if (GProcessMemoryManipulator.smethod_12(num2 + 48, "GameObjGUID") == SeekPlayerID)
+                    if (GProcessMemoryManipulator.ReadInt64(num2 + 48, "GameObjGUID") == SeekPlayerID)
                     {
                         Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;

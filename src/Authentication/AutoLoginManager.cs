@@ -47,7 +47,7 @@ public class AutoLoginManager
                 return false;
             if (!gclass14_0.method_1("Accounts\\" + string_1 + ".xml"))
                 throw new Exception("Unable to read XML file (encrypted on another machine?)");
-            GProcessMemoryManipulator.smethod_31();
+            GProcessMemoryManipulator.GetProcessId();
             return method_3();
         }
         catch (ThreadInterruptedException ex)
@@ -139,7 +139,7 @@ public class AutoLoginManager
             method_4();
         if (!method_10().ToLower().StartsWith(gclass14_0.string_2.ToLower()))
             method_5();
-        GProcessMemoryManipulator.smethod_31();
+        GProcessMemoryManipulator.GetProcessId();
         var flag = false;
         GInterfaceObject ginterfaceObject = null;
         for (var index = 1; index <= 9; ++index)
@@ -161,7 +161,7 @@ public class AutoLoginManager
             return false;
         }
 
-        GProcessMemoryManipulator.smethod_31();
+        GProcessMemoryManipulator.GetProcessId();
         ginterfaceObject.ClickMouse(false);
         Thread.Sleep(500);
         gcontext_0.Interface.GetByNamePreWorld("CharSelectEnterWorldButton").ClickMouse(false);

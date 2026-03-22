@@ -152,7 +152,7 @@ public class CombatController
                 if (gclass54_0.genum7_0 != PartyRole.const_0)
                     gclass54_0.method_1();
                 int_5 = ConfigManager.gclass61_0.method_3("ExtraPull");
-                if (MemoryOffsetTable.gclass18_0.method_5("ActionBarEnabled"))
+                if (MemoryOffsetTable.Instance.HasOffset("ActionBarEnabled"))
                 {
                     if (StartupClass.GliderManager != null)
                         StartupClass.GliderManager.method_28(0);
@@ -198,7 +198,7 @@ public class CombatController
             StartupClass.MainForm.Activate();
         }
 
-        if (MessageBox.Show(StartupClass.MainForm, MessageProvider.GetMessage(int_15), GProcessMemoryManipulator.smethod_0(),
+        if (MessageBox.Show(StartupClass.MainForm, MessageProvider.GetMessage(int_15), GProcessMemoryManipulator.GenerateRandomString(),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Hand) != DialogResult.Yes)
             return;
         Process.Start("http://www.mmoglider.com/elitelink");
@@ -275,7 +275,7 @@ public class CombatController
 
     public void method_4()
     {
-        GProcessMemoryManipulator.smethod_4();
+        GProcessMemoryManipulator.GetCursorPosition();
         if (StartupClass.GliderManager != null)
             StartupClass.GliderManager.method_33(true);
         bool_2 = false;
@@ -893,7 +893,7 @@ public class CombatController
                 {
                     method_60();
                     if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 20.0 &&
-                        MemoryOffsetTable.gclass18_0.method_5("ArmorAlt2") &&
+                        MemoryOffsetTable.Instance.HasOffset("ArmorAlt2") &&
                         !char.IsDigit(ConfigManager.gclass61_0.method_2("AppKey")[0]))
                     {
                         if (StartupClass.GliderManager != null)
@@ -1397,7 +1397,7 @@ public class CombatController
 
     public bool method_30(long long_1, double double_8, double double_9, double double_10)
     {
-        var int_29 = MemoryOffsetTable.gclass18_0.method_4("UnderCursor");
+        var int_29 = MemoryOffsetTable.Instance.GetIntOffset("UnderCursor");
         var flag = false;
         Logger.smethod_1("Position on bobber: " + double_8 + " -> " + double_9 + ", inc = " + double_10);
         for (var double_3 = 0.08; double_3 < 0.6 && !flag; double_3 += double_10)
@@ -1405,7 +1405,7 @@ public class CombatController
         {
             InputController.smethod_18(double_2, double_3);
             GProcessMemoryManipulator.Sleep(20U);
-            if (GProcessMemoryManipulator.smethod_12(int_29, "UnderCursor3") != long_1)
+            if (GProcessMemoryManipulator.ReadInt64(int_29, "UnderCursor3") != long_1)
             {
                 if (bool_10)
                     return false;
@@ -1420,7 +1420,7 @@ public class CombatController
         if (flag)
         {
             StartupClass.smethod_39(500);
-            flag = GProcessMemoryManipulator.smethod_12(int_29, "UnderCursor4") == long_1;
+            flag = GProcessMemoryManipulator.ReadInt64(int_29, "UnderCursor4") == long_1;
         }
 
         Logger.smethod_1(MessageProvider.smethod_2(235, flag));
@@ -1443,7 +1443,7 @@ public class CombatController
         PlayerTracker.smethod_2();
         StartupClass.smethod_39(1000);
         Logger.smethod_1(MessageProvider.GetMessage(240));
-        SpellcastingManager.gclass42_0.sortedList_0["Common.Fish"].FilloutKey();
+        SpellcastingManager.gclass42_0.Offsets["Common.Fish"].FilloutKey();
         SpellcastingManager.gclass42_0.method_0("Common.Fish");
         StartupClass.smethod_39(1000);
         Logger.smethod_1(MessageProvider.GetMessage(241));
@@ -2069,7 +2069,7 @@ public class CombatController
             Logger.LogMessage(MessageProvider.smethod_2(786, gnode_0.Name));
             var num = 0;
             gnode_0.Hover();
-            if (!method_18(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("CursorType"), "CursorType")))
+            if (!method_18(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType")))
             {
                 Logger.LogMessage("Can't harvest this, cursor never turned into something acceptable");
                 StartupClass.sortedList_2.Add(gnode_0.GUID, "");
@@ -2079,7 +2079,7 @@ public class CombatController
                 for (; num < 9; ++num)
                     if (!method_19())
                     {
-                        var int_15 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("CursorType"), "CursorType");
+                        var int_15 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType");
                         if (method_18(int_15))
                         {
                             method_56();
@@ -2335,8 +2335,8 @@ public class CombatController
     private bool method_50()
     {
         method_14(
-            new GLocation(GProcessMemoryManipulator.smethod_13(MemoryOffsetTable.gclass18_0.method_4("CorpseLocation") - 8, "CorpseX"),
-                (double)GProcessMemoryManipulator.smethod_13(MemoryOffsetTable.gclass18_0.method_4("CorpseLocation") - 4, "CorpseY")), false);
+            new GLocation(GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 8, "CorpseX"),
+                (double)GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 4, "CorpseY")), false);
         return !gplayerSelf_0.IsDead;
     }
 
@@ -2465,7 +2465,7 @@ public class CombatController
                     if (!bool_21 || !gclass36_2.method_3() || GContext.Main.Me.PetGUID == 0L ||
                         GContext.Main.Me.TargetGUID != GContext.Main.Me.PetGUID)
                     {
-                        var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("LootWindow"), "LootWindow");
+                        var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "LootWindow");
                         if (num != 0 || !flag)
                         {
                             if (num != 0)
@@ -2524,7 +2524,7 @@ public class CombatController
                 break;
             }
 
-        var str = GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4("RedMessage"), 128, "RedMessage");
+        var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage");
         Logger.smethod_1("Red message after loot: [" + str + "]");
         if (str.ToLower().IndexOf(MessageProvider.GetMessage(230)) > -1)
         {

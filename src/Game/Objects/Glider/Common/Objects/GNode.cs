@@ -75,19 +75,19 @@ namespace Glider.Common.Objects
         protected void SetDisplayInfo()
         {
             _displayInfo = "(unknown)";
-            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ObjectInfo"), "InfoBase");
+            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfo"), "InfoBase");
             var storageInt = GetStorageInt("GAMEOBJECT_DISPLAYID");
-            var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ObjectInfoSub"), "InfoBaseSub");
+            var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfoSub"), "InfoBaseSub");
             if (storageInt < num2)
                 return;
-            var num3 = GProcessMemoryManipulator.smethod_11(num1 + (storageInt - num2) * 4, "InfoThisGuy");
+            var num3 = GProcessMemoryManipulator.ReadInt32(num1 + (storageInt - num2) * 4, "InfoThisGuy");
             if (num3 == 0 || num3 < 8388608)
                 return;
-            var int_29 = GProcessMemoryManipulator.smethod_11(num3 + 4, "InfoDisplayPtr");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(num3 + 4, "InfoDisplayPtr");
             if (int_29 == 0)
                 _displayInfo = "(null)";
             else
-                _displayInfo = GProcessMemoryManipulator.smethod_9(int_29, 128, "DisplayInfo").ToLower();
+                _displayInfo = GProcessMemoryManipulator.ReadString(int_29, 128, "DisplayInfo").ToLower();
         }
 
         protected override void SetName()
@@ -95,10 +95,10 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("NodeName");
             if (baseInt == 0)
                 return;
-            var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + MemoryOffsetTable.gclass18_0.method_4("NodeNameSecond"), "noden2");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("NodeNameSecond"), "noden2");
             if (int_29 == 0)
                 return;
-            _name = GProcessMemoryManipulator.smethod_9(int_29, 64, "nodename");
+            _name = GProcessMemoryManipulator.ReadString(int_29, 64, "nodename");
         }
     }
 }

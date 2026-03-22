@@ -358,7 +358,7 @@ public class InputController
     {
         int int_29;
         int int_30;
-        GProcessMemoryManipulator.smethod_25(double_2, double_3, out int_29, out int_30);
+        GProcessMemoryManipulator.WorldToScreen(double_2, double_3, out int_29, out int_30);
         if (StartupClass.IsGliderInitialized && !ConfigManager.gclass61_0.method_5("NoCursorHook"))
         {
             double_0 = double_2;
@@ -408,7 +408,7 @@ public class InputController
         GetCursorPos(out gstruct12_0);
         double double_0;
         double double_1;
-        GProcessMemoryManipulator.smethod_26(out double_0, out double_1, gstruct12_0.int_0, gstruct12_0.int_1);
+        GProcessMemoryManipulator.ScreenToWorld(out double_0, out double_1, gstruct12_0.int_0, gstruct12_0.int_1);
         double_2 = double_0;
         double_3 = double_1;
     }

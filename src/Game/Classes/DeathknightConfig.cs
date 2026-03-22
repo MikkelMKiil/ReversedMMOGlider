@@ -41,7 +41,7 @@ public class DeathknightConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Deathknight.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Deathknight.html");
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

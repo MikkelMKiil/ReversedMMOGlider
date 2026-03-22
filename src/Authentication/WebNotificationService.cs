@@ -220,7 +220,7 @@ public class WebNotificationService
         {
             var element2 = xmlDocument.CreateElement("Player");
             method_12(element2, "Name", GPlayerSelf.Me.Name);
-            method_12(element2, "Realm", GProcessMemoryManipulator.smethod_32());
+            method_12(element2, "Realm", GProcessMemoryManipulator.GetProcessExecutablePath());
             method_12(element2, "Race", ((int)GPlayerSelf.Me.PlayerRace).ToString());
             method_12(element2, "Class", ((int)GPlayerSelf.Me.PlayerClass).ToString());
             method_12(element2, "Level", GPlayerSelf.Me.Level.ToString());
@@ -235,7 +235,7 @@ public class WebNotificationService
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
             method_12(element2, "WorldMap: ",
-                GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4("WorldMap"), 100, "WorldMap"));
+                GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("WorldMap"), 100, "WorldMap"));
             element1.AppendChild(element2);
             var target = GPlayerSelf.Me.Target;
             if (target != null)

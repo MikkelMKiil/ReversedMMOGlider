@@ -18,7 +18,7 @@ public class ConfigManager
     public static ConfigManager gclass61_0;
     public bool bool_0;
     protected List<string> list_0;
-    public SortedList sortedList_0;
+    public SortedList Offsets;
     private readonly string string_1;
     private readonly string string_2;
 
@@ -28,7 +28,7 @@ public class ConfigManager
         string_1 = "Glider.config.xml";
         string_2 = "GliderConfig";
         bool_0 = false;
-        sortedList_0 = new SortedList();
+        Offsets = new SortedList();
         method_6();
         list_0 = new List<string>();
         method_7(true);
@@ -36,7 +36,7 @@ public class ConfigManager
 
     public ConfigManager(string string_3, string string_4)
     {
-        sortedList_0 = new SortedList();
+        Offsets = new SortedList();
         string_1 = string_3;
         string_2 = string_4;
         method_7(false);
@@ -44,37 +44,37 @@ public class ConfigManager
 
     public void method_0(string string_3, string string_4)
     {
-        if (sortedList_0.ContainsKey(string_3))
-            sortedList_0[string_3] = string_4;
+        if (Offsets.ContainsKey(string_3))
+            Offsets[string_3] = string_4;
         else
-            sortedList_0.Add(string_3, string_4);
+            Offsets.Add(string_3, string_4);
     }
 
     public void method_1(string string_3, string string_4)
     {
-        if (sortedList_0.ContainsKey(string_3))
+        if (Offsets.ContainsKey(string_3))
             return;
-        sortedList_0.Add(string_3, string_4);
+        Offsets.Add(string_3, string_4);
     }
 
     public string method_2(string string_3)
     {
-        return sortedList_0.ContainsKey(string_3) ? (string)sortedList_0[string_3] : null;
+        return Offsets.ContainsKey(string_3) ? (string)Offsets[string_3] : null;
     }
 
     public int method_3(string string_3)
     {
-        return sortedList_0.ContainsKey(string_3) ? int.Parse((string)sortedList_0[string_3]) : 0;
+        return Offsets.ContainsKey(string_3) ? int.Parse((string)Offsets[string_3]) : 0;
     }
 
     public double method_4(string string_3)
     {
-        return sortedList_0.ContainsKey(string_3) ? StartupClass.smethod_6((string)sortedList_0[string_3]) : 0.0;
+        return Offsets.ContainsKey(string_3) ? StartupClass.smethod_6((string)Offsets[string_3]) : 0.0;
     }
 
     public bool method_5(string string_3)
     {
-        return sortedList_0.ContainsKey(string_3) && (string)sortedList_0[string_3] == "True";
+        return Offsets.ContainsKey(string_3) && (string)Offsets[string_3] == "True";
     }
 
     public void method_6()
@@ -357,8 +357,8 @@ public class ConfigManager
         var xmlDocument_0 = new XmlDocument();
         xmlDocument_0.AppendChild(xmlDocument_0.CreateXmlDeclaration("1.0", null, null));
         xmlDocument_0.AppendChild(xmlDocument_0.CreateElement(string_2));
-        foreach (string key in sortedList_0.Keys)
-            method_17(xmlDocument_0, key, (string)sortedList_0[key]);
+        foreach (string key in Offsets.Keys)
+            method_17(xmlDocument_0, key, (string)Offsets[key]);
         method_14(xmlDocument_0, list_0, "LoadClasses", "SourceFile");
         xmlDocument_0.Save(string_3);
     }
@@ -382,8 +382,8 @@ public class ConfigManager
 
     public void method_18(string string_3)
     {
-        if (!sortedList_0.ContainsKey(string_3))
+        if (!Offsets.ContainsKey(string_3))
             return;
-        sortedList_0.Remove(string_3);
+        Offsets.Remove(string_3);
     }
 }

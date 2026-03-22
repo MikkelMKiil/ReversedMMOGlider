@@ -317,7 +317,7 @@ public class HunterConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Hunter.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Hunter.html");
     }
 
     private void method_0(object sender, EventArgs e)

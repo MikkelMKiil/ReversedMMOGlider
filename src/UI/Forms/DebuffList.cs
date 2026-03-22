@@ -22,7 +22,7 @@ public class DebuffList : Form
     private Label label1;
     private Button MyHelpButton;
     private Button MyOKButton;
-    public SortedList<int, string> sortedList_0;
+    public SortedList<int, string> Offsets;
 
     public DebuffList()
     {
@@ -100,7 +100,7 @@ public class DebuffList : Form
     public void method_0()
     {
         var str1 = "NewDebuffs.xml";
-        sortedList_0 = new SortedList<int, string>();
+        Offsets = new SortedList<int, string>();
         if (!File.Exists(str1))
             return;
         try
@@ -125,10 +125,10 @@ public class DebuffList : Form
                                 continue;
                         }
 
-                    if (!sortedList_0.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
+                    if (!Offsets.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
                     {
                         Logger.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
-                        sortedList_0.Add(num, str2);
+                        Offsets.Add(num, str2);
                         DebuffBox.Items.Add(str2 + " (" + num.ToString("x") + ")");
                     }
                 }
@@ -161,6 +161,6 @@ public class DebuffList : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Debuffs.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Debuffs.html");
     }
 }

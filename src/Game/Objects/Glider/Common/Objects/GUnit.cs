@@ -260,7 +260,7 @@ namespace Glider.Common.Objects
         public bool IsInMeleeRange => DistanceToSelf <= GContext.Main.MeleeDistance;
 
         public bool IsCursorOnUnit =>
-            GProcessMemoryManipulator.smethod_12(MemoryOffsetTable.gclass18_0.method_4("UnderCursor"), "UnderCursor") == GUID;
+            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
 
         public bool IsFacingAway =>
             Math.Abs(GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading)) < Math.PI / 2.0;
@@ -324,9 +324,9 @@ namespace Glider.Common.Objects
         {
             get
             {
-                var num = MemoryOffsetTable.gclass18_0.method_4(nameof(RaidTargetIcon));
+                var num = MemoryOffsetTable.Instance.GetIntOffset(nameof(RaidTargetIcon));
                 for (var index = 0; index < 8; ++index)
-                    if (GProcessMemoryManipulator.smethod_12(num + index * 8, "rti") == GUID)
+                    if (GProcessMemoryManipulator.ReadInt64(num + index * 8, "rti") == GUID)
                         return (GRaidTargetIcon)(index + 1);
                 return GRaidTargetIcon.NotSpecified;
             }
@@ -378,7 +378,7 @@ namespace Glider.Common.Objects
             _monsterDefinition = GetBaseInt("MonsterDefinition");
             _creatureType = _monsterDefinition == 0
                 ? GCreatureType.NoDefinition
-                : (GCreatureType)GProcessMemoryManipulator.smethod_11(_monsterDefinition + MemoryOffsetTable.gclass18_0.method_4("CreatureType"),
+                : (GCreatureType)GProcessMemoryManipulator.ReadInt32(_monsterDefinition + MemoryOffsetTable.Instance.GetIntOffset("CreatureType"),
                     "rct");
             var storageFloat1 = GetStorageFloat("UNIT_FIELD_POWER5");
             var storageFloat2 = GetStorageFloat("UNIT_FIELD_MAXPOWER5");
@@ -392,10 +392,10 @@ namespace Glider.Common.Objects
             _lastHealthPoints = _healthPoints;
             if ((_dflags & 1) > 0)
                 _wasLootable = true;
-            _movementFlags1 = GProcessMemoryManipulator.smethod_11(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("MoveFlags"), "movefl");
-            var num = GProcessMemoryManipulator.smethod_11(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("MoveStruct2"), "movest2");
+            _movementFlags1 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags"), "movefl");
+            var num = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveStruct2"), "movest2");
             if (num != 0)
-                _movementFlags2 = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.gclass18_0.method_4("MoveFlags2"), "movefl2");
+                _movementFlags2 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags2"), "movefl2");
             else
                 _movementFlags2 = 0;
         }
@@ -642,12 +642,12 @@ namespace Glider.Common.Objects
 
         protected int GetFactionGroupRow(int CheckBaseAddress)
         {
-            var num1 = GProcessMemoryManipulator.smethod_21(MemoryOffsetTable.gclass18_0.method_4("FactionSub"), "facsub");
-            var num2 = GProcessMemoryManipulator.smethod_21(
-                GProcessMemoryManipulator.smethod_21(CheckBaseAddress + MemoryOffsetTable.gclass18_0.method_4("FactionOff1"), "fac1") +
-                MemoryOffsetTable.gclass18_0.method_4("FactionOff2"), "fac2");
-            return GProcessMemoryManipulator.smethod_21(
-                GProcessMemoryManipulator.smethod_21(MemoryOffsetTable.gclass18_0.method_4("FactionBase"), "fac3") + (num2 - num1) * 4,
+            var num1 = GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionSub"), "facsub");
+            var num2 = GProcessMemoryManipulator.ReadIntFromOffset(
+                GProcessMemoryManipulator.ReadIntFromOffset(CheckBaseAddress + MemoryOffsetTable.Instance.GetIntOffset("FactionOff1"), "fac1") +
+                MemoryOffsetTable.Instance.GetIntOffset("FactionOff2"), "fac2");
+            return GProcessMemoryManipulator.ReadIntFromOffset(
+                GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionBase"), "fac3") + (num2 - num1) * 4,
                 "faclookup");
         }
 
@@ -667,8 +667,8 @@ namespace Glider.Common.Objects
                                   factionGroupRow2.ToString("x8"));
             if (factionGroupRow1 != 0 && factionGroupRow2 != 0)
             {
-                if ((GProcessMemoryManipulator.smethod_11(factionGroupRow1 + 12, "rf0") &
-                     GProcessMemoryManipulator.smethod_11(factionGroupRow2 + 20, "rf1")) > 0)
+                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf0") &
+                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 20, "rf1")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Hostile at first hostile check");
@@ -678,10 +678,10 @@ namespace Glider.Common.Objects
                 var int_29_1 = factionGroupRow2 + 24;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.smethod_11(int_29_1, "rf2");
+                    var num = GProcessMemoryManipulator.ReadInt32(int_29_1, "rf2");
                     if (num != 0)
                     {
-                        if (num != GProcessMemoryManipulator.smethod_11(factionGroupRow1 + 4, "rf3"))
+                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf3"))
                         {
                             int_29_1 += 4;
                         }
@@ -698,8 +698,8 @@ namespace Glider.Common.Objects
                     }
                 }
 
-                if ((GProcessMemoryManipulator.smethod_11(factionGroupRow1 + 12, "rf4") &
-                     GProcessMemoryManipulator.smethod_11(factionGroupRow2 + 16, "rf5")) > 0)
+                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf4") &
+                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 16, "rf5")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Friendly at first friendly check");
@@ -709,10 +709,10 @@ namespace Glider.Common.Objects
                 var int_29_2 = factionGroupRow2 + 40;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.smethod_11(int_29_2, "rf6");
+                    var num = GProcessMemoryManipulator.ReadInt32(int_29_2, "rf6");
                     if (num != 0)
                     {
-                        if (num != GProcessMemoryManipulator.smethod_11(factionGroupRow1 + 4, "rf7"))
+                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf7"))
                         {
                             int_29_2 += 4;
                         }
@@ -729,8 +729,8 @@ namespace Glider.Common.Objects
                     }
                 }
 
-                if ((GProcessMemoryManipulator.smethod_11(factionGroupRow1 + 20, "rf8") &
-                     GProcessMemoryManipulator.smethod_11(factionGroupRow2 + 12, "rf9")) > 0)
+                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 20, "rf8") &
+                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 12, "rf9")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Friendly at third friendly check");
@@ -740,10 +740,10 @@ namespace Glider.Common.Objects
                 var int_29_3 = factionGroupRow1 + 40;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.smethod_11(int_29_3, "rfa");
+                    var num = GProcessMemoryManipulator.ReadInt32(int_29_3, "rfa");
                     if (num != 0)
                     {
-                        if (num == GProcessMemoryManipulator.smethod_11(factionGroupRow2 + 4, "rfb"))
+                        if (num == GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 4, "rfb"))
                         {
                             if (Debug)
                                 GContext.Main.Log("Friendly at fourth friendly check");
@@ -795,7 +795,7 @@ namespace Glider.Common.Objects
         {
             if (WKBuffs.ContainsKey(WKBuffName))
                 return WKBuffs[WKBuffName];
-            var strArray = MemoryOffsetTable.gclass18_0.method_3("Buff_" + WKBuffName).Split(' ');
+            var strArray = MemoryOffsetTable.Instance.GetStringOffset("Buff_" + WKBuffName).Split(' ');
             var wellKnownBuff = new int[strArray.Length];
             for (var index = 0; index < strArray.Length; ++index)
                 wellKnownBuff[index] = int.Parse(strArray[index], NumberStyles.HexNumber);
@@ -841,24 +841,24 @@ namespace Glider.Common.Objects
             var num3 = 14;
             var num4 = 12;
             var num5 = 128;
-            var num6 = GProcessMemoryManipulator.smethod_11(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("NB_BaseCount"), "ubuffcount");
-            var num7 = BaseAddress + MemoryOffsetTable.gclass18_0.method_4("NB_BaseList");
-            var num8 = GProcessMemoryManipulator.smethod_11(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("NB_ExtCount"), "extbuffcount");
+            var num6 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
+            var num7 = BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseList");
+            var num8 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
             if (num8 > 0)
             {
                 num6 = num8;
-                num7 = GProcessMemoryManipulator.smethod_11(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("NB_ExtListPtr"), "extbuffptr");
+                num7 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
             }
 
             for (var index = 0; index < num6; ++index)
             {
                 var num9 = num7 + index * num1;
-                var SpellID = GProcessMemoryManipulator.smethod_11(num9 + num2, "buffsid");
+                var SpellID = GProcessMemoryManipulator.ReadInt32(num9 + num2, "buffsid");
                 if (SpellID > 0)
                 {
                     var IsHarmful = false;
-                    int ChargesLeft = GProcessMemoryManipulator.smethod_15(num9 + num3, "buffchgs");
-                    if ((GProcessMemoryManipulator.smethod_15(num9 + num4, "buffflgs") & num5) > 0)
+                    int ChargesLeft = GProcessMemoryManipulator.ReadByte(num9 + num3, "buffchgs");
+                    if ((GProcessMemoryManipulator.ReadByte(num9 + num4, "buffflgs") & num5) > 0)
                         IsHarmful = true;
                     if (SpellID != 0)
                         gbuffList.Add(new GBuff(SpellID, ChargesLeft, IsHarmful));
@@ -878,7 +878,7 @@ namespace Glider.Common.Objects
                 num1 = 40;
             for (var index = 0; index < 56; ++index)
             {
-                var SpellID = GProcessMemoryManipulator.smethod_11(num2 + index * 4, "BuffSpell" + index);
+                var SpellID = GProcessMemoryManipulator.ReadInt32(num2 + index * 4, "BuffSpell" + index);
                 var IsHarmful = index >= num1 && index < num1 + 16;
                 if (SpellID != 0)
                     gbuffList.Add(new GBuff(SpellID, 0, IsHarmful));

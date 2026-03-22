@@ -338,7 +338,7 @@ public class PriestConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Priest.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Priest.html");
     }
 
     private void PreShield_CheckedChanged(object sender, EventArgs e)

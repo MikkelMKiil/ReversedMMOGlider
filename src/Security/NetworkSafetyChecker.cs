@@ -86,7 +86,7 @@ public class NetworkSafetyChecker
         if (NetworkStatus == NetCheckResult.Unknown)
             return !showDialogs || MessageBox.Show(null,
                 "NetCheck was unable to complete, using Glider may not be safe.  Please check your logs and Glider support forums for more information.\r\n\r\nDo you want to continue with your current action?",
-                GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes;
+                GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes;
         if (NetworkStatus == NetCheckResult.Stop)
         {
             StartupClass.IsExitRequested = true;
@@ -97,14 +97,14 @@ public class NetworkSafetyChecker
             var warningText = "Stop: " + WarningTimestamp + "\r\n\r\n" + WarningMessage.Replace("|", "\r\n");
             if (WarningDetailsUrl.Length > 0)
             {
-                if (MessageBox.Show(null, warningText + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.smethod_0(),
+                if (MessageBox.Show(null, warningText + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.GenerateRandomString(),
                         MessageBoxButtons.YesNo, MessageBoxIcon.Hand) == DialogResult.Yes)
                     Process.Start(WarningDetailsUrl);
                 StopGlider();
                 return false;
             }
 
-            var messageBoxResult = (int)MessageBox.Show(null, warningText, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            var messageBoxResult = (int)MessageBox.Show(null, warningText, GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
             StopGlider();
             return false;
         }
@@ -116,13 +116,13 @@ public class NetworkSafetyChecker
                 var text = "Warning: " + WarningTimestamp + "\r\n\r\n" + WarningMessage.Replace("|", "\r\n");
                 if (WarningDetailsUrl.Length > 0)
                 {
-                    if (MessageBox.Show(null, text + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.smethod_0(),
+                    if (MessageBox.Show(null, text + "\r\n\r\nOpen link in new browser window?", GProcessMemoryManipulator.GenerateRandomString(),
                             MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                         Process.Start(WarningDetailsUrl);
                     return false;
                 }
 
-                var num = (int)MessageBox.Show(null, text, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK,
+                var num = (int)MessageBox.Show(null, text, GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation);
                 return false;
             }

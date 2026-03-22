@@ -19,9 +19,9 @@ namespace Glider.Common.Objects
             if (SpellNameCache.ContainsKey(SpellID))
                 return SpellNameCache[SpellID];
             StartupClass.gclass63_0.method_9(SpellID);
-            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.sortedList_0[SpellID].string_0);
-            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.sortedList_0[SpellID].gbuffType_0);
-            return StartupClass.gclass63_0.sortedList_0[SpellID].string_0;
+            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].string_0);
+            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].gbuffType_0);
+            return StartupClass.gclass63_0.Offsets[SpellID].string_0;
         }
 
         public static string GetSpellNameAndBuffType(int SpellID, out GBuffType BuffType)
@@ -34,9 +34,9 @@ namespace Glider.Common.Objects
             }
 
             StartupClass.gclass63_0.method_9(SpellID);
-            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.sortedList_0[SpellID].string_0);
-            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.sortedList_0[SpellID].gbuffType_0);
-            return StartupClass.gclass63_0.sortedList_0[SpellID].string_0;
+            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].string_0);
+            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].gbuffType_0);
+            return StartupClass.gclass63_0.Offsets[SpellID].string_0;
         }
 
         public static int[] CrossReferenceSpell(int SpellID)

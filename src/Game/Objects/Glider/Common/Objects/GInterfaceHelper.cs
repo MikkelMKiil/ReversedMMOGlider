@@ -25,20 +25,20 @@ namespace Glider.Common.Objects
         {
             get
             {
-                var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue1"), "uig1");
-                var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue2"), "uig2");
-                var int_29_1 = num1 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-                var int_29_2 = num2 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-                var num3 = GProcessMemoryManipulator.smethod_11(int_29_1, "uigm1");
-                var num4 = GProcessMemoryManipulator.smethod_11(int_29_2, "uigm2");
+                var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
+                var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
+                var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+                var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+                var num3 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
+                var num4 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
                 return num3 == num4 && num3 != 0;
             }
         }
 
-        public int CursorType => GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(CursorType)), "cursortype");
+        public int CursorType => GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorType)), "cursortype");
 
         public GCursorItemTypes CursorItemType =>
-            (GCursorItemTypes)GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(CursorItemType)),
+            (GCursorItemTypes)GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorItemType)),
                 "cursoritemtype");
 
         public void OnAttach()
@@ -79,7 +79,7 @@ namespace Glider.Common.Objects
         {
             try
             {
-                var gkey = SpellcastingManager.gclass42_0.sortedList_0[KeyName];
+                var gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
                 if (gkey.BarState == GBarState.Indifferent)
                     throw new Exception("BarState indifferent for that key, can only look up Combat/Rest");
                 var num = StartupClass.numbers_string.IndexOf(gkey.CharCode);
@@ -111,11 +111,11 @@ namespace Glider.Common.Objects
 
         public int GetActionInventory(string KeyName)
         {
-            var gkey = SpellcastingManager.gclass42_0.sortedList_0[KeyName];
+            var gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
             gkey.FilloutKey();
             Logger.smethod_1(MessageProvider.smethod_2(627, gkey.KeyName, gkey.CharCode));
-            var num1 = MemoryOffsetTable.gclass18_0.method_4("BarBase");
-            var num2 = MemoryOffsetTable.gclass18_0.method_4("BarSize");
+            var num1 = MemoryOffsetTable.Instance.GetIntOffset("BarBase");
+            var num2 = MemoryOffsetTable.Instance.GetIntOffset("BarSize");
             var num3 = 0;
             var num4 = StartupClass.numbers_string.IndexOf(gkey.CharCode);
             if (num4 == -1)
@@ -126,11 +126,11 @@ namespace Glider.Common.Objects
                 switch (gkey.BarState)
                 {
                     case GBarState.Combat:
-                        num3 = int.Parse(new string(SpellcastingManager.gclass42_0.sortedList_0["Common.BarCombat"].CharCode, 1));
+                        num3 = int.Parse(new string(SpellcastingManager.gclass42_0.Offsets["Common.BarCombat"].CharCode, 1));
                         Logger.smethod_1(MessageProvider.smethod_2(3, num3));
                         break;
                     case GBarState.Rest:
-                        num3 = int.Parse(new string(SpellcastingManager.gclass42_0.sortedList_0["Common.BarRest"].CharCode, 1));
+                        num3 = int.Parse(new string(SpellcastingManager.gclass42_0.Offsets["Common.BarRest"].CharCode, 1));
                         Logger.smethod_1(MessageProvider.smethod_2(4, num3));
                         break;
                     case GBarState.Bar1:
@@ -164,7 +164,7 @@ namespace Glider.Common.Objects
                 return -1;
             }
 
-            return GProcessMemoryManipulator.smethod_11(int_29, "GetActionInv" + num4);
+            return GProcessMemoryManipulator.ReadInt32(int_29, "GetActionInv" + num4);
         }
 
         public void WaitForReady(string KeyName)
@@ -185,7 +185,7 @@ namespace Glider.Common.Objects
             GKey gkey;
             try
             {
-                gkey = SpellcastingManager.gclass42_0.sortedList_0[KeyName];
+                gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
             }
             catch (KeyNotFoundException ex)
             {
@@ -194,13 +194,13 @@ namespace Glider.Common.Objects
             }
 
             gkey.FilloutKey();
-            var visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
+            var visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets[KeyName].FindVisibleInterfaceObject();
             return visibleInterfaceObject != null && GetByName(visibleInterfaceObject).IsFiring;
         }
 
         public bool IsKeyReady(string KeyName)
         {
-            var gkey = SpellcastingManager.gclass42_0.sortedList_0[KeyName];
+            var gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
             if (gkey == null)
             {
                 Logger.LogMessage("!! IsKeyReady failed, missing key: \"" + KeyName + "\"");
@@ -213,18 +213,18 @@ namespace Glider.Common.Objects
 
         public static void DumpUIDebug(bool RequireVisible)
         {
-            var int_1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "DumpUI_UIParent");
+            var int_1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "DumpUI_UIParent");
             var num = 0;
             do
             {
-                var int_29 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UIName"), "uinamedumpui");
+                var int_29 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
                 if (int_29 != 0)
                     goto label_2;
                 label_1:
-                int_1 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UINext"), "CurrentAddress");
+                int_1 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
                 continue;
                 label_2:
-                var str = GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamedumpui");
+                var str = GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamedumpui");
                 var gclass8 = new UIElement(int_1);
                 if (gclass8.method_10() || !RequireVisible)
                 {
@@ -245,8 +245,8 @@ namespace Glider.Common.Objects
         {
             try
             {
-                SpellcastingManager.gclass42_0.sortedList_0[KeyName].FilloutKey(true);
-                return !SpellcastingManager.gclass42_0.sortedList_0[KeyName].IsUndefined;
+                SpellcastingManager.gclass42_0.Offsets[KeyName].FilloutKey(true);
+                return !SpellcastingManager.gclass42_0.Offsets[KeyName].IsUndefined;
             }
             catch (KeyNotFoundException ex)
             {
@@ -260,7 +260,7 @@ namespace Glider.Common.Objects
             GKey gkey;
             try
             {
-                gkey = SpellcastingManager.gclass42_0.sortedList_0[KeyName];
+                gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
             }
             catch (KeyNotFoundException ex)
             {
@@ -269,12 +269,12 @@ namespace Glider.Common.Objects
             }
 
             gkey.FilloutKey();
-            var visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
+            var visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets[KeyName].FindVisibleInterfaceObject();
             if (visibleInterfaceObject == null)
             {
                 gkey.EnsureBar();
                 Thread.Sleep(100);
-                visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
+                visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets[KeyName].FindVisibleInterfaceObject();
                 if (visibleInterfaceObject == null)
                     return false;
             }
@@ -294,26 +294,26 @@ namespace Glider.Common.Objects
 
         public static void DumpPreWorldUIDebug(bool RequireVisible)
         {
-            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue1"), "uig1");
-            var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIGlue2"), "uig2");
-            var int_29_1 = num1 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-            var int_29_2 = num2 + MemoryOffsetTable.gclass18_0.method_4("UIGlueStep");
-            var num3 = GProcessMemoryManipulator.smethod_11(int_29_1, "uigm1");
-            var num4 = GProcessMemoryManipulator.smethod_11(int_29_2, "uigm2");
+            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
+            var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
+            var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+            var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
+            var num3 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
+            var num4 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
             var int_1 = num3;
             if (num3 != 0 && num3 == num4)
             {
                 var num5 = 0;
                 do
                 {
-                    var int_29_3 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UIName"), "uinamedumpui");
+                    var int_29_3 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
                     if (int_29_3 != 0)
                         goto label_3;
                     label_2:
-                    int_1 = GProcessMemoryManipulator.smethod_11(int_1 + MemoryOffsetTable.gclass18_0.method_4("UINext"), "CurrentAddress");
+                    int_1 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
                     continue;
                     label_3:
-                    var str = GProcessMemoryManipulator.smethod_9(int_29_3, 200, "objectnamedumpui");
+                    var str = GProcessMemoryManipulator.ReadString(int_29_3, 200, "objectnamedumpui");
                     var gclass8 = new UIElement(int_1);
                     if (gclass8.method_10() || !RequireVisible)
                     {

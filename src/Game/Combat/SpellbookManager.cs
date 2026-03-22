@@ -13,12 +13,12 @@ using Glider.Common.Objects;
 public class SpellbookManager
 {
     private int int_0;
-    public SortedList<int, SpellEntry> sortedList_0;
+    public SortedList<int, SpellEntry> Offsets;
 
     public SpellbookManager()
     {
-        sortedList_0 = new SortedList<int, SpellEntry>();
-        var num = MemoryOffsetTable.gclass18_0.method_4("MySpells");
+        Offsets = new SortedList<int, SpellEntry>();
+        var num = MemoryOffsetTable.Instance.GetIntOffset("MySpells");
         method_1(method_5("SpellListBase"), "slb");
         method_1(method_5("SpellListRowCount"), "slrc");
         method_1(method_5("SpellListSub"), "sls");
@@ -29,22 +29,22 @@ public class SpellbookManager
                 method_9(int_1);
         }
 
-        method_4("Created SpellbookEx structure, initial count: " + sortedList_0.Keys.Count + " spells");
+        method_4("Created SpellbookEx structure, initial count: " + Offsets.Keys.Count + " spells");
     }
 
     private byte[] method_0(int int_1, int int_2, string string_0)
     {
-        return GProcessMemoryManipulator.smethod_17(int_1, int_2, string_0);
+        return GProcessMemoryManipulator.ReadBytes(int_1, int_2, string_0);
     }
 
     private int method_1(int int_1, string string_0)
     {
-        return GProcessMemoryManipulator.smethod_11(int_1, string_0);
+        return GProcessMemoryManipulator.ReadInt32(int_1, string_0);
     }
 
     private string method_2(int int_1, string string_0)
     {
-        return GProcessMemoryManipulator.smethod_9(int_1, 100, string_0);
+        return GProcessMemoryManipulator.ReadString(int_1, 100, string_0);
     }
 
     private void method_3(string string_0)
@@ -59,19 +59,19 @@ public class SpellbookManager
 
     private int method_5(string string_0)
     {
-        return MemoryOffsetTable.gclass18_0.method_4(string_0);
+        return MemoryOffsetTable.Instance.GetIntOffset(string_0);
     }
 
     public void method_6()
     {
-        foreach (var key in sortedList_0.Keys)
-            method_4(sortedList_0[key].ToString());
+        foreach (var key in Offsets.Keys)
+            method_4(Offsets[key].ToString());
     }
 
     public SpellEntry method_7(int int_1)
     {
         method_9(int_1);
-        return sortedList_0[int_1];
+        return Offsets[int_1];
     }
 
     public void method_8(int int_1)
@@ -86,10 +86,10 @@ public class SpellbookManager
 
     public void method_9(int int_1)
     {
-        if (int_1 == 0 || sortedList_0.ContainsKey(int_1))
+        if (int_1 == 0 || Offsets.ContainsKey(int_1))
             return;
         var gclass64 = method_10(int_1);
-        sortedList_0.Add(gclass64.int_0, gclass64);
+        Offsets.Add(gclass64.int_0, gclass64);
     }
 
     private SpellEntry method_10(int int_1)
@@ -130,21 +130,21 @@ public class SpellbookManager
     public string method_11(int int_1)
     {
         method_9(int_1);
-        return !sortedList_0.ContainsKey(int_1)
+        return !Offsets.ContainsKey(int_1)
             ? "(no such spell 0x" + int_1.ToString("x") + ")"
-            : sortedList_0[int_1].string_0;
+            : Offsets[int_1].string_0;
     }
 
     public int method_12(int int_1, string string_0)
     {
-        if (!sortedList_0.ContainsKey(int_1))
+        if (!Offsets.ContainsKey(int_1))
             return 0;
-        var gclass64 = sortedList_0[int_1];
+        var gclass64 = Offsets[int_1];
         var num = 0;
-        foreach (var key in sortedList_0.Keys)
-            if (sortedList_0[key].string_0 == gclass64.string_0)
+        foreach (var key in Offsets.Keys)
+            if (Offsets[key].string_0 == gclass64.string_0)
             {
-                sortedList_0[key].string_1 = string_0;
+                Offsets[key].string_1 = string_0;
                 ++num;
             }
 
@@ -155,9 +155,9 @@ public class SpellbookManager
     public int[] method_13(int int_1)
     {
         method_9(int_1);
-        if (!sortedList_0.ContainsKey(int_1))
+        if (!Offsets.ContainsKey(int_1))
             return null;
-        var string0 = sortedList_0[int_1].string_0;
+        var string0 = Offsets[int_1].string_0;
         if (string0 == null)
         {
             method_4("! Could not find spell name for 0x" + int_1.ToString("x") + ", not good!");
@@ -165,7 +165,7 @@ public class SpellbookManager
         }
 
         var intList = new List<int>();
-        foreach (var gclass64 in sortedList_0.Values)
+        foreach (var gclass64 in Offsets.Values)
             if (gclass64.string_0 == string0)
                 intList.Add(gclass64.int_0);
         return intList.ToArray();
@@ -174,7 +174,7 @@ public class SpellbookManager
     public bool method_14()
     {
         var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
-        var num2 = GProcessMemoryManipulator.smethod_34();
+        var num2 = GProcessMemoryManipulator.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             for (; num1 != 0 && num1 % 2 == 0; num1 = method_1(num1 + 4, "c1next"))
@@ -200,11 +200,11 @@ public class SpellbookManager
     {
         if (int_1 == 0)
             return method_14();
-        if (sortedList_0.ContainsKey(int_1))
+        if (Offsets.ContainsKey(int_1))
             method_9(int_1);
-        var gclass64 = sortedList_0[int_1];
+        var gclass64 = Offsets[int_1];
         var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
-        var num2 = GProcessMemoryManipulator.smethod_34();
+        var num2 = GProcessMemoryManipulator.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             while (num1 != 0 && num1 % 2 == 0)
@@ -255,7 +255,7 @@ public class SpellbookManager
         try
         {
             var numArray = method_17(int_1_1, method_5("SpellNameRLE") + 48);
-            if (numArray.Length >= MemoryOffsetTable.gclass18_0.method_4("SpellNameRLE") + 4)
+            if (numArray.Length >= MemoryOffsetTable.Instance.GetIntOffset("SpellNameRLE") + 4)
                 return numArray;
             method_4("! Can't read spelldata for 0x" + int_1.ToString("x") + ", RLE data too short: 0x" +
                      numArray.Length.ToString("x") + " bytes");

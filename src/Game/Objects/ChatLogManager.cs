@@ -387,11 +387,11 @@ public class ChatLogManager
     {
         if (string_2.Length == 1 && char.IsDigit(string_2[0]))
             return int.Parse(string_2);
-        var num1 = MemoryOffsetTable.gclass18_0.method_4("ChatFrameBase");
-        var num2 = MemoryOffsetTable.gclass18_0.method_4("ChatFrameSize");
+        var num1 = MemoryOffsetTable.Instance.GetIntOffset("ChatFrameBase");
+        var num2 = MemoryOffsetTable.Instance.GetIntOffset("ChatFrameSize");
         for (var index = 0; index <= 10; ++index)
         {
-            var str = GProcessMemoryManipulator.smethod_9(num1 + index * num2, 100, "ChatFrameName");
+            var str = GProcessMemoryManipulator.ReadString(num1 + index * num2, 100, "ChatFrameName");
             Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;

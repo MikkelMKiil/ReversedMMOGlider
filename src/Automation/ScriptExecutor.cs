@@ -19,7 +19,7 @@ using Microsoft.CSharp;
 
 public class ScriptExecutor
 {
-    private readonly SortedList<string, GScript> sortedList_0;
+    private readonly SortedList<string, GScript> Offsets;
     private Thread thread_0;
 
     public ScriptExecutor()
@@ -28,7 +28,7 @@ public class ScriptExecutor
             Directory.CreateDirectory("DefaultScripts");
         if (!Directory.Exists("Scripts"))
             Directory.CreateDirectory("Scripts");
-        sortedList_0 = new SortedList<string, GScript>();
+        Offsets = new SortedList<string, GScript>();
     }
 
     public void method_0()
@@ -68,7 +68,7 @@ public class ScriptExecutor
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                         StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_27(StartupClass.AnotherIntegerValue);
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
                         if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
                             Logger.LogMessage("No game window, no background mode!");
@@ -127,19 +127,19 @@ public class ScriptExecutor
 
     protected void method_4(string string_0, bool bool_0)
     {
-        if (!sortedList_0.ContainsKey(string_0))
+        if (!Offsets.ContainsKey(string_0))
             method_5(string_0);
         try
         {
-            if (sortedList_0[string_0] != null && !bool_0 && StartupClass.IsSomeConditionMet)
+            if (Offsets[string_0] != null && !bool_0 && StartupClass.IsSomeConditionMet)
             {
-                sortedList_0[string_0].Setup();
-                sortedList_0[string_0].Execute();
+                Offsets[string_0].Setup();
+                Offsets[string_0].Execute();
             }
             else
             {
-                sortedList_0[string_0 + "_Base"].Setup();
-                sortedList_0[string_0 + "_Base"].Execute();
+                Offsets[string_0 + "_Base"].Setup();
+                Offsets[string_0 + "_Base"].Execute();
             }
         }
         catch (ThreadInterruptedException ex)
@@ -150,7 +150,7 @@ public class ScriptExecutor
         {
             Logger.LogMessage("!! Unhandled exception in script for \"" + string_0 + "\": " + ex.Message + "\r\n" +
                                ex.StackTrace);
-            sortedList_0.Remove(string_0);
+            Offsets.Remove(string_0);
             throw ex;
         }
     }
@@ -172,20 +172,20 @@ public class ScriptExecutor
             Logger.smethod_1("Considering: \"" + str2 + "\"");
             if (File.Exists(str2))
             {
-                sortedList_0[string_0] = method_11(str2);
+                Offsets[string_0] = method_11(str2);
             }
             else
             {
                 Logger.smethod_1("No such file, skipping");
-                sortedList_0[string_0] = null;
+                Offsets[string_0] = null;
             }
         }
         else
         {
-            sortedList_0[string_0] = null;
+            Offsets[string_0] = null;
         }
 
-        sortedList_0[string_0 + "_Base"] = method_10(string_0);
+        Offsets[string_0 + "_Base"] = method_10(string_0);
     }
 
     private void method_6(string string_0)
@@ -209,7 +209,7 @@ public class ScriptExecutor
 
     public void method_8()
     {
-        sortedList_0.Clear();
+        Offsets.Clear();
     }
 
     private string method_9(string string_0)

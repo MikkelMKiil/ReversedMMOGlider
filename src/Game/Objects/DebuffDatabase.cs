@@ -16,12 +16,12 @@ using Glider.Common.Objects;
 
 public class DebuffDatabase
 {
-    public SortedList<int, DebuffEntry> sortedList_0;
+    public SortedList<int, DebuffEntry> Offsets;
     public SortedList<int, string> sortedList_1;
 
     public DebuffDatabase()
     {
-        sortedList_0 = new SortedList<int, DebuffEntry>();
+        Offsets = new SortedList<int, DebuffEntry>();
         sortedList_1 = new SortedList<int, string>();
         method_0();
     }
@@ -63,9 +63,9 @@ public class DebuffDatabase
                                 continue;
                         }
 
-                    if (!sortedList_0.ContainsKey(gclass45.int_0))
+                    if (!Offsets.ContainsKey(gclass45.int_0))
                     {
-                        sortedList_0.Add(gclass45.int_0, gclass45);
+                        Offsets.Add(gclass45.int_0, gclass45);
                         ++num1;
                     }
                     else
@@ -85,9 +85,9 @@ public class DebuffDatabase
 
     public void method_1(int int_0, string string_0, DebuffType genum4_0)
     {
-        if (sortedList_0.ContainsKey(int_0))
+        if (Offsets.ContainsKey(int_0))
             return;
-        sortedList_0.Add(int_0, new DebuffEntry(int_0, genum4_0, string_0, false));
+        Offsets.Add(int_0, new DebuffEntry(int_0, genum4_0, string_0, false));
     }
 
     protected DebuffType method_2(string string_0)
@@ -126,7 +126,7 @@ public class DebuffDatabase
 
     public void method_4()
     {
-        if (sortedList_0.Keys.Count == 0)
+        if (Offsets.Keys.Count == 0)
             return;
         var filename = "Debuffs.xml";
         try
@@ -135,7 +135,7 @@ public class DebuffDatabase
             xmlTextWriter.Formatting = Formatting.Indented;
             xmlTextWriter.WriteStartDocument();
             xmlTextWriter.WriteStartElement("Debuffs");
-            foreach (var gclass45 in sortedList_0.Values)
+            foreach (var gclass45 in Offsets.Values)
             {
                 xmlTextWriter.WriteStartElement("Debuff");
                 xmlTextWriter.WriteAttributeString("ID", gclass45.int_0.ToString("x"));
@@ -157,17 +157,17 @@ public class DebuffDatabase
 
     public bool method_5(int int_0, DebuffType genum4_0, bool bool_0)
     {
-        if (!sortedList_0.ContainsKey(int_0))
+        if (!Offsets.ContainsKey(int_0))
             return false;
-        var flag = sortedList_0[int_0].genum4_0 == genum4_0;
+        var flag = Offsets[int_0].genum4_0 == genum4_0;
         if (bool_0 && flag)
-            flag = sortedList_0[int_0].bool_0;
+            flag = Offsets[int_0].bool_0;
         return flag;
     }
 
     public bool method_6(int int_0)
     {
-        return sortedList_0.ContainsKey(int_0);
+        return Offsets.ContainsKey(int_0);
     }
 
     public bool method_7(DebuffType genum4_0, string string_0, bool bool_0)
@@ -189,7 +189,7 @@ public class DebuffDatabase
         if (!StartupClass.bool_13)
             return;
         foreach (var gbuff in GPlayerSelf.Me.GetBuffSnapshot())
-            if (gbuff.SpellID > 0 && !sortedList_0.ContainsKey(gbuff.SpellID) &&
+            if (gbuff.SpellID > 0 && !Offsets.ContainsKey(gbuff.SpellID) &&
                 !sortedList_1.ContainsKey(gbuff.SpellID) && gbuff.SpellName != null && gbuff.SpellName.Length > 0)
             {
                 Logger.smethod_1(MessageProvider.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
@@ -200,7 +200,7 @@ public class DebuffDatabase
     [SpecialName]
     public int method_9()
     {
-        return sortedList_0.Keys.Count;
+        return Offsets.Keys.Count;
     }
 
     public void method_10()

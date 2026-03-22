@@ -18,8 +18,8 @@ public class FlightPointManager
 
     public void method_0()
     {
-        var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("Language"), "Language");
-        int_0 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIFlightpointCount"), "fpcount");
+        var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Language"), "Language");
+        int_0 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIFlightpointCount"), "fpcount");
         Logger.smethod_1("Flight point count: " + int_0);
         if (int_0 == 0)
         {
@@ -31,12 +31,12 @@ public class FlightPointManager
             for (var index = 0; index < int_0; ++index)
             {
                 var int_29 =
-                    GProcessMemoryManipulator.smethod_11(
-                        GProcessMemoryManipulator.smethod_11((index << 5) + MemoryOffsetTable.gclass18_0.method_4("UIFlightpointBase"),
-                            "fpbase") + 4 * num + MemoryOffsetTable.gclass18_0.method_4("UIFlightpointName"), "fpname");
+                    GProcessMemoryManipulator.ReadInt32(
+                        GProcessMemoryManipulator.ReadInt32((index << 5) + MemoryOffsetTable.Instance.GetIntOffset("UIFlightpointBase"),
+                            "fpbase") + 4 * num + MemoryOffsetTable.Instance.GetIntOffset("UIFlightpointName"), "fpname");
                 if (int_29 != 0)
                 {
-                    string_0[index] = GProcessMemoryManipulator.smethod_9(int_29, 150, "fpnamebytes");
+                    string_0[index] = GProcessMemoryManipulator.ReadString(int_29, 150, "fpnamebytes");
                     Logger.smethod_1(index + " = \"" + string_0[index] + "\"");
                 }
                 else

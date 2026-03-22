@@ -318,9 +318,9 @@ public class StartupClass
             string_5 = string_11;
             Logger.LogMessage(MessageProvider.smethod_2(109, string_5));
             ConfigManager.gclass61_0.method_0("LastProfile", string_11);
-            if (gclass54_0 != null && gclass54_0.sortedList_0 != null)
+            if (gclass54_0 != null && gclass54_0.Offsets != null)
             {
-                gclass54_0.sortedList_0 = null;
+                gclass54_0.Offsets = null;
                 Logger.LogMessage(MessageProvider.GetMessage(110));
             }
 
@@ -501,7 +501,7 @@ public class StartupClass
     public static void smethod_9()
     {
         isInitializationSuccessful = false;
-        MemoryOffsetTable.gclass18_0 = new MemoryOffsetTable();
+        MemoryOffsetTable.Instance = new MemoryOffsetTable();
         thread_0 = new Thread(smethod_10);
         thread_0.Start();
     }
@@ -567,7 +567,7 @@ public class StartupClass
             {
                 Logger.LogMessage("Starting Tripwire");
                 GameMemoryReader = new WardenMonitor(GliderManager, ConfigManager.gclass61_0.method_5("LogWW"),
-                    MemoryOffsetTable.gclass18_0.method_4("VAPeek"));
+                    MemoryOffsetTable.Instance.GetIntOffset("VAPeek"));
             }
 
             if (IsSomeConditionMet && !bool_37 && !IsAttached)
@@ -625,11 +625,11 @@ public class StartupClass
             IsForegroundEnabled = false;
             gclass36_2.method_4();
             GProcessMemoryManipulator.bool_2 = false;
-            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.gclass18_0.method_4("D_Player"));
-            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.gclass18_0.method_4("D_Items"));
-            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.gclass18_0.method_4("D_NPC"));
-            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.gclass18_0.method_4("D_Object"));
-            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.gclass18_0.method_4("D_Container"));
+            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
+            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
+            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
+            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
+            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
             gclass63_0 = new SpellbookManager();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
@@ -675,7 +675,7 @@ public class StartupClass
         Logger.smethod_1("AppContext.Detach invoked");
         if (int_12 == 0 && !GProcessMemoryManipulator.smethod_56(AnotherIntegerValue))
         {
-            GProcessMemoryManipulator.smethod_7(AdditionalApplicationHandle);
+            GProcessMemoryManipulator.CloseProcessHandle(AdditionalApplicationHandle);
             AdditionalApplicationHandle = IntPtr.Zero;
             AnotherIntegerValue = 0;
         }
@@ -1236,8 +1236,8 @@ public class StartupClass
         if (SpellCooldownTimer.IsReady)
         {
             SpellCooldownTimer.Reset();
-            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.smethod_28();
-            GProcessMemoryManipulator.smethod_31();
+            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
+            GProcessMemoryManipulator.GetProcessId();
         }
 
         if (bool_38 && !IsAttached && !bool_37)
@@ -1329,7 +1329,7 @@ public class StartupClass
 
     public static bool smethod_44()
     {
-        AnotherIntegerValue = GProcessMemoryManipulator.smethod_1();
+        AnotherIntegerValue = GProcessMemoryManipulator.AttachToWowProcess();
         if (AnotherIntegerValue == 0)
         {
             bool_35 = true;
@@ -1339,7 +1339,7 @@ public class StartupClass
         IsGliderAttached = true;
         if (AdditionalApplicationHandle == IntPtr.Zero && !bool_14)
         {
-            AdditionalApplicationHandle = GProcessMemoryManipulator.smethod_6(AnotherIntegerValue);
+            AdditionalApplicationHandle = GProcessMemoryManipulator.OpenProcessHandle(AnotherIntegerValue);
             if (AdditionalApplicationHandle == IntPtr.Zero)
             {
                 if (!IsGliderPaused)
@@ -1351,26 +1351,26 @@ public class StartupClass
                 return false;
             }
 
-            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.smethod_28();
+            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
             if (GliderManager != null && !GliderManager.method_26(AnotherIntegerValue))
             {
                 Logger.LogMessage(
                     "Some other Glider is already open on that game, maybe we'll attach to some other one");
                 CloseHandle(AdditionalApplicationHandle);
                 AdditionalApplicationHandle = IntPtr.Zero;
-                GProcessMemoryManipulator.smethod_5(AnotherIntegerValue);
+                GProcessMemoryManipulator.SetProcessId(AnotherIntegerValue);
                 AnotherIntegerValue = 0;
                 return false;
             }
 
-            GProcessMemoryManipulator.smethod_31();
+            GProcessMemoryManipulator.GetProcessId();
             if (GameMemoryWriter != null)
                 GameMemoryWriter.method_2("OnGameFirstSeen", false);
         }
 
         if (IsAttached)
             return true;
-        if (GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "probeuip") == 0 && !bool_20 &&
+        if (GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "probeuip") == 0 && !bool_20 &&
             ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
@@ -1383,10 +1383,10 @@ public class StartupClass
             return false;
         }
 
-        if (MemoryOffsetTable.gclass18_0.method_5("TLSSlot"))
+        if (MemoryOffsetTable.Instance.HasOffset("TLSSlot"))
             return GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && GObjectList.StealthCountGameObjects(long_0) > 0 &&
                    long_0 != 0L;
-        var numArray = GProcessMemoryManipulator.smethod_20(MemoryOffsetTable.gclass18_0.method_4("PlayerIdAddr"), 8);
+        var numArray = GProcessMemoryManipulator.ReadBytesRaw(MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr"), 8);
         if (numArray == null)
         {
             if (AdditionalApplicationHandle != IntPtr.Zero)
@@ -1398,7 +1398,7 @@ public class StartupClass
         long_0 = BitConverter.ToInt64(numArray, 0);
         if (long_0 == 0L)
             return false;
-        int_5 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("MainTable"), "MainTableProbe");
+        int_5 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTableProbe");
         return GObjectList.StealthCountGameObjects(long_0) > 1;
     }
 
@@ -1426,7 +1426,7 @@ public class StartupClass
     {
         if (bool_40)
             return;
-        GProcessMemoryManipulator.smethod_38(MainApplicationHandle);
+        GProcessMemoryManipulator.SetForegroundWindow(MainApplicationHandle);
         bool_40 = true;
     }
 
@@ -1435,9 +1435,9 @@ public class StartupClass
         if (bool_41)
             return;
         double width = ConfigManager.gclass61_0.method_3("ShrinkWidth");
-        GProcessMemoryManipulator.smethod_40(MainApplicationHandle, out size_0);
+        GProcessMemoryManipulator.GetWindowSize(MainApplicationHandle, out size_0);
         var height = size_0.Height / (double)size_0.Width * width;
-        GProcessMemoryManipulator.smethod_42(MainApplicationHandle, new Size((int)width, (int)height));
+        GProcessMemoryManipulator.SetWindowSize(MainApplicationHandle, new Size((int)width, (int)height));
         bool_41 = true;
     }
 
@@ -1445,7 +1445,7 @@ public class StartupClass
     {
         if (!bool_40)
             return;
-        GProcessMemoryManipulator.smethod_37(MainApplicationHandle);
+        GProcessMemoryManipulator.ShowWindow(MainApplicationHandle);
         bool_40 = false;
     }
 
@@ -1453,7 +1453,7 @@ public class StartupClass
     {
         if (!bool_41)
             return;
-        GProcessMemoryManipulator.smethod_42(MainApplicationHandle, size_0);
+        GProcessMemoryManipulator.SetWindowSize(MainApplicationHandle, size_0);
         bool_41 = false;
     }
 
@@ -1599,7 +1599,7 @@ public class StartupClass
 
     private static void smethod_60()
     {
-        if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+        if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         smethod_58();
@@ -1616,7 +1616,7 @@ public class StartupClass
         }
         else
         {
-            if (MessageBox.Show(MainForm, MessageProvider.GetMessage(876), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+            if (MessageBox.Show(MainForm, MessageProvider.GetMessage(876), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
                     MessageBoxIcon.Exclamation) != DialogResult.Yes)
                 return;
             Process.Start("http://www.mmoglider.com/Download.aspx?Update=True");
@@ -1628,7 +1628,7 @@ public class StartupClass
         if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
         {
             Logger.smethod_1("Setting up bg stuff");
-            MainApplicationHandle = GProcessMemoryManipulator.smethod_29(AnotherIntegerValue);
+            MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(AnotherIntegerValue);
             GliderManager.method_34(AnotherIntegerValue, MainApplicationHandle);
             IsGliderInitialized = true;
         }
@@ -1640,20 +1640,20 @@ public class StartupClass
 
     public static string smethod_63(int int_14)
     {
-        var num1 = MemoryOffsetTable.gclass18_0.method_4("MacroBase");
-        var num2 = GProcessMemoryManipulator.smethod_11(num1 + 36, "mbase");
+        var num1 = MemoryOffsetTable.Instance.GetIntOffset("MacroBase");
+        var num2 = GProcessMemoryManipulator.ReadInt32(num1 + 36, "mbase");
         int int_29_1;
         for (var int_29_2 =
-                 GProcessMemoryManipulator.smethod_11(GProcessMemoryManipulator.smethod_11(num1 + 28, "mbase2") + 12 * (int_14 & num2) + 8, "mbase3");
+                 GProcessMemoryManipulator.ReadInt32(GProcessMemoryManipulator.ReadInt32(num1 + 28, "mbase2") + 12 * (int_14 & num2) + 8, "mbase3");
              int_29_2 > 0 && (int_29_2 & 1) == 0;
-             int_29_2 = GProcessMemoryManipulator.smethod_11(int_29_2 + GProcessMemoryManipulator.smethod_11(int_29_1, "mnext3") + 4, "mnext4"))
+             int_29_2 = GProcessMemoryManipulator.ReadInt32(int_29_2 + GProcessMemoryManipulator.ReadInt32(int_29_1, "mnext3") + 4, "mnext4"))
         {
-            var num3 = GProcessMemoryManipulator.smethod_11(int_29_2, "mstep");
-            var str = GProcessMemoryManipulator.smethod_9(int_29_2 + 36, 64, "mname");
+            var num3 = GProcessMemoryManipulator.ReadInt32(int_29_2, "mstep");
+            var str = GProcessMemoryManipulator.ReadString(int_29_2 + 36, 64, "mname");
             if (num3 == int_14)
                 return str;
-            int_29_1 = GProcessMemoryManipulator.smethod_11(num1 + 28, "mnext1") +
-                       12 * (GProcessMemoryManipulator.smethod_11(num1 + 36, "mnext2") & int_14);
+            int_29_1 = GProcessMemoryManipulator.ReadInt32(num1 + 28, "mnext1") +
+                       12 * (GProcessMemoryManipulator.ReadInt32(num1 + 36, "mnext2") & int_14);
         }
 
         return "(could not find macro in list!)";

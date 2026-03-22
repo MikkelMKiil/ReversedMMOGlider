@@ -469,7 +469,7 @@ public class RogueConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Rogue.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Rogue.html");
     }
 
     private void UseKick_CheckedChanged(object sender, EventArgs e)

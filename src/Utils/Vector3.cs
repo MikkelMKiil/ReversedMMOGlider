@@ -64,8 +64,8 @@ public class Vector3
 
     public void method_0(int int_0)
     {
-        float_0 = GProcessMemoryManipulator.smethod_13(int_0, "v3dx");
-        float_1 = GProcessMemoryManipulator.smethod_13(int_0 + 4, "v3dy");
-        float_2 = GProcessMemoryManipulator.smethod_13(int_0 + 8, "v3dz");
+        float_0 = GProcessMemoryManipulator.ReadFloat(int_0, "v3dx");
+        float_1 = GProcessMemoryManipulator.ReadFloat(int_0 + 4, "v3dy");
+        float_2 = GProcessMemoryManipulator.ReadFloat(int_0 + 8, "v3dz");
     }
 }

@@ -19,7 +19,7 @@ public class Matrix3
         for (var index1 = 0; index1 < 3; ++index1)
         for (var index2 = 0; index2 < 3; ++index2)
         {
-            float_0[index1, index2] = GProcessMemoryManipulator.smethod_13(int_0, "matrix3d");
+            float_0[index1, index2] = GProcessMemoryManipulator.ReadFloat(int_0, "matrix3d");
             int_0 += 4;
         }
     }

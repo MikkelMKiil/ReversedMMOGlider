@@ -245,7 +245,7 @@ public class PaladinConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Paladin.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Paladin.html");
     }
 
     private void AvoidAdds_CheckedChanged(object sender, EventArgs e)

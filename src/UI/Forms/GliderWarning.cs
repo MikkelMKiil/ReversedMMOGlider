@@ -69,7 +69,7 @@ public class GliderWarning : Form
     private void GliderWarning_Load(object sender, EventArgs e)
     {
         MessageProvider.smethod_3(this, nameof(GliderWarning));
-        Text = GProcessMemoryManipulator.smethod_0();
+        Text = GProcessMemoryManipulator.GenerateRandomString();
     }
 
     private void MyYesButton_Click(object sender, EventArgs e)

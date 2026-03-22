@@ -230,7 +230,7 @@ public class ConfigForm : Form
     private CheckBox ShiftLoot;
     private CheckBox SitWhenBored;
     private CheckBox SkipLoot;
-    private readonly SortedList<string, string> sortedList_0 = new SortedList<string, string>();
+    private readonly SortedList<string, string> Offsets = new SortedList<string, string>();
     private CheckBox SoundKill;
     private TextBox SpellLeadDelay;
     private CheckBox StopAfter;
@@ -3111,7 +3111,7 @@ public class ConfigForm : Form
         switch (gconfigResult)
         {
             case GConfigResult.NotSupported:
-                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GProcessMemoryManipulator.smethod_0(),
+                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GProcessMemoryManipulator.GenerateRandomString(),
                     MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 break;
             case GConfigResult.Accept:
@@ -3131,7 +3131,7 @@ public class ConfigForm : Form
         var helpString = helpProvider_0.GetHelpString(tabControl1.SelectedTab);
         if (helpString == null || helpString.Length <= 0)
             return;
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, helpString);
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
     }
 
     private void StopAfter_CheckedChanged(object sender, EventArgs e)
@@ -3297,7 +3297,7 @@ public class ConfigForm : Form
             StartupClass.DebuffsKnown_string.method_10();
         var debuffList = new DebuffList();
         debuffList.method_0();
-        if (debuffList.sortedList_0.Keys.Count == 0)
+        if (debuffList.Offsets.Keys.Count == 0)
         {
             var num1 = (int)MessageBox.Show(this, MessageProvider.smethod_4("DebuffList.NoneNew"),
                 MessageProvider.smethod_4("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -3319,7 +3319,7 @@ public class ConfigForm : Form
         groupBox25.Enabled = BackgroundEnable.Checked;
         if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
             return;
-        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK,
+        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
         BackgroundEnable.Checked = false;
     }
@@ -3422,7 +3422,7 @@ public class ConfigForm : Form
                 {
                     var num = (int)MessageBox.Show(this,
                         "This class cannot be unloaded because it is in use.  Switch Glider to another class in the \"General\" tab before unloading this class.",
-                        GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     e.NewValue = CheckState.Checked;
                     return;
                 }
@@ -3467,8 +3467,8 @@ public class ConfigForm : Form
     private void AccountCreate_Click(object sender, EventArgs e)
     {
         if (Directory.GetFiles("Accounts\\", "*.xml").Length == 0 && MessageBox.Show(this, MessageProvider.GetMessage(867),
-                GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-            GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
+                GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
         var num = (int)new AccountInfo().ShowDialog(this);
         method_16();
     }
@@ -3527,17 +3527,17 @@ public class ConfigForm : Form
     protected void method_18()
     {
         KeyEditClass.Items.Add("(Select...)");
-        foreach (var gkey in SpellcastingManager.gclass42_0.sortedList_0.Values)
+        foreach (var gkey in SpellcastingManager.gclass42_0.Offsets.Values)
             if (gkey.KeyName.IndexOf('.') > 0)
             {
                 var key = gkey.KeyName.Substring(0, gkey.KeyName.IndexOf('.'));
-                if (!sortedList_0.ContainsKey(key))
+                if (!Offsets.ContainsKey(key))
                 {
                     var str = key;
                     var string_6 = "Common.Class" + key;
                     if (MessageProvider.smethod_5(string_6))
                         str = MessageProvider.smethod_4(string_6);
-                    sortedList_0.Add(key, str);
+                    Offsets.Add(key, str);
                     KeyEditClass.Items.Add(str);
                 }
             }
@@ -3553,10 +3553,10 @@ public class ConfigForm : Form
     private void EditKeymap_Click(object sender, EventArgs e)
     {
         var str = KeyEditClass.SelectedItem.ToString();
-        foreach (var key in sortedList_0.Keys)
-            if (sortedList_0[key] == str)
+        foreach (var key in Offsets.Keys)
+            if (Offsets[key] == str)
             {
-                method_19(key, sortedList_0[key]);
+                method_19(key, Offsets[key]);
                 break;
             }
     }

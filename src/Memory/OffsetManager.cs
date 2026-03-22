@@ -27,10 +27,10 @@ public class OffsetManager
         var descriptorCount = 0;
         while (true)
         {
-            var descriptorStringPtr = GProcessMemoryManipulator.smethod_11(currentOffset, "DescriptorStringPtr");
+            var descriptorStringPtr = GProcessMemoryManipulator.ReadInt32(currentOffset, "DescriptorStringPtr");
             if ((descriptorStringPtr & 1073741824) != 1073741824)
             {
-                var descriptorKey = GProcessMemoryManipulator.smethod_9(descriptorStringPtr, 64, "DescriptorString");
+                var descriptorKey = GProcessMemoryManipulator.ReadString(descriptorStringPtr, 64, "DescriptorString");
                 switch (descriptorKey)
                 {
                     case null:
