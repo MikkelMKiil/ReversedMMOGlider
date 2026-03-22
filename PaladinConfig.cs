@@ -34,13 +34,13 @@ public class PaladinConfig : Form
     public PaladinConfig()
     {
         InitializeComponent();
-        PullDistance.Text = GClass61.gclass61_0.method_2("Paladin.PullDistance");
-        FinishJudgeLife.Text = ((int)(GClass61.gclass61_0.method_4("Paladin.FinishJudgeLife") * 100.0)).ToString();
-        UseDivineFavor.Checked = GClass61.gclass61_0.method_2("Paladin.UseDivineFavor") == "True";
-        UseWrath.Checked = GClass61.gclass61_0.method_2("Paladin.UseWrath") == "True";
-        UseCrusaderStrike.Checked = GClass61.gclass61_0.method_2("Paladin.UseCrusaderStrike") == "True";
-        AvoidAdds.Checked = GClass61.gclass61_0.method_2("Paladin.AvoidAdds") == "True";
-        AvoidAddDistance.Text = GClass61.gclass61_0.method_2("Paladin.AvoidAddDistance");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Paladin.PullDistance");
+        FinishJudgeLife.Text = ((int)(ConfigManager.gclass61_0.method_4("Paladin.FinishJudgeLife") * 100.0)).ToString();
+        UseDivineFavor.Checked = ConfigManager.gclass61_0.method_2("Paladin.UseDivineFavor") == "True";
+        UseWrath.Checked = ConfigManager.gclass61_0.method_2("Paladin.UseWrath") == "True";
+        UseCrusaderStrike.Checked = ConfigManager.gclass61_0.method_2("Paladin.UseCrusaderStrike") == "True";
+        AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Paladin.AvoidAdds") == "True";
+        AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Paladin.AvoidAddDistance");
         MessageProvider.smethod_3(this, "Paladin");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -226,16 +226,16 @@ public class PaladinConfig : Form
     {
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Paladin.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Paladin.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(FinishJudgeLife.Text))
-            GClass61.gclass61_0.method_0("Paladin.FinishJudgeLife",
+            ConfigManager.gclass61_0.method_0("Paladin.FinishJudgeLife",
                 (double.Parse(FinishJudgeLife.Text) / 100.0).ToString());
         if (StartupClass.smethod_19(AvoidAddDistance.Text))
-            GClass61.gclass61_0.method_0("Paladin.AvoidAddDistance", AvoidAddDistance.Text);
-        GClass61.gclass61_0.method_0("Paladin.UseDivineFavor", UseDivineFavor.Checked.ToString());
-        GClass61.gclass61_0.method_0("Paladin.UseWrath", UseWrath.Checked.ToString());
-        GClass61.gclass61_0.method_0("Paladin.UseCrusaderStrike", UseCrusaderStrike.Checked.ToString());
-        GClass61.gclass61_0.method_0("Paladin.AvoidAdds", AvoidAdds.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Paladin.AvoidAddDistance", AvoidAddDistance.Text);
+        ConfigManager.gclass61_0.method_0("Paladin.UseDivineFavor", UseDivineFavor.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Paladin.UseWrath", UseWrath.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Paladin.UseCrusaderStrike", UseCrusaderStrike.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Paladin.AvoidAdds", AvoidAdds.Checked.ToString());
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

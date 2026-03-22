@@ -42,19 +42,19 @@ public class PriestConfig : Form
     public PriestConfig()
     {
         InitializeComponent();
-        MindblastCooldown.Text = GClass61.gclass61_0.method_2("Priest.MindblastCooldown");
-        ShadowWordCooldown.Text = GClass61.gclass61_0.method_2("Priest.ShadowWordCooldown");
-        ShieldCooldown.Text = GClass61.gclass61_0.method_2("Priest.ShieldCooldown");
-        PullDistance.Text = GClass61.gclass61_0.method_2("Priest.PullDistance");
-        UseWand.Checked = GClass61.gclass61_0.method_2("Priest.UseWand") == "True";
-        MindFlay.Checked = GClass61.gclass61_0.method_2("Priest.MindFlay") == "True";
-        PreShield.Checked = GClass61.gclass61_0.method_2("Priest.PreShield") == "True";
-        AlwaysShield.Checked = GClass61.gclass61_0.method_2("Priest.AlwaysShield") == "True";
-        SkipFlayRange.Checked = GClass61.gclass61_0.method_2("Priest.SkipFlayRange") == "True";
-        FlayRunners.Checked = GClass61.gclass61_0.method_2("Priest.FlayRunners") == "True";
-        UseShadowform.Checked = GClass61.gclass61_0.method_2("Priest.UseShadowform") == "True";
-        UseVampiric.Checked = GClass61.gclass61_0.method_2("Priest.UseVampiric") == "True";
-        ExtraFlay.Checked = GClass61.gclass61_0.method_2("Priest.ExtraFlay") == "True";
+        MindblastCooldown.Text = ConfigManager.gclass61_0.method_2("Priest.MindblastCooldown");
+        ShadowWordCooldown.Text = ConfigManager.gclass61_0.method_2("Priest.ShadowWordCooldown");
+        ShieldCooldown.Text = ConfigManager.gclass61_0.method_2("Priest.ShieldCooldown");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Priest.PullDistance");
+        UseWand.Checked = ConfigManager.gclass61_0.method_2("Priest.UseWand") == "True";
+        MindFlay.Checked = ConfigManager.gclass61_0.method_2("Priest.MindFlay") == "True";
+        PreShield.Checked = ConfigManager.gclass61_0.method_2("Priest.PreShield") == "True";
+        AlwaysShield.Checked = ConfigManager.gclass61_0.method_2("Priest.AlwaysShield") == "True";
+        SkipFlayRange.Checked = ConfigManager.gclass61_0.method_2("Priest.SkipFlayRange") == "True";
+        FlayRunners.Checked = ConfigManager.gclass61_0.method_2("Priest.FlayRunners") == "True";
+        UseShadowform.Checked = ConfigManager.gclass61_0.method_2("Priest.UseShadowform") == "True";
+        UseVampiric.Checked = ConfigManager.gclass61_0.method_2("Priest.UseVampiric") == "True";
+        ExtraFlay.Checked = ConfigManager.gclass61_0.method_2("Priest.ExtraFlay") == "True";
         MessageProvider.smethod_3(this, "Priest");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -311,24 +311,24 @@ public class PriestConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        GClass61.gclass61_0.method_0("Priest.UseWand", UseWand.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.MindFlay", MindFlay.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.PreShield", PreShield.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.AlwaysShield", AlwaysShield.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.SkipFlayRange", SkipFlayRange.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.FlayRunners", FlayRunners.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.UseShadowform", UseShadowform.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.UseVampiric", UseVampiric.Checked.ToString());
-        GClass61.gclass61_0.method_0("Priest.ExtraFlay", ExtraFlay.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.UseWand", UseWand.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.MindFlay", MindFlay.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.PreShield", PreShield.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.AlwaysShield", AlwaysShield.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.SkipFlayRange", SkipFlayRange.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.FlayRunners", FlayRunners.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.UseShadowform", UseShadowform.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.UseVampiric", UseVampiric.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Priest.ExtraFlay", ExtraFlay.Checked.ToString());
         if (StartupClass.smethod_19(MindblastCooldown.Text))
-            GClass61.gclass61_0.method_0("Priest.MindblastCooldown", MindblastCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Priest.MindblastCooldown", MindblastCooldown.Text);
         if (StartupClass.smethod_19(ShadowWordCooldown.Text))
-            GClass61.gclass61_0.method_0("Priest.ShadowWordCooldown", ShadowWordCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Priest.ShadowWordCooldown", ShadowWordCooldown.Text);
         if (StartupClass.smethod_19(ShieldCooldown.Text))
-            GClass61.gclass61_0.method_0("Priest.ShieldCooldown", ShieldCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Priest.ShieldCooldown", ShieldCooldown.Text);
         if (!StartupClass.smethod_19(PullDistance.Text))
             return;
-        GClass61.gclass61_0.method_0("Priest.PullDistance", PullDistance.Text);
+        ConfigManager.gclass61_0.method_0("Priest.PullDistance", PullDistance.Text);
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

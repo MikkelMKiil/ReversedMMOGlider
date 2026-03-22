@@ -450,7 +450,7 @@ namespace Glider.Common.Objects
                 StartupClass.gclass73_0.method_34(1500, 5000);
                 if (StartupClass.random_0.Next() % 3 == 0)
                 {
-                    GClass42.gclass42_0.method_0("Common.Jump");
+                    SpellcastingManager.gclass42_0.method_0("Common.Jump");
                     StartupClass.gclass73_0.method_34(1500, 3000);
                 }
             }
@@ -491,21 +491,21 @@ namespace Glider.Common.Objects
         {
             var int_14 = 0;
             if (Math.Abs(Delta) < 0.25)
-                int_14 = (int)(Delta * GClass55.int_19);
+                int_14 = (int)(Delta * InputController.int_19);
             if (int_14 <= 0)
                 return false;
             var heading = GPlayerSelf.Me.Heading;
-            GClass42.gclass42_0.method_1(SpinKey);
+            SpellcastingManager.gclass42_0.method_1(SpinKey);
             StartupClass.smethod_39(int_14);
-            GClass42.gclass42_0.method_2(SpinKey);
+            SpellcastingManager.gclass42_0.method_2(SpinKey);
             GPlayerSelf.Me.Refresh(true);
             var num = CompareHeadings(heading, GPlayerSelf.Me.Heading);
             if (Math.Abs(num) > 0.02)
             {
                 if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
-                    GClass55.int_19 -= 15;
+                    InputController.int_19 -= 15;
                 else
-                    GClass55.int_19 += 15;
+                    InputController.int_19 += 15;
             }
 
             return true;

@@ -109,7 +109,7 @@ public class GDataEncryptionManager
         }
 
         WriteIntToStream(StartupClass.int_4);
-        WriteStringToStream(GClass61.gclass61_0.method_2("AppKey"));
+        WriteStringToStream(ConfigManager.gclass61_0.method_2("AppKey"));
         if (GProcessMemoryManipulator.bool_3)
             WriteIntToStream(int_3_1);
         else
@@ -126,8 +126,8 @@ public class GDataEncryptionManager
     {
         if (encryptedData == null)
             PrepareEncryptionData();
-        var string_3 = GClass61.gclass61_0.method_2("AuthPage") != null
-            ? GClass61.gclass61_0.method_2("AuthPage")
+        var string_3 = ConfigManager.gclass61_0.method_2("AuthPage") != null
+            ? ConfigManager.gclass61_0.method_2("AuthPage")
             : "http://www.mmoglider.com/EM.aspx";
         bool flag;
         if (!(flag = SendDataAndReceiveResponse(string_3)) && isProcessed)
@@ -164,7 +164,7 @@ public class GDataEncryptionManager
     {
         try
         {
-            return new GClass70(string_3, encryptedData).method_1();
+            return new SimpleHttpClient(string_3, encryptedData).method_1();
         }
         catch (Exception ex)
         {

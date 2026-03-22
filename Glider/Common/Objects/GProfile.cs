@@ -720,7 +720,7 @@ namespace Glider.Common.Objects
                 CurrentIndex += StartupClass.int_6;
                 if (CurrentIndex < 0 || CurrentIndex >= Waypoints.Count)
                 {
-                    GClass48.smethod_2();
+                    ProfileGroupManager.smethod_2();
                     OneShotHit = OneShot && OneShotStepCheck > 4;
                 }
 

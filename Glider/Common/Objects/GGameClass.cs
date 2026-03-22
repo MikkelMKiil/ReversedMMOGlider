@@ -179,10 +179,10 @@ namespace Glider.Common.Objects
 
         public bool CheckBandageApply(bool InCombat)
         {
-            if ((Me.TargetGUID != 0L && !InCombat) || !(GClass61.gclass61_0.method_2("UseBandages") == "True") ||
+            if ((Me.TargetGUID != 0L && !InCombat) || !(ConfigManager.gclass61_0.method_2("UseBandages") == "True") ||
                 Me.HasWellKnownBuff("Bandaged"))
                 return false;
-            if (Me.Health * 100.0 < GClass61.gclass61_0.method_3("BandageHealth"))
+            if (Me.Health * 100.0 < ConfigManager.gclass61_0.method_3("BandageHealth"))
             {
                 Logger.LogMessage(MessageProvider.GetMessage(27));
                 var actionInventory = Interface.GetActionInventory("Common.ApplyBandage");

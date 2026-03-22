@@ -49,24 +49,24 @@ public class WarlockConfig : Form
         InitializeComponent();
         for (var index = 0; index < 6; ++index)
             PetComboBox.Items.Add(MessageProvider.smethod_4("Warlock.Pet" + index));
-        PullDistance.Text = GClass61.gclass61_0.method_2("Warlock.PullDistance");
-        SpellLockLife.Text = GClass61.gclass61_0.method_2("Warlock.SpellLockLife");
-        FarmShards.Text = GClass61.gclass61_0.method_2("Warlock.FarmShards");
-        DarkPact.Checked = GClass61.gclass61_0.method_2("Warlock.DarkPact") == "True";
-        UseNightfall.Checked = GClass61.gclass61_0.method_2("Warlock.UseNightfall") == "True";
-        UseDeathCoil.Checked = GClass61.gclass61_0.method_2("Warlock.UseDeathcoil") == "True";
-        UseFear.Checked = GClass61.gclass61_0.method_2("Warlock.UseFear") == "True";
-        RunPull.Checked = GClass61.gclass61_0.method_2("Warlock.RunPull") == "True";
-        PetAttack.Checked = GClass61.gclass61_0.method_2("Warlock.PetAttack") == "True";
-        ShardOneKill.Checked = GClass61.gclass61_0.method_2("Warlock.ShardOneKill") == "True";
-        UseReckless.Checked = GClass61.gclass61_0.method_2("Warlock.Reckless") == "True";
-        UseWand.Checked = GClass61.gclass61_0.method_2("Warlock.UseWand") == "True";
-        ThreeDotPull.Checked = GClass61.gclass61_0.method_2("Warlock.ThreeDotPull") == "True";
-        Kite.Checked = GClass61.gclass61_0.method_2("Warlock.Kite") == "True";
-        UseSoulLink.Checked = GClass61.gclass61_0.method_2("Warlock.UseSoulLink") == "True";
-        PetComboBox.SelectedIndex = int.Parse(GClass61.gclass61_0.method_2("Warlock.Pet"));
-        StopShards.Checked = GClass61.gclass61_0.method_5("Warlock.StopShards");
-        Jump.Checked = GClass61.gclass61_0.method_5("Warlock.Jump");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Warlock.PullDistance");
+        SpellLockLife.Text = ConfigManager.gclass61_0.method_2("Warlock.SpellLockLife");
+        FarmShards.Text = ConfigManager.gclass61_0.method_2("Warlock.FarmShards");
+        DarkPact.Checked = ConfigManager.gclass61_0.method_2("Warlock.DarkPact") == "True";
+        UseNightfall.Checked = ConfigManager.gclass61_0.method_2("Warlock.UseNightfall") == "True";
+        UseDeathCoil.Checked = ConfigManager.gclass61_0.method_2("Warlock.UseDeathcoil") == "True";
+        UseFear.Checked = ConfigManager.gclass61_0.method_2("Warlock.UseFear") == "True";
+        RunPull.Checked = ConfigManager.gclass61_0.method_2("Warlock.RunPull") == "True";
+        PetAttack.Checked = ConfigManager.gclass61_0.method_2("Warlock.PetAttack") == "True";
+        ShardOneKill.Checked = ConfigManager.gclass61_0.method_2("Warlock.ShardOneKill") == "True";
+        UseReckless.Checked = ConfigManager.gclass61_0.method_2("Warlock.Reckless") == "True";
+        UseWand.Checked = ConfigManager.gclass61_0.method_2("Warlock.UseWand") == "True";
+        ThreeDotPull.Checked = ConfigManager.gclass61_0.method_2("Warlock.ThreeDotPull") == "True";
+        Kite.Checked = ConfigManager.gclass61_0.method_2("Warlock.Kite") == "True";
+        UseSoulLink.Checked = ConfigManager.gclass61_0.method_2("Warlock.UseSoulLink") == "True";
+        PetComboBox.SelectedIndex = int.Parse(ConfigManager.gclass61_0.method_2("Warlock.Pet"));
+        StopShards.Checked = ConfigManager.gclass61_0.method_5("Warlock.StopShards");
+        Jump.Checked = ConfigManager.gclass61_0.method_5("Warlock.Jump");
         MessageProvider.smethod_3(this, "Warlock");
         GProcessMemoryManipulator.smethod_48(this);
         GProcessMemoryManipulator.smethod_51(helpProvider_0);
@@ -398,28 +398,28 @@ public class WarlockConfig : Form
             return;
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Warlock.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Warlock.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(SpellLockLife.Text))
-            GClass61.gclass61_0.method_0("Warlock.SpellLockLife", SpellLockLife.Text);
+            ConfigManager.gclass61_0.method_0("Warlock.SpellLockLife", SpellLockLife.Text);
         if (StartupClass.smethod_19(FarmShards.Text))
-            GClass61.gclass61_0.method_0("Warlock.FarmShards", FarmShards.Text);
+            ConfigManager.gclass61_0.method_0("Warlock.FarmShards", FarmShards.Text);
         else
-            GClass61.gclass61_0.method_0("Warlock.FarmShards", "0");
-        GClass61.gclass61_0.method_0("Warlock.RunPull", RunPull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.UseFear", UseFear.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.UseNightfall", UseNightfall.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.UseDeathcoil", UseDeathCoil.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.PetAttack", PetAttack.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.DarkPact", DarkPact.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.Reckless", UseReckless.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.ThreeDotPull", ThreeDotPull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.Kite", Kite.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.UseWand", UseWand.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.UseSoulLink", UseSoulLink.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.ShardOneKill", ShardOneKill.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.Pet", PetComboBox.SelectedIndex.ToString());
-        GClass61.gclass61_0.method_0("Warlock.StopShards", StopShards.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warlock.Jump", Jump.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Warlock.FarmShards", "0");
+        ConfigManager.gclass61_0.method_0("Warlock.RunPull", RunPull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.UseFear", UseFear.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.UseNightfall", UseNightfall.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.UseDeathcoil", UseDeathCoil.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.PetAttack", PetAttack.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.DarkPact", DarkPact.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.Reckless", UseReckless.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.ThreeDotPull", ThreeDotPull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.Kite", Kite.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.UseWand", UseWand.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.UseSoulLink", UseSoulLink.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.ShardOneKill", ShardOneKill.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.Pet", PetComboBox.SelectedIndex.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.StopShards", StopShards.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warlock.Jump", Jump.Checked.ToString());
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

@@ -473,7 +473,7 @@ public class ProfileWizard : Form
                 PrevButton.Enabled = false;
                 break;
             case Enum0.const_1:
-                double_2 = GClass61.gclass61_0.method_4("AutoAddDistance");
+                double_2 = ConfigManager.gclass61_0.method_4("AutoAddDistance");
                 method_2(PanelStdWaypoints);
                 PrevButton.Enabled = true;
                 bool_1 = false;
@@ -606,7 +606,7 @@ public class ProfileWizard : Form
             return false;
         }
 
-        var path = GClass61.gclass61_0.method_2("ProfilesDir") + ProfileNameBox.Text.Trim() + ".xml";
+        var path = ConfigManager.gclass61_0.method_2("ProfilesDir") + ProfileNameBox.Text.Trim() + ".xml";
         if (File.Exists(path))
             if (MessageBox.Show(this, MessageProvider.smethod_6("ProfileWizard.ProfileExists", ProfileNameBox.Text.Trim()),
                     GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
@@ -689,7 +689,7 @@ public class ProfileWizard : Form
             return;
         glocation_0 = GPlayerSelf.Me.Location;
         gprofile_0.VendorWaypoints.Add(glocation_0);
-        GClass20.smethod_0("Key.wav");
+        SoundPlayer.smethod_0("Key.wav");
     }
 
     private void method_8()
@@ -749,7 +749,7 @@ public class ProfileWizard : Form
             {
                 glocation_0 = GPlayerSelf.Me.Location;
                 gprofile_0.Waypoints.Add(glocation_0);
-                GClass20.smethod_0("Key.wav");
+                SoundPlayer.smethod_0("Key.wav");
                 if (!bool_1 && gprofile_0.Waypoints.Count > 2 &&
                     glocation_0.GetDistanceTo(gprofile_0.Waypoints[0]) > 100.0)
                 {
@@ -758,7 +758,7 @@ public class ProfileWizard : Form
                     if (!bool_0)
                     {
                         StdWaypointsLabel.Text = MessageProvider.smethod_4("ProfileWizard.StdWaypointsLabelAway");
-                        GClass20.smethod_0("PlayerNear.wav");
+                        SoundPlayer.smethod_0("PlayerNear.wav");
                         bool_0 = true;
                     }
                 }
@@ -852,7 +852,7 @@ public class ProfileWizard : Form
         {
             glocation_0 = GPlayerSelf.Me.Location;
             gprofile_0.GhostWaypoints.Add(glocation_0);
-            GClass20.smethod_0("Key.wav");
+            SoundPlayer.smethod_0("Key.wav");
         }
 
         if (gprofile_0.GhostWaypoints.Count > 0 &&

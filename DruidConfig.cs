@@ -53,29 +53,29 @@ public class DruidConfig : Form
     public DruidConfig()
     {
         InitializeComponent();
-        PullDistance.Text = GClass61.gclass61_0.method_2("Druid.PullDistance");
-        MaulCost.Text = GClass61.gclass61_0.method_2("Druid.MaulCost");
-        ClawCost.Text = GClass61.gclass61_0.method_2("Druid.ClawCost");
-        BiteMultiplier.Text = GClass61.gclass61_0.method_2("Druid.BiteMultiplier");
-        UseDemo.Checked = GClass61.gclass61_0.method_2("Druid.UseDemo") == "True";
-        UseFaerie.Checked = GClass61.gclass61_0.method_2("Druid.UseFaerie") == "True";
-        UseBash.Checked = GClass61.gclass61_0.method_2("Druid.UseBash") == "True";
-        BashCasters.Checked = GClass61.gclass61_0.method_2("Druid.BashCasters") == "True";
-        UseBarkskin.Checked = GClass61.gclass61_0.method_2("Druid.UseBarkskin") == "True";
-        UseMangle.Checked = GClass61.gclass61_0.method_2("Druid.UseMangle") == "True";
-        UseCharge.Checked = GClass61.gclass61_0.method_2("Druid.UseCharge") == "True";
-        UseSwiftness.Checked = GClass61.gclass61_0.method_2("Druid.UseSwiftness") == "True";
-        UseEnrage.Checked = GClass61.gclass61_0.method_2("Druid.Enrage") == "True";
-        UseRip.Checked = GClass61.gclass61_0.method_2("Druid.UseRip") == "True";
-        UseFury.Checked = GClass61.gclass61_0.method_2("Druid.UseFury") == "True";
-        UseStealth.Checked = GClass61.gclass61_0.method_2("Druid.UseStealth") == "True";
-        StealthNear.Checked = GClass61.gclass61_0.method_2("Druid.StealthNear") == "True";
-        UseSwipe.Checked = GClass61.gclass61_0.method_2("Druid.UseSwipe") == "True";
-        UseStarfire.Checked = GClass61.gclass61_0.method_2("Druid.UseStarfire") == "True";
-        DetectBuffs.Checked = GClass61.gclass61_0.method_2("Druid.DetectBuffs") == "True";
-        if (GClass61.gclass61_0.method_2("Druid.UseForm") == "Bear")
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Druid.PullDistance");
+        MaulCost.Text = ConfigManager.gclass61_0.method_2("Druid.MaulCost");
+        ClawCost.Text = ConfigManager.gclass61_0.method_2("Druid.ClawCost");
+        BiteMultiplier.Text = ConfigManager.gclass61_0.method_2("Druid.BiteMultiplier");
+        UseDemo.Checked = ConfigManager.gclass61_0.method_2("Druid.UseDemo") == "True";
+        UseFaerie.Checked = ConfigManager.gclass61_0.method_2("Druid.UseFaerie") == "True";
+        UseBash.Checked = ConfigManager.gclass61_0.method_2("Druid.UseBash") == "True";
+        BashCasters.Checked = ConfigManager.gclass61_0.method_2("Druid.BashCasters") == "True";
+        UseBarkskin.Checked = ConfigManager.gclass61_0.method_2("Druid.UseBarkskin") == "True";
+        UseMangle.Checked = ConfigManager.gclass61_0.method_2("Druid.UseMangle") == "True";
+        UseCharge.Checked = ConfigManager.gclass61_0.method_2("Druid.UseCharge") == "True";
+        UseSwiftness.Checked = ConfigManager.gclass61_0.method_2("Druid.UseSwiftness") == "True";
+        UseEnrage.Checked = ConfigManager.gclass61_0.method_2("Druid.Enrage") == "True";
+        UseRip.Checked = ConfigManager.gclass61_0.method_2("Druid.UseRip") == "True";
+        UseFury.Checked = ConfigManager.gclass61_0.method_2("Druid.UseFury") == "True";
+        UseStealth.Checked = ConfigManager.gclass61_0.method_2("Druid.UseStealth") == "True";
+        StealthNear.Checked = ConfigManager.gclass61_0.method_2("Druid.StealthNear") == "True";
+        UseSwipe.Checked = ConfigManager.gclass61_0.method_2("Druid.UseSwipe") == "True";
+        UseStarfire.Checked = ConfigManager.gclass61_0.method_2("Druid.UseStarfire") == "True";
+        DetectBuffs.Checked = ConfigManager.gclass61_0.method_2("Druid.DetectBuffs") == "True";
+        if (ConfigManager.gclass61_0.method_2("Druid.UseForm") == "Bear")
             UseBearForm.Checked = true;
-        if (GClass61.gclass61_0.method_2("Druid.UseForm") == "Cat")
+        if (ConfigManager.gclass61_0.method_2("Druid.UseForm") == "Cat")
             UseCatForm.Checked = true;
         MessageProvider.smethod_3(this, "Druid");
         GProcessMemoryManipulator.smethod_48(this);
@@ -455,34 +455,34 @@ public class DruidConfig : Form
     {
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Druid.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Druid.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(MaulCost.Text))
-            GClass61.gclass61_0.method_0("Druid.MaulCost", MaulCost.Text);
+            ConfigManager.gclass61_0.method_0("Druid.MaulCost", MaulCost.Text);
         if (StartupClass.smethod_19(ClawCost.Text))
-            GClass61.gclass61_0.method_0("Druid.ClawCost", ClawCost.Text);
+            ConfigManager.gclass61_0.method_0("Druid.ClawCost", ClawCost.Text);
         if (StartupClass.smethod_19(BiteMultiplier.Text))
-            GClass61.gclass61_0.method_0("Druid.BiteMultiplier", BiteMultiplier.Text);
-        GClass61.gclass61_0.method_0("Druid.BashCasters", BashCasters.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseBash", UseBash.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseDemo", UseDemo.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseFaerie", UseFaerie.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseBarkskin", UseBarkskin.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseMangle", UseMangle.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseCharge", UseCharge.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseSwiftness", UseSwiftness.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.Enrage", UseEnrage.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseRip", UseRip.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseFury", UseFury.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseStealth", UseStealth.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.StealthNear", StealthNear.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseStarfire", UseStarfire.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.UseSwipe", UseSwipe.Checked.ToString());
-        GClass61.gclass61_0.method_0("Druid.DetectBuffs", DetectBuffs.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Druid.BiteMultiplier", BiteMultiplier.Text);
+        ConfigManager.gclass61_0.method_0("Druid.BashCasters", BashCasters.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseBash", UseBash.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseDemo", UseDemo.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseFaerie", UseFaerie.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseBarkskin", UseBarkskin.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseMangle", UseMangle.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseCharge", UseCharge.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseSwiftness", UseSwiftness.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.Enrage", UseEnrage.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseRip", UseRip.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseFury", UseFury.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseStealth", UseStealth.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.StealthNear", StealthNear.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseStarfire", UseStarfire.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.UseSwipe", UseSwipe.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Druid.DetectBuffs", DetectBuffs.Checked.ToString());
         if (UseBearForm.Checked)
-            GClass61.gclass61_0.method_0("Druid.UseForm", "Bear");
+            ConfigManager.gclass61_0.method_0("Druid.UseForm", "Bear");
         if (!UseCatForm.Checked)
             return;
-        GClass61.gclass61_0.method_0("Druid.UseForm", "Cat");
+        ConfigManager.gclass61_0.method_0("Druid.UseForm", "Cat");
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

@@ -90,7 +90,7 @@ public class GProcessMemoryManipulator
 
     public static int smethod_1()
     {
-        var gclass65 = new GClass65();
+        var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         if (StartupClass.int_12 != 0)
         {
@@ -112,7 +112,7 @@ public class GProcessMemoryManipulator
             StartupClass.IsGliderInitialized = false;
         }
 
-        var str = GClass61.gclass61_0.method_2("AttachEXE");
+        var str = ConfigManager.gclass61_0.method_2("AttachEXE");
         if (StartupClass.IsAttached)
             str = "Solitaire.exe";
         if (gclass65.method_1(str) == 0)
@@ -172,7 +172,7 @@ public class GProcessMemoryManipulator
     public static IntPtr smethod_6(int int_29)
     {
         var num = !StartupClass.IsAttached
-            ? !GClass61.gclass61_0.method_5("AllowWriteBytes")
+            ? !ConfigManager.gclass61_0.method_5("AllowWriteBytes")
                 ? OpenProcess(24U, false, int_29)
                 : OpenProcess(1080U, false, int_29)
             : OpenProcess(1048U, false, int_29);
@@ -325,22 +325,22 @@ public class GProcessMemoryManipulator
 
     public static int smethod_21(int int_29, string string_0)
     {
-        return BitConverter.ToInt32(smethod_20(int_29, 4) ?? throw new GException1(int_29, 4, string_0), 0);
+        return BitConverter.ToInt32(smethod_20(int_29, 4) ?? throw new MemoryReadException(int_29, 4, string_0), 0);
     }
 
     public static float smethod_22(int int_29, string string_0)
     {
-        return BitConverter.ToSingle(smethod_20(int_29, 4) ?? throw new GException1(int_29, 4, string_0), 0);
+        return BitConverter.ToSingle(smethod_20(int_29, 4) ?? throw new MemoryReadException(int_29, 4, string_0), 0);
     }
 
     public static float smethod_23(int int_29, string string_0)
     {
-        return (smethod_20(int_29, 1) ?? throw new GException1(int_29, 1, string_0))[0];
+        return (smethod_20(int_29, 1) ?? throw new MemoryReadException(int_29, 1, string_0))[0];
     }
 
     public static long smethod_24(int int_29, string string_0)
     {
-        return BitConverter.ToInt64(smethod_20(int_29, 8) ?? throw new GException1(int_29, 8, string_0), 0);
+        return BitConverter.ToInt64(smethod_20(int_29, 8) ?? throw new MemoryReadException(int_29, 8, string_0), 0);
     }
 
     [DllImport("kernel32", SetLastError = true)]
@@ -453,7 +453,7 @@ public class GProcessMemoryManipulator
 
     public static IntPtr smethod_27(int int_29)
     {
-        var gclass36 = new GClass36(20000);
+        var gclass36 = new GameTimer(20000);
         gclass36.method_4();
         while (!gclass36.method_3())
         {
@@ -499,11 +499,11 @@ public class GProcessMemoryManipulator
 
     public static int smethod_31()
     {
-        if (!GClass18.gclass18_0.method_5("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
+        if (!MemoryOffsetTable.gclass18_0.method_5("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
             return 0;
-        var num1 = GClass18.gclass18_0.method_4("DS1");
-        var num2 = GClass18.gclass18_0.method_4("DS2");
-        var num3 = GClass18.gclass18_0.method_4("Julie");
+        var num1 = MemoryOffsetTable.gclass18_0.method_4("DS1");
+        var num2 = MemoryOffsetTable.gclass18_0.method_4("DS2");
+        var num3 = MemoryOffsetTable.gclass18_0.method_4("Julie");
         var num4 = 0;
         var int_29 = num1 - 4096;
         var tickCount = Environment.TickCount;
@@ -523,11 +523,11 @@ public class GProcessMemoryManipulator
             }
         }
 
-        if (num4 > 0 && StartupClass.GameMemoryReader != null && GClass18.gclass18_0.method_5("AllowFS"))
-            StartupClass.GameMemoryReader.method_6(GClass18.gclass18_0.method_4("JulieDrop"),
-                GClass18.gclass18_0.method_4("JulieSize"));
+        if (num4 > 0 && StartupClass.GameMemoryReader != null && MemoryOffsetTable.gclass18_0.method_5("AllowFS"))
+            StartupClass.GameMemoryReader.method_6(MemoryOffsetTable.gclass18_0.method_4("JulieDrop"),
+                MemoryOffsetTable.gclass18_0.method_4("JulieSize"));
         if (num4 > 0)
-            StartupClass.smethod_37(GEnum0.const_1);
+            StartupClass.smethod_37(WardenCheckStatus.const_1);
         return num4;
     }
 
@@ -570,8 +570,8 @@ public class GProcessMemoryManipulator
 
     public static int smethod_34()
     {
-        var int_29 = smethod_11(GClass18.gclass18_0.method_4("GameTimeType"), "gt1");
-        var num1 = smethod_11(int_29 + GClass18.gclass18_0.method_4("GameTimeTypeF1"), "gt2");
+        var int_29 = smethod_11(MemoryOffsetTable.gclass18_0.method_4("GameTimeType"), "gt1");
+        var num1 = smethod_11(int_29 + MemoryOffsetTable.gclass18_0.method_4("GameTimeTypeF1"), "gt2");
         long long_0 = 0;
         if (num1 >= 2)
         {
@@ -583,7 +583,7 @@ public class GProcessMemoryManipulator
         }
 
         var num3 = smethod_14(int_29, "gt0");
-        var num4 = smethod_14(int_29 + GClass18.gclass18_0.method_4("GameTimeTypeF2"), "gt3");
+        var num4 = smethod_14(int_29 + MemoryOffsetTable.gclass18_0.method_4("GameTimeTypeF2"), "gt3");
         return (int)(long_0 * num3 + num4);
     }
 
@@ -710,9 +710,9 @@ public class GProcessMemoryManipulator
         var intptr_2 = smethod_49();
         if (!(intptr_2 != IntPtr.Zero))
             return false;
-        if (GClass61.gclass61_0.method_2("TitleBarRename") == "True")
+        if (ConfigManager.gclass61_0.method_2("TitleBarRename") == "True")
         {
-            if (GClass61.gclass61_0.method_2("TitleBarRandom") == "True")
+            if (ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True")
                 SetWindowText(intptr_2, MessageProvider.smethod_2(348, smethod_0()));
             else
                 SetWindowText(intptr_2, MessageProvider.smethod_2(713, "TitleBarName"));
@@ -723,8 +723,8 @@ public class GProcessMemoryManipulator
 
     public static void smethod_48(Form form_0)
     {
-        if (!(GClass61.gclass61_0.method_2("TitleBarRename") == "True") ||
-            !(GClass61.gclass61_0.method_2("TitleBarRandom") == "True"))
+        if (!(ConfigManager.gclass61_0.method_2("TitleBarRename") == "True") ||
+            !(ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True"))
             return;
         form_0.Text = smethod_0();
     }
@@ -769,12 +769,12 @@ public class GProcessMemoryManipulator
     {
         long_0 = 0L;
         int_29 = 0;
-        var gclass65 = new GClass65();
+        var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         if (numArray.Length == 0)
             return false;
-        var num1 = smethod_11(GClass18.gclass18_0.method_4("TLSSlot"), "TLSSlot");
+        var num1 = smethod_11(MemoryOffsetTable.gclass18_0.method_4("TLSSlot"), "TLSSlot");
         foreach (var uint_24 in numArray)
         {
             var intptr_2 = OpenThread(64U, false, uint_24);
@@ -789,8 +789,8 @@ public class GProcessMemoryManipulator
                 if (num3 == 0)
                 {
                     var num4 = smethod_11(smethod_11(structure.int_1 + 44, "TLSOffset") + 4 * num1, "TargetTLSSlot");
-                    var num5 = smethod_12(num4 + GClass18.gclass18_0.method_4("TLSPlayerID"), "TLSPlayerID");
-                    var num6 = smethod_11(num4 + GClass18.gclass18_0.method_4("TLSMainTable"), "TLSMainTable");
+                    var num5 = smethod_12(num4 + MemoryOffsetTable.gclass18_0.method_4("TLSPlayerID"), "TLSPlayerID");
+                    var num6 = smethod_11(num4 + MemoryOffsetTable.gclass18_0.method_4("TLSMainTable"), "TLSMainTable");
                     if (num5 > 0L)
                     {
                         long_0 = num5;
@@ -814,7 +814,7 @@ public class GProcessMemoryManipulator
         if (StartupClass.AnotherIntegerValue == 0)
             return;
         StartupClass.bool_30 = false;
-        var gclass65 = new GClass65();
+        var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         var intptr_2 = numArray.Length == 1
@@ -842,7 +842,7 @@ public class GProcessMemoryManipulator
 
     public static bool smethod_56(int int_29)
     {
-        var gclass65 = new GClass65();
+        var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         return gclass65.method_2(int_29) > 0;
     }

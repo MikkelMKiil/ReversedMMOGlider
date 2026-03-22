@@ -55,7 +55,7 @@ namespace Glider.Common.Objects
                     return null;
                 }
 
-                var BaseAddress = int5 + GClass18.gclass18_0.method_4("InitialOffset");
+                var BaseAddress = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
                 while (true)
                 {
                     long guid;
@@ -435,11 +435,11 @@ namespace Glider.Common.Objects
                     }
                 }
 
-            if (gmonster == null && GClass61.gclass61_0.method_5("LogMonsterChecks"))
+            if (gmonster == null && ConfigManager.gclass61_0.method_5("LogMonsterChecks"))
                 Logger.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
             if (gmonster == null)
                 return null;
-            var num2 = GClass61.gclass61_0.method_3("ExtraPull");
+            var num2 = ConfigManager.gclass61_0.method_3("ExtraPull");
             return gmonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + num2) &&
                    (StartupClass.gprofile_0.Wander || StartupClass.gprofile_0.GetDistanceTo(gmonster.Location) <=
                        StartupClass.CurrentGameClass.PullDistance + num2)
@@ -464,7 +464,7 @@ namespace Glider.Common.Objects
                         flag = false;
                     if (gnode.IsTreasure)
                         flag = false;
-                    if ((!flag || GClass61.gclass61_0.method_5("PickupJunk")) && !IsHarvestBanned(gnode.Name))
+                    if ((!flag || ConfigManager.gclass61_0.method_5("PickupJunk")) && !IsHarvestBanned(gnode.Name))
                     {
                         double distanceToSelf = gnode.Location.DistanceToSelf;
                         if (distanceToSelf < num)
@@ -496,7 +496,7 @@ namespace Glider.Common.Objects
             var flag = false;
             if (int5 == 0)
                 return 0;
-            var num2 = int5 + GClass18.gclass18_0.method_4("InitialOffset");
+            var num2 = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
             while (true)
             {
                 num2 = GProcessMemoryManipulator.smethod_11(num2 + 60, "GameObjNext");

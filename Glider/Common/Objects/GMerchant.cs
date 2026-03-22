@@ -169,9 +169,9 @@ namespace Glider.Common.Objects
         public void Close()
         {
             if (IsVisible)
-                GClass42.gclass42_0.method_0("Common.Escape");
+                SpellcastingManager.gclass42_0.method_0("Common.Escape");
             Thread.Sleep(777);
-            GClass73.smethod_1();
+            CombatController.smethod_1();
         }
 
         public bool BuyOnAnyPage(string ItemName)

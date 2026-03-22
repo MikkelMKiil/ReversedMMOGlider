@@ -103,24 +103,24 @@ namespace Glider.Common.Objects
         public bool StoppedOnDetach => StartupClass.bool_36;
 
         public string RedMessage =>
-            GProcessMemoryManipulator.smethod_9(GClass18.gclass18_0.method_4(nameof(RedMessage)), 128, nameof(RedMessage));
+            GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4(nameof(RedMessage)), 128, nameof(RedMessage));
 
         public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
 
         public GProfile Profile => StartupClass.gprofile_0;
 
-        public bool IsCorpseNearby => GClass5.smethod_1();
+        public bool IsCorpseNearby => LootableCorpseTracker.smethod_1();
 
         public bool IsGliderRunning =>
             StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal;
 
         public GMoveHelper MoveHelper { get; private set; }
 
-        public string WorldMap => GProcessMemoryManipulator.smethod_9(GClass18.gclass18_0.method_4(nameof(WorldMap)), 64, "worldmap")
+        public string WorldMap => GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4(nameof(WorldMap)), 64, "worldmap")
             .Substring(11);
 
         public string ZoneText =>
-            GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4(nameof(ZoneText)), "zonetext"), 64,
+            GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(ZoneText)), "zonetext"), 64,
                 "zonetext");
 
         public string SubZoneText
@@ -128,7 +128,7 @@ namespace Glider.Common.Objects
             get
             {
                 var str = GProcessMemoryManipulator.smethod_9(
-                    GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4(nameof(SubZoneText)), "subzonetext"), 64,
+                    GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(SubZoneText)), "subzonetext"), 64,
                     "subzonetext");
                 return str.Length > 1 ? str : "n/a";
             }
@@ -148,13 +148,13 @@ namespace Glider.Common.Objects
 
         public void ApplyConfig()
         {
-            MeleeDistance = GClass61.gclass61_0.method_4("MeleeDistance");
-            RangedDistance = GClass61.gclass61_0.method_4("RangedDistance");
-            RestHealth = GClass61.gclass61_0.method_4("RestHealth") / 100.0;
-            RestMana = GClass61.gclass61_0.method_4("RestMana") / 100.0;
-            MouseSpin = GClass61.gclass61_0.method_5("MouseSpin");
-            _spellLeadDelay = GClass61.gclass61_0.method_3("SpellLeadDelay");
-            GMonster.LogChecks = GClass61.gclass61_0.method_5("LogMonsterChecks");
+            MeleeDistance = ConfigManager.gclass61_0.method_4("MeleeDistance");
+            RangedDistance = ConfigManager.gclass61_0.method_4("RangedDistance");
+            RestHealth = ConfigManager.gclass61_0.method_4("RestHealth") / 100.0;
+            RestMana = ConfigManager.gclass61_0.method_4("RestMana") / 100.0;
+            MouseSpin = ConfigManager.gclass61_0.method_5("MouseSpin");
+            _spellLeadDelay = ConfigManager.gclass61_0.method_3("SpellLeadDelay");
+            GMonster.LogChecks = ConfigManager.gclass61_0.method_5("LogMonsterChecks");
             if (StartupClass.gclass68_0 != null)
                 StartupClass.gclass68_0.method_1();
             if (GetConfigBool("AutoStop"))
@@ -227,19 +227,19 @@ namespace Glider.Common.Objects
                 return;
             if (Name.IndexOf('.') == -1)
                 throw new ArgumentException("Cannot change values of root config items");
-            GClass61.gclass61_0.method_0(Name, Value);
+            ConfigManager.gclass61_0.method_0(Name, Value);
         }
 
         public void SaveConfig()
         {
-            GClass61.gclass61_0.method_8();
+            ConfigManager.gclass61_0.method_8();
         }
 
         public void AddAutoKey(string KeyName)
         {
-            if (GClass42.gclass42_0.sortedList_0.ContainsKey(KeyName))
+            if (SpellcastingManager.gclass42_0.sortedList_0.ContainsKey(KeyName))
                 return;
-            GClass42.gclass42_0.method_4(KeyName);
+            SpellcastingManager.gclass42_0.method_4(KeyName);
         }
 
         public void SetKeyValue(
@@ -248,22 +248,22 @@ namespace Glider.Common.Objects
             int ShiftState,
             char TheChar)
         {
-            GClass42.gclass42_0.method_5(KeyName, RequiredBarState, ShiftState, TheChar, 0);
+            SpellcastingManager.gclass42_0.method_5(KeyName, RequiredBarState, ShiftState, TheChar, 0);
         }
 
         public void SetKeyValue(string KeyName, GBarState RequiredBarState, int ShiftState, short VK)
         {
-            GClass42.gclass42_0.method_5(KeyName, RequiredBarState, ShiftState, char.MinValue, VK);
+            SpellcastingManager.gclass42_0.method_5(KeyName, RequiredBarState, ShiftState, char.MinValue, VK);
         }
 
         public void SetSpellKey(string KeyName, int ShiftState, int SpellID)
         {
-            GClass42.gclass42_0.method_8(KeyName, SpellID, ShiftState);
+            SpellcastingManager.gclass42_0.method_8(KeyName, SpellID, ShiftState);
         }
 
         public void SetItemKey(string KeyName, int ItemID)
         {
-            GClass42.gclass42_0.method_7(KeyName, ItemID);
+            SpellcastingManager.gclass42_0.method_7(KeyName, ItemID);
         }
 
         public bool IsConfigured(string Name)
@@ -273,22 +273,22 @@ namespace Glider.Common.Objects
 
         public string GetConfigString(string Name)
         {
-            return IsUnsafeConfig(Name) ? "demo" : GClass61.gclass61_0.method_2(Name);
+            return IsUnsafeConfig(Name) ? "demo" : ConfigManager.gclass61_0.method_2(Name);
         }
 
         public int GetConfigInt(string Name)
         {
-            return IsUnsafeConfig(Name) ? 0 : GClass61.gclass61_0.method_3(Name);
+            return IsUnsafeConfig(Name) ? 0 : ConfigManager.gclass61_0.method_3(Name);
         }
 
         public bool GetConfigBool(string Name)
         {
-            return !IsUnsafeConfig(Name) && GClass61.gclass61_0.method_5(Name);
+            return !IsUnsafeConfig(Name) && ConfigManager.gclass61_0.method_5(Name);
         }
 
         public double GetConfigDouble(string Name)
         {
-            return IsUnsafeConfig(Name) ? 0.0 : GClass61.gclass61_0.method_4(Name);
+            return IsUnsafeConfig(Name) ? 0.0 : ConfigManager.gclass61_0.method_4(Name);
         }
 
         private bool IsUnsafeConfig(string Name)
@@ -390,10 +390,10 @@ namespace Glider.Common.Objects
         public void SendKey(string KeyName)
         {
             Logger.smethod_1("SendKey: \"" + KeyName + "\"");
-            if (GClass42.gclass42_0.sortedList_0.ContainsKey(KeyName))
+            if (SpellcastingManager.gclass42_0.sortedList_0.ContainsKey(KeyName))
             {
-                GClass42.gclass42_0.sortedList_0[KeyName].FilloutKey();
-                GClass42.gclass42_0.method_0(KeyName);
+                SpellcastingManager.gclass42_0.sortedList_0[KeyName].FilloutKey();
+                SpellcastingManager.gclass42_0.method_0(KeyName);
             }
             else
             {
@@ -403,12 +403,12 @@ namespace Glider.Common.Objects
 
         public void PressKey(string KeyName)
         {
-            GClass42.gclass42_0.method_1(KeyName);
+            SpellcastingManager.gclass42_0.method_1(KeyName);
         }
 
         public void ReleaseKey(string KeyName)
         {
-            GClass42.gclass42_0.method_2(KeyName);
+            SpellcastingManager.gclass42_0.method_2(KeyName);
         }
 
         public void ReleaseAllKeys()
@@ -416,7 +416,7 @@ namespace Glider.Common.Objects
             StartupClass.gclass68_0.method_3(false);
             Running = false;
             SpinningKey = null;
-            GClass55.smethod_27();
+            InputController.smethod_27();
         }
 
         public void ReleaseSpinRun()
@@ -514,7 +514,7 @@ namespace Glider.Common.Objects
 
         public bool RemoveDebuffs(GBuffType DType, string SpellName, bool InCombat)
         {
-            return StartupClass.DebuffsKnown_string.method_7((GEnum4)DType, SpellName, InCombat);
+            return StartupClass.DebuffsKnown_string.method_7((DebuffType)DType, SpellName, InCombat);
         }
 
         public GCombatResult CheckCommonCombatResult(GMonster Monster, bool WasAmbush)
@@ -713,7 +713,7 @@ namespace Glider.Common.Objects
 
         public void HandlePopups()
         {
-            GClass67.smethod_2();
+            DialogMonitor.smethod_2();
         }
 
         public bool RegisterMoveHelper(GMoveHelper NewGuy, string DisplayNote)
@@ -771,7 +771,7 @@ namespace Glider.Common.Objects
 
         public void WaitForNotFiring(string KeyName)
         {
-            var visibleInterfaceObject = GClass42.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
+            var visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
             if (visibleInterfaceObject == null)
                 return;
             var byName = Interface.GetByName(visibleInterfaceObject);

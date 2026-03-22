@@ -25,11 +25,11 @@ namespace Glider.Common.Objects
             {
                 switch (StartupClass.gclass54_0.genum7_0)
                 {
-                    case GEnum7.const_0:
+                    case PartyRole.const_0:
                         return GPartyMode.Solo;
-                    case GEnum7.const_1:
+                    case PartyRole.const_1:
                         return GPartyMode.Leader;
-                    case GEnum7.const_2:
+                    case PartyRole.const_2:
                         return GPartyMode.Follower;
                     default:
                         throw new Exception("unknown partymode!");
@@ -41,9 +41,9 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (StartupClass.glideMode_0 != GlideMode.Auto || StartupClass.gclass54_0.genum7_0 == GEnum7.const_0)
+                if (StartupClass.glideMode_0 != GlideMode.Auto || StartupClass.gclass54_0.genum7_0 == PartyRole.const_0)
                     return GHealDisposition.Never;
-                switch (GClass61.gclass61_0.method_2("PartyHealMode"))
+                switch (ConfigManager.gclass61_0.method_2("PartyHealMode"))
                 {
                     case "Dedicated":
                         return GHealDisposition.Dedicated;
@@ -57,12 +57,12 @@ namespace Glider.Common.Objects
             }
         }
 
-        public bool HealParty => HealMode != GHealDisposition.Never && GClass54.gclass54_0.genum7_0 != GEnum7.const_0;
+        public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.gclass54_0.genum7_0 != PartyRole.const_0;
 
         public long[] GetPartyMembers()
         {
             var longList = new List<long>();
-            var int_29 = GClass18.gclass18_0.method_4("PartyMembers");
+            var int_29 = MemoryOffsetTable.gclass18_0.method_4("PartyMembers");
             var num1 = 0;
             while (num1 < 4)
             {
@@ -98,7 +98,7 @@ namespace Glider.Common.Objects
             if (index == partyMembers.Length)
                 Logger.LogMessage("!! Never found party member to target: " + Target);
             else
-                GClass55.smethod_9((short)(113 + (short)index));
+                InputController.smethod_9((short)(113 + (short)index));
         }
 
         private PartyBuffBucket GetBuffsForPlayer(long GUID)
@@ -118,7 +118,7 @@ namespace Glider.Common.Objects
             if (!buffsForPlayer.Buffs.ContainsKey(SpellName))
             {
                 buffsForPlayer.Buffs.Add(SpellName, new PartyBuff(SpellName, BuffDurationSeconds * 1000));
-                if (GClass61.gclass61_0.method_5("ResetBuffs"))
+                if (ConfigManager.gclass61_0.method_5("ResetBuffs"))
                     buffsForPlayer.Buffs[SpellName].Timer.ForceReady();
             }
 

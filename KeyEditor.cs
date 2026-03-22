@@ -46,13 +46,13 @@ public class KeyEditor : Form
     public KeyEditor(string string_2, string string_3)
     {
         if (StartupClass.bool_13)
-            GClass42.gclass42_0.method_23();
+            SpellcastingManager.gclass42_0.method_23();
         string_0 = string_2;
         InitializeComponent();
         MessageProvider.smethod_3(this, nameof(KeyEditor));
         var keyEditor = this;
         keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.smethod_0() + "]";
-        foreach (var key in GClass42.gclass42_0.sortedList_0.Keys)
+        foreach (var key in SpellcastingManager.gclass42_0.sortedList_0.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
         KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Char"));
@@ -301,8 +301,8 @@ public class KeyEditor : Form
             if (sortedList_0.Keys.Count > 0)
             {
                 foreach (var gkey in sortedList_0.Values)
-                    GClass42.gclass42_0.sortedList_0[gkey.KeyName] = gkey;
-                GClass42.gclass42_0.method_14();
+                    SpellcastingManager.gclass42_0.sortedList_0[gkey.KeyName] = gkey;
+                SpellcastingManager.gclass42_0.method_14();
             }
 
             DialogResult = DialogResult.OK;
@@ -335,7 +335,7 @@ public class KeyEditor : Form
         }
         else
         {
-            gkey_0 = GClass42.gclass42_0.sortedList_0[key].Clone();
+            gkey_0 = SpellcastingManager.gclass42_0.sortedList_0[key].Clone();
             sortedList_0.Add(key, gkey_0);
         }
 
@@ -429,7 +429,7 @@ public class KeyEditor : Form
             for (var SlotNumber = 1; SlotNumber <= 108; ++SlotNumber)
             {
                 var gshortcut_0 = new GShortcut(SlotNumber);
-                var class0 = new Class0();
+                var class0 = new IntStringEntry();
                 if (gshortcut_0.ShortcutValue > 0)
                 {
                     class0.int_0 = gshortcut_0.SlotNumber;
@@ -461,7 +461,7 @@ public class KeyEditor : Form
 
             if (flag)
                 return;
-            var class0_1 = new Class0();
+            var class0_1 = new IntStringEntry();
             class0_1.int_0 = -1;
             class0_1.string_0 = "0x" + gkey_0.SIM.ToString("x") + " ";
             class0_1.string_0 += StartupClass.gclass63_0.method_11(gkey_0.SIM);
@@ -521,9 +521,9 @@ public class KeyEditor : Form
                     return;
                 }
 
-                if (((Class0)Spell.SelectedItem).int_0 != -1)
+                if (((IntStringEntry)Spell.SelectedItem).int_0 != -1)
                 {
-                    var gshortcut = new GShortcut(((Class0)Spell.SelectedItem).int_0);
+                    var gshortcut = new GShortcut(((IntStringEntry)Spell.SelectedItem).int_0);
                     gkey_0.SIM = gshortcut.ShortcutValue;
                     switch (gshortcut.ShortcutType)
                     {
@@ -541,9 +541,9 @@ public class KeyEditor : Form
             }
         }
 
-        if (gkey_0.AutoUpdate && GClass42.gclass42_0.sortedList_1.ContainsKey(gkey_0.KeyName))
+        if (gkey_0.AutoUpdate && SpellcastingManager.gclass42_0.sortedList_1.ContainsKey(gkey_0.KeyName))
         {
-            GClass42.gclass42_0.sortedList_1[gkey_0.KeyName].CopyTo(gkey_0);
+            SpellcastingManager.gclass42_0.sortedList_1[gkey_0.KeyName].CopyTo(gkey_0);
             gkey_0.AutoUpdate = true;
         }
 

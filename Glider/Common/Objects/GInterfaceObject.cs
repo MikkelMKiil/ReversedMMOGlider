@@ -13,9 +13,9 @@ namespace Glider.Common.Objects
     {
         protected GInterfaceObject _cooldown;
         protected GInterfaceObject _icon;
-        protected GClass8 _inner;
+        protected UIElement _inner;
 
-        public GInterfaceObject(GClass8 InnerObject)
+        public GInterfaceObject(UIElement InnerObject)
         {
             _inner = InnerObject;
             _cooldown = null;
@@ -58,7 +58,7 @@ namespace Glider.Common.Objects
                 }
 
                 if (_icon != null)
-                    return GProcessMemoryManipulator.smethod_15(_icon._inner.int_0 + GClass18.gclass18_0.method_4("UIDisabled"),
+                    return GProcessMemoryManipulator.smethod_15(_icon._inner.int_0 + MemoryOffsetTable.gclass18_0.method_4("UIDisabled"),
                         "UIDisabled") == 0;
                 Logger.smethod_1("No icon for object: " + _inner.string_0 + ", can't check enabled!");
                 return false;
@@ -66,10 +66,10 @@ namespace Glider.Common.Objects
         }
 
         private bool InnerIsReady =>
-            GProcessMemoryManipulator.smethod_15(_inner.int_0 + GClass18.gclass18_0.method_4("UIReady"), "UIReady") == 0;
+            GProcessMemoryManipulator.smethod_15(_inner.int_0 + MemoryOffsetTable.gclass18_0.method_4("UIReady"), "UIReady") == 0;
 
         public bool IsFiring =>
-            GProcessMemoryManipulator.smethod_15(_inner.int_0 + GClass18.gclass18_0.method_4("UIFiring"), "UIFiring") != 0;
+            GProcessMemoryManipulator.smethod_15(_inner.int_0 + MemoryOffsetTable.gclass18_0.method_4("UIFiring"), "UIFiring") != 0;
 
         public bool IsVisible => _inner.method_10();
 
@@ -88,7 +88,7 @@ namespace Glider.Common.Objects
         }
 
         public bool IsEnabledInFrame =>
-            GProcessMemoryManipulator.smethod_11(_inner.int_0 + GClass18.gclass18_0.method_4("MBEnabled"), "ieif") != 0;
+            GProcessMemoryManipulator.smethod_11(_inner.int_0 + MemoryOffsetTable.gclass18_0.method_4("MBEnabled"), "ieif") != 0;
 
         public override string ToString()
         {

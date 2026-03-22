@@ -192,12 +192,12 @@ namespace Glider.Common.Objects
             base.LoadFields();
             _playerClass =
                 (GPlayerClass)(GProcessMemoryManipulator.smethod_21(
-                    GProcessMemoryManipulator.smethod_21(BaseAddress + GClass18.gclass18_0.method_4("ClassPtrOffset"), "ClassPtr") +
-                    GClass18.gclass18_0.method_4("ClassIdOffset"), "ClassId") & byte.MaxValue);
-            var num = GProcessMemoryManipulator.smethod_21(BaseAddress + GClass18.gclass18_0.method_4("ClassPtrOffset"), "RacePtr");
+                    GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("ClassPtrOffset"), "ClassPtr") +
+                    MemoryOffsetTable.gclass18_0.method_4("ClassIdOffset"), "ClassId") & byte.MaxValue);
+            var num = GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.gclass18_0.method_4("ClassPtrOffset"), "RacePtr");
             if (num != 0)
                 _playerRace =
-                    (GPlayerRace)(GProcessMemoryManipulator.smethod_21(num + GClass18.gclass18_0.method_4("RaceIdOffset"), "Race") &
+                    (GPlayerRace)(GProcessMemoryManipulator.smethod_21(num + MemoryOffsetTable.gclass18_0.method_4("RaceIdOffset"), "Race") &
                                   byte.MaxValue);
             _petGuid = GetStorageLong("UNIT_FIELD_SUMMON");
             if (_petGuid == 0L)
@@ -211,7 +211,7 @@ namespace Glider.Common.Objects
 
         protected override void SetName()
         {
-            var num1 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("PlayerNames") + 12, "PlayerNamesBase");
+            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("PlayerNames") + 12, "PlayerNamesBase");
             while ((num1 & 1) == 0 && num1 != 0 && num1 != 28)
             {
                 var num2 = GProcessMemoryManipulator.smethod_12(num1 + 24, "PlayerNamesGUID");

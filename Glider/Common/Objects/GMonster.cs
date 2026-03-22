@@ -48,7 +48,7 @@ namespace Glider.Common.Objects
             get
             {
                 Refresh();
-                return GClass61.gclass61_0.method_5("BypassTagCheck") ? IsTagged : (_dflags & 8) > 0;
+                return ConfigManager.gclass61_0.method_5("BypassTagCheck") ? IsTagged : (_dflags & 8) > 0;
             }
         }
 
@@ -161,7 +161,7 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                if (IsTagged && !IsMine && !GClass61.gclass61_0.method_5("IgnoreTags"))
+                if (IsTagged && !IsMine && !ConfigManager.gclass61_0.method_5("IgnoreTags"))
                 {
                     SkipReason = "tagged and not mine";
                     return false;
@@ -228,7 +228,7 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("MonsterDefinition");
             if (baseInt == 0)
                 return;
-            _harvestFlags = GProcessMemoryManipulator.smethod_11(baseInt + GClass18.gclass18_0.method_4("HarvestType"), "harvesttype");
+            _harvestFlags = GProcessMemoryManipulator.smethod_11(baseInt + MemoryOffsetTable.gclass18_0.method_4("HarvestType"), "harvesttype");
         }
 
         protected override void SetName()
@@ -240,8 +240,8 @@ namespace Glider.Common.Objects
             if (baseInt == 0)
                 return;
             var num = 0;
-            if (GClass18.gclass18_0.method_5("UnitNameSecond"))
-                num += GClass18.gclass18_0.method_4("UnitNameSecond");
+            if (MemoryOffsetTable.gclass18_0.method_5("UnitNameSecond"))
+                num += MemoryOffsetTable.gclass18_0.method_4("UnitNameSecond");
             var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + num, "UnitNamePtr");
             if (int_29 == 0)
                 return;
@@ -257,8 +257,8 @@ namespace Glider.Common.Objects
             if (baseInt == 0)
                 return;
             var num = 0;
-            if (GClass18.gclass18_0.method_5("UnitTitle"))
-                num += GClass18.gclass18_0.method_4("UnitTitle");
+            if (MemoryOffsetTable.gclass18_0.method_5("UnitTitle"))
+                num += MemoryOffsetTable.gclass18_0.method_4("UnitTitle");
             var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + num, "UnitTitlePtr");
             if (int_29 == 0)
                 return;

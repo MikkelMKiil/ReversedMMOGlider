@@ -86,14 +86,14 @@ public class RemindBar : Form
     private void MyYesButton_Click(object sender, EventArgs e)
     {
         if (DontRemindMe.Checked)
-            GClass61.gclass61_0.method_0("RemindActionBars", "No");
+            ConfigManager.gclass61_0.method_0("RemindActionBars", "No");
         DialogResult = DialogResult.Yes;
     }
 
     private void MyNoButton_Click(object sender, EventArgs e)
     {
         if (DontRemindMe.Checked)
-            GClass61.gclass61_0.method_0("RemindActionBars", "No");
+            ConfigManager.gclass61_0.method_0("RemindActionBars", "No");
         DialogResult = DialogResult.No;
     }
 }

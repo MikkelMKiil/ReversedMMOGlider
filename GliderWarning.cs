@@ -27,9 +27,9 @@ public class GliderWarning : Form
 
     public static void smethod_0(string string_0, string string_1)
     {
-        if (GClass61.gclass61_0.method_2("NoWarn") == string_0)
+        if (ConfigManager.gclass61_0.method_2("NoWarn") == string_0)
             return;
-        GClass20.smethod_2("SystemExclamation");
+        SoundPlayer.smethod_2("SystemExclamation");
         var gliderWarning = new GliderWarning();
         gliderWarning.LabelWarning.Text = string_0;
         gliderWarning.method_1();
@@ -39,8 +39,8 @@ public class GliderWarning : Form
         var dialogResult = gliderWarning.ShowDialog();
         if (gliderWarning.NoMoreWarning.Checked)
         {
-            GClass61.gclass61_0.method_0("NoWarn", string_0);
-            GClass61.gclass61_0.method_8();
+            ConfigManager.gclass61_0.method_0("NoWarn", string_0);
+            ConfigManager.gclass61_0.method_8();
         }
 
         if (dialogResult != DialogResult.Yes)
@@ -50,9 +50,9 @@ public class GliderWarning : Form
 
     public static void smethod_1(string string_0)
     {
-        if (GClass61.gclass61_0.method_2("NoWarn") == string_0)
+        if (ConfigManager.gclass61_0.method_2("NoWarn") == string_0)
             return;
-        GClass20.smethod_2("SystemExclamation");
+        SoundPlayer.smethod_2("SystemExclamation");
         var gliderWarning = new GliderWarning();
         gliderWarning.LabelWarning.Text = string_0;
         gliderWarning.method_1();
@@ -62,8 +62,8 @@ public class GliderWarning : Form
         var num = (int)gliderWarning.ShowDialog();
         if (!gliderWarning.NoMoreWarning.Checked)
             return;
-        GClass61.gclass61_0.method_0("NoWarn", string_0);
-        GClass61.gclass61_0.method_8();
+        ConfigManager.gclass61_0.method_0("NoWarn", string_0);
+        ConfigManager.gclass61_0.method_8();
     }
 
     private void GliderWarning_Load(object sender, EventArgs e)
