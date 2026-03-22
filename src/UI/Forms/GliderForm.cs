@@ -156,7 +156,7 @@ public class GliderForm : Form, ILogger
       this.alwaysOnTopToolStripMenuItem1.Checked = true;
     }
     if (!ConfigManager.gclass61_0.bool_0)
-      GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "Welcome.html");
+      GProcessMemoryManipulator.IsWindowVisible((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "Welcome.html");
     MessageProvider.smethod_3((Form) this, nameof (GliderForm));
     KeyboardHookManager.intptr_0 = this.Handle;
     this.VersionLabel.Text = "Glider 1.8.0 (Release) -- January 21, 2009";
@@ -205,19 +205,19 @@ public class GliderForm : Form, ILogger
     if (flag1)
     {
       File.Delete("TWfail.txt");
-      GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "TripwireFailed.html");
+      GProcessMemoryManipulator.IsWindowVisible((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "TripwireFailed.html");
     }
     else if (flag2)
     {
       File.Delete("TWunsafe.txt");
-      GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "TripwireUnsafe.html");
+      GProcessMemoryManipulator.IsWindowVisible((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "TripwireUnsafe.html");
     }
     else
     {
       if (!flag3)
         return;
       File.Delete("DeadSession.txt");
-      GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "DeadSession.html");
+      GProcessMemoryManipulator.IsWindowVisible((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "DeadSession.html");
     }
   }
 
@@ -240,7 +240,7 @@ public class GliderForm : Form, ILogger
       if (ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True")
       {
         if (this.string_1 == null)
-          this.string_1 = GProcessMemoryManipulator.smethod_0();
+          this.string_1 = GProcessMemoryManipulator.GenerateRandomString();
         this.StatusLabel.Text = this.string_1 + " " + string_2;
       }
       else
@@ -1080,7 +1080,7 @@ public class GliderForm : Form, ILogger
       {
         this.timer_0.Enabled = false;
         Logger.LogMessage("Timer exception in Glider: The exception is: " + ex.Message + ", " + ex.StackTrace);
-        int num = (int) MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        int num = (int) MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
         StartupClass.smethod_27(false, "TimerExcep");
         Environment.Exit(0);
       }
@@ -1185,7 +1185,7 @@ public class GliderForm : Form, ILogger
     if (size_0.Height <= 32 || size_0.Width <= 32)
       return;
     Logger.LogMessage("Positioning game window: location=" + point_0.ToString() + ", size=" + size_0.ToString());
-    GProcessMemoryManipulator.smethod_43(StartupClass.MainApplicationHandle, size_0, point_0);
+    GProcessMemoryManipulator.GetForegroundWindow(StartupClass.MainApplicationHandle, size_0, point_0);
   }
 
   private void method_9()
@@ -1193,7 +1193,7 @@ public class GliderForm : Form, ILogger
     this.gclass36_0.method_4();
     Point point_0;
     Size size_0;
-    if (StartupClass.bool_41 || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GProcessMemoryManipulator.smethod_39(StartupClass.MainApplicationHandle, out point_0) || !GProcessMemoryManipulator.smethod_40(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
+    if (StartupClass.bool_41 || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GProcessMemoryManipulator.GetWindowPosition(StartupClass.MainApplicationHandle, out point_0) || !GProcessMemoryManipulator.GetWindowSize(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
       return;
     ConfigManager.gclass61_0.method_0("GameWindowPos", point_0.X.ToString() + "," + (object) point_0.Y);
     ConfigManager.gclass61_0.method_0("GameWindowSize", size_0.Width.ToString() + "," + (object) size_0.Height);
@@ -1578,7 +1578,7 @@ public class GliderForm : Form, ILogger
 
   private void MyHelpButton_Click(object sender, EventArgs e)
   {
-    GProcessMemoryManipulator.smethod_44((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "MainWindow.html");
+    GProcessMemoryManipulator.IsWindowVisible((Control) this, "Glider.chm", HelpNavigator.Topic, (object) "MainWindow.html");
   }
 
   private void QuickLoadButton_Click(object sender, EventArgs e) => this.method_11();

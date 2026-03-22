@@ -492,7 +492,7 @@ public class DruidConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Druid.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Druid.html");
     }
 
     private void UseBearForm_CheckedChanged(object sender, EventArgs e)

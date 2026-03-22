@@ -103,7 +103,7 @@ namespace Glider.Common.Objects
         public void EnsureBar()
         {
             var gbarState =
-                (GBarState)(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "curbar") + 3);
+                (GBarState)(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "curbar") + 3);
             if (BarState == GBarState.Indifferent || BarState == gbarState)
                 return;
             if (BarState == GBarState.Combat)
@@ -320,7 +320,7 @@ namespace Glider.Common.Objects
             if (SIM == 0)
                 return null;
             var StartSlotIndex = 1;
-            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "abcurrent");
+            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "abcurrent");
             if (num == 0)
             {
                 var stance = GPlayerSelf.Me.Stance;

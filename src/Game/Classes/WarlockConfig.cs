@@ -429,7 +429,7 @@ public class WarlockConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Warlock.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Warlock.html");
     }
 
     private void PetComboBox_SelectedIndexChanged(object sender, EventArgs e)

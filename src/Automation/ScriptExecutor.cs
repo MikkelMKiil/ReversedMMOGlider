@@ -68,7 +68,7 @@ public class ScriptExecutor
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                         StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.smethod_27(StartupClass.AnotherIntegerValue);
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
                         if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
                             Logger.LogMessage("No game window, no background mode!");

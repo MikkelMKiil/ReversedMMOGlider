@@ -51,7 +51,7 @@ public class KeyEditor : Form
         InitializeComponent();
         MessageProvider.smethod_3(this, nameof(KeyEditor));
         var keyEditor = this;
-        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.smethod_0() + "]";
+        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.GenerateRandomString() + "]";
         foreach (var key in SpellcastingManager.gclass42_0.Offsets.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
@@ -555,7 +555,7 @@ public class KeyEditor : Form
     {
         if (!bool_0)
             return false;
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.smethod_0() + "]",
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.GenerateRandomString() + "]",
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
         return true;
@@ -570,6 +570,6 @@ public class KeyEditor : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
     }
 }

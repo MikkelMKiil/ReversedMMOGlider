@@ -391,7 +391,7 @@ public class ChatLogManager
         var num2 = MemoryOffsetTable.Instance.GetIntOffset("ChatFrameSize");
         for (var index = 0; index <= 10; ++index)
         {
-            var str = GProcessMemoryManipulator.smethod_9(num1 + index * num2, 100, "ChatFrameName");
+            var str = GProcessMemoryManipulator.ReadString(num1 + index * num2, 100, "ChatFrameName");
             Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;

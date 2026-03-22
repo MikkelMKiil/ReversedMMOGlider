@@ -191,13 +191,13 @@ namespace Glider.Common.Objects
         {
             base.LoadFields();
             _playerClass =
-                (GPlayerClass)(GProcessMemoryManipulator.smethod_21(
-                    GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr") +
+                (GPlayerClass)(GProcessMemoryManipulator.ReadIntFromOffset(
+                    GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr") +
                     MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
-            var num = GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "RacePtr");
+            var num = GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "RacePtr");
             if (num != 0)
                 _playerRace =
-                    (GPlayerRace)(GProcessMemoryManipulator.smethod_21(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") &
+                    (GPlayerRace)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") &
                                   byte.MaxValue);
             _petGuid = GetStorageLong("UNIT_FIELD_SUMMON");
             if (_petGuid == 0L)
@@ -211,15 +211,15 @@ namespace Glider.Common.Objects
 
         protected override void SetName()
         {
-            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("PlayerNames") + 12, "PlayerNamesBase");
+            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerNames") + 12, "PlayerNamesBase");
             while ((num1 & 1) == 0 && num1 != 0 && num1 != 28)
             {
-                var num2 = GProcessMemoryManipulator.smethod_12(num1 + 24, "PlayerNamesGUID");
-                var str = GProcessMemoryManipulator.smethod_9(num1 + 32, 32, "PlayerName");
+                var num2 = GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID");
+                var str = GProcessMemoryManipulator.ReadString(num1 + 32, 32, "PlayerName");
                 if (num2 != GUID)
                 {
                     var num3 = num1;
-                    num1 = GProcessMemoryManipulator.smethod_11(num1 + 16, "PlayerNext");
+                    num1 = GProcessMemoryManipulator.ReadInt32(num1 + 16, "PlayerNext");
                     if (num1 == num3)
                         break;
                 }

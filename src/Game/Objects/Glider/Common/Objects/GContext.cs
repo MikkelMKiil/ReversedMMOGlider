@@ -103,7 +103,7 @@ namespace Glider.Common.Objects
         public bool StoppedOnDetach => StartupClass.bool_36;
 
         public string RedMessage =>
-            GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
+            GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
 
         public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
 
@@ -116,19 +116,19 @@ namespace Glider.Common.Objects
 
         public GMoveHelper MoveHelper { get; private set; }
 
-        public string WorldMap => GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.Instance.GetIntOffset(nameof(WorldMap)), 64, "worldmap")
+        public string WorldMap => GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(WorldMap)), 64, "worldmap")
             .Substring(11);
 
         public string ZoneText =>
-            GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset(nameof(ZoneText)), "zonetext"), 64,
+            GProcessMemoryManipulator.ReadString(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(ZoneText)), "zonetext"), 64,
                 "zonetext");
 
         public string SubZoneText
         {
             get
             {
-                var str = GProcessMemoryManipulator.smethod_9(
-                    GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset(nameof(SubZoneText)), "subzonetext"), 64,
+                var str = GProcessMemoryManipulator.ReadString(
+                    GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(SubZoneText)), "subzonetext"), 64,
                     "subzonetext");
                 return str.Length > 1 ? str : "n/a";
             }
@@ -703,7 +703,7 @@ namespace Glider.Common.Objects
 
         public string GetRandomString()
         {
-            return GProcessMemoryManipulator.smethod_0();
+            return GProcessMemoryManipulator.GenerateRandomString();
         }
 
         public void DoHearthAction()

@@ -25,7 +25,7 @@ namespace Glider.Common.Objects
                 var bagContents = new long[SlotCount];
                 var num = _descriptor.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
                 for (var index = 0; index < SlotCount; ++index)
-                    bagContents[index] = GProcessMemoryManipulator.smethod_12(StorageAddress + num + index * 8, "bagc");
+                    bagContents[index] = GProcessMemoryManipulator.ReadInt64(StorageAddress + num + index * 8, "bagc");
                 return bagContents;
             }
         }

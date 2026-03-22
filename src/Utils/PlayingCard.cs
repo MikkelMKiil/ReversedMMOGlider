@@ -58,15 +58,15 @@ public class PlayingCard
 
     public void method_0()
     {
-        var num1 = GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_11, "md1");
+        var num1 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_11, "md1");
         int_2 = num1 / 13;
         int_1 = num1 % 13;
         int_3 = 0;
         int_4 = 0;
-        var num2 = GProcessMemoryManipulator.smethod_11(int_0 + SolitaireMemoryOffsets.int_14, "md2");
-        int_3 = GProcessMemoryManipulator.smethod_11(num2 + SolitaireMemoryOffsets.int_15, "md3");
-        int_4 = GProcessMemoryManipulator.smethod_11(num2 + SolitaireMemoryOffsets.int_16, "md4");
-        bool_0 = GProcessMemoryManipulator.smethod_15(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
+        var num2 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_14, "md2");
+        int_3 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_15, "md3");
+        int_4 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_16, "md4");
+        bool_0 = GProcessMemoryManipulator.ReadByte(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
     }
 
     // Removed the incomplete line at line 71

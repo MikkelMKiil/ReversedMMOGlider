@@ -535,7 +535,7 @@ public class MageConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Mage.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Mage.html");
     }
 
     private void MageConfig_Load(object sender, EventArgs e)

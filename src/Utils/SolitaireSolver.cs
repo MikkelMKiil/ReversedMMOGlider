@@ -22,7 +22,7 @@ public class SolitaireSolver
         var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
             StartupClass.smethod_27(false, "NoSolitaireModuleInSolitaire");
-        var int_1 = GProcessMemoryManipulator.smethod_11(num + SolitaireMemoryOffsets.int_0, "md0");
+        var int_1 = GProcessMemoryManipulator.ReadInt32(num + SolitaireMemoryOffsets.int_0, "md0");
         if (int_1 == 0)
             StartupClass.smethod_27(false, "NoGameInSolitaire");
         var gclass34_0 = new SolitaireGameState(int_1);

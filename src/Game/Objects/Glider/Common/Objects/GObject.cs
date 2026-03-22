@@ -41,8 +41,8 @@ namespace Glider.Common.Objects
             Tag = null;
             ObjectTag = null;
             this.BaseAddress = BaseAddress;
-            StorageAddress = GProcessMemoryManipulator.smethod_11(BaseAddress + 8, "GameObjStorage");
-            GUID = GProcessMemoryManipulator.smethod_12(BaseAddress + 48, "NewObjGUID");
+            StorageAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 8, "GameObjStorage");
+            GUID = GProcessMemoryManipulator.ReadInt64(BaseAddress + 48, "NewObjGUID");
             this.FrameNumber = FrameNumber;
         }
 
@@ -93,7 +93,7 @@ namespace Glider.Common.Objects
         public float DistanceToSelf => GContext.Main.Me != null ? GContext.Main.Me.GetDistanceTo(this) : 0.0f;
 
         public bool IsCursorOnObject =>
-            GProcessMemoryManipulator.smethod_12(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
+            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
@@ -118,7 +118,7 @@ namespace Glider.Common.Objects
 
         private static GObjectType QuickGetType(int BaseAddress)
         {
-            return (GObjectType)GProcessMemoryManipulator.smethod_11(BaseAddress + 20, "QuickType");
+            return (GObjectType)GProcessMemoryManipulator.ReadInt32(BaseAddress + 20, "QuickType");
         }
 
         public bool Refresh()
@@ -169,7 +169,7 @@ namespace Glider.Common.Objects
             var descriptorOffset = FindDescriptorOffset(Name);
             return descriptorOffset == 0
                 ? -1
-                : GProcessMemoryManipulator.smethod_21(StorageAddress + descriptorOffset, "ReadSI." + Name);
+                : GProcessMemoryManipulator.ReadIntFromOffset(StorageAddress + descriptorOffset, "ReadSI." + Name);
         }
 
         protected long GetStorageLong(string Name)
@@ -177,7 +177,7 @@ namespace Glider.Common.Objects
             var descriptorOffset = FindDescriptorOffset(Name);
             return descriptorOffset == 0
                 ? -1L
-                : GProcessMemoryManipulator.smethod_24(StorageAddress + descriptorOffset, "ReadSL." + Name);
+                : GProcessMemoryManipulator.ReadLongFromOffset(StorageAddress + descriptorOffset, "ReadSL." + Name);
         }
 
         protected float GetStorageFloat(string Name)
@@ -185,22 +185,22 @@ namespace Glider.Common.Objects
             var descriptorOffset = FindDescriptorOffset(Name);
             return descriptorOffset == 0
                 ? float.NaN
-                : GProcessMemoryManipulator.smethod_22(StorageAddress + descriptorOffset, "ReadSF." + Name);
+                : GProcessMemoryManipulator.ReadFloatFromOffset(StorageAddress + descriptorOffset, "ReadSF." + Name);
         }
 
         protected int GetBaseInt(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBI." + OffsetName);
+            return GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBI." + OffsetName);
         }
 
         protected long GetBaseLong(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_24(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBL." + OffsetName);
+            return GProcessMemoryManipulator.ReadLongFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBL." + OffsetName);
         }
 
         protected float GetBaseFloat(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_22(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBF." + OffsetName);
+            return GProcessMemoryManipulator.ReadFloatFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBF." + OffsetName);
         }
 
         protected void SetType(GObjectType Type)

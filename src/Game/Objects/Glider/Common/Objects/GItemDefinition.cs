@@ -44,26 +44,26 @@ namespace Glider.Common.Objects
             var itemData = FindItemData();
             if (itemData == 0)
                 return;
-            Quality = (GItemQuality)GProcessMemoryManipulator.smethod_15(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefQuality"),
+            Quality = (GItemQuality)GProcessMemoryManipulator.ReadByte(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefQuality"),
                 "itemquality");
-            StackSize = GProcessMemoryManipulator.smethod_11(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefStackSize"), "stacksize");
-            SpellID = GProcessMemoryManipulator.smethod_11(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefSpellID"), "spellid");
-            var int_29 = GProcessMemoryManipulator.smethod_11(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefName"), "itemname");
+            StackSize = GProcessMemoryManipulator.ReadInt32(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefStackSize"), "stacksize");
+            SpellID = GProcessMemoryManipulator.ReadInt32(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefSpellID"), "spellid");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(itemData + MemoryOffsetTable.Instance.GetIntOffset("ItemDefName"), "itemname");
             if (int_29 != 0)
-                Name = GProcessMemoryManipulator.smethod_10(int_29, 100, "itemdefname1");
-            _conjureFlag = GProcessMemoryManipulator.smethod_15(itemData + MemoryOffsetTable.Instance.GetIntOffset("ConjureFlag"), "conjureflag");
+                Name = GProcessMemoryManipulator.ReadStringInternal(int_29, 100, "itemdefname1");
+            _conjureFlag = GProcessMemoryManipulator.ReadByte(itemData + MemoryOffsetTable.Instance.GetIntOffset("ConjureFlag"), "conjureflag");
         }
 
         private int FindItemData()
         {
             var num1 = 10;
-            var num2 = GProcessMemoryManipulator.smethod_11(
+            var num2 = GProcessMemoryManipulator.ReadInt32(
                 MemoryOffsetTable.Instance.GetIntOffset("ItemDBBase") + MemoryOffsetTable.Instance.GetIntOffset("ItemDBMask"), "itemdbm");
-            var num3 = GProcessMemoryManipulator.smethod_11(
+            var num3 = GProcessMemoryManipulator.ReadInt32(
                 MemoryOffsetTable.Instance.GetIntOffset("ItemDBBase") + MemoryOffsetTable.Instance.GetIntOffset("ItemDBList"), "itemdbl");
             var num4 = (ItemID & num2) * 3;
-            var num5 = GProcessMemoryManipulator.smethod_11(num3 + num4 * 4, "stepsize");
-            var int_29 = GProcessMemoryManipulator.smethod_11(num3 + num4 * 4 + 4 + 4, "itemptr");
+            var num5 = GProcessMemoryManipulator.ReadInt32(num3 + num4 * 4, "stepsize");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(num3 + num4 * 4 + 4 + 4, "itemptr");
             while (true)
             {
                 --num1;
@@ -73,8 +73,8 @@ namespace Glider.Common.Objects
                     {
                         if ((int_29 & 1) == 0)
                         {
-                            if (GProcessMemoryManipulator.smethod_11(int_29, "subitemptr") != ItemID)
-                                int_29 = GProcessMemoryManipulator.smethod_11(int_29 + num5 + 4, "itemnext");
+                            if (GProcessMemoryManipulator.ReadInt32(int_29, "subitemptr") != ItemID)
+                                int_29 = GProcessMemoryManipulator.ReadInt32(int_29 + num5 + 4, "itemnext");
                             else
                                 goto label_9;
                         }

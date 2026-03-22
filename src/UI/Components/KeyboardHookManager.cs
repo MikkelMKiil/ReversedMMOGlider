@@ -119,7 +119,7 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.F1)
             return;
-        GProcessMemoryManipulator.smethod_45();
+        GProcessMemoryManipulator.IsWindowMinimized();
     }
 
     public void method_2(object sender, KeyEventArgs e)

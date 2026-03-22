@@ -17,26 +17,26 @@ namespace Glider.Common.Objects
         public GGameCamera()
         {
             _valid = false;
-            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "CameraBase");
+            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "CameraBase");
             if (num == 0)
                 return;
-            BaseAddress = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.Instance.GetIntOffset("CameraOff1"), "CameraOff1");
+            BaseAddress = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("CameraOff1"), "CameraOff1");
             _valid = true;
             Logger.smethod_1(ToString());
         }
 
         public float Yaw =>
-            !_valid ? 0.0f : GProcessMemoryManipulator.smethod_13(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraYaw"), "CameraYaw");
+            !_valid ? 0.0f : GProcessMemoryManipulator.ReadFloat(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraYaw"), "CameraYaw");
 
         public float Pitch =>
             !_valid
                 ? 0.0f
-                : GProcessMemoryManipulator.smethod_13(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraPitch"), "CameraPitch");
+                : GProcessMemoryManipulator.ReadFloat(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraPitch"), "CameraPitch");
 
         public float Zoom =>
             !_valid
                 ? 0.0f
-                : GProcessMemoryManipulator.smethod_13(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraZoom"), "CameraZoom");
+                : GProcessMemoryManipulator.ReadFloat(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("CameraZoom"), "CameraZoom");
 
         public override string ToString()
         {

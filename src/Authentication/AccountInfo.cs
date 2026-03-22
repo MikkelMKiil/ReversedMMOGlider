@@ -33,7 +33,7 @@ public class AccountInfo : Form
     public AccountInfo()
     {
         InitializeComponent();
-        Text = GProcessMemoryManipulator.smethod_0();
+        Text = GProcessMemoryManipulator.GenerateRandomString();
         AccountName.Focus();
         AccountName.Select();
     }
@@ -207,7 +207,7 @@ public class AccountInfo : Form
             Logger.smethod_1("Saving to: \"" + str + "\"");
             if (File.Exists(str) && MessageBox.Show(this,
                     "An Auto Login character by that nickname already exists.  Do you want to overwrite it with this information?",
-                    GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
             new EncryptedAccountStorage
             {
@@ -216,20 +216,20 @@ public class AccountInfo : Form
                 string_2 = RealmName.Text.Trim(),
                 string_3 = CharacterName.Text.Trim()
             }.method_0(str, UseEncrypt.Checked);
-            var num = (int)MessageBox.Show(this, "Character data saved successfully!", GProcessMemoryManipulator.smethod_0(),
+            var num = (int)MessageBox.Show(this, "Character data saved successfully!", GProcessMemoryManipulator.GenerateRandomString(),
                 MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             DialogResult = DialogResult.OK;
         }
         else
         {
             var num1 = (int)MessageBox.Show(this, "Fill out all of the fields before selecting \"Create\".",
-                GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
         }
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
     }
 
     private void UseEncrypt_CheckedChanged(object sender, EventArgs e)
@@ -238,7 +238,7 @@ public class AccountInfo : Form
             return;
         var num = (int)MessageBox.Show(this,
             "Encryption has been turned off for this Auto Login character.  Note that the account password will be plainly visible in the configuration file for this account.\r\n\r\nFor the best account security, enable the \"Encrypt data\" option again.",
-            GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
     }
 
     private bool method_0()

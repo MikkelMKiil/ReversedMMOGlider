@@ -51,7 +51,7 @@ public class ChatFrameLocator
         bool_0 = false;
         int_2 = 0;
         int_3 = ushort.MaxValue;
-        int_0 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
+        int_0 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_0 == 0)
         {
             string_1 = "UIParent is null - no top object!";
@@ -61,9 +61,9 @@ public class ChatFrameLocator
         var num = int_0;
         do
         {
-            var int_29 = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onameui");
-            if (int_29 == 0 || !(GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamec1") == string_0))
-                num = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onext");
+            var int_29 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onameui");
+            if (int_29 == 0 || !(GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamec1") == string_0))
+                num = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onext");
             else
                 goto label_5;
         } while (num != 0);
@@ -98,13 +98,13 @@ public class ChatFrameLocator
         if (!bool_0 && !method_0())
             return null;
         var stringList = new List<string>();
-        var num1 = GProcessMemoryManipulator.smethod_11(int_1 + int_4, "tablebomb");
-        var num2 = GProcessMemoryManipulator.smethod_11(int_1 + int_5, "capacity");
-        var num3 = GProcessMemoryManipulator.smethod_11(int_1 + int_6, "insertpos");
+        var num1 = GProcessMemoryManipulator.ReadInt32(int_1 + int_4, "tablebomb");
+        var num2 = GProcessMemoryManipulator.ReadInt32(int_1 + int_5, "capacity");
+        var num3 = GProcessMemoryManipulator.ReadInt32(int_1 + int_6, "insertpos");
         if (num3 == int_3)
             return stringList.ToArray();
         int_3 = num3;
-        var num4 = GProcessMemoryManipulator.smethod_11(int_1 + int_7, "tablebomb");
+        var num4 = GProcessMemoryManipulator.ReadInt32(int_1 + int_7, "tablebomb");
         if (num4 == 0)
         {
             string_1 = "Object has no pointer to bomb of strings!";
@@ -120,12 +120,12 @@ public class ChatFrameLocator
         {
             if (num5 >= num2)
                 num5 -= num2;
-            num6 = GProcessMemoryManipulator.smethod_11(num4 + num5 * int_8, "chatlinepointer");
+            num6 = GProcessMemoryManipulator.ReadInt32(num4 + num5 * int_8, "chatlinepointer");
             if (num6 != 0)
             {
                 if (flag)
                 {
-                    var str = GProcessMemoryManipulator.smethod_10(num6, 1024, "chatline3");
+                    var str = GProcessMemoryManipulator.ReadStringInternal(num6, 1024, "chatline3");
                     if (!(str == "(read failed)"))
                     {
                         stringList.Add(str);

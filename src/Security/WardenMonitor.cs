@@ -124,7 +124,7 @@ public class WardenMonitor
     {
         if (int_0 < 1 && StartupClass.bool_35)
         {
-            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
+            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
             if (num != 0)
             {
                 Logger.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
@@ -148,7 +148,7 @@ public class WardenMonitor
 
     public void method_6(int int_3, int int_4)
     {
-        var byte_1 = GProcessMemoryManipulator.smethod_17(int_3, int_4, "bsp");
+        var byte_1 = GProcessMemoryManipulator.ReadBytes(int_3, int_4, "bsp");
         if (byte_1 == null)
             return;
         method_7(byte_1);

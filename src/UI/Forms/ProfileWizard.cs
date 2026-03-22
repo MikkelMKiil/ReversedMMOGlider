@@ -450,7 +450,7 @@ public class ProfileWizard : Form
 
     public DialogResult method_0(Form form_0)
     {
-        Text = GProcessMemoryManipulator.smethod_0();
+        Text = GProcessMemoryManipulator.GenerateRandomString();
         string_2 = MessageProvider.smethod_4("ProfileWizard.Left");
         string_3 = MessageProvider.smethod_4("ProfileWizard.Right");
         string_4 = MessageProvider.smethod_4("ProfileWizard.Yards");
@@ -609,7 +609,7 @@ public class ProfileWizard : Form
         var path = ConfigManager.gclass61_0.method_2("ProfilesDir") + ProfileNameBox.Text.Trim() + ".xml";
         if (File.Exists(path))
             if (MessageBox.Show(this, MessageProvider.smethod_6("ProfileWizard.ProfileExists", ProfileNameBox.Text.Trim()),
-                    GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
+                    GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
             {
                 ProfileNameBox.Focus();
                 return false;
@@ -630,7 +630,7 @@ public class ProfileWizard : Form
 
     private void method_6(string string_5, Control control_0)
     {
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4("ProfileWizard." + string_5), GProcessMemoryManipulator.smethod_0(),
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4("ProfileWizard." + string_5), GProcessMemoryManipulator.GenerateRandomString(),
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
     }
@@ -884,7 +884,7 @@ public class ProfileWizard : Form
     private void SkipVendorBox_CheckedChanged(object sender, EventArgs e)
     {
         if (SkipVendorBox.Checked || StartupClass.IsSomeConditionMet || MessageBox.Show(this,
-                MessageProvider.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo,
+                MessageProvider.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             return;
         SkipVendorBox.Checked = true;

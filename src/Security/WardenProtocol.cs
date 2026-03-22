@@ -441,11 +441,11 @@ public class WardenProtocol
             case 1:
                 var int32_2 = BitConverter.ToInt32(byte_0, 4);
                 genum10_0 = GEnum10.const_2;
-                return GProcessMemoryManipulator.smethod_17(int32_2, 8192, "bsb1");
+                return GProcessMemoryManipulator.ReadBytes(int32_2, 8192, "bsb1");
             case 2:
                 var int32_3 = BitConverter.ToInt32(byte_0, 4);
                 genum10_0 = GEnum10.const_3;
-                return GProcessMemoryManipulator.smethod_17(int32_3, 4096, "bsb2");
+                return GProcessMemoryManipulator.ReadBytes(int32_3, 4096, "bsb2");
             default:
                 var destinationArray = new byte[int32_1];
                 Array.Copy(byte_0, 4, destinationArray, 0, int32_1);

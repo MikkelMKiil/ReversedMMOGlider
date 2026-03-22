@@ -20,7 +20,7 @@ namespace Glider.Common.Objects
         public GShortcut(int SlotNumber)
         {
             this.SlotNumber = SlotNumber;
-            var num = (uint)GProcessMemoryManipulator.smethod_11(
+            var num = (uint)GProcessMemoryManipulator.ReadInt32(
                 MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts") + 4 * (SlotNumber - 1), "shortcut1");
             if (num == 0U)
             {

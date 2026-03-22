@@ -761,7 +761,7 @@ public class ProfileProps : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.smethod_44(this, "Glider.chm", HelpNavigator.Topic, "Profiles.html");
+        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Profiles.html");
     }
 
     private void ClearGhostWaypoints_Click(object sender, EventArgs e)

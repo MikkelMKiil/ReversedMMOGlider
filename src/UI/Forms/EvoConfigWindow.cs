@@ -37,7 +37,7 @@ public class EvoConfigWindow : Form
     public EvoConfigWindow()
     {
         InitializeComponent();
-        Text = GProcessMemoryManipulator.smethod_0();
+        Text = GProcessMemoryManipulator.GenerateRandomString();
         AppKey.Text = ConfigManager.gclass61_0.method_2(nameof(AppKey));
         VersionLabel.Text = "1.8.0 (Release)";
     }
