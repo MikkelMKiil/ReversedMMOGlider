@@ -45,185 +45,185 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PEImageParser.cs" />
-    <Compile Include="EncryptedDataTransport.cs" />
-    <Compile Include="Vector3.cs" />
-    <Compile Include="NetworkSafetyChecker.cs" />
-    <Compile Include="Matrix3.cs" />
-    <Compile Include="DebuffList.cs">
+    <Compile Include="src/Memory/PEImageParser.cs" />
+    <Compile Include="src/Authentication/EncryptedDataTransport.cs" />
+    <Compile Include="src/Utils/Vector3.cs" />
+    <Compile Include="src/Security/NetworkSafetyChecker.cs" />
+    <Compile Include="src/Utils/Matrix3.cs" />
+    <Compile Include="src/UI/Forms/DebuffList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LootableCorpseTracker.cs" />
-    <Compile Include="WorldToScreenProjector.cs" />
-    <Compile Include="ConfigForm.cs">
+    <Compile Include="src/Game/Objects/LootableCorpseTracker.cs" />
+    <Compile Include="src/Game/Movement/WorldToScreenProjector.cs" />
+    <Compile Include="src/UI/Forms/ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ShamanConfig.cs">
+    <Compile Include="src/Game/Classes/ShamanConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GliderWarning.cs">
+    <Compile Include="src/UI/Forms/GliderWarning.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlayingCard.cs" />
-    <Compile Include="DebuffPick.cs">
+    <Compile Include="src/Utils/PlayingCard.cs" />
+    <Compile Include="src/UI/Forms/DebuffPick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeathknightConfig.cs">
+    <Compile Include="src/Game/Classes/DeathknightConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ILogger.cs" />
-    <Compile Include="UIElement.cs" />
-    <Compile Include="ProfileWizard.cs">
+    <Compile Include="src/Core/ILogger.cs" />
+    <Compile Include="src/UI/Components/UIElement.cs" />
+    <Compile Include="src/UI/Forms/ProfileWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LaunchpadReminder.cs">
+    <Compile Include="src/UI/Forms/LaunchpadReminder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="KeyEditor.cs">
+    <Compile Include="src/UI/Forms/KeyEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WebNotificationService.cs" />
-    <Compile Include="LogEntry.cs" />
-    <Compile Include="SecurityDescriptorHelper.cs" />
-    <Compile Include="GliderException.cs" />
-    <Compile Include="TimedStringEntry.cs" />
-    <Compile Include="FlightPointManager.cs" />
-    <Compile Include="EvoConfigWindow.cs">
+    <Compile Include="src/Authentication/WebNotificationService.cs" />
+    <Compile Include="src/Utils/LogEntry.cs" />
+    <Compile Include="src/Utils/SecurityDescriptorHelper.cs" />
+    <Compile Include="src/Utils/GliderException.cs" />
+    <Compile Include="src/Utils/TimedStringEntry.cs" />
+    <Compile Include="src/Game/Movement/FlightPointManager.cs" />
+    <Compile Include="src/UI/Forms/EvoConfigWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PaladinConfig.cs">
+    <Compile Include="src/Game/Classes/PaladinConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AccountInfo.cs">
+    <Compile Include="src/Authentication/AccountInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EncryptedAccountStorage.cs" />
-    <Compile Include="WardenCheckDiagram.cs" />
-    <Compile Include="WardenCheckStatus.cs" />
-    <Compile Include="WardenMonitor.cs" />
-    <Compile Include="DebugPrivilegeElevator.cs" />
-    <Compile Include="MemoryOffsetTable.cs" />
-    <Compile Include="IntStringEntry.cs" />
-    <Compile Include="WardenCheckDatabase.cs" />
-    <Compile Include="SoundPlayer.cs" />
-    <Compile Include="ProfileProps.cs">
+    <Compile Include="src/Authentication/EncryptedAccountStorage.cs" />
+    <Compile Include="src/Security/WardenCheckDiagram.cs" />
+    <Compile Include="src/Security/WardenCheckStatus.cs" />
+    <Compile Include="src/Security/WardenMonitor.cs" />
+    <Compile Include="src/Memory/DebugPrivilegeElevator.cs" />
+    <Compile Include="src/Memory/MemoryOffsetTable.cs" />
+    <Compile Include="src/Utils/IntStringEntry.cs" />
+    <Compile Include="src/Security/WardenCheckDatabase.cs" />
+    <Compile Include="src/Utils/SoundPlayer.cs" />
+    <Compile Include="src/UI/Forms/ProfileProps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlayerTracker.cs" />
-    <Compile Include="SpellEnabledState.cs" />
-    <Compile Include="SpellActionData.cs" />
-    <Compile Include="PriestConfig.cs">
+    <Compile Include="src/Game/Objects/PlayerTracker.cs" />
+    <Compile Include="src/Game/Combat/SpellEnabledState.cs" />
+    <Compile Include="src/Game/Combat/SpellActionData.cs" />
+    <Compile Include="src/Game/Classes/PriestConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FixedString16.cs" />
-    <Compile Include="NetworkAdapterEntry.cs" />
-    <Compile Include="ProcessListEntry.cs" />
-    <Compile Include="MACAddressReader.cs" />
-    <Compile Include="KeyboardHookManager.cs" />
-    <Compile Include="EmptyPlaceholder.cs" />
-    <Compile Include="HunterConfig.cs">
+    <Compile Include="src/Utils/FixedString16.cs" />
+    <Compile Include="src/Utils/NetworkAdapterEntry.cs" />
+    <Compile Include="src/Memory/ProcessListEntry.cs" />
+    <Compile Include="src/Utils/MACAddressReader.cs" />
+    <Compile Include="src/UI/Components/KeyboardHookManager.cs" />
+    <Compile Include="src/Utils/EmptyPlaceholder.cs" />
+    <Compile Include="src/Game/Classes/HunterConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ByteSignaturePattern.cs" />
-    <Compile Include="PickWindow.cs">
+    <Compile Include="src/Utils/ByteSignaturePattern.cs" />
+    <Compile Include="src/UI/Forms/PickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MessageProvider.cs" />
-    <Compile Include="AutoLoginManager.cs" />
-    <Compile Include="WarriorConfig.cs">
+    <Compile Include="src/Core/MessageProvider.cs" />
+    <Compile Include="src/Authentication/AutoLoginManager.cs" />
+    <Compile Include="src/Game/Classes/WarriorConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ISXWardenIntegration.cs" />
-    <Compile Include="LootRouteParser.cs" />
-    <Compile Include="SolitaireGameState.cs" />
-    <Compile Include="WaypointType.cs" />
-    <Compile Include="TriStateOption.cs" />
-    <Compile Include="StartupClass.cs" />
-    <Compile Include="GameTimer.cs" />
-    <Compile Include="RemindBar.cs">
+    <Compile Include="src/Security/ISXWardenIntegration.cs" />
+    <Compile Include="src/Automation/LootRouteParser.cs" />
+    <Compile Include="src/Utils/SolitaireGameState.cs" />
+    <Compile Include="src/Game/Objects/WaypointType.cs" />
+    <Compile Include="src/Utils/TriStateOption.cs" />
+    <Compile Include="src/Core/StartupClass.cs" />
+    <Compile Include="src/Utils/GameTimer.cs" />
+    <Compile Include="src/UI/Forms/RemindBar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Logger.cs" />
-    <Compile Include="EquipmentEnchantmentChecker.cs" />
-    <Compile Include="InventoryItem.cs" />
-    <Compile Include="SolitaireSolver.cs" />
-    <Compile Include="SolitaireMemoryOffsets.cs" />
-    <Compile Include="SpellcastingManager.cs" />
-    <Compile Include="OffsetManager.cs" />
-    <Compile Include="DebuffType.cs" />
-    <Compile Include="DebuffDatabase.cs" />
-    <Compile Include="DebuffEntry.cs" />
-    <Compile Include="WardenMatchResult.cs" />
-    <Compile Include="WardenPatternMatcher.cs" />
-    <Compile Include="ScriptExecutor.cs" />
-    <Compile Include="BoolStringOption.cs" />
-    <Compile Include="MemoryReadException.cs" />
-    <Compile Include="ProfileGroupManager.cs" />
-    <Compile Include="MachGlideRunner.cs" />
-    <Compile Include="RestStatusMonitor.cs" />
-    <Compile Include="StepConditionType.cs" />
-    <Compile Include="ProfileStepCondition.cs" />
-    <Compile Include="ApplicationInitializer.cs" />
-    <Compile Include="WardenCondition.cs" />
-    <Compile Include="PartyRole.cs" />
-    <Compile Include="PartyManager.cs" />
-    <Compile Include="InputController.cs" />
-    <Compile Include="GDataEncryptionManager.cs" />
-    <Compile Include="ScreenCapture.cs" />
-    <Compile Include="GDIHelper.cs" />
-    <Compile Include="WindowContextHelper.cs" />
-    <Compile Include="GlideMainThread.cs" />
-    <Compile Include="ConfigManager.cs" />
-    <Compile Include="ClipboardHelper.cs" />
-    <Compile Include="DruidConfig.cs">
+    <Compile Include="src/Core/Logger.cs" />
+    <Compile Include="src/Game/Objects/EquipmentEnchantmentChecker.cs" />
+    <Compile Include="src/Game/Objects/InventoryItem.cs" />
+    <Compile Include="src/Utils/SolitaireSolver.cs" />
+    <Compile Include="src/Utils/SolitaireMemoryOffsets.cs" />
+    <Compile Include="src/Game/Combat/SpellcastingManager.cs" />
+    <Compile Include="src/Memory/OffsetManager.cs" />
+    <Compile Include="src/Game/Objects/DebuffType.cs" />
+    <Compile Include="src/Game/Objects/DebuffDatabase.cs" />
+    <Compile Include="src/Game/Objects/DebuffEntry.cs" />
+    <Compile Include="src/Security/WardenMatchResult.cs" />
+    <Compile Include="src/Security/WardenPatternMatcher.cs" />
+    <Compile Include="src/Automation/ScriptExecutor.cs" />
+    <Compile Include="src/Utils/BoolStringOption.cs" />
+    <Compile Include="src/Memory/MemoryReadException.cs" />
+    <Compile Include="src/Automation/ProfileGroupManager.cs" />
+    <Compile Include="src/Automation/MachGlideRunner.cs" />
+    <Compile Include="src/Game/Objects/RestStatusMonitor.cs" />
+    <Compile Include="src/Automation/StepConditionType.cs" />
+    <Compile Include="src/Automation/ProfileStepCondition.cs" />
+    <Compile Include="src/Core/ApplicationInitializer.cs" />
+    <Compile Include="src/Security/WardenCondition.cs" />
+    <Compile Include="src/Game/Objects/PartyRole.cs" />
+    <Compile Include="src/Game/Objects/PartyManager.cs" />
+    <Compile Include="src/UI/Components/InputController.cs" />
+    <Compile Include="src/Authentication/GDataEncryptionManager.cs" />
+    <Compile Include="src/UI/Components/ScreenCapture.cs" />
+    <Compile Include="src/Utils/GDIHelper.cs" />
+    <Compile Include="src/Utils/WindowContextHelper.cs" />
+    <Compile Include="src/Core/GlideMainThread.cs" />
+    <Compile Include="src/Core/ConfigManager.cs" />
+    <Compile Include="src/Utils/ClipboardHelper.cs" />
+    <Compile Include="src/Game/Classes/DruidConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestThread.cs" />
-    <Compile Include="SpellbookManager.cs" />
-    <Compile Include="SpellEntry.cs" />
-    <Compile Include="SecCheck.cs">
+    <Compile Include="src/Utils/TestThread.cs" />
+    <Compile Include="src/Game/Combat/SpellbookManager.cs" />
+    <Compile Include="src/Game/Combat/SpellEntry.cs" />
+    <Compile Include="src/Security/SecCheck.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProcessEnumerator.cs" />
-    <Compile Include="ProcessInfo.cs" />
-    <Compile Include="DialogMonitor.cs" />
-    <Compile Include="CameraRotator.cs" />
-    <Compile Include="RogueConfig.cs">
+    <Compile Include="src/Memory/ProcessEnumerator.cs" />
+    <Compile Include="src/Memory/ProcessInfo.cs" />
+    <Compile Include="src/UI/Components/DialogMonitor.cs" />
+    <Compile Include="src/Game/Movement/CameraRotator.cs" />
+    <Compile Include="src/Game/Classes/RogueConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChatLogManager.cs" />
-    <Compile Include="SimpleHttpClient.cs" />
-    <Compile Include="WardenStateValue.cs" />
-    <Compile Include="WardenProtocol.cs" />
-    <Compile Include="StepStopAction.cs" />
-    <Compile Include="AutomationStep.cs" />
-    <Compile Include="CombatController.cs" />
-    <Compile Include="CodeCompiler.cs" />
-    <Compile Include="MageConfig.cs">
+    <Compile Include="src/Game/Objects/ChatLogManager.cs" />
+    <Compile Include="src/Authentication/SimpleHttpClient.cs" />
+    <Compile Include="src/Security/WardenStateValue.cs" />
+    <Compile Include="src/Security/WardenProtocol.cs" />
+    <Compile Include="src/Automation/StepStopAction.cs" />
+    <Compile Include="src/Automation/AutomationStep.cs" />
+    <Compile Include="src/Game/Combat/CombatController.cs" />
+    <Compile Include="src/Automation/CodeCompiler.cs" />
+    <Compile Include="src/Game/Classes/MageConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ChatFrameLocator.cs" />
-    <Compile Include="FileLogger.cs" />
-    <Compile Include="RemoteViewerClient.cs" />
-    <Compile Include="GProcessMemoryManipulator.cs" />
-    <Compile Include="RemoteViewerServer.cs" />
-    <Compile Include="CardStack.cs" />
-    <Compile Include="SixStateOption.cs" />
-    <Compile Include="WarlockConfig.cs">
+    <Compile Include="src/UI/Components/ChatFrameLocator.cs" />
+    <Compile Include="src/Core/FileLogger.cs" />
+    <Compile Include="src/Utils/RemoteViewerClient.cs" />
+    <Compile Include="src/Memory/GProcessMemoryManipulator.cs" />
+    <Compile Include="src/Utils/RemoteViewerServer.cs" />
+    <Compile Include="src/Utils/CardStack.cs" />
+    <Compile Include="src/Utils/SixStateOption.cs" />
+    <Compile Include="src/Game/Classes/WarlockConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CompilerGeneratedCache.cs" />
-    <Compile Include="LaunchpadReminder_1.cs">
+    <Compile Include="src/Automation/CompilerGeneratedCache.cs" />
+    <Compile Include="src/UI/Forms/LaunchpadReminder_1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GliderForm.cs">
+    <Compile Include="src/UI/Forms/GliderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationLogger.cs" />
-    <Compile Include="FactionReminder.cs">
+    <Compile Include="src/Core/ApplicationLogger.cs" />
+    <Compile Include="src/UI/Forms/FactionReminder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResourceProvider.cs" />
+    <Compile Include="src/UI/Forms/ResourceProvider.cs" />
     <Compile Include="Glider\Common\NetCheckResult.cs" />
     <Compile Include="Glider\Common\GlideMode.cs" />
     <Compile Include="Glider\Common\GameClass.cs" />
@@ -288,18 +288,18 @@
     <Compile Include="Glider\Common\Objects\GMovement.cs" />
     <Compile Include="Glider\Common\Objects\GInterfaceHelper.cs" />
     <Compile Include="Glider\Common\Objects\GItemDefinition.cs" />
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="src/Core/AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AccountInfo.resx" />
-    <EmbeddedResource Include="ResourceProvider.resx" />
-    <EmbeddedResource Include="ConfigForm.resx" />
-    <EmbeddedResource Include="DeathknightConfig.resx" />
-    <EmbeddedResource Include="DebuffList.resx" />
-    <EmbeddedResource Include="DebuffPick.resx" />
-    <EmbeddedResource Include="DruidConfig.resx" />
-    <EmbeddedResource Include="EvoConfigWindow.resx" />
-    <EmbeddedResource Include="FactionReminder.resx" />
+    <EmbeddedResource Include="src/Authentication/AccountInfo.resx" />
+    <EmbeddedResource Include="src/UI/Forms/ResourceProvider.resx" />
+    <EmbeddedResource Include="src/UI/Forms/ConfigForm.resx" />
+    <EmbeddedResource Include="src/Game/Classes/DeathknightConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/DebuffList.resx" />
+    <EmbeddedResource Include="src/UI/Forms/DebuffPick.resx" />
+    <EmbeddedResource Include="src/Game/Classes/DruidConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/EvoConfigWindow.resx" />
+    <EmbeddedResource Include="src/UI/Forms/FactionReminder.resx" />
     <EmbeddedResource Include="Glider\Common\Objects\GConfigWindow.resx" />
     <EmbeddedResource Include="Glider\en-US.xml" />
     <EmbeddedResource Include="GliderCommon\DefaultClasses\Deathknight.cs" />
@@ -316,24 +316,24 @@
     <EmbeddedResource Include="GliderCommon\DefaultScripts\OnGameFirstSeen.cs" />
     <EmbeddedResource Include="GliderCommon\DefaultScripts\OnGliderStart.cs" />
     <EmbeddedResource Include="GliderCommon\DefaultScripts\OnHearth.cs" />
-    <EmbeddedResource Include="GliderForm.resx" />
-    <EmbeddedResource Include="GliderWarning.resx" />
-    <EmbeddedResource Include="HunterConfig.resx" />
-    <EmbeddedResource Include="KeyEditor.resx" />
-    <EmbeddedResource Include="LaunchpadReminder.resx" />
-    <EmbeddedResource Include="LaunchpadReminder_1.resx" />
-    <EmbeddedResource Include="MageConfig.resx" />
-    <EmbeddedResource Include="PaladinConfig.resx" />
-    <EmbeddedResource Include="PickWindow.resx" />
-    <EmbeddedResource Include="PriestConfig.resx" />
-    <EmbeddedResource Include="ProfileProps.resx" />
-    <EmbeddedResource Include="ProfileWizard.resx" />
-    <EmbeddedResource Include="RemindBar.resx" />
-    <EmbeddedResource Include="RogueConfig.resx" />
-    <EmbeddedResource Include="SecCheck.resx" />
-    <EmbeddedResource Include="ShamanConfig.resx" />
-    <EmbeddedResource Include="WarlockConfig.resx" />
-    <EmbeddedResource Include="WarriorConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/GliderForm.resx" />
+    <EmbeddedResource Include="src/UI/Forms/GliderWarning.resx" />
+    <EmbeddedResource Include="src/Game/Classes/HunterConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/KeyEditor.resx" />
+    <EmbeddedResource Include="src/UI/Forms/LaunchpadReminder.resx" />
+    <EmbeddedResource Include="src/UI/Forms/LaunchpadReminder_1.resx" />
+    <EmbeddedResource Include="src/Game/Classes/MageConfig.resx" />
+    <EmbeddedResource Include="src/Game/Classes/PaladinConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/PickWindow.resx" />
+    <EmbeddedResource Include="src/Game/Classes/PriestConfig.resx" />
+    <EmbeddedResource Include="src/UI/Forms/ProfileProps.resx" />
+    <EmbeddedResource Include="src/UI/Forms/ProfileWizard.resx" />
+    <EmbeddedResource Include="src/UI/Forms/RemindBar.resx" />
+    <EmbeddedResource Include="src/Game/Classes/RogueConfig.resx" />
+    <EmbeddedResource Include="src/Security/SecCheck.resx" />
+    <EmbeddedResource Include="src/Game/Classes/ShamanConfig.resx" />
+    <EmbeddedResource Include="src/Game/Classes/WarlockConfig.resx" />
+    <EmbeddedResource Include="src/Game/Classes/WarriorConfig.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
