@@ -62,7 +62,7 @@ namespace Glider.Common.Objects
         public long[] GetPartyMembers()
         {
             var longList = new List<long>();
-            var int_29 = MemoryOffsetTable.gclass18_0.method_4("PartyMembers");
+            var int_29 = MemoryOffsetTable.Instance.GetIntOffset("PartyMembers");
             var num1 = 0;
             while (num1 < 4)
             {

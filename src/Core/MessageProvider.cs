@@ -18,7 +18,7 @@ public class MessageProvider
 {
     public static MessageProvider gclass30_0;
     private static readonly Regex regex_0 = new Regex("^\\d+$");
-    private readonly SortedList sortedList_0;
+    private readonly SortedList Offsets;
     private readonly SortedList sortedList_1;
     private readonly SortedList sortedList_2;
     private readonly SortedList sortedList_3;
@@ -41,13 +41,13 @@ public class MessageProvider
         }
 
         var str1 = string_0 + ".xml";
-        sortedList_0 = new SortedList();
+        Offsets = new SortedList();
         sortedList_1 = new SortedList();
         sortedList_2 = new SortedList();
         sortedList_3 = new SortedList();
         if (File.Exists(string_6 + str1))
         {
-            string_1 = method_0(string_6 + str1, sortedList_0, sortedList_2);
+            string_1 = method_0(string_6 + str1, Offsets, sortedList_2);
             string_5 = str1;
         }
         else
@@ -59,7 +59,7 @@ public class MessageProvider
             {
                 Logger.LogMessage("Using alternate strings: " + files[0]);
                 string_5 = files[0];
-                string_1 = method_0(files[0], sortedList_0, sortedList_2);
+                string_1 = method_0(files[0], Offsets, sortedList_2);
             }
             else
             {
@@ -194,8 +194,8 @@ public class MessageProvider
     public static string smethod_4(string string_6)
     {
         string str = null;
-        if (gclass30_0.sortedList_0.ContainsKey(string_6))
-            str = (string)gclass30_0.sortedList_0[string_6];
+        if (gclass30_0.Offsets.ContainsKey(string_6))
+            str = (string)gclass30_0.Offsets[string_6];
         if (str == null && gclass30_0.sortedList_1 != null && gclass30_0.sortedList_1.ContainsKey(string_6))
             str = (string)gclass30_0.sortedList_1[string_6];
         return str;
@@ -204,7 +204,7 @@ public class MessageProvider
     public static bool smethod_5(string string_6)
     {
         return (gclass30_0.sortedList_1 != null && gclass30_0.sortedList_1.ContainsKey(string_6)) ||
-               gclass30_0.sortedList_0.ContainsKey(string_6);
+               gclass30_0.Offsets.ContainsKey(string_6);
     }
 
     public static string smethod_6(string string_6, params object[] object_0)

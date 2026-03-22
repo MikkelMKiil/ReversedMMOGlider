@@ -103,7 +103,7 @@ namespace Glider.Common.Objects
         public bool StoppedOnDetach => StartupClass.bool_36;
 
         public string RedMessage =>
-            GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4(nameof(RedMessage)), 128, nameof(RedMessage));
+            GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
 
         public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
 
@@ -116,11 +116,11 @@ namespace Glider.Common.Objects
 
         public GMoveHelper MoveHelper { get; private set; }
 
-        public string WorldMap => GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4(nameof(WorldMap)), 64, "worldmap")
+        public string WorldMap => GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.Instance.GetIntOffset(nameof(WorldMap)), 64, "worldmap")
             .Substring(11);
 
         public string ZoneText =>
-            GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(ZoneText)), "zonetext"), 64,
+            GProcessMemoryManipulator.smethod_9(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset(nameof(ZoneText)), "zonetext"), 64,
                 "zonetext");
 
         public string SubZoneText
@@ -128,7 +128,7 @@ namespace Glider.Common.Objects
             get
             {
                 var str = GProcessMemoryManipulator.smethod_9(
-                    GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4(nameof(SubZoneText)), "subzonetext"), 64,
+                    GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset(nameof(SubZoneText)), "subzonetext"), 64,
                     "subzonetext");
                 return str.Length > 1 ? str : "n/a";
             }
@@ -237,7 +237,7 @@ namespace Glider.Common.Objects
 
         public void AddAutoKey(string KeyName)
         {
-            if (SpellcastingManager.gclass42_0.sortedList_0.ContainsKey(KeyName))
+            if (SpellcastingManager.gclass42_0.Offsets.ContainsKey(KeyName))
                 return;
             SpellcastingManager.gclass42_0.method_4(KeyName);
         }
@@ -390,9 +390,9 @@ namespace Glider.Common.Objects
         public void SendKey(string KeyName)
         {
             Logger.smethod_1("SendKey: \"" + KeyName + "\"");
-            if (SpellcastingManager.gclass42_0.sortedList_0.ContainsKey(KeyName))
+            if (SpellcastingManager.gclass42_0.Offsets.ContainsKey(KeyName))
             {
-                SpellcastingManager.gclass42_0.sortedList_0[KeyName].FilloutKey();
+                SpellcastingManager.gclass42_0.Offsets[KeyName].FilloutKey();
                 SpellcastingManager.gclass42_0.method_0(KeyName);
             }
             else
@@ -771,7 +771,7 @@ namespace Glider.Common.Objects
 
         public void WaitForNotFiring(string KeyName)
         {
-            var visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0[KeyName].FindVisibleInterfaceObject();
+            var visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets[KeyName].FindVisibleInterfaceObject();
             if (visibleInterfaceObject == null)
                 return;
             var byName = Interface.GetByName(visibleInterfaceObject);

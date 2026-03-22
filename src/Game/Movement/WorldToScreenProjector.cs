@@ -21,16 +21,16 @@ public class WorldToScreenProjector
         double_1 = 0.0;
         double_2 = 0.0;
         var num1 = GProcessMemoryManipulator.smethod_11(
-            GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("CameraBase"), "camerabase") +
-            MemoryOffsetTable.gclass18_0.method_4("CameraOff1"), "camerasub");
+            GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "camerabase") +
+            MemoryOffsetTable.Instance.GetIntOffset("CameraOff1"), "camerasub");
         var gclass4 = new Matrix3();
-        gclass4.method_0(num1 + MemoryOffsetTable.gclass18_0.method_4("CC_ViewMatrix"));
+        gclass4.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_ViewMatrix"));
         var gclass2_0_1 = Vector3.smethod_0(glocation_0);
         gclass2_0_1.float_2 += (float)double_0;
         var gclass2_1 = new Vector3();
-        gclass2_1.method_0(num1 + MemoryOffsetTable.gclass18_0.method_4("CC_Position"));
+        gclass2_1.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_Position"));
         var gclass2_0_2 = Vector3.smethod_1(gclass2_0_1, gclass2_1);
-        var num2 = GProcessMemoryManipulator.smethod_13(num1 + MemoryOffsetTable.gclass18_0.method_4("CC_FOV"), "camerafov");
+        var num2 = GProcessMemoryManipulator.smethod_13(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
         if (Vector3.smethod_2(gclass2_0_2, gclass4.method_1(0)) < 0.0)
         {
             Logger.smethod_1("! Screen coord lookup failed, dotproduct is no good");

@@ -272,7 +272,7 @@ public class LootableCorpseTracker
         var flag3 = false;
         while (!gspellTimer4.IsReadySlow)
         {
-            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("LootWindow"), "lwprobe");
+            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "lwprobe");
             if (num != 0 || !flag3)
             {
                 if (num != 0)

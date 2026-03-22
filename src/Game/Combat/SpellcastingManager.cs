@@ -17,7 +17,7 @@ public class SpellcastingManager
 {
     public static SpellcastingManager gclass42_0;
     private bool bool_0;
-    public SortedList<string, GKey> sortedList_0;
+    public SortedList<string, GKey> Offsets;
     public SortedList<string, GKey> sortedList_1;
     private string string_0 = "??";
 
@@ -28,7 +28,7 @@ public class SpellcastingManager
 
     public void method_0(string string_1)
     {
-        if (!sortedList_0.ContainsKey(string_1))
+        if (!Offsets.ContainsKey(string_1))
         {
             Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
             Logger.smethod_1(Environment.StackTrace);
@@ -37,14 +37,14 @@ public class SpellcastingManager
         {
             lock (this)
             {
-                sortedList_0[string_1].Send();
+                Offsets[string_1].Send();
             }
         }
     }
 
     public void method_1(string string_1)
     {
-        if (!sortedList_0.ContainsKey(string_1))
+        if (!Offsets.ContainsKey(string_1))
         {
             Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
             Logger.smethod_1(Environment.StackTrace);
@@ -53,14 +53,14 @@ public class SpellcastingManager
         {
             lock (this)
             {
-                sortedList_0[string_1].Press();
+                Offsets[string_1].Press();
             }
         }
     }
 
     public void method_2(string string_1)
     {
-        if (!sortedList_0.ContainsKey(string_1))
+        if (!Offsets.ContainsKey(string_1))
         {
             Logger.LogMessage(MessageProvider.smethod_2(58, string_1));
             Logger.smethod_1(Environment.StackTrace);
@@ -69,7 +69,7 @@ public class SpellcastingManager
         {
             lock (this)
             {
-                sortedList_0[string_1].Release();
+                Offsets[string_1].Release();
             }
         }
     }
@@ -78,7 +78,7 @@ public class SpellcastingManager
     {
         lock (this)
         {
-            foreach (var gkey in sortedList_0.Values)
+            foreach (var gkey in Offsets.Values)
                 gkey.UnFill();
         }
     }
@@ -100,7 +100,7 @@ public class SpellcastingManager
         char char_0,
         short short_0)
     {
-        if (sortedList_0.ContainsKey(string_1))
+        if (Offsets.ContainsKey(string_1))
             return;
         method_9(string_1, gbarState_0, int_0, char_0, short_0);
     }
@@ -165,8 +165,8 @@ public class SpellcastingManager
 
     protected void method_10(GKey gkey_0)
     {
-        if (!sortedList_0.ContainsKey(gkey_0.KeyName))
-            sortedList_0.Add(gkey_0.KeyName, gkey_0);
+        if (!Offsets.ContainsKey(gkey_0.KeyName))
+            Offsets.Add(gkey_0.KeyName, gkey_0);
         if (sortedList_1.ContainsKey(gkey_0.KeyName))
             return;
         sortedList_1.Add(gkey_0.KeyName, gkey_0);
@@ -174,7 +174,7 @@ public class SpellcastingManager
 
     protected void method_11()
     {
-        sortedList_0 = new SortedList<string, GKey>();
+        Offsets = new SortedList<string, GKey>();
         method_9("Common.Mount", GBarState.Indifferent, 0, '`', 0);
         method_9("Common.Backpack", GBarState.Indifferent, 0, 'B', 0);
         method_9("Common.BackpackAll", GBarState.Indifferent, 1, 'B', 0);
@@ -473,9 +473,9 @@ public class SpellcastingManager
 
     public bool method_15(string string_1)
     {
-        if (!sortedList_0.ContainsKey(string_1))
+        if (!Offsets.ContainsKey(string_1))
             return true;
-        var gkey = sortedList_0[string_1];
+        var gkey = Offsets[string_1];
         return gkey.CharCode == char.MinValue && gkey.VK == 0;
     }
 
@@ -484,7 +484,7 @@ public class SpellcastingManager
         var xmlDocument_0 = new XmlDocument();
         xmlDocument_0.AppendChild(xmlDocument_0.CreateXmlDeclaration("1.0", null, null));
         xmlDocument_0.AppendChild(xmlDocument_0.CreateElement("Keys"));
-        foreach (var gkey_0 in sortedList_0.Values)
+        foreach (var gkey_0 in Offsets.Values)
             method_18(xmlDocument_0, gkey_0);
         if (File.Exists(string_1))
             File.Delete(string_1);
@@ -607,7 +607,7 @@ public class SpellcastingManager
         var str2 = xmlNode_0.Attributes["KeyName"].Value;
         try
         {
-            if (sortedList_0.ContainsKey(str2) && !bool_1)
+            if (Offsets.ContainsKey(str2) && !bool_1)
                 return;
             var gkey = new GKey(str2);
             if (xmlNode_0.Attributes["KeyType"] != null)
@@ -694,10 +694,10 @@ public class SpellcastingManager
 
             if (xmlNode_0.Attributes["Auto"] != null && xmlNode_0.Attributes["Auto"].Value == "True")
                 gkey.AutoUpdate = true;
-            if (sortedList_0.ContainsKey(str2))
-                sortedList_0[str2] = gkey;
+            if (Offsets.ContainsKey(str2))
+                Offsets[str2] = gkey;
             else
-                sortedList_0.Add(str2, gkey);
+                Offsets.Add(str2, gkey);
         }
         catch (Exception ex)
         {
@@ -713,11 +713,11 @@ public class SpellcastingManager
 
     private void method_22()
     {
-        if (!sortedList_0.ContainsKey("Common.BarCombat"))
+        if (!Offsets.ContainsKey("Common.BarCombat"))
             return;
-        var num1 = StartupClass.numbers_string.IndexOf(sortedList_0["Common.BarCombat"].CharCode);
-        var num2 = StartupClass.numbers_string.IndexOf(sortedList_0["Common.BarRest"].CharCode);
-        foreach (var gkey in sortedList_0.Values)
+        var num1 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarCombat"].CharCode);
+        var num2 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarRest"].CharCode);
+        foreach (var gkey in Offsets.Values)
         {
             var num3 = 0;
             if (gkey.BarState == GBarState.Combat)
@@ -728,9 +728,9 @@ public class SpellcastingManager
                 gkey.BarState = (GBarState)num3;
         }
 
-        sortedList_0.Remove("Common.BarCombat");
-        sortedList_0.Remove("Common.BarRest");
-        sortedList_0.Remove("Common.CooldownProbe");
+        Offsets.Remove("Common.BarCombat");
+        Offsets.Remove("Common.BarRest");
+        Offsets.Remove("Common.CooldownProbe");
         Logger.LogMessage("Updated Keys.xml to new style, saving to disk.");
         method_14();
     }
@@ -738,7 +738,7 @@ public class SpellcastingManager
     public void method_23()
     {
         var gkeyList = new List<GKey>();
-        foreach (var gkey in sortedList_0.Values)
+        foreach (var gkey in Offsets.Values)
             if (gkey.AutoUpdate)
             {
                 gkey.NeedAutoUpdate = true;

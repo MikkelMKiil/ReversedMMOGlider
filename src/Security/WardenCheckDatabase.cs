@@ -14,12 +14,12 @@ using Glider.Common;
 public class WardenCheckDatabase
 {
     public List<WardenCheckDiagram> list_0;
-    public SortedList<string, ByteSignaturePattern> sortedList_0;
+    public SortedList<string, ByteSignaturePattern> Offsets;
 
     public WardenCheckDatabase()
     {
         list_0 = new List<WardenCheckDiagram>();
-        sortedList_0 = new SortedList<string, ByteSignaturePattern>();
+        Offsets = new SortedList<string, ByteSignaturePattern>();
     }
 
     public WardenCheckDiagram[] method_0(string string_0)

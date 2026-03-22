@@ -366,7 +366,7 @@ public class TestThread
         Logger.LogMessage("Put cursor on item!");
         Thread.Sleep(3000);
         Logger.LogMessage("Cursor Type: " +
-                           GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("CursorType"), "CursorType"));
+                           GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
     }
 
     private static void smethod_24()
@@ -471,7 +471,7 @@ public class TestThread
 
     private static void smethod_32()
     {
-        SpellcastingManager.gclass42_0.sortedList_0["Rogue.Sinister"].FilloutKey();
+        SpellcastingManager.gclass42_0.Offsets["Rogue.Sinister"].FilloutKey();
     }
 
     private static void smethod_33()
@@ -497,7 +497,7 @@ public class TestThread
 
     private static void smethod_35()
     {
-        var visibleInterfaceObject = SpellcastingManager.gclass42_0.sortedList_0["Rogue.Sinister"].FindVisibleInterfaceObject();
+        var visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets["Rogue.Sinister"].FindVisibleInterfaceObject();
         if (visibleInterfaceObject == null)
         {
             Logger.LogMessage("Could not find visible object for sinister strike");
@@ -512,14 +512,14 @@ public class TestThread
     private static void smethod_36()
     {
         SpellcastingManager.gclass42_0.method_23();
-        SpellcastingManager.gclass42_0.sortedList_0["Common.Potion"].FilloutKey();
+        SpellcastingManager.gclass42_0.Offsets["Common.Potion"].FilloutKey();
         Logger.LogMessage("Potion ready flag: " + GContext.Main.Interface.IsKeyReady("Common.Potion"));
     }
 
     private static void smethod_37()
     {
         SpellcastingManager.gclass42_0.method_23();
-        foreach (var gkey in SpellcastingManager.gclass42_0.sortedList_0.Values)
+        foreach (var gkey in SpellcastingManager.gclass42_0.Offsets.Values)
             if (gkey.KeyName.StartsWith("Common") || gkey.KeyName.StartsWith(GPlayerSelf.Me.PlayerClass.ToString()))
                 gkey.FilloutKey();
     }

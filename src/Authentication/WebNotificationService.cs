@@ -235,7 +235,7 @@ public class WebNotificationService
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
             method_12(element2, "WorldMap: ",
-                GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.gclass18_0.method_4("WorldMap"), 100, "WorldMap"));
+                GProcessMemoryManipulator.smethod_9(MemoryOffsetTable.Instance.GetIntOffset("WorldMap"), 100, "WorldMap"));
             element1.AppendChild(element2);
             var target = GPlayerSelf.Me.Target;
             if (target != null)

@@ -31,9 +31,9 @@ public class ChatFrameLocator
         string_1 = "(no error)";
         int_2 = 0;
         int_3 = ushort.MaxValue;
-        int_7 = MemoryOffsetTable.gclass18_0.method_4("CFStrings");
-        int_8 = MemoryOffsetTable.gclass18_0.method_4("CFStringSize");
-        var num = MemoryOffsetTable.gclass18_0.method_4("CFCounterBase");
+        int_7 = MemoryOffsetTable.Instance.GetIntOffset("CFStrings");
+        int_8 = MemoryOffsetTable.Instance.GetIntOffset("CFStringSize");
+        var num = MemoryOffsetTable.Instance.GetIntOffset("CFCounterBase");
         int_4 = num;
         int_5 = num + 4;
         int_6 = num + 8;
@@ -51,7 +51,7 @@ public class ChatFrameLocator
         bool_0 = false;
         int_2 = 0;
         int_3 = ushort.MaxValue;
-        int_0 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "uiparent");
+        int_0 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_0 == 0)
         {
             string_1 = "UIParent is null - no top object!";
@@ -61,9 +61,9 @@ public class ChatFrameLocator
         var num = int_0;
         do
         {
-            var int_29 = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.gclass18_0.method_4("UIName"), "onameui");
+            var int_29 = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onameui");
             if (int_29 == 0 || !(GProcessMemoryManipulator.smethod_9(int_29, 200, "objectnamec1") == string_0))
-                num = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.gclass18_0.method_4("UINext"), "onext");
+                num = GProcessMemoryManipulator.smethod_11(num + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onext");
             else
                 goto label_5;
         } while (num != 0);

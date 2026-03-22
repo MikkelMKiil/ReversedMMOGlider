@@ -93,7 +93,7 @@ namespace Glider.Common.Objects
         public float DistanceToSelf => GContext.Main.Me != null ? GContext.Main.Me.GetDistanceTo(this) : 0.0f;
 
         public bool IsCursorOnObject =>
-            GProcessMemoryManipulator.smethod_12(MemoryOffsetTable.gclass18_0.method_4("UnderCursor"), "UnderCursor") == GUID;
+            GProcessMemoryManipulator.smethod_12(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
@@ -190,17 +190,17 @@ namespace Glider.Common.Objects
 
         protected int GetBaseInt(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBI." + OffsetName);
+            return GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBI." + OffsetName);
         }
 
         protected long GetBaseLong(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_24(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBL." + OffsetName);
+            return GProcessMemoryManipulator.smethod_24(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBL." + OffsetName);
         }
 
         protected float GetBaseFloat(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_22(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBF." + OffsetName);
+            return GProcessMemoryManipulator.smethod_22(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBF." + OffsetName);
         }
 
         protected void SetType(GObjectType Type)

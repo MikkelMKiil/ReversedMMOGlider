@@ -318,9 +318,9 @@ public class StartupClass
             string_5 = string_11;
             Logger.LogMessage(MessageProvider.smethod_2(109, string_5));
             ConfigManager.gclass61_0.method_0("LastProfile", string_11);
-            if (gclass54_0 != null && gclass54_0.sortedList_0 != null)
+            if (gclass54_0 != null && gclass54_0.Offsets != null)
             {
-                gclass54_0.sortedList_0 = null;
+                gclass54_0.Offsets = null;
                 Logger.LogMessage(MessageProvider.GetMessage(110));
             }
 
@@ -501,7 +501,7 @@ public class StartupClass
     public static void smethod_9()
     {
         isInitializationSuccessful = false;
-        MemoryOffsetTable.gclass18_0 = new MemoryOffsetTable();
+        MemoryOffsetTable.Instance = new MemoryOffsetTable();
         thread_0 = new Thread(smethod_10);
         thread_0.Start();
     }
@@ -567,7 +567,7 @@ public class StartupClass
             {
                 Logger.LogMessage("Starting Tripwire");
                 GameMemoryReader = new WardenMonitor(GliderManager, ConfigManager.gclass61_0.method_5("LogWW"),
-                    MemoryOffsetTable.gclass18_0.method_4("VAPeek"));
+                    MemoryOffsetTable.Instance.GetIntOffset("VAPeek"));
             }
 
             if (IsSomeConditionMet && !bool_37 && !IsAttached)
@@ -625,11 +625,11 @@ public class StartupClass
             IsForegroundEnabled = false;
             gclass36_2.method_4();
             GProcessMemoryManipulator.bool_2 = false;
-            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.gclass18_0.method_4("D_Player"));
-            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.gclass18_0.method_4("D_Items"));
-            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.gclass18_0.method_4("D_NPC"));
-            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.gclass18_0.method_4("D_Object"));
-            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.gclass18_0.method_4("D_Container"));
+            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
+            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
+            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
+            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
+            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
             gclass63_0 = new SpellbookManager();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
@@ -1370,7 +1370,7 @@ public class StartupClass
 
         if (IsAttached)
             return true;
-        if (GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "probeuip") == 0 && !bool_20 &&
+        if (GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "probeuip") == 0 && !bool_20 &&
             ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
@@ -1383,10 +1383,10 @@ public class StartupClass
             return false;
         }
 
-        if (MemoryOffsetTable.gclass18_0.method_5("TLSSlot"))
+        if (MemoryOffsetTable.Instance.HasOffset("TLSSlot"))
             return GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && GObjectList.StealthCountGameObjects(long_0) > 0 &&
                    long_0 != 0L;
-        var numArray = GProcessMemoryManipulator.smethod_20(MemoryOffsetTable.gclass18_0.method_4("PlayerIdAddr"), 8);
+        var numArray = GProcessMemoryManipulator.smethod_20(MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr"), 8);
         if (numArray == null)
         {
             if (AdditionalApplicationHandle != IntPtr.Zero)
@@ -1398,7 +1398,7 @@ public class StartupClass
         long_0 = BitConverter.ToInt64(numArray, 0);
         if (long_0 == 0L)
             return false;
-        int_5 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("MainTable"), "MainTableProbe");
+        int_5 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTableProbe");
         return GObjectList.StealthCountGameObjects(long_0) > 1;
     }
 
@@ -1640,7 +1640,7 @@ public class StartupClass
 
     public static string smethod_63(int int_14)
     {
-        var num1 = MemoryOffsetTable.gclass18_0.method_4("MacroBase");
+        var num1 = MemoryOffsetTable.Instance.GetIntOffset("MacroBase");
         var num2 = GProcessMemoryManipulator.smethod_11(num1 + 36, "mbase");
         int int_29_1;
         for (var int_29_2 =

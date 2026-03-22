@@ -55,7 +55,7 @@ namespace Glider.Common.Objects
                     return null;
                 }
 
-                var BaseAddress = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
+                var BaseAddress = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
                 while (true)
                 {
                     long guid;
@@ -496,7 +496,7 @@ namespace Glider.Common.Objects
             var flag = false;
             if (int5 == 0)
                 return 0;
-            var num2 = int5 + MemoryOffsetTable.gclass18_0.method_4("InitialOffset");
+            var num2 = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
             while (true)
             {
                 num2 = GProcessMemoryManipulator.smethod_11(num2 + 60, "GameObjNext");

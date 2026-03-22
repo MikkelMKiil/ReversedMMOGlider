@@ -7,50 +7,89 @@
 #nullable disable
 using System.Collections;
 
+/// <summary>
+/// Stores and manages memory offsets for WoW client interaction.
+/// Offsets can be stored as either integer addresses or string identifiers.
+/// </summary>
 public class MemoryOffsetTable
 {
-    public static MemoryOffsetTable gclass18_0;
-    public SortedList sortedList_0;
+    /// <summary>
+    /// Singleton instance of the MemoryOffsetTable.
+    /// </summary>
+    public static MemoryOffsetTable Instance;
+
+    /// <summary>
+    /// Internal storage for offsets. Keys are offset names, values can be int or string.
+    /// </summary>
+    public SortedList Offsets;
 
     public MemoryOffsetTable()
     {
-        gclass18_0 = this;
-        sortedList_0 = new SortedList();
+        Instance = this;
+        Offsets = new SortedList();
     }
 
-    public void method_0()
+    /// <summary>
+    /// Clears all stored offsets.
+    /// </summary>
+    public void Clear()
     {
-        sortedList_0.Clear();
+        Offsets.Clear();
     }
 
-    public void method_1(string string_0, string string_1)
+    /// <summary>
+    /// Adds a string-based offset to the table.
+    /// </summary>
+    /// <param name="offsetName">The name/key of the offset</param>
+    /// <param name="offsetValue">The string value (e.g., buff ID)</param>
+    public void AddStringOffset(string offsetName, string offsetValue)
     {
-        sortedList_0.Add(string_0, string_1);
+        Offsets.Add(offsetName, offsetValue);
     }
 
-    public void method_2(string string_0, int int_0)
+    /// <summary>
+    /// Adds an integer-based offset to the table.
+    /// </summary>
+    /// <param name="offsetName">The name/key of the offset</param>
+    /// <param name="offsetAddress">The memory address as integer</param>
+    public void AddIntOffset(string offsetName, int offsetAddress)
     {
-        sortedList_0.Add(string_0, int_0);
+        Offsets.Add(offsetName, offsetAddress);
     }
 
-    public string method_3(string string_0)
+    /// <summary>
+    /// Retrieves a string offset by name.
+    /// </summary>
+    /// <param name="offsetName">The name of the offset to retrieve</param>
+    /// <returns>The string value, or empty string if not found</returns>
+    public string GetStringOffset(string offsetName)
     {
-        if (sortedList_0.ContainsKey(string_0))
-            return (string)sortedList_0[string_0];
-        Logger.LogMessage(MessageProvider.smethod_2(314, string_0));
+        if (Offsets.ContainsKey(offsetName))
+            return (string)Offsets[offsetName];
+        Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
         return "";
     }
 
-    public int method_4(string string_0)
+    /// <summary>
+    /// Retrieves an integer offset by name.
+    /// </summary>
+    /// <param name="offsetName">The name of the offset to retrieve</param>
+    /// <returns>The integer address, or 0 if not found</returns>
+    public int GetIntOffset(string offsetName)
     {
-        if (sortedList_0.ContainsKey(string_0))
-            return (int)sortedList_0[string_0];
-        Logger.LogMessage(MessageProvider.smethod_2(314, string_0));
+        if (Offsets.ContainsKey(offsetName))
+            return (int)Offsets[offsetName];
+        Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
         return 0;
     }
 
-    public bool method_5(string string_0)
+    /// <summary>
+    /// Checks if an offset exists in the table.
+    /// </summary>
+    /// <param name="offsetName">The name of the offset to check</param>
+    /// <returns>True if the offset exists, false otherwise</returns>
+    public bool HasOffset(string offsetName)
     {
-        return sortedList_0.ContainsKey(string_0);
+        return Offsets.ContainsKey(offsetName);
     }
 }

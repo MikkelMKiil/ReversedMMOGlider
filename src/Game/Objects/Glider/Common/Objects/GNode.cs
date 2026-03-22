@@ -75,9 +75,9 @@ namespace Glider.Common.Objects
         protected void SetDisplayInfo()
         {
             _displayInfo = "(unknown)";
-            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ObjectInfo"), "InfoBase");
+            var num1 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfo"), "InfoBase");
             var storageInt = GetStorageInt("GAMEOBJECT_DISPLAYID");
-            var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ObjectInfoSub"), "InfoBaseSub");
+            var num2 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfoSub"), "InfoBaseSub");
             if (storageInt < num2)
                 return;
             var num3 = GProcessMemoryManipulator.smethod_11(num1 + (storageInt - num2) * 4, "InfoThisGuy");
@@ -95,7 +95,7 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("NodeName");
             if (baseInt == 0)
                 return;
-            var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + MemoryOffsetTable.gclass18_0.method_4("NodeNameSecond"), "noden2");
+            var int_29 = GProcessMemoryManipulator.smethod_11(baseInt + MemoryOffsetTable.Instance.GetIntOffset("NodeNameSecond"), "noden2");
             if (int_29 == 0)
                 return;
             _name = GProcessMemoryManipulator.smethod_9(int_29, 64, "nodename");

@@ -74,7 +74,7 @@ public class GProcessMemoryManipulator
     public static bool bool_2;
     public static bool bool_3 = true;
     public static int int_27;
-    private static readonly SortedList<int, string> sortedList_0 = new SortedList<int, string>();
+    private static readonly SortedList<int, string> Offsets = new SortedList<int, string>();
     private static IntPtr intptr_0;
     private static int int_28;
     private static IntPtr intptr_1;
@@ -119,7 +119,7 @@ public class GProcessMemoryManipulator
             return 0;
         var num = 0;
         foreach (var gclass66 in gclass65.gclass66_0)
-            if (string.Compare(gclass66.string_0, str, true) == 0 && !sortedList_0.ContainsKey(gclass66.int_0))
+            if (string.Compare(gclass66.string_0, str, true) == 0 && !Offsets.ContainsKey(gclass66.int_0))
             {
                 num = gclass66.int_0;
                 break;
@@ -166,7 +166,7 @@ public class GProcessMemoryManipulator
     public static void smethod_5(int int_29)
     {
         Logger.smethod_1("Forgetting app: " + int_29);
-        sortedList_0.Add(int_29, "");
+        Offsets.Add(int_29, "");
     }
 
     public static IntPtr smethod_6(int int_29)
@@ -499,11 +499,11 @@ public class GProcessMemoryManipulator
 
     public static int smethod_31()
     {
-        if (!MemoryOffsetTable.gclass18_0.method_5("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
+        if (!MemoryOffsetTable.Instance.HasOffset("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
             return 0;
-        var num1 = MemoryOffsetTable.gclass18_0.method_4("DS1");
-        var num2 = MemoryOffsetTable.gclass18_0.method_4("DS2");
-        var num3 = MemoryOffsetTable.gclass18_0.method_4("Julie");
+        var num1 = MemoryOffsetTable.Instance.GetIntOffset("DS1");
+        var num2 = MemoryOffsetTable.Instance.GetIntOffset("DS2");
+        var num3 = MemoryOffsetTable.Instance.GetIntOffset("Julie");
         var num4 = 0;
         var int_29 = num1 - 4096;
         var tickCount = Environment.TickCount;
@@ -523,9 +523,9 @@ public class GProcessMemoryManipulator
             }
         }
 
-        if (num4 > 0 && StartupClass.GameMemoryReader != null && MemoryOffsetTable.gclass18_0.method_5("AllowFS"))
-            StartupClass.GameMemoryReader.method_6(MemoryOffsetTable.gclass18_0.method_4("JulieDrop"),
-                MemoryOffsetTable.gclass18_0.method_4("JulieSize"));
+        if (num4 > 0 && StartupClass.GameMemoryReader != null && MemoryOffsetTable.Instance.HasOffset("AllowFS"))
+            StartupClass.GameMemoryReader.method_6(MemoryOffsetTable.Instance.GetIntOffset("JulieDrop"),
+                MemoryOffsetTable.Instance.GetIntOffset("JulieSize"));
         if (num4 > 0)
             StartupClass.smethod_37(WardenCheckStatus.const_1);
         return num4;
@@ -570,8 +570,8 @@ public class GProcessMemoryManipulator
 
     public static int smethod_34()
     {
-        var int_29 = smethod_11(MemoryOffsetTable.gclass18_0.method_4("GameTimeType"), "gt1");
-        var num1 = smethod_11(int_29 + MemoryOffsetTable.gclass18_0.method_4("GameTimeTypeF1"), "gt2");
+        var int_29 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("GameTimeType"), "gt1");
+        var num1 = smethod_11(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF1"), "gt2");
         long long_0 = 0;
         if (num1 >= 2)
         {
@@ -583,7 +583,7 @@ public class GProcessMemoryManipulator
         }
 
         var num3 = smethod_14(int_29, "gt0");
-        var num4 = smethod_14(int_29 + MemoryOffsetTable.gclass18_0.method_4("GameTimeTypeF2"), "gt3");
+        var num4 = smethod_14(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF2"), "gt3");
         return (int)(long_0 * num3 + num4);
     }
 
@@ -774,7 +774,7 @@ public class GProcessMemoryManipulator
         var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         if (numArray.Length == 0)
             return false;
-        var num1 = smethod_11(MemoryOffsetTable.gclass18_0.method_4("TLSSlot"), "TLSSlot");
+        var num1 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("TLSSlot"), "TLSSlot");
         foreach (var uint_24 in numArray)
         {
             var intptr_2 = OpenThread(64U, false, uint_24);
@@ -789,8 +789,8 @@ public class GProcessMemoryManipulator
                 if (num3 == 0)
                 {
                     var num4 = smethod_11(smethod_11(structure.int_1 + 44, "TLSOffset") + 4 * num1, "TargetTLSSlot");
-                    var num5 = smethod_12(num4 + MemoryOffsetTable.gclass18_0.method_4("TLSPlayerID"), "TLSPlayerID");
-                    var num6 = smethod_11(num4 + MemoryOffsetTable.gclass18_0.method_4("TLSMainTable"), "TLSMainTable");
+                    var num5 = smethod_12(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSPlayerID"), "TLSPlayerID");
+                    var num6 = smethod_11(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSMainTable"), "TLSMainTable");
                     if (num5 > 0L)
                     {
                         long_0 = num5;
