@@ -98,14 +98,14 @@ public class FactionReminder : Form
     private void MyYesButton_Click(object sender, EventArgs e)
     {
         if (DontRemindMe.Checked)
-            GClass61.gclass61_0.method_0("RemindFaction", "No");
+            ConfigManager.gclass61_0.method_0("RemindFaction", "No");
         DialogResult = DialogResult.Yes;
     }
 
     private void MyNoButton_Click(object sender, EventArgs e)
     {
         if (DontRemindMe.Checked)
-            GClass61.gclass61_0.method_0("RemindFaction", "No");
+            ConfigManager.gclass61_0.method_0("RemindFaction", "No");
         DialogResult = DialogResult.No;
     }
 

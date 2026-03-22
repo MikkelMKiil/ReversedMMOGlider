@@ -21,7 +21,7 @@ namespace Glider.Common.Objects
             string DebugClue)
         {
             var int_31 = 0;
-            if (!GClass61.gclass61_0.method_5("AllowWriteBytes"))
+            if (!ConfigManager.gclass61_0.method_5("AllowWriteBytes"))
             {
                 GContext.Main.Log("! WriteBytes to 0x" + StartAddress.ToString("x") +
                                   " failed, operation prohibited by configuration (clue = " + DebugClue + ")");

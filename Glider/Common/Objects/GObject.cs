@@ -93,7 +93,7 @@ namespace Glider.Common.Objects
         public float DistanceToSelf => GContext.Main.Me != null ? GContext.Main.Me.GetDistanceTo(this) : 0.0f;
 
         public bool IsCursorOnObject =>
-            GProcessMemoryManipulator.smethod_12(GClass18.gclass18_0.method_4("UnderCursor"), "UnderCursor") == GUID;
+            GProcessMemoryManipulator.smethod_12(MemoryOffsetTable.gclass18_0.method_4("UnderCursor"), "UnderCursor") == GUID;
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
@@ -142,7 +142,7 @@ namespace Glider.Common.Objects
             {
                 LoadFields();
             }
-            catch (GException1 ex)
+            catch (MemoryReadException ex)
             {
                 Cull();
                 Logger.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
@@ -190,17 +190,17 @@ namespace Glider.Common.Objects
 
         protected int GetBaseInt(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_21(BaseAddress + GClass18.gclass18_0.method_4(OffsetName), "ReadBI." + OffsetName);
+            return GProcessMemoryManipulator.smethod_21(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBI." + OffsetName);
         }
 
         protected long GetBaseLong(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_24(BaseAddress + GClass18.gclass18_0.method_4(OffsetName), "ReadBL." + OffsetName);
+            return GProcessMemoryManipulator.smethod_24(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBL." + OffsetName);
         }
 
         protected float GetBaseFloat(string OffsetName)
         {
-            return GProcessMemoryManipulator.smethod_22(BaseAddress + GClass18.gclass18_0.method_4(OffsetName), "ReadBF." + OffsetName);
+            return GProcessMemoryManipulator.smethod_22(BaseAddress + MemoryOffsetTable.gclass18_0.method_4(OffsetName), "ReadBF." + OffsetName);
         }
 
         protected void SetType(GObjectType Type)
@@ -244,16 +244,16 @@ namespace Glider.Common.Objects
 
         public bool Hover()
         {
-            PawSpeedMS = GClass61.gclass61_0.method_3("PawSpeed");
+            PawSpeedMS = ConfigManager.gclass61_0.method_3("PawSpeed");
             StartupClass.gclass68_0.method_3(true);
             if (StartupClass.IsGliderInitialized)
-                GClass55.smethod_18(GClass55.double_0, GClass55.double_1);
+                InputController.smethod_18(InputController.double_0, InputController.double_1);
             if ((IsCursorOnObject && !StartupClass.IsGliderInitialized) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
                 TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
                 return true;
             foreach (var glocation in StartupClass.gclass33_0.list_0)
             {
-                GClass55.smethod_18(glocation.X, glocation.Y);
+                InputController.smethod_18(glocation.X, glocation.Y);
                 Thread.Sleep(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
@@ -276,7 +276,7 @@ namespace Glider.Common.Objects
         {
             if (!Hover())
                 return false;
-            GClass55.smethod_23(true);
+            InputController.smethod_23(true);
             Thread.Sleep(371);
             return true;
         }
@@ -285,7 +285,7 @@ namespace Glider.Common.Objects
         {
             if (!Hover())
                 return false;
-            GClass55.smethod_23(false);
+            InputController.smethod_23(false);
             Thread.Sleep(271);
             return true;
         }
@@ -294,9 +294,9 @@ namespace Glider.Common.Objects
         {
             double double_1;
             double double_2;
-            if (GClass6.smethod_0(Location, ZAdjust, out double_1, out double_2))
+            if (WorldToScreenProjector.smethod_0(Location, ZAdjust, out double_1, out double_2))
             {
-                GClass55.smethod_18(double_1, double_2);
+                InputController.smethod_18(double_1, double_2);
                 Thread.Sleep(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
@@ -304,7 +304,7 @@ namespace Glider.Common.Objects
                 for (var num1 = -0.02; num1 <= 0.02; num1 += 0.01)
                 for (var num2 = -0.02; num2 <= 0.02; num2 += 0.01)
                 {
-                    GClass55.smethod_18(double_1 + num1, double_2 + num2);
+                    InputController.smethod_18(double_1 + num1, double_2 + num2);
                     Thread.Sleep(PawSpeedMS);
                     if (IsCursorOnObject)
                         return true;

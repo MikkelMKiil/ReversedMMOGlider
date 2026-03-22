@@ -283,11 +283,11 @@ public class ConfigForm : Form
         {
             var key = StartupClass.ProfileMapping.Keys[index];
             var profile = StartupClass.ProfileMapping[key];
-            if (profile.genum1_0 == GEnum1.const_1 &&
+            if (profile.genum1_0 == SpellEnabledState.const_1 &&
                 (profile.object_0 == null || ((GGameClass)profile.object_0).IsSelectable))
             {
                 ClassList.Items.Add(profile);
-                if (key == GClass61.gclass61_0.method_2("CustomClassName"))
+                if (key == ConfigManager.gclass61_0.method_2("CustomClassName"))
                     ClassList.SelectedIndex = ClassList.Items.Count - 1;
             }
         }
@@ -298,80 +298,80 @@ public class ConfigForm : Form
         AllowWW.Enabled = true;
         if (bool_4)
             tabControl1.Controls.Add(TabInvisible);
-        ChatLogFrame.Text = GClass61.gclass61_0.method_2(nameof(ChatLogFrame));
-        CombatLogFrame.Text = GClass61.gclass61_0.method_2(nameof(CombatLogFrame));
-        WebNotifyEnabled.Checked = GClass61.gclass61_0.method_2(nameof(WebNotifyEnabled)) == "True";
-        WebNotifyCredentials.Text = GClass61.gclass61_0.method_2(nameof(WebNotifyCredentials));
-        WebNotifyURL.Text = GClass61.gclass61_0.method_2(nameof(WebNotifyURL));
-        UseTray.Checked = GClass61.gclass61_0.method_2(nameof(UseTray)) == "True";
-        BackgroundEnable.Checked = GClass61.gclass61_0.method_2(nameof(BackgroundEnable)) == "True";
+        ChatLogFrame.Text = ConfigManager.gclass61_0.method_2(nameof(ChatLogFrame));
+        CombatLogFrame.Text = ConfigManager.gclass61_0.method_2(nameof(CombatLogFrame));
+        WebNotifyEnabled.Checked = ConfigManager.gclass61_0.method_2(nameof(WebNotifyEnabled)) == "True";
+        WebNotifyCredentials.Text = ConfigManager.gclass61_0.method_2(nameof(WebNotifyCredentials));
+        WebNotifyURL.Text = ConfigManager.gclass61_0.method_2(nameof(WebNotifyURL));
+        UseTray.Checked = ConfigManager.gclass61_0.method_2(nameof(UseTray)) == "True";
+        BackgroundEnable.Checked = ConfigManager.gclass61_0.method_2(nameof(BackgroundEnable)) == "True";
         BackgroundEnable.Enabled = StartupClass.GliderManager != null;
-        ShiftLoot.Checked = GClass61.gclass61_0.method_2(nameof(ShiftLoot)) == "True";
-        UseHook.Checked = GClass61.gclass61_0.method_2(nameof(UseHook)) == "True";
-        MouseSpin.Checked = GClass61.gclass61_0.method_2(nameof(MouseSpin)) == "True";
-        ManageGamePos.Checked = GClass61.gclass61_0.method_2(nameof(ManageGamePos)) == "True";
-        MediaKeysBox.Checked = GClass61.gclass61_0.method_2("UseMediaKeys") == "True";
-        AutoSkin.Checked = GClass61.gclass61_0.method_2(nameof(AutoSkin)) == "True";
-        NinjaSkin.Checked = GClass61.gclass61_0.method_2(nameof(NinjaSkin)) == "True";
-        WalkLoot.Checked = GClass61.gclass61_0.method_2(nameof(WalkLoot)) == "True";
-        ProductKeyBox.Text = GClass61.gclass61_0.method_2("AppKey");
-        SpellLeadDelay.Text = GClass61.gclass61_0.method_2(nameof(SpellLeadDelay));
-        ExtraPull.Text = GClass61.gclass61_0.method_2(nameof(ExtraPull));
-        ResetBuffs.Checked = GClass61.gclass61_0.method_2(nameof(ResetBuffs)) == "True";
-        Resurrect.Checked = GClass61.gclass61_0.method_2(nameof(Resurrect)) == "True";
-        AltLayout.Checked = GClass61.gclass61_0.method_2(nameof(AltLayout)) == "True";
-        MaxResurrect.Text = GClass61.gclass61_0.method_2(nameof(MaxResurrect));
-        StopLootingWhenFull.Checked = GClass61.gclass61_0.method_5(nameof(StopLootingWhenFull));
-        TurboLoot.Checked = GClass61.gclass61_0.method_5(nameof(TurboLoot));
-        StopWhenFull.Checked = GClass61.gclass61_0.method_5(nameof(StopWhenFull));
-        AllowNetCheck.Checked = GClass61.gclass61_0.method_5(nameof(AllowNetCheck));
-        if (GClass61.gclass61_0.method_2("AutoStop") == "True")
+        ShiftLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(ShiftLoot)) == "True";
+        UseHook.Checked = ConfigManager.gclass61_0.method_2(nameof(UseHook)) == "True";
+        MouseSpin.Checked = ConfigManager.gclass61_0.method_2(nameof(MouseSpin)) == "True";
+        ManageGamePos.Checked = ConfigManager.gclass61_0.method_2(nameof(ManageGamePos)) == "True";
+        MediaKeysBox.Checked = ConfigManager.gclass61_0.method_2("UseMediaKeys") == "True";
+        AutoSkin.Checked = ConfigManager.gclass61_0.method_2(nameof(AutoSkin)) == "True";
+        NinjaSkin.Checked = ConfigManager.gclass61_0.method_2(nameof(NinjaSkin)) == "True";
+        WalkLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(WalkLoot)) == "True";
+        ProductKeyBox.Text = ConfigManager.gclass61_0.method_2("AppKey");
+        SpellLeadDelay.Text = ConfigManager.gclass61_0.method_2(nameof(SpellLeadDelay));
+        ExtraPull.Text = ConfigManager.gclass61_0.method_2(nameof(ExtraPull));
+        ResetBuffs.Checked = ConfigManager.gclass61_0.method_2(nameof(ResetBuffs)) == "True";
+        Resurrect.Checked = ConfigManager.gclass61_0.method_2(nameof(Resurrect)) == "True";
+        AltLayout.Checked = ConfigManager.gclass61_0.method_2(nameof(AltLayout)) == "True";
+        MaxResurrect.Text = ConfigManager.gclass61_0.method_2(nameof(MaxResurrect));
+        StopLootingWhenFull.Checked = ConfigManager.gclass61_0.method_5(nameof(StopLootingWhenFull));
+        TurboLoot.Checked = ConfigManager.gclass61_0.method_5(nameof(TurboLoot));
+        StopWhenFull.Checked = ConfigManager.gclass61_0.method_5(nameof(StopWhenFull));
+        AllowNetCheck.Checked = ConfigManager.gclass61_0.method_5(nameof(AllowNetCheck));
+        if (ConfigManager.gclass61_0.method_2("AutoStop") == "True")
             StopAfter.Checked = true;
-        StopAfterMinutes.Text = GClass61.gclass61_0.method_2("AutoStopMinutes");
+        StopAfterMinutes.Text = ConfigManager.gclass61_0.method_2("AutoStopMinutes");
         StopAfter_CheckedChanged(null, null);
-        RestHealth.Text = GClass61.gclass61_0.method_2(nameof(RestHealth));
-        RestMana.Text = GClass61.gclass61_0.method_2(nameof(RestMana));
-        ChatDelete.Checked = GClass61.gclass61_0.method_2(nameof(ChatDelete)) == "True";
-        PlayWhisper.Checked = GClass61.gclass61_0.method_2("ChatWhisper") == "True";
-        PlaySay.Checked = GClass61.gclass61_0.method_2(nameof(PlaySay)) == "True";
-        SoundKill.Checked = GClass61.gclass61_0.method_2(nameof(SoundKill)) == "True";
-        AutoReply.Checked = GClass61.gclass61_0.method_2("ChatAutoReply") == "True";
-        AutoReplyText.Text = GClass61.gclass61_0.method_2("ChatAutoReplyText");
-        RemoveDebuffs.Checked = GClass61.gclass61_0.method_5(nameof(RemoveDebuffs));
-        UseClipboard.Checked = GClass61.gclass61_0.method_2(nameof(UseClipboard)) == "True";
-        KeyDelay.Text = GClass61.gclass61_0.method_2(nameof(KeyDelay));
-        PawSpeed.Text = GClass61.gclass61_0.method_2(nameof(PawSpeed));
-        FastEat.Checked = GClass61.gclass61_0.method_2(nameof(FastEat)) == "True";
-        UseBandages.Checked = GClass61.gclass61_0.method_2(nameof(UseBandages)) == "True";
-        SitWhenBored.Checked = GClass61.gclass61_0.method_2(nameof(SitWhenBored)) == "True";
-        BandageHealth.Text = GClass61.gclass61_0.method_2(nameof(BandageHealth));
-        JumpMore.Checked = GClass61.gclass61_0.method_2(nameof(JumpMore)) == "True";
-        Strafe.Checked = GClass61.gclass61_0.method_2(nameof(Strafe)) == "True";
-        AllowWW.Checked = GClass61.gclass61_0.method_5(nameof(AllowWW));
-        SkipLoot.Checked = GClass61.gclass61_0.method_2(nameof(SkipLoot)) == "True";
-        HarvestRange.Text = GClass61.gclass61_0.method_2(nameof(HarvestRange));
-        PickupJunk.Checked = GClass61.gclass61_0.method_2(nameof(PickupJunk)) == "True";
-        AllowAutoSecCheck.Checked = GClass61.gclass61_0.method_2(nameof(AllowAutoSecCheck)) == "True";
-        TeleportStop.Checked = GClass61.gclass61_0.method_2(nameof(TeleportStop)) == "True";
-        TeleportLogout.Checked = GClass61.gclass61_0.method_2(nameof(TeleportLogout)) == "True";
-        FoodAmount.Text = GClass61.gclass61_0.method_2(nameof(FoodAmount));
-        AmmoAmount.Text = GClass61.gclass61_0.method_2(nameof(AmmoAmount));
-        WaterAmount.Text = GClass61.gclass61_0.method_2(nameof(WaterAmount));
-        FriendAlert.Text = GClass61.gclass61_0.method_2(nameof(FriendAlert));
-        FriendLogout.Text = GClass61.gclass61_0.method_2(nameof(FriendLogout));
-        MaxPopups.Text = GClass61.gclass61_0.method_2(nameof(MaxPopups));
-        AvoidSameFaction.Checked = GClass61.gclass61_0.method_2(nameof(AvoidSameFaction)) == "True";
-        AvoidOtherFaction.Checked = GClass61.gclass61_0.method_2(nameof(AvoidOtherFaction)) == "True";
-        LootSafeDistance.Text = GClass61.gclass61_0.method_2("LootCheckDistance");
-        LootCheckHostiles.Checked = GClass61.gclass61_0.method_5(nameof(LootCheckHostiles));
-        MeleeDistance.Text = GClass61.gclass61_0.method_2(nameof(MeleeDistance));
-        RangedDistance.Text = GClass61.gclass61_0.method_2(nameof(RangedDistance));
-        StopOnVanish.Checked = GClass61.gclass61_0.method_5(nameof(StopOnVanish));
-        FightPlayers.Checked = GClass61.gclass61_0.method_5(nameof(FightPlayers));
-        PartyAdds.Checked = GClass61.gclass61_0.method_2(nameof(PartyAdds)) == "True";
-        PartyBuff.Checked = GClass61.gclass61_0.method_2(nameof(PartyBuff)) == "True";
-        PartySlashFollow.Checked = GClass61.gclass61_0.method_2(nameof(PartySlashFollow)) == "True";
-        switch (GClass61.gclass61_0.method_2("PartyMode"))
+        RestHealth.Text = ConfigManager.gclass61_0.method_2(nameof(RestHealth));
+        RestMana.Text = ConfigManager.gclass61_0.method_2(nameof(RestMana));
+        ChatDelete.Checked = ConfigManager.gclass61_0.method_2(nameof(ChatDelete)) == "True";
+        PlayWhisper.Checked = ConfigManager.gclass61_0.method_2("ChatWhisper") == "True";
+        PlaySay.Checked = ConfigManager.gclass61_0.method_2(nameof(PlaySay)) == "True";
+        SoundKill.Checked = ConfigManager.gclass61_0.method_2(nameof(SoundKill)) == "True";
+        AutoReply.Checked = ConfigManager.gclass61_0.method_2("ChatAutoReply") == "True";
+        AutoReplyText.Text = ConfigManager.gclass61_0.method_2("ChatAutoReplyText");
+        RemoveDebuffs.Checked = ConfigManager.gclass61_0.method_5(nameof(RemoveDebuffs));
+        UseClipboard.Checked = ConfigManager.gclass61_0.method_2(nameof(UseClipboard)) == "True";
+        KeyDelay.Text = ConfigManager.gclass61_0.method_2(nameof(KeyDelay));
+        PawSpeed.Text = ConfigManager.gclass61_0.method_2(nameof(PawSpeed));
+        FastEat.Checked = ConfigManager.gclass61_0.method_2(nameof(FastEat)) == "True";
+        UseBandages.Checked = ConfigManager.gclass61_0.method_2(nameof(UseBandages)) == "True";
+        SitWhenBored.Checked = ConfigManager.gclass61_0.method_2(nameof(SitWhenBored)) == "True";
+        BandageHealth.Text = ConfigManager.gclass61_0.method_2(nameof(BandageHealth));
+        JumpMore.Checked = ConfigManager.gclass61_0.method_2(nameof(JumpMore)) == "True";
+        Strafe.Checked = ConfigManager.gclass61_0.method_2(nameof(Strafe)) == "True";
+        AllowWW.Checked = ConfigManager.gclass61_0.method_5(nameof(AllowWW));
+        SkipLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(SkipLoot)) == "True";
+        HarvestRange.Text = ConfigManager.gclass61_0.method_2(nameof(HarvestRange));
+        PickupJunk.Checked = ConfigManager.gclass61_0.method_2(nameof(PickupJunk)) == "True";
+        AllowAutoSecCheck.Checked = ConfigManager.gclass61_0.method_2(nameof(AllowAutoSecCheck)) == "True";
+        TeleportStop.Checked = ConfigManager.gclass61_0.method_2(nameof(TeleportStop)) == "True";
+        TeleportLogout.Checked = ConfigManager.gclass61_0.method_2(nameof(TeleportLogout)) == "True";
+        FoodAmount.Text = ConfigManager.gclass61_0.method_2(nameof(FoodAmount));
+        AmmoAmount.Text = ConfigManager.gclass61_0.method_2(nameof(AmmoAmount));
+        WaterAmount.Text = ConfigManager.gclass61_0.method_2(nameof(WaterAmount));
+        FriendAlert.Text = ConfigManager.gclass61_0.method_2(nameof(FriendAlert));
+        FriendLogout.Text = ConfigManager.gclass61_0.method_2(nameof(FriendLogout));
+        MaxPopups.Text = ConfigManager.gclass61_0.method_2(nameof(MaxPopups));
+        AvoidSameFaction.Checked = ConfigManager.gclass61_0.method_2(nameof(AvoidSameFaction)) == "True";
+        AvoidOtherFaction.Checked = ConfigManager.gclass61_0.method_2(nameof(AvoidOtherFaction)) == "True";
+        LootSafeDistance.Text = ConfigManager.gclass61_0.method_2("LootCheckDistance");
+        LootCheckHostiles.Checked = ConfigManager.gclass61_0.method_5(nameof(LootCheckHostiles));
+        MeleeDistance.Text = ConfigManager.gclass61_0.method_2(nameof(MeleeDistance));
+        RangedDistance.Text = ConfigManager.gclass61_0.method_2(nameof(RangedDistance));
+        StopOnVanish.Checked = ConfigManager.gclass61_0.method_5(nameof(StopOnVanish));
+        FightPlayers.Checked = ConfigManager.gclass61_0.method_5(nameof(FightPlayers));
+        PartyAdds.Checked = ConfigManager.gclass61_0.method_2(nameof(PartyAdds)) == "True";
+        PartyBuff.Checked = ConfigManager.gclass61_0.method_2(nameof(PartyBuff)) == "True";
+        PartySlashFollow.Checked = ConfigManager.gclass61_0.method_2(nameof(PartySlashFollow)) == "True";
+        switch (ConfigManager.gclass61_0.method_2("PartyMode"))
         {
             case "Solo":
                 PartySolo.Checked = true;
@@ -384,7 +384,7 @@ public class ConfigForm : Form
                 break;
         }
 
-        switch (GClass61.gclass61_0.method_2(nameof(PartyHealMode)))
+        switch (ConfigManager.gclass61_0.method_2(nameof(PartyHealMode)))
         {
             case "Dedicated":
                 PartyHealMode.SelectedIndex = 0;
@@ -397,38 +397,38 @@ public class ConfigForm : Form
                 break;
         }
 
-        PartyLooters.Text = GClass61.gclass61_0.method_2(nameof(PartyLooters));
-        PartyLootPos.Text = GClass61.gclass61_0.method_2(nameof(PartyLootPos));
-        PartyMember1.Text = GClass61.gclass61_0.method_2(nameof(PartyMember1));
-        PartyMember2.Text = GClass61.gclass61_0.method_2(nameof(PartyMember2));
-        PartyMember3.Text = GClass61.gclass61_0.method_2(nameof(PartyMember3));
-        PartyMember4.Text = GClass61.gclass61_0.method_2(nameof(PartyMember4));
-        PartyLeaderName.Text = GClass61.gclass61_0.method_2(nameof(PartyLeaderName));
-        PartyAttackDelay.Text = GClass61.gclass61_0.method_2(nameof(PartyAttackDelay));
-        PartyLeaderWait.Text = GClass61.gclass61_0.method_2(nameof(PartyLeaderWait));
-        PartyFollowerStart.Text = GClass61.gclass61_0.method_2(nameof(PartyFollowerStart));
-        PartyFollowerStop.Text = GClass61.gclass61_0.method_2(nameof(PartyFollowerStop));
+        PartyLooters.Text = ConfigManager.gclass61_0.method_2(nameof(PartyLooters));
+        PartyLootPos.Text = ConfigManager.gclass61_0.method_2(nameof(PartyLootPos));
+        PartyMember1.Text = ConfigManager.gclass61_0.method_2(nameof(PartyMember1));
+        PartyMember2.Text = ConfigManager.gclass61_0.method_2(nameof(PartyMember2));
+        PartyMember3.Text = ConfigManager.gclass61_0.method_2(nameof(PartyMember3));
+        PartyMember4.Text = ConfigManager.gclass61_0.method_2(nameof(PartyMember4));
+        PartyLeaderName.Text = ConfigManager.gclass61_0.method_2(nameof(PartyLeaderName));
+        PartyAttackDelay.Text = ConfigManager.gclass61_0.method_2(nameof(PartyAttackDelay));
+        PartyLeaderWait.Text = ConfigManager.gclass61_0.method_2(nameof(PartyLeaderWait));
+        PartyFollowerStart.Text = ConfigManager.gclass61_0.method_2(nameof(PartyFollowerStart));
+        PartyFollowerStop.Text = ConfigManager.gclass61_0.method_2(nameof(PartyFollowerStop));
         bool_0 = false;
-        ListenEnabled.Checked = GClass61.gclass61_0.method_5(nameof(ListenEnabled));
-        ListenPort.Text = GClass61.gclass61_0.method_2(nameof(ListenPort));
-        ListenPassword.Text = GClass61.gclass61_0.method_2(nameof(ListenPassword));
-        BypassLootSanity.Checked = GClass61.gclass61_0.method_5(nameof(BypassLootSanity));
-        RelogEnabled.Checked = GClass61.gclass61_0.method_5(nameof(RelogEnabled));
-        StrafeObstacles.Checked = GClass61.gclass61_0.method_2(nameof(StrafeObstacles)) == "True";
+        ListenEnabled.Checked = ConfigManager.gclass61_0.method_5(nameof(ListenEnabled));
+        ListenPort.Text = ConfigManager.gclass61_0.method_2(nameof(ListenPort));
+        ListenPassword.Text = ConfigManager.gclass61_0.method_2(nameof(ListenPassword));
+        BypassLootSanity.Checked = ConfigManager.gclass61_0.method_5(nameof(BypassLootSanity));
+        RelogEnabled.Checked = ConfigManager.gclass61_0.method_5(nameof(RelogEnabled));
+        StrafeObstacles.Checked = ConfigManager.gclass61_0.method_2(nameof(StrafeObstacles)) == "True";
         MessageProvider.smethod_3(this, "Config");
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
         GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
         WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
         DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
-        if (GClass61.gclass61_0.method_2("LastProfile") != null)
-            InitialProfile.Text = GClass61.gclass61_0.method_2("LastProfile");
+        if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
+            InitialProfile.Text = ConfigManager.gclass61_0.method_2("LastProfile");
         else
             InitialProfile.Text = MessageProvider.GetMessage(771);
         method_0(nameof(Profile1), Profile1);
         method_0(nameof(Profile2), Profile2);
         method_0(nameof(Profile3), Profile3);
-        switch (GClass61.gclass61_0.method_2("BackgroundDisplay"))
+        switch (ConfigManager.gclass61_0.method_2("BackgroundDisplay"))
         {
             case "Normal":
                 DisplayNormal.Checked = true;
@@ -441,7 +441,7 @@ public class ConfigForm : Form
                 break;
         }
 
-        switch (GClass61.gclass61_0.method_2("VendType"))
+        switch (ConfigManager.gclass61_0.method_2("VendType"))
         {
             case "Poor":
                 VendGrey.Checked = true;
@@ -454,14 +454,14 @@ public class ConfigForm : Form
                 break;
         }
 
-        if (GClass61.gclass61_0.method_2(nameof(VendWhiteList)) != null)
-            VendWhiteList.Text = GClass61.gclass61_0.method_2(nameof(VendWhiteList)).Replace(",", Environment.NewLine);
-        if (GClass61.gclass61_0.method_2(nameof(VendMailList)) != null)
-            VendMailList.Text = GClass61.gclass61_0.method_2(nameof(VendMailList)).Replace(",", Environment.NewLine);
-        MailToText.Text = GClass61.gclass61_0.method_2(nameof(MailToText));
-        SubjectText.Text = GClass61.gclass61_0.method_2(nameof(SubjectText));
-        SendMail.Checked = GClass61.gclass61_0.method_2(nameof(SendMail)) == "True";
-        if (GClass61.gclass61_0.method_5(nameof(GliderDebug)))
+        if (ConfigManager.gclass61_0.method_2(nameof(VendWhiteList)) != null)
+            VendWhiteList.Text = ConfigManager.gclass61_0.method_2(nameof(VendWhiteList)).Replace(",", Environment.NewLine);
+        if (ConfigManager.gclass61_0.method_2(nameof(VendMailList)) != null)
+            VendMailList.Text = ConfigManager.gclass61_0.method_2(nameof(VendMailList)).Replace(",", Environment.NewLine);
+        MailToText.Text = ConfigManager.gclass61_0.method_2(nameof(MailToText));
+        SubjectText.Text = ConfigManager.gclass61_0.method_2(nameof(SubjectText));
+        SendMail.Checked = ConfigManager.gclass61_0.method_2(nameof(SendMail)) == "True";
+        if (ConfigManager.gclass61_0.method_5(nameof(GliderDebug)))
             Logger.LogMessage("Glider debug mode enabled");
         method_11();
         method_16();
@@ -475,7 +475,7 @@ public class ConfigForm : Form
 
     private void method_0(string string_0, Label label_0)
     {
-        var str = GClass61.gclass61_0.method_2(string_0);
+        var str = ConfigManager.gclass61_0.method_2(string_0);
         if (str == null)
             label_0.Text = MessageProvider.GetMessage(771);
         else
@@ -2877,165 +2877,165 @@ public class ConfigForm : Form
                 "Process Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        var selectedItem = (GClass22)ClassList.SelectedItem;
-        GClass61.gclass61_0.method_0("CustomClassName", selectedItem.string_1);
-        GClass61.gclass61_0.method_0("AllowNetCheck", AllowNetCheck.Checked.ToString());
-        GClass61.gclass61_0.method_0("AllowWW", AllowWW.Checked.ToString());
-        GClass61.gclass61_0.method_0("ManageGamePos", ManageGamePos.Checked.ToString());
-        GClass61.gclass61_0.method_0("UseMediaKeys", MediaKeysBox.Checked.ToString());
-        GClass61.gclass61_0.method_0("AutoSkin", AutoSkin.Checked.ToString());
-        GClass61.gclass61_0.method_0("NinjaSkin", NinjaSkin.Checked.ToString());
-        GClass61.gclass61_0.method_0("WalkLoot", WalkLoot.Checked.ToString());
-        GClass61.gclass61_0.method_0("ResetBuffs", ResetBuffs.Checked.ToString());
-        GClass61.gclass61_0.method_0("Resurrect", Resurrect.Checked.ToString());
-        GClass61.gclass61_0.method_0("AltLayout", AltLayout.Checked.ToString());
-        GClass61.gclass61_0.method_0("ChatDelete", ChatDelete.Checked.ToString());
-        GClass61.gclass61_0.method_0("ChatWhisper", PlayWhisper.Checked.ToString());
-        GClass61.gclass61_0.method_0("PlaySay", PlaySay.Checked.ToString());
-        GClass61.gclass61_0.method_0("SoundKill", SoundKill.Checked.ToString());
-        GClass61.gclass61_0.method_0("ChatAutoReply", AutoReply.Checked.ToString());
-        GClass61.gclass61_0.method_0("ChatAutoReplyText", AutoReplyText.Text.Trim());
-        GClass61.gclass61_0.method_0("RemoveDebuffs", RemoveDebuffs.Checked.ToString());
-        GClass61.gclass61_0.method_0("AppKey", ProductKeyBox.Text);
-        GClass61.gclass61_0.method_0("UseClipboard", UseClipboard.Checked.ToString());
-        GClass61.gclass61_0.method_0("SkipLoot", SkipLoot.Checked.ToString());
-        GClass61.gclass61_0.method_0("TeleportStop", TeleportStop.Checked.ToString());
-        GClass61.gclass61_0.method_0("TeleportLogout", TeleportLogout.Checked.ToString());
-        GClass61.gclass61_0.method_0("UseBandages", UseBandages.Checked.ToString());
-        GClass61.gclass61_0.method_0("JumpMore", JumpMore.Checked.ToString());
-        GClass61.gclass61_0.method_0("Strafe", Strafe.Checked.ToString());
-        GClass61.gclass61_0.method_0("FastEat", FastEat.Checked.ToString());
-        GClass61.gclass61_0.method_0("SitWhenBored", SitWhenBored.Checked.ToString());
-        GClass61.gclass61_0.method_0("PickupJunk", PickupJunk.Checked.ToString());
-        GClass61.gclass61_0.method_0("AllowAutoSecCheck", AllowAutoSecCheck.Checked.ToString());
-        GClass61.gclass61_0.method_0("FightPlayers", FightPlayers.Checked.ToString());
-        GClass61.gclass61_0.method_0("StopOnVanish", StopOnVanish.Checked.ToString());
-        GClass61.gclass61_0.method_0("StopLootingWhenFull", StopLootingWhenFull.Checked.ToString());
-        GClass61.gclass61_0.method_0("StopWhenFull", StopWhenFull.Checked.ToString());
-        GClass61.gclass61_0.method_0("UseHook", UseHook.Checked.ToString());
-        GClass61.gclass61_0.method_0("MouseSpin", MouseSpin.Checked.ToString());
-        GClass61.gclass61_0.method_0("ShiftLoot", ShiftLoot.Checked.ToString());
-        GClass61.gclass61_0.method_0("BackgroundEnable", BackgroundEnable.Checked.ToString());
-        GClass61.gclass61_0.method_0("UseTray", UseTray.Checked.ToString());
-        GClass61.gclass61_0.method_0("TurboLoot", TurboLoot.Checked.ToString());
-        GClass61.gclass61_0.method_0("WebNotifyEnabled", WebNotifyEnabled.Checked.ToString());
-        GClass61.gclass61_0.method_0("WebNotifyURL", WebNotifyURL.Text);
-        GClass61.gclass61_0.method_0("WebNotifyCredentials", WebNotifyCredentials.Text);
+        var selectedItem = (SpellActionData)ClassList.SelectedItem;
+        ConfigManager.gclass61_0.method_0("CustomClassName", selectedItem.string_1);
+        ConfigManager.gclass61_0.method_0("AllowNetCheck", AllowNetCheck.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AllowWW", AllowWW.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ManageGamePos", ManageGamePos.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("UseMediaKeys", MediaKeysBox.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AutoSkin", AutoSkin.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("NinjaSkin", NinjaSkin.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("WalkLoot", WalkLoot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ResetBuffs", ResetBuffs.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Resurrect", Resurrect.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AltLayout", AltLayout.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ChatDelete", ChatDelete.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ChatWhisper", PlayWhisper.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("PlaySay", PlaySay.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("SoundKill", SoundKill.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ChatAutoReply", AutoReply.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ChatAutoReplyText", AutoReplyText.Text.Trim());
+        ConfigManager.gclass61_0.method_0("RemoveDebuffs", RemoveDebuffs.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AppKey", ProductKeyBox.Text);
+        ConfigManager.gclass61_0.method_0("UseClipboard", UseClipboard.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("SkipLoot", SkipLoot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("TeleportStop", TeleportStop.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("TeleportLogout", TeleportLogout.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("UseBandages", UseBandages.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("JumpMore", JumpMore.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Strafe", Strafe.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("FastEat", FastEat.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("SitWhenBored", SitWhenBored.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("PickupJunk", PickupJunk.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AllowAutoSecCheck", AllowAutoSecCheck.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("FightPlayers", FightPlayers.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("StopOnVanish", StopOnVanish.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("StopLootingWhenFull", StopLootingWhenFull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("StopWhenFull", StopWhenFull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("UseHook", UseHook.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("MouseSpin", MouseSpin.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ShiftLoot", ShiftLoot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("BackgroundEnable", BackgroundEnable.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("UseTray", UseTray.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("TurboLoot", TurboLoot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("WebNotifyEnabled", WebNotifyEnabled.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("WebNotifyURL", WebNotifyURL.Text);
+        ConfigManager.gclass61_0.method_0("WebNotifyCredentials", WebNotifyCredentials.Text);
         if (AutoLogCharacter.SelectedIndex == 0)
-            GClass61.gclass61_0.method_0("AutoLog", "");
+            ConfigManager.gclass61_0.method_0("AutoLog", "");
         else
-            GClass61.gclass61_0.method_0("AutoLog", AutoLogCharacter.Items[AutoLogCharacter.SelectedIndex].ToString());
+            ConfigManager.gclass61_0.method_0("AutoLog", AutoLogCharacter.Items[AutoLogCharacter.SelectedIndex].ToString());
         if (StopAfter.Checked)
-            GClass61.gclass61_0.method_0("AutoStop", "True");
+            ConfigManager.gclass61_0.method_0("AutoStop", "True");
         else
-            GClass61.gclass61_0.method_0("AutoStop", "False");
+            ConfigManager.gclass61_0.method_0("AutoStop", "False");
         if (ProductKeyBox.Text.Trim().Length == 0)
-            GClass61.gclass61_0.method_0("AppKey", "demo");
+            ConfigManager.gclass61_0.method_0("AppKey", "demo");
         if (StartupClass.smethod_19(SpellLeadDelay.Text))
-            GClass61.gclass61_0.method_0("SpellLeadDelay", SpellLeadDelay.Text);
+            ConfigManager.gclass61_0.method_0("SpellLeadDelay", SpellLeadDelay.Text);
         if (StartupClass.smethod_19(ExtraPull.Text))
-            GClass61.gclass61_0.method_0("ExtraPull", ExtraPull.Text);
+            ConfigManager.gclass61_0.method_0("ExtraPull", ExtraPull.Text);
         if (StartupClass.smethod_19(StopAfterMinutes.Text))
-            GClass61.gclass61_0.method_0("AutoStopMinutes", StopAfterMinutes.Text);
+            ConfigManager.gclass61_0.method_0("AutoStopMinutes", StopAfterMinutes.Text);
         if (StartupClass.smethod_19(MaxResurrect.Text))
-            GClass61.gclass61_0.method_0("MaxResurrect", MaxResurrect.Text);
+            ConfigManager.gclass61_0.method_0("MaxResurrect", MaxResurrect.Text);
         if (StartupClass.smethod_19(RestHealth.Text))
-            GClass61.gclass61_0.method_0("RestHealth", RestHealth.Text);
+            ConfigManager.gclass61_0.method_0("RestHealth", RestHealth.Text);
         if (StartupClass.smethod_19(RestMana.Text))
-            GClass61.gclass61_0.method_0("RestMana", RestMana.Text);
+            ConfigManager.gclass61_0.method_0("RestMana", RestMana.Text);
         if (StartupClass.smethod_19(KeyDelay.Text))
-            GClass61.gclass61_0.method_0("KeyDelay", KeyDelay.Text);
+            ConfigManager.gclass61_0.method_0("KeyDelay", KeyDelay.Text);
         if (StartupClass.smethod_19(FoodAmount.Text))
-            GClass61.gclass61_0.method_0("FoodAmount", FoodAmount.Text);
+            ConfigManager.gclass61_0.method_0("FoodAmount", FoodAmount.Text);
         if (StartupClass.smethod_19(AmmoAmount.Text))
-            GClass61.gclass61_0.method_0("AmmoAmount", AmmoAmount.Text);
+            ConfigManager.gclass61_0.method_0("AmmoAmount", AmmoAmount.Text);
         if (StartupClass.smethod_19(WaterAmount.Text))
-            GClass61.gclass61_0.method_0("WaterAmount", WaterAmount.Text);
+            ConfigManager.gclass61_0.method_0("WaterAmount", WaterAmount.Text);
         if (StartupClass.smethod_19(PawSpeed.Text))
-            GClass61.gclass61_0.method_0("PawSpeed", PawSpeed.Text);
+            ConfigManager.gclass61_0.method_0("PawSpeed", PawSpeed.Text);
         if (StartupClass.smethod_19(HarvestRange.Text))
-            GClass61.gclass61_0.method_0("HarvestRange", HarvestRange.Text);
+            ConfigManager.gclass61_0.method_0("HarvestRange", HarvestRange.Text);
         if (StartupClass.smethod_19(BandageHealth.Text))
-            GClass61.gclass61_0.method_0("BandageHealth", BandageHealth.Text);
+            ConfigManager.gclass61_0.method_0("BandageHealth", BandageHealth.Text);
         if (method_2(FriendAlert.Text))
-            GClass61.gclass61_0.method_0("FriendAlert", FriendAlert.Text);
+            ConfigManager.gclass61_0.method_0("FriendAlert", FriendAlert.Text);
         if (StartupClass.smethod_19(FriendLogout.Text))
-            GClass61.gclass61_0.method_0("FriendLogout", FriendLogout.Text);
+            ConfigManager.gclass61_0.method_0("FriendLogout", FriendLogout.Text);
         if (StartupClass.smethod_19(MaxPopups.Text))
-            GClass61.gclass61_0.method_0("MaxPopups", MaxPopups.Text);
-        GClass61.gclass61_0.method_0("LootCheckHostiles", LootCheckHostiles.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("MaxPopups", MaxPopups.Text);
+        ConfigManager.gclass61_0.method_0("LootCheckHostiles", LootCheckHostiles.Checked.ToString());
         if (StartupClass.smethod_19(LootSafeDistance.Text))
-            GClass61.gclass61_0.method_0("LootCheckDistance", LootSafeDistance.Text);
+            ConfigManager.gclass61_0.method_0("LootCheckDistance", LootSafeDistance.Text);
         if (method_2(MeleeDistance.Text))
-            GClass61.gclass61_0.method_0("MeleeDistance", MeleeDistance.Text);
+            ConfigManager.gclass61_0.method_0("MeleeDistance", MeleeDistance.Text);
         if (method_2(RangedDistance.Text))
-            GClass61.gclass61_0.method_0("RangedDistance", RangedDistance.Text);
-        GClass61.gclass61_0.method_0("AvoidSameFaction", AvoidSameFaction.Checked.ToString());
-        GClass61.gclass61_0.method_0("AvoidOtherFaction", AvoidOtherFaction.Checked.ToString());
-        GClass61.gclass61_0.method_0("PartyAdds", PartyAdds.Checked.ToString());
-        GClass61.gclass61_0.method_0("PartyBuff", PartyBuff.Checked.ToString());
-        GClass61.gclass61_0.method_0("PartySlashFollow", PartySlashFollow.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("RangedDistance", RangedDistance.Text);
+        ConfigManager.gclass61_0.method_0("AvoidSameFaction", AvoidSameFaction.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("AvoidOtherFaction", AvoidOtherFaction.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("PartyAdds", PartyAdds.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("PartyBuff", PartyBuff.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("PartySlashFollow", PartySlashFollow.Checked.ToString());
         switch (PartyHealMode.SelectedIndex)
         {
             case 0:
-                GClass61.gclass61_0.method_0("PartyHealMode", "Dedicated");
+                ConfigManager.gclass61_0.method_0("PartyHealMode", "Dedicated");
                 break;
             case 1:
-                GClass61.gclass61_0.method_0("PartyHealMode", "Normal");
+                ConfigManager.gclass61_0.method_0("PartyHealMode", "Normal");
                 break;
             case 2:
-                GClass61.gclass61_0.method_0("PartyHealMode", "Never");
+                ConfigManager.gclass61_0.method_0("PartyHealMode", "Never");
                 break;
         }
 
         if (StartupClass.smethod_19(PartyLooters.Text))
-            GClass61.gclass61_0.method_0("PartyLooters", PartyLooters.Text);
+            ConfigManager.gclass61_0.method_0("PartyLooters", PartyLooters.Text);
         if (StartupClass.smethod_19(PartyLootPos.Text))
-            GClass61.gclass61_0.method_0("PartyLootPos", PartyLootPos.Text);
+            ConfigManager.gclass61_0.method_0("PartyLootPos", PartyLootPos.Text);
         if (StartupClass.smethod_19(PartyAttackDelay.Text))
-            GClass61.gclass61_0.method_0("PartyAttackDelay", PartyAttackDelay.Text);
+            ConfigManager.gclass61_0.method_0("PartyAttackDelay", PartyAttackDelay.Text);
         if (StartupClass.smethod_19(PartyLeaderWait.Text))
-            GClass61.gclass61_0.method_0("PartyLeaderWait", PartyLeaderWait.Text);
+            ConfigManager.gclass61_0.method_0("PartyLeaderWait", PartyLeaderWait.Text);
         if (StartupClass.smethod_19(PartyFollowerStart.Text))
-            GClass61.gclass61_0.method_0("PartyFollowerStart", PartyFollowerStart.Text);
+            ConfigManager.gclass61_0.method_0("PartyFollowerStart", PartyFollowerStart.Text);
         if (StartupClass.smethod_19(PartyFollowerStop.Text))
-            GClass61.gclass61_0.method_0("PartyFollowerStop", PartyFollowerStop.Text);
+            ConfigManager.gclass61_0.method_0("PartyFollowerStop", PartyFollowerStop.Text);
         if (PartySolo.Checked)
-            GClass61.gclass61_0.method_0("PartyMode", "Solo");
+            ConfigManager.gclass61_0.method_0("PartyMode", "Solo");
         if (PartyLeader.Checked)
-            GClass61.gclass61_0.method_0("PartyMode", "Leader");
+            ConfigManager.gclass61_0.method_0("PartyMode", "Leader");
         if (PartyFollower.Checked)
-            GClass61.gclass61_0.method_0("PartyMode", "Follower");
-        GClass61.gclass61_0.method_0("PartyLeaderName", PartyLeaderName.Text);
-        GClass61.gclass61_0.method_0("PartyMember1", PartyMember1.Text.Trim());
-        GClass61.gclass61_0.method_0("PartyMember2", PartyMember2.Text.Trim());
-        GClass61.gclass61_0.method_0("PartyMember3", PartyMember3.Text.Trim());
-        GClass61.gclass61_0.method_0("PartyMember4", PartyMember4.Text.Trim());
-        GClass61.gclass61_0.method_0("ListenEnabled", ListenEnabled.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("PartyMode", "Follower");
+        ConfigManager.gclass61_0.method_0("PartyLeaderName", PartyLeaderName.Text);
+        ConfigManager.gclass61_0.method_0("PartyMember1", PartyMember1.Text.Trim());
+        ConfigManager.gclass61_0.method_0("PartyMember2", PartyMember2.Text.Trim());
+        ConfigManager.gclass61_0.method_0("PartyMember3", PartyMember3.Text.Trim());
+        ConfigManager.gclass61_0.method_0("PartyMember4", PartyMember4.Text.Trim());
+        ConfigManager.gclass61_0.method_0("ListenEnabled", ListenEnabled.Checked.ToString());
         if (StartupClass.smethod_19(ListenPort.Text))
-            GClass61.gclass61_0.method_0("ListenPort", ListenPort.Text);
-        GClass61.gclass61_0.method_0("ListenPassword", ListenPassword.Text);
-        GClass61.gclass61_0.method_0("RelogEnabled", RelogEnabled.Checked.ToString());
-        GClass61.gclass61_0.method_0("BypassLootSanity", BypassLootSanity.Checked.ToString());
-        GClass61.gclass61_0.method_0("StrafeObstacles", StrafeObstacles.Checked.ToString());
-        GClass61.gclass61_0.method_0("ChatLogFrame", ChatLogFrame.Text.Trim());
-        GClass61.gclass61_0.method_0("CombatLogFrame", CombatLogFrame.Text.Trim());
+            ConfigManager.gclass61_0.method_0("ListenPort", ListenPort.Text);
+        ConfigManager.gclass61_0.method_0("ListenPassword", ListenPassword.Text);
+        ConfigManager.gclass61_0.method_0("RelogEnabled", RelogEnabled.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("BypassLootSanity", BypassLootSanity.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("StrafeObstacles", StrafeObstacles.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("ChatLogFrame", ChatLogFrame.Text.Trim());
+        ConfigManager.gclass61_0.method_0("CombatLogFrame", CombatLogFrame.Text.Trim());
         method_1("LastProfile", InitialProfile);
         method_1("Profile1", Profile1);
         method_1("Profile2", Profile2);
         method_1("Profile3", Profile3);
         if (DisplayNormal.Checked)
-            GClass61.gclass61_0.method_0("BackgroundDisplay", "Normal");
+            ConfigManager.gclass61_0.method_0("BackgroundDisplay", "Normal");
         if (DisplayHide.Checked)
-            GClass61.gclass61_0.method_0("BackgroundDisplay", "Hide");
+            ConfigManager.gclass61_0.method_0("BackgroundDisplay", "Hide");
         if (DisplayShrink.Checked)
-            GClass61.gclass61_0.method_0("BackgroundDisplay", "Shrink");
+            ConfigManager.gclass61_0.method_0("BackgroundDisplay", "Shrink");
         if (VendGrey.Checked)
-            GClass61.gclass61_0.method_0("VendType", "Poor");
+            ConfigManager.gclass61_0.method_0("VendType", "Poor");
         if (VendWhite.Checked)
-            GClass61.gclass61_0.method_0("VendType", "Common");
+            ConfigManager.gclass61_0.method_0("VendType", "Common");
         if (VendGreen.Checked)
-            GClass61.gclass61_0.method_0("VendType", "Uncommon");
+            ConfigManager.gclass61_0.method_0("VendType", "Uncommon");
         var str1 = "";
         var stringList1 = new List<string>();
         var stringReader1 = new StringReader(VendWhiteList.Text);
@@ -3046,17 +3046,17 @@ public class ConfigForm : Form
         stringReader1.Close();
         for (var index = 0; index < stringList1.Count; ++index)
             str1 = index != stringList1.Count - 1 ? str1 + stringList1[index] + "," : str1 + stringList1[index];
-        GClass61.gclass61_0.method_0("VendWhiteList", str1);
-        GClass61.gclass61_0.method_8();
-        GClass61.gclass61_0.method_0("SendMail", SendMail.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("VendWhiteList", str1);
+        ConfigManager.gclass61_0.method_8();
+        ConfigManager.gclass61_0.method_0("SendMail", SendMail.Checked.ToString());
         if (MailToText.Text.Length < 1)
-            GClass61.gclass61_0.method_0("MailToText", "");
+            ConfigManager.gclass61_0.method_0("MailToText", "");
         else
-            GClass61.gclass61_0.method_0("MailToText", MailToText.Text.Trim());
+            ConfigManager.gclass61_0.method_0("MailToText", MailToText.Text.Trim());
         if (SubjectText.Text.Length < 1)
-            GClass61.gclass61_0.method_0("SubjectText", "");
+            ConfigManager.gclass61_0.method_0("SubjectText", "");
         else
-            GClass61.gclass61_0.method_0("SubjectText", SubjectText.Text.Trim());
+            ConfigManager.gclass61_0.method_0("SubjectText", SubjectText.Text.Trim());
         var str3 = "";
         var stringList2 = new List<string>();
         var stringReader2 = new StringReader(VendMailList.Text);
@@ -3067,8 +3067,8 @@ public class ConfigForm : Form
         stringReader2.Close();
         for (var index = 0; index < stringList2.Count; ++index)
             str3 = index != stringList2.Count - 1 ? str3 + stringList2[index] + "," : str3 + stringList2[index];
-        GClass61.gclass61_0.method_0("VendMailList", str3);
-        GClass61.gclass61_0.method_8();
+        ConfigManager.gclass61_0.method_0("VendMailList", str3);
+        ConfigManager.gclass61_0.method_8();
         StartupClass.IsGliderInitialized = false;
         method_18();
         StartupClass.MainWindowHandle = null;
@@ -3079,7 +3079,7 @@ public class ConfigForm : Form
     {
         if (!(label_0.Text != MessageProvider.GetMessage(771)))
             return;
-        GClass61.gclass61_0.method_0(string_0, label_0.Text);
+        ConfigManager.gclass61_0.method_0(string_0, label_0.Text);
     }
 
     private bool method_2(string string_0)
@@ -3103,7 +3103,7 @@ public class ConfigForm : Form
 
     private void ClassOptionsButton_Click(object sender, EventArgs e)
     {
-        var selectedItem = (GClass22)ClassList.SelectedItem;
+        var selectedItem = (SpellActionData)ClassList.SelectedItem;
         selectedItem.method_0();
         var object0 = (GGameClass)selectedItem.object_0;
         Logger.LogMessage("Calling show config on " + selectedItem.string_0);
@@ -3121,7 +3121,7 @@ public class ConfigForm : Form
 
         if (gconfigResult != GConfigResult.Accept)
             return;
-        if (GClass61.gclass61_0.method_2("RemindActionBars") == null)
+        if (ConfigManager.gclass61_0.method_2("RemindActionBars") == null)
             method_3();
         StartupClass.bool_29 = true;
     }
@@ -3171,12 +3171,12 @@ public class ConfigForm : Form
 
     private void method_5(object sender, EventArgs e)
     {
-        GClass42.gclass42_0.method_14();
+        SpellcastingManager.gclass42_0.method_14();
     }
 
     private void LoadKeymap_Click(object sender, EventArgs e)
     {
-        GClass42.gclass42_0.method_12();
+        SpellcastingManager.gclass42_0.method_12();
     }
 
     private void PartySolo_CheckedChanged(object sender, EventArgs e)
@@ -3317,7 +3317,7 @@ public class ConfigForm : Form
     private void BackgroundEnable_CheckedChanged(object sender, EventArgs e)
     {
         groupBox25.Enabled = BackgroundEnable.Checked;
-        if (bool_1 || !AllowWW.Checked || GClass71.smethod_2(false) != GEnum9.const_1)
+        if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
             return;
         var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
@@ -3329,7 +3329,7 @@ public class ConfigForm : Form
         if (!Directory.Exists("Classes"))
             Directory.CreateDirectory("Classes");
         var files = Directory.GetFiles("Classes", "*.cs");
-        GClass61.gclass61_0.method_10("CustomClasses");
+        ConfigManager.gclass61_0.method_10("CustomClasses");
         foreach (var string_0 in files)
         {
             var key = method_13(string_0);
@@ -3371,7 +3371,7 @@ public class ConfigForm : Form
     {
         var selectedItem = (string)ClassFilesList.SelectedItem;
         string string_1;
-        var assembly_0 = GClass74.smethod_0(selectedItem, out string_1);
+        var assembly_0 = CodeCompiler.smethod_0(selectedItem, out string_1);
         if (assembly_0 == null)
         {
             var num1 = (int)MessageBox.Show(this, string_1, "Compile Failed", MessageBoxButtons.OK,
@@ -3397,7 +3397,7 @@ public class ConfigForm : Form
                 return;
             var profile = StartupClass.ProfileMapping[selectedItem];
             ((GGameClass)profile.object_0).Shutdown();
-            profile.object_0 = GClass74.smethod_7(selectedItem, assembly_0, false, true);
+            profile.object_0 = CodeCompiler.smethod_7(selectedItem, assembly_0, false, true);
         }
     }
 
@@ -3411,7 +3411,7 @@ public class ConfigForm : Form
         if (!bool_3)
             return;
         var selectedItem = (string)ClassFilesList.SelectedItem;
-        if (GClass61.gclass61_0.method_11("CustomClasses", selectedItem))
+        if (ConfigManager.gclass61_0.method_11("CustomClasses", selectedItem))
         {
             if (!StartupClass.ProfileMapping.ContainsKey(selectedItem))
                 return;
@@ -3430,15 +3430,15 @@ public class ConfigForm : Form
                 ClassList.Items.Remove(profile);
             }
 
-            GClass74.smethod_5(selectedItem);
-            GClass61.gclass61_0.method_13("CustomClasses", selectedItem);
+            CodeCompiler.smethod_5(selectedItem);
+            ConfigManager.gclass61_0.method_13("CustomClasses", selectedItem);
         }
         else
         {
             string string_1;
-            if (GClass74.smethod_13(selectedItem, out string_1))
+            if (CodeCompiler.smethod_13(selectedItem, out string_1))
             {
-                GClass61.gclass61_0.method_12("CustomClasses", selectedItem);
+                ConfigManager.gclass61_0.method_12("CustomClasses", selectedItem);
                 ClassList.Items.Add(StartupClass.ProfileMapping[selectedItem]);
             }
             else
@@ -3487,7 +3487,7 @@ public class ConfigForm : Form
         AutoLogCharacter.Items.Add(MessageProvider.GetMessage(874));
         AutoLogCharacter.SelectedIndex = 0;
         var files = Directory.GetFiles("Accounts\\", "*.xml");
-        var str1 = GClass61.gclass61_0.method_2("AutoLog");
+        var str1 = ConfigManager.gclass61_0.method_2("AutoLog");
         foreach (var string_0 in files)
         {
             var str2 = method_17(string_0);
@@ -3521,13 +3521,13 @@ public class ConfigForm : Form
 
     private void GliderDebug_CheckedChanged(object sender, EventArgs e)
     {
-        GClass61.gclass61_0.method_0("GliderDebug", GliderDebug.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("GliderDebug", GliderDebug.Checked.ToString());
     }
 
     protected void method_18()
     {
         KeyEditClass.Items.Add("(Select...)");
-        foreach (var gkey in GClass42.gclass42_0.sortedList_0.Values)
+        foreach (var gkey in SpellcastingManager.gclass42_0.sortedList_0.Values)
             if (gkey.KeyName.IndexOf('.') > 0)
             {
                 var key = gkey.KeyName.Substring(0, gkey.KeyName.IndexOf('.'));
@@ -3569,7 +3569,7 @@ public class ConfigForm : Form
     [SpecialName]
     private bool method_20()
     {
-        return GClass61.gclass61_0.method_2("AppKey").StartsWith("02") ||
+        return ConfigManager.gclass61_0.method_2("AppKey").StartsWith("02") ||
                MessageProvider.gclass30_0.string_0.ToLower().IndexOf("zh") > -1;
     }
 }

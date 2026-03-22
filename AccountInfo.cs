@@ -209,7 +209,7 @@ public class AccountInfo : Form
                     "An Auto Login character by that nickname already exists.  Do you want to overwrite it with this information?",
                     GProcessMemoryManipulator.smethod_0(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            new GClass14
+            new EncryptedAccountStorage
             {
                 string_0 = AccountName.Text.Trim(),
                 string_1 = AccountPassword.Text.Trim(),

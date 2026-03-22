@@ -52,28 +52,28 @@ public class RogueConfig : Form
     public RogueConfig()
     {
         InitializeComponent();
-        PullDistance.Text = GClass61.gclass61_0.method_2("Rogue.PullDistance");
-        EvasionCooldown.Text = GClass61.gclass61_0.method_2("Rogue.EvasionCooldown");
-        EviscMultiplier.Text = GClass61.gclass61_0.method_2("Rogue.EviscMultiplier");
-        SinisterCost.Text = GClass61.gclass61_0.method_2("Rogue.SinisterCost");
-        UseColdblood.Checked = GClass61.gclass61_0.method_2("Rogue.UseColdblood") == "True";
-        UseBackstab.Checked = GClass61.gclass61_0.method_2("Rogue.UseBackstab") == "True";
-        CheapShot.Checked = GClass61.gclass61_0.method_2("Rogue.CheapShot") == "True";
-        ChaseRunners.Checked = GClass61.gclass61_0.method_2("Rogue.ChaseRunners") == "True";
-        UseVanish.Checked = GClass61.gclass61_0.method_2("Rogue.UseVanish") == "True";
-        KickLife.Text = GClass61.gclass61_0.method_2("Rogue.KickLife");
-        UseKick.Checked = GClass61.gclass61_0.method_2("Rogue.UseKick") == "True";
-        UseStealth.Checked = GClass61.gclass61_0.method_2("Rogue.UseStealth") == "True";
-        StealthNear.Checked = GClass61.gclass61_0.method_2("Rogue.StealthNear") == "True";
-        UseRiposte.Checked = GClass61.gclass61_0.method_2("Rogue.UseRiposte") == "True";
-        PoisonMain.Checked = GClass61.gclass61_0.method_2("Rogue.PoisonMain") == "True";
-        PoisonOff.Checked = GClass61.gclass61_0.method_2("Rogue.PoisonOff") == "True";
-        UseBladeFlurry.Checked = GClass61.gclass61_0.method_2("Rogue.UseBladeFlurry") == "True";
-        SaveBladeFlurry.Checked = GClass61.gclass61_0.method_2("Rogue.SaveBladeFlurry") == "True";
-        UseKidneyShot.Checked = GClass61.gclass61_0.method_2("Rogue.UseKidneyShot") == "True";
-        UseRush.Checked = GClass61.gclass61_0.method_2("Rogue.UseRush") == "True";
-        SaveRush.Checked = GClass61.gclass61_0.method_2("Rogue.SaveRush") == "True";
-        UseGhostly.Checked = GClass61.gclass61_0.method_2("Rogue.UseGhostly") == "True";
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Rogue.PullDistance");
+        EvasionCooldown.Text = ConfigManager.gclass61_0.method_2("Rogue.EvasionCooldown");
+        EviscMultiplier.Text = ConfigManager.gclass61_0.method_2("Rogue.EviscMultiplier");
+        SinisterCost.Text = ConfigManager.gclass61_0.method_2("Rogue.SinisterCost");
+        UseColdblood.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseColdblood") == "True";
+        UseBackstab.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseBackstab") == "True";
+        CheapShot.Checked = ConfigManager.gclass61_0.method_2("Rogue.CheapShot") == "True";
+        ChaseRunners.Checked = ConfigManager.gclass61_0.method_2("Rogue.ChaseRunners") == "True";
+        UseVanish.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseVanish") == "True";
+        KickLife.Text = ConfigManager.gclass61_0.method_2("Rogue.KickLife");
+        UseKick.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseKick") == "True";
+        UseStealth.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseStealth") == "True";
+        StealthNear.Checked = ConfigManager.gclass61_0.method_2("Rogue.StealthNear") == "True";
+        UseRiposte.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseRiposte") == "True";
+        PoisonMain.Checked = ConfigManager.gclass61_0.method_2("Rogue.PoisonMain") == "True";
+        PoisonOff.Checked = ConfigManager.gclass61_0.method_2("Rogue.PoisonOff") == "True";
+        UseBladeFlurry.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseBladeFlurry") == "True";
+        SaveBladeFlurry.Checked = ConfigManager.gclass61_0.method_2("Rogue.SaveBladeFlurry") == "True";
+        UseKidneyShot.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseKidneyShot") == "True";
+        UseRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseRush") == "True";
+        SaveRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.SaveRush") == "True";
+        UseGhostly.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseGhostly") == "True";
         MessageProvider.smethod_3(this, "Rogue");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -434,32 +434,32 @@ public class RogueConfig : Form
     {
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Rogue.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Rogue.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(EvasionCooldown.Text))
-            GClass61.gclass61_0.method_0("Rogue.EvasionCooldown", EvasionCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Rogue.EvasionCooldown", EvasionCooldown.Text);
         if (StartupClass.smethod_19(SinisterCost.Text))
-            GClass61.gclass61_0.method_0("Rogue.SinisterCost", SinisterCost.Text);
+            ConfigManager.gclass61_0.method_0("Rogue.SinisterCost", SinisterCost.Text);
         if (StartupClass.smethod_19(EviscMultiplier.Text))
-            GClass61.gclass61_0.method_0("Rogue.EviscMultiplier", EviscMultiplier.Text);
+            ConfigManager.gclass61_0.method_0("Rogue.EviscMultiplier", EviscMultiplier.Text);
         if (StartupClass.smethod_19(KickLife.Text))
-            GClass61.gclass61_0.method_0("Rogue.KickLife", KickLife.Text);
-        GClass61.gclass61_0.method_0("Rogue.UseColdblood", UseColdblood.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseBackstab", UseBackstab.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.CheapShot", CheapShot.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.ChaseRunners", ChaseRunners.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseVanish", UseVanish.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseKick", UseKick.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseStealth", UseStealth.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.StealthNear", StealthNear.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseRiposte", UseRiposte.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.PoisonMain", PoisonMain.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.PoisonOff", PoisonOff.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseBladeFlurry", UseBladeFlurry.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.SaveBladeFlurry", SaveBladeFlurry.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseKidneyShot", UseKidneyShot.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseRush", UseRush.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.SaveRush", SaveRush.Checked.ToString());
-        GClass61.gclass61_0.method_0("Rogue.UseGhostly", UseGhostly.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Rogue.KickLife", KickLife.Text);
+        ConfigManager.gclass61_0.method_0("Rogue.UseColdblood", UseColdblood.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseBackstab", UseBackstab.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.CheapShot", CheapShot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.ChaseRunners", ChaseRunners.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseVanish", UseVanish.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseKick", UseKick.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseStealth", UseStealth.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.StealthNear", StealthNear.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseRiposte", UseRiposte.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.PoisonMain", PoisonMain.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.PoisonOff", PoisonOff.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseBladeFlurry", UseBladeFlurry.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.SaveBladeFlurry", SaveBladeFlurry.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseKidneyShot", UseKidneyShot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseRush", UseRush.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.SaveRush", SaveRush.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Rogue.UseGhostly", UseGhostly.Checked.ToString());
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

@@ -51,24 +51,24 @@ public class WarriorConfig : Form
     public WarriorConfig()
     {
         InitializeComponent();
-        AvoidAddDistance.Text = GClass61.gclass61_0.method_2("Warrior.AvoidAddDistance");
-        PullDistance.Text = GClass61.gclass61_0.method_2("Warrior.PullDistance");
-        HeroicRage.Text = GClass61.gclass61_0.method_2("Warrior.HeroicRage");
-        HeroicCooldown.Text = GClass61.gclass61_0.method_2("Warrior.HeroicCooldown");
-        ShieldBashLife.Text = GClass61.gclass61_0.method_2("Warrior.ShieldBashLife");
-        ChargePull.Checked = GClass61.gclass61_0.method_2("Warrior.ChargePull") == "True";
-        UseConcussion.Checked = GClass61.gclass61_0.method_2("Warrior.UseConcussion") == "True";
-        UseExecute.Checked = GClass61.gclass61_0.method_2("Warrior.UseExecute") == "True";
-        UseSunder.Checked = GClass61.gclass61_0.method_2("Warrior.UseSunder") == "True";
-        ChaseRunners.Checked = GClass61.gclass61_0.method_2("Warrior.ChaseRunners") == "True";
-        UseHamstring.Checked = GClass61.gclass61_0.method_2("Warrior.UseHamstring") == "True";
-        UseBloodrage.Checked = GClass61.gclass61_0.method_2("Warrior.UseBloodrage") == "True";
-        UseDemoralizing.Checked = GClass61.gclass61_0.method_2("Warrior.UseDemoralizing") == "True";
-        UseCleave.Checked = GClass61.gclass61_0.method_2("Warrior.UseCleave") == "True";
-        UseOverpower.Checked = GClass61.gclass61_0.method_2("Warrior.UseOverpower") == "True";
-        UseShieldBash.Checked = GClass61.gclass61_0.method_2("Warrior.UseShieldBash") == "True";
-        AvoidAdds.Checked = GClass61.gclass61_0.method_2("Warrior.AvoidAdds") == "True";
-        UseMortalStrike.Checked = GClass61.gclass61_0.method_2("Warrior.UseMortalStrike") == "True";
+        AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Warrior.AvoidAddDistance");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Warrior.PullDistance");
+        HeroicRage.Text = ConfigManager.gclass61_0.method_2("Warrior.HeroicRage");
+        HeroicCooldown.Text = ConfigManager.gclass61_0.method_2("Warrior.HeroicCooldown");
+        ShieldBashLife.Text = ConfigManager.gclass61_0.method_2("Warrior.ShieldBashLife");
+        ChargePull.Checked = ConfigManager.gclass61_0.method_2("Warrior.ChargePull") == "True";
+        UseConcussion.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseConcussion") == "True";
+        UseExecute.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseExecute") == "True";
+        UseSunder.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseSunder") == "True";
+        ChaseRunners.Checked = ConfigManager.gclass61_0.method_2("Warrior.ChaseRunners") == "True";
+        UseHamstring.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseHamstring") == "True";
+        UseBloodrage.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseBloodrage") == "True";
+        UseDemoralizing.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseDemoralizing") == "True";
+        UseCleave.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseCleave") == "True";
+        UseOverpower.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseOverpower") == "True";
+        UseShieldBash.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseShieldBash") == "True";
+        AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Warrior.AvoidAdds") == "True";
+        UseMortalStrike.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseMortalStrike") == "True";
         MessageProvider.smethod_3(this, "Warrior");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -426,30 +426,30 @@ public class WarriorConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        GClass61.gclass61_0.method_0("Warrior.ChargePull", ChargePull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseConcussion", UseConcussion.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseExecute", UseExecute.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseSunder", UseSunder.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.ChaseRunners", ChaseRunners.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseHamstring", UseHamstring.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseBloodrage", UseBloodrage.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseDemoralizing", UseDemoralizing.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseCleave", UseCleave.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseOverpower", UseOverpower.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseShieldBash", UseShieldBash.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.AvoidAdds", AvoidAdds.Checked.ToString());
-        GClass61.gclass61_0.method_0("Warrior.UseMortalStrike", UseMortalStrike.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.ChargePull", ChargePull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseConcussion", UseConcussion.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseExecute", UseExecute.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseSunder", UseSunder.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.ChaseRunners", ChaseRunners.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseHamstring", UseHamstring.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseBloodrage", UseBloodrage.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseDemoralizing", UseDemoralizing.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseCleave", UseCleave.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseOverpower", UseOverpower.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseShieldBash", UseShieldBash.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.AvoidAdds", AvoidAdds.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Warrior.UseMortalStrike", UseMortalStrike.Checked.ToString());
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Warrior.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Warrior.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(HeroicRage.Text))
-            GClass61.gclass61_0.method_0("Warrior.HeroicRage", HeroicRage.Text);
+            ConfigManager.gclass61_0.method_0("Warrior.HeroicRage", HeroicRage.Text);
         if (StartupClass.smethod_19(HeroicCooldown.Text))
-            GClass61.gclass61_0.method_0("Warrior.HeroicCooldown", HeroicCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Warrior.HeroicCooldown", HeroicCooldown.Text);
         if (StartupClass.smethod_19(ShieldBashLife.Text))
-            GClass61.gclass61_0.method_0("Warrior.ShieldBashLife", ShieldBashLife.Text);
+            ConfigManager.gclass61_0.method_0("Warrior.ShieldBashLife", ShieldBashLife.Text);
         if (!StartupClass.smethod_19(AvoidAddDistance.Text))
             return;
-        GClass61.gclass61_0.method_0("Warrior.AvoidAddDistance", AvoidAddDistance.Text);
+        ConfigManager.gclass61_0.method_0("Warrior.AvoidAddDistance", AvoidAddDistance.Text);
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

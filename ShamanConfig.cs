@@ -53,26 +53,26 @@ public class ShamanConfig : Form
     {
         InitializeComponent();
         MessageProvider.smethod_7(ShockMode, "Common.ShockMode");
-        PullDistance.Text = GClass61.gclass61_0.method_2("Shaman.PullDistance");
-        ShockLife.Text = GClass61.gclass61_0.method_2("Shaman.ShockLife");
-        ShockMana.Text = GClass61.gclass61_0.method_2("Shaman.ShockMana");
-        ShootRunners.Checked = GClass61.gclass61_0.method_2("Shaman.ShootRunners") == "True";
-        UseSwiftness.Checked = GClass61.gclass61_0.method_2("Shaman.UseSwiftness") == "True";
-        StartTotem.Checked = GClass61.gclass61_0.method_2("Shaman.StartTotem") == "True";
-        FastMelee.Checked = GClass61.gclass61_0.method_2("Shaman.FastMelee") == "True";
-        ShockPull.Checked = GClass61.gclass61_0.method_2("Shaman.ShockPull") == "True";
-        UseHealTotem.Checked = GClass61.gclass61_0.method_2("Shaman.UseHealTotem") == "True";
-        UseEarthbind.Checked = GClass61.gclass61_0.method_2("Shaman.UseEarthbind") == "True";
-        DualWield.Checked = GClass61.gclass61_0.method_2("Shaman.DualWield") == "True";
-        ExtraShield.Checked = GClass61.gclass61_0.method_2("Shaman.ExtraShield") == "True";
-        UseStormstrike.Checked = GClass61.gclass61_0.method_2("Shaman.UseStormstrike") == "True";
-        UseRage.Checked = GClass61.gclass61_0.method_2("Shaman.UseRage") == "True";
-        AvoidAdds.Checked = GClass61.gclass61_0.method_2("Shaman.AvoidAdds") == "True";
-        UseTotemicCall.Checked = GClass61.gclass61_0.method_2("Shaman.UseTotemicCall") == "True";
-        UseLightningShield.Checked = GClass61.gclass61_0.method_2("Shaman.UseLightningShield") == "True";
-        UseStoneclaw.Checked = GClass61.gclass61_0.method_2("Shaman.UseStoneclaw") == "True";
-        AvoidAddDistance.Text = GClass61.gclass61_0.method_2("Shaman.AvoidAddDistance");
-        switch (GClass61.gclass61_0.method_2("Shaman.ShockMode"))
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Shaman.PullDistance");
+        ShockLife.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockLife");
+        ShockMana.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockMana");
+        ShootRunners.Checked = ConfigManager.gclass61_0.method_2("Shaman.ShootRunners") == "True";
+        UseSwiftness.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseSwiftness") == "True";
+        StartTotem.Checked = ConfigManager.gclass61_0.method_2("Shaman.StartTotem") == "True";
+        FastMelee.Checked = ConfigManager.gclass61_0.method_2("Shaman.FastMelee") == "True";
+        ShockPull.Checked = ConfigManager.gclass61_0.method_2("Shaman.ShockPull") == "True";
+        UseHealTotem.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseHealTotem") == "True";
+        UseEarthbind.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseEarthbind") == "True";
+        DualWield.Checked = ConfigManager.gclass61_0.method_2("Shaman.DualWield") == "True";
+        ExtraShield.Checked = ConfigManager.gclass61_0.method_2("Shaman.ExtraShield") == "True";
+        UseStormstrike.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseStormstrike") == "True";
+        UseRage.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseRage") == "True";
+        AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Shaman.AvoidAdds") == "True";
+        UseTotemicCall.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseTotemicCall") == "True";
+        UseLightningShield.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseLightningShield") == "True";
+        UseStoneclaw.Checked = ConfigManager.gclass61_0.method_2("Shaman.UseStoneclaw") == "True";
+        AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Shaman.AvoidAddDistance");
+        switch (ConfigManager.gclass61_0.method_2("Shaman.ShockMode"))
         {
             case "Spam":
                 ShockMode.SelectedIndex = 0;
@@ -452,38 +452,38 @@ public class ShamanConfig : Form
     {
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Shaman.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Shaman.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(ShockMana.Text))
-            GClass61.gclass61_0.method_0("Shaman.ShockMana", ShockMana.Text);
+            ConfigManager.gclass61_0.method_0("Shaman.ShockMana", ShockMana.Text);
         if (StartupClass.smethod_19(ShockLife.Text))
-            GClass61.gclass61_0.method_0("Shaman.ShockLife", ShockLife.Text);
+            ConfigManager.gclass61_0.method_0("Shaman.ShockLife", ShockLife.Text);
         if (StartupClass.smethod_19(AvoidAddDistance.Text))
-            GClass61.gclass61_0.method_0("Shaman.AvoidAddDistance", AvoidAddDistance.Text);
-        GClass61.gclass61_0.method_0("Shaman.ShootRunners", ShootRunners.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseSwiftness", UseSwiftness.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.StartTotem", StartTotem.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.ShockPull", ShockPull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseHealTotem", UseHealTotem.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseEarthbind", UseEarthbind.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.FastMelee", FastMelee.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.DualWield", DualWield.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.ExtraShield", ExtraShield.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseStormstrike", UseStormstrike.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseTotemicCall", UseTotemicCall.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseLightningShield", UseLightningShield.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseRage", UseRage.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.UseStoneclaw", UseStoneclaw.Checked.ToString());
-        GClass61.gclass61_0.method_0("Shaman.AvoidAdds", AvoidAdds.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Shaman.AvoidAddDistance", AvoidAddDistance.Text);
+        ConfigManager.gclass61_0.method_0("Shaman.ShootRunners", ShootRunners.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseSwiftness", UseSwiftness.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.StartTotem", StartTotem.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.ShockPull", ShockPull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseHealTotem", UseHealTotem.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseEarthbind", UseEarthbind.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.FastMelee", FastMelee.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.DualWield", DualWield.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.ExtraShield", ExtraShield.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseStormstrike", UseStormstrike.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseTotemicCall", UseTotemicCall.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseLightningShield", UseLightningShield.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseRage", UseRage.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.UseStoneclaw", UseStoneclaw.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Shaman.AvoidAdds", AvoidAdds.Checked.ToString());
         switch (ShockMode.SelectedIndex)
         {
             case 0:
-                GClass61.gclass61_0.method_0("Shaman.ShockMode", "Spam");
+                ConfigManager.gclass61_0.method_0("Shaman.ShockMode", "Spam");
                 break;
             case 1:
-                GClass61.gclass61_0.method_0("Shaman.ShockMode", "Runners");
+                ConfigManager.gclass61_0.method_0("Shaman.ShockMode", "Runners");
                 break;
             case 2:
-                GClass61.gclass61_0.method_0("Shaman.ShockMode", "Interrupt");
+                ConfigManager.gclass61_0.method_0("Shaman.ShockMode", "Interrupt");
                 break;
         }
     }

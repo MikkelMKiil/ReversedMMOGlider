@@ -92,28 +92,28 @@ namespace Glider.Common.Objects
         protected void ShiftThisKey(bool KeyDown)
         {
             if ((ShiftState & 1) != 0)
-                GClass55.smethod_0(16, KeyDown);
+                InputController.smethod_0(16, KeyDown);
             if ((ShiftState & 2) != 0)
-                GClass55.smethod_0(17, KeyDown);
+                InputController.smethod_0(17, KeyDown);
             if ((ShiftState & 4) == 0)
                 return;
-            GClass55.smethod_0(18, KeyDown);
+            InputController.smethod_0(18, KeyDown);
         }
 
         public void EnsureBar()
         {
             var gbarState =
-                (GBarState)(GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("ActionBarCurrent"), "curbar") + 3);
+                (GBarState)(GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ActionBarCurrent"), "curbar") + 3);
             if (BarState == GBarState.Indifferent || BarState == gbarState)
                 return;
             if (BarState == GBarState.Combat)
-                GClass42.gclass42_0.method_0("Common.BarCombat");
+                SpellcastingManager.gclass42_0.method_0("Common.BarCombat");
             if (BarState == GBarState.Rest)
-                GClass42.gclass42_0.method_0("Common.BarRest");
+                SpellcastingManager.gclass42_0.method_0("Common.BarRest");
             if (BarState != GBarState.Bar1 && BarState != GBarState.Bar2 && BarState != GBarState.Bar3 &&
                 BarState != GBarState.Bar4 && BarState != GBarState.Bar5 && BarState != GBarState.Bar6)
                 return;
-            GClass42.gclass42_0.method_0("Common." + BarState);
+            SpellcastingManager.gclass42_0.method_0("Common." + BarState);
         }
 
         public void Send()
@@ -127,9 +127,9 @@ namespace Glider.Common.Objects
                 EnsureBar();
                 ShiftThisKey(true);
                 if (CharCode == char.MinValue)
-                    GClass55.smethod_9(VK);
+                    InputController.smethod_9(VK);
                 else
-                    GClass55.smethod_6(char.ToLower(CharCode));
+                    InputController.smethod_6(char.ToLower(CharCode));
                 ShiftThisKey(false);
             }
         }
@@ -155,9 +155,9 @@ namespace Glider.Common.Objects
                 EnsureBar();
                 ShiftThisKey(true);
                 if (CharCode == char.MinValue)
-                    GClass55.smethod_0(VK, Pressing);
+                    InputController.smethod_0(VK, Pressing);
                 else
-                    GClass55.smethod_4(CharCode, Pressing);
+                    InputController.smethod_4(CharCode, Pressing);
                 ShiftThisKey(false);
             }
         }
@@ -320,7 +320,7 @@ namespace Glider.Common.Objects
             if (SIM == 0)
                 return null;
             var StartSlotIndex = 1;
-            var num = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("ActionBarCurrent"), "abcurrent");
+            var num = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("ActionBarCurrent"), "abcurrent");
             if (num == 0)
             {
                 var stance = GPlayerSelf.Me.Stance;
@@ -360,7 +360,7 @@ namespace Glider.Common.Objects
                 if (MatchesShortcut(new GShortcut(StartSlotIndex + index)))
                 {
                     var string_1 = BaseObjectName + "Button" + (index + 1);
-                    var gclass8 = GClass8.smethod_2(string_1);
+                    var gclass8 = UIElement.smethod_2(string_1);
                     if (gclass8 != null && gclass8.method_10())
                     {
                         HitName = string_1;

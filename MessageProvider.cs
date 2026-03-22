@@ -34,9 +34,9 @@ public class MessageProvider
         string_4 = string_6;
         string_0 = Thread.CurrentThread.CurrentCulture.Name;
         Logger.smethod_1("Culture: " + string_0);
-        if (GClass61.gclass61_0.method_2("ForceCulture") != null)
+        if (ConfigManager.gclass61_0.method_2("ForceCulture") != null)
         {
-            string_0 = GClass61.gclass61_0.method_2("ForceCulture");
+            string_0 = ConfigManager.gclass61_0.method_2("ForceCulture");
             Logger.smethod_1("Overriding with ForceCulture: " + string_0);
         }
 

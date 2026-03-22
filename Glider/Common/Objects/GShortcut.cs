@@ -21,7 +21,7 @@ namespace Glider.Common.Objects
         {
             this.SlotNumber = SlotNumber;
             var num = (uint)GProcessMemoryManipulator.smethod_11(
-                GClass18.gclass18_0.method_4("ActionBarShortcuts") + 4 * (SlotNumber - 1), "shortcut1");
+                MemoryOffsetTable.gclass18_0.method_4("ActionBarShortcuts") + 4 * (SlotNumber - 1), "shortcut1");
             if (num == 0U)
             {
                 ShortcutType = GShortcutType.Empty;

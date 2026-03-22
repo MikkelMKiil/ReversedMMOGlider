@@ -63,26 +63,26 @@ public class MageConfig : Form
             IceBarrier.Items.Add(MessageProvider.smethod_4("Mage.IceBarrier" + index));
         for (var index = 0; index < 3; ++index)
             Finisher.Items.Add(MessageProvider.smethod_4("Mage.Finisher" + index));
-        FireblastCooldown.Text = GClass61.gclass61_0.method_2("Mage.FireblastCooldownSec");
-        PullDistance.Text = GClass61.gclass61_0.method_2("Mage.PullDistance");
-        FinishLife.Text = GClass61.gclass61_0.method_2("Mage.FinishLife");
-        FireblastDistance.Text = GClass61.gclass61_0.method_2("Mage.FireblastDistance");
-        MeleeSpellCooldown.Text = GClass61.gclass61_0.method_2("Mage.MeleeSpellCooldown");
-        CounterspellLife.Text = GClass61.gclass61_0.method_2("Mage.CounterspellLife");
-        ShieldLife.Text = GClass61.gclass61_0.method_2("Mage.ShieldLife");
-        UseManaStones.Checked = GClass61.gclass61_0.method_2("Mage.UseManaStones") == "True";
-        SaveBlast.Checked = GClass61.gclass61_0.method_2("Mage.SaveBlast") == "True";
-        UseFrostNova.Checked = GClass61.gclass61_0.method_2("Mage.UseFrostNova") == "True";
-        UsePoly.Checked = GClass61.gclass61_0.method_2("Mage.UsePoly") == "True";
-        ApproachFireblast.Checked = GClass61.gclass61_0.method_2("Mage.ApproachFireblast") == "True";
-        UseCounterspell.Checked = GClass61.gclass61_0.method_2("Mage.UseCounterspell") == "True";
-        UseEvocation.Checked = GClass61.gclass61_0.method_2("Mage.UseEvocation") == "True";
-        UseCombustion.Checked = GClass61.gclass61_0.method_2("Mage.UseCombustion") == "True";
-        UseMeleeSpell.Checked = GClass61.gclass61_0.method_2("Mage.UseMeleeSpell") == "True";
-        WaitOnPull.Checked = GClass61.gclass61_0.method_2("Mage.WaitOnPull") == "True";
-        UseDampen.Checked = GClass61.gclass61_0.method_2("Mage.UseDampen") == "True";
-        IceBarrier.SelectedIndex = GClass61.gclass61_0.method_3("Mage.IceBarrier");
-        Finisher.SelectedIndex = GClass61.gclass61_0.method_3("Mage.Finisher");
+        FireblastCooldown.Text = ConfigManager.gclass61_0.method_2("Mage.FireblastCooldownSec");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Mage.PullDistance");
+        FinishLife.Text = ConfigManager.gclass61_0.method_2("Mage.FinishLife");
+        FireblastDistance.Text = ConfigManager.gclass61_0.method_2("Mage.FireblastDistance");
+        MeleeSpellCooldown.Text = ConfigManager.gclass61_0.method_2("Mage.MeleeSpellCooldown");
+        CounterspellLife.Text = ConfigManager.gclass61_0.method_2("Mage.CounterspellLife");
+        ShieldLife.Text = ConfigManager.gclass61_0.method_2("Mage.ShieldLife");
+        UseManaStones.Checked = ConfigManager.gclass61_0.method_2("Mage.UseManaStones") == "True";
+        SaveBlast.Checked = ConfigManager.gclass61_0.method_2("Mage.SaveBlast") == "True";
+        UseFrostNova.Checked = ConfigManager.gclass61_0.method_2("Mage.UseFrostNova") == "True";
+        UsePoly.Checked = ConfigManager.gclass61_0.method_2("Mage.UsePoly") == "True";
+        ApproachFireblast.Checked = ConfigManager.gclass61_0.method_2("Mage.ApproachFireblast") == "True";
+        UseCounterspell.Checked = ConfigManager.gclass61_0.method_2("Mage.UseCounterspell") == "True";
+        UseEvocation.Checked = ConfigManager.gclass61_0.method_2("Mage.UseEvocation") == "True";
+        UseCombustion.Checked = ConfigManager.gclass61_0.method_2("Mage.UseCombustion") == "True";
+        UseMeleeSpell.Checked = ConfigManager.gclass61_0.method_2("Mage.UseMeleeSpell") == "True";
+        WaitOnPull.Checked = ConfigManager.gclass61_0.method_2("Mage.WaitOnPull") == "True";
+        UseDampen.Checked = ConfigManager.gclass61_0.method_2("Mage.UseDampen") == "True";
+        IceBarrier.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.IceBarrier");
+        Finisher.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.Finisher");
         MessageProvider.smethod_3(this, "Mage");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -500,32 +500,32 @@ public class MageConfig : Form
     {
         DialogResult = DialogResult.OK;
         if (StartupClass.smethod_19(FireblastCooldown.Text))
-            GClass61.gclass61_0.method_0("Mage.FireblastCooldownSec", FireblastCooldown.Text);
+            ConfigManager.gclass61_0.method_0("Mage.FireblastCooldownSec", FireblastCooldown.Text);
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Mage.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Mage.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(FinishLife.Text))
-            GClass61.gclass61_0.method_0("Mage.FinishLife", FinishLife.Text);
+            ConfigManager.gclass61_0.method_0("Mage.FinishLife", FinishLife.Text);
         if (StartupClass.smethod_19(FireblastDistance.Text))
-            GClass61.gclass61_0.method_0("Mage.FireblastDistance", FireblastDistance.Text);
+            ConfigManager.gclass61_0.method_0("Mage.FireblastDistance", FireblastDistance.Text);
         if (StartupClass.smethod_19(CounterspellLife.Text))
-            GClass61.gclass61_0.method_0("Mage.CounterspellLife", CounterspellLife.Text);
+            ConfigManager.gclass61_0.method_0("Mage.CounterspellLife", CounterspellLife.Text);
         if (StartupClass.smethod_19(ShieldLife.Text))
-            GClass61.gclass61_0.method_0("Mage.ShieldLife", ShieldLife.Text);
+            ConfigManager.gclass61_0.method_0("Mage.ShieldLife", ShieldLife.Text);
         if (StartupClass.smethod_19(MeleeSpellCooldown.Text))
-            GClass61.gclass61_0.method_0("Mage.MeleeSpellCooldown", MeleeSpellCooldown.Text);
-        GClass61.gclass61_0.method_0("Mage.UseManaStones", UseManaStones.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.SaveBlast", SaveBlast.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseFrostNova", UseFrostNova.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UsePoly", UsePoly.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseEvocation", UseEvocation.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseCounterspell", UseCounterspell.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseCombustion", UseCombustion.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseMeleeSpell", UseMeleeSpell.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.ApproachFireblast", ApproachFireblast.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.WaitOnPull", WaitOnPull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.UseDampen", UseDampen.Checked.ToString());
-        GClass61.gclass61_0.method_0("Mage.IceBarrier", IceBarrier.SelectedIndex.ToString());
-        GClass61.gclass61_0.method_0("Mage.Finisher", Finisher.SelectedIndex.ToString());
+            ConfigManager.gclass61_0.method_0("Mage.MeleeSpellCooldown", MeleeSpellCooldown.Text);
+        ConfigManager.gclass61_0.method_0("Mage.UseManaStones", UseManaStones.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.SaveBlast", SaveBlast.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseFrostNova", UseFrostNova.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UsePoly", UsePoly.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseEvocation", UseEvocation.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseCounterspell", UseCounterspell.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseCombustion", UseCombustion.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseMeleeSpell", UseMeleeSpell.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.ApproachFireblast", ApproachFireblast.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.WaitOnPull", WaitOnPull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.UseDampen", UseDampen.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.IceBarrier", IceBarrier.SelectedIndex.ToString());
+        ConfigManager.gclass61_0.method_0("Mage.Finisher", Finisher.SelectedIndex.ToString());
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

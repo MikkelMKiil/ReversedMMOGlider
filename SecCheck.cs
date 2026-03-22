@@ -108,43 +108,43 @@ public class SecCheck : Form
     {
         var flag = false;
         TheList.Items.Clear();
-        if (!GClass61.gclass61_0.method_5("AllowWW"))
+        if (!ConfigManager.gclass61_0.method_5("AllowWW"))
             method_1("High", "Tripwire is not enabled", "Tripwire");
-        if (!GClass61.gclass61_0.method_5("ChatEnabled"))
+        if (!ConfigManager.gclass61_0.method_5("ChatEnabled"))
         {
             method_1("High", "Chat processing is disabled", "ChatEnable");
         }
         else
         {
-            if (!GClass61.gclass61_0.method_5("ChatWhisper"))
+            if (!ConfigManager.gclass61_0.method_5("ChatWhisper"))
                 method_1("High", "Alert on whisper is disabled", "AlertWhisper");
-            if (!GClass61.gclass61_0.method_5("PlaySay"))
+            if (!ConfigManager.gclass61_0.method_5("PlaySay"))
                 flag = true;
         }
 
-        if (GClass61.gclass61_0.method_5("ListenEnabled") && GClass61.gclass61_0.method_2("ListenPassword").Length == 0)
+        if (ConfigManager.gclass61_0.method_5("ListenEnabled") && ConfigManager.gclass61_0.method_2("ListenPassword").Length == 0)
             method_1("High", "Remote is enabled with no password", "RemotePass");
-        if (GClass61.gclass61_0.method_4("FriendAlert") == 0.0 || GClass61.gclass61_0.method_4("FriendAlert") > 3.0)
+        if (ConfigManager.gclass61_0.method_4("FriendAlert") == 0.0 || ConfigManager.gclass61_0.method_4("FriendAlert") > 3.0)
             method_1("High", "Follower detection is off/slow", "FollowerDetect");
-        if (GClass61.gclass61_0.method_3("FriendLogout") == 0 || GClass61.gclass61_0.method_3("FriendLogout") > 5)
+        if (ConfigManager.gclass61_0.method_3("FriendLogout") == 0 || ConfigManager.gclass61_0.method_3("FriendLogout") > 5)
             method_1("High", "Follower logout is off/slow", "FollowerLogout");
-        if (!GClass61.gclass61_0.method_5("AllowNetCheck"))
+        if (!ConfigManager.gclass61_0.method_5("AllowNetCheck"))
             method_1("Medium", "NetCheck is not enabled", "NetCheck");
-        if (!GClass61.gclass61_0.method_5("EscapeClear"))
+        if (!ConfigManager.gclass61_0.method_5("EscapeClear"))
             method_1("Medium", "Clear target with Escape is disabled", "EscapeClear");
         if (flag)
             method_1("Medium", "Alert on say is disabled", "AlertSay");
-        if (!GClass61.gclass61_0.method_5("StrafeObstacles"))
+        if (!ConfigManager.gclass61_0.method_5("StrafeObstacles"))
             method_1("Medium", "Strafe obstacles is disabled", "StrafeObstacles");
-        if (GClass61.gclass61_0.method_5("ListenEnabled") && GClass61.gclass61_0.method_3("ListenPort") == 3200)
+        if (ConfigManager.gclass61_0.method_5("ListenEnabled") && ConfigManager.gclass61_0.method_3("ListenPort") == 3200)
             method_1("Medium", "Remote is enabled on default port", "RemotePort");
-        if (!GClass61.gclass61_0.method_5("WalkLoot"))
+        if (!ConfigManager.gclass61_0.method_5("WalkLoot"))
             method_1("Medium", "Walk to loot is disabled", "WalkToLoot");
-        if (!GClass61.gclass61_0.method_5("AutoStop"))
+        if (!ConfigManager.gclass61_0.method_5("AutoStop"))
             method_1("Medium", "Auto-stop after time is disabled", "AutoStopTime");
-        if (GClass61.gclass61_0.method_5("Resurrect") && GClass61.gclass61_0.method_3("MaxResurrect") > 5)
+        if (ConfigManager.gclass61_0.method_5("Resurrect") && ConfigManager.gclass61_0.method_3("MaxResurrect") > 5)
             method_1("Medium", "Excessive automatic resurrections", "ManyRes");
-        if (!GClass61.gclass61_0.method_5("StopWhenFull"))
+        if (!ConfigManager.gclass61_0.method_5("StopWhenFull"))
             method_1("Low", "Auto-stop when full is disabled", "AutoStopInv");
         method_2(1, 10, "Profiles", "High");
         method_2(11, 20, "Profiles", "Medium");

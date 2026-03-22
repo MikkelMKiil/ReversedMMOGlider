@@ -30,11 +30,11 @@ public class DeathknightConfig : Form
     public DeathknightConfig()
     {
         InitializeComponent();
-        PullDistance.Text = GClass61.gclass61_0.method_2("Deathknight.PullDistance");
-        AvoidAddDistance.Text = GClass61.gclass61_0.method_2("Deathknight.AvoidAddDistance");
-        AvoidAdds.Checked = GClass61.gclass61_0.method_5("Deathknight.AvoidAdds");
-        UseGhoul.Checked = GClass61.gclass61_0.method_5("Deathknight.UseGhoul");
-        UseCorpseDust.Checked = GClass61.gclass61_0.method_5("Deathknight.UseCorpseDust");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Deathknight.PullDistance");
+        AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Deathknight.AvoidAddDistance");
+        AvoidAdds.Checked = ConfigManager.gclass61_0.method_5("Deathknight.AvoidAdds");
+        UseGhoul.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseGhoul");
+        UseCorpseDust.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseCorpseDust");
         MessageProvider.smethod_3(this, "Deathknight");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -52,12 +52,12 @@ public class DeathknightConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Deathknight.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Deathknight.PullDistance", PullDistance.Text);
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Deathknight.AvoidAddDistance", AvoidAddDistance.Text);
-        GClass61.gclass61_0.method_0("Deathknight.UseGhoul", UseGhoul.Checked.ToString());
-        GClass61.gclass61_0.method_0("Deathknight.UseCorpseDust", UseCorpseDust.Checked.ToString());
-        GClass61.gclass61_0.method_0("Deathknight.AvoidAdds", AvoidAdds.Checked.ToString());
+            ConfigManager.gclass61_0.method_0("Deathknight.AvoidAddDistance", AvoidAddDistance.Text);
+        ConfigManager.gclass61_0.method_0("Deathknight.UseGhoul", UseGhoul.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Deathknight.UseCorpseDust", UseCorpseDust.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Deathknight.AvoidAdds", AvoidAdds.Checked.ToString());
         DialogResult = DialogResult.OK;
     }
 

@@ -17,7 +17,7 @@ public class DebuffPick : Form
     private Button ButtonDisease;
     private Button ButtonMagic;
     private Button ButtonPoison;
-    public GEnum4 genum4_0;
+    public DebuffType genum4_0;
     private IContainer icontainer_0;
     private Label label1;
     private Label label2;
@@ -35,25 +35,25 @@ public class DebuffPick : Form
 
     private void ButtonMagic_Click(object sender, EventArgs e)
     {
-        genum4_0 = GEnum4.const_1;
+        genum4_0 = DebuffType.const_1;
         DialogResult = DialogResult.OK;
     }
 
     private void ButtonPoison_Click(object sender, EventArgs e)
     {
-        genum4_0 = GEnum4.const_2;
+        genum4_0 = DebuffType.const_2;
         DialogResult = DialogResult.OK;
     }
 
     private void ButtonDisease_Click(object sender, EventArgs e)
     {
-        genum4_0 = GEnum4.const_4;
+        genum4_0 = DebuffType.const_4;
         DialogResult = DialogResult.OK;
     }
 
     private void ButtonCurse_Click(object sender, EventArgs e)
     {
-        genum4_0 = GEnum4.const_3;
+        genum4_0 = DebuffType.const_3;
         DialogResult = DialogResult.OK;
     }
 

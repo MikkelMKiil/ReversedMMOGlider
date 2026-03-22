@@ -46,32 +46,32 @@ public class StartupClass
 
     public static bool IsAttached;
     public static bool IsDetached;
-    public static GClass49 GameProcessManager;
+    public static MachGlideRunner GameProcessManager;
     public static GStance CurrentStance = GStance.Unknown;
     public static bool IsForegroundEnabled = true;
     public static bool IsBackgroundEnabled = false;
     public static IWin32Window MainWindowHandle = null;
     public static bool IsStopRequested;
-    public static GClass16 GameMemoryReader;
-    public static GClass47 GameMemoryWriter;
+    public static WardenMonitor GameMemoryReader;
+    public static ScriptExecutor GameMemoryWriter;
     public static bool IsExitRequested;
-    public static GClass71 GliderManager;
-    public static SortedList<string, GClass22> ProfileMapping;
+    public static WardenProtocol GliderManager;
+    public static SortedList<string, SpellActionData> ProfileMapping;
     public static GGameClass CurrentGameClass;
-    public static GClass22 CurrentProfile;
-    public static GClass9 GliderUIManager;
+    public static SpellActionData CurrentProfile;
+    public static WebNotificationService GliderUIManager;
     private static readonly GSpellTimer SpellCooldownTimer = new GSpellTimer(37000, false);
     public static bool IsGliderAttached;
     public static Form MainForm = null;
     public static bool IsGliderRunning;
     public static bool IsGliderPaused;
     public static bool IsGliderInitialized;
-    public static GClass32 GameClass32Instance;
+    public static ISXWardenIntegration GameClass32Instance;
     public static int SomeIntegerValue;
-    public static GClass8 GameClass8Instance;
-    public static GClass69 GameClass69Instance;
+    public static UIElement GameClass8Instance;
+    public static ChatLogManager GameClass69Instance;
     public static bool IsSomeConditionMet;
-    public static SortedList<long, GClass5> ProfileIdToProfileMap;
+    public static SortedList<long, LootableCorpseTracker> ProfileIdToProfileMap;
     public static AppMode ApplicationStartupMode;
     public static IntPtr MainApplicationHandle = IntPtr.Zero;
     public static string SomeStringData;
@@ -81,7 +81,7 @@ public class StartupClass
     public static GProfile gprofile_0;
     public static string string_5;
     public static bool bool_14 = false;
-    public static GClass68 gclass68_0;
+    public static CameraRotator gclass68_0;
     public static OffsetManager gclass43_0;
     public static OffsetManager gclass43_1;
     public static OffsetManager gclass43_2;
@@ -98,47 +98,47 @@ public class StartupClass
     public static bool bool_16;
     public static bool IsBetaVersion = false;
     public static bool IsBetaAccessGranted;
-    public static GClass36 gclass36_0;
+    public static GameTimer gclass36_0;
     public static GlideMode glideMode_0;
     public static int int_7;
     public static int int_8;
     public static int int_9;
     public static bool bool_19;
     public static Thread thread_0;
-    public static GClass54 gclass54_0;
+    public static PartyManager gclass54_0;
     public static bool bool_20;
     public static bool bool_21;
-    public static GClass36 gclass36_1;
-    public static GClass24 gclass24_0;
-    public static GClass11 gclass11_0;
+    public static GameTimer gclass36_1;
+    public static KeyboardHookManager gclass24_0;
+    public static SecurityDescriptorHelper gclass11_0;
     public static bool isInitializationSuccessful;
-    public static GClass79 gclass79_0;
+    public static RemoteViewerServer gclass79_0;
     public static GameClass gameClass_0;
     public static bool bool_23;
     public static bool isInputStringFourCharacters = true;
     public static DateTime expiryTime;
     public static bool isTimeAdded;
     public static bool bool_26 = false;
-    public static GInterface0 ginterface0_0;
+    public static ILogger ginterface0_0;
     public static bool bool_27;
     public static int int_10;
-    public static GClass73 gclass73_0;
+    public static CombatController gclass73_0;
     public static byte[] byte_0 = null;
     public static bool bool_28 = false;
-    public static GClass60 gclass60_0;
+    public static GlideMainThread gclass60_0;
     public static string numbers_string = "1234567890-=";
     public static int int_11;
-    public static GEnum2 genum2_0 = GEnum2.const_0;
+    public static WaypointType genum2_0 = WaypointType.const_0;
     public static bool bool_29;
-    public static GClass38 gclass38_0;
+    public static EquipmentEnchantmentChecker gclass38_0;
     public static double double_0;
-    public static GClass44 DebuffsKnown_string;
+    public static DebuffDatabase DebuffsKnown_string;
     public static string[] string_8;
-    public static GClass48 gclass48_0;
+    public static ProfileGroupManager gclass48_0;
     public static int int_12;
     public static Random random_0;
-    public static GClass33 gclass33_0;
-    public static GClass36 gclass36_2 = new GClass36(6000);
+    public static LootRouteParser gclass33_0;
+    public static GameTimer gclass36_2 = new GameTimer(6000);
     public static bool bool_30;
     public static bool bool_31 = false;
     public static GSpellTimer gspellTimer_1 = null;
@@ -150,13 +150,13 @@ public class StartupClass
     public static bool bool_36;
     public static bool bool_37;
     public static bool bool_38;
-    public static GClass63 gclass63_0;
+    public static SpellbookManager gclass63_0;
     private static int int_13;
     public static IntPtr intptr_2 = IntPtr.Zero;
     public static bool bool_39 = true;
     public static uint uint_0 = uint.MaxValue;
-    private static readonly GClass36 gclass36_3 = new GClass36(3500);
-    private static GClass36 gclass36_4 = new GClass36(6000);
+    private static readonly GameTimer gclass36_3 = new GameTimer(3500);
+    private static GameTimer gclass36_4 = new GameTimer(6000);
     private static readonly GSpellTimer gspellTimer_2 = new GSpellTimer(1080000, true);
     private static string string_10 = null;
     private static Size size_0;
@@ -166,21 +166,21 @@ public class StartupClass
     public static void InitStartupMode(AppMode appMode_1)
     {
         ApplicationStartupMode = appMode_1;
-        ProfileMapping = new SortedList<string, GClass22>();
-        ProfileIdToProfileMap = new SortedList<long, GClass5>();
+        ProfileMapping = new SortedList<string, SpellActionData>();
+        ProfileIdToProfileMap = new SortedList<long, LootableCorpseTracker>();
         if (appMode_1 == AppMode.PGEdit)
         {
-            GClass61.gclass61_0 = new GClass61();
+            ConfigManager.gclass61_0 = new ConfigManager();
             MessageProvider.smethod_0(".\\");
             random_0 = new Random();
             gprofile_0 = null;
             string_5 = null;
             thread_0 = null;
-            gclass54_0 = new GClass54();
+            gclass54_0 = new PartyManager();
             int_4 = 1;
-            if (GClass61.gclass61_0.method_2("LastProfile") != null)
+            if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             {
-                smethod_1(GClass61.gclass61_0.method_2("LastProfile"));
+                smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
             }
             else
             {
@@ -190,22 +190,22 @@ public class StartupClass
 
             var gcontext = new GContext();
             if (appMode_1 != AppMode.PGEdit)
-                GClass74.smethod_10();
-            GClass55.smethod_31(GClass61.gclass61_0);
+                CodeCompiler.smethod_10();
+            InputController.smethod_31(ConfigManager.gclass61_0);
             smethod_5();
-            GClass42.gclass42_0 = new GClass42();
-            GClass42.gclass42_0.method_12();
+            SpellcastingManager.gclass42_0 = new SpellcastingManager();
+            SpellcastingManager.gclass42_0.method_12();
             smethod_7();
             if (appMode_1 == AppMode.PGEdit)
                 return;
-            if (GClass61.gclass61_0.method_2("AppKey") != "demo")
-                GClass74.smethod_14();
+            if (ConfigManager.gclass61_0.method_2("AppKey") != "demo")
+                CodeCompiler.smethod_14();
             smethod_8();
         }
         else
         {
             Logger.LogMessage("Glider 1.8.0 starting up (Release)");
-            GClass61.gclass61_0 = new GClass61();
+            ConfigManager.gclass61_0 = new ConfigManager();
             IsBetaAccessGranted = true;
             if (Environment.CommandLine.ToLower().IndexOf("/l1") != -1)
                 bool_34 = true;
@@ -218,11 +218,11 @@ public class StartupClass
             if (Environment.CommandLine.ToLower().IndexOf("/resume") != -1)
                 bool_30 = true;
             MessageProvider.smethod_0(".\\");
-            gclass11_0 = new GClass11();
+            gclass11_0 = new SecurityDescriptorHelper();
             gclass11_0.method_1();
             GameClass32Instance = null;
             random_0 = new Random();
-            gclass36_0 = new GClass36(10000);
+            gclass36_0 = new GameTimer(10000);
             glideMode_0 = GlideMode.None;
             WowVersionLabel_string = "0.0";
             int_7 = 0;
@@ -234,22 +234,22 @@ public class StartupClass
             bool_16 = false;
             thread_0 = null;
             int_6 = 1;
-            gclass36_0 = new GClass36(660000);
+            gclass36_0 = new GameTimer(660000);
             bool_21 = false;
-            gclass36_1 = new GClass36(30000);
+            gclass36_1 = new GameTimer(30000);
             IsGliderInitialized = false;
-            gclass68_0 = new GClass68();
+            gclass68_0 = new CameraRotator();
             if (!IsAttached)
             {
                 smethod_54();
                 smethod_55();
             }
 
-            if (GClass61.gclass61_0.method_5("AllowNetCheck") && !IsAttached)
-                new GClass3().ValidateNetworkSafety(true);
-            if (GClass61.gclass61_0.method_2("LastProfile") != null)
+            if (ConfigManager.gclass61_0.method_5("AllowNetCheck") && !IsAttached)
+                new NetworkSafetyChecker().ValidateNetworkSafety(true);
+            if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             {
-                smethod_1(GClass61.gclass61_0.method_2("LastProfile"));
+                smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
             }
             else
             {
@@ -257,18 +257,18 @@ public class StartupClass
                 string_5 = MessageProvider.GetMessage(70);
             }
 
-            GliderUIManager = new GClass9();
+            GliderUIManager = new WebNotificationService();
             var gcontext = new GContext();
             if (!IsAttached)
-                GClass74.smethod_10();
-            GClass55.smethod_31(GClass61.gclass61_0);
+                CodeCompiler.smethod_10();
+            InputController.smethod_31(ConfigManager.gclass61_0);
             smethod_5();
-            gclass54_0 = new GClass54();
-            gclass54_0.method_0(GClass61.gclass61_0);
+            gclass54_0 = new PartyManager();
+            gclass54_0.method_0(ConfigManager.gclass61_0);
             smethod_52();
-            GClass42.gclass42_0 = new GClass42();
-            GClass42.gclass42_0.method_12();
-            gclass24_0 = new GClass24();
+            SpellcastingManager.gclass42_0 = new SpellcastingManager();
+            SpellcastingManager.gclass42_0.method_12();
+            gclass24_0 = new KeyboardHookManager();
             gclass36_0.method_4();
             if (!IsAttached)
                 smethod_7();
@@ -283,8 +283,8 @@ public class StartupClass
                 Environment.Exit(1);
             }
 
-            GameMemoryWriter = new GClass47();
-            GameClass69Instance = new GClass69();
+            GameMemoryWriter = new ScriptExecutor();
+            GameClass69Instance = new ChatLogManager();
             smethod_30();
             smethod_53();
             smethod_9();
@@ -295,7 +295,7 @@ public class StartupClass
     {
         if (smethod_2(string_11))
         {
-            gclass48_0 = new GClass48();
+            gclass48_0 = new ProfileGroupManager();
             return gclass48_0.method_4(string_11);
         }
 
@@ -317,7 +317,7 @@ public class StartupClass
             bool_16 = false;
             string_5 = string_11;
             Logger.LogMessage(MessageProvider.smethod_2(109, string_5));
-            GClass61.gclass61_0.method_0("LastProfile", string_11);
+            ConfigManager.gclass61_0.method_0("LastProfile", string_11);
             if (gclass54_0 != null && gclass54_0.sortedList_0 != null)
             {
                 gclass54_0.sortedList_0 = null;
@@ -344,10 +344,10 @@ public class StartupClass
     {
         if (IsAttached)
             return;
-        numbers_string = GClass61.gclass61_0.method_2("BarCharacters");
+        numbers_string = ConfigManager.gclass61_0.method_2("BarCharacters");
         if (GContext.Main != null)
             GContext.Main.ApplyConfig();
-        DebuffsKnown_string = new GClass44();
+        DebuffsKnown_string = new DebuffDatabase();
         if (bool_29)
         {
             bool_29 = false;
@@ -356,13 +356,13 @@ public class StartupClass
 
         if (CurrentGameClass != null)
             CurrentGameClass.LoadConfig();
-        GClass50.double_2 = smethod_6(GClass61.gclass61_0.method_2("MeleeDistance"));
-        GClass50.double_3 = smethod_6(GClass61.gclass61_0.method_2("RangedDistance"));
-        double_0 = smethod_6(GClass61.gclass61_0.method_2("AutoAddDistance"));
-        GClass20.bool_0 = GClass61.gclass61_0.method_5("Silent");
+        RestStatusMonitor.double_2 = smethod_6(ConfigManager.gclass61_0.method_2("MeleeDistance"));
+        RestStatusMonitor.double_3 = smethod_6(ConfigManager.gclass61_0.method_2("RangedDistance"));
+        double_0 = smethod_6(ConfigManager.gclass61_0.method_2("AutoAddDistance"));
+        SoundPlayer.bool_0 = ConfigManager.gclass61_0.method_5("Silent");
         if (ApplicationStartupMode == AppMode.PGEdit)
             return;
-        if (!GClass61.gclass61_0.method_5("ListenEnabled"))
+        if (!ConfigManager.gclass61_0.method_5("ListenEnabled"))
         {
             if (gclass79_0 != null)
             {
@@ -373,7 +373,7 @@ public class StartupClass
         }
         else
         {
-            if (gclass79_0 != null && gclass79_0.int_0 != GClass61.gclass61_0.method_3("ListenPort"))
+            if (gclass79_0 != null && gclass79_0.int_0 != ConfigManager.gclass61_0.method_3("ListenPort"))
             {
                 Logger.LogMessage(MessageProvider.smethod_2(142, gclass79_0.int_0));
                 gclass79_0.method_1();
@@ -382,22 +382,22 @@ public class StartupClass
 
             if (gclass79_0 == null)
             {
-                gclass79_0 = new GClass79();
+                gclass79_0 = new RemoteViewerServer();
                 Logger.LogMessage(MessageProvider.smethod_2(143, gclass79_0.int_0));
                 gclass79_0.method_0();
             }
         }
 
-        string_8 = GClass61.gclass61_0.method_2("FriendWhitelist").Split(' ');
-        gclass33_0 = new GClass33(GClass61.gclass61_0.method_2("LootPattern"));
+        string_8 = ConfigManager.gclass61_0.method_2("FriendWhitelist").Split(' ');
+        gclass33_0 = new LootRouteParser(ConfigManager.gclass61_0.method_2("LootPattern"));
         GliderUIManager.method_2();
-        if (GClass61.gclass61_0.method_5("UseHook") && !GClass24.bool_0)
+        if (ConfigManager.gclass61_0.method_5("UseHook") && !KeyboardHookManager.bool_0)
         {
-            gclass24_0 = new GClass24();
+            gclass24_0 = new KeyboardHookManager();
         }
         else
         {
-            if (gclass24_0 == null || !GClass24.bool_0 || GClass61.gclass61_0.method_5("UseHook"))
+            if (gclass24_0 == null || !KeyboardHookManager.bool_0 || ConfigManager.gclass61_0.method_5("UseHook"))
                 return;
             gclass24_0.method_17();
         }
@@ -410,9 +410,9 @@ public class StartupClass
 
     private static void smethod_7()
     {
-        if (GClass61.gclass61_0.method_2("ForceVersion") != null)
+        if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
         {
-            WowVersionLabel_string = GClass61.gclass61_0.method_2("ForceVersion");
+            WowVersionLabel_string = ConfigManager.gclass61_0.method_2("ForceVersion");
             Logger.LogMessage(MessageProvider.smethod_2(81, WowVersionLabel_string));
         }
 
@@ -442,7 +442,7 @@ public class StartupClass
                 }
                 else
                 {
-                    if (GClass61.gclass61_0.method_2("ForceVersion") != null)
+                    if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
                         return;
                     WowVersionLabel_string = versionInfo.FileVersion;
                     Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel_string));
@@ -453,10 +453,10 @@ public class StartupClass
 
     public static void smethod_8()
     {
-        var str = GClass61.gclass61_0.method_2("CustomClassName");
+        var str = ConfigManager.gclass61_0.method_2("CustomClassName");
         if (str.Length == 0)
         {
-            var gameClass = (GameClass)GClass61.gclass61_0.method_3("Class");
+            var gameClass = (GameClass)ConfigManager.gclass61_0.method_3("Class");
             str = gameClass + ".cs (internal)";
             if (!ProfileMapping.ContainsKey(str))
             {
@@ -465,7 +465,7 @@ public class StartupClass
             }
 
             Logger.smethod_1("Promoting name to: \"" + str + "\"");
-            GClass61.gclass61_0.method_0("CustomClassName", str);
+            ConfigManager.gclass61_0.method_0("CustomClassName", str);
         }
 
         if (!ProfileMapping.ContainsKey(str))
@@ -475,7 +475,7 @@ public class StartupClass
             {
                 str += ".cs (internal)";
                 Logger.LogMessage("Promoted to real internal class: " + str);
-                GClass61.gclass61_0.method_0("CustomClassName", str);
+                ConfigManager.gclass61_0.method_0("CustomClassName", str);
             }
             else
             {
@@ -501,7 +501,7 @@ public class StartupClass
     public static void smethod_9()
     {
         isInitializationSuccessful = false;
-        GClass18.gclass18_0 = new GClass18();
+        MemoryOffsetTable.gclass18_0 = new MemoryOffsetTable();
         thread_0 = new Thread(smethod_10);
         thread_0.Start();
     }
@@ -520,7 +520,7 @@ public class StartupClass
 
     private static void smethod_11()
     {
-        ApplicationInitializer.InitializeAndValidate(GClass61.gclass61_0.method_2("AppKey"), true);
+        ApplicationInitializer.InitializeAndValidate(ConfigManager.gclass61_0.method_2("AppKey"), true);
         bool_13 = false;
         if (isInputStringFourCharacters && !bool_23)
         {
@@ -531,7 +531,7 @@ public class StartupClass
 
         thread_0 = null;
         if (isInitializationSuccessful)
-            GClass17.smethod_0();
+            DebugPrivilegeElevator.smethod_0();
         if (!isInputStringFourCharacters)
         {
             Logger.LogMessage(MessageProvider.GetMessage(76));
@@ -539,7 +539,7 @@ public class StartupClass
                 Logger.LogMessage(MessageProvider.smethod_2(77, expiryTime.ToString()));
             if (IsSomeConditionMet)
             {
-                GClass74.smethod_12();
+                CodeCompiler.smethod_12();
                 if (GameMemoryWriter != null)
                     GameMemoryWriter.method_7();
                 switch (ApplicationInitializer.InitializationCount)
@@ -563,11 +563,11 @@ public class StartupClass
             }
 
             bool_19 = false;
-            if (GClass61.gclass61_0.method_5("AllowWW") && GliderManager != null && GameMemoryReader == null && !IsAttached)
+            if (ConfigManager.gclass61_0.method_5("AllowWW") && GliderManager != null && GameMemoryReader == null && !IsAttached)
             {
                 Logger.LogMessage("Starting Tripwire");
-                GameMemoryReader = new GClass16(GliderManager, GClass61.gclass61_0.method_5("LogWW"),
-                    GClass18.gclass18_0.method_4("VAPeek"));
+                GameMemoryReader = new WardenMonitor(GliderManager, ConfigManager.gclass61_0.method_5("LogWW"),
+                    MemoryOffsetTable.gclass18_0.method_4("VAPeek"));
             }
 
             if (IsSomeConditionMet && !bool_37 && !IsAttached)
@@ -616,7 +616,7 @@ public class StartupClass
         Logger.smethod_1("--- Attach code in");
         if (IsAttached)
         {
-            GClass20.smethod_0("Attach.wav");
+            SoundPlayer.smethod_0("Attach.wav");
             IsDetached = true;
             ginterface0_0.imethod_0();
         }
@@ -625,28 +625,28 @@ public class StartupClass
             IsForegroundEnabled = false;
             gclass36_2.method_4();
             GProcessMemoryManipulator.bool_2 = false;
-            gclass43_0 = new OffsetManager("Player", GClass18.gclass18_0.method_4("D_Player"));
-            gclass43_3 = new OffsetManager("Item", GClass18.gclass18_0.method_4("D_Items"));
-            gclass43_1 = new OffsetManager("NPC", GClass18.gclass18_0.method_4("D_NPC"));
-            gclass43_2 = new OffsetManager("Object", GClass18.gclass18_0.method_4("D_Object"));
-            gclass43_4 = new OffsetManager("Container", GClass18.gclass18_0.method_4("D_Container"));
-            gclass63_0 = new GClass63();
+            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.gclass18_0.method_4("D_Player"));
+            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.gclass18_0.method_4("D_Items"));
+            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.gclass18_0.method_4("D_NPC"));
+            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.gclass18_0.method_4("D_Object"));
+            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.gclass18_0.method_4("D_Container"));
+            gclass63_0 = new SpellbookManager();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
                 CurrentGameClass.OnAttach();
-            GClass8.smethod_2("UIParent");
+            UIElement.smethod_2("UIParent");
             smethod_17(1, MessageProvider.GetMessage(98));
             ginterface0_0.imethod_0();
-            gclass38_0 = new GClass38();
+            gclass38_0 = new EquipmentEnchantmentChecker();
             gclass38_0.method_0();
             GameClass69Instance.method_0();
-            GClass67.smethod_0();
-            GameClass8Instance = GClass8.smethod_2("GameMenuFrame");
+            DialogMonitor.smethod_0();
+            GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
             IsGliderPaused = false;
             if (gclass48_0 != null)
                 gclass48_0.method_6();
             bool_13 = true;
-            GClass20.smethod_0("Attach.wav");
+            SoundPlayer.smethod_0("Attach.wav");
             if (GameMemoryReader != null)
             {
                 GameMemoryReader.method_5();
@@ -761,7 +761,7 @@ public class StartupClass
                         {
                             var short_0 = (short)int.Parse(string_11.Substring(index + 1, num - index - 1));
                             flag = false;
-                            GClass55.smethod_9(short_0);
+                            InputController.smethod_9(short_0);
                             index = num;
                         }
                         catch (Exception ex)
@@ -781,13 +781,13 @@ public class StartupClass
                 else
                 {
                     flag = false;
-                    GClass55.smethod_9(13);
+                    InputController.smethod_9(13);
                     Thread.Sleep(700);
                 }
             }
 
             if (flag)
-                GClass55.smethod_6(char_0);
+                InputController.smethod_6(char_0);
         }
     }
 
@@ -820,10 +820,10 @@ public class StartupClass
             return false;
         }
 
-        if (!GClass61.gclass61_0.method_5("BackgroundEnable"))
+        if (!ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             smethod_22();
         glideMode_0 = GlideMode.Manual;
-        gclass60_0 = new GClass60();
+        gclass60_0 = new GlideMainThread();
         return true;
     }
 
@@ -851,18 +851,18 @@ public class StartupClass
         var flag = false;
         switch (genum2_0)
         {
-            case GEnum2.const_0:
+            case WaypointType.const_0:
                 flag = GPlayerSelf.Me.IsDead;
                 break;
-            case GEnum2.const_1:
+            case WaypointType.const_1:
                 flag = false;
                 break;
-            case GEnum2.const_2:
+            case WaypointType.const_2:
                 flag = true;
                 break;
         }
 
-        if (genum2_0 == GEnum2.const_3)
+        if (genum2_0 == WaypointType.const_3)
         {
             gprofile_0.VendorWaypoints.Add(GPlayerSelf.Me.Location);
             Logger.LogMessage(MessageProvider.smethod_2(870, gprofile_0.VendorWaypoints.Count));
@@ -892,7 +892,7 @@ public class StartupClass
             return false;
         }
 
-        if (GClass61.gclass61_0.method_5("AllowNetCheck") && !new GClass3().ValidateNetworkSafety(true))
+        if (ConfigManager.gclass61_0.method_5("AllowNetCheck") && !new NetworkSafetyChecker().ValidateNetworkSafety(true))
             return false;
         if (glideMode_0 != GlideMode.None)
         {
@@ -922,7 +922,7 @@ public class StartupClass
         }
 
         if (GPlayerSelf.Me.IsDead &&
-            (gprofile_0.GhostWaypoints.Count == 0 || !GClass61.gclass61_0.method_5("Resurrect")))
+            (gprofile_0.GhostWaypoints.Count == 0 || !ConfigManager.gclass61_0.method_5("Resurrect")))
         {
             Logger.LogMessage(MessageProvider.GetMessage(120));
             return false;
@@ -931,7 +931,7 @@ public class StartupClass
         if (!IsGliderInitialized)
             smethod_22();
         glideMode_0 = GlideMode.Auto;
-        gclass73_0 = new GClass73();
+        gclass73_0 = new CombatController();
         if (gclass73_0.method_1())
             return true;
         glideMode_0 = GlideMode.None;
@@ -940,7 +940,7 @@ public class StartupClass
 
     private static bool smethod_25()
     {
-        GameProcessManager = new GClass49();
+        GameProcessManager = new MachGlideRunner();
         if (!GameProcessManager.method_0())
         {
             glideMode_0 = GlideMode.None;
@@ -1031,7 +1031,7 @@ public class StartupClass
             gclass68_0.method_3(true);
             Logger.smethod_1(MessageProvider.smethod_2(652, bool_42, (int)glideMode_0, string_11));
             gclass68_0.method_3(true);
-            GClass55.smethod_21(false);
+            InputController.smethod_21(false);
             if (glideMode_0 == GlideMode.Auto)
             {
                 if (bool_42)
@@ -1116,7 +1116,7 @@ public class StartupClass
         if (GameMemoryReader != null)
             GameMemoryReader.method_0();
         GameMemoryWriter.method_0();
-        GClass74.smethod_4();
+        CodeCompiler.smethod_4();
         GliderUIManager.method_5();
     }
 
@@ -1140,7 +1140,7 @@ public class StartupClass
 
     private static void smethod_33()
     {
-        GClass20.smethod_1("GliderExit.wav");
+        SoundPlayer.smethod_1("GliderExit.wav");
         DebuffsKnown_string.method_10();
         ginterface0_0.imethod_4();
         if (GliderManager != null && !bool_33)
@@ -1196,14 +1196,14 @@ public class StartupClass
     [DllImport("kernel32")]
     private static extern bool CloseHandle(IntPtr intptr_3);
 
-    public static void smethod_37(GEnum0 genum0_0)
+    public static void smethod_37(WardenCheckStatus genum0_0)
     {
         Logger.LogMessage("StopOnTW invoked, result = " + (int)genum0_0);
-        if (genum0_0 == GEnum0.const_2)
+        if (genum0_0 == WardenCheckStatus.const_2)
             File.WriteAllText("TWfail.txt", "guh!");
-        if (genum0_0 == GEnum0.const_1)
+        if (genum0_0 == WardenCheckStatus.const_1)
             File.WriteAllText("TWunsafe.txt", "guh!");
-        if (genum0_0 == GEnum0.const_3)
+        if (genum0_0 == WardenCheckStatus.const_3)
             File.WriteAllText("DeadSession.txt", "guh!");
         IsExitRequested = true;
         if (GameMemoryReader != null)
@@ -1228,8 +1228,8 @@ public class StartupClass
         if (gspellTimer_2.IsReady)
         {
             gspellTimer_2.Reset();
-            var gclass3 = new GClass3();
-            if (GClass61.gclass61_0.method_5("AllowNetCheck"))
+            var gclass3 = new NetworkSafetyChecker();
+            if (ConfigManager.gclass61_0.method_5("AllowNetCheck"))
                 gclass3.ValidateNetworkSafety(false);
         }
 
@@ -1243,7 +1243,7 @@ public class StartupClass
         if (bool_38 && !IsAttached && !bool_37)
         {
             bool_37 = true;
-            GClass74.smethod_14();
+            CodeCompiler.smethod_14();
             smethod_8();
         }
 
@@ -1263,10 +1263,10 @@ public class StartupClass
         }
 
         GameClass69Instance.method_4();
-        GClass67.smethod_1();
+        DialogMonitor.smethod_1();
         if (GameClass8Instance != null && GameClass8Instance.method_10() && glideMode_0 == GlideMode.Auto)
-            GClass55.smethod_9(27);
-        if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && GClass61.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
+            InputController.smethod_9(27);
+        if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
             (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !IsGliderRunning)
         {
             IsGliderRunning = true;
@@ -1275,7 +1275,7 @@ public class StartupClass
 
         GObjectList.GetObjects();
         gclass68_0.method_7();
-        GClass55.smethod_21(true);
+        InputController.smethod_21(true);
     }
 
     public static void smethod_39(int int_14)
@@ -1300,15 +1300,15 @@ public class StartupClass
             Logger.LogMessage(MessageProvider.GetMessage(830));
             if (glideMode_0 == GlideMode.Auto)
                 gprofile_0.ForceBlacklist(gunit_0.GUID);
-            GClass73.smethod_1();
+            CombatController.smethod_1();
             return true;
         }
 
         Logger.LogMessage(MessageProvider.GetMessage(517));
-        if (GClass61.gclass61_0.method_5("StopOnVanish"))
+        if (ConfigManager.gclass61_0.method_5("StopOnVanish"))
         {
             GContext.Main.Movement.LookConfused();
-            GClass20.smethod_0("GMWhisper.wav");
+            SoundPlayer.smethod_0("GMWhisper.wav");
             smethod_27(true, "TargetVanishedInCombat");
         }
 
@@ -1370,11 +1370,11 @@ public class StartupClass
 
         if (IsAttached)
             return true;
-        if (GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("UIParent"), "probeuip") == 0 && !bool_20 &&
+        if (GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("UIParent"), "probeuip") == 0 && !bool_20 &&
             ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
-            var str = GClass61.gclass61_0.method_2("AutoLog");
-            if (str != null && str.Length > 0 && IsSomeConditionMet && new GClass31().method_2())
+            var str = ConfigManager.gclass61_0.method_2("AutoLog");
+            if (str != null && str.Length > 0 && IsSomeConditionMet && new AutoLoginManager().method_2())
             {
                 bool_20 = true;
                 GameMemoryWriter.method_2("DoAutoLog", false);
@@ -1383,10 +1383,10 @@ public class StartupClass
             return false;
         }
 
-        if (GClass18.gclass18_0.method_5("TLSSlot"))
+        if (MemoryOffsetTable.gclass18_0.method_5("TLSSlot"))
             return GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && GObjectList.StealthCountGameObjects(long_0) > 0 &&
                    long_0 != 0L;
-        var numArray = GProcessMemoryManipulator.smethod_20(GClass18.gclass18_0.method_4("PlayerIdAddr"), 8);
+        var numArray = GProcessMemoryManipulator.smethod_20(MemoryOffsetTable.gclass18_0.method_4("PlayerIdAddr"), 8);
         if (numArray == null)
         {
             if (AdditionalApplicationHandle != IntPtr.Zero)
@@ -1398,7 +1398,7 @@ public class StartupClass
         long_0 = BitConverter.ToInt64(numArray, 0);
         if (long_0 == 0L)
             return false;
-        int_5 = GProcessMemoryManipulator.smethod_11(GClass18.gclass18_0.method_4("MainTable"), "MainTableProbe");
+        int_5 = GProcessMemoryManipulator.smethod_11(MemoryOffsetTable.gclass18_0.method_4("MainTable"), "MainTableProbe");
         return GObjectList.StealthCountGameObjects(long_0) > 1;
     }
 
@@ -1411,7 +1411,7 @@ public class StartupClass
 
     public static void smethod_46()
     {
-        switch (GClass61.gclass61_0.method_2("BackgroundDisplay"))
+        switch (ConfigManager.gclass61_0.method_2("BackgroundDisplay"))
         {
             case "Hide":
                 smethod_47();
@@ -1434,7 +1434,7 @@ public class StartupClass
     {
         if (bool_41)
             return;
-        double width = GClass61.gclass61_0.method_3("ShrinkWidth");
+        double width = ConfigManager.gclass61_0.method_3("ShrinkWidth");
         GProcessMemoryManipulator.smethod_40(MainApplicationHandle, out size_0);
         var height = size_0.Height / (double)size_0.Width * width;
         GProcessMemoryManipulator.smethod_42(MainApplicationHandle, new Size((int)width, (int)height));
@@ -1468,16 +1468,16 @@ public class StartupClass
         if (Environment.CommandLine.ToLower().IndexOf("/ln") == -1)
             return;
         var string_4 = smethod_36("/ln");
-        GClass61.gclass61_0.method_0("LName", string_4);
-        GClass61.gclass61_0.method_8();
+        ConfigManager.gclass61_0.method_0("LName", string_4);
+        ConfigManager.gclass61_0.method_8();
     }
 
     private static void smethod_53()
     {
         if (Environment.CommandLine.ToLower().IndexOf("/driver") != -1)
         {
-            GClass20.smethod_1("Kill.wav");
-            GliderManager = new GClass71(smethod_36("/driver"));
+            SoundPlayer.smethod_1("Kill.wav");
+            GliderManager = new WardenProtocol(smethod_36("/driver"));
             Logger.smethod_1("Sending data to shadow driver");
             if (!GliderManager.method_38())
             {
@@ -1509,7 +1509,7 @@ public class StartupClass
             Logger.LogMessage("/attachpid specified, looking for: " + int_12);
         }
 
-        if (!GClass61.gclass61_0.method_5("UnloadShadow") || GliderManager == null)
+        if (!ConfigManager.gclass61_0.method_5("UnloadShadow") || GliderManager == null)
             return;
         GliderManager.method_11();
         GliderManager = null;
@@ -1517,7 +1517,7 @@ public class StartupClass
 
     private static void smethod_54()
     {
-        var str = GClass61.gclass61_0.method_2("ForceVersion");
+        var str = ConfigManager.gclass61_0.method_2("ForceVersion");
         if (str == null || str.Length <= 0 || MessageBox.Show(null,
                 "ForceVersion detected in configuration.  Running with this option increases the risk of detection and may cause Glider to crash.  Are you sure you want to continue?",
                 "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
@@ -1530,7 +1530,7 @@ public class StartupClass
 
     private static void smethod_55()
     {
-        if (GClass61.gclass61_0.method_5("AllowWW") || MessageBox.Show(null,
+        if (ConfigManager.gclass61_0.method_5("AllowWW") || MessageBox.Show(null,
                 "Tripwire is disabled in configuration.  Running with this option increases the risk of detection.  Are you sure you want to continue?",
                 "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
             DialogResult.No)
@@ -1546,12 +1546,12 @@ public class StartupClass
         if (!IsSomeConditionMet)
         {
             Logger.LogMessage(MessageProvider.GetMessage(868));
-            GClass73.smethod_0(869);
+            CombatController.smethod_0(869);
         }
         else
         {
-            var string_1 = GClass61.gclass61_0.method_2("AutoLog");
-            if (!new GClass31().method_1(string_1))
+            var string_1 = ConfigManager.gclass61_0.method_2("AutoLog");
+            if (!new AutoLoginManager().method_1(string_1))
                 return;
             string_9 = string_1;
             Logger.smethod_1("Autolog is good!");
@@ -1576,22 +1576,22 @@ public class StartupClass
             IsInitialized = true;
             SecurityCheckInstance = new SecCheck();
             SecurityCheckInstance.Show();
-            GClass61.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
-            GClass61.gclass61_0.method_8();
+            ConfigManager.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
+            ConfigManager.gclass61_0.method_8();
         }
     }
 
     public static void smethod_59()
     {
-        if (!GClass61.gclass61_0.method_5("AllowAutoSecCheck"))
+        if (!ConfigManager.gclass61_0.method_5("AllowAutoSecCheck"))
             return;
-        if (GClass61.gclass61_0.method_2("LastSecCheck") == null)
+        if (ConfigManager.gclass61_0.method_2("LastSecCheck") == null)
         {
-            GClass61.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
+            ConfigManager.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
         }
         else
         {
-            if ((DateTime.Now - DateTime.Parse(GClass61.gclass61_0.method_2("LastSecCheck"))).TotalDays < 7.0)
+            if ((DateTime.Now - DateTime.Parse(ConfigManager.gclass61_0.method_2("LastSecCheck"))).TotalDays < 7.0)
                 return;
             smethod_60();
         }
@@ -1610,7 +1610,7 @@ public class StartupClass
         IsSecCheckEnabled = true;
         if (int.Parse("1.8.0".Replace(".", "")) >= InitializationCount)
             return;
-        if (GClass61.gclass61_0.method_5("NoVersionPop"))
+        if (ConfigManager.gclass61_0.method_5("NoVersionPop"))
         {
             Logger.LogMessage("A new version of Glider is available for download.");
         }
@@ -1625,7 +1625,7 @@ public class StartupClass
 
     public static void smethod_62()
     {
-        if (!IsGliderInitialized && GClass61.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
+        if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
         {
             Logger.smethod_1("Setting up bg stuff");
             MainApplicationHandle = GProcessMemoryManipulator.smethod_29(AnotherIntegerValue);
@@ -1640,7 +1640,7 @@ public class StartupClass
 
     public static string smethod_63(int int_14)
     {
-        var num1 = GClass18.gclass18_0.method_4("MacroBase");
+        var num1 = MemoryOffsetTable.gclass18_0.method_4("MacroBase");
         var num2 = GProcessMemoryManipulator.smethod_11(num1 + 36, "mbase");
         int int_29_1;
         for (var int_29_2 =

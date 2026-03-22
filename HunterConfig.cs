@@ -39,20 +39,20 @@ public class HunterConfig : Form
     public HunterConfig()
     {
         InitializeComponent();
-        PullDistance.Text = GClass61.gclass61_0.method_2("Hunter.PullDistance");
-        MinHappiness.Text = GClass61.gclass61_0.method_2("Hunter.MinHappiness");
-        DotShot.Checked = GClass61.gclass61_0.method_5("Hunter.DotShot");
-        UseIntimidate.Checked = GClass61.gclass61_0.method_5("Hunter.UseIntimidate");
-        UseWrath.Checked = GClass61.gclass61_0.method_5("Hunter.UseWrath");
-        ApproachPull.Checked = GClass61.gclass61_0.method_5("Hunter.ApproachPull");
-        SetTrap.Checked = GClass61.gclass61_0.method_5("Hunter.SetTrap");
-        SeparateGroups.Checked = GClass61.gclass61_0.method_5("Hunter.SeparateGroups");
-        PetAttack.Checked = GClass61.gclass61_0.method_5("Hunter.PetAttack");
-        AvoidMelee.Checked = GClass61.gclass61_0.method_5("Hunter.AvoidMelee");
-        NoPet.Checked = GClass61.gclass61_0.method_5("Hunter.NoPet");
-        TrapAdds.Checked = GClass61.gclass61_0.method_5("Hunter.TrapAdds");
-        FeedMacro.Checked = GClass61.gclass61_0.method_5("Hunter.FeedMacro");
-        UseViper.Checked = GClass61.gclass61_0.method_5("Hunter.UseViper");
+        PullDistance.Text = ConfigManager.gclass61_0.method_2("Hunter.PullDistance");
+        MinHappiness.Text = ConfigManager.gclass61_0.method_2("Hunter.MinHappiness");
+        DotShot.Checked = ConfigManager.gclass61_0.method_5("Hunter.DotShot");
+        UseIntimidate.Checked = ConfigManager.gclass61_0.method_5("Hunter.UseIntimidate");
+        UseWrath.Checked = ConfigManager.gclass61_0.method_5("Hunter.UseWrath");
+        ApproachPull.Checked = ConfigManager.gclass61_0.method_5("Hunter.ApproachPull");
+        SetTrap.Checked = ConfigManager.gclass61_0.method_5("Hunter.SetTrap");
+        SeparateGroups.Checked = ConfigManager.gclass61_0.method_5("Hunter.SeparateGroups");
+        PetAttack.Checked = ConfigManager.gclass61_0.method_5("Hunter.PetAttack");
+        AvoidMelee.Checked = ConfigManager.gclass61_0.method_5("Hunter.AvoidMelee");
+        NoPet.Checked = ConfigManager.gclass61_0.method_5("Hunter.NoPet");
+        TrapAdds.Checked = ConfigManager.gclass61_0.method_5("Hunter.TrapAdds");
+        FeedMacro.Checked = ConfigManager.gclass61_0.method_5("Hunter.FeedMacro");
+        UseViper.Checked = ConfigManager.gclass61_0.method_5("Hunter.UseViper");
         MessageProvider.smethod_3(this, "Hunter");
         GProcessMemoryManipulator.smethod_48(this);
     }
@@ -291,23 +291,23 @@ public class HunterConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        GClass61.gclass61_0.method_0("Hunter.DotShot", DotShot.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.ApproachPull", ApproachPull.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.SetTrap", SetTrap.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.UseIntimidate", UseIntimidate.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.UseWrath", UseWrath.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.SeparateGroups", SeparateGroups.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.PetAttack", PetAttack.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.AvoidMelee", AvoidMelee.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.NoPet", NoPet.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.TrapAdds", TrapAdds.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.FeedMacro", FeedMacro.Checked.ToString());
-        GClass61.gclass61_0.method_0("Hunter.UseViper", UseViper.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.DotShot", DotShot.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.ApproachPull", ApproachPull.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.SetTrap", SetTrap.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.UseIntimidate", UseIntimidate.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.UseWrath", UseWrath.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.SeparateGroups", SeparateGroups.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.PetAttack", PetAttack.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.AvoidMelee", AvoidMelee.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.NoPet", NoPet.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.TrapAdds", TrapAdds.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.FeedMacro", FeedMacro.Checked.ToString());
+        ConfigManager.gclass61_0.method_0("Hunter.UseViper", UseViper.Checked.ToString());
         if (StartupClass.smethod_19(PullDistance.Text))
-            GClass61.gclass61_0.method_0("Hunter.PullDistance", PullDistance.Text);
+            ConfigManager.gclass61_0.method_0("Hunter.PullDistance", PullDistance.Text);
         if (!StartupClass.smethod_19(MinHappiness.Text))
             return;
-        GClass61.gclass61_0.method_0("Hunter.MinHappiness", MinHappiness.Text);
+        ConfigManager.gclass61_0.method_0("Hunter.MinHappiness", MinHappiness.Text);
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

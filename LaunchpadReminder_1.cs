@@ -72,7 +72,7 @@ public class LaunchpadReminder_1 : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         if (DontRemindMe.Checked)
-            GClass61.gclass61_0.method_0("LaunchpadReminder", "No");
+            ConfigManager.gclass61_0.method_0("LaunchpadReminder", "No");
         DialogResult = DialogResult.OK;
     }
 }

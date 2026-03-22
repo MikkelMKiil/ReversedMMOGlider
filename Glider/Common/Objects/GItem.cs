@@ -117,11 +117,11 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (!GClass61.gclass61_0.method_5("SendMail") || IsProtected || IsSoulbound || Definition.IsConjured)
+                if (!ConfigManager.gclass61_0.method_5("SendMail") || IsProtected || IsSoulbound || Definition.IsConjured)
                     return false;
                 var gitemQuality = (GItemQuality)Enum.Parse(typeof(GItemQuality),
-                    GClass61.gclass61_0.method_2("VendType"), true);
-                var str1 = GClass61.gclass61_0.method_2("VendMailList");
+                    ConfigManager.gclass61_0.method_2("VendType"), true);
+                var str1 = ConfigManager.gclass61_0.method_2("VendMailList");
                 var chArray = new char[1] { ',' };
                 foreach (var str2 in str1.Split(chArray))
                     if (Name.ToLower() == str2.ToLower())
@@ -134,13 +134,13 @@ namespace Glider.Common.Objects
 
         public bool IsSellable => !IsMailable && !IsProtected && !IsSoulbound && !Definition.IsConjured &&
                                   Definition.Quality <= (GItemQuality)Enum.Parse(typeof(GItemQuality),
-                                      GClass61.gclass61_0.method_2("VendType"), true);
+                                      ConfigManager.gclass61_0.method_2("VendType"), true);
 
         public bool IsProtected
         {
             get
             {
-                var str1 = GClass61.gclass61_0.method_2("VendWhiteList");
+                var str1 = ConfigManager.gclass61_0.method_2("VendWhiteList");
                 var chArray = new char[1] { ',' };
                 foreach (var str2 in str1.Split(chArray))
                     if (Name.ToLower() == str2.ToLower())

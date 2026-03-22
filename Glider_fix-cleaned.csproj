@@ -45,16 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GClass0.cs" />
-    <Compile Include="GClass1.cs" />
-    <Compile Include="GClass2.cs" />
-    <Compile Include="GClass3.cs" />
-    <Compile Include="GClass4.cs" />
+    <Compile Include="PEImageParser.cs" />
+    <Compile Include="EncryptedDataTransport.cs" />
+    <Compile Include="Vector3.cs" />
+    <Compile Include="NetworkSafetyChecker.cs" />
+    <Compile Include="Matrix3.cs" />
     <Compile Include="DebuffList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass5.cs" />
-    <Compile Include="GClass6.cs" />
+    <Compile Include="LootableCorpseTracker.cs" />
+    <Compile Include="WorldToScreenProjector.cs" />
     <Compile Include="ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,15 +64,15 @@
     <Compile Include="GliderWarning.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass7.cs" />
+    <Compile Include="PlayingCard.cs" />
     <Compile Include="DebuffPick.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DeathknightConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GInterface0.cs" />
-    <Compile Include="GClass8.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="UIElement.cs" />
     <Compile Include="ProfileWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,12 +82,12 @@
     <Compile Include="KeyEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass9.cs" />
-    <Compile Include="GClass10.cs" />
-    <Compile Include="GClass11.cs" />
-    <Compile Include="GException0.cs" />
-    <Compile Include="GClass12.cs" />
-    <Compile Include="GClass13.cs" />
+    <Compile Include="WebNotificationService.cs" />
+    <Compile Include="LogEntry.cs" />
+    <Compile Include="SecurityDescriptorHelper.cs" />
+    <Compile Include="GliderException.cs" />
+    <Compile Include="TimedStringEntry.cs" />
+    <Compile Include="FlightPointManager.cs" />
     <Compile Include="EvoConfigWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,133 +97,133 @@
     <Compile Include="AccountInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass14.cs" />
-    <Compile Include="GClass15.cs" />
-    <Compile Include="GEnum0.cs" />
-    <Compile Include="GClass16.cs" />
-    <Compile Include="GClass17.cs" />
-    <Compile Include="GClass18.cs" />
-    <Compile Include="Class0.cs" />
-    <Compile Include="GClass19.cs" />
-    <Compile Include="GClass20.cs" />
+    <Compile Include="EncryptedAccountStorage.cs" />
+    <Compile Include="WardenCheckDiagram.cs" />
+    <Compile Include="WardenCheckStatus.cs" />
+    <Compile Include="WardenMonitor.cs" />
+    <Compile Include="DebugPrivilegeElevator.cs" />
+    <Compile Include="MemoryOffsetTable.cs" />
+    <Compile Include="IntStringEntry.cs" />
+    <Compile Include="WardenCheckDatabase.cs" />
+    <Compile Include="SoundPlayer.cs" />
     <Compile Include="ProfileProps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass21.cs" />
-    <Compile Include="GEnum1.cs" />
-    <Compile Include="GClass22.cs" />
+    <Compile Include="PlayerTracker.cs" />
+    <Compile Include="SpellEnabledState.cs" />
+    <Compile Include="SpellActionData.cs" />
     <Compile Include="PriestConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GStruct9.cs" />
-    <Compile Include="GStruct10.cs" />
-    <Compile Include="GStruct11.cs" />
-    <Compile Include="GClass23.cs" />
-    <Compile Include="GClass24.cs" />
-    <Compile Include="GClass28.cs" />
+    <Compile Include="FixedString16.cs" />
+    <Compile Include="NetworkAdapterEntry.cs" />
+    <Compile Include="ProcessListEntry.cs" />
+    <Compile Include="MACAddressReader.cs" />
+    <Compile Include="KeyboardHookManager.cs" />
+    <Compile Include="EmptyPlaceholder.cs" />
     <Compile Include="HunterConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass29.cs" />
+    <Compile Include="ByteSignaturePattern.cs" />
     <Compile Include="PickWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MessageProvider.cs" />
-    <Compile Include="GClass31.cs" />
+    <Compile Include="AutoLoginManager.cs" />
     <Compile Include="WarriorConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass32.cs" />
-    <Compile Include="GClass33.cs" />
-    <Compile Include="GClass34.cs" />
-    <Compile Include="GEnum2.cs" />
-    <Compile Include="GEnum3.cs" />
+    <Compile Include="ISXWardenIntegration.cs" />
+    <Compile Include="LootRouteParser.cs" />
+    <Compile Include="SolitaireGameState.cs" />
+    <Compile Include="WaypointType.cs" />
+    <Compile Include="TriStateOption.cs" />
     <Compile Include="StartupClass.cs" />
-    <Compile Include="GClass36.cs" />
+    <Compile Include="GameTimer.cs" />
     <Compile Include="RemindBar.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Logger.cs" />
-    <Compile Include="GClass38.cs" />
-    <Compile Include="GClass39.cs" />
-    <Compile Include="GClass40.cs" />
-    <Compile Include="GClass41.cs" />
-    <Compile Include="GClass42.cs" />
+    <Compile Include="EquipmentEnchantmentChecker.cs" />
+    <Compile Include="InventoryItem.cs" />
+    <Compile Include="SolitaireSolver.cs" />
+    <Compile Include="SolitaireMemoryOffsets.cs" />
+    <Compile Include="SpellcastingManager.cs" />
     <Compile Include="OffsetManager.cs" />
-    <Compile Include="GEnum4.cs" />
-    <Compile Include="GClass44.cs" />
-    <Compile Include="GClass45.cs" />
-    <Compile Include="GEnum5.cs" />
-    <Compile Include="GClass46.cs" />
-    <Compile Include="GClass47.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="GException1.cs" />
-    <Compile Include="GClass48.cs" />
-    <Compile Include="GClass49.cs" />
-    <Compile Include="GClass50.cs" />
-    <Compile Include="GEnum6.cs" />
-    <Compile Include="GClass51.cs" />
+    <Compile Include="DebuffType.cs" />
+    <Compile Include="DebuffDatabase.cs" />
+    <Compile Include="DebuffEntry.cs" />
+    <Compile Include="WardenMatchResult.cs" />
+    <Compile Include="WardenPatternMatcher.cs" />
+    <Compile Include="ScriptExecutor.cs" />
+    <Compile Include="BoolStringOption.cs" />
+    <Compile Include="MemoryReadException.cs" />
+    <Compile Include="ProfileGroupManager.cs" />
+    <Compile Include="MachGlideRunner.cs" />
+    <Compile Include="RestStatusMonitor.cs" />
+    <Compile Include="StepConditionType.cs" />
+    <Compile Include="ProfileStepCondition.cs" />
     <Compile Include="ApplicationInitializer.cs" />
-    <Compile Include="GClass53.cs" />
-    <Compile Include="GEnum7.cs" />
-    <Compile Include="GClass54.cs" />
-    <Compile Include="GClass55.cs" />
+    <Compile Include="WardenCondition.cs" />
+    <Compile Include="PartyRole.cs" />
+    <Compile Include="PartyManager.cs" />
+    <Compile Include="InputController.cs" />
     <Compile Include="GDataEncryptionManager.cs" />
-    <Compile Include="GClass57.cs" />
-    <Compile Include="GClass58.cs" />
-    <Compile Include="GClass59.cs" />
-    <Compile Include="GClass60.cs" />
-    <Compile Include="GClass61.cs" />
-    <Compile Include="Class2.cs" />
+    <Compile Include="ScreenCapture.cs" />
+    <Compile Include="GDIHelper.cs" />
+    <Compile Include="WindowContextHelper.cs" />
+    <Compile Include="GlideMainThread.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="ClipboardHelper.cs" />
     <Compile Include="DruidConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass62.cs" />
-    <Compile Include="GClass63.cs" />
-    <Compile Include="GClass64.cs" />
+    <Compile Include="TestThread.cs" />
+    <Compile Include="SpellbookManager.cs" />
+    <Compile Include="SpellEntry.cs" />
     <Compile Include="SecCheck.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass65.cs" />
-    <Compile Include="GClass66.cs" />
-    <Compile Include="GClass67.cs" />
-    <Compile Include="GClass68.cs" />
+    <Compile Include="ProcessEnumerator.cs" />
+    <Compile Include="ProcessInfo.cs" />
+    <Compile Include="DialogMonitor.cs" />
+    <Compile Include="CameraRotator.cs" />
     <Compile Include="RogueConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass69.cs" />
-    <Compile Include="GClass70.cs" />
-    <Compile Include="GEnum9.cs" />
-    <Compile Include="GClass71.cs" />
-    <Compile Include="GEnum15.cs" />
-    <Compile Include="GClass72.cs" />
-    <Compile Include="GClass73.cs" />
-    <Compile Include="GClass74.cs" />
+    <Compile Include="ChatLogManager.cs" />
+    <Compile Include="SimpleHttpClient.cs" />
+    <Compile Include="WardenStateValue.cs" />
+    <Compile Include="WardenProtocol.cs" />
+    <Compile Include="StepStopAction.cs" />
+    <Compile Include="AutomationStep.cs" />
+    <Compile Include="CombatController.cs" />
+    <Compile Include="CodeCompiler.cs" />
     <Compile Include="MageConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass75.cs" />
-    <Compile Include="GClass76.cs" />
-    <Compile Include="GClass77.cs" />
+    <Compile Include="ChatFrameLocator.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="RemoteViewerClient.cs" />
     <Compile Include="GProcessMemoryManipulator.cs" />
-    <Compile Include="GClass79.cs" />
-    <Compile Include="GClass80.cs" />
-    <Compile Include="GEnum16.cs" />
+    <Compile Include="RemoteViewerServer.cs" />
+    <Compile Include="CardStack.cs" />
+    <Compile Include="SixStateOption.cs" />
     <Compile Include="WarlockConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Class4.cs" />
+    <Compile Include="CompilerGeneratedCache.cs" />
     <Compile Include="LaunchpadReminder_1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GliderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GClass81.cs" />
+    <Compile Include="ApplicationLogger.cs" />
     <Compile Include="FactionReminder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Class5.cs" />
+    <Compile Include="ResourceProvider.cs" />
     <Compile Include="Glider\Common\NetCheckResult.cs" />
     <Compile Include="Glider\Common\GlideMode.cs" />
     <Compile Include="Glider\Common\GameClass.cs" />
@@ -292,7 +292,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AccountInfo.resx" />
-    <EmbeddedResource Include="Class5.resx" />
+    <EmbeddedResource Include="ResourceProvider.resx" />
     <EmbeddedResource Include="ConfigForm.resx" />
     <EmbeddedResource Include="DeathknightConfig.resx" />
     <EmbeddedResource Include="DebuffList.resx" />
