@@ -52,6 +52,26 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -94,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Game\Objects\Glider\Common\Objects\GConfigWindow.resx">
       <DependentUpon>GConfigWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Security\SecCheck.resx">
+      <DependentUpon>SecCheck.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\ConfigForm.resx" />
     <EmbeddedResource Include="UI\Forms\DebuffList.resx" />
@@ -279,6 +302,20 @@
     <Compile Include="Memory\ProcessEnumerator.cs" />
     <Compile Include="Memory\ProcessInfo.cs" />
     <Compile Include="Memory\ProcessListEntry.cs" />
+    <Compile Include="Security\ISXWardenIntegration.cs" />
+    <Compile Include="Security\NetworkSafetyChecker.cs" />
+    <Compile Include="Security\SecCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Security\WardenCheckDatabase.cs" />
+    <Compile Include="Security\WardenCheckDiagram.cs" />
+    <Compile Include="Security\WardenCheckStatus.cs" />
+    <Compile Include="Security\WardenCondition.cs" />
+    <Compile Include="Security\WardenMatchResult.cs" />
+    <Compile Include="Security\WardenMonitor.cs" />
+    <Compile Include="Security\WardenPatternMatcher.cs" />
+    <Compile Include="Security\WardenProtocol.cs" />
+    <Compile Include="Security\WardenStateValue.cs" />
     <Compile Include="UI\Components\ChatFrameLocator.cs" />
     <Compile Include="UI\Components\DialogMonitor.cs" />
     <Compile Include="UI\Components\InputController.cs" />
@@ -366,9 +403,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game\Objects\Glider\en-US.xml" />
+    <Content Include="OffsetDump.txt" />
+    <Content Include="Offsets.static.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\copilot-instructions.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -191,10 +191,17 @@ public class ScriptExecutor
     private void method_6(string string_0)
     {
         var path = "DefaultScripts\\" + string_0 + ".cs";
+        var scriptText = method_9(string_0);
+        if (scriptText == null || scriptText.Trim().Length == 0)
+        {
+            Logger.LogMessage("! Skipping default script export for \"" + string_0 + "\" (no source found).");
+            return;
+        }
+
         if (File.Exists(path))
             File.Delete(path);
         var streamWriter = new StreamWriter(path, false);
-        streamWriter.Write(method_9(string_0));
+        streamWriter.Write(scriptText);
         streamWriter.Flush();
         streamWriter.Close();
     }
@@ -214,19 +221,49 @@ public class ScriptExecutor
 
     private string method_9(string string_0)
     {
-        var name = "GliderCommon.DefaultScripts." + string_0 + ".cs";
-        var manifestResourceStream = Assembly.GetCallingAssembly().GetManifestResourceStream(name);
-        if (manifestResourceStream == null)
+        var assembly = typeof(ScriptExecutor).Assembly;
+        var exactNames = new[]
         {
-            Logger.LogMessage("! Couldn't get default script: \"" + name + "\"");
-            return null;
+            "GliderCommon.DefaultScripts." + string_0 + ".cs",
+            "Glider.DefaultScripts." + string_0 + ".cs",
+            "DefaultScripts." + string_0 + ".cs"
+        };
+
+        Stream manifestResourceStream = null;
+        foreach (var name in exactNames)
+        {
+            manifestResourceStream = assembly.GetManifestResourceStream(name);
+            if (manifestResourceStream != null)
+                break;
         }
 
-        var streamReader = new StreamReader(manifestResourceStream);
-        var end = streamReader.ReadToEnd();
-        streamReader.Close();
-        manifestResourceStream.Close();
-        return end;
+        if (manifestResourceStream == null)
+        {
+            var names = assembly.GetManifestResourceNames();
+            for (var i = 0; i < names.Length; i++)
+                if (names[i].EndsWith("DefaultScripts." + string_0 + ".cs", StringComparison.OrdinalIgnoreCase))
+                {
+                    manifestResourceStream = assembly.GetManifestResourceStream(names[i]);
+                    if (manifestResourceStream != null)
+                        break;
+                }
+        }
+
+        if (manifestResourceStream != null)
+        {
+            var streamReader = new StreamReader(manifestResourceStream);
+            var end = streamReader.ReadToEnd();
+            streamReader.Close();
+            manifestResourceStream.Close();
+            return end;
+        }
+
+        var filePath = "DefaultScripts\\" + string_0 + ".cs";
+        if (File.Exists(filePath))
+            return File.ReadAllText(filePath);
+
+        Logger.LogMessage("! Couldn't get default script: \"" + string_0 + "\" (resource + file lookup failed)");
+        return null;
     }
 
     private GScript method_10(string string_0)
@@ -241,6 +278,12 @@ public class ScriptExecutor
 
     private GScript method_12(string string_0)
     {
+        if (string_0 == null || string_0.Trim().Length == 0)
+        {
+            Logger.LogMessage("Unable to compile script: script source is null or empty.");
+            return null;
+        }
+
         Logger.smethod_1("Compiling script, length = " + string_0.Length + " bytes");
         string string_1;
         var assembly_0 = method_13(string_0, out string_1);
@@ -272,7 +315,7 @@ public class ScriptExecutor
         compilerParameters.GenerateInMemory = true;
         compilerParameters.WarningLevel = 4;
         compilerParameters.IncludeDebugInformation = true;
-        compilerParameters.ReferencedAssemblies.Add("Grefs.dat");
+        compilerParameters.ReferencedAssemblies.Add(CodeCompiler.GetCompilerReferenceAssembly());
         CodeCompiler.smethod_1(string_0, compilerParameters);
         var compilerResults = codeDomProvider.CompileAssemblyFromSource(compilerParameters, string_0);
         var errors = compilerResults.Errors;

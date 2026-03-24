@@ -18,15 +18,53 @@ public class EquipmentEnchantmentChecker
     public int int_1;
     public SortedList Offsets;
 
+    private static readonly string[] string_0 =
+    {
+        "HeadSlot",
+        "NeckSlot",
+        "ShoulderSlot",
+        "ShirtSlot",
+        "ChestSlot",
+        "WaistSlot",
+        "LegsSlot",
+        "FeetSlot",
+        "WristSlot",
+        "HandsSlot",
+        "Finger0Slot",
+        "Finger1Slot",
+        "Trinket0Slot",
+        "Trinket1Slot",
+        "BackSlot",
+        "MainHandSlot",
+        "SecondaryHandSlot",
+        "RangedSlot",
+        "TabardSlot"
+    };
+
     public void method_0()
     {
         Offsets = new SortedList();
-        var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotNameCount"), "SlotNameCount");
-        var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotName"), "SlotName");
-        for (var index = 0; index < num1; ++index)
-            Offsets.Add(
-                GProcessMemoryManipulator.ReadString(GProcessMemoryManipulator.ReadInt32(num2 + index * 16, "ItemBase"), 100, "ItemBaseName"),
-                GProcessMemoryManipulator.ReadInt32(num2 + index * 16 + 8, "ItemBaseID"));
+        if (MemoryOffsetTable.Instance.HasOffset("SlotNameCount") && MemoryOffsetTable.Instance.HasOffset("SlotName"))
+        {
+            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotNameCount"), "SlotNameCount");
+            var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("SlotName"), "SlotName");
+            if (num1 > 0 && num1 <= 64 && num2 > 65536)
+            {
+                for (var index = 0; index < num1; ++index)
+                {
+                    var str = GProcessMemoryManipulator.ReadString(
+                        GProcessMemoryManipulator.ReadInt32(num2 + index * 16, "ItemBase"), 100, "ItemBaseName");
+                    var num3 = GProcessMemoryManipulator.ReadInt32(num2 + index * 16 + 8, "ItemBaseID");
+                    if (str != null && str.Length > 0 && num3 > 0 && !Offsets.ContainsKey(str))
+                        Offsets.Add(str, num3);
+                }
+            }
+        }
+
+        if (Offsets.Count == 0)
+            for (var index = 0; index < string_0.Length; ++index)
+                Offsets.Add(string_0[index], index + 1);
+
         bool_0 = Offsets.Count > 0;
     }
 

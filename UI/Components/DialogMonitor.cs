@@ -36,7 +36,7 @@ public class DialogMonitor
     {
         if (!StartupClass.bool_13)
             return;
-        if (gclass8_0.method_10())
+        if (gclass8_0 != null && gclass8_0.method_10())
         {
             if (!bool_0)
             {
@@ -51,7 +51,7 @@ public class DialogMonitor
             bool_0 = false;
         }
 
-        if (gclass8_1.method_10())
+        if (gclass8_1 != null && gclass8_1.method_10())
         {
             if (bool_1)
                 return;

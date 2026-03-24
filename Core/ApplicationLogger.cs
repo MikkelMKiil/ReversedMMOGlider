@@ -78,13 +78,12 @@ public class ApplicationLogger : ILogger
 
     private void method_1()
     {
-        var fileInfo1 = new FileInfo("Glider.log");
-        if (!fileInfo1.Exists)
-            return;
-        var fileInfo2 = new FileInfo("Glider.LastRun.log");
-        if (fileInfo2.Exists)
-            fileInfo2.Delete();
-        fileInfo1.MoveTo("Glider.LastRun.log");
+        var path = "Glider.log";
+        if (File.Exists(path))
+            File.Delete(path);
+        using (File.Create(path))
+        {
+        }
     }
 
     private void method_2(string string_0)

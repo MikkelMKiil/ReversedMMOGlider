@@ -13,11 +13,20 @@ using System.IO;
 public class SpellbookManager
 {
     private int int_0;
+    private bool bool_0;
+    private bool bool_1;
     public SortedList<int, SpellEntry> Offsets;
 
     public SpellbookManager()
     {
         Offsets = new SortedList<int, SpellEntry>();
+        bool_0 = method_18("MySpells", "SpellListBase", "SpellListRowCount", "SpellListSub", "SpellNameRLE", "BuffTypeRLE", "SpellGroupRLE", "SpellRankRLE");
+        bool_1 = method_18("CooldownStart", "CooldownStep", "CD_TicksAtCast", "CD_DurationGCD", "CD_SpellID", "CD_GroupID", "CD_ActiveDuration", "CD_DurationSpell", "CD_DurationGroup");
+        if (!bool_0)
+        {
+            method_4("SpellbookEx disabled: required spell list offsets are missing for this client build");
+            return;
+        }
         var num = MemoryOffsetTable.Instance.GetIntOffset("MySpells");
         method_1(method_5("SpellListBase"), "slb");
         method_1(method_5("SpellListRowCount"), "slrc");
@@ -173,6 +182,8 @@ public class SpellbookManager
 
     public bool method_14()
     {
+        if (!bool_1)
+            return true;
         var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
         var num2 = GProcessMemoryManipulator.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
@@ -198,6 +209,8 @@ public class SpellbookManager
 
     public bool method_15(int int_1)
     {
+        if (!bool_1)
+            return true;
         if (int_1 == 0)
             return method_14();
         if (Offsets.ContainsKey(int_1))
@@ -247,8 +260,12 @@ public class SpellbookManager
 
     private byte[] method_16(int int_1)
     {
+        if (!bool_0)
+            return null;
         var num1 = method_1(method_5("SpellListBase"), "slstart");
         var num2 = method_1(method_5("SpellListSub"), "slsbottom");
+        if (num1 == 0)
+            return null;
         var int_1_1 = method_1(num1 + (int_1 - num2) * 4, "satidx");
         if (int_1_1 == 0)
             return null;
@@ -294,5 +311,13 @@ public class SpellbookManager
         }
 
         return memoryStream.ToArray();
+    }
+
+    private bool method_18(params string[] string_0)
+    {
+        foreach (var str in string_0)
+            if (!MemoryOffsetTable.Instance.HasOffset(str))
+                return false;
+        return true;
     }
 }

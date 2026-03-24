@@ -55,13 +55,26 @@ namespace Glider.Common.Objects
                     return null;
                 }
 
-                var BaseAddress = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
+                var BaseAddress = GetFirstObjectPointer(int5);
+                var num1 = BaseAddress;
+                var num = 0;
+                var hashSet = new HashSet<int>();
                 while (true)
                 {
+                    if (++num > 8192)
+                    {
+                        Logger.smethod_1("Object list traversal aborted: exceeded safety iteration cap");
+                        break;
+                    }
+                    if (BaseAddress != 0 && !hashSet.Add(BaseAddress))
+                    {
+                        if (BaseAddress != num1)
+                            Logger.smethod_1("Object list traversal aborted: detected cycle in object links");
+                        break;
+                    }
                     long guid;
                     do
                     {
-                        BaseAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 60, "GameObjNext");
                         if ((BaseAddress & 1) == 0 && BaseAddress != 0 && BaseAddress != 28)
                         {
                             guid = QuickGetGUID(BaseAddress);
@@ -90,6 +103,7 @@ namespace Glider.Common.Objects
                         {
                             goto label_15;
                         }
+                        BaseAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 60, "GameObjNext");
                     } while (!LogObjects);
 
                     goto label_13;
@@ -98,6 +112,35 @@ namespace Glider.Common.Objects
                     continue;
                 label_13:
                     Logger.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
+                }
+
+                var num3 = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
+                    ? MemoryOffsetTable.Instance.GetIntOffset("MainTableActivePlayer")
+                    : 24;
+                if (int5 != 0 && num3 > 0)
+                {
+                    var num2 = GProcessMemoryManipulator.ReadInt32(int5 + num3, "MainTableActivePlayerObj");
+                    if (IsLikelyObjectPointer(num2))
+                    {
+                        var guid1 = QuickGetGUID(num2);
+                        if (guid1 != 0L)
+                        {
+                            StartupClass.long_0 = guid1;
+                            if (!LastSnapshot.ContainsKey(guid1) || !(LastSnapshot[guid1] is GPlayerSelf))
+                            {
+                                var gobject = new GPlayerSelf(num2, FrameNumber);
+                                if (LastSnapshot.ContainsKey(guid1))
+                                    LastSnapshot.Remove(guid1);
+                                LastSnapshot.Add(guid1, gobject);
+                            }
+                            else
+                            {
+                                LastSnapshot[guid1].FrameNumber = FrameNumber;
+                            }
+
+                            GContext.Main.Me = (GPlayerSelf)LastSnapshot[guid1];
+                        }
+                    }
                 }
 
             label_15:
@@ -494,21 +537,35 @@ namespace Glider.Common.Objects
             var int5 = StartupClass.int_5;
             var num1 = 0;
             var flag = false;
+            var num2 = 0;
+            var hashSet = new HashSet<int>();
             if (int5 == 0)
                 return 0;
-            var num2 = int5 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
+            var num3 = GetFirstObjectPointer(int5);
+            var num4 = num3;
             while (true)
             {
-                num2 = GProcessMemoryManipulator.ReadInt32(num2 + 60, "GameObjNext");
-                if ((num2 & 1) == 0 && num2 != 0 && num2 != 28)
+                if (++num2 > 8192)
                 {
-                    if (GProcessMemoryManipulator.ReadInt64(num2 + 48, "GameObjGUID") == SeekPlayerID)
+                    Logger.smethod_1("Attach probe note: stealth object traversal hit safety cap");
+                    break;
+                }
+                if (num3 != 0 && !hashSet.Add(num3))
+                {
+                    if (num3 != num4)
+                        Logger.smethod_1("Attach probe note: stealth traversal detected cycle");
+                    break;
+                }
+                if ((num3 & 1) == 0 && num3 != 0 && num3 != 28)
+                {
+                    if (GProcessMemoryManipulator.ReadInt64(num3 + 48, "GameObjGUID") == SeekPlayerID)
                     {
                         Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;
                     }
 
                     ++num1;
+                    num3 = GProcessMemoryManipulator.ReadInt32(num3 + 60, "GameObjNext");
                 }
                 else
                 {
@@ -519,6 +576,67 @@ namespace Glider.Common.Objects
             if (num1 > 0)
                 Logger.smethod_1("Stealth object count: " + num1 + ", hitme = " + flag);
             return !flag ? 0 : num1;
+        }
+
+        public static bool TryGetLikelyPlayerGuid(out long guid_0)
+        {
+            guid_0 = 0L;
+            var int5 = StartupClass.int_5;
+            if (int5 == 0)
+                return false;
+            var num = GetFirstObjectPointer(int5);
+            var num2 = num;
+            var num1 = 0;
+            var hashSet = new HashSet<int>();
+            while (true)
+            {
+                if (++num1 > 8192)
+                    break;
+                if (num != 0 && !hashSet.Add(num))
+                {
+                    if (num != num2)
+                        Logger.smethod_1("Attach probe note: player GUID traversal detected cycle");
+                    break;
+                }
+                if ((num & 1) != 0 || num == 0 || num == 28)
+                    break;
+                if (GProcessMemoryManipulator.ReadInt32(num + 20, "QuickType") == 4)
+                {
+                    var int64 = GProcessMemoryManipulator.ReadInt64(num + 48, "GameObjGUID");
+                    if (int64 != 0L)
+                    {
+                        if (int64 <= 4096L)
+                        {
+                            Logger.smethod_1("Attach probe note: inferred low player GUID candidate = 0x" + int64.ToString("x"));
+                            num = GProcessMemoryManipulator.ReadInt32(num + 60, "GameObjNext");
+                            continue;
+                        }
+                        guid_0 = int64;
+                        return true;
+                    }
+                }
+                num = GProcessMemoryManipulator.ReadInt32(num + 60, "GameObjNext");
+            }
+
+            return false;
+        }
+
+        private static int GetFirstObjectPointer(int int_0)
+        {
+            var initialOffset = MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
+            var firstObjectPointer = GProcessMemoryManipulator.ReadInt32(int_0 + initialOffset, "GameObjFirst");
+            return IsLikelyObjectPointer(firstObjectPointer) ? firstObjectPointer : 0;
+        }
+
+        private static bool IsLikelyObjectPointer(int int_0)
+        {
+            if ((int_0 & 1) != 0 || int_0 == 0 || int_0 == 28 || int_0 < 65536)
+                return false;
+            var objectType = GProcessMemoryManipulator.ReadBytesRaw(int_0 + 20, 4);
+            if (objectType == null || objectType.Length < 4)
+                return false;
+            var quickType = BitConverter.ToInt32(objectType, 0);
+            return quickType >= 1 && quickType <= 7;
         }
     }
 }

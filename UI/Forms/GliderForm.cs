@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -231,6 +232,18 @@ public class GliderForm : Form, ILogger
         if (string_2.LastIndexOf("\\") > -1)
             string_2 = string_2.Substring(string_2.LastIndexOf("\\") + 1);
         return string_2;
+    }
+
+    private static object smethod_3(ComponentResourceManager componentResourceManager_0, string string_2)
+    {
+        try
+        {
+            return componentResourceManager_0.GetObject(string_2);
+        }
+        catch (MissingManifestResourceException)
+        {
+            return (object)null;
+        }
     }
 
     public void method_3(string string_2)
@@ -454,7 +467,7 @@ public class GliderForm : Form, ILogger
         this.VersionLabel.TabIndex = 39;
         this.VersionLabel.Text = "(glider version label)";
         this.VersionLabel.TextAlign = ContentAlignment.TopCenter;
-        this.MyHelpButton.Image = (Image)componentResourceManager.GetObject("MyHelpButton.Image");
+        this.MyHelpButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "MyHelpButton.Image");
         this.MyHelpButton.Location = new Point(312, 482);
         this.MyHelpButton.Name = "MyHelpButton";
         this.MyHelpButton.Size = new Size(40, 40);
@@ -483,14 +496,14 @@ public class GliderForm : Form, ILogger
         this.groupBox2.TabIndex = 36;
         this.groupBox2.TabStop = false;
         this.groupBox2.Text = "Action";
-        this.QuickLoadButton.Image = (Image)componentResourceManager.GetObject("QuickLoadButton.Image");
+        this.QuickLoadButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "QuickLoadButton.Image");
         this.QuickLoadButton.Location = new Point(221, 32);
         this.QuickLoadButton.Name = "QuickLoadButton";
         this.QuickLoadButton.Size = new Size(40, 40);
         this.QuickLoadButton.TabIndex = 19;
         this.QuickLoadButton.UseVisualStyleBackColor = true;
         this.QuickLoadButton.Click += new EventHandler(this.QuickLoadButton_Click);
-        this.ConfigButton.Image = (Image)componentResourceManager.GetObject("ConfigButton.Image");
+        this.ConfigButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "ConfigButton.Image");
         this.ConfigButton.Location = new Point(289, 32);
         this.ConfigButton.Name = "ConfigButton";
         this.ConfigButton.Size = new Size(40, 40);
@@ -498,7 +511,7 @@ public class GliderForm : Form, ILogger
         this.ConfigButton.UseVisualStyleBackColor = true;
         this.ConfigButton.Click += new EventHandler(this.ConfigButton_Click);
         this.StopButton.Enabled = false;
-        this.StopButton.Image = (Image)componentResourceManager.GetObject("StopButton.Image");
+        this.StopButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "StopButton.Image");
         this.StopButton.Location = new Point(153, 32);
         this.StopButton.Name = "StopButton";
         this.StopButton.Size = new Size(40, 40);
@@ -506,7 +519,7 @@ public class GliderForm : Form, ILogger
         this.StopButton.UseVisualStyleBackColor = true;
         this.StopButton.Click += new EventHandler(this.StopButton_Click);
         this.KillButton.Enabled = false;
-        this.KillButton.Image = (Image)componentResourceManager.GetObject("KillButton.Image");
+        this.KillButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "KillButton.Image");
         this.KillButton.Location = new Point(85, 32);
         this.KillButton.Name = "KillButton";
         this.KillButton.Size = new Size(40, 40);
@@ -514,7 +527,7 @@ public class GliderForm : Form, ILogger
         this.KillButton.UseVisualStyleBackColor = true;
         this.KillButton.Click += new EventHandler(this.KillButton_Click);
         this.GlideButton.Enabled = false;
-        this.GlideButton.Image = (Image)componentResourceManager.GetObject("GlideButton.Image");
+        this.GlideButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "GlideButton.Image");
         this.GlideButton.Location = new Point(17, 32);
         this.GlideButton.Name = "GlideButton";
         this.GlideButton.Size = new Size(40, 40);
@@ -522,7 +535,7 @@ public class GliderForm : Form, ILogger
         this.GlideButton.UseVisualStyleBackColor = true;
         this.GlideButton.Click += new EventHandler(this.GlideButton_Click);
         this.ShrinkButton.Enabled = false;
-        this.ShrinkButton.Image = (Image)componentResourceManager.GetObject("ShrinkButton.Image");
+        this.ShrinkButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "ShrinkButton.Image");
         this.ShrinkButton.Location = new Point(17, 32);
         this.ShrinkButton.Name = "ShrinkButton";
         this.ShrinkButton.Size = new Size(40, 40);
@@ -531,7 +544,7 @@ public class GliderForm : Form, ILogger
         this.ShrinkButton.Visible = false;
         this.ShrinkButton.Click += new EventHandler(this.ShrinkButton_Click);
         this.HideButton.Enabled = false;
-        this.HideButton.Image = (Image)componentResourceManager.GetObject("HideButton.Image");
+        this.HideButton.Image = (Image)GliderForm.smethod_3(componentResourceManager, "HideButton.Image");
         this.HideButton.Location = new Point(85, 32);
         this.HideButton.Name = "HideButton";
         this.HideButton.Size = new Size(40, 40);
@@ -898,9 +911,9 @@ public class GliderForm : Form, ILogger
         this.tabPage1.Text = "tabPage1";
         this.tabPage1.UseVisualStyleBackColor = true;
         this.notifyIcon_0.ContextMenuStrip = this.contextMenuStrip2;
-        this.notifyIcon_0.Icon = (Icon)componentResourceManager.GetObject("notifyIcon1.Icon");
+        this.notifyIcon_0.Icon = (Icon)GliderForm.smethod_3(componentResourceManager, "notifyIcon1.Icon");
         this.notifyIcon_0.Text = "Glider";
-        this.notifyIcon_0.Visible = true;
+        this.notifyIcon_0.Visible = this.notifyIcon_0.Icon != null;
         this.notifyIcon_0.MouseDoubleClick += new MouseEventHandler(this.notifyIcon_0_MouseDoubleClick);
         this.contextMenuStrip2.Items.AddRange(new ToolStripItem[3]
         {
@@ -958,7 +971,7 @@ public class GliderForm : Form, ILogger
         this.locXYZLabel.Size = new Size(43, 13);
         this.locXYZLabel.TabIndex = 12;
         this.locXYZLabel.Text = "Coords:";
-        this.BackgroundImage = (Image)componentResourceManager.GetObject("$this.BackgroundImage");
+        this.BackgroundImage = (Image)GliderForm.smethod_3(componentResourceManager, "$this.BackgroundImage");
         this.ClientSize = new Size(396, 609);
         this.ContextMenuStrip = this.ContextMenuStripWindow;
         this.ControlBox = false;
@@ -1070,7 +1083,7 @@ public class GliderForm : Form, ILogger
         {
             try
             {
-                this.method_7();
+                this.updateStatusFromGameTick();
                 if (this.bool_0)
                     return;
                 this.bool_0 = true;
@@ -1087,7 +1100,12 @@ public class GliderForm : Form, ILogger
         }
     }
 
-    private void method_7()
+    /// <summary>
+    /// Executes one UI/game status refresh tick.
+    /// Input: no explicit parameters (uses current process/game state from shared runtime objects).
+    /// Output: no return value; updates form controls (health, power, speed, target info, logs) and performs related tick side-effects.
+    /// </summary>
+    private void updateStatusFromGameTick()
     {
         this.method_20();
         this.method_8();
@@ -1106,27 +1124,54 @@ public class GliderForm : Form, ILogger
             this.LogBox.ScrollToCaret();
             this.LogBox.Refresh();
         }
-        if (StartupClass.bool_13 && GPlayerSelf.Me != null)
+        GPlayerSelf currentPlayer = (GPlayerSelf)null;
+        if (StartupClass.bool_13)
         {
-            if (this.glocation_0 != null && Environment.TickCount - this.int_3 > 1200)
+            GObjectList.SetCacheDirty();
+            GObjectList.GetObjects();
+            currentPlayer = (GContext.Main != null ? GContext.Main.Me : (GPlayerSelf)null) ?? GPlayerSelf.Me;
+        }
+
+        if (StartupClass.bool_13 && currentPlayer != null)
+        {
+            GLocation location = currentPlayer.Location;
+            if (location != null && this.glocation_0 != null && Environment.TickCount - this.int_3 > 1200)
             {
-                this.SpeedLabel_1.Text = Math.Round((double)this.glocation_0.GetDistanceTo(GPlayerSelf.Me.Location) / ((double)(Environment.TickCount - this.int_3) / 1000.0), 2).ToString();
+                this.SpeedLabel_1.Text = Math.Round((double)this.glocation_0.GetDistanceTo(location) / ((double)(Environment.TickCount - this.int_3) / 1000.0), 2).ToString();
                 this.int_3 = Environment.TickCount;
-                this.glocation_0 = GPlayerSelf.Me.Location;
+                this.glocation_0 = location;
             }
-            else if (this.glocation_0 == null)
+            else if (location != null && this.glocation_0 == null)
             {
                 this.int_3 = Environment.TickCount;
-                this.glocation_0 = GPlayerSelf.Me.Location;
+                this.glocation_0 = location;
+                this.SpeedLabel_1.Text = "0";
             }
-            this.LabelHealth_1.Text = MessageProvider.smethod_2(653, (object)GPlayerSelf.Me.HealthPoints.ToString(), (object)(int)(GPlayerSelf.Me.Health * 100.0));
+            this.LabelHealth_1.Text = MessageProvider.smethod_2(653, (object)currentPlayer.HealthPoints.ToString(), (object)(int)(currentPlayer.Health * 100.0));
             this.LabelKills_1.Text = MessageProvider.smethod_2(654, (object)StartupClass.int_7, (object)StartupClass.int_8, (object)StartupClass.int_9);
             this.XPHour_1.Text = StartupClass.smethod_29().ToString();
-            if (GPlayerSelf.Me.IsCasting)
+            bool isCasting = false;
+            try
+            {
+                isCasting = currentPlayer.IsCasting;
+            }
+            catch (Exception)
+            {
+            }
+            if (isCasting)
                 this.LabelKills_1.Text += " *";
             if (StartupClass.CurrentGameClass != null)
                 this.LabelMana_1.Text = StartupClass.CurrentGameClass.PowerValue;
-            GUnit target = GPlayerSelf.Me.Target;
+            else
+                this.LabelMana_1.Text = currentPlayer.Power2.ToString() + " / " + (object)currentPlayer.Power2Max;
+            GUnit target = (GUnit)null;
+            try
+            {
+                target = currentPlayer.Target;
+            }
+            catch (Exception)
+            {
+            }
             if (target != null)
             {
                 this.AddFactionButton.Enabled = true;
@@ -1157,7 +1202,11 @@ public class GliderForm : Form, ILogger
                 this.XPHour_1.Text = Math.Round((double)StartupClass.gclass73_0.int_8 / (DateTime.Now - StartupClass.dateTime_0).TotalSeconds * 3600.0, 0).ToString();
                 StartupClass.gclass73_0.bool_9 = false;
             }
-            this.method_18();
+            if (GPlayerSelf.Me != null)
+                this.method_18();
+        }
+        else if (StartupClass.bool_13)
+        {
         }
         StartupClass.smethod_38();
         if (StartupClass.bool_21 && StartupClass.gclass36_1.method_3())
@@ -1337,13 +1386,11 @@ public class GliderForm : Form, ILogger
 
     private void method_13()
     {
-        FileInfo fileInfo1 = new FileInfo("Glider.log");
-        if (!fileInfo1.Exists)
-            return;
-        FileInfo fileInfo2 = new FileInfo("Glider.LastRun.log");
-        if (fileInfo2.Exists)
-            fileInfo2.Delete();
-        fileInfo1.MoveTo("Glider.LastRun.log");
+        if (File.Exists("Glider.log"))
+            File.Delete("Glider.log");
+        using (File.Create("Glider.log"))
+        {
+        }
     }
 
     public void method_14(bool bool_11)
@@ -1431,6 +1478,8 @@ public class GliderForm : Form, ILogger
     public void method_18()
     {
         if (StartupClass.gprofile_0 == null || StartupClass.gprofile_0.Waypoints == null)
+            return;
+        if (GPlayerSelf.Me == null)
             return;
         if (StartupClass.gprofile_0.Waypoints.Count > 2)
         {

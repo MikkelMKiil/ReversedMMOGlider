@@ -151,6 +151,7 @@ public class StartupClass
     public static bool bool_37;
     public static bool bool_38;
     public static SpellbookManager gclass63_0;
+    private static readonly object killActionLock = new object();
     private static int int_13;
     public static IntPtr intptr_2 = IntPtr.Zero;
     public static bool bool_39 = true;
@@ -416,39 +417,78 @@ public class StartupClass
             Logger.LogMessage(MessageProvider.smethod_2(81, WowVersionLabel_string));
         }
 
-        var registryKey = Registry.LocalMachine.OpenSubKey(MessageProvider.GetMessage(649));
-        if (registryKey == null)
+        string string_11;
+        if (!TryResolveWowInstallPath(out string_11))
         {
-            Logger.LogMessage(MessageProvider.GetMessage(82));
+            Logger.LogMessage(MessageProvider.GetMessage(83));
+            return;
         }
-        else
+
+        SomeStringData = string_11;
+        var fileName = Path.Combine(SomeStringData, "WoW.exe");
+        Logger.smethod_1(MessageProvider.smethod_2(84, fileName));
+        var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
+        if (versionInfo == null)
         {
-            var obj = registryKey.GetValue("InstallPath");
-            if (obj == null)
+            Logger.LogMessage(MessageProvider.smethod_2(85, fileName));
+            return;
+        }
+
+        if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
+            return;
+        WowVersionLabel_string = versionInfo.FileVersion;
+        Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel_string));
+    }
+
+    private static bool TryResolveWowInstallPath(out string string_11)
+    {
+        string_11 = null;
+        var string_12 = MessageProvider.GetMessage(649);
+        RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(string_12) ?? Registry.CurrentUser.OpenSubKey(string_12);
+        if (registryKey != null)
+            try
+            {
+                foreach (var str in new string[3] { "InstallPath", "Path", "GamePath" })
+                {
+                    var value = registryKey.GetValue(str);
+                    if (value != null)
+                    {
+                        string_11 = value.ToString();
+                        if (!string.IsNullOrEmpty(string_11))
+                            break;
+                    }
+                }
+            }
+            finally
             {
                 registryKey.Close();
-                Logger.LogMessage(MessageProvider.GetMessage(83));
             }
-            else
-            {
-                SomeStringData = obj.ToString();
-                var fileName = SomeStringData + "WoW.exe";
-                Logger.smethod_1(MessageProvider.smethod_2(84, fileName));
-                registryKey.Close();
-                var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
-                if (versionInfo == null)
-                {
-                    Logger.LogMessage(MessageProvider.smethod_2(85, fileName));
-                }
-                else
-                {
-                    if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
-                        return;
-                    WowVersionLabel_string = versionInfo.FileVersion;
-                    Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel_string));
-                }
-            }
+
+        if (string.IsNullOrEmpty(string_11))
+        {
+            var string_13 = ConfigManager.gclass61_0.method_2("GamePath");
+            if (!string.IsNullOrEmpty(string_13))
+                string_11 = string_13;
         }
+
+        if (string.IsNullOrEmpty(string_11))
+            try
+            {
+                var processesByName = Process.GetProcessesByName("Wow");
+                if (processesByName.Length > 0 && processesByName[0].MainModule != null)
+                    string_11 = Path.GetDirectoryName(processesByName[0].MainModule.FileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.smethod_1("Unable to query running WoW path: " + ex.Message);
+            }
+
+        if (string.IsNullOrEmpty(string_11))
+            return false;
+        string_11 = string_11.Trim().Trim('"');
+        if (!string_11.EndsWith("\\"))
+            string_11 += "\\";
+        return Directory.Exists(string_11);
     }
 
     public static void smethod_8()
@@ -1020,69 +1060,75 @@ public class StartupClass
 
     private static void smethod_28(bool bool_42, string string_11)
     {
-        var flag = false;
-        if (glideMode_0 == GlideMode.None && (!bool_13 || !bool_42))
+        lock (killActionLock)
         {
-            --int_13;
-        }
-        else
-        {
-            smethod_51();
-            gclass68_0.method_3(true);
-            Logger.smethod_1(MessageProvider.smethod_2(652, bool_42, (int)glideMode_0, string_11));
-            gclass68_0.method_3(true);
-            InputController.smethod_21(false);
-            if (glideMode_0 == GlideMode.Auto)
+            var flag = false;
+            if (glideMode_0 != GlideMode.None || bool_13 && bool_42)
             {
-                if (bool_42)
-                    bool_36 = true;
-                if (CurrentGameClass != null)
-                    CurrentGameClass.OnStopGlide();
-                smethod_17(1, MessageProvider.GetMessage(100));
-                if (IsAttached)
+                smethod_51();
+                gclass68_0.method_3(true);
+                Logger.smethod_1(MessageProvider.smethod_2(652, bool_42, (int)glideMode_0, string_11));
+                gclass68_0.method_3(true);
+                InputController.smethod_21(false);
+                if (glideMode_0 == GlideMode.Auto)
                 {
-                    if (Thread.CurrentThread == GameProcessManager.thread_0)
+                    if (bool_42)
+                        bool_36 = true;
+                    if (CurrentGameClass != null)
+                        CurrentGameClass.OnStopGlide();
+                    smethod_17(1, MessageProvider.GetMessage(100));
+                    if (IsAttached)
+                    {
+                        var gameProcessManager = GameProcessManager;
+                        if (gameProcessManager != null && Thread.CurrentThread == gameProcessManager.thread_0)
+                            flag = true;
+                    }
+                    else
+                    {
+                        var combatController = gclass73_0;
+                        if (combatController != null && Thread.CurrentThread == combatController.thread_0)
+                            flag = true;
+                    }
+
+                    Logger.smethod_1(MessageProvider.GetMessage(100));
+                    glideMode_0 = GlideMode.None;
+                    if (IsAttached)
+                    {
+                        var gameProcessManager = GameProcessManager;
+                        GameProcessManager = null;
+                        if (gameProcessManager != null)
+                            gameProcessManager.method_1();
+                    }
+                    else
+                    {
+                        var combatController = gclass73_0;
+                        gclass73_0 = null;
+                        if (combatController != null)
+                            combatController.method_2();
+                    }
+                }
+
+                if (glideMode_0 == GlideMode.Manual)
+                {
+                    smethod_17(1, MessageProvider.GetMessage(101));
+                    if (gclass60_0 != null && Thread.CurrentThread == gclass60_0.thread_0)
                         flag = true;
-                }
-                else if (Thread.CurrentThread == gclass73_0.thread_0)
-                {
-                    flag = true;
+                    Logger.smethod_1(MessageProvider.GetMessage(102));
+                    glideMode_0 = GlideMode.None;
+                    if (gclass60_0 != null)
+                        gclass60_0.method_0();
+                    gclass60_0 = null;
                 }
 
-                Logger.smethod_1(MessageProvider.GetMessage(100));
-                glideMode_0 = GlideMode.None;
-                if (IsAttached)
-                {
-                    GameProcessManager.method_1();
-                    GameProcessManager = null;
-                }
-                else
-                {
-                    gclass73_0.method_2();
-                    gclass73_0 = null;
-                }
+                if (bool_42)
+                    smethod_15();
+                ginterface0_0.imethod_0();
+                GContext.Main.ReleaseAllKeys();
+                if (GliderManager != null)
+                    GliderManager.method_33(false);
+                if (flag)
+                    throw new ThreadInterruptedException();
             }
-
-            if (glideMode_0 == GlideMode.Manual)
-            {
-                smethod_17(1, MessageProvider.GetMessage(101));
-                if (gclass60_0 != null && Thread.CurrentThread == gclass60_0.thread_0)
-                    flag = true;
-                Logger.smethod_1(MessageProvider.GetMessage(102));
-                glideMode_0 = GlideMode.None;
-                if (gclass60_0 != null)
-                    gclass60_0.method_0();
-                gclass60_0 = null;
-            }
-
-            if (bool_42)
-                smethod_15();
-            ginterface0_0.imethod_0();
-            GContext.Main.ReleaseAllKeys();
-            if (GliderManager != null)
-                GliderManager.method_33(false);
-            if (flag)
-                throw new ThreadInterruptedException();
         }
     }
 
@@ -1249,17 +1295,23 @@ public class StartupClass
 
         if (!bool_13)
             return;
+
+        GObjectList.GetObjects();
+        var me = GPlayerSelf.Me;
+        if (me == null)
+            return;
+
         if (DebuffsKnown_string != null && gclass36_3.method_3())
         {
             gclass36_3.method_4();
             DebuffsKnown_string.method_8();
         }
 
-        if (GPlayerSelf.Me.Stance != CurrentStance)
+        if (me.Stance != CurrentStance)
         {
             if (CurrentStance != GStance.Unknown)
                 GContext.Main.Interface.UnFillAllKeys();
-            CurrentStance = GPlayerSelf.Me.Stance;
+            CurrentStance = me.Stance;
         }
 
         GameClass69Instance.method_4();
@@ -1273,7 +1325,6 @@ public class StartupClass
             smethod_46();
         }
 
-        GObjectList.GetObjects();
         gclass68_0.method_7();
         InputController.smethod_21(true);
     }
@@ -1332,9 +1383,13 @@ public class StartupClass
         AnotherIntegerValue = GProcessMemoryManipulator.AttachToWowProcess();
         if (AnotherIntegerValue == 0)
         {
+            if (!bool_35)
+                Logger.smethod_1("Attach attempt: no matching process found for AttachEXE");
             bool_35 = true;
             return false;
         }
+
+        bool_35 = false;
 
         IsGliderAttached = true;
         if (AdditionalApplicationHandle == IntPtr.Zero && !bool_14)
@@ -1370,7 +1425,8 @@ public class StartupClass
 
         if (IsAttached)
             return true;
-        if (GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "probeuip") == 0 && !bool_20 &&
+        var int_14 = MemoryOffsetTable.Instance.GetIntOffset("UIParent");
+        if (int_14 > 0 && GProcessMemoryManipulator.ReadInt32(int_14, "probeuip") == 0 && !bool_20 &&
             ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
@@ -1380,26 +1436,157 @@ public class StartupClass
                 GameMemoryWriter.method_2("DoAutoLog", false);
             }
 
-            return false;
+            Logger.smethod_1("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
         }
 
-        if (MemoryOffsetTable.Instance.HasOffset("TLSSlot"))
-            return GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && GObjectList.StealthCountGameObjects(long_0) > 0 &&
-                   long_0 != 0L;
-        var numArray = GProcessMemoryManipulator.ReadBytesRaw(MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr"), 8);
-        if (numArray == null)
+        if (MemoryOffsetTable.Instance.HasOffset("TLSSlot") && MemoryOffsetTable.Instance.GetIntOffset("TLSSlot") > 0)
         {
-            if (AdditionalApplicationHandle != IntPtr.Zero)
-                CloseHandle(AdditionalApplicationHandle);
-            AdditionalApplicationHandle = IntPtr.Zero;
+            if (GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && long_0 != 0L)
+            {
+                if (GObjectList.StealthCountGameObjects(long_0) > 0)
+                    return true;
+                Logger.smethod_1("TLS attach probe failed object validation, trying static offsets fallback");
+            }
+            else
+            {
+                Logger.smethod_1("TLS attach probe failed, trying static offsets fallback");
+            }
+        }
+        long_0 = 0L;
+        var int_18 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
+        var int_19 = int_18;
+        if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
+        {
+            var int_20 = MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe");
+            var int_21 = GProcessMemoryManipulator.ReadInt32(int_18 + int_20, "MainTableProbe");
+            var int_22 = int_18 + int_20;
+            if (smethod_62(int_21))
+                int_19 = int_21;
+            else if (smethod_62(int_22))
+                int_19 = int_22;
+            else
+                int_19 = int_21;
+        }
+        int_5 = int_19;
+        if (int_5 == 0)
+        {
+            Logger.smethod_1("Attach probe failed: resolved MainTable pointer is zero");
             return false;
         }
 
-        long_0 = BitConverter.ToInt64(numArray, 0);
+        var bool_42 = false;
+        var bool_43 = false;
+        var int_23 = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
+            ? MemoryOffsetTable.Instance.GetIntOffset("MainTableActivePlayer")
+            : 24;
+        if (int_23 > 0)
+        {
+            var int_24 = GProcessMemoryManipulator.ReadInt32(int_5 + int_23, "MainTableActivePlayer");
+            if (isLikelyObjectAddress(int_24))
+            {
+                var int64_1 = GProcessMemoryManipulator.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
+                if (int64_1 != 0L)
+                {
+                    long_0 = int64_1;
+                    bool_42 = true;
+                    bool_43 = true;
+                    Logger.smethod_1("Attach probe: using active player object GUID = 0x" + long_0.ToString("x"));
+                }
+            }
+        }
+
+        var int_25 = MemoryOffsetTable.Instance.HasOffset("MainTableLocalGuid")
+            ? MemoryOffsetTable.Instance.GetIntOffset("MainTableLocalGuid")
+            : 40;
+        if (!bool_42 && int_25 > 0)
+        {
+            var int64_2 = GProcessMemoryManipulator.ReadInt64(int_5 + int_25, "MainTableLocalGuid");
+            if (int64_2 != 0L)
+            {
+                long_0 = int64_2;
+                bool_43 = true;
+                Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + long_0.ToString("x"));
+            }
+        }
+
         if (long_0 == 0L)
+        {
+            var configuredPlayerIdAddress = MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr");
+            var playerIdCandidates = new int[]
+            {
+                configuredPlayerIdAddress,
+                0x00CD87A8,
+                0x00BD07A8
+            };
+            for (var candidateIndex = 0; candidateIndex < playerIdCandidates.Length; ++candidateIndex)
+            {
+                var candidateAddress = playerIdCandidates[candidateIndex];
+                if (candidateAddress == 0)
+                    continue;
+
+                var playerGuidBytes = GProcessMemoryManipulator.ReadBytesRaw(candidateAddress, 8);
+                if (playerGuidBytes == null)
+                    continue;
+
+                var playerGuid = BitConverter.ToInt64(playerGuidBytes, 0);
+                if (playerGuid != 0L)
+                {
+                    long_0 = playerGuid;
+                    if (candidateAddress != configuredPlayerIdAddress)
+                        Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
+                    break;
+                }
+            }
+
+            if (long_0 == 0L)
+            {
+                Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
+                return false;
+            }
+        }
+
+        var num = GObjectList.StealthCountGameObjects(long_0);
+        if (num > 0)
+            return true;
+        long long_1;
+        if (GObjectList.TryGetLikelyPlayerGuid(out long_1))
+        {
+            if (bool_43 && long_1 <= 4096L)
+            {
+                Logger.smethod_1("Attach probe note: ignoring low inferred GUID candidate because object manager GUID is already known");
+                return true;
+            }
+            long_0 = long_1;
+            Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + long_0.ToString("x"));
+            num = GObjectList.StealthCountGameObjects(long_0);
+            if (num > 1)
+                return true;
+        }
+
+        Logger.smethod_1("Attach probe failed: object validation count too low = " + num);
+        return false;
+    }
+
+    private static bool isLikelyObjectAddress(int objectAddress)
+    {
+        if ((objectAddress & 1) != 0 || objectAddress == 0 || objectAddress == 28 || objectAddress < 65536)
             return false;
-        int_5 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTableProbe");
-        return GObjectList.StealthCountGameObjects(long_0) > 1;
+        var objectTypeBytes = GProcessMemoryManipulator.ReadBytesRaw(objectAddress + 20, 4);
+        if (objectTypeBytes == null || objectTypeBytes.Length < 4)
+            return false;
+        var objectType = BitConverter.ToInt32(objectTypeBytes, 0);
+        return objectType >= 1 && objectType <= 7;
+    }
+
+    private static bool smethod_62(int int_14)
+    {
+        if (int_14 == 0)
+            return false;
+        var firstObjectAddress = GProcessMemoryManipulator.ReadInt32(int_14 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset"), "MainTableFirstProbe");
+        if ((firstObjectAddress & 1) != 0 || firstObjectAddress == 0 || firstObjectAddress == 28 || firstObjectAddress < 65536)
+            return false;
+        var objectType = GProcessMemoryManipulator.ReadInt32(firstObjectAddress + 20, "MainTableFirstTypeProbe");
+        return objectType >= 1 && objectType <= 7;
     }
 
     public static void smethod_45()

@@ -403,6 +403,11 @@ namespace Glider.Common.Objects
         protected void LoadKnownSpells()
         {
             var intList = new List<int>();
+            if (!MemoryOffsetTable.Instance.HasOffset("MySpells"))
+            {
+                _knownSpells = intList.ToArray();
+                return;
+            }
             var num1 = MemoryOffsetTable.Instance.GetIntOffset("MySpells");
             for (var index = 0; index < 1024; ++index)
             {

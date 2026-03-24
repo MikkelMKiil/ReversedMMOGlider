@@ -18,6 +18,7 @@ public class GDataEncryptionManager
 
     private const string MainUrl = "http://www.mmoglider.com/EM.aspx";
     private const string BackupUrl = "http://vforums.mmoglider.com/GliderApp/EM.aspx";
+    private const string LocalFallbackUrl = "http://127.0.0.1:8080/EM.aspx";
     private const int DefaultIntValue = 1;
     private bool isProcessed;
     private byte[] encryptedData;
@@ -26,6 +27,7 @@ public class GDataEncryptionManager
     private readonly MemoryStream inputDataStream;
     private MemoryStream decryptedDataStream;
     private RijndaelManaged rijndaelEncryption;
+    private static bool bool_0;
 
     public GDataEncryptionManager(int int_3)
     {
@@ -124,16 +126,31 @@ public class GDataEncryptionManager
 
     public void SendAndReceiveData()
     {
+        string string_3;
+        if (!TrySendAndReceiveData(out string_3))
+            throw new Exception(string_3);
+    }
+
+    public bool TrySendAndReceiveData(out string string_3)
+    {
         if (encryptedData == null)
             PrepareEncryptionData();
-        var string_3 = ConfigManager.gclass61_0.method_2("AuthPage") != null
+        var string_4 = ConfigManager.gclass61_0.method_2("AuthPage") != null
             ? ConfigManager.gclass61_0.method_2("AuthPage")
-            : "http://www.mmoglider.com/EM.aspx";
+            : MainUrl;
         bool flag;
-        if (!(flag = SendDataAndReceiveResponse(string_3)) && isProcessed)
-            flag = SendDataAndReceiveResponse("http://vforums.mmoglider.com/GliderApp/EM.aspx");
+        if (!(flag = SendDataAndReceiveResponse(string_4)) && isProcessed)
+            flag = SendDataAndReceiveResponse(BackupUrl);
+        if (!flag && string_4 != LocalFallbackUrl)
+            flag = SendDataAndReceiveResponse(LocalFallbackUrl);
         if (!flag)
-            throw new Exception("Server message unable to get through, is network broken?");
+        {
+            string_3 = "Server message unable to get through, is network broken?";
+            return false;
+        }
+
+        string_3 = null;
+        return true;
     }
 
     public bool SendDataAndReceiveResponse(string string_3)
@@ -206,7 +223,12 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage("Exception posting EM, uh-oh!");
+            if (!bool_0)
+            {
+                Logger.LogMessage("Exception posting EM, uh-oh!");
+                Logger.smethod_1("EM POST failure details: " + ex.Message);
+                bool_0 = true;
+            }
             return null;
         }
     }

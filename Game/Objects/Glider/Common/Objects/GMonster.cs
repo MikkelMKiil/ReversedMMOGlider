@@ -226,7 +226,7 @@ namespace Glider.Common.Objects
             _dflags = GetStorageInt("UNIT_DYNAMIC_FLAGS");
             _harvestFlags = 0;
             var baseInt = GetBaseInt("MonsterDefinition");
-            if (baseInt == 0)
+            if (baseInt == 0 || !MemoryOffsetTable.Instance.HasOffset("HarvestType"))
                 return;
             _harvestFlags = GProcessMemoryManipulator.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("HarvestType"), "harvesttype");
         }

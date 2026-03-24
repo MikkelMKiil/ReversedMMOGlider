@@ -31,6 +31,17 @@ public class ChatFrameLocator
         string_1 = "(no error)";
         int_2 = 0;
         int_3 = ushort.MaxValue;
+        if (!MemoryOffsetTable.Instance.HasOffset("CFStrings") ||
+            !MemoryOffsetTable.Instance.HasOffset("CFStringSize") ||
+            !MemoryOffsetTable.Instance.HasOffset("CFCounterBase"))
+        {
+            int_7 = 0;
+            int_8 = 0;
+            int_4 = 0;
+            int_5 = 0;
+            int_6 = 0;
+            return;
+        }
         int_7 = MemoryOffsetTable.Instance.GetIntOffset("CFStrings");
         int_8 = MemoryOffsetTable.Instance.GetIntOffset("CFStringSize");
         var num = MemoryOffsetTable.Instance.GetIntOffset("CFCounterBase");
@@ -48,6 +59,12 @@ public class ChatFrameLocator
 
     public bool method_0()
     {
+        if (int_7 == 0 || int_8 == 0 || int_4 == 0)
+        {
+            string_1 = "Chat frame offsets missing";
+            bool_0 = false;
+            return false;
+        }
         bool_0 = false;
         int_2 = 0;
         int_3 = ushort.MaxValue;

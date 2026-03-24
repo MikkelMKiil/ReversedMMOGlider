@@ -59,7 +59,7 @@ public class CodeCompiler
         compilerParameters.GenerateInMemory = true;
         compilerParameters.WarningLevel = 4;
         compilerParameters.IncludeDebugInformation = true;
-        compilerParameters.ReferencedAssemblies.Add("Grefs.dat");
+        compilerParameters.ReferencedAssemblies.Add(GetCompilerReferenceAssembly());
         compilerParameters.ReferencedAssemblies.Add("System.dll");
         compilerParameters.ReferencedAssemblies.Add("System.Xml.dll");
         compilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
@@ -81,13 +81,47 @@ public class CodeCompiler
         return flag ? null : compilerResults.CompiledAssembly;
     }
 
+    public static string GetCompilerReferenceAssembly()
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Grefs.dat");
+        if (File.Exists(path))
+            return path;
+        path = Path.Combine(Environment.CurrentDirectory, "Grefs.dat");
+        if (File.Exists(path))
+            return path;
+        return typeof(GGameClass).Assembly.Location;
+    }
+
     private static string smethod_3(string string_0)
     {
+        var asm = typeof(CodeCompiler).Assembly;
+        Stream manifestResourceStream = null;
         var name = "GliderCommon.DefaultClasses." + string_0;
-        var manifestResourceStream = Assembly.GetCallingAssembly().GetManifestResourceStream(name);
+        manifestResourceStream = asm.GetManifestResourceStream(name);
         if (manifestResourceStream == null)
         {
-            Logger.LogMessage("! Couldn't get default class: \"" + name + "\"");
+            var suffix = ".DefaultClasses." + string_0;
+            foreach (var resourceName in asm.GetManifestResourceNames())
+            {
+                if (resourceName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    manifestResourceStream = asm.GetManifestResourceStream(resourceName);
+                    break;
+                }
+            }
+        }
+
+        if (manifestResourceStream == null)
+        {
+            var path1 = Path.Combine(Path.Combine(Path.Combine("Game", "GliderCommon"), "DefaultClasses"), string_0);
+            if (File.Exists(path1))
+                return File.ReadAllText(path1);
+            var path2 = Path.Combine("DefaultClasses", string_0);
+            if (File.Exists(path2))
+                return File.ReadAllText(path2);
+            if (File.Exists(string_0))
+                return File.ReadAllText(string_0);
+            Logger.LogMessage("! Couldn't get default class source: \"" + string_0 + "\"");
             return null;
         }
 

@@ -373,8 +373,15 @@ namespace Glider.Common.Objects
             _createdBy = GetStorageLong("UNIT_FIELD_CREATEDBY");
             _target = GetStorageLong("UNIT_FIELD_TARGET");
             _channelingID = GetStorageLong("UNIT_FIELD_CHANNEL_OBJECT");
-            _castingID = GetBaseInt("PlayerCasting");
-            _channelingSpellID = GetBaseInt("PlayerCastingAlt");
+            _castingID = 0;
+            _channelingSpellID = 0;
+            if (GUID == StartupClass.long_0)
+            {
+                if (MemoryOffsetTable.Instance.HasOffset("PlayerCasting"))
+                    _castingID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCasting"), "PlayerCasting");
+                if (MemoryOffsetTable.Instance.HasOffset("PlayerCastingAlt"))
+                    _channelingSpellID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCastingAlt"), "PlayerCastingAlt");
+            }
             _monsterDefinition = GetBaseInt("MonsterDefinition");
             _creatureType = _monsterDefinition == 0
                 ? GCreatureType.NoDefinition
@@ -795,10 +802,19 @@ namespace Glider.Common.Objects
         {
             if (WKBuffs.ContainsKey(WKBuffName))
                 return WKBuffs[WKBuffName];
-            var strArray = MemoryOffsetTable.Instance.GetStringOffset("Buff_" + WKBuffName).Split(' ');
-            var wellKnownBuff = new int[strArray.Length];
+            var strArray = MemoryOffsetTable.Instance.GetStringOffset("Buff_" + WKBuffName)
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var wellKnownBuffList = new List<int>();
             for (var index = 0; index < strArray.Length; ++index)
-                wellKnownBuff[index] = int.Parse(strArray[index], NumberStyles.HexNumber);
+            {
+                if (!int.TryParse(strArray[index], NumberStyles.HexNumber, null, out var value))
+                {
+                    Logger.smethod_1($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
+                    continue;
+                }
+                wellKnownBuffList.Add(value);
+            }
+            var wellKnownBuff = wellKnownBuffList.ToArray();
             WKBuffs.Add(WKBuffName, wellKnownBuff);
             return wellKnownBuff;
         }
@@ -835,6 +851,15 @@ namespace Glider.Common.Objects
 
         protected void LoadBuffList()
         {
+            if (!MemoryOffsetTable.Instance.HasOffset("NB_BaseCount") ||
+                !MemoryOffsetTable.Instance.HasOffset("NB_BaseList") ||
+                !MemoryOffsetTable.Instance.HasOffset("NB_ExtCount") ||
+                !MemoryOffsetTable.Instance.HasOffset("NB_ExtListPtr"))
+            {
+                LoadBuffListOld();
+                return;
+            }
+
             var gbuffList = new List<GBuff>();
             var num1 = 24;
             var num2 = 8;
@@ -844,17 +869,27 @@ namespace Glider.Common.Objects
             var num6 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
             var num7 = BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseList");
             var num8 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
+            if (num6 < 0 || num6 > 256)
+            {
+                LoadBuffListOld();
+                return;
+            }
             if (num8 > 0)
             {
                 num6 = num8;
                 num7 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
+                if (num6 < 0 || num6 > 256 || num7 == 0)
+                {
+                    LoadBuffListOld();
+                    return;
+                }
             }
 
             for (var index = 0; index < num6; ++index)
             {
                 var num9 = num7 + index * num1;
                 var SpellID = GProcessMemoryManipulator.ReadInt32(num9 + num2, "buffsid");
-                if (SpellID > 0)
+                if (SpellID > 0 && SpellID < 200000)
                 {
                     var IsHarmful = false;
                     int ChargesLeft = GProcessMemoryManipulator.ReadByte(num9 + num3, "buffchgs");
@@ -871,6 +906,13 @@ namespace Glider.Common.Objects
 
         protected virtual void LoadBuffListOld()
         {
+            if (!MemoryOffsetTable.Instance.HasOffset("UNIT_FIELD_AURA"))
+            {
+                _lastBuffs = new GBuff[0];
+                _lastBuffCheck = Environment.TickCount;
+                return;
+            }
+
             var gbuffList = new List<GBuff>();
             var num1 = 16;
             var num2 = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
@@ -880,7 +922,7 @@ namespace Glider.Common.Objects
             {
                 var SpellID = GProcessMemoryManipulator.ReadInt32(num2 + index * 4, "BuffSpell" + index);
                 var IsHarmful = index >= num1 && index < num1 + 16;
-                if (SpellID != 0)
+                if (SpellID > 0 && SpellID < 200000)
                     gbuffList.Add(new GBuff(SpellID, 0, IsHarmful));
             }
 

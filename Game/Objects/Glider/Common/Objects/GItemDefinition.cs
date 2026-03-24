@@ -56,6 +56,10 @@ namespace Glider.Common.Objects
 
         private int FindItemData()
         {
+            if (!MemoryOffsetTable.Instance.HasOffset("ItemDBBase") ||
+                !MemoryOffsetTable.Instance.HasOffset("ItemDBMask") ||
+                !MemoryOffsetTable.Instance.HasOffset("ItemDBList"))
+                return 0;
             var num1 = 10;
             var num2 = GProcessMemoryManipulator.ReadInt32(
                 MemoryOffsetTable.Instance.GetIntOffset("ItemDBBase") + MemoryOffsetTable.Instance.GetIntOffset("ItemDBMask"), "itemdbm");

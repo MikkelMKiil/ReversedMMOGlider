@@ -7,6 +7,7 @@
 #nullable disable
 using Glider.Common;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -17,6 +18,7 @@ public class ApplicationInitializer
 {
     private const string RSAKeyValue =
         "<RSAKeyValue><Modulus>vBh2qHt0lpcAhOBwoHnCyeAXc5wHWXSHHbbA3/hAoWla7jAG1NCh1DWsh255doo/Op/qTBBy9KPA2Tm1VJYX5zd8rtBn2ulkL51xUZ4uak30y6aTD/eZN2d3jsoEFVM45yU5q7y3S1D1mVDcdPxgdIQ6Pfwq/sNRX+yTeDXrjLU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+    private const string StaticOffsetFileName = "Offsets.static.xml";
 
     public static bool IsInitialized;
     public static DateTime InitializationTime;
@@ -28,141 +30,21 @@ public class ApplicationInitializer
         {
             InitializationTime = DateTime.Now;
             InitializationCount = 0;
-            var dataEncryptionManager = new GDataEncryptionManager(7);
-            dataEncryptionManager.PrepareDataStream();
-            dataEncryptionManager.WriteStringToStream("Release");
-            dataEncryptionManager.WriteIntToStream(0);
-            dataEncryptionManager.WriteIntToStream(!isValidationRequired ? 1 : 0);
-            dataEncryptionManager.WriteStringToStream(StartupClass.WowVersionLabel_string);
-            if (isValidationRequired)
-                StartupClass.IsSomeConditionMet = false;
-            dataEncryptionManager.SendAndReceiveData();
-            var responseStatus = dataEncryptionManager.ReadStringFromDecryptedStream();
-            var responseMessage = dataEncryptionManager.ReadStringFromDecryptedStream();
-            var fileName = dataEncryptionManager.ReadStringFromDecryptedStream();
-            if (responseStatus != "Good" && isValidationRequired)
+            int int_0;
+            if (!TryLoadStaticOffsets(out int_0))
             {
-                if (fileName.Length == 0)
-                {
-                    var messageBoxResult = (int)MessageBox.Show(null, MessageProvider.smethod_2(690, responseStatus, responseMessage), MessageProvider.GetMessage(657),
-                        MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    return false;
-                }
-
-                if (MessageBox.Show(null, MessageProvider.smethod_2(791, responseStatus, responseMessage, fileName), MessageProvider.GetMessage(657),
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Hand) == DialogResult.Yes)
-                    Process.Start(fileName);
-                return false;
-            }
-
-            if (!isValidationRequired)
+                Logger.LogMessage("Unable to load static offsets from \"" + StaticOffsetFileName + "\".");
                 return true;
-            var streamIntValue = dataEncryptionManager.ReadIntFromDecryptedStream();
-            if (StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal)
-                StartupClass.int_4 = streamIntValue;
-            var firstDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
-            var secondDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
-            if (firstDecryptedString.Length > 0)
-            {
-                var formattedString = firstDecryptedString.Replace("|", "\r\n");
-                Logger.LogMessage(MessageProvider.GetMessage(288));
-                if (secondDecryptedString == null)
-                    GliderWarning.smethod_1(formattedString);
-                else
-                    GliderWarning.smethod_0(MessageProvider.smethod_2(691, formattedString), secondDecryptedString);
-            }
-
-            var thirdDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
-            if (thirdDecryptedString.Length > 0)
-            {
-                var cleanedRealmList = GetRealmFromConfigFile().ToLower().Replace("\"", "").Replace("'", "");
-                var cleanedThirdDecryptedString = thirdDecryptedString.Replace("\"", "").Replace("'", "");
-                if (!cleanedRealmList.ToLower().StartsWith(cleanedThirdDecryptedString))
-                {
-                    var messageBoxResult = (int)MessageBox.Show(null, MessageProvider.smethod_2(788, cleanedThirdDecryptedString), MessageProvider.GetMessage(657),
-                        MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    return false;
-                }
-            }
-
-            var applicationStatus = dataEncryptionManager.ReadStringFromDecryptedStream();
-            StartupClass.InitializationCount = dataEncryptionManager.ReadIntFromDecryptedStream();
-            InitializationCount = dataEncryptionManager.ReadIntFromDecryptedStream();
-            var dateString = dataEncryptionManager.ReadStringFromDecryptedStream();
-            if (dateString.Length > 0)
-            {
-                InitializationTime = DateTime.Parse(dateString);
-                Logger.smethod_1("SubExpire parsed: " + InitializationTime + ", Now: " + DateTime.Now);
-            }
-            else
-            {
-                InitializationTime = DateTime.Now;
-            }
-
-            var secondsToAdd = dataEncryptionManager.ReadIntFromDecryptedStream();
-            MemoryOffsetTable.Instance.Clear();
-            var streamIntValue3 = dataEncryptionManager.ReadIntFromDecryptedStream();
-            for (var index = 0; index < streamIntValue3; ++index)
-            {
-                var fifthDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
-                var sixthDecryptedString = dataEncryptionManager.ReadStringFromDecryptedStream();
-                try
-                {
-                    if (fifthDecryptedString == "SF")
-                    {
-                        WardenMonitor.smethod_0(sixthDecryptedString);
-                    }
-                    else if (fifthDecryptedString.StartsWith("Buff_"))
-                    {
-                        MemoryOffsetTable.Instance.AddStringOffset(fifthDecryptedString, sixthDecryptedString);
-                    }
-                    else if (fifthDecryptedString.StartsWith("_"))
-                    {
-                        ProcessInitializationParameters(fifthDecryptedString, sixthDecryptedString);
-                    }
-                    else
-                    {
-                        var parsedIntValue = int.Parse(sixthDecryptedString, NumberStyles.HexNumber);
-                        MemoryOffsetTable.Instance.AddIntOffset(fifthDecryptedString, parsedIntValue);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (fifthDecryptedString == "GH")
-                        MemoryOffsetTable.Instance.Offsets.Add("GH", sixthDecryptedString);
-                }
             }
 
             StartupClass.isInitializationSuccessful = true;
-            StartupClass.isInputStringFourCharacters = inputString.Length == 4;
-            Logger.LogMessage(MessageProvider.GetMessage(289));
-            if (secondsToAdd > 0)
-            {
-                StartupClass.isTimeAdded = true;
-                StartupClass.expiryTime = DateTime.Now.AddSeconds(secondsToAdd);
-            }
-            else
-            {
-                StartupClass.isTimeAdded = false;
-            }
-
-            switch (applicationStatus)
-            {
-                case "Beta":
-                    StartupClass.IsBetaVersion = true;
-                    StartupClass.IsBetaAccessGranted = true;
-                    Logger.LogMessage(MessageProvider.GetMessage(290));
-                    break;
-                case "Old":
-                    Logger.LogMessage(MessageProvider.GetMessage(872));
-                    break;
-            }
-
-            if (inputString.ToUpper() == "DEMO")
-                StartupClass.isInputStringFourCharacters = true;
-            if (DateTime.Now < InitializationTime)
-                if (isValidationRequired)
-                    StartupClass.IsSomeConditionMet = true;
+            StartupClass.isInputStringFourCharacters = false;
+            StartupClass.IsBetaAccessGranted = true;
+            StartupClass.IsBetaVersion = false;
+            StartupClass.isTimeAdded = false;
+            if (isValidationRequired)
+                StartupClass.IsSomeConditionMet = true;
+            Logger.LogMessage("Loaded " + int_0 + " static offsets from \"" + StaticOffsetFileName + "\".");
         }
         catch (Exception ex)
         {
@@ -171,6 +53,156 @@ public class ApplicationInitializer
         }
 
         Logger.smethod_1("Returning from Logon");
+        return true;
+    }
+
+    private static bool TryLoadStaticOffsets(out int int_0)
+    {
+        int_0 = 0;
+        string string_1;
+        if (!TryResolveStaticOffsetPath(out string_1))
+            return false;
+        try
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(string_1);
+            MemoryOffsetTable.Instance.Clear();
+            foreach (XmlNode selectNode in xmlDocument.SelectNodes("/Offsets/*"))
+            {
+                string string_2;
+                string string_3;
+                if (selectNode.Name == "Entry")
+                {
+                    if (selectNode.Attributes == null)
+                        continue;
+                    var xmlAttribute1 = selectNode.Attributes["name"];
+                    var xmlAttribute2 = selectNode.Attributes["value"];
+                    if (xmlAttribute1 == null || xmlAttribute2 == null)
+                        continue;
+                    string_2 = xmlAttribute1.Value;
+                    string_3 = xmlAttribute2.Value;
+                }
+                else
+                {
+                    string_2 = selectNode.Name;
+                    string_3 = selectNode.InnerText;
+                }
+
+                if (ApplyStaticOffset(string_2, string_3))
+                    ++int_0;
+            }
+
+            Logger.LogMessage("Static offsets source: " + string_1);
+            return int_0 > 0 && ValidateRequiredOffsets();
+        }
+        catch (Exception ex)
+        {
+            Logger.smethod_1("Unable to load static offsets: " + ex.Message);
+            return false;
+        }
+    }
+
+    private static bool TryResolveStaticOffsetPath(out string string_1)
+    {
+        string_1 = null;
+        var stringList = new List<string>();
+        stringList.Add(StaticOffsetFileName);
+        stringList.Add(Path.Combine(Environment.CurrentDirectory, StaticOffsetFileName));
+        stringList.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, StaticOffsetFileName));
+        try
+        {
+            var fullPath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+            var directoryName = Path.GetDirectoryName(fullPath.TrimEnd('\\'));
+            for (var index = 0; index < 4 && !string.IsNullOrEmpty(directoryName); ++index)
+            {
+                stringList.Add(Path.Combine(directoryName, StaticOffsetFileName));
+                directoryName = Path.GetDirectoryName(directoryName);
+            }
+        }
+        catch (Exception)
+        {
+        }
+
+        foreach (var path in stringList)
+            if (!string.IsNullOrEmpty(path) && File.Exists(path))
+            {
+                string_1 = path;
+                return true;
+            }
+
+        return false;
+    }
+
+    private static bool ApplyStaticOffset(string string_1, string string_2)
+    {
+        if (string_1 == null || string_1.Length == 0 || string_2 == null)
+            return false;
+        string_2 = string_2.Trim();
+        if (string_2.Length == 0)
+            return false;
+        try
+        {
+            if (string_1 == "SF")
+            {
+                WardenMonitor.smethod_0(string_2);
+                return true;
+            }
+
+            if (string_1.StartsWith("Buff_"))
+            {
+                MemoryOffsetTable.Instance.AddStringOffset(string_1, string_2);
+                return true;
+            }
+
+            if (string_1.StartsWith("_"))
+            {
+                ProcessInitializationParameters(string_1, string_2);
+                return true;
+            }
+
+            if (string_1 == "GH")
+            {
+                MemoryOffsetTable.Instance.Offsets.Add("GH", string_2);
+                return true;
+            }
+
+            var num = ParseStaticOffsetValue(string_2);
+            MemoryOffsetTable.Instance.AddIntOffset(string_1, num);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.smethod_1("Skipping invalid static offset \"" + string_1 + "\": " + ex.Message);
+            return false;
+        }
+    }
+
+    private static int ParseStaticOffsetValue(string string_1)
+    {
+        if (string_1.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            string_1 = string_1.Substring(2);
+        int result;
+        if (int.TryParse(string_1, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result))
+            return result;
+        if (int.TryParse(string_1, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+            return result;
+        throw new Exception("Offset value is not numeric: " + string_1);
+    }
+
+    private static bool ValidateRequiredOffsets()
+    {
+        foreach (var key in new string[5]
+                 {
+                     "MainTable", "InitialOffset", "PlayerIdAddr", "D_Player", "D_Object"
+                 })
+        {
+            if (!MemoryOffsetTable.Instance.HasOffset(key))
+            {
+                Logger.LogMessage("Static offsets file is missing required key: " + key);
+                return false;
+            }
+        }
+
         return true;
     }
 

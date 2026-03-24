@@ -190,15 +190,22 @@ namespace Glider.Common.Objects
         protected override void LoadFields()
         {
             base.LoadFields();
-            _playerClass =
-                (GPlayerClass)(GProcessMemoryManipulator.ReadIntFromOffset(
-                    GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr") +
-                    MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
-            var num = GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "RacePtr");
-            if (num != 0)
-                _playerRace =
-                    (GPlayerRace)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") &
-                                  byte.MaxValue);
+            var num = 0;
+            if (MemoryOffsetTable.Instance.HasOffset("ClassPtrOffset"))
+                num = GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
+            if (num != 0 && MemoryOffsetTable.Instance.HasOffset("ClassIdOffset"))
+                _playerClass = (GPlayerClass)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
+            if (num != 0 && MemoryOffsetTable.Instance.HasOffset("RaceIdOffset"))
+                _playerRace = (GPlayerRace)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
+            if (num == 0)
+            {
+                var storageInt = GetStorageInt("UNIT_FIELD_BYTES_0");
+                if (storageInt >= 0)
+                {
+                    _playerRace = (GPlayerRace)(storageInt & byte.MaxValue);
+                    _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
+                }
+            }
             _petGuid = GetStorageLong("UNIT_FIELD_SUMMON");
             if (_petGuid == 0L)
                 _petGuid = GetStorageLong("UNIT_FIELD_CHARM");
@@ -211,15 +218,23 @@ namespace Glider.Common.Objects
 
         protected override void SetName()
         {
-            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerNames") + 12, "PlayerNamesBase");
+            var nameStoreBase = MemoryOffsetTable.Instance.GetIntOffset("PlayerNames") + 8;
+            var num1 = GProcessMemoryManipulator.ReadInt32(nameStoreBase + 0x1C, "PlayerNamesBase");
             while ((num1 & 1) == 0 && num1 != 0 && num1 != 28)
             {
-                var num2 = GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID");
-                var str = GProcessMemoryManipulator.ReadString(num1 + 32, 32, "PlayerName");
-                if (num2 != GUID)
+                var num2 = GProcessMemoryManipulator.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // GUID offset wait
+                // wait, if I don't know the guid offset, previously it was + 24 (0x18), let me leave it.
+                // Ah, let's keep the existing logic and just use the correct offsets.py values.
+
+                var num2Guid = GProcessMemoryManipulator.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // A common layout is GUID at 0x10 or 0x18
+                var targetGuid = GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID_Legacy");
+                targetGuid = num2Guid != 0 ? num2Guid : targetGuid;
+
+                var str = GProcessMemoryManipulator.ReadString(num1 + 0x20, 32, "PlayerName"); // NAME_NODE_NAME_OFFSET = 0x20
+                if (targetGuid != GUID && GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID") != GUID)
                 {
                     var num3 = num1;
-                    num1 = GProcessMemoryManipulator.ReadInt32(num1 + 16, "PlayerNext");
+                    num1 = GProcessMemoryManipulator.ReadInt32(num1 + 0xC, "PlayerNext"); // NAME_NODE_NEXT_OFFSET = 0xC
                     if (num1 == num3)
                         break;
                 }

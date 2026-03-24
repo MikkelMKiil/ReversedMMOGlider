@@ -88,6 +88,21 @@ public class GProcessMemoryManipulator
         return stringBuilder.ToString();
     }
 
+    public static string smethod_0()
+    {
+        return GenerateRandomString();
+    }
+
+    public static int smethod_1()
+    {
+        return StartupClass.smethod_18();
+    }
+
+    public static GStruct22 smethod_4()
+    {
+        return GetCursorPosition();
+    }
+
     public static int AttachToWowProcess()
     {
         var gclass65 = new ProcessEnumerator();
@@ -203,6 +218,11 @@ public class GProcessMemoryManipulator
         return smethod_10(int_29, int_30, string_0);
     }
 
+    public static string smethod_10(int int_29, int int_30, string string_0)
+    {
+        return ReadStringInternal(int_29, int_30, string_0);
+    }
+
     public static string ReadStringInternal(int int_29, int int_30, string string_0)
     {
         GStruct21 gstruct21_0;
@@ -233,10 +253,20 @@ public class GProcessMemoryManipulator
         return numArray == null ? 0 : BitConverter.ToInt32(numArray, 0);
     }
 
+    public static int smethod_11(int int_29, string string_0)
+    {
+        return ReadInt32(int_29, string_0);
+    }
+
     public static long ReadInt64(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 8, string_0);
         return numArray == null ? 0L : BitConverter.ToInt64(numArray, 0);
+    }
+
+    public static long smethod_12(int int_29, string string_0)
+    {
+        return ReadInt64(int_29, string_0);
     }
 
     public static float ReadFloat(int int_29, string string_0)
@@ -249,6 +279,11 @@ public class GProcessMemoryManipulator
     {
         var numArray = smethod_17(int_29, 8, string_0);
         return numArray == null ? 0.0 : BitConverter.ToDouble(numArray, 0);
+    }
+
+    public static double smethod_14(int int_29, string string_0)
+    {
+        return ReadDouble(int_29, string_0);
     }
 
     public static byte ReadByte(int int_29, string string_0)
@@ -268,6 +303,16 @@ public class GProcessMemoryManipulator
         return smethod_19(int_29, int_30, string_0, false);
     }
 
+    public static byte[] ReadBytes(int int_29, int int_30, string string_0)
+    {
+        return smethod_17(int_29, int_30, string_0);
+    }
+
+    public static byte[] ReadBytes(int int_29, int int_30, string string_0, bool bool_4)
+    {
+        return smethod_19(int_29, int_30, string_0, bool_4);
+    }
+
     private static int ReadProcessMemoryInternal(int int_29, byte[] byte_0, int int_30, out int int_31)
     {
         if (StartupClass.bool_14 && StartupClass.GliderManager != null)
@@ -281,6 +326,11 @@ public class GProcessMemoryManipulator
         if (num1 != 0)
             int_27 = Marshal.GetLastWin32Error();
         return num1;
+    }
+
+    private static int smethod_18(int int_29, byte[] byte_0, int int_30, out int int_31)
+    {
+        return ReadProcessMemoryInternal(int_29, byte_0, int_30, out int_31);
     }
 
     public static byte[] smethod_19(int int_29, int int_30, string string_0, bool bool_4)
@@ -323,24 +373,33 @@ public class GProcessMemoryManipulator
         return smethod_18(int_29, byte_0, int_30, out var _) == 0 ? null : byte_0;
     }
 
+    public static byte[] ReadBytesRaw(int int_29, int int_30)
+    {
+        return smethod_20(int_29, int_30);
+    }
+
     public static int ReadIntFromOffset(int int_29, string string_0)
     {
-        return BitConverter.ToInt32(smethod_20(int_29, 4) ?? throw new MemoryReadException(int_29, 4, string_0), 0);
+        var bytes = smethod_20(int_29, 4);
+        return bytes == null ? 0 : BitConverter.ToInt32(bytes, 0);
     }
 
     public static float ReadFloatFromOffset(int int_29, string string_0)
     {
-        return BitConverter.ToSingle(smethod_20(int_29, 4) ?? throw new MemoryReadException(int_29, 4, string_0), 0);
+        var bytes = smethod_20(int_29, 4);
+        return bytes == null ? 0f : BitConverter.ToSingle(bytes, 0);
     }
 
     public static float ReadFloatAlternate(int int_29, string string_0)
     {
-        return (smethod_20(int_29, 1) ?? throw new MemoryReadException(int_29, 1, string_0))[0];
+        var bytes = smethod_20(int_29, 1);
+        return bytes == null ? 0f : (float)bytes[0];
     }
 
     public static long ReadLongFromOffset(int int_29, string string_0)
     {
-        return BitConverter.ToInt64(smethod_20(int_29, 8) ?? throw new MemoryReadException(int_29, 8, string_0), 0);
+        var bytes = smethod_20(int_29, 8);
+        return bytes == null ? 0L : BitConverter.ToInt64(bytes, 0);
     }
 
     [DllImport("kernel32", SetLastError = true)]
@@ -466,6 +525,11 @@ public class GProcessMemoryManipulator
         return new IntPtr(0);
     }
 
+    public static IntPtr smethod_29(int int_29)
+    {
+        return OpenProcessWithAccess(int_29);
+    }
+
     public static bool IsWowProcessRunning()
     {
         var procAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "ReadProcessMemory");
@@ -556,7 +620,7 @@ public class GProcessMemoryManipulator
         label_5:
             streamReader.Close();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
 
@@ -635,10 +699,10 @@ public class GProcessMemoryManipulator
         ShowWindow(intptr_2, 0);
     }
 
-    public static void SetForegroundWindow(IntPtr intptr_2)
-    {
-        ShowWindow(intptr_2, 0);
-    }
+    //public static void SetForegroundWindow(IntPtr intptr_2)
+    //{
+    //    ShowWindow(intptr_2, 0);
+    //}
 
     public static bool GetWindowPosition(IntPtr intptr_2, out Point point_0)
     {
@@ -690,6 +754,11 @@ public class GProcessMemoryManipulator
         var url = string_0;
         Help.ShowHelp(control_0, url, helpNavigator_0, object_0);
         smethod_45();
+    }
+
+    private static void smethod_45()
+    {
+        StartupClass.smethod_45();
     }
 
     public static void IsWindowMinimized()
@@ -943,4 +1012,5 @@ public class GProcessMemoryManipulator
         public int int_5;
         public int int_6;
     }
+
 }

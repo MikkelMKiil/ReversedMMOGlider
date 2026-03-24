@@ -167,24 +167,30 @@ namespace Glider.Common.Objects
         protected int GetStorageInt(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
+            if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
+                descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
-                ? -1
+                ? 0
                 : GProcessMemoryManipulator.ReadIntFromOffset(StorageAddress + descriptorOffset, "ReadSI." + Name);
         }
 
         protected long GetStorageLong(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
+            if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
+                descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
-                ? -1L
+                ? 0L
                 : GProcessMemoryManipulator.ReadLongFromOffset(StorageAddress + descriptorOffset, "ReadSL." + Name);
         }
 
         protected float GetStorageFloat(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
+            if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
+                descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
-                ? float.NaN
+                ? 0.0f
                 : GProcessMemoryManipulator.ReadFloatFromOffset(StorageAddress + descriptorOffset, "ReadSF." + Name);
         }
 

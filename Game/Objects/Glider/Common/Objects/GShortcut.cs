@@ -20,8 +20,23 @@ namespace Glider.Common.Objects
         public GShortcut(int SlotNumber)
         {
             this.SlotNumber = SlotNumber;
-            var num = (uint)GProcessMemoryManipulator.ReadInt32(
-                MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts") + 4 * (SlotNumber - 1), "shortcut1");
+
+            if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+            {
+                ShortcutType = GShortcutType.Empty;
+                ShortcutValue = 0;
+                return;
+            }
+
+            var actionBarShortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
+            if (actionBarShortcutsBase < 65536)
+            {
+                ShortcutType = GShortcutType.Empty;
+                ShortcutValue = 0;
+                return;
+            }
+
+            var num = (uint)GProcessMemoryManipulator.ReadInt32(actionBarShortcutsBase + 4 * (SlotNumber - 1), "shortcut1");
             if (num == 0U)
             {
                 ShortcutType = GShortcutType.Empty;

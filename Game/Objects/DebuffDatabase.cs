@@ -188,8 +188,14 @@ public class DebuffDatabase
     {
         if (!StartupClass.bool_13)
             return;
-        foreach (var gbuff in GPlayerSelf.Me.GetBuffSnapshot())
-            if (gbuff.SpellID > 0 && !Offsets.ContainsKey(gbuff.SpellID) &&
+        var me = GPlayerSelf.Me;
+        if (me == null)
+            return;
+        var buffSnapshot = me.GetBuffSnapshot();
+        if (buffSnapshot == null)
+            return;
+        foreach (var gbuff in buffSnapshot)
+            if (gbuff != null && gbuff.SpellID > 0 && !Offsets.ContainsKey(gbuff.SpellID) &&
                 !sortedList_1.ContainsKey(gbuff.SpellID) && gbuff.SpellName != null && gbuff.SpellName.Length > 0)
             {
                 Logger.smethod_1(MessageProvider.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
@@ -236,8 +242,15 @@ public class DebuffDatabase
     {
         try
         {
-            foreach (var gbuff in GPlayerSelf.Me.GetBuffSnapshot())
-                Logger.LogMessage(MessageProvider.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+            var me = GPlayerSelf.Me;
+            if (me == null)
+                return;
+            var buffSnapshot = me.GetBuffSnapshot();
+            if (buffSnapshot == null)
+                return;
+            foreach (var gbuff in buffSnapshot)
+                if (gbuff != null)
+                    Logger.LogMessage(MessageProvider.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
         }
         catch (Exception ex)
         {

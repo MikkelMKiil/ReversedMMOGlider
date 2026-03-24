@@ -22,11 +22,13 @@ public class MemoryOffsetTable
     /// Internal storage for offsets. Keys are offset names, values can be int or string.
     /// </summary>
     public SortedList Offsets;
+    private readonly SortedList missingOffsetsLogged;
 
     public MemoryOffsetTable()
     {
         Instance = this;
         Offsets = new SortedList();
+        missingOffsetsLogged = new SortedList();
     }
 
     /// <summary>
@@ -35,6 +37,7 @@ public class MemoryOffsetTable
     public void Clear()
     {
         Offsets.Clear();
+        missingOffsetsLogged.Clear();
     }
 
     /// <summary>
@@ -66,7 +69,7 @@ public class MemoryOffsetTable
     {
         if (Offsets.ContainsKey(offsetName))
             return (string)Offsets[offsetName];
-        Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
+        LogMissingOffsetOnce(offsetName);
         return "";
     }
 
@@ -79,7 +82,7 @@ public class MemoryOffsetTable
     {
         if (Offsets.ContainsKey(offsetName))
             return (int)Offsets[offsetName];
-        Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
+        LogMissingOffsetOnce(offsetName);
         return 0;
     }
 
@@ -91,5 +94,13 @@ public class MemoryOffsetTable
     public bool HasOffset(string offsetName)
     {
         return Offsets.ContainsKey(offsetName);
+    }
+
+    private void LogMissingOffsetOnce(string offsetName)
+    {
+        if (missingOffsetsLogged.ContainsKey(offsetName))
+            return;
+        missingOffsetsLogged.Add(offsetName, true);
+        Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
     }
 }

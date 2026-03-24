@@ -1589,7 +1589,8 @@ public class CombatController
             method_64(glocation_1);
         while (true)
         {
-            if (gplayerSelf_0.TargetGUID != 0L && gplayerSelf_0.Target.IsDead)
+            GUnit target = gplayerSelf_0.Target;
+            if (target != null && target.IsDead)
                 goto label_91;
         label_6:
             GContext.Main.PulseSpin(!GContext.Main.IsRunning);
@@ -1786,7 +1787,14 @@ public class CombatController
                                 else
                                 {
                                     if (flag2)
-                                        StartupClass.smethod_27(false, "StuckTooMuchOnWP");
+                                    {
+                                        Logger.LogMessage("Still stuck after previous-waypoint recovery, skipping current waypoint");
+                                        gprofile_0.ConsumeCurrentWaypoint();
+                                        flag2 = false;
+                                        num1 = 0;
+                                        method_35();
+                                        continue;
+                                    }
                                     Logger.LogMessage("Stuck too much, trying previous waypoint");
                                     flag2 = true;
                                     gprofile_0.SetPreviousWaypoint();

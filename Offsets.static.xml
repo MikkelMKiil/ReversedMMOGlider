@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Offsets>
+	<!-- Core object manager / IDs (WoW 3.3.5a build 12340 known) -->
+	<MainTable>0x00C79CE0</MainTable>
+	<!-- CurrMgr_Ptr (ClientConnection) -->
+	<InitialOffset>0xAC</InitialOffset>
+	<!-- FirstObject offset in s_curMgr -->
+ <PlayerIdAddr>0x00BD07A8</PlayerIdAddr>
+	<!-- Local PlayerGUID (3.3.5a/12340 static) -->
+	<TargetId>0x00BD07B0</TargetId>
+	<!-- TargetGUID -->
+	<UnderCursor>0x00BD07A0</UnderCursor>
+	<!-- MouseOverGUID -->
+
+	<!-- Descriptor table roots (Absolute byte offsets to field arrays in WoW 3.3.5a) -->
+	<D_Player>0x14C</D_Player>
+	<!-- PLAYER_FIELD_START (UNIT_END) -> 0x14C bytes -->
+	<D_Items>0x18</D_Items>
+	<!-- ITEM_FIELD_OWNER = 0x6 (DWORD) -> 0x18 bytes -->
+	<D_NPC>0x18</D_NPC>
+	<!-- UNIT_FIELD_CHARM = 0x6 (DWORD) -> 0x18 bytes -->
+	<D_Object>0x0</D_Object>
+	<!-- OBJECT_FIELD_GUID = 0x0 bytes -->
+	<D_Container>0x100</D_Container>
+	<!-- CONTAINER_FIELD_NUM_SLOTS = 0x40 (DWORD) -> 0x100 bytes -->
+
+	<!-- Direct descriptor fallback offsets (byte offsets in descriptor storage) -->
+	<OBJECT_FIELD_ENTRY>0x0C</OBJECT_FIELD_ENTRY>
+	<UNIT_FIELD_TARGET>0x48</UNIT_FIELD_TARGET>
+	<UNIT_FIELD_CREATEDBY>0x40</UNIT_FIELD_CREATEDBY>
+	<UNIT_FIELD_HEALTH>0x60</UNIT_FIELD_HEALTH>
+	<UNIT_FIELD_POWER1>0x64</UNIT_FIELD_POWER1>
+	<UNIT_FIELD_POWER2>0x68</UNIT_FIELD_POWER2>
+	<UNIT_FIELD_POWER4>0x70</UNIT_FIELD_POWER4>
+	<UNIT_FIELD_POWER7>0x7C</UNIT_FIELD_POWER7>
+	<UNIT_FIELD_MAXHEALTH>0x80</UNIT_FIELD_MAXHEALTH>
+	<UNIT_FIELD_MAXPOWER1>0x84</UNIT_FIELD_MAXPOWER1>
+	<UNIT_FIELD_MAXPOWER4>0x90</UNIT_FIELD_MAXPOWER4>
+	<UNIT_FIELD_LEVEL>0xD8</UNIT_FIELD_LEVEL>
+	<UNIT_FIELD_FACTIONTEMPLATE>0xDC</UNIT_FIELD_FACTIONTEMPLATE>
+	<UNIT_FIELD_FLAGS>0xEC</UNIT_FIELD_FLAGS>
+	<UNIT_DYNAMIC_FLAGS>0xF0</UNIT_DYNAMIC_FLAGS>
+	<UNIT_FIELD_BYTES_0>0x5C</UNIT_FIELD_BYTES_0>
+	<UNIT_FIELD_BYTES_1>0x1CC</UNIT_FIELD_BYTES_1>
+	<UNIT_FIELD_SUMMON>0x38</UNIT_FIELD_SUMMON>
+	<UNIT_FIELD_CHARM>0x18</UNIT_FIELD_CHARM>
+
+	<!-- Core UI / runtime pointers -->
+   <UIParent>0x00B7436C</UIParent>
+	<!-- Static UI base frame -->
+	<MainTableProbe>0x2ED0</MainTableProbe>
+	<!-- CurrMgr_Offs (ObjectManager base =[0x00C79CE0] + 0x2ED0) -->
+ <MainTableLocalGuid>0xC0</MainTableLocalGuid>
+	<!-- Local player GUID offset inside object manager (3.3.5a/12340) -->
+ <MainTableActivePlayer>0x18</MainTableActivePlayer>
+	<!-- Active player object pointer offset inside object manager (3.3.5a) -->
+	<ActionBarCurrent>0x00BDFC34</ActionBarCurrent>
+	<!-- Pointer to current Action Bar page -->
+	<PlayerNames>0x00C5D938</PlayerNames>
+	<!-- Static PlayerName pointer offset -->
+	<ObjectInfo>0x00C7CA58</ObjectInfo>
+	<!-- WDB ItemCache base pointer -->
+	<ObjectInfoSub>0x00C81270</ObjectInfoSub>
+	<!-- WDB CreatureCache base pointer -->
+
+	<!-- TLS path (WoW 3.3.5a hardware TLS info) -->
+   <TLSSlot>0x0</TLSSlot>
+	<!-- Client TLS Index -->
+  <TLSPlayerID>0x0</TLSPlayerID>
+	<!-- Offset to Player in TLS -->
+    <TLSMainTable>0x0</TLSMainTable>
+	<!-- Offset to CurMgr in TLS -->
+
+	<!-- Object/base movement fields (known for 3.3.5a) -->
+	<X>0x798</X>
+	<!-- Pos_X -->
+	<Y>0x79C</Y>
+	<!-- Pos_Y -->
+	<Z>0x7A0</Z>
+	<!-- Pos_Z -->
+	<Heading>0x7A8</Heading>
+	<!-- Rot -->
+	<Pitch>0x7AC</Pitch>
+	<!-- Pitch -->
+	<MoveFlags>0x7E0</MoveFlags>
+	<!-- Movement flags offset in CGUnit_C -->
+	<MoveStruct2>0x118</MoveStruct2>
+	<!-- Pointer to movement structure from unit base -->
+	<MoveFlags2>0x40</MoveFlags2>
+	<!-- Internal offset to flags inside the movement struct -->
+
+	<!-- Casting / class/race ptr chain -->
+	<PlayerCasting>0x00CECAD0</PlayerCasting>
+	<!-- Local player current casting spell ID -->
+	<PlayerCastingAlt>0x00CECB20</PlayerCastingAlt>
+	<!-- Local player channeled spell ID -->
+
+	<!-- Gameplay helper offsets -->
+	<ComboPointsAddr>0x00BD084D</ComboPointsAddr>
+	<!-- Combo points base address -->
+	<Combat>0xEC</Combat>
+	<!-- UNIT_FIELD_FLAGS offset (combat flag is 0x80000 bit here) -->
+	<MonsterDefinition>0x964</MonsterDefinition>
+	<!-- Pointer to CreatureCache data from Unit structure -->
+	<CreatureType>0x10</CreatureType>
+	<!-- Creature type (Beast, Undead, etc.) offset inside CreatureCache struct -->
+	<NodeName>0x1A4</NodeName>
+	<!-- GameObject ObjectName1 offset -->
+	<NodeNameSecond>0x90</NodeNameSecond>
+	<!-- GameObject ObjectName2 offset -->
+
+	<!-- Chat/UI text systems -->
+	<ChatFrameBase>0x00B75A60</ChatFrameBase>
+	<!-- ChatBuffer_Start -->
+   <UIName>0xB4</UIName>
+	<!-- UI object name pointer offset (CSimpleFrame) -->
+	<UINext>0x3C</UINext>
+	<!-- Next UI object pointer in global linked list -->
+	<ChatFrameSize>0x17C0</ChatFrameSize>
+	<!-- ChatBuffer_Next (Struct size step) -->
+	<UILabelText>0xCC</UILabelText>
+	<!-- CGFontString text pointer offset -->
+	<UIFontString>0xC8</UIFontString>
+	<!-- CGFontString layout base -->
+
+	<!-- Misc pointers used by existing code paths -->
+	<MacroBase>0x00BE1150</MacroBase>
+	<!-- Client static macro array base -->
+	<CameraBase>0x00C7B5A8</CameraBase>
+	<!-- 3.3.5a active Camera pointer (Updated from 0x00D09850) -->
+	<WorldMap>0x00BD0F40</WorldMap>
+	<!-- Current opened World Map ID -->
+	<VAPeek>0x10</VAPeek>
+	<!-- Structure peek offsets -->
+	<FLPeek>0x14</FLPeek>
+	<!-- Structure peek offsets -->
+</Offsets>
