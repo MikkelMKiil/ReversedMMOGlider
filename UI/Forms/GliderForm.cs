@@ -103,6 +103,7 @@ public class GliderForm : Form, ILogger
     private ContextMenuStrip ContextMenuStripWindow;
     private ToolStripMenuItem alwaysOnTopToolStripMenuItem1;
     private ToolStripMenuItem minimizeToTrayToolStripMenuItem;
+    private ToolStripMenuItem verboseMainLoopLoggingToolStripMenuItem;
     private ToolStripMenuItem exitToolStripMenuItem1;
     private ToolStripSeparator toolStripSeparator1;
     private ToolTip toolTip_0;
@@ -156,6 +157,7 @@ public class GliderForm : Form, ILogger
             this.TopMost = true;
             this.alwaysOnTopToolStripMenuItem1.Checked = true;
         }
+        this.verboseMainLoopLoggingToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
         if (!ConfigManager.gclass61_0.bool_0)
             GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"Welcome.html");
         MessageProvider.smethod_3((Form)this, nameof(GliderForm));
@@ -372,6 +374,7 @@ public class GliderForm : Form, ILogger
         this.ContextMenuStripWindow = new ContextMenuStrip(this.icontainer_0);
         this.alwaysOnTopToolStripMenuItem1 = new ToolStripMenuItem();
         this.minimizeToTrayToolStripMenuItem = new ToolStripMenuItem();
+        this.verboseMainLoopLoggingToolStripMenuItem = new ToolStripMenuItem();
         this.toolStripSeparator1 = new ToolStripSeparator();
         this.exitToolStripMenuItem1 = new ToolStripMenuItem();
         this.Location_3d = new Label();
@@ -933,15 +936,16 @@ public class GliderForm : Form, ILogger
         this.exitToolStripMenuItem.Size = new Size(148, 22);
         this.exitToolStripMenuItem.Text = "Exit";
         this.exitToolStripMenuItem.Click += new EventHandler(this.exitToolStripMenuItem_Click);
-        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[4]
+        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[5]
         {
       (ToolStripItem) this.alwaysOnTopToolStripMenuItem1,
       (ToolStripItem) this.minimizeToTrayToolStripMenuItem,
+      (ToolStripItem) this.verboseMainLoopLoggingToolStripMenuItem,
       (ToolStripItem) this.toolStripSeparator1,
       (ToolStripItem) this.exitToolStripMenuItem1
         });
         this.ContextMenuStripWindow.Name = "ContextMenuStripWindow";
-        this.ContextMenuStripWindow.Size = new Size(161, 76);
+        this.ContextMenuStripWindow.Size = new Size(220, 98);
         this.alwaysOnTopToolStripMenuItem1.Name = "alwaysOnTopToolStripMenuItem1";
         this.alwaysOnTopToolStripMenuItem1.Size = new Size(160, 22);
         this.alwaysOnTopToolStripMenuItem1.Text = "Always on top";
@@ -950,6 +954,11 @@ public class GliderForm : Form, ILogger
         this.minimizeToTrayToolStripMenuItem.Size = new Size(160, 22);
         this.minimizeToTrayToolStripMenuItem.Text = "Minimize to tray";
         this.minimizeToTrayToolStripMenuItem.Click += new EventHandler(this.minimizeToTrayToolStripMenuItem_Click);
+        this.verboseMainLoopLoggingToolStripMenuItem.CheckOnClick = true;
+        this.verboseMainLoopLoggingToolStripMenuItem.Name = "verboseMainLoopLoggingToolStripMenuItem";
+        this.verboseMainLoopLoggingToolStripMenuItem.Size = new Size(219, 22);
+        this.verboseMainLoopLoggingToolStripMenuItem.Text = "Verbose main loop logging";
+        this.verboseMainLoopLoggingToolStripMenuItem.Click += new EventHandler(this.verboseMainLoopLoggingToolStripMenuItem_Click);
         this.toolStripSeparator1.Name = "toolStripSeparator1";
         this.toolStripSeparator1.Size = new Size(157, 6);
         this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
@@ -2187,6 +2196,13 @@ public class GliderForm : Form, ILogger
             Logger.LogMessage(MessageProvider.GetMessage(845));
         else
             this.Visible = false;
+    }
+
+    private void verboseMainLoopLoggingToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool isEnabled = this.verboseMainLoopLoggingToolStripMenuItem.Checked;
+        ConfigManager.gclass61_0.method_0("VerboseMainLoopLogging", isEnabled.ToString());
+        Logger.LogMessage("Verbose main loop logging " + (isEnabled ? "enabled" : "disabled"));
     }
 
     private void exitToolStripMenuItem1_Click(object sender, EventArgs e) => this.Close();

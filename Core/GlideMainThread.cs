@@ -11,6 +11,7 @@ using System.Threading;
 
 public class GlideMainThread
 {
+    private const int int_0 = 5000;
     private readonly GPlayerSelf gplayerSelf_0;
     public Thread thread_0;
 
@@ -20,6 +21,7 @@ public class GlideMainThread
         StartupClass.ginterface0_0.imethod_0();
         thread_0 = null;
         thread_0 = new Thread(method_1);
+        thread_0.IsBackground = true;
         thread_0.Start();
     }
 
@@ -28,7 +30,8 @@ public class GlideMainThread
         if (thread_0 != null && Thread.CurrentThread != thread_0)
         {
             thread_0.Interrupt();
-            thread_0.Join();
+            if (!thread_0.Join(int_0))
+                Logger.LogMessage("Glide main thread did not stop within 5000ms after interrupt.");
         }
 
         thread_0 = null;

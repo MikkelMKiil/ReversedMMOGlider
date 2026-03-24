@@ -1261,11 +1261,18 @@ public class StartupClass
 
     public static void smethod_38()
     {
+        smethod_63("Tick start");
         if (IsExitRequested)
+        {
+            smethod_63("Exit requested, skipping tick");
             return;
+        }
+
         smethod_45();
+        smethod_63("Attach/refresh check completed");
         if (bool_30 && bool_27)
         {
+            smethod_63("Security handshake check");
             GProcessMemoryManipulator.smethod_53();
             if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
                 GameMemoryWriter.method_2("OnGliderStart", false);
@@ -1273,6 +1280,7 @@ public class StartupClass
 
         if (gspellTimer_2.IsReady)
         {
+            smethod_63("Network safety timer fired");
             gspellTimer_2.Reset();
             var gclass3 = new NetworkSafetyChecker();
             if (ConfigManager.gclass61_0.method_5("AllowNetCheck"))
@@ -1281,6 +1289,7 @@ public class StartupClass
 
         if (SpellCooldownTimer.IsReady)
         {
+            smethod_63("Process probe timer fired");
             SpellCooldownTimer.Reset();
             GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
             GProcessMemoryManipulator.GetProcessId();
@@ -1288,45 +1297,75 @@ public class StartupClass
 
         if (bool_38 && !IsAttached && !bool_37)
         {
+            smethod_63("Deferred startup compilation");
             bool_37 = true;
             CodeCompiler.smethod_14();
             smethod_8();
         }
 
         if (!bool_13)
+        {
+            smethod_63("Not attached, tick complete");
             return;
+        }
 
+        smethod_63("Refreshing object list");
         GObjectList.GetObjects();
         var me = GPlayerSelf.Me;
         if (me == null)
+        {
+            smethod_63("Player object unavailable, tick complete");
             return;
+        }
 
         if (DebuffsKnown_string != null && gclass36_3.method_3())
         {
+            smethod_63("Debuff cache refresh");
             gclass36_3.method_4();
             DebuffsKnown_string.method_8();
         }
 
         if (me.Stance != CurrentStance)
         {
+            smethod_63("Stance changed");
             if (CurrentStance != GStance.Unknown)
                 GContext.Main.Interface.UnFillAllKeys();
             CurrentStance = me.Stance;
         }
 
+        smethod_63("Running chat/dialog updates");
         GameClass69Instance.method_4();
         DialogMonitor.smethod_1();
         if (GameClass8Instance != null && GameClass8Instance.method_10() && glideMode_0 == GlideMode.Auto)
+        {
+            smethod_63("Auto mode popup dismiss");
             InputController.smethod_9(27);
+        }
+
         if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
             (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !IsGliderRunning)
         {
+            smethod_63("Applying background display state");
             IsGliderRunning = true;
             smethod_46();
         }
 
+        smethod_63("Running camera/input maintenance");
         gclass68_0.method_7();
         InputController.smethod_21(true);
+        smethod_63("Tick complete");
+    }
+
+    private static bool smethod_64()
+    {
+        return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
+    }
+
+    private static void smethod_63(string string_11)
+    {
+        if (!smethod_64() || ginterface0_0 == null)
+            return;
+        ginterface0_0.imethod_2("[Debug] [MainLoop] " + string_11);
     }
 
     public static void smethod_39(int int_14)
