@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.4.11612.150
+VisualStudioVersion = 18.4.11612.150 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glider_fix-cleaned", "Glider_fix-cleaned.csproj", "{BC1CD084-3AF2-44FC-8B51-8E4646020949}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GliderRemastered", "GliderRemastered.csproj", "{BC1CD084-3AF2-44FC-8B51-8E4646020949}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
