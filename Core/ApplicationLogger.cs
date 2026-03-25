@@ -126,7 +126,7 @@ public class ApplicationLogger : ILogger
     {
         while (true)
         {
-            Thread.smethod_39(200);
+            Thread.Sleep(200);
             if (bool_0 && StartupClass.IsGameProcessAttached)
                 goto label_6;
         label_1:

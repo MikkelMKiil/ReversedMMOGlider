@@ -41,13 +41,13 @@ public class TestThread
             else
             {
                 StartupClass.BringGameWindowToForeground();
-                Thread.smethod_39(2000);
+                Thread.Sleep(2000);
             }
 
             if (StartupClass.GliderManager != null)
                 StartupClass.GliderManager.method_33(true);
             smethod_52();
-            Thread.smethod_39(4000);
+            Thread.Sleep(4000);
             StartupClass.cameraRotator.method_7();
             InputController.smethod_21(false);
             if (StartupClass.GliderManager != null)
@@ -69,12 +69,12 @@ public class TestThread
         if (GContext.Main.Me.Target != null)
         {
             if (!StartupClass.IsGliderInitialized)
-                Thread.smethod_39(3000);
+                Thread.Sleep(3000);
             var gspellTimer = new GSpellTimer(5000, false);
             StartupClass.cameraRotator.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
             while (!gspellTimer.IsReady)
             {
-                Thread.smethod_39(20);
+                Thread.Sleep(20);
                 if (StartupClass.cameraRotator.method_8(true))
                     break;
             }
@@ -183,7 +183,7 @@ public class TestThread
             int num2;
             do
             {
-                Thread.smethod_39(100);
+                Thread.Sleep(100);
                 num2 = GProcessMemoryManipulator.ReadInt32(11257960, "bst");
             } while (num2 == num1);
 
@@ -286,7 +286,7 @@ public class TestThread
     {
         while (GPlayerSelf.Me.Target != null)
         {
-            Thread.smethod_39(1000);
+            Thread.Sleep(1000);
             GContext.Main.Log("Populated/Firing/Ready: " + GContext.Main.Interface.IsKeyPopulated("Warlock.Wand") +
                               "/" + GContext.Main.Interface.IsKeyFiring("Warlock.Wand") + "/" +
                               GContext.Main.Interface.IsKeyReady("Warlock.Wand"));
@@ -300,7 +300,7 @@ public class TestThread
         while (GPlayerSelf.Me.Target != null)
         {
             var target = GPlayerSelf.Me.Target;
-            Thread.smethod_39(200);
+            Thread.Sleep(200);
             GContext.Main.Log("Casting/Energy/Ready: " + target.IsCasting + "/" + GPlayerSelf.Me.Energy + "/" +
                               GContext.Main.Interface.IsKeyReady("Rogue.Kick"));
         }
@@ -364,7 +364,7 @@ public class TestThread
     private static void smethod_23()
     {
         Logger.LogMessage("Put cursor on item!");
-        Thread.smethod_39(3000);
+        Thread.Sleep(3000);
         Logger.LogMessage("Cursor Type: " +
                            GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
     }
@@ -430,7 +430,7 @@ public class TestThread
         var byName = GContext.Main.Interface.GetByName("QuestFrame");
         var childObject = GContext.Main.Interface.GetByName("QuestDetailScrollChildFrame")
             .GetChildObject("QuestTitleText");
-        Thread.smethod_39(777);
+        Thread.Sleep(777);
         if (!byName.IsVisible)
         {
             Logger.LogMessage("No quest frame, skipping gossip check");
@@ -559,7 +559,7 @@ public class TestThread
             {
                 Logger.LogMessage("Conversion good, positioning cursor");
                 InputController.smethod_18(double_1, double_2);
-                Thread.smethod_39(1000);
+                Thread.Sleep(1000);
                 InputController.smethod_23(true);
             }
             else

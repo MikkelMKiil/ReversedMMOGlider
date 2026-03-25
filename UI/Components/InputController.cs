@@ -204,7 +204,7 @@ public class InputController
         gstruct13_0.gstruct14_0.int_0 = 0;
         gstruct13_0.gstruct14_0.short_0 = 0;
         SendInput(1U, ref gstruct13_0, Marshal.SizeOf(gstruct13_0));
-        Thread.smethod_39(200);
+        Thread.Sleep(200);
         gstruct13_0.gstruct14_0.int_0 |= 2;
         SendInput(1U, ref gstruct13_0, Marshal.SizeOf(gstruct13_0));
     }
@@ -350,7 +350,7 @@ public class InputController
             smethod_20();
             if (!StartupClass.IsAttached)
                 return;
-            Thread.smethod_39(100);
+            Thread.Sleep(100);
         }
     }
 
@@ -416,7 +416,7 @@ public class InputController
     public static void smethod_23(bool bool_3)
     {
         smethod_24(bool_3);
-        Thread.smethod_39(StartupClass.IsAttached ? 100 : 10);
+        Thread.Sleep(StartupClass.IsAttached ? 100 : 10);
         smethod_25(bool_3);
     }
 

@@ -310,12 +310,12 @@ namespace Glider.Common.Objects
             if (!LastCastFast.IsReady)
             {
                 Debug("Sleeping for spell lead delay with interrupt");
-                Thread.smethod_39(_spellLeadDelay);
+                Thread.Sleep(_spellLeadDelay);
             }
 
             LastCastFast.Reset();
             SendKey(KeyName);
-            Thread.smethod_39(600);
+            Thread.Sleep(600);
             if (Me.IsCasting)
             {
                 flag = true;
@@ -332,13 +332,13 @@ namespace Glider.Common.Objects
                         else
                         {
                             SendKey("Common.Escape");
-                            Thread.smethod_39(401);
+                            Thread.Sleep(401);
                             CastSpell(InterruptKey, true, true);
                             break;
                         }
                     }
 
-                    Thread.smethod_39(101);
+                    Thread.Sleep(101);
                 }
             }
 
@@ -364,19 +364,19 @@ namespace Glider.Common.Objects
             if (!LastCastFast.IsReady)
             {
                 Debug("Sleeping for spell lead delay with no interrupt");
-                Thread.smethod_39(_spellLeadDelay);
+                Thread.Sleep(_spellLeadDelay);
             }
 
             LastCastFast.Reset();
             Debug("CastSpell: \"" + KeyName + "\", WaitGCD=" + WaitGCD + ", FastReturn=" + FastReturn);
             SendKey(KeyName);
-            Thread.smethod_39(FastReturn ? 101 : ChannelWaitTime);
+            Thread.Sleep(FastReturn ? 101 : ChannelWaitTime);
             if (Me.IsCasting && !FastReturn)
             {
                 flag = true;
                 var gspellTimer = new GSpellTimer(15000);
                 while (!gspellTimer.IsReady && Me.IsCasting)
-                    Thread.smethod_39(101);
+                    Thread.Sleep(101);
             }
 
             return flag;
@@ -573,7 +573,7 @@ namespace Glider.Common.Objects
 
             if (!StartupClass.StartAutoGlide(true))
                 return false;
-            Thread.smethod_39(1500);
+            Thread.Sleep(1500);
             return IsGliding;
         }
 
@@ -645,7 +645,7 @@ namespace Glider.Common.Objects
                     return GCombatResult.Unknown;
                 if (!gspellTimer1.IsReady || Me.IsInCombat || Target.DistanceToSelf <= (double)PullDistance)
                 {
-                    Thread.smethod_39(102);
+                    Thread.Sleep(102);
                 }
                 else
                 {

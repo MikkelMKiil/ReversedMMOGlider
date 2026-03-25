@@ -519,7 +519,7 @@ public class GProcessMemoryManipulator
             var num = smethod_29(int_29);
             if (num != IntPtr.Zero)
                 return num;
-            Thread.smethod_39(500);
+            Thread.Sleep(500);
         }
 
         return new IntPtr(0);
@@ -674,7 +674,7 @@ public class GProcessMemoryManipulator
     private static extern short QueryPerformanceCounter(ref long long_0);
 
     [DllImport("kernel32.dll")]
-    public static extern void smethod_39(uint uint_23);
+    public static extern void Sleep(uint uint_23);
 
     [DllImport("user32.dll")]
     private static extern bool SetWindowPos(

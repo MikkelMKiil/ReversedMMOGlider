@@ -281,7 +281,7 @@ namespace Glider.Common.Objects
             {
                 if (IsMine || IsTargetingMe)
                     return true;
-                Thread.smethod_39(101);
+                Thread.Sleep(101);
             }
 
             GContext.Main.Log("Never engaged: " + ToString());

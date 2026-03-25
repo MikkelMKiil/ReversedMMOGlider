@@ -443,13 +443,13 @@ public class PartyManager
         {
             Logger.smethod_1("Using assist key to pick up target");
             SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + int_7);
-            Thread.smethod_39(100);
+            Thread.Sleep(100);
             SpellcastingManager.gclass42_0.method_0("Common.Assist");
             var gclass36 = new GameTimer(2000);
             gclass36.method_4();
             while (!gclass36.method_3())
             {
-                Thread.smethod_39(100);
+                Thread.Sleep(100);
                 if (GPlayerSelf.Me.TargetGUID == gunit_0.GUID)
                     return true;
             }

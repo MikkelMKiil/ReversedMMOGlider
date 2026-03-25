@@ -192,9 +192,9 @@ public class LootableCorpseTracker
                     if (DialogMonitor.string_0.ToLower().IndexOf(MessageProvider.GetMessage(871)) != -1)
                     {
                         Logger.LogMessage("Bind-on-pickup dialog is visible, accepting");
-                        Thread.smethod_39(600);
+                        Thread.Sleep(600);
                         UIElement.smethod_2("StaticPopup1Button1").method_16(false);
-                        Thread.smethod_39(600);
+                        Thread.Sleep(600);
                     }
                     else
                     {
@@ -284,7 +284,7 @@ public class LootableCorpseTracker
                     if (!GPlayerSelf.Me.IsCasting)
                     {
                         Logger.smethod_1("I stopped casting, skinning must be good (gulp!)");
-                        Thread.smethod_39(1371);
+                        Thread.Sleep(1371);
                         break;
                     }
                 }

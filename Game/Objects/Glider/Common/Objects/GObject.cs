@@ -260,7 +260,7 @@ namespace Glider.Common.Objects
             foreach (var glocation in StartupClass.lootRouteParser.list_0)
             {
                 InputController.smethod_18(glocation.X, glocation.Y);
-                Thread.smethod_39(PawSpeedMS);
+                Thread.Sleep(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
             }
@@ -283,7 +283,7 @@ namespace Glider.Common.Objects
             if (!Hover())
                 return false;
             InputController.smethod_23(true);
-            Thread.smethod_39(371);
+            Thread.Sleep(371);
             return true;
         }
 
@@ -292,7 +292,7 @@ namespace Glider.Common.Objects
             if (!Hover())
                 return false;
             InputController.smethod_23(false);
-            Thread.smethod_39(271);
+            Thread.Sleep(271);
             return true;
         }
 
@@ -303,7 +303,7 @@ namespace Glider.Common.Objects
             if (WorldToScreenProjector.smethod_0(Location, ZAdjust, out double_1, out double_2))
             {
                 InputController.smethod_18(double_1, double_2);
-                Thread.smethod_39(PawSpeedMS);
+                Thread.Sleep(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
                 GContext.Main.ReleaseSpinRun();
@@ -311,7 +311,7 @@ namespace Glider.Common.Objects
                     for (var num2 = -0.02; num2 <= 0.02; num2 += 0.01)
                     {
                         InputController.smethod_18(double_1 + num1, double_2 + num2);
-                        Thread.smethod_39(PawSpeedMS);
+                        Thread.Sleep(PawSpeedMS);
                         if (IsCursorOnObject)
                             return true;
                     }

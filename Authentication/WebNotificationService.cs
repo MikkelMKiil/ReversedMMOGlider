@@ -129,7 +129,7 @@ public class WebNotificationService
         {
             do
             {
-                Thread.smethod_39(1000);
+                Thread.Sleep(1000);
             } while ((DateTime.Now - dateTime_0).TotalSeconds < int_0);
 
             method_4("Touching remote server");

@@ -112,9 +112,9 @@ public class ProfileGroupManager
         var num = 99999.0;
         Logger.smethod_1("Looking for closest profile in group");
         foreach (var gclass72_2 in list_0)
-            if (gclass72_2.ActiveGProfile.Waypoints.Count > 0 && gclass72_2.bool_2)
+            if (gclass72_2.gprofile_0.Waypoints.Count > 0 && gclass72_2.bool_2)
             {
-                var distanceTo = gclass72_2.ActiveGProfile.GetDistanceTo(GPlayerSelf.Me.Location);
+                var distanceTo = gclass72_2.gprofile_0.GetDistanceTo(GPlayerSelf.Me.Location);
                 if (distanceTo < num)
                 {
                     gclass72_1 = gclass72_2;
@@ -131,8 +131,8 @@ public class ProfileGroupManager
         }
 
         Logger.LogMessage("Closest profile: " + gclass72_0.string_0 + ", distance: " + num);
-        StartupClass.ActiveGProfile = gclass72_0.ActiveGProfile;
-        return gclass72_0.ActiveGProfile;
+        StartupClass.ActiveGProfile = gclass72_0.gprofile_0;
+        return gclass72_0.gprofile_0;
     }
 
     public static void smethod_0()
@@ -178,14 +178,14 @@ public class ProfileGroupManager
         var gclass72 = list_0[gclass51_0.int_1];
         if (!gclass72_0.bool_0)
         {
-            if (gclass72_0.ActiveGProfile.Waypoints.Count != 0 && gclass72.ActiveGProfile.Waypoints.Count != 0)
+            if (gclass72_0.gprofile_0.Waypoints.Count != 0 && gclass72.gprofile_0.Waypoints.Count != 0)
             {
                 Logger.smethod_1("Looking for waypoint match between: " + gclass72_0.string_0 + " and " +
                                    gclass72.string_0);
-                var num = method_10(gclass72_0.ActiveGProfile, gclass72.ActiveGProfile);
-                var waypoint = gclass72_0.ActiveGProfile.Waypoints[num];
+                var num = method_10(gclass72_0.gprofile_0, gclass72.gprofile_0);
+                var waypoint = gclass72_0.gprofile_0.Waypoints[num];
                 double distanceTo = GPlayerSelf.Me.Location.GetDistanceTo(waypoint);
-                if (gclass72_0.bool_1 && gclass72.ActiveGProfile.IgnoreAttackers)
+                if (gclass72_0.bool_1 && gclass72.gprofile_0.IgnoreAttackers)
                     method_15();
                 if (distanceTo > 10.0)
                     method_12(num);
@@ -198,11 +198,11 @@ public class ProfileGroupManager
 
         gclass72_0 = gclass72;
         StartupClass.LoadSingleProfile(gclass72_0.string_0);
-        gclass72_0.ActiveGProfile.Select();
+        gclass72_0.gprofile_0.Select();
         method_0();
-        if (gclass72_0.ActiveGProfile.IgnoreAttackers && gclass72_0.bool_1 && !method_13())
+        if (gclass72_0.gprofile_0.IgnoreAttackers && gclass72_0.bool_1 && !method_13())
             method_15();
-        if (!gclass72_0.ActiveGProfile.IgnoreAttackers && method_13())
+        if (!gclass72_0.gprofile_0.IgnoreAttackers && method_13())
             smethod_4();
         return true;
     }
@@ -274,7 +274,7 @@ public class ProfileGroupManager
             StartupClass.StopGlide(false, "CantClickFM");
         }
 
-        Thread.smethod_39(4000);
+        Thread.Sleep(4000);
         var gclass8 = UIElement.smethod_2("GossipTitleButton1");
         if (gclass8 == null)
         {
@@ -285,9 +285,9 @@ public class ProfileGroupManager
         if (gclass8.method_10())
         {
             Logger.LogMessage("Gossip title is visible, positioning cursor");
-            Thread.smethod_39(1000);
+            Thread.Sleep(1000);
             gclass8.method_16(false);
-            Thread.smethod_39(5000);
+            Thread.Sleep(5000);
         }
 
         var gclass13 = new FlightPointManager();
@@ -300,7 +300,7 @@ public class ProfileGroupManager
         }
 
         UIElement.smethod_2("TaxiButton" + num).method_16(false);
-        Thread.smethod_39(5000);
+        Thread.Sleep(5000);
         if (!method_11())
         {
             Logger.LogMessage("!! Clicked on flightpoint, but we don't seem to be flying");
@@ -314,19 +314,19 @@ public class ProfileGroupManager
         } while (method_11());
 
         Logger.LogMessage("Flight complete");
-        Thread.smethod_39(500);
+        Thread.Sleep(500);
         SpellcastingManager.gclass42_0.method_0("Common.Forward");
-        Thread.smethod_39(500);
+        Thread.Sleep(500);
     }
 
-    private int method_10(GProfile ActiveGProfile, GProfile gprofile_1)
+    private int method_10(GProfile gprofile_0, GProfile gprofile_1)
     {
         var num1 = 0;
         var num2 = 9999.0;
-        for (var index1 = 0; index1 < ActiveGProfile.Waypoints.Count; ++index1)
+        for (var index1 = 0; index1 < gprofile_0.Waypoints.Count; ++index1)
             for (var index2 = 0; index2 < gprofile_1.Waypoints.Count; ++index2)
             {
-                double distanceTo = ActiveGProfile.Waypoints[index1].GetDistanceTo(gprofile_1.Waypoints[index2]);
+                double distanceTo = gprofile_0.Waypoints[index1].GetDistanceTo(gprofile_1.Waypoints[index2]);
                 if (distanceTo < num2)
                 {
                     num2 = distanceTo;
@@ -341,18 +341,18 @@ public class ProfileGroupManager
     private bool method_11()
     {
         var location = GPlayerSelf.Me.Location;
-        Thread.smethod_39(500);
+        Thread.Sleep(500);
         return location.GetDistanceTo(GPlayerSelf.Me.Location) > 0.0;
     }
 
     private void method_12(int int_4)
     {
         Logger.LogMessage(MessageProvider.smethod_2(833, int_4 + 1));
-        gclass72_0.ActiveGProfile.BeginProfile(GPlayerSelf.Me.Location);
-        var currentIndex = gclass72_0.ActiveGProfile.CurrentIndex;
+        gclass72_0.gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
+        var currentIndex = gclass72_0.gprofile_0.CurrentIndex;
         var flag1 = false;
         int num1;
-        if (gclass72_0.ActiveGProfile.Reversible)
+        if (gclass72_0.gprofile_0.Reversible)
         {
             num1 = currentIndex >= int_4 ? -1 : 1;
         }
@@ -362,9 +362,9 @@ public class ProfileGroupManager
             var num2 = currentIndex - int_4;
             var num3 = int_4 - currentIndex;
             if (num2 < 0)
-                num2 += gclass72_0.ActiveGProfile.Waypoints.Count;
+                num2 += gclass72_0.gprofile_0.Waypoints.Count;
             if (num3 < 0)
-                num3 += gclass72_0.ActiveGProfile.Waypoints.Count;
+                num3 += gclass72_0.gprofile_0.Waypoints.Count;
             num1 = num2 >= num3 ? 1 : -1;
             Logger.smethod_1("LeftSteps: " + num2 + ", RightSteps: " + num3 + ", Delta: " + num1);
             if (num3 == 0 && num2 == 0)
@@ -387,7 +387,7 @@ public class ProfileGroupManager
             if (gclass36_1.method_3())
                 goto label_41;
         label_9:
-            var waypoint1 = gclass72_0.ActiveGProfile.Waypoints[index];
+            var waypoint1 = gclass72_0.gprofile_0.Waypoints[index];
             if (GPlayerSelf.Me.Location.GetDistanceTo(waypoint1) < 8.0)
             {
                 if (!flag1)
@@ -395,20 +395,20 @@ public class ProfileGroupManager
                     index += num1;
                     if (index < 0)
                     {
-                        if (gclass72_0.ActiveGProfile.Reversible)
+                        if (gclass72_0.gprofile_0.Reversible)
                         {
                             index = 1;
                             num1 = 1;
                         }
                         else
                         {
-                            index = gclass72_0.ActiveGProfile.Waypoints.Count - 1;
+                            index = gclass72_0.gprofile_0.Waypoints.Count - 1;
                         }
                     }
 
-                    if (index == gclass72_0.ActiveGProfile.Waypoints.Count)
+                    if (index == gclass72_0.gprofile_0.Waypoints.Count)
                     {
-                        if (gclass72_0.ActiveGProfile.Reversible)
+                        if (gclass72_0.gprofile_0.Reversible)
                         {
                             index -= 2;
                             num1 = -1;
@@ -465,7 +465,7 @@ public class ProfileGroupManager
                                 NewHeading -= 2.0 * Math.PI;
                             GContext.Main.Movement.SetHeading(NewHeading);
                             SpellcastingManager.gclass42_0.method_1("Common.Forward");
-                            Thread.smethod_39(1700);
+                            Thread.Sleep(1700);
                             flag2 = false;
                         }
                     }
@@ -476,7 +476,7 @@ public class ProfileGroupManager
                 gclass36_2.method_4();
             }
 
-            var waypoint2 = gclass72_0.ActiveGProfile.Waypoints[index];
+            var waypoint2 = gclass72_0.gprofile_0.Waypoints[index];
             if (!GContext.Main.IsRunning)
                 GContext.Main.Movement.BasePatrolTowards(waypoint2);
             else
@@ -489,7 +489,7 @@ public class ProfileGroupManager
                 flag3 = method_13();
             }
 
-            Thread.smethod_39(200);
+            Thread.Sleep(200);
             continue;
         label_41:
             Logger.LogMessage(MessageProvider.GetMessage(834));
@@ -538,12 +538,12 @@ public class ProfileGroupManager
                 StartupClass.combatController.method_52(true);
             }
 
-            Thread.smethod_39(500);
+            Thread.Sleep(500);
         }
 
         StartupClass.CurrentGameClass.LeaveForm();
         GContext.Main.ReleaseAllKeys();
-        Thread.smethod_39(1500);
+        Thread.Sleep(1500);
         var buffSnapshot = GPlayerSelf.Me.GetBuffSnapshot();
         if (!SpellcastingManager.gclass42_0.method_15("Common.PreMount"))
             GContext.Main.CastSpell("Common.PreMount");
@@ -555,7 +555,7 @@ public class ProfileGroupManager
             int_3 = method_16(buffSnapshot);
             Logger.smethod_1("Looking for new mount buff id: " + int_3.ToString("x"));
             if (int_3 == 0)
-                Thread.smethod_39(100);
+                Thread.Sleep(100);
             else
                 break;
         }
@@ -603,13 +603,13 @@ public class ProfileGroupManager
     {
         while (true)
         {
-            StartupClass.combatController.ActiveGProfile = gclass72_0.ActiveGProfile;
-            gclass72_0.ActiveGProfile.Select();
-            gclass72_0.ActiveGProfile.BeginProfile(GPlayerSelf.Me.Location);
+            StartupClass.combatController.gprofile_0 = gclass72_0.gprofile_0;
+            gclass72_0.gprofile_0.Select();
+            gclass72_0.gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
             Logger.smethod_1("Going into run loop for: " + gclass72_0.string_0);
-            if (!gclass72_0.ActiveGProfile.Fishing)
+            if (!gclass72_0.gprofile_0.Fishing)
             {
-                if (gclass72_0.ActiveGProfile.NaturalRun)
+                if (gclass72_0.gprofile_0.NaturalRun)
                 {
                     StartupClass.combatController.method_39();
                 }

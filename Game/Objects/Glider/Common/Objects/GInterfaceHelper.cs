@@ -177,7 +177,7 @@ namespace Glider.Common.Objects
 
             if (gspellTimer.IsReady)
                 GContext.Main.Log("* Gave up waiting for cooldown on \"" + KeyName + "\"");
-            Thread.smethod_39(67);
+            Thread.Sleep(67);
         }
 
         public bool IsKeyFiring(string KeyName)
@@ -273,7 +273,7 @@ namespace Glider.Common.Objects
             if (visibleInterfaceObject == null)
             {
                 gkey.EnsureBar();
-                Thread.smethod_39(100);
+                Thread.Sleep(100);
                 visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets[KeyName].FindVisibleInterfaceObject();
                 if (visibleInterfaceObject == null)
                     return false;

@@ -14,7 +14,7 @@ public class AutomationStep
     public bool bool_0;
     public bool bool_1;
     public bool bool_2;
-    public GProfile ActiveGProfile;
+    public GProfile gprofile_0;
     private readonly List<ProfileStepCondition> list_0;
     public string string_0;
     public string string_1;
@@ -139,10 +139,10 @@ public class AutomationStep
 
     public void method_10()
     {
-        ActiveGProfile = new GProfile();
-        if (!ActiveGProfile.Load(string_0))
+        gprofile_0 = new GProfile();
+        if (!gprofile_0.Load(string_0))
         {
-            Logger.LogMessage("Can't load profile: \"" + ActiveGProfile + "\", giving up!");
+            Logger.LogMessage("Can't load profile: \"" + gprofile_0 + "\", giving up!");
             StartupClass.StopGlide(false, "LoadProfileFail");
         }
         else

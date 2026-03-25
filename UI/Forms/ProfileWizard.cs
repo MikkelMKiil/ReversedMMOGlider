@@ -27,7 +27,7 @@ public class ProfileWizard : Form
     private Enum0 enum0_0;
     private Label FilenameLabel;
     private GLocation glocation_0;
-    private GProfile ActiveGProfile;
+    private GProfile gprofile_0;
     private IContainer icontainer_0;
     private Label label1;
     private Label label2;
@@ -480,11 +480,11 @@ public class ProfileWizard : Form
                 StdWaypointsClose.Visible = false;
                 break;
             case Enum0.const_2:
-                ActiveGProfile.Save(string_0);
+                gprofile_0.Save(string_0);
                 method_2(PanelGhostWaypointsStart);
                 break;
             case Enum0.const_3:
-                ActiveGProfile.GhostWaypoints.Clear();
+                gprofile_0.GhostWaypoints.Clear();
                 glocation_0 = null;
                 if (SkipGhostBox.Checked)
                 {
@@ -495,7 +495,7 @@ public class ProfileWizard : Form
                 method_2(PanelGhostWaypointsRecord);
                 break;
             case Enum0.const_4:
-                ActiveGProfile.Save(string_0);
+                gprofile_0.Save(string_0);
                 method_2(PanelVendorStart);
                 SkipVendorBox.Checked = !StartupClass.IsSomeConditionMet;
                 break;
@@ -508,8 +508,8 @@ public class ProfileWizard : Form
                 }
 
                 glocation_0 = GPlayerSelf.Me.Location;
-                ActiveGProfile.VendorWaypoints.Clear();
-                ActiveGProfile.VendorWaypoints.Add(glocation_0);
+                gprofile_0.VendorWaypoints.Clear();
+                gprofile_0.VendorWaypoints.Add(glocation_0);
                 method_2(PanelVendorRecordFW);
                 break;
             case Enum0.const_6:
@@ -520,7 +520,7 @@ public class ProfileWizard : Form
                 method_2(PanelVendorConnect);
                 break;
             case Enum0.const_8:
-                ActiveGProfile.Save(string_0);
+                gprofile_0.Save(string_0);
                 StartupClass.LoadProfile(string_0);
                 method_2(PanelDone);
                 PrevButton.Enabled = false;
@@ -552,12 +552,12 @@ public class ProfileWizard : Form
             case Enum0.const_4:
                 return true;
             case Enum0.const_5:
-                if (ActiveGProfile.VendorFW != null)
+                if (gprofile_0.VendorFW != null)
                     return true;
                 method_6("NoVendorFW", null);
                 return false;
             case Enum0.const_6:
-                if (ActiveGProfile.VendorAR != null)
+                if (gprofile_0.VendorAR != null)
                     return true;
                 method_6("NoVendorAR", null);
                 return false;
@@ -575,16 +575,16 @@ public class ProfileWizard : Form
 
     private bool method_4()
     {
-        if (ActiveGProfile.MinLevel != 0 && ActiveGProfile.MaxLevel != 0)
+        if (gprofile_0.MinLevel != 0 && gprofile_0.MaxLevel != 0)
         {
-            if (ActiveGProfile.Waypoints.Count < 5)
+            if (gprofile_0.Waypoints.Count < 5)
             {
                 method_6("NoWPs", null);
                 return false;
             }
 
-            ActiveGProfile.Reversible =
-                ActiveGProfile.Waypoints[0].GetDistanceTo(ActiveGProfile.Waypoints[ActiveGProfile.Waypoints.Count - 1]) > 50.0;
+            gprofile_0.Reversible =
+                gprofile_0.Waypoints[0].GetDistanceTo(gprofile_0.Waypoints[gprofile_0.Waypoints.Count - 1]) > 50.0;
             return true;
         }
 
@@ -617,12 +617,12 @@ public class ProfileWizard : Form
 
         string_0 = path;
         string_1 = ProfileNameBox.Text.Trim();
-        if (ActiveGProfile == null)
+        if (gprofile_0 == null)
         {
-            ActiveGProfile = new GProfile();
-            ActiveGProfile.NaturalRun = true;
-            ActiveGProfile.SkipWaypoints = true;
-            ActiveGProfile.BlacklistOn = true;
+            gprofile_0 = new GProfile();
+            gprofile_0.NaturalRun = true;
+            gprofile_0.SkipWaypoints = true;
+            gprofile_0.BlacklistOn = true;
         }
 
         return true;
@@ -688,13 +688,13 @@ public class ProfileWizard : Form
         if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) < double_3)
             return;
         glocation_0 = GPlayerSelf.Me.Location;
-        ActiveGProfile.VendorWaypoints.Add(glocation_0);
+        gprofile_0.VendorWaypoints.Add(glocation_0);
         SoundPlayer.smethod_0("Key.wav");
     }
 
     private void method_8()
     {
-        var closestWaypoint = ActiveGProfile.FindClosestWaypoint(GPlayerSelf.Me.Location);
+        var closestWaypoint = gprofile_0.FindClosestWaypoint(GPlayerSelf.Me.Location);
         double headingTo = GPlayerSelf.Me.Location.GetHeadingTo(closestWaypoint);
         var num = GContext.Main.Movement.CompareHeadings(GPlayerSelf.Me.Heading, headingTo);
         string str;
@@ -721,8 +721,8 @@ public class ProfileWizard : Form
     {
         if (GPlayerSelf.Me.Target != null && GPlayerSelf.Me.Target.IsInMeleeRange)
         {
-            ActiveGProfile.VendorFW = GPlayerSelf.Me.Target.Name;
-            CurrentFWLabel.Text = ActiveGProfile.VendorFW;
+            gprofile_0.VendorFW = GPlayerSelf.Me.Target.Name;
+            CurrentFWLabel.Text = gprofile_0.VendorFW;
         }
 
         method_7(double_1);
@@ -730,12 +730,12 @@ public class ProfileWizard : Form
 
     private void method_10()
     {
-        if (GPlayerSelf.Me.Target == null || GPlayerSelf.Me.Target.Name != ActiveGProfile.VendorFW)
+        if (GPlayerSelf.Me.Target == null || GPlayerSelf.Me.Target.Name != gprofile_0.VendorFW)
             bool_3 = true;
         if (GPlayerSelf.Me.Target != null && GPlayerSelf.Me.Target.IsInMeleeRange && bool_3)
         {
-            ActiveGProfile.VendorAR = GPlayerSelf.Me.Target.Name;
-            CurrentARLabel.Text = ActiveGProfile.VendorAR;
+            gprofile_0.VendorAR = GPlayerSelf.Me.Target.Name;
+            CurrentARLabel.Text = gprofile_0.VendorAR;
         }
 
         method_7(double_1);
@@ -748,10 +748,10 @@ public class ProfileWizard : Form
             if (glocation_0 == null || GPlayerSelf.Me.GetDistanceTo(glocation_0) > double_2)
             {
                 glocation_0 = GPlayerSelf.Me.Location;
-                ActiveGProfile.Waypoints.Add(glocation_0);
+                gprofile_0.Waypoints.Add(glocation_0);
                 SoundPlayer.smethod_0("Key.wav");
-                if (!bool_1 && ActiveGProfile.Waypoints.Count > 2 &&
-                    glocation_0.GetDistanceTo(ActiveGProfile.Waypoints[0]) > 100.0)
+                if (!bool_1 && gprofile_0.Waypoints.Count > 2 &&
+                    glocation_0.GetDistanceTo(gprofile_0.Waypoints[0]) > 100.0)
                 {
                     bool_1 = true;
                     StdWaypointsClose.Visible = true;
@@ -763,7 +763,7 @@ public class ProfileWizard : Form
                     }
                 }
 
-                if (bool_1 && glocation_0.GetDistanceTo(ActiveGProfile.Waypoints[0]) < double_2 * 2.0 && !bool_2)
+                if (bool_1 && glocation_0.GetDistanceTo(gprofile_0.Waypoints[0]) < double_2 * 2.0 && !bool_2)
                 {
                     bool_2 = true;
                     method_14();
@@ -778,33 +778,33 @@ public class ProfileWizard : Form
                 var num = 1;
                 if (GPlayerSelf.Me.Level >= 26)
                     ++num;
-                if (target.Level <= ActiveGProfile.MinLevel || ActiveGProfile.MinLevel == 0)
+                if (target.Level <= gprofile_0.MinLevel || gprofile_0.MinLevel == 0)
                 {
-                    ActiveGProfile.MinLevel = target.Level - num;
-                    if (ActiveGProfile.MinLevel == 0)
-                        ActiveGProfile.MinLevel = 1;
+                    gprofile_0.MinLevel = target.Level - num;
+                    if (gprofile_0.MinLevel == 0)
+                        gprofile_0.MinLevel = 1;
                 }
 
-                if (target.Level >= ActiveGProfile.MaxLevel || ActiveGProfile.MaxLevel == 0)
-                    ActiveGProfile.MaxLevel = target.Level + num;
-                if (!ActiveGProfile.CheckFaction(target.FactionID, true))
-                    ActiveGProfile.AddFaction(target.FactionID);
+                if (target.Level >= gprofile_0.MaxLevel || gprofile_0.MaxLevel == 0)
+                    gprofile_0.MaxLevel = target.Level + num;
+                if (!gprofile_0.CheckFaction(target.FactionID, true))
+                    gprofile_0.AddFaction(target.FactionID);
             }
         }
 
-        LabelWaypointCount.Text = ActiveGProfile.Waypoints.Count.ToString();
-        if (ActiveGProfile.MinLevel > 0 && ActiveGProfile.MaxLevel > 0)
-            LabelLevelRange.Text = ActiveGProfile.MinLevel + " - " + ActiveGProfile.MaxLevel;
+        LabelWaypointCount.Text = gprofile_0.Waypoints.Count.ToString();
+        if (gprofile_0.MinLevel > 0 && gprofile_0.MaxLevel > 0)
+            LabelLevelRange.Text = gprofile_0.MinLevel + " - " + gprofile_0.MaxLevel;
         else
             LabelLevelRange.Text = MessageProvider.smethod_4("ProfileWizard.NoKills");
-        var factionsAsString = ActiveGProfile.GetFactionsAsString();
+        var factionsAsString = gprofile_0.GetFactionsAsString();
         if (factionsAsString.Length > 0)
             LabelFactions.Text = factionsAsString;
         else
             LabelLevelRange.Text = MessageProvider.smethod_4("ProfileWizard.NoKills");
         if (!StdWaypointsClose.Visible)
             return;
-        double headingTo = GPlayerSelf.Me.Location.GetHeadingTo(ActiveGProfile.Waypoints[0]);
+        double headingTo = GPlayerSelf.Me.Location.GetHeadingTo(gprofile_0.Waypoints[0]);
         var num1 = GContext.Main.Movement.CompareHeadings(GPlayerSelf.Me.Heading, headingTo);
         string str;
         if (num1 < 0.0)
@@ -818,7 +818,7 @@ public class ProfileWizard : Form
         }
 
         StdWaypointsClose.Text = MessageProvider.smethod_6("ProfileWizard.StdWaypointsClose",
-            Math.Round(GPlayerSelf.Me.Location.GetDistanceTo(ActiveGProfile.Waypoints[0]), 0),
+            Math.Round(GPlayerSelf.Me.Location.GetDistanceTo(gprofile_0.Waypoints[0]), 0),
             Math.Round(num1 / Math.PI * 180.0, 0), str);
     }
 
@@ -831,7 +831,7 @@ public class ProfileWizard : Form
 
     private void method_13()
     {
-        var closestWaypoint = ActiveGProfile.FindClosestWaypoint(GPlayerSelf.Me.Location);
+        var closestWaypoint = gprofile_0.FindClosestWaypoint(GPlayerSelf.Me.Location);
         double headingTo = GPlayerSelf.Me.Location.GetHeadingTo(closestWaypoint);
         var num = GContext.Main.Movement.CompareHeadings(GPlayerSelf.Me.Heading, headingTo);
         string str1;
@@ -851,12 +851,12 @@ public class ProfileWizard : Form
         if (glocation_0 == null || GPlayerSelf.Me.GetDistanceTo(glocation_0) > double_2)
         {
             glocation_0 = GPlayerSelf.Me.Location;
-            ActiveGProfile.GhostWaypoints.Add(glocation_0);
+            gprofile_0.GhostWaypoints.Add(glocation_0);
             SoundPlayer.smethod_0("Key.wav");
         }
 
-        if (ActiveGProfile.GhostWaypoints.Count > 0 &&
-            ActiveGProfile.GhostWaypoints[ActiveGProfile.GhostWaypoints.Count - 1].GetDistanceTo(closestWaypoint) <
+        if (gprofile_0.GhostWaypoints.Count > 0 &&
+            gprofile_0.GhostWaypoints[gprofile_0.GhostWaypoints.Count - 1].GetDistanceTo(closestWaypoint) <
             double_2 * 2.0)
             method_14();
         else

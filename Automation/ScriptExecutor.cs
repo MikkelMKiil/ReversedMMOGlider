@@ -83,7 +83,7 @@ public class ScriptExecutor
                     else
                     {
                         StartupClass.BringGameWindowToForeground();
-                        Thread.smethod_39(2000);
+                        Thread.Sleep(2000);
                     }
 
                     Logger.smethod_1("Firing up script on new thread");

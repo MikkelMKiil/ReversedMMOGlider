@@ -197,7 +197,7 @@ public class WardenMonitor
                 {
                     gclass71_0.method_30();
                     flag1 = true;
-                    Thread.smethod_39(2000);
+                    Thread.Sleep(2000);
                     return WardenCheckStatus.const_3;
                 }
 

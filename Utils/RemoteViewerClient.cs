@@ -463,7 +463,7 @@ public class RemoteViewerClient
                 if (lower1 == "/exitglider")
                 {
                     method_6("Exiting Glider, this connection will close very soon!\r\n");
-                    Thread.smethod_39(1000);
+                    Thread.Sleep(1000);
                     StartupClass.TriggerKillEvent();
                 }
                 else

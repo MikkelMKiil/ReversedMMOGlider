@@ -199,7 +199,7 @@ public class PlayerTracker
                 if (gspellTimer2.IsReady)
                 {
                     SpellcastingManager.gclass42_0.method_1("Common.Back");
-                    Thread.smethod_39(400);
+                    Thread.Sleep(400);
                     SpellcastingManager.gclass42_0.method_2("Common.Back");
                     gspellTimer2.Reset();
                 }

@@ -18,7 +18,7 @@ public class SolitaireSolver
     {
         int_0 = 100;
         StartupClass.BringGameWindowToForeground();
-        Thread.smethod_39(500);
+        Thread.Sleep(500);
         var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
             StartupClass.StopGlide(false, "NoSolitaireModuleInSolitaire");
@@ -28,7 +28,7 @@ public class SolitaireSolver
         var gclass34_0 = new SolitaireGameState(int_1);
         while (method_3(gclass34_0))
         {
-            Thread.smethod_39(int_0);
+            Thread.Sleep(int_0);
             gclass34_0.method_2();
             if (gclass34_0.method_4())
             {
@@ -61,7 +61,7 @@ public class SolitaireSolver
         }
 
         gclass34_0.gclass80_0.method_3();
-        Thread.smethod_39(1000);
+        Thread.Sleep(1000);
         gclass34_0.method_2();
         if (gclass34_0.gclass80_0.gclass7_0.Length > 0)
         {
@@ -117,7 +117,7 @@ public class SolitaireSolver
                         {
                             method_2("Moving card from stack #" + index1 + " to stack #" + index2);
                             gclass7.method_2();
-                            Thread.smethod_39(int_0);
+                            Thread.Sleep(int_0);
                             gclass7_0.method_2();
                             gclass7.method_4();
                             return true;
@@ -144,7 +144,7 @@ public class SolitaireSolver
                     {
                         method_2("Moving king from stack #" + index1 + " to empty stack #" + index2);
                         gclass7.method_2();
-                        Thread.smethod_39(int_0);
+                        Thread.Sleep(int_0);
                         gclass80_2.method_3();
                         gclass7.method_4();
                         return true;
@@ -167,7 +167,7 @@ public class SolitaireSolver
             {
                 method_2("Moving draw card to stack #" + index);
                 gclass7.method_2();
-                Thread.smethod_39(int_0);
+                Thread.Sleep(int_0);
                 if (gclass7.method_7())
                     gclass34_0.gclass80_3[index].method_3();
                 else
@@ -196,7 +196,7 @@ public class SolitaireSolver
                         {
                             method_1("Moving stacked card home: " + gclass7_2);
                             gclass7_2.method_2();
-                            Thread.smethod_39(int_0);
+                            Thread.Sleep(int_0);
                             gclass7_0.method_2();
                             gclass7_2.method_4();
                             return true;
@@ -207,7 +207,7 @@ public class SolitaireSolver
                 {
                     method_1("Moving draw card home: " + gclass7_1);
                     gclass7_1.method_2();
-                    Thread.smethod_39(int_0);
+                    Thread.Sleep(int_0);
                     gclass7_0.method_2();
                     gclass7_1.method_4();
                     return true;

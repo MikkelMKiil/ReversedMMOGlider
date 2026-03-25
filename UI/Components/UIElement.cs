@@ -337,21 +337,21 @@ public class UIElement
     public void method_16(bool bool_1)
     {
         method_15();
-        Thread.smethod_39(300);
+        Thread.Sleep(300);
         InputController.smethod_23(bool_1);
     }
 
     public void method_17(bool bool_1)
     {
         method_15();
-        Thread.smethod_39(300);
+        Thread.Sleep(300);
         InputController.smethod_24(bool_1);
     }
 
     public void method_18(bool bool_1)
     {
         method_15();
-        Thread.smethod_39(300);
+        Thread.Sleep(300);
         InputController.smethod_25(bool_1);
     }
 }

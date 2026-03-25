@@ -1316,7 +1316,7 @@ public class GliderForm : Form, ILogger
         ProfileProps profileProps = new ProfileProps((GProfile)null);
         if (profileProps.ShowDialog() != DialogResult.OK)
             return;
-        StartupClass.ActiveGProfile = profileProps.ActiveGProfile;
+        StartupClass.ActiveGProfile = profileProps.gprofile_0;
         StartupClass.currentProfilePath = MessageProvider.GetMessage(70);
         this.method_4();
         this.method_12(true);
@@ -1622,7 +1622,7 @@ public class GliderForm : Form, ILogger
     {
         this.bool_5 = true;
         Logger.LogMessage("Setting stop flag in Gliderform");
-        Thread.smethod_39(1200);
+        Thread.Sleep(1200);
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)

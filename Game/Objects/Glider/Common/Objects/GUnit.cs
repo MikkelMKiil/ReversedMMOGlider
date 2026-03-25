@@ -555,7 +555,7 @@ namespace Glider.Common.Objects
                             GContext.Main.StartRun();
                         else
                             GContext.Main.ReleaseRun();
-                        Thread.smethod_39(61);
+                        Thread.Sleep(61);
                     }
                     else
                     {
@@ -590,7 +590,7 @@ namespace Glider.Common.Objects
                 Refresh(true);
                 var headingTo = GContext.Main.Movement.GetHeadingTo(GContext.Main.Me.Location, Location);
                 if (Math.Abs(GContext.Main.Movement.CompareHeadings(headingTo, Heading)) >= Math.PI / 2.0)
-                    Thread.smethod_39(25);
+                    Thread.Sleep(25);
                 else
                     break;
             }
@@ -602,7 +602,7 @@ namespace Glider.Common.Objects
             }
 
             GContext.Main.ReleaseRun();
-            Thread.smethod_39(250 + StartupClass.random_0.Next() % 250);
+            Thread.Sleep(250 + StartupClass.random_0.Next() % 250);
             GContext.Main.ReleaseKey(KeyName1);
             Face();
             GContext.Main.Me.Refresh(true);
