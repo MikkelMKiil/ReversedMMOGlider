@@ -39,6 +39,9 @@ namespace Glider.Common.Objects
         protected string SpinningKey;
         public GTendency T_Skinnable;
         protected double TargetHeading;
+        private ulong _ambushTraceGuid;
+        private int _ambushTraceLastLogTick;
+        private bool _ambushTraceLastValid;
 
         public GContext()
         {
@@ -521,8 +524,11 @@ namespace Glider.Common.Objects
 
         public GCombatResult CheckCommonCombatResult(GMonster Monster, bool WasAmbush)
         {
+            TraceAmbushCombatState(Monster, WasAmbush, "tick");
+
             if (!Monster.IsValid)
             {
+                TraceAmbushCombatState(Monster, WasAmbush, "invalid");
                 Log("Monster is gone from object list, ending combat");
                 return GCombatResult.Vanished;
             }
@@ -557,6 +563,68 @@ namespace Glider.Common.Objects
                 return GCombatResult.Unknown;
             Log("We're not in combat, this can't be working out, ending combat");
             return GCombatResult.Bugged;
+        }
+
+        private void TraceAmbushCombatState(GMonster monster, bool wasAmbush, string stage)
+        {
+            if (!wasAmbush)
+            {
+                _ambushTraceGuid = 0UL;
+                _ambushTraceLastLogTick = 0;
+                _ambushTraceLastValid = true;
+                return;
+            }
+
+            if (monster == null)
+                return;
+
+            if (_ambushTraceGuid != monster.GUID)
+            {
+                _ambushTraceGuid = monster.GUID;
+                _ambushTraceLastLogTick = 0;
+                _ambushTraceLastValid = monster.IsValid;
+                Logger.LogMessage("[Trace][Ambush] start GUID=0x" + monster.GUID.ToString("x") +
+                                  ", Base=0x" + monster.BaseAddress.ToString("x") +
+                                  ", Storage=0x" + monster.StorageAddress.ToString("x"));
+            }
+
+            var now = Environment.TickCount;
+            var validChanged = _ambushTraceLastValid != monster.IsValid;
+            if (!validChanged && now - _ambushTraceLastLogTick < 250)
+                return;
+
+            _ambushTraceLastValid = monster.IsValid;
+            _ambushTraceLastLogTick = now;
+
+            var meTargetGuid = Me != null ? Me.TargetGUID : 0UL;
+            var snapshotPresent = GObjectList.IsObjectPresent(monster.GUID);
+            var combatTicks = StartupClass.CurrentGameClass != null ? StartupClass.CurrentGameClass.TicksSinceCombatStart : 0;
+
+            if (!monster.IsValid)
+            {
+                Logger.LogMessage("[Trace][Ambush] stage=" + stage +
+                                  ", GUID=0x" + monster.GUID.ToString("x") +
+                                  ", Valid=" + monster.IsValid +
+                                  ", SnapshotPresent=" + snapshotPresent +
+                                  ", Base=0x" + monster.BaseAddress.ToString("x") +
+                                  ", Storage=0x" + monster.StorageAddress.ToString("x") +
+                                  ", MeTargetGUID=0x" + meTargetGuid.ToString("x") +
+                                  ", CombatTicks=" + combatTicks);
+                return;
+            }
+
+            Logger.LogMessage("[Trace][Ambush] stage=" + stage +
+                              ", GUID=0x" + monster.GUID.ToString("x") +
+                              ", Valid=" + monster.IsValid +
+                              ", SnapshotPresent=" + snapshotPresent +
+                              ", HP=" + monster.HealthPoints + "/" + monster.HealthMax +
+                              ", Dist=" + Math.Round((double)monster.DistanceToSelf, 2) +
+                              ", InCombat=" + monster.IsInCombat +
+                              ", MonsterTargetGUID=0x" + monster.TargetGUID.ToString("x") +
+                              ", MeTargetGUID=0x" + meTargetGuid.ToString("x") +
+                              ", Base=0x" + monster.BaseAddress.ToString("x") +
+                              ", Storage=0x" + monster.StorageAddress.ToString("x") +
+                              ", CombatTicks=" + combatTicks);
         }
 
         public bool StartGlide()

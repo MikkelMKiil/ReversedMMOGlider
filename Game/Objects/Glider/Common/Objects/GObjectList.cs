@@ -59,17 +59,22 @@ namespace Glider.Common.Objects
                 var num1 = BaseAddress;
                 var num = 0;
                 var hashSet = new HashSet<int>();
+                var traversalComplete = true;
                 while (true)
                 {
                     if (++num > 8192)
                     {
-                        Logger.smethod_1("Object list traversal aborted: exceeded safety iteration cap");
+                        Logger.LogMessage("[CRITICAL] Object list traversal aborted: exceeded safety iteration cap");
+                        traversalComplete = false;
                         break;
                     }
                     if (BaseAddress != 0 && !hashSet.Add(BaseAddress))
                     {
                         if (BaseAddress != num1)
-                            Logger.smethod_1("Object list traversal aborted: detected cycle in object links");
+                        {
+                            Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links");
+                            traversalComplete = false;
+                        }
                         break;
                     }
                     ulong guid;
@@ -158,34 +163,54 @@ namespace Glider.Common.Objects
                 }
 
             label_15:
-                for (var index = 0; index < LastSnapshot.Count; ++index)
+                if (traversalComplete)
                 {
-                    var gobject = LastSnapshot.Values[index];
-                    if (gobject.FrameNumber != FrameNumber)
+                    ulong playerTargetGuid = 0UL;
+                    if (GContext.Main != null && GContext.Main.Me != null)
+                        playerTargetGuid = GContext.Main.Me.TargetGUID;
+
+                    for (var index = 0; index < LastSnapshot.Count; ++index)
                     {
-                        if (gobject is GPlayerSelf && gobject.GUID == StartupClass.long_0)
+                        var gobject = LastSnapshot.Values[index];
+                    if (gobject.FrameNumber != FrameNumber)
                         {
-                            gobject.FrameNumber = FrameNumber;
+                        if (unchecked(FrameNumber - gobject.FrameNumber) <= 1)
                             continue;
-                        }
 
-                        if (gobject is GPlayerSelf || gobject.GUID == StartupClass.long_0)
-                        {
-                            GPlayerSelf.Me = null;
-                            if (GContext.Main != null)
-                                GContext.Main.Me = null;
-                        }
+                            if (playerTargetGuid != 0UL && gobject.GUID == playerTargetGuid)
+                            {
+                                gobject.FrameNumber = FrameNumber;
+                                continue;
+                            }
 
-                        if (LogObjects)
-                            Logger.smethod_1("+ Culling old object: " + gobject);
-                        gobject.Cull();
-                        LastSnapshot.RemoveAt(index);
-                        --index;
+                            if (gobject is GPlayerSelf && gobject.GUID == StartupClass.long_0)
+                            {
+                                gobject.FrameNumber = FrameNumber;
+                                continue;
+                            }
+
+                            if (gobject is GPlayerSelf || gobject.GUID == StartupClass.long_0)
+                            {
+                                GPlayerSelf.Me = null;
+                                if (GContext.Main != null)
+                                    GContext.Main.Me = null;
+                            }
+
+                            if (LogObjects)
+                                Logger.smethod_1("+ Culling old object: " + gobject);
+                            gobject.Cull();
+                            LastSnapshot.RemoveAt(index);
+                            --index;
+                        }
                     }
+                }
+                else
+                {
+                    Logger.smethod_1("Object snapshot cull skipped due to incomplete traversal; preserving prior entities for next tick");
                 }
 
                 LastUpdate = Environment.TickCount;
-                if (LastSnapshot.Count == 0)
+                if (traversalComplete && LastSnapshot.Count == 0)
                     flag = true;
             }
 

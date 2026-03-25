@@ -155,7 +155,8 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                if (TargetGUID != 0L && TargetGUID != GUID)
+                var myGuid = GPlayerSelf.Me != null ? GPlayerSelf.Me.GUID : 0UL;
+                if (TargetGUID != 0UL && TargetGUID != myGuid)
                 {
                     SkipReason = "monster already has a target";
                     return false;

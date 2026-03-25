@@ -775,8 +775,7 @@ public class CombatController
             Logger.LogMessage(MessageProvider.GetMessage(178));
             smethod_1();
         }
-        else if (bool_20 && !unit.IsTargetingMe && !unit.IsTargetingMyPet &&
-                 !StartupClass.gclass54_0.method_13(unit.TargetGUID))
+        else if (bool_20 && !method_77(unit))
         {
             Logger.LogMessage(MessageProvider.GetMessage(863));
             smethod_1();
@@ -979,6 +978,43 @@ public class CombatController
                 }
             }
         }
+    }
+
+    private bool method_77(GUnit gunit_0)
+    {
+        if (gunit_0.IsTargetingMe || gunit_0.IsTargetingMyPet || StartupClass.gclass54_0.method_13(gunit_0.TargetGUID))
+            return true;
+
+        if (!gunit_0.IsMonster || gunit_0.IsDead)
+            return false;
+
+        var isLikelyAggroRange = gunit_0.DistanceToSelf <= StartupClass.CurrentGameClass.PullDistance + int_5 + 8;
+        if (isLikelyAggroRange && (gunit_0.Reaction == GReaction.Hostile || gunit_0.Reaction == GReaction.Unknown))
+        {
+            Logger.smethod_1("Ambush target accepted by proximity/reaction gate: GUID=0x" + gunit_0.GUID.ToString("x") +
+                               ", Dist=" + gunit_0.DistanceToSelf + ", Reaction=" + gunit_0.Reaction);
+            return true;
+        }
+
+        var targetGuid = gunit_0.TargetGUID;
+        gunit_0.Refresh(true);
+        gplayerSelf_0.Refresh(true);
+        var refreshedTargetGuid = gunit_0.TargetGUID;
+
+        if (gunit_0.IsTargetingMe || gunit_0.IsTargetingMyPet || StartupClass.gclass54_0.method_13(refreshedTargetGuid))
+            return true;
+
+        if ((targetGuid == 0UL || refreshedTargetGuid == 0UL) && gunit_0.IsInCombat &&
+            (gunit_0.Reaction == GReaction.Hostile || gunit_0.Reaction == GReaction.Unknown) &&
+            gunit_0.DistanceToSelf <= StartupClass.CurrentGameClass.PullDistance + int_5)
+        {
+            Logger.smethod_1("Ambush target accepted despite transient zero TargetGUID: GUID=0x" +
+                               gunit_0.GUID.ToString("x") + ", Dist=" + gunit_0.DistanceToSelf +
+                               ", InCombat=" + gunit_0.IsInCombat);
+            return true;
+        }
+
+        return false;
     }
 
     public void method_13()
