@@ -425,6 +425,11 @@ public class KeyEditor : Form
         Spell.Items.Clear();
         if (GContext.Main.IsAttached)
         {
+            if (StartupClass.gclass63_0 == null)
+            {
+                StartupClass.gclass63_0 = new SpellbookManager();
+            }
+
             gkey_0.FilloutKey();
             for (var SlotNumber = 1; SlotNumber <= 108; ++SlotNumber)
             {
@@ -436,11 +441,13 @@ public class KeyEditor : Form
                     switch (gshortcut_0.ShortcutType)
                     {
                         case GShortcutType.Spell:
-                            class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
+                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
+                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
                                               StartupClass.gclass63_0.method_11(gshortcut_0.ShortcutValue);
                             break;
                         case GShortcutType.Item:
-                            class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
+                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
+                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
                                               new GItemDefinition(gshortcut_0.ShortcutValue).Name + " (item)";
                             break;
                         case GShortcutType.Macro:

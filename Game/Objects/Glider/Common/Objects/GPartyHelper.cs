@@ -98,7 +98,7 @@ namespace Glider.Common.Objects
             if (index == partyMembers.Length)
                 Logger.LogMessage("!! Never found party member to target: " + Target);
             else
-                InputController.smethod_9((short)(113 + (short)index));
+                InputController.TapKey((short)(113 + (short)index));
         }
 
         private PartyBuffBucket GetBuffsForPlayer(ulong GUID)

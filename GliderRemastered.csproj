@@ -120,9 +120,11 @@
     <EmbeddedResource Include="UI\Forms\DebuffPick.resx" />
     <EmbeddedResource Include="UI\Forms\EvoConfigWindow.resx" />
     <EmbeddedResource Include="UI\Forms\FactionReminder.resx" />
-    <EmbeddedResource Include="UI\Forms\GliderForm.resx"></EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\GliderForm.resx">
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\GliderWarning.resx" />
-    <EmbeddedResource Include="UI\Forms\KeyEditor.resx"></EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\KeyEditor.resx">
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\LaunchpadReminder.resx" />
     <EmbeddedResource Include="UI\Forms\LaunchpadReminder_1.resx" />
     <EmbeddedResource Include="UI\Forms\PickWindow.resx" />
@@ -194,6 +196,7 @@
     <Compile Include="Game\Combat\CombatController.cs" />
     <Compile Include="Game\Combat\SpellActionData.cs" />
     <Compile Include="Game\Combat\SpellbookManager.cs" />
+    <Compile Include="Game\Combat\SpellbookOffsets.cs" />
     <Compile Include="Game\Combat\SpellcastingManager.cs" />
     <Compile Include="Game\Combat\SpellEnabledState.cs" />
     <Compile Include="Game\Combat\SpellEntry.cs" />
@@ -388,6 +391,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+    <None Include="DEBUG_LOGGING_GUIDE.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

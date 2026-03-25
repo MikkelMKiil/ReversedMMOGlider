@@ -92,12 +92,12 @@ namespace Glider.Common.Objects
         protected void ShiftThisKey(bool KeyDown)
         {
             if ((ShiftState & 1) != 0)
-                InputController.smethod_0(16, KeyDown);
+                InputController.SendKey(16, KeyDown);
             if ((ShiftState & 2) != 0)
-                InputController.smethod_0(17, KeyDown);
+                InputController.SendKey(17, KeyDown);
             if ((ShiftState & 4) == 0)
                 return;
-            InputController.smethod_0(18, KeyDown);
+            InputController.SendKey(18, KeyDown);
         }
 
         public void EnsureBar()
@@ -120,6 +120,8 @@ namespace Glider.Common.Objects
         {
             if (CharCode == char.MinValue && VK == 0)
             {
+                if (KeyName == "Common.ToggleCombat")
+                    Logger.LogMessage("[Critical] [Input][AutoAttack] " + KeyName + " is not bound (CharCode/VK are empty). Configure your WoW Attack/StartAttack bind or set this key in Edit Keys.");
                 Logger.smethod_1(MessageProvider.smethod_2(57, KeyName));
             }
             else
@@ -127,7 +129,7 @@ namespace Glider.Common.Objects
                 EnsureBar();
                 ShiftThisKey(true);
                 if (CharCode == char.MinValue)
-                    InputController.smethod_9(VK);
+                    InputController.TapKey(VK);
                 else
                     InputController.smethod_6(char.ToLower(CharCode));
                 ShiftThisKey(false);
@@ -155,7 +157,7 @@ namespace Glider.Common.Objects
                 EnsureBar();
                 ShiftThisKey(true);
                 if (CharCode == char.MinValue)
-                    InputController.smethod_0(VK, Pressing);
+                    InputController.SendKey(VK, Pressing);
                 else
                     InputController.smethod_4(CharCode, Pressing);
                 ShiftThisKey(false);

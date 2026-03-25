@@ -105,7 +105,7 @@ public class DialogMonitor
 
         GContext.Main.ReleaseAllKeys();
         Thread.Sleep(StartupClass.random_0.Next() % 1000 + 1000);
-        InputController.smethod_9(27);
+        InputController.TapKey(27);
         Thread.Sleep(StartupClass.random_0.Next() % 800 + 500);
         if (smethod_3(string_1))
             return;

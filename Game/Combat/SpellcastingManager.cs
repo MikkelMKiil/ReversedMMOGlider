@@ -37,6 +37,13 @@ public class SpellcastingManager
         {
             lock (this)
             {
+                if (string_1 == "Common.ToggleCombat")
+                {
+                    var key = Offsets[string_1];
+                    Logger.LogMessage("[Input][AutoAttack] Sending " + string_1 + ": " + key + ", IsUndefined=" + key.IsUndefined +
+                                      ", IsGliderInitialized=" + StartupClass.IsGliderInitialized +
+                                      ", MainApplicationHandle=0x" + StartupClass.MainApplicationHandle.ToInt64().ToString("x"));
+                }
                 Offsets[string_1].Send();
             }
         }
@@ -53,6 +60,15 @@ public class SpellcastingManager
         {
             lock (this)
             {
+                if (string_1 == "Common.Forward" || string_1 == "Common.RotateLeft" || string_1 == "Common.RotateRight" ||
+                    string_1 == "Common.StrafeLeft" || string_1 == "Common.StrafeRight")
+                {
+                    var key = Offsets[string_1];
+                    if (key.IsUndefined)
+                        Logger.LogMessage("[Critical] [Input][Move] PressKey " + string_1 + " is undefined: " + key);
+                    else
+                        Logger.smethod_1("[Input][Move] PressKey " + string_1 + ": " + key);
+                }
                 Offsets[string_1].Press();
             }
         }
@@ -69,6 +85,15 @@ public class SpellcastingManager
         {
             lock (this)
             {
+                if (string_1 == "Common.Forward" || string_1 == "Common.RotateLeft" || string_1 == "Common.RotateRight" ||
+                    string_1 == "Common.StrafeLeft" || string_1 == "Common.StrafeRight")
+                {
+                    var key = Offsets[string_1];
+                    if (key.IsUndefined)
+                        Logger.LogMessage("[Critical] [Input][Move] ReleaseKey " + string_1 + " is undefined: " + key);
+                    else
+                        Logger.smethod_1("[Input][Move] ReleaseKey " + string_1 + ": " + key);
+                }
                 Offsets[string_1].Release();
             }
         }

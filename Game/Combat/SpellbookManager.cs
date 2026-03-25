@@ -316,8 +316,21 @@ public class SpellbookManager
     private bool method_18(params string[] string_0)
     {
         foreach (var str in string_0)
+        {
             if (!MemoryOffsetTable.Instance.HasOffset(str))
                 return false;
+
+            var value = MemoryOffsetTable.Instance.GetIntOffset(str);
+
+            // In this project, offset "0" is widely used as a placeholder for "unknown/not reversed yet".
+            // SpellbookEx must not run with placeholders; it will read bogus memory and prevent combat.
+            if (value == 0)
+            {
+                Logger.LogMessage("SpellbookEx disabled: required spell list offsets are missing for this client build (placeholder 0x0): " + str);
+                return false;
+            }
+        }
+
         return true;
     }
 }

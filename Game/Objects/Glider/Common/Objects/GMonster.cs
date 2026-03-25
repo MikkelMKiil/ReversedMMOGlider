@@ -149,14 +149,14 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                if (Health != 1.0)
+                if (Health < 0.99)
                 {
-                    SkipReason = "health != 100, probably tagged";
+                    SkipReason = "health below pull threshold, probably tagged or already damaged";
                     return false;
                 }
 
                 var myGuid = GPlayerSelf.Me != null ? GPlayerSelf.Me.GUID : 0UL;
-                if (TargetGUID != 0UL && TargetGUID != myGuid)
+                if (TargetGUID != 0UL && TargetGUID != GUID && TargetGUID != myGuid)
                 {
                     SkipReason = "monster already has a target";
                     return false;

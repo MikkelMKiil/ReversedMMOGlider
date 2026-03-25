@@ -1,9 +1,3 @@
-// Decompiled with JetBrains decompiler
-// Type: Glider.Common.Objects.GObject
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
 #nullable disable
 using System;
 using System.Threading;
@@ -260,19 +254,60 @@ namespace Glider.Common.Objects
 
         public bool Hover()
         {
+            // read paw speed and enforce a minimum to avoid zero-sleep oddities
             PawSpeedMS = ConfigManager.gclass61_0.method_3("PawSpeed");
-            StartupClass.gclass68_0.method_3(true);
-            if (StartupClass.IsGliderInitialized)
-                InputController.smethod_18(InputController.double_0, InputController.double_1);
-            if ((IsCursorOnObject && !StartupClass.IsGliderInitialized) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
-                TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
-                return true;
-            foreach (var glocation in StartupClass.gclass33_0.list_0)
+            if (PawSpeedMS < 1) PawSpeedMS = 1;
+
+            // ensure camera rotator is enabled (keep original behavior), but don't let exceptions bubble
+            try
             {
-                InputController.smethod_18(glocation.X, glocation.Y);
-                Thread.Sleep(PawSpeedMS);
-                if (IsCursorOnObject)
-                    return true;
+                StartupClass.gclass68_0.method_3(true);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogMessage("CameraRotator enable failed: " + ex);
+            }
+
+            // If cursor is already on the object, return true immediately (avoid moving it away)
+            if (IsCursorOnObject)
+                return true;
+
+            // restore stored cursor position only when Glider initialized (preserve previous behavior)
+            if (StartupClass.IsGliderInitialized)
+            {
+                try
+                {
+                    InputController.smethod_18(InputController.double_0, InputController.double_1);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogMessage("InputController restore failed: " + ex);
+                }
+            }
+
+            // try a set of Z adjustments
+            if (TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) || TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
+                return true;
+
+            // fall back to the configured list of screen positions, if present
+            var list = StartupClass.gclass33_0 != null ? StartupClass.gclass33_0.list_0 : null;
+            if (list != null)
+            {
+                foreach (var glocation in list)
+                {
+                    try
+                    {
+                        InputController.smethod_18(glocation.X, glocation.Y);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogMessage("InputController move failed: " + ex);
+                    }
+
+                    Thread.Sleep(PawSpeedMS);
+                    if (IsCursorOnObject)
+                        return true;
+                }
             }
 
             return false;

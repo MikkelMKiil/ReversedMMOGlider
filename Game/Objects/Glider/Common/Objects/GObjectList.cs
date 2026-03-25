@@ -16,6 +16,23 @@ namespace Glider.Common.Objects
         private static int FrameNumber;
         private static int LastUpdate;
         private static readonly SortedList<ulong, GObject> LastSnapshot = new SortedList<ulong, GObject>();
+        private static int _targetScanLastLogTick;
+        private static string _targetScanLastLogState;
+
+        // Debug tracking for object list population
+        private static int _lastTraversalObjectCount;
+        private static int _lastTraversalEnemyCount;
+        private static int _lastTraversalPlayerCount;
+        private static int _lastTraversalNodeCount;
+        private static int _lastTraversalSkippedCount;
+        private static int _lastLoggedTick;
+        private const int LogIntervalMs = 5000; // Log every 5 seconds
+
+        /// <summary>
+        /// Gets the memory offset for the next object pointer in the linked-list traversal.
+        /// Centralized from hardcoded 0x3C for maintainability and version management.
+        /// </summary>
+        private static int GameObjNextOffset => MemoryOffsetTable.Instance.GetIntOffset("GameObjNext");
 
         public static void ClearCache()
         {
@@ -34,6 +51,44 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Logs object list population debug info at throttled intervals.
+        /// </summary>
+        private static void LogObjectListDebugInfo()
+        {
+            var currentTick = Environment.TickCount;
+            if (currentTick - _lastLoggedTick < LogIntervalMs)
+                return;
+
+            _lastLoggedTick = currentTick;
+
+            var enemies = 0;
+            var players = 0;
+            var nodes = 0;
+            var other = 0;
+
+            lock (LastSnapshot)
+            {
+                foreach (var obj in LastSnapshot.Values)
+                {
+                    if (obj.Type == GObjectType.Monster)
+                        enemies++;
+                    else if (obj.Type == GObjectType.Player)
+                        players++;
+                    else if (obj.Type == GObjectType.Node)
+                        nodes++;
+                    else
+                        other++;
+                }
+            }
+
+            Logger.LogMessage("[DEBUG_OBJLIST] Total=" + LastSnapshot.Count + 
+                            ", Enemies=" + enemies + 
+                            ", Players=" + players + 
+                            ", Nodes=" + nodes + 
+                            ", Other=" + other);
+        }
+
         private static SortedList<ulong, GObject> GetAll()
         {
             return GetAll(false);
@@ -41,130 +96,174 @@ namespace Glider.Common.Objects
 
         private static SortedList<ulong, GObject> GetAll(bool BypassTimer)
         {
-            var flag = false;
+            var snapshotIsEmpty = false;
+            var traversalObjectCount = 0;
+            var traversalSkippedCount = 0;
+            var priorSnapshotCount = 0;
+            SortedList<ulong, GObject> newSnapshot = null;
+
             lock (LastSnapshot)
             {
+                priorSnapshotCount = LastSnapshot.Count;
                 if (Environment.TickCount - LastUpdate < 50 && !BypassTimer)
                     return LastSnapshot;
                 ++FrameNumber;
-                var int5 = StartupClass.int_5;
-                if (int5 == 0)
+
+                newSnapshot = new SortedList<ulong, GObject>(priorSnapshotCount > 0 ? priorSnapshotCount : 16);
+                var objectManagerBase = StartupClass.int_5;
+                if (objectManagerBase == 0)
                 {
                     Logger.LogMessage(MessageProvider.GetMessage(56));
                     StartupClass.smethod_27(true, "GetObjectsMainTableEmpty");
                     return null;
                 }
 
-                var BaseAddress = GetFirstObjectPointer(int5);
-                var num1 = BaseAddress;
-                var num = 0;
-                var hashSet = new HashSet<int>();
+                var currentObjectAddress = GetFirstObjectPointer(objectManagerBase);
+                var firstObjectAddress = currentObjectAddress;
+                var iterationCount = 0;
+                var visitedAddresses = new HashSet<int>();
                 var traversalComplete = true;
+
+                if (currentObjectAddress == 0)
+                {
+                    Logger.LogMessage("[CRITICAL] GetAll: FirstObjectPointer returned 0");
+                    traversalComplete = false;
+                }
+
                 while (true)
                 {
-                    if (++num > 8192)
+                    if (++iterationCount > 8192)
                     {
                         Logger.LogMessage("[CRITICAL] Object list traversal aborted: exceeded safety iteration cap");
                         traversalComplete = false;
                         break;
                     }
-                    if (BaseAddress != 0 && !hashSet.Add(BaseAddress))
+                    if (currentObjectAddress != 0 && !visitedAddresses.Add(currentObjectAddress))
                     {
-                        if (BaseAddress != num1)
+                        if (currentObjectAddress != firstObjectAddress)
                         {
-                            Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links");
+                            Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links at 0x" + 
+                                            currentObjectAddress.ToString("x"));
                             traversalComplete = false;
                         }
                         break;
                     }
-                    ulong guid;
+                    ulong guid = 0UL;
                     do
                     {
-                        if ((BaseAddress & 1) == 0 && BaseAddress != 0 && BaseAddress != 28)
+                        if (currentObjectAddress == 0)
+                            goto label_15;
+
+                        // Some builds include sentinel/invalid nodes in the linked list. These must be skipped,
+                        // not treated as end-of-list, or the snapshot will be incomplete/empty.
+                        if (currentObjectAddress == 28 || (currentObjectAddress & 1) != 0)
                         {
-                            guid = QuickGetGUID(BaseAddress);
-                            if (!LastSnapshot.ContainsKey(guid))
+                            ++traversalSkippedCount;
+                            currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+
+                            // Log sentinel skips occasionally
+                            if (traversalSkippedCount % 100 == 0)
+                                Logger.smethod_1("[TRACE] Skipped sentinel/invalid nodes: " + traversalSkippedCount);
+                            continue;
+                        }
+
+                        if ((currentObjectAddress & 1) == 0)
+                        {
+                            guid = QuickGetGUID(currentObjectAddress);
+                            if (!newSnapshot.ContainsKey(guid))
                             {
+                                ++traversalObjectCount;
                                 GObject gobject;
                                 if (guid == StartupClass.long_0)
                                 {
-                                    gobject = new GPlayerSelf(BaseAddress, FrameNumber);
+                                    gobject = new GPlayerSelf(currentObjectAddress, FrameNumber);
                                     if (GContext.Main.Me == null)
                                         GContext.Main.Me = (GPlayerSelf)gobject;
                                 }
                                 else
                                 {
-                                    gobject = GObject.Create(BaseAddress, FrameNumber);
+                                    gobject = GObject.Create(currentObjectAddress, FrameNumber);
                                 }
 
-                                LastSnapshot.Add(guid, gobject);
+                                newSnapshot.Add(guid, gobject);
+
+                                // Log enemy additions
+                                if (gobject.Type == GObjectType.Monster && traversalObjectCount % 10 == 0)
+                                    Logger.smethod_1("[TRACE] Added monster: 0x" + guid.ToString("x") + " (" + gobject.Name + ")");
                             }
                             else
                             {
                                 goto label_7;
                             }
                         }
-                        else
-                        {
-                            goto label_15;
-                        }
-                        BaseAddress = GameMemoryAccess.ReadInt32(BaseAddress + 60, "GameObjNext");
+                        currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
                     } while (!LogObjects);
 
                     goto label_13;
                 label_7:
-                    var existingObject = LastSnapshot[guid];
-                    if (existingObject.BaseAddress != BaseAddress)
+                    var existingObject = newSnapshot[guid];
+                    if (existingObject.BaseAddress != currentObjectAddress)
                     {
-                        existingObject.BaseAddress = unchecked((uint)BaseAddress);
-                        existingObject.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(BaseAddress + 8, "GameObjStorage"));
+                        existingObject.BaseAddress = unchecked((uint)currentObjectAddress);
+                        existingObject.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(currentObjectAddress + 8, "GameObjStorage"));
                     }
 
                     existingObject.FrameNumber = FrameNumber;
                     continue;
                 label_13:
-                    Logger.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
+                    Logger.smethod_1("+ Adding new object: " + newSnapshot[guid]);
                 }
 
-                var num3 = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
+                var activePlayerOffset = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
                     ? MemoryOffsetTable.Instance.GetIntOffset("MainTableActivePlayer")
                     : 24;
-                if (int5 != 0 && num3 > 0)
+                if (objectManagerBase != 0 && activePlayerOffset > 0)
                 {
-                    var num2 = GameMemoryAccess.ReadInt32(int5 + num3, "MainTableActivePlayerObj");
-                    if (IsLikelyObjectPointer(num2))
+                    var activePlayerObjectAddress = GameMemoryAccess.ReadInt32(objectManagerBase + activePlayerOffset, "MainTableActivePlayerObj");
+                    if (IsLikelyObjectPointer(activePlayerObjectAddress))
                     {
-                        var guid1 = QuickGetGUID(num2);
-                        if (guid1 != 0UL)
+                        var activePlayerGuid = QuickGetGUID(activePlayerObjectAddress);
+                        if (activePlayerGuid != 0UL)
                         {
-                            StartupClass.long_0 = guid1;
-                            if (!LastSnapshot.ContainsKey(guid1) || !(LastSnapshot[guid1] is GPlayerSelf))
+                            StartupClass.long_0 = activePlayerGuid;
+                            if (!newSnapshot.ContainsKey(activePlayerGuid) || !(newSnapshot[activePlayerGuid] is GPlayerSelf))
                             {
-                                var gobject = new GPlayerSelf(num2, FrameNumber);
-                                if (LastSnapshot.ContainsKey(guid1))
-                                    LastSnapshot.Remove(guid1);
-                                LastSnapshot.Add(guid1, gobject);
+                                var gobject = new GPlayerSelf(activePlayerObjectAddress, FrameNumber);
+                                if (newSnapshot.ContainsKey(activePlayerGuid))
+                                    newSnapshot.Remove(activePlayerGuid);
+                                newSnapshot.Add(activePlayerGuid, gobject);
                             }
                             else
                             {
-                                var activePlayer = LastSnapshot[guid1];
-                                if (activePlayer.BaseAddress != num2)
+                                var activePlayer = newSnapshot[activePlayerGuid];
+                                if (activePlayer.BaseAddress != activePlayerObjectAddress)
                                 {
-                                    activePlayer.BaseAddress = unchecked((uint)num2);
-                                    activePlayer.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(num2 + 8, "GameObjStorage"));
+                                    activePlayer.BaseAddress = unchecked((uint)activePlayerObjectAddress);
+                                    activePlayer.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(activePlayerObjectAddress + 8, "GameObjStorage"));
                                 }
 
                                 activePlayer.FrameNumber = FrameNumber;
                             }
 
-                            GContext.Main.Me = (GPlayerSelf)LastSnapshot[guid1];
+                            GContext.Main.Me = (GPlayerSelf)newSnapshot[activePlayerGuid];
                         }
                     }
                 }
 
             label_15:
+                // If the traversal produced an implausibly tiny snapshot compared to the previous tick,
+                // assume the OM links were unstable for this pass and preserve the prior snapshot.
+                // This prevents a single transient read failure from collapsing targeting to "2 objects".
+                if (traversalComplete && priorSnapshotCount >= 50 && newSnapshot.Count <= 10)
+                {
+                    traversalComplete = false;
+                    Logger.smethod_1("Object snapshot marked incomplete: tiny result (" + newSnapshot.Count + ") vs prior (" + priorSnapshotCount + ")");
+                }
+
                 if (traversalComplete)
                 {
+                    // Cull old objects from the previous snapshot before swapping.
+                    // This preserves prior entities when traversal is incomplete.
                     ulong playerTargetGuid = 0UL;
                     if (GContext.Main != null && GContext.Main.Me != null)
                         playerTargetGuid = GContext.Main.Me.TargetGUID;
@@ -172,10 +271,10 @@ namespace Glider.Common.Objects
                     for (var index = 0; index < LastSnapshot.Count; ++index)
                     {
                         var gobject = LastSnapshot.Values[index];
-                    if (gobject.FrameNumber != FrameNumber)
+                        if (gobject.FrameNumber != FrameNumber)
                         {
-                        if (unchecked(FrameNumber - gobject.FrameNumber) <= 1)
-                            continue;
+                            if (unchecked(FrameNumber - gobject.FrameNumber) <= 1)
+                                continue;
 
                             if (playerTargetGuid != 0UL && gobject.GUID == playerTargetGuid)
                             {
@@ -203,6 +302,10 @@ namespace Glider.Common.Objects
                             --index;
                         }
                     }
+
+                    LastSnapshot.Clear();
+                    for (var index = 0; index < newSnapshot.Count; ++index)
+                        LastSnapshot.Add(newSnapshot.Keys[index], newSnapshot.Values[index]);
                 }
                 else
                 {
@@ -210,12 +313,20 @@ namespace Glider.Common.Objects
                 }
 
                 LastUpdate = Environment.TickCount;
-                if (traversalComplete && LastSnapshot.Count == 0)
-                    flag = true;
+                if (traversalComplete && newSnapshot.Count == 0)
+                    snapshotIsEmpty = true;
+
+                // Store metrics for debug logging
+                _lastTraversalObjectCount = traversalObjectCount;
+                _lastTraversalSkippedCount = traversalSkippedCount;
             }
 
-            if (flag)
+            if (snapshotIsEmpty)
                 StartupClass.smethod_27(true, "ZeroCountObjects");
+
+            // Log periodic summary
+            LogObjectListDebugInfo();
+
             return LastSnapshot;
         }
 
@@ -274,6 +385,23 @@ namespace Glider.Common.Objects
             var objects = GetObjects(GObjectType.Monster);
             var destinationArray = new GMonster[objects.Length];
             Array.Copy(objects, destinationArray, objects.Length);
+
+            // Debug log if monster count drops unexpectedly
+            if (destinationArray.Length > 0 && Environment.TickCount - _lastLoggedTick < LogIntervalMs)
+            {
+                var validMonsters = 0;
+                foreach (var monster in destinationArray)
+                {
+                    if (monster != null && monster.IsValid)
+                        validMonsters++;
+                }
+
+                if (validMonsters < destinationArray.Length)
+                    Logger.smethod_1("[TRACE] Monsters: Total=" + destinationArray.Length + 
+                                   ", Valid=" + validMonsters + 
+                                   ", Invalid=" + (destinationArray.Length - validMonsters));
+            }
+
             return destinationArray;
         }
 
@@ -369,28 +497,37 @@ namespace Glider.Common.Objects
             if (objectManagerBase == 0)
                 return false;
 
-            var baseAddress = GetFirstObjectPointer(objectManagerBase);
-            var firstAddress = baseAddress;
-            var iterations = 0;
-            var visited = new HashSet<int>();
+            var currentObjectAddress = GetFirstObjectPointer(objectManagerBase);
+            var firstObjectAddress = currentObjectAddress;
+            var iterationCount = 0;
+            var visitedAddresses = new HashSet<int>();
+            var checkCount = 0;
+            var readFailures = 0;
 
-            while ((baseAddress & 1) == 0 && baseAddress != 0 && baseAddress != 28)
+            while ((currentObjectAddress & 1) == 0 && currentObjectAddress != 0 && currentObjectAddress != 28)
             {
-                if (++iterations > 8192)
-                    break;
-
-                if (!visited.Add(baseAddress))
+                if (++iterationCount > 8192)
                 {
-                    if (baseAddress != firstAddress)
+                    Logger.LogMessage("[CRITICAL] TryMaterializeUnitByGuid: Iteration cap hit for GUID=0x" + guid.ToString("x"));
+                    break;
+                }
+
+                if (!visitedAddresses.Add(currentObjectAddress))
+                {
+                    if (currentObjectAddress != firstObjectAddress)
                         Logger.smethod_1("ResolveUnitByGuid materialize traversal detected cycle");
                     break;
                 }
 
-                var storageGuid = GameMemoryAccess.ReadObjectGuid(baseAddress);
-                var legacyGuid = GameMemoryAccess.ReadInt64(baseAddress + 48, "GameObjGUID.Legacy");
+                ++checkCount;
+                var storageGuid = GameMemoryAccess.ReadObjectGuid(currentObjectAddress);
+                if (storageGuid == 0UL)
+                    ++readFailures;
+
+                var legacyGuid = GameMemoryAccess.ReadInt64(currentObjectAddress + 48, "GameObjGUID.Legacy");
                 if (storageGuid == guid || legacyGuid == guid)
                 {
-                    var obj = GObject.Create(baseAddress, FrameNumber);
+                    var obj = GObject.Create(currentObjectAddress, FrameNumber);
                     lock (LastSnapshot)
                     {
                         if (LastSnapshot.ContainsKey(obj.GUID))
@@ -422,8 +559,14 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                baseAddress = GameMemoryAccess.ReadInt32(baseAddress + 60, "GameObjNext");
+                currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
             }
+
+            // Log if we had read failures during traversal
+            if (readFailures > 0)
+                Logger.smethod_1("[TRACE] TryMaterializeUnitByGuid: GUID=0x" + guid.ToString("x") + 
+                               " not found. Checked=" + checkCount + 
+                               ", ReadFailures=" + readFailures);
 
             return false;
         }
@@ -490,15 +633,15 @@ namespace Glider.Common.Objects
         {
             var monsters = GetMonsters();
             GMonster nearestHostile = null;
-            var num = 9999.0;
+            var closestDistance = 9999.0;
             foreach (var gmonster in monsters)
                 if ((IncludeInjured || gmonster.Health == 1.0) && gmonster.IsValid && !gmonster.IsTrivial &&
                     gmonster.GUID != ExcludeGUID &&
                     (gmonster.Reaction == GReaction.Hostile || gmonster.Reaction == GReaction.Unknown) &&
-                    gmonster.Location.GetDistanceTo(Location) < num &&
+                    gmonster.Location.GetDistanceTo(Location) < closestDistance &&
                     Math.Abs(gmonster.Location.Z - Location.Z) < 12.0)
                 {
-                    num = gmonster.Location.GetDistanceTo(Location);
+                    closestDistance = gmonster.Location.GetDistanceTo(Location);
                     nearestHostile = gmonster;
                 }
 
@@ -513,9 +656,9 @@ namespace Glider.Common.Objects
         public static bool CheckForAttackers()
         {
             var attackers = GetAttackers(false);
-            var num = 9999.0;
+            var closestDistance = 9999.0;
             foreach (var gunit in attackers)
-                if (gunit.DistanceToSelf < num && !gunit.IsDead)
+                if (gunit.DistanceToSelf < closestDistance && !gunit.IsDead)
                     return true;
             return false;
         }
@@ -524,11 +667,11 @@ namespace Glider.Common.Objects
         {
             var attackers = GetAttackers(true);
             GUnit nearestAttacker = null;
-            var num = 9999.0;
+            var closestDistance = 9999.0;
             foreach (var gunit in attackers)
-                if (gunit.DistanceToSelf < num && gunit.GUID != ExcludeGUID && !gunit.IsDead)
+                if (gunit.DistanceToSelf < closestDistance && gunit.GUID != ExcludeGUID && !gunit.IsDead)
                 {
-                    num = gunit.DistanceToSelf;
+                    closestDistance = gunit.DistanceToSelf;
                     nearestAttacker = gunit;
                 }
 
@@ -595,8 +738,8 @@ namespace Glider.Common.Objects
 
         public static void DumpDebug()
         {
-            var num1 = 0;
-            var num2 = 0;
+            var objectCount = 0;
+            var unitCount = 0;
             lock (LastSnapshot)
             {
                 Logger.smethod_1("-- GObjectList.DumpDebug invoked, LastUpdate = " + LastUpdate + ", Current = " +
@@ -604,11 +747,11 @@ namespace Glider.Common.Objects
                 var lastSnapshot = LastSnapshot;
                 foreach (var key in lastSnapshot.Keys)
                 {
-                    ++num1;
+                    ++objectCount;
                     Logger.smethod_1(key.ToString("x16") + " --> " + lastSnapshot[key]);
                 }
 
-                Logger.smethod_1("-- Object dump done, hits: " + num1 + ", unit hits: " + num2);
+                Logger.smethod_1("-- Object dump done, hits: " + objectCount + ", unit hits: " + unitCount);
             }
         }
 
@@ -636,12 +779,12 @@ namespace Glider.Common.Objects
         {
             if (Objects == null)
                 return null;
-            var num = 99999.0;
+            var closestDistance = 99999.0;
             GObject closest = null;
             foreach (var gobject in Objects)
-                if (gobject.Location.GetDistanceTo(Location) < num)
+                if (gobject.Location.GetDistanceTo(Location) < closestDistance)
                 {
-                    num = gobject.Location.GetDistanceTo(Location);
+                    closestDistance = gobject.Location.GetDistanceTo(Location);
                     closest = gobject;
                 }
 
@@ -651,14 +794,14 @@ namespace Glider.Common.Objects
         public static GMonster GetClosestNeutralMonster()
         {
             var monsters = GetMonsters();
-            var num = 99999.0;
+            var closestDistance = 99999.0;
             GMonster closestNeutralMonster = null;
             foreach (var gmonster in monsters)
                 if (gmonster.Reaction == GReaction.Neutral && gmonster.Level > 5 &&
                     Math.Abs(gmonster.Location.Z - GContext.Main.Me.Location.Z) < 10.0 && gmonster.Health == 1.0 &&
-                    gmonster.DistanceToSelf < num)
+                    gmonster.DistanceToSelf < closestDistance)
                 {
-                    num = gmonster.DistanceToSelf;
+                    closestDistance = gmonster.DistanceToSelf;
                     closestNeutralMonster = gmonster;
                 }
 
@@ -679,55 +822,119 @@ namespace Glider.Common.Objects
         {
             if (StartupClass.gprofile_0.IgnoreAttackers)
                 return null;
-            var num1 = 9999.0;
-            GMonster gmonster = null;
-            foreach (var monster in GetMonsters())
+            var monsters = GetMonsters();
+            if (monsters == null || monsters.Length == 0)
+            {
+                var emptyState = "nomonsters";
+                var nowTick = Environment.TickCount;
+                if (_targetScanLastLogState != emptyState || nowTick - _targetScanLastLogTick > 2500)
+                {
+                    _targetScanLastLogState = emptyState;
+                    _targetScanLastLogTick = nowTick;
+                    Logger.LogMessage("[Loop] skipping target scan: no monsters found in current object snapshot.");
+                }
+
+                return null;
+            }
+            var closestDistance = 9999.0;
+            GMonster targetMonster = null;
+            GMonster skippedClosest = null;
+            var skippedClosestDistance = 9999.0;
+            var skippedCount = 0;
+            foreach (var monster in monsters)
                 if (monster.IsValidProfileTarget)
                 {
-                    double distanceToSelf = monster.DistanceToSelf;
-                    if (distanceToSelf < num1)
+                    double monsterDistance = monster.DistanceToSelf;
+                    if (monsterDistance < closestDistance)
                     {
-                        num1 = distanceToSelf;
-                        gmonster = monster;
+                        closestDistance = monsterDistance;
+                        targetMonster = monster;
+                    }
+                }
+                else
+                {
+                    ++skippedCount;
+                    var skipDistance = monster.DistanceToSelf;
+                    if (skipDistance < skippedClosestDistance)
+                    {
+                        skippedClosestDistance = skipDistance;
+                        skippedClosest = monster;
                     }
                 }
 
-            if (gmonster == null && ConfigManager.gclass61_0.method_5("LogMonsterChecks"))
+            if (targetMonster == null && ConfigManager.gclass61_0.method_5("LogMonsterChecks"))
                 Logger.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
-            if (gmonster == null)
+            if (targetMonster == null && skippedClosest != null)
+            {
+                var state = "skip:" + skippedClosest.SkipReason + ":" + skippedCount;
+                var nowTick = Environment.TickCount;
+                if (_targetScanLastLogState != state || nowTick - _targetScanLastLogTick > 2500)
+                {
+                    _targetScanLastLogState = state;
+                    _targetScanLastLogTick = nowTick;
+                    Logger.LogMessage("[Loop] skipping target candidates: count=" + skippedCount +
+                                      ", closest=\"" + skippedClosest.Name + "\"" +
+                                      ", guid=0x" + skippedClosest.GUID.ToString("x") +
+                                      ", dist=" + Math.Round(skippedClosest.DistanceToSelf, 2) +
+                                      ", faction=" + skippedClosest.FactionID +
+                                      ", hp=" + skippedClosest.HealthPoints + "/" + skippedClosest.HealthMax +
+                                      ", target=0x" + skippedClosest.TargetGUID.ToString("x") +
+                                      ", reason=\"" + skippedClosest.SkipReason + "\"");
+                }
+            }
+            if (targetMonster == null)
                 return null;
-            var num2 = ConfigManager.gclass61_0.method_3("ExtraPull");
-            return gmonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + num2) &&
-                   (StartupClass.gprofile_0.Wander || StartupClass.gprofile_0.GetDistanceTo(gmonster.Location) <=
-                       StartupClass.CurrentGameClass.PullDistance + num2)
-                ? gmonster
-                : null;
+            var extraPullDistance = ConfigManager.gclass61_0.method_3("ExtraPull");
+            var withinPull = targetMonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + extraPullDistance);
+            var withinProfile = StartupClass.gprofile_0.Wander ||
+                                StartupClass.gprofile_0.GetDistanceTo(targetMonster.Location) <=
+                                StartupClass.CurrentGameClass.PullDistance + extraPullDistance;
+            if (!withinPull || !withinProfile)
+            {
+                var state = "envelope:" + targetMonster.GUID.ToString("x");
+                var nowTick = Environment.TickCount;
+                if (_targetScanLastLogState != state || nowTick - _targetScanLastLogTick > 2500)
+                {
+                    _targetScanLastLogState = state;
+                    _targetScanLastLogTick = nowTick;
+                    Logger.LogMessage("[Loop] skipping target \"" + targetMonster.Name + "\"" +
+                                      ", guid=0x" + targetMonster.GUID.ToString("x") +
+                                      ", dist=" + Math.Round(targetMonster.DistanceToSelf, 2) +
+                                      ", pullMax=" + (StartupClass.CurrentGameClass.PullDistance + extraPullDistance) +
+                                      ", profileDist=" + Math.Round(StartupClass.gprofile_0.GetDistanceTo(targetMonster.Location), 2) +
+                                      ", profileMax=" + (StartupClass.CurrentGameClass.PullDistance + extraPullDistance) +
+                                      ", reason=\"outside pull/profile envelope\"");
+                }
+                return null;
+            }
+
+            return targetMonster;
         }
 
         public static GNode GetClosestHarvestable()
         {
             var nodes = GetNodes();
-            var num = 9999.0;
+            var closestDistance = 9999.0;
             GNode closestHarvestable = null;
             foreach (var gnode in nodes)
             {
-                var flag = true;
+                var canHarvest = true;
                 if (!StartupClass.sortedList_2.ContainsKey(gnode.GUID) &&
                     Math.Abs(gnode.Location.Z - GPlayerSelf.Me.Location.Z) <= 10.0)
                 {
                     if (gnode.IsFlower && GPlayerSelf.Me.HasHerbalism)
-                        flag = false;
+                        canHarvest = false;
                     if (gnode.IsMineral && GPlayerSelf.Me.HasMining)
-                        flag = false;
+                        canHarvest = false;
                     if (gnode.IsTreasure)
-                        flag = false;
-                    if ((!flag || ConfigManager.gclass61_0.method_5("PickupJunk")) && !IsHarvestBanned(gnode.Name))
+                        canHarvest = false;
+                    if ((!canHarvest || ConfigManager.gclass61_0.method_5("PickupJunk")) && !IsHarvestBanned(gnode.Name))
                     {
-                        double distanceToSelf = gnode.Location.DistanceToSelf;
-                        if (distanceToSelf < num)
+                        double distanceToNode = gnode.Location.DistanceToSelf;
+                        if (distanceToNode < closestDistance)
                         {
                             closestHarvestable = gnode;
-                            num = distanceToSelf;
+                            closestDistance = distanceToNode;
                         }
                     }
                 }
@@ -749,37 +956,37 @@ namespace Glider.Common.Objects
         public static int StealthCountGameObjects(ulong SeekPlayerID)
         {
             var int5 = StartupClass.int_5;
-            var num1 = 0;
-            var flag = false;
-            var num2 = 0;
-            var hashSet = new HashSet<int>();
+            var foundObjectCount = 0;
+            var playerFound = false;
+            var traversalIterations = 0;
+            var visitedAddresses = new HashSet<int>();
             if (int5 == 0)
                 return 0;
-            var num3 = GetFirstObjectPointer(int5);
-            var num4 = num3;
+            var currentObjectAddress = GetFirstObjectPointer(int5);
+            var firstObjectAddress = currentObjectAddress;
             while (true)
             {
-                if (++num2 > 8192)
+                if (++traversalIterations > 8192)
                 {
                     Logger.smethod_1("Attach probe note: stealth object traversal hit safety cap");
                     break;
                 }
-                if (num3 != 0 && !hashSet.Add(num3))
+                if (currentObjectAddress != 0 && !visitedAddresses.Add(currentObjectAddress))
                 {
-                    if (num3 != num4)
+                    if (currentObjectAddress != firstObjectAddress)
                         Logger.smethod_1("Attach probe note: stealth traversal detected cycle");
                     break;
                 }
-                if ((num3 & 1) == 0 && num3 != 0 && num3 != 28)
+                if ((currentObjectAddress & 1) == 0 && currentObjectAddress != 0 && currentObjectAddress != 28)
                 {
-                    if (GameMemoryAccess.ReadObjectGuid(num3) == SeekPlayerID)
+                    if (GameMemoryAccess.ReadObjectGuid(currentObjectAddress) == SeekPlayerID)
                     {
                         Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
-                        flag = true;
+                        playerFound = true;
                     }
 
-                    ++num1;
-                    num3 = GameMemoryAccess.ReadInt32(num3 + 60, "GameObjNext");
+                    ++foundObjectCount;
+                    currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
                 }
                 else
                 {
@@ -787,9 +994,9 @@ namespace Glider.Common.Objects
                 }
             }
 
-            if (num1 > 0)
-                Logger.smethod_1("Stealth object count: " + num1 + ", hitme = " + flag);
-            return !flag ? 0 : num1;
+            if (foundObjectCount > 0)
+                Logger.smethod_1("Stealth object count: " + foundObjectCount + ", hitme = " + playerFound);
+            return !playerFound ? 0 : foundObjectCount;
         }
 
         public static bool TryGetLikelyPlayerGuid(out ulong guid_0)
@@ -798,32 +1005,32 @@ namespace Glider.Common.Objects
             var int5 = StartupClass.int_5;
             if (int5 == 0)
                 return false;
-            var num = GetFirstObjectPointer(int5);
-            var num2 = num;
-            var num1 = 0;
-            var hashSet = new HashSet<int>();
+            var currentObjectAddress = GetFirstObjectPointer(int5);
+            var firstObjectAddress = currentObjectAddress;
+            var traversalIterations = 0;
+            var visitedAddresses = new HashSet<int>();
             while (true)
             {
-                if (++num1 > 8192)
+                if (++traversalIterations > 8192)
                     break;
-                if (num != 0 && !hashSet.Add(num))
+                if (currentObjectAddress != 0 && !visitedAddresses.Add(currentObjectAddress))
                 {
-                    if (num != num2)
+                    if (currentObjectAddress != firstObjectAddress)
                         Logger.smethod_1("Attach probe note: player GUID traversal detected cycle");
                     break;
                 }
-                if ((num & 1) != 0 || num == 0 || num == 28)
+                if ((currentObjectAddress & 1) != 0 || currentObjectAddress == 0 || currentObjectAddress == 28)
                     break;
-                if (GameMemoryAccess.ReadInt32(num + 20, "QuickType") == 4)
+                if (GameMemoryAccess.ReadInt32(currentObjectAddress + 20, "QuickType") == 4)
                 {
-                    var int64 = GameMemoryAccess.ReadObjectGuid(num);
-                    if (int64 != 0UL)
+                    var playerGuid = GameMemoryAccess.ReadObjectGuid(currentObjectAddress);
+                    if (playerGuid != 0UL)
                     {
-                        guid_0 = int64;
+                        guid_0 = playerGuid;
                         return true;
                     }
                 }
-                num = GameMemoryAccess.ReadInt32(num + 60, "GameObjNext");
+                currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
             }
 
             return false;
@@ -838,7 +1045,8 @@ namespace Glider.Common.Objects
 
         private static bool IsLikelyObjectPointer(int int_0)
         {
-            return (int_0 & 1) == 0 && int_0 != 0 && int_0 != 28 && int_0 >= 65536;
+            var pointer = unchecked((uint)int_0);
+            return (pointer & 1U) == 0U && pointer != 0U && pointer != 28U && pointer >= 65536U;
         }
     }
 }

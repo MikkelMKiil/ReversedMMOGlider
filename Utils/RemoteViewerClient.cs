@@ -427,9 +427,9 @@ public class RemoteViewerClient
                     }
                     else
                     {
-                        if (StartupClass.IsGliderInitialized || !InputController.bool_0)
+                        if (StartupClass.IsGliderInitialized || !InputController.UseClipboard)
                         {
-                            InputController.smethod_9(13);
+                            InputController.TapKey(13);
                             StartupClass.smethod_39(300);
                         }
 
@@ -491,7 +491,7 @@ public class RemoteViewerClient
                         var short_0 = smethod_1(string_1.Substring(string_1.IndexOf(" ") + 1));
                         if (short_0 > 0)
                         {
-                            InputController.smethod_0((short)short_0, true);
+                            InputController.SendKey((short)short_0, true);
                             method_6("Key down\r\n");
                         }
                         else
@@ -505,7 +505,7 @@ public class RemoteViewerClient
                         var short_0 = smethod_1(string_1.Substring(string_1.IndexOf(" ") + 1));
                         if (short_0 > 0)
                         {
-                            InputController.smethod_0((short)short_0, false);
+                            InputController.SendKey((short)short_0, false);
                             method_6("Key up\r\n");
                         }
                         else

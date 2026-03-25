@@ -1228,7 +1228,7 @@ public class CombatController
         if (GPlayerSelf.Me.TargetGUID == 0L)
             return;
         Logger.smethod_1("Sending Esc to clear target");
-        InputController.smethod_9(27);
+        InputController.TapKey(27);
     }
 
     public void method_20()
@@ -1348,9 +1348,9 @@ public class CombatController
                 }
                 else
                 {
-                    if (!InputController.bool_0)
+                    if (!InputController.UseClipboard)
                     {
-                        InputController.smethod_9(13);
+                        InputController.TapKey(13);
                         StartupClass.smethod_39(900);
                     }
 
@@ -2663,14 +2663,14 @@ public class CombatController
     {
         if (ConfigManager.gclass61_0.method_5("ShiftLoot"))
         {
-            InputController.smethod_0(16, true);
+            InputController.SendKey(16, true);
             StartupClass.smethod_39(100);
         }
 
         InputController.smethod_23(true);
         if (!ConfigManager.gclass61_0.method_5("ShiftLoot"))
             return;
-        InputController.smethod_0(16, false);
+        InputController.SendKey(16, false);
     }
 
     public void method_57(LootableCorpseTracker gclass5_0, GUnit gunit_0, bool bool_20)
@@ -2752,7 +2752,7 @@ public class CombatController
         if (!(ConfigManager.gclass61_0.method_2("TeleportStop") == "True"))
             return;
         GContext.Main.Movement.LookConfused();
-        InputController.smethod_9(27);
+        InputController.TapKey(27);
         StartupClass.smethod_27(true, "TeleportWarning");
     }
 

@@ -493,7 +493,7 @@ namespace Glider.Common.Objects
         {
             var int_14 = 0;
             if (Math.Abs(Delta) < 0.25)
-                int_14 = (int)(Delta * InputController.int_19);
+                int_14 = (int)(Delta * InputController.TapSpinDelay);
             if (int_14 <= 0)
                 return false;
             var heading = GPlayerSelf.Me.Heading;
@@ -509,9 +509,9 @@ namespace Glider.Common.Objects
             }
 
             if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
-                InputController.int_19 -= 15;
+                InputController.TapSpinDelay -= 15;
             else
-                InputController.int_19 += 15;
+                InputController.TapSpinDelay += 15;
 
             return true;
         }

@@ -16,6 +16,8 @@
 	<!-- Local player GUID offset inside ObjectManager -->
 	<MainTableActivePlayer>0x18</MainTableActivePlayer>
 	<!-- Not used for active player lookup in 3.3.5a; kept for compat -->
+	<GameObjNext>0x3C</GameObjNext>
+	<!-- Object linked-list traversal: next object pointer offset from base struct -->
 
 	<!-- Static GUID addresses -->
 	<PlayerIdAddr>0x00CA1238</PlayerIdAddr>
@@ -113,10 +115,11 @@
 	<!-- Static base of player name cache -->
 
 	<!-- Known spells -->
-	<MySpells>0x00BE5D88</MySpells>
+ <MySpells>0x00B700F0</MySpells>
 	<!-- Static address of known spells array -->
 
 	<!-- Action bar -->
+ <ActionBarShortcuts>0x81E358</ActionBarShortcuts>
 	<ActionBarCurrent>0x00BDFC34</ActionBarCurrent>
 
 	<!-- Camera -->

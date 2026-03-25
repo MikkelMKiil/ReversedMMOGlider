@@ -876,7 +876,7 @@ public class StartupClass
                         {
                             var short_0 = (short)int.Parse(string_11.Substring(index + 1, num - index - 1));
                             flag = false;
-                            InputController.smethod_9(short_0);
+                            InputController.TapKey(short_0);
                             index = num;
                         }
                         catch (Exception ex)
@@ -896,7 +896,7 @@ public class StartupClass
                 else
                 {
                     flag = false;
-                    InputController.smethod_9(13);
+                    InputController.TapKey(13);
                     Thread.Sleep(700);
                 }
             }
@@ -1451,7 +1451,7 @@ public class StartupClass
             return;
 
         LogMainLoopStep("Auto mode popup dismiss");
-        InputController.smethod_9(27);
+        InputController.TapKey(27);
     }
 
     private static void ApplyBackgroundModeIfNeeded()
