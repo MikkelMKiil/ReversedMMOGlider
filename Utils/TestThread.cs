@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: TestThread
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -33,7 +33,7 @@ public class TestThread
             if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                 StartupClass.GliderManager != null)
             {
-                StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
+                StartupClass.MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
                 StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
                 StartupClass.IsGliderInitialized = true;
                 Logger.LogMessage("Setting up for background mode!");
@@ -184,7 +184,7 @@ public class TestThread
             do
             {
                 Thread.Sleep(100);
-                num2 = GProcessMemoryManipulator.ReadInt32(11257960, "bst");
+                num2 = GameMemoryAccess.ReadInt32(11257960, "bst");
             } while (num2 == num1);
 
             Logger.LogMessage("new value for bst: " + num2);
@@ -366,7 +366,7 @@ public class TestThread
         Logger.LogMessage("Put cursor on item!");
         Thread.Sleep(3000);
         Logger.LogMessage("Cursor Type: " +
-                           GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
+                           GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
     }
 
     private static void smethod_24()

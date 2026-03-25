@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GContainer
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -25,7 +25,7 @@ namespace Glider.Common.Objects
                 var bagContents = new long[SlotCount];
                 var num = _descriptor.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
                 for (var index = 0; index < SlotCount; ++index)
-                    bagContents[index] = GProcessMemoryManipulator.ReadInt64(StorageAddress + num + index * 8, "bagc");
+                    bagContents[index] = GameMemoryAccess.ReadInt64(StorageAddress + num + index * 8, "bagc");
                 return bagContents;
             }
         }

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WebNotificationService
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -220,7 +220,7 @@ public class WebNotificationService
         {
             var element2 = xmlDocument.CreateElement("Player");
             method_12(element2, "Name", GPlayerSelf.Me.Name);
-            method_12(element2, "Realm", GProcessMemoryManipulator.GetProcessExecutablePath());
+            method_12(element2, "Realm", GameMemoryAccess.GetProcessExecutablePath());
             method_12(element2, "Race", ((int)GPlayerSelf.Me.PlayerRace).ToString());
             method_12(element2, "Class", ((int)GPlayerSelf.Me.PlayerClass).ToString());
             method_12(element2, "Level", GPlayerSelf.Me.Level.ToString());
@@ -235,7 +235,7 @@ public class WebNotificationService
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
             method_12(element2, "WorldMap: ",
-                GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("WorldMap"), 100, "WorldMap"));
+                GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset("WorldMap"), 100, "WorldMap"));
             element1.AppendChild(element2);
             var target = GPlayerSelf.Me.Target;
             if (target != null)

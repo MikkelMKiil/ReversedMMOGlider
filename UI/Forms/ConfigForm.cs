@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ConfigForm
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -466,8 +466,8 @@ public class ConfigForm : Form
         method_11();
         method_16();
         method_18();
-        GProcessMemoryManipulator.smethod_48(this);
-        GProcessMemoryManipulator.smethod_51(helpProvider_0);
+        GameMemoryAccess.smethod_48(this);
+        GameMemoryAccess.smethod_51(helpProvider_0);
         StartupClass.gclass54_0.bool_4 = false;
         bool_3 = true;
         StartupClass.MainWindowHandle = this;
@@ -3111,7 +3111,7 @@ public class ConfigForm : Form
         switch (gconfigResult)
         {
             case GConfigResult.NotSupported:
-                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GProcessMemoryManipulator.GenerateRandomString(),
+                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GameMemoryAccess.GenerateRandomString(),
                     MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 break;
             case GConfigResult.Accept:
@@ -3131,7 +3131,7 @@ public class ConfigForm : Form
         var helpString = helpProvider_0.GetHelpString(tabControl1.SelectedTab);
         if (helpString == null || helpString.Length <= 0)
             return;
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
     }
 
     private void StopAfter_CheckedChanged(object sender, EventArgs e)
@@ -3319,7 +3319,7 @@ public class ConfigForm : Form
         groupBox25.Enabled = BackgroundEnable.Checked;
         if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
             return;
-        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
+        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
         BackgroundEnable.Checked = false;
     }
@@ -3422,7 +3422,7 @@ public class ConfigForm : Form
                 {
                     var num = (int)MessageBox.Show(this,
                         "This class cannot be unloaded because it is in use.  Switch Glider to another class in the \"General\" tab before unloading this class.",
-                        GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     e.NewValue = CheckState.Checked;
                     return;
                 }
@@ -3467,8 +3467,8 @@ public class ConfigForm : Form
     private void AccountCreate_Click(object sender, EventArgs e)
     {
         if (Directory.GetFiles("Accounts\\", "*.xml").Length == 0 && MessageBox.Show(this, MessageProvider.GetMessage(867),
-                GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-            GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
+                GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
         var num = (int)new AccountInfo().ShowDialog(this);
         method_16();
     }

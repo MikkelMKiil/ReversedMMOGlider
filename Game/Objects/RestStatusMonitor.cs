@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: RestStatusMonitor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -62,7 +62,7 @@ public class RestStatusMonitor
         if (!gspellTimer_1.IsReady)
             return false;
         gspellTimer_1.Reset();
-        var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage") ??
+        var str = GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage") ??
                   MessageProvider.GetMessage(6);
         Logger.smethod_1(MessageProvider.smethod_2(7, str));
         ++int_1;

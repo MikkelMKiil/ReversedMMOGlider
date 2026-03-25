@@ -1,4 +1,4 @@
-﻿public interface ILogger
+public interface ILogger
 {
     void imethod_0();
 

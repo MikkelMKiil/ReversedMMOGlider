@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: CameraRotator
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -152,7 +152,7 @@ public class CameraRotator
     {
         lock (this)
         {
-            double num1 = GProcessMemoryManipulator.ReadFloat(int_1, "Quickheading");
+            double num1 = GameMemoryAccess.ReadFloat(int_1, "Quickheading");
             var num2 = GContext.Main.Movement.CompareHeadings(num1, double_4);
             if (Math.Abs(num2) < 0.15)
             {
@@ -171,7 +171,7 @@ public class CameraRotator
             var H1 = 0.0;
             while (!gspellTimer.IsReady)
             {
-                H1 = GProcessMemoryManipulator.ReadFloat(int_1, "QuickHeadingCheck");
+                H1 = GameMemoryAccess.ReadFloat(int_1, "QuickHeadingCheck");
                 if (H1 == num1)
                     Thread.Sleep(6);
                 else
@@ -263,7 +263,7 @@ public class CameraRotator
         }
 
         method_0("Moving cursor to center of game window (Relative pos was: " + double_2 + "/" + double_3 + ")");
-        GProcessMemoryManipulator.WorldToScreen(0.5, 0.5, out int_4, out int_5);
+        GameMemoryAccess.WorldToScreen(0.5, 0.5, out int_4, out int_5);
         method_14(int_4, int_5);
         Thread.Sleep(201);
     }

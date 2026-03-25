@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: SecurityDescriptorHelper
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -107,7 +107,7 @@ public class SecurityDescriptorHelper
     public bool method_1()
     {
         method_0();
-        var intptr_0_1 = OpenProcess(2035711U, false, GProcessMemoryManipulator.GetCurrentProcessId());
+        var intptr_0_1 = OpenProcess(2035711U, false, GameMemoryAccess.GetCurrentProcessId());
         IntPtr intptr_5;
         var securityInfo = GetSecurityInfo(intptr_0_1, 6, 4, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
             out intptr_5);

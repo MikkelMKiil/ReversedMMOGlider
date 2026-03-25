@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: StartupClass
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -644,7 +644,7 @@ public class StartupClass
 
     public static void smethod_13()
     {
-        GProcessMemoryManipulator.bool_2 = false;
+        GameMemoryAccess.bool_2 = false;
         bool_13 = false;
         if (!smethod_44())
             return;
@@ -664,7 +664,7 @@ public class StartupClass
         {
             IsForegroundEnabled = false;
             gclass36_2.method_4();
-            GProcessMemoryManipulator.bool_2 = false;
+            GameMemoryAccess.bool_2 = false;
             gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
             gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
             gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
@@ -713,9 +713,9 @@ public class StartupClass
         bool_20 = false;
         bool_32 = true;
         Logger.smethod_1("AppContext.Detach invoked");
-        if (int_12 == 0 && !GProcessMemoryManipulator.smethod_56(AnotherIntegerValue))
+        if (int_12 == 0 && !GameMemoryAccess.smethod_56(AnotherIntegerValue))
         {
-            GProcessMemoryManipulator.CloseProcessHandle(AdditionalApplicationHandle);
+            GameMemoryAccess.CloseProcessHandle(AdditionalApplicationHandle);
             AdditionalApplicationHandle = IntPtr.Zero;
             AnotherIntegerValue = 0;
         }
@@ -870,7 +870,7 @@ public class StartupClass
     public static void smethod_22()
     {
         smethod_39(500);
-        GProcessMemoryManipulator.SetForegroundWindow(MainApplicationHandle);
+        GameMemoryAccess.SetForegroundWindow(MainApplicationHandle);
         smethod_39(500);
     }
 
@@ -1273,7 +1273,7 @@ public class StartupClass
         if (bool_30 && bool_27)
         {
             smethod_63("Security handshake check");
-            GProcessMemoryManipulator.smethod_53();
+            GameMemoryAccess.smethod_53();
             if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
                 GameMemoryWriter.method_2("OnGliderStart", false);
         }
@@ -1291,8 +1291,8 @@ public class StartupClass
         {
             smethod_63("Process probe timer fired");
             SpellCooldownTimer.Reset();
-            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
-            GProcessMemoryManipulator.GetProcessId();
+            GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
+            GameMemoryAccess.GetProcessId();
         }
 
         if (bool_38 && !IsAttached && !bool_37)
@@ -1419,7 +1419,7 @@ public class StartupClass
 
     public static bool smethod_44()
     {
-        AnotherIntegerValue = GProcessMemoryManipulator.AttachToWowProcess();
+        AnotherIntegerValue = GameMemoryAccess.AttachToWowProcess();
         if (AnotherIntegerValue == 0)
         {
             if (!bool_35)
@@ -1433,7 +1433,7 @@ public class StartupClass
         IsGliderAttached = true;
         if (AdditionalApplicationHandle == IntPtr.Zero && !bool_14)
         {
-            AdditionalApplicationHandle = GProcessMemoryManipulator.OpenProcessHandle(AnotherIntegerValue);
+            AdditionalApplicationHandle = GameMemoryAccess.OpenProcessHandle(AnotherIntegerValue);
             if (AdditionalApplicationHandle == IntPtr.Zero)
             {
                 if (!IsGliderPaused)
@@ -1445,19 +1445,19 @@ public class StartupClass
                 return false;
             }
 
-            GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
+            GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
             if (GliderManager != null && !GliderManager.method_26(AnotherIntegerValue))
             {
                 Logger.LogMessage(
                     "Some other Glider is already open on that game, maybe we'll attach to some other one");
                 CloseHandle(AdditionalApplicationHandle);
                 AdditionalApplicationHandle = IntPtr.Zero;
-                GProcessMemoryManipulator.SetProcessId(AnotherIntegerValue);
+                GameMemoryAccess.SetProcessId(AnotherIntegerValue);
                 AnotherIntegerValue = 0;
                 return false;
             }
 
-            GProcessMemoryManipulator.GetProcessId();
+            GameMemoryAccess.GetProcessId();
             if (GameMemoryWriter != null)
                 GameMemoryWriter.method_2("OnGameFirstSeen", false);
         }
@@ -1465,7 +1465,7 @@ public class StartupClass
         if (IsAttached)
             return true;
         var int_14 = MemoryOffsetTable.Instance.GetIntOffset("UIParent");
-        if (int_14 > 0 && GProcessMemoryManipulator.ReadInt32(int_14, "probeuip") == 0 && !bool_20 &&
+        if (int_14 > 0 && GameMemoryAccess.ReadInt32(int_14, "probeuip") == 0 && !bool_20 &&
             ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
@@ -1480,7 +1480,7 @@ public class StartupClass
 
         if (MemoryOffsetTable.Instance.HasOffset("TLSSlot") && MemoryOffsetTable.Instance.GetIntOffset("TLSSlot") > 0)
         {
-            if (GProcessMemoryManipulator.smethod_52(out long_0, out int_5) && long_0 != 0L)
+            if (GameMemoryAccess.smethod_52(out long_0, out int_5) && long_0 != 0L)
             {
                 if (GObjectList.StealthCountGameObjects(long_0) > 0)
                     return true;
@@ -1492,12 +1492,12 @@ public class StartupClass
             }
         }
         long_0 = 0L;
-        var int_18 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
+        var int_18 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
         var int_19 = int_18;
         if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
         {
             var int_20 = MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe");
-            var int_21 = GProcessMemoryManipulator.ReadInt32(int_18 + int_20, "MainTableProbe");
+            var int_21 = GameMemoryAccess.ReadInt32(int_18 + int_20, "MainTableProbe");
             var int_22 = int_18 + int_20;
             if (smethod_62(int_21))
                 int_19 = int_21;
@@ -1520,10 +1520,10 @@ public class StartupClass
             : 24;
         if (int_23 > 0)
         {
-            var int_24 = GProcessMemoryManipulator.ReadInt32(int_5 + int_23, "MainTableActivePlayer");
+            var int_24 = GameMemoryAccess.ReadInt32(int_5 + int_23, "MainTableActivePlayer");
             if (isLikelyObjectAddress(int_24))
             {
-                var int64_1 = GProcessMemoryManipulator.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
+                var int64_1 = GameMemoryAccess.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
                 if (int64_1 != 0L)
                 {
                     long_0 = int64_1;
@@ -1539,7 +1539,7 @@ public class StartupClass
             : 40;
         if (!bool_42 && int_25 > 0)
         {
-            var int64_2 = GProcessMemoryManipulator.ReadInt64(int_5 + int_25, "MainTableLocalGuid");
+            var int64_2 = GameMemoryAccess.ReadInt64(int_5 + int_25, "MainTableLocalGuid");
             if (int64_2 != 0L)
             {
                 long_0 = int64_2;
@@ -1563,7 +1563,7 @@ public class StartupClass
                 if (candidateAddress == 0)
                     continue;
 
-                var playerGuidBytes = GProcessMemoryManipulator.ReadBytesRaw(candidateAddress, 8);
+                var playerGuidBytes = GameMemoryAccess.ReadBytesRaw(candidateAddress, 8);
                 if (playerGuidBytes == null)
                     continue;
 
@@ -1610,7 +1610,7 @@ public class StartupClass
     {
         if ((objectAddress & 1) != 0 || objectAddress == 0 || objectAddress == 28 || objectAddress < 65536)
             return false;
-        var objectTypeBytes = GProcessMemoryManipulator.ReadBytesRaw(objectAddress + 20, 4);
+        var objectTypeBytes = GameMemoryAccess.ReadBytesRaw(objectAddress + 20, 4);
         if (objectTypeBytes == null || objectTypeBytes.Length < 4)
             return false;
         var objectType = BitConverter.ToInt32(objectTypeBytes, 0);
@@ -1621,10 +1621,10 @@ public class StartupClass
     {
         if (int_14 == 0)
             return false;
-        var firstObjectAddress = GProcessMemoryManipulator.ReadInt32(int_14 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset"), "MainTableFirstProbe");
+        var firstObjectAddress = GameMemoryAccess.ReadInt32(int_14 + MemoryOffsetTable.Instance.GetIntOffset("InitialOffset"), "MainTableFirstProbe");
         if ((firstObjectAddress & 1) != 0 || firstObjectAddress == 0 || firstObjectAddress == 28 || firstObjectAddress < 65536)
             return false;
-        var objectType = GProcessMemoryManipulator.ReadInt32(firstObjectAddress + 20, "MainTableFirstTypeProbe");
+        var objectType = GameMemoryAccess.ReadInt32(firstObjectAddress + 20, "MainTableFirstTypeProbe");
         return objectType >= 1 && objectType <= 7;
     }
 
@@ -1652,7 +1652,7 @@ public class StartupClass
     {
         if (bool_40)
             return;
-        GProcessMemoryManipulator.SetForegroundWindow(MainApplicationHandle);
+        GameMemoryAccess.SetForegroundWindow(MainApplicationHandle);
         bool_40 = true;
     }
 
@@ -1661,9 +1661,9 @@ public class StartupClass
         if (bool_41)
             return;
         double width = ConfigManager.gclass61_0.method_3("ShrinkWidth");
-        GProcessMemoryManipulator.GetWindowSize(MainApplicationHandle, out size_0);
+        GameMemoryAccess.GetWindowSize(MainApplicationHandle, out size_0);
         var height = size_0.Height / (double)size_0.Width * width;
-        GProcessMemoryManipulator.SetWindowSize(MainApplicationHandle, new Size((int)width, (int)height));
+        GameMemoryAccess.SetWindowSize(MainApplicationHandle, new Size((int)width, (int)height));
         bool_41 = true;
     }
 
@@ -1671,7 +1671,7 @@ public class StartupClass
     {
         if (!bool_40)
             return;
-        GProcessMemoryManipulator.ShowWindow(MainApplicationHandle);
+        GameMemoryAccess.ShowWindow(MainApplicationHandle);
         bool_40 = false;
     }
 
@@ -1679,7 +1679,7 @@ public class StartupClass
     {
         if (!bool_41)
             return;
-        GProcessMemoryManipulator.SetWindowSize(MainApplicationHandle, size_0);
+        GameMemoryAccess.SetWindowSize(MainApplicationHandle, size_0);
         bool_41 = false;
     }
 
@@ -1825,7 +1825,7 @@ public class StartupClass
 
     private static void smethod_60()
     {
-        if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
+        if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         smethod_58();
@@ -1842,7 +1842,7 @@ public class StartupClass
         }
         else
         {
-            if (MessageBox.Show(MainForm, MessageProvider.GetMessage(876), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
+            if (MessageBox.Show(MainForm, MessageProvider.GetMessage(876), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
                     MessageBoxIcon.Exclamation) != DialogResult.Yes)
                 return;
             Process.Start("http://www.mmoglider.com/Download.aspx?Update=True");
@@ -1854,7 +1854,7 @@ public class StartupClass
         if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
         {
             Logger.smethod_1("Setting up bg stuff");
-            MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(AnotherIntegerValue);
+            MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(AnotherIntegerValue);
             GliderManager.method_34(AnotherIntegerValue, MainApplicationHandle);
             IsGliderInitialized = true;
         }
@@ -1867,19 +1867,19 @@ public class StartupClass
     public static string smethod_63(int int_14)
     {
         var num1 = MemoryOffsetTable.Instance.GetIntOffset("MacroBase");
-        var num2 = GProcessMemoryManipulator.ReadInt32(num1 + 36, "mbase");
+        var num2 = GameMemoryAccess.ReadInt32(num1 + 36, "mbase");
         int int_29_1;
         for (var int_29_2 =
-                 GProcessMemoryManipulator.ReadInt32(GProcessMemoryManipulator.ReadInt32(num1 + 28, "mbase2") + 12 * (int_14 & num2) + 8, "mbase3");
+                 GameMemoryAccess.ReadInt32(GameMemoryAccess.ReadInt32(num1 + 28, "mbase2") + 12 * (int_14 & num2) + 8, "mbase3");
              int_29_2 > 0 && (int_29_2 & 1) == 0;
-             int_29_2 = GProcessMemoryManipulator.ReadInt32(int_29_2 + GProcessMemoryManipulator.ReadInt32(int_29_1, "mnext3") + 4, "mnext4"))
+             int_29_2 = GameMemoryAccess.ReadInt32(int_29_2 + GameMemoryAccess.ReadInt32(int_29_1, "mnext3") + 4, "mnext4"))
         {
-            var num3 = GProcessMemoryManipulator.ReadInt32(int_29_2, "mstep");
-            var str = GProcessMemoryManipulator.ReadString(int_29_2 + 36, 64, "mname");
+            var num3 = GameMemoryAccess.ReadInt32(int_29_2, "mstep");
+            var str = GameMemoryAccess.ReadString(int_29_2 + 36, 64, "mname");
             if (num3 == int_14)
                 return str;
-            int_29_1 = GProcessMemoryManipulator.ReadInt32(num1 + 28, "mnext1") +
-                       12 * (GProcessMemoryManipulator.ReadInt32(num1 + 36, "mnext2") & int_14);
+            int_29_1 = GameMemoryAccess.ReadInt32(num1 + 28, "mnext1") +
+                       12 * (GameMemoryAccess.ReadInt32(num1 + 36, "mnext2") & int_14);
         }
 
         return "(could not find macro in list!)";

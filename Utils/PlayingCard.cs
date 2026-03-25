@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PlayingCard
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -58,15 +58,15 @@ public class PlayingCard
 
     public void method_0()
     {
-        var num1 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_11, "md1");
+        var num1 = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_11, "md1");
         int_2 = num1 / 13;
         int_1 = num1 % 13;
         int_3 = 0;
         int_4 = 0;
-        var num2 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_14, "md2");
-        int_3 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_15, "md3");
-        int_4 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_16, "md4");
-        bool_0 = GProcessMemoryManipulator.ReadByte(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
+        var num2 = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_14, "md2");
+        int_3 = GameMemoryAccess.ReadInt32(num2 + SolitaireMemoryOffsets.int_15, "md3");
+        int_4 = GameMemoryAccess.ReadInt32(num2 + SolitaireMemoryOffsets.int_16, "md4");
+        bool_0 = GameMemoryAccess.ReadByte(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
     }
 
     // Removed the incomplete line at line 71

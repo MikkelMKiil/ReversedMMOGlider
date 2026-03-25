@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyTrademark("")]

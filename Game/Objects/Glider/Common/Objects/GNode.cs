@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GNode
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -75,19 +75,19 @@ namespace Glider.Common.Objects
         protected void SetDisplayInfo()
         {
             _displayInfo = "(unknown)";
-            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfo"), "InfoBase");
+            var num1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfo"), "InfoBase");
             var storageInt = GetStorageInt("GAMEOBJECT_DISPLAYID");
-            var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfoSub"), "InfoBaseSub");
+            var num2 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ObjectInfoSub"), "InfoBaseSub");
             if (storageInt < num2)
                 return;
-            var num3 = GProcessMemoryManipulator.ReadInt32(num1 + (storageInt - num2) * 4, "InfoThisGuy");
+            var num3 = GameMemoryAccess.ReadInt32(num1 + (storageInt - num2) * 4, "InfoThisGuy");
             if (num3 == 0 || num3 < 8388608)
                 return;
-            var int_29 = GProcessMemoryManipulator.ReadInt32(num3 + 4, "InfoDisplayPtr");
+            var int_29 = GameMemoryAccess.ReadInt32(num3 + 4, "InfoDisplayPtr");
             if (int_29 == 0)
                 _displayInfo = "(null)";
             else
-                _displayInfo = GProcessMemoryManipulator.ReadString(int_29, 128, "DisplayInfo").ToLower();
+                _displayInfo = GameMemoryAccess.ReadString(int_29, 128, "DisplayInfo").ToLower();
         }
 
         protected override void SetName()
@@ -95,10 +95,10 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("NodeName");
             if (baseInt == 0)
                 return;
-            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("NodeNameSecond"), "noden2");
+            var int_29 = GameMemoryAccess.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("NodeNameSecond"), "noden2");
             if (int_29 == 0)
                 return;
-            _name = GProcessMemoryManipulator.ReadString(int_29, 64, "nodename");
+            _name = GameMemoryAccess.ReadString(int_29, 64, "nodename");
         }
     }
 }

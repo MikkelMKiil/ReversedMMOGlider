@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GClass43
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -9,6 +9,7 @@ using System.Collections;
 
 public class OffsetManager
 {
+    private const int DescriptorEndMask = 1073741824;
     private readonly int initialOffset;
     private readonly SortedList OffsetList;
     private string descriptorName;
@@ -18,7 +19,6 @@ public class OffsetManager
         this.descriptorName = descriptorName;
         this.initialOffset = initialOffset;
         OffsetList = new SortedList();
-        PopulateOffsetList();
     }
 
     public void PopulateOffsetList()
@@ -27,10 +27,10 @@ public class OffsetManager
         var descriptorCount = 0;
         while (true)
         {
-            var descriptorStringPtr = GProcessMemoryManipulator.ReadInt32(currentOffset, "DescriptorStringPtr");
-            if ((descriptorStringPtr & 1073741824) != 1073741824)
+            var descriptorStringPtr = GameMemoryAccess.ReadInt32(currentOffset, "DescriptorStringPtr");
+            if ((descriptorStringPtr & DescriptorEndMask) != DescriptorEndMask)
             {
-                var descriptorKey = GProcessMemoryManipulator.ReadString(descriptorStringPtr, 64, "DescriptorString");
+                var descriptorKey = GameMemoryAccess.ReadString(descriptorStringPtr, 64, "DescriptorString");
                 switch (descriptorKey)
                 {
                     case null:

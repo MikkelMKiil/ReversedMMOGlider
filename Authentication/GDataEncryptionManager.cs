@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GDataEncryptionManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -112,7 +112,7 @@ public class GDataEncryptionManager
 
         WriteIntToStream(StartupClass.int_4);
         WriteStringToStream(ConfigManager.gclass61_0.method_2("AppKey"));
-        if (GProcessMemoryManipulator.bool_3)
+        if (GameMemoryAccess.bool_3)
             WriteIntToStream(int_3_1);
         else
             WriteIntToStream(int_3_1 + 100000);

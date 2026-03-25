@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GObjectList
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -103,12 +103,19 @@ namespace Glider.Common.Objects
                         {
                             goto label_15;
                         }
-                        BaseAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 60, "GameObjNext");
+                        BaseAddress = GameMemoryAccess.ReadInt32(BaseAddress + 60, "GameObjNext");
                     } while (!LogObjects);
 
                     goto label_13;
                 label_7:
-                    LastSnapshot[guid].FrameNumber = FrameNumber;
+                    var existingObject = LastSnapshot[guid];
+                    if (existingObject.BaseAddress != BaseAddress)
+                    {
+                        existingObject.BaseAddress = BaseAddress;
+                        existingObject.StorageAddress = GameMemoryAccess.ReadInt32(BaseAddress + 8, "GameObjStorage");
+                    }
+
+                    existingObject.FrameNumber = FrameNumber;
                     continue;
                 label_13:
                     Logger.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
@@ -119,7 +126,7 @@ namespace Glider.Common.Objects
                     : 24;
                 if (int5 != 0 && num3 > 0)
                 {
-                    var num2 = GProcessMemoryManipulator.ReadInt32(int5 + num3, "MainTableActivePlayerObj");
+                    var num2 = GameMemoryAccess.ReadInt32(int5 + num3, "MainTableActivePlayerObj");
                     if (IsLikelyObjectPointer(num2))
                     {
                         var guid1 = QuickGetGUID(num2);
@@ -135,7 +142,14 @@ namespace Glider.Common.Objects
                             }
                             else
                             {
-                                LastSnapshot[guid1].FrameNumber = FrameNumber;
+                                var activePlayer = LastSnapshot[guid1];
+                                if (activePlayer.BaseAddress != num2)
+                                {
+                                    activePlayer.BaseAddress = num2;
+                                    activePlayer.StorageAddress = GameMemoryAccess.ReadInt32(num2 + 8, "GameObjStorage");
+                                }
+
+                                activePlayer.FrameNumber = FrameNumber;
                             }
 
                             GContext.Main.Me = (GPlayerSelf)LastSnapshot[guid1];
@@ -233,7 +247,7 @@ namespace Glider.Common.Objects
 
         private static long QuickGetGUID(int BaseAddress)
         {
-            return GProcessMemoryManipulator.ReadInt64(BaseAddress + 48, "QuickGUID");
+            return GameMemoryAccess.ReadInt64(BaseAddress + 48, "QuickGUID");
         }
 
         public static GUnit FindUnit(long GUID)
@@ -558,14 +572,14 @@ namespace Glider.Common.Objects
                 }
                 if ((num3 & 1) == 0 && num3 != 0 && num3 != 28)
                 {
-                    if (GProcessMemoryManipulator.ReadInt64(num3 + 48, "GameObjGUID") == SeekPlayerID)
+                    if (GameMemoryAccess.ReadInt64(num3 + 48, "GameObjGUID") == SeekPlayerID)
                     {
                         Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;
                     }
 
                     ++num1;
-                    num3 = GProcessMemoryManipulator.ReadInt32(num3 + 60, "GameObjNext");
+                    num3 = GameMemoryAccess.ReadInt32(num3 + 60, "GameObjNext");
                 }
                 else
                 {
@@ -600,22 +614,22 @@ namespace Glider.Common.Objects
                 }
                 if ((num & 1) != 0 || num == 0 || num == 28)
                     break;
-                if (GProcessMemoryManipulator.ReadInt32(num + 20, "QuickType") == 4)
+                if (GameMemoryAccess.ReadInt32(num + 20, "QuickType") == 4)
                 {
-                    var int64 = GProcessMemoryManipulator.ReadInt64(num + 48, "GameObjGUID");
+                    var int64 = GameMemoryAccess.ReadInt64(num + 48, "GameObjGUID");
                     if (int64 != 0L)
                     {
                         if (int64 <= 4096L)
                         {
                             Logger.smethod_1("Attach probe note: inferred low player GUID candidate = 0x" + int64.ToString("x"));
-                            num = GProcessMemoryManipulator.ReadInt32(num + 60, "GameObjNext");
+                            num = GameMemoryAccess.ReadInt32(num + 60, "GameObjNext");
                             continue;
                         }
                         guid_0 = int64;
                         return true;
                     }
                 }
-                num = GProcessMemoryManipulator.ReadInt32(num + 60, "GameObjNext");
+                num = GameMemoryAccess.ReadInt32(num + 60, "GameObjNext");
             }
 
             return false;
@@ -624,7 +638,7 @@ namespace Glider.Common.Objects
         private static int GetFirstObjectPointer(int int_0)
         {
             var initialOffset = MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
-            var firstObjectPointer = GProcessMemoryManipulator.ReadInt32(int_0 + initialOffset, "GameObjFirst");
+            var firstObjectPointer = GameMemoryAccess.ReadInt32(int_0 + initialOffset, "GameObjFirst");
             return IsLikelyObjectPointer(firstObjectPointer) ? firstObjectPointer : 0;
         }
 
@@ -632,7 +646,7 @@ namespace Glider.Common.Objects
         {
             if ((int_0 & 1) != 0 || int_0 == 0 || int_0 == 28 || int_0 < 65536)
                 return false;
-            var objectType = GProcessMemoryManipulator.ReadBytesRaw(int_0 + 20, 4);
+            var objectType = GameMemoryAccess.ReadBytesRaw(int_0 + 20, 4);
             if (objectType == null || objectType.Length < 4)
                 return false;
             var quickType = BitConverter.ToInt32(objectType, 0);

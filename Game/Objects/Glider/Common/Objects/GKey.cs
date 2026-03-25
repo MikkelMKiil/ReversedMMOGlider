@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GKey
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -103,7 +103,7 @@ namespace Glider.Common.Objects
         public void EnsureBar()
         {
             var gbarState =
-                (GBarState)(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "curbar") + 3);
+                (GBarState)(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "curbar") + 3);
             if (BarState == GBarState.Indifferent || BarState == gbarState)
                 return;
             if (BarState == GBarState.Combat)
@@ -320,7 +320,7 @@ namespace Glider.Common.Objects
             if (SIM == 0)
                 return null;
             var StartSlotIndex = 1;
-            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "abcurrent");
+            var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "abcurrent");
             if (num == 0)
             {
                 var stance = GPlayerSelf.Me.Stance;

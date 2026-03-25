@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GlideMainThread
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -64,7 +64,14 @@ public class GlideMainThread
             StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
         }
 
-        var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);
+        var player = GPlayerSelf.Me ?? gplayerSelf_0;
+        if (player == null)
+        {
+            Logger.LogMessage("Unable to acquire player object for one-kill action");
+            return;
+        }
+
+        var unit = GObjectList.FindUnit(player.TargetGUID);
         if (unit == null)
         {
             Logger.LogMessage(MessageProvider.GetMessage(306));

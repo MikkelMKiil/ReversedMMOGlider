@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ProfileProps
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -121,7 +121,7 @@ public class ProfileProps : Form
 
         method_4();
         MessageProvider.smethod_3(this, nameof(ProfileProps));
-        GProcessMemoryManipulator.smethod_48(this);
+        GameMemoryAccess.smethod_48(this);
         if (gprofile_0 == null)
             return;
         if (gprofile_1.Waypoints.Count > 0)
@@ -761,7 +761,7 @@ public class ProfileProps : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Profiles.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Profiles.html");
     }
 
     private void ClearGhostWaypoints_Click(object sender, EventArgs e)

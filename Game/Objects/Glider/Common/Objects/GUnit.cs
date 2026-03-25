@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GUnit
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -85,17 +85,7 @@ namespace Glider.Common.Objects
             get
             {
                 if (_reaction == GReaction.Unknown)
-                    try
-                    {
-                        _reaction = GetReaction(false);
-                    }
-                    catch (MemoryReadException ex)
-                    {
-                        Logger.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
-                                           ")");
-                        Cull();
-                        _reaction = GReaction.Unknown;
-                    }
+                    _reaction = GetReaction(false);
 
                 return _reaction;
             }
@@ -260,7 +250,7 @@ namespace Glider.Common.Objects
         public bool IsInMeleeRange => DistanceToSelf <= GContext.Main.MeleeDistance;
 
         public bool IsCursorOnUnit =>
-            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
+            GameMemoryAccess.ReadUnderCursorGuid() == GUID;
 
         public bool IsFacingAway =>
             Math.Abs(GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading)) < Math.PI / 2.0;
@@ -326,7 +316,7 @@ namespace Glider.Common.Objects
             {
                 var num = MemoryOffsetTable.Instance.GetIntOffset(nameof(RaidTargetIcon));
                 for (var index = 0; index < 8; ++index)
-                    if (GProcessMemoryManipulator.ReadInt64(num + index * 8, "rti") == GUID)
+                    if (GameMemoryAccess.ReadRaidTargetGuid(num, index) == GUID)
                         return (GRaidTargetIcon)(index + 1);
                 return GRaidTargetIcon.NotSpecified;
             }
@@ -378,15 +368,14 @@ namespace Glider.Common.Objects
             if (GUID == StartupClass.long_0)
             {
                 if (MemoryOffsetTable.Instance.HasOffset("PlayerCasting"))
-                    _castingID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCasting"), "PlayerCasting");
+                    _castingID = GameMemoryAccess.ReadPlayerCasting();
                 if (MemoryOffsetTable.Instance.HasOffset("PlayerCastingAlt"))
-                    _channelingSpellID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCastingAlt"), "PlayerCastingAlt");
+                    _channelingSpellID = GameMemoryAccess.ReadPlayerCastingAlt();
             }
             _monsterDefinition = GetBaseInt("MonsterDefinition");
             _creatureType = _monsterDefinition == 0
                 ? GCreatureType.NoDefinition
-                : (GCreatureType)GProcessMemoryManipulator.ReadInt32(_monsterDefinition + MemoryOffsetTable.Instance.GetIntOffset("CreatureType"),
-                    "rct");
+                : (GCreatureType)GameMemoryAccess.ReadCreatureType(_monsterDefinition);
             var storageFloat1 = GetStorageFloat("UNIT_FIELD_POWER5");
             var storageFloat2 = GetStorageFloat("UNIT_FIELD_MAXPOWER5");
             _happiness = storageFloat2 != 0.0 ? storageFloat1 / (double)storageFloat2 : 0.0;
@@ -399,10 +388,10 @@ namespace Glider.Common.Objects
             _lastHealthPoints = _healthPoints;
             if ((_dflags & 1) > 0)
                 _wasLootable = true;
-            _movementFlags1 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags"), "movefl");
-            var num = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveStruct2"), "movest2");
+            _movementFlags1 = GameMemoryAccess.ReadMovementFlags1(BaseAddress);
+            var num = GameMemoryAccess.ReadMoveStruct2(BaseAddress);
             if (num != 0)
-                _movementFlags2 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags2"), "movefl2");
+                _movementFlags2 = GameMemoryAccess.ReadMovementFlags2(num);
             else
                 _movementFlags2 = 0;
         }
@@ -649,13 +638,9 @@ namespace Glider.Common.Objects
 
         protected int GetFactionGroupRow(int CheckBaseAddress)
         {
-            var num1 = GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionSub"), "facsub");
-            var num2 = GProcessMemoryManipulator.ReadIntFromOffset(
-                GProcessMemoryManipulator.ReadIntFromOffset(CheckBaseAddress + MemoryOffsetTable.Instance.GetIntOffset("FactionOff1"), "fac1") +
-                MemoryOffsetTable.Instance.GetIntOffset("FactionOff2"), "fac2");
-            return GProcessMemoryManipulator.ReadIntFromOffset(
-                GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionBase"), "fac3") + (num2 - num1) * 4,
-                "faclookup");
+            var num1 = GameMemoryAccess.ReadFactionSub();
+            var num2 = GameMemoryAccess.ReadFactionOff2(GameMemoryAccess.ReadFactionOff1(CheckBaseAddress));
+            return GameMemoryAccess.ReadFactionLookup(GameMemoryAccess.ReadFactionBase(), num2 - num1);
         }
 
         protected GReaction GetReaction(bool Debug)
@@ -674,8 +659,8 @@ namespace Glider.Common.Objects
                                   factionGroupRow2.ToString("x8"));
             if (factionGroupRow1 != 0 && factionGroupRow2 != 0)
             {
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf0") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 20, "rf1")) > 0)
+                if ((GameMemoryAccess.ReadReactionValue(factionGroupRow1 + 12, "rf0") &
+                     GameMemoryAccess.ReadReactionValue(factionGroupRow2 + 20, "rf1")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Hostile at first hostile check");
@@ -685,10 +670,10 @@ namespace Glider.Common.Objects
                 var int_29_1 = factionGroupRow2 + 24;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_1, "rf2");
+                    var num = GameMemoryAccess.ReadReactionValue(int_29_1, "rf2");
                     if (num != 0)
                     {
-                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf3"))
+                        if (num != GameMemoryAccess.ReadReactionValue(factionGroupRow1 + 4, "rf3"))
                         {
                             int_29_1 += 4;
                         }
@@ -705,8 +690,8 @@ namespace Glider.Common.Objects
                     }
                 }
 
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf4") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 16, "rf5")) > 0)
+                if ((GameMemoryAccess.ReadReactionValue(factionGroupRow1 + 12, "rf4") &
+                     GameMemoryAccess.ReadReactionValue(factionGroupRow2 + 16, "rf5")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Friendly at first friendly check");
@@ -716,10 +701,10 @@ namespace Glider.Common.Objects
                 var int_29_2 = factionGroupRow2 + 40;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_2, "rf6");
+                    var num = GameMemoryAccess.ReadReactionValue(int_29_2, "rf6");
                     if (num != 0)
                     {
-                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf7"))
+                        if (num != GameMemoryAccess.ReadReactionValue(factionGroupRow1 + 4, "rf7"))
                         {
                             int_29_2 += 4;
                         }
@@ -736,8 +721,8 @@ namespace Glider.Common.Objects
                     }
                 }
 
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 20, "rf8") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 12, "rf9")) > 0)
+                if ((GameMemoryAccess.ReadReactionValue(factionGroupRow1 + 20, "rf8") &
+                     GameMemoryAccess.ReadReactionValue(factionGroupRow2 + 12, "rf9")) > 0)
                 {
                     if (Debug)
                         GContext.Main.Log("Friendly at third friendly check");
@@ -747,10 +732,10 @@ namespace Glider.Common.Objects
                 var int_29_3 = factionGroupRow1 + 40;
                 for (var index = 0; index < 4; ++index)
                 {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_3, "rfa");
+                    var num = GameMemoryAccess.ReadReactionValue(int_29_3, "rfa");
                     if (num != 0)
                     {
-                        if (num == GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 4, "rfb"))
+                        if (num == GameMemoryAccess.ReadReactionValue(factionGroupRow2 + 4, "rfb"))
                         {
                             if (Debug)
                                 GContext.Main.Log("Friendly at fourth friendly check");
@@ -866,9 +851,9 @@ namespace Glider.Common.Objects
             var num3 = 14;
             var num4 = 12;
             var num5 = 128;
-            var num6 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
+            var num6 = GameMemoryAccess.ReadNewBuffBaseCount(BaseAddress);
             var num7 = BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseList");
-            var num8 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
+            var num8 = GameMemoryAccess.ReadNewBuffExtCount(BaseAddress);
             if (num6 < 0 || num6 > 256)
             {
                 LoadBuffListOld();
@@ -877,7 +862,7 @@ namespace Glider.Common.Objects
             if (num8 > 0)
             {
                 num6 = num8;
-                num7 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
+                num7 = GameMemoryAccess.ReadNewBuffExtPointer(BaseAddress);
                 if (num6 < 0 || num6 > 256 || num7 == 0)
                 {
                     LoadBuffListOld();
@@ -888,12 +873,12 @@ namespace Glider.Common.Objects
             for (var index = 0; index < num6; ++index)
             {
                 var num9 = num7 + index * num1;
-                var SpellID = GProcessMemoryManipulator.ReadInt32(num9 + num2, "buffsid");
+                var SpellID = GameMemoryAccess.ReadNewBuffSpellId(num9, num2);
                 if (SpellID > 0 && SpellID < 200000)
                 {
                     var IsHarmful = false;
-                    int ChargesLeft = GProcessMemoryManipulator.ReadByte(num9 + num3, "buffchgs");
-                    if ((GProcessMemoryManipulator.ReadByte(num9 + num4, "buffflgs") & num5) > 0)
+                    int ChargesLeft = GameMemoryAccess.ReadNewBuffCharges(num9, num3);
+                    if ((GameMemoryAccess.ReadNewBuffFlags(num9, num4) & num5) > 0)
                         IsHarmful = true;
                     if (SpellID != 0)
                         gbuffList.Add(new GBuff(SpellID, ChargesLeft, IsHarmful));
@@ -920,7 +905,7 @@ namespace Glider.Common.Objects
                 num1 = 40;
             for (var index = 0; index < 56; ++index)
             {
-                var SpellID = GProcessMemoryManipulator.ReadInt32(num2 + index * 4, "BuffSpell" + index);
+                var SpellID = GameMemoryAccess.ReadOldBuffSpellId(num2, index);
                 var IsHarmful = index >= num1 && index < num1 + 16;
                 if (SpellID > 0 && SpellID < 200000)
                     gbuffList.Add(new GBuff(SpellID, 0, IsHarmful));

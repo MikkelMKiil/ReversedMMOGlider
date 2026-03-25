@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ProcessInfo
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -18,6 +18,6 @@ public class ProcessInfo
 
     public void method_0()
     {
-        GProcessMemoryManipulator.smethod_55(int_0);
+        GameMemoryAccess.smethod_55(int_0);
     }
 }

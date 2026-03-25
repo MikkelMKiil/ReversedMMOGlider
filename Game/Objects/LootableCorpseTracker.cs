@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: LootableCorpseTracker
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -272,7 +272,7 @@ public class LootableCorpseTracker
         var flag3 = false;
         while (!gspellTimer4.IsReadySlow)
         {
-            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "lwprobe");
+            var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "lwprobe");
             if (num != 0 || !flag3)
             {
                 if (num != 0)

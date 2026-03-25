@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: CardStack
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -24,19 +24,19 @@ public class CardStack
 
     public void method_0()
     {
-        var length = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_9, "md10");
+        var length = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_9, "md10");
         gclass7_0 = new PlayingCard[length];
         for (var index = 0; index < length; ++index)
         {
-            var int_5 = GProcessMemoryManipulator.ReadInt32(GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_10, "md11") + 4 * index, "md12");
+            var int_5 = GameMemoryAccess.ReadInt32(GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_10, "md11") + 4 * index, "md12");
             gclass7_0[index] = new PlayingCard(int_5, this);
         }
 
         int_1 = 0;
         int_2 = 0;
-        var num = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_13, "md13");
-        int_1 = GProcessMemoryManipulator.ReadInt32(num + SolitaireMemoryOffsets.int_15, "md14");
-        int_2 = GProcessMemoryManipulator.ReadInt32(num + SolitaireMemoryOffsets.int_16, "md15");
+        var num = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_13, "md13");
+        int_1 = GameMemoryAccess.ReadInt32(num + SolitaireMemoryOffsets.int_15, "md14");
+        int_2 = GameMemoryAccess.ReadInt32(num + SolitaireMemoryOffsets.int_16, "md15");
     }
 
     public void method_1(string string_0)

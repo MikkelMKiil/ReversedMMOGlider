@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GInterfaceHelper
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -25,20 +25,20 @@ namespace Glider.Common.Objects
         {
             get
             {
-                var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
-                var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
+                var num1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
+                var num2 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
                 var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
                 var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
-                var num3 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
-                var num4 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
+                var num3 = GameMemoryAccess.ReadInt32(int_29_1, "uigm1");
+                var num4 = GameMemoryAccess.ReadInt32(int_29_2, "uigm2");
                 return num3 == num4 && num3 != 0;
             }
         }
 
-        public int CursorType => GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorType)), "cursortype");
+        public int CursorType => GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorType)), "cursortype");
 
         public GCursorItemTypes CursorItemType =>
-            (GCursorItemTypes)GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorItemType)),
+            (GCursorItemTypes)GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(CursorItemType)),
                 "cursoritemtype");
 
         public void OnAttach()
@@ -164,7 +164,7 @@ namespace Glider.Common.Objects
                 return -1;
             }
 
-            return GProcessMemoryManipulator.ReadInt32(int_29, "GetActionInv" + num4);
+            return GameMemoryAccess.ReadInt32(int_29, "GetActionInv" + num4);
         }
 
         public void WaitForReady(string KeyName)
@@ -213,18 +213,18 @@ namespace Glider.Common.Objects
 
         public static void DumpUIDebug(bool RequireVisible)
         {
-            var int_1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "DumpUI_UIParent");
+            var int_1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "DumpUI_UIParent");
             var num = 0;
             do
             {
-                var int_29 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
+                var int_29 = GameMemoryAccess.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
                 if (int_29 != 0)
                     goto label_2;
             label_1:
-                int_1 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
+                int_1 = GameMemoryAccess.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
                 continue;
             label_2:
-                var str = GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamedumpui");
+                var str = GameMemoryAccess.ReadString(int_29, 200, "objectnamedumpui");
                 var gclass8 = new UIElement(int_1);
                 if (gclass8.method_10() || !RequireVisible)
                 {
@@ -294,26 +294,26 @@ namespace Glider.Common.Objects
 
         public static void DumpPreWorldUIDebug(bool RequireVisible)
         {
-            var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
-            var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
+            var num1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
+            var num2 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
             var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
             var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
-            var num3 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
-            var num4 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
+            var num3 = GameMemoryAccess.ReadInt32(int_29_1, "uigm1");
+            var num4 = GameMemoryAccess.ReadInt32(int_29_2, "uigm2");
             var int_1 = num3;
             if (num3 != 0 && num3 == num4)
             {
                 var num5 = 0;
                 do
                 {
-                    var int_29_3 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
+                    var int_29_3 = GameMemoryAccess.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "uinamedumpui");
                     if (int_29_3 != 0)
                         goto label_3;
                 label_2:
-                    int_1 = GProcessMemoryManipulator.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
+                    int_1 = GameMemoryAccess.ReadInt32(int_1 + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "CurrentAddress");
                     continue;
                 label_3:
-                    var str = GProcessMemoryManipulator.ReadString(int_29_3, 200, "objectnamedumpui");
+                    var str = GameMemoryAccess.ReadString(int_29_3, 200, "objectnamedumpui");
                     var gclass8 = new UIElement(int_1);
                     if (gclass8.method_10() || !RequireVisible)
                     {

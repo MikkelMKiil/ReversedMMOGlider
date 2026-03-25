@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GPlayerSelf
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -250,7 +250,7 @@ namespace Glider.Common.Objects
 
         public bool IsGhost => HasWellKnownBuff("Ghost");
 
-        public override long TargetGUID => GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("TargetId"), "PSelfTarget");
+        public override long TargetGUID => GameMemoryAccess.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("TargetId"), "PSelfTarget");
 
         public long[] Bags => _bags;
 
@@ -261,7 +261,7 @@ namespace Glider.Common.Objects
                 var bagContents = new long[16];
                 var num = _descriptor.GetOffsetValue("PLAYER_FIELD_PACK_SLOT_1");
                 for (var index = 0; index < 16; ++index)
-                    bagContents[index] = GProcessMemoryManipulator.ReadInt64(StorageAddress + num + index * 8, "pbagc");
+                    bagContents[index] = GameMemoryAccess.ReadInt64(StorageAddress + num + index * 8, "pbagc");
                 return bagContents;
             }
         }
@@ -269,14 +269,14 @@ namespace Glider.Common.Objects
         public int SlotCount => 16;
 
         public GLocation CorpseLocation => new GLocation(
-            GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)) - 8, "CorpseX"),
-            GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)) - 4, "CorpseY"),
-            GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)), "CorpseZ"));
+            GameMemoryAccess.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)) - 8, "CorpseX"),
+            GameMemoryAccess.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)) - 4, "CorpseY"),
+            GameMemoryAccess.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset(nameof(CorpseLocation)), "CorpseZ"));
 
         protected override void LoadFields()
         {
             base.LoadFields();
-            _comboPoints = (int)GProcessMemoryManipulator.ReadFloatAlternate(MemoryOffsetTable.Instance.GetIntOffset("ComboPointsAddr"), "ComboPoints");
+            _comboPoints = (int)GameMemoryAccess.ReadFloatAlternate(MemoryOffsetTable.Instance.GetIntOffset("ComboPointsAddr"), "ComboPoints");
             _fightingID = GetBaseInt("Combat");
             _experience = GetStorageInt("PLAYER_XP");
             _ammoItemDefID = GetStorageInt("PLAYER_AMMO_ID");
@@ -292,7 +292,7 @@ namespace Glider.Common.Objects
             var index = 0;
             while (index < 18)
             {
-                _equippedItems[index] = GProcessMemoryManipulator.ReadInt64(int_29, "eqir");
+                _equippedItems[index] = GameMemoryAccess.ReadInt64(int_29, "eqir");
                 ++index;
                 int_29 += 8;
             }
@@ -350,7 +350,7 @@ namespace Glider.Common.Objects
             for (var index = 1; index < 5; ++index)
             {
                 var num1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
-                var num2 = GProcessMemoryManipulator.ReadInt64(Me.StorageAddress + num1, "BagGuid1");
+                var num2 = GameMemoryAccess.ReadInt64(Me.StorageAddress + num1, "BagGuid1");
                 longList.Add(num2);
             }
 
@@ -411,7 +411,7 @@ namespace Glider.Common.Objects
             var num1 = MemoryOffsetTable.Instance.GetIntOffset("MySpells");
             for (var index = 0; index < 1024; ++index)
             {
-                var num2 = GProcessMemoryManipulator.ReadInt32(num1 + index * 4, "SpellID");
+                var num2 = GameMemoryAccess.ReadInt32(num1 + index * 4, "SpellID");
                 if (num2 != 0)
                     intList.Add(num2);
                 else

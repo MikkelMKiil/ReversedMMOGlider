@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GObject
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -41,8 +41,8 @@ namespace Glider.Common.Objects
             Tag = null;
             ObjectTag = null;
             this.BaseAddress = BaseAddress;
-            StorageAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 8, "GameObjStorage");
-            GUID = GProcessMemoryManipulator.ReadInt64(BaseAddress + 48, "NewObjGUID");
+            StorageAddress = GameMemoryAccess.ReadObjectStorageAddress(BaseAddress);
+            GUID = GameMemoryAccess.ReadObjectGuid(BaseAddress);
             this.FrameNumber = FrameNumber;
         }
 
@@ -93,7 +93,7 @@ namespace Glider.Common.Objects
         public float DistanceToSelf => GContext.Main.Me != null ? GContext.Main.Me.GetDistanceTo(this) : 0.0f;
 
         public bool IsCursorOnObject =>
-            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
+            GameMemoryAccess.ReadUnderCursorGuid() == GUID;
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
@@ -118,7 +118,7 @@ namespace Glider.Common.Objects
 
         private static GObjectType QuickGetType(int BaseAddress)
         {
-            return (GObjectType)GProcessMemoryManipulator.ReadInt32(BaseAddress + 20, "QuickType");
+            return (GObjectType)GameMemoryAccess.ReadQuickObjectType(BaseAddress);
         }
 
         public bool Refresh()
@@ -140,13 +140,17 @@ namespace Glider.Common.Objects
 
             try
             {
+                var storageAddress = GameMemoryAccess.ReadRefreshStorageAddress(BaseAddress);
+                if (storageAddress != 0)
+                    StorageAddress = storageAddress;
+
                 LoadFields();
             }
             catch (MemoryReadException ex)
             {
+                Logger.LogMessage("!! CRITICAL: Refresh memory read failed for object GUID=0x" + GUID.ToString("x") +
+                                  ", BaseAddr=0x" + BaseAddress.ToString("x8") + ": " + ex);
                 Cull();
-                Logger.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
-                                   ", object data: " + ToString() + ")");
                 return false;
             }
 
@@ -171,7 +175,7 @@ namespace Glider.Common.Objects
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
                 ? 0
-                : GProcessMemoryManipulator.ReadIntFromOffset(StorageAddress + descriptorOffset, "ReadSI." + Name);
+                : GameMemoryAccess.ReadStorageInt(StorageAddress, descriptorOffset, Name);
         }
 
         protected long GetStorageLong(string Name)
@@ -181,7 +185,7 @@ namespace Glider.Common.Objects
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
                 ? 0L
-                : GProcessMemoryManipulator.ReadLongFromOffset(StorageAddress + descriptorOffset, "ReadSL." + Name);
+                : GameMemoryAccess.ReadStorageLong(StorageAddress, descriptorOffset, Name);
         }
 
         protected float GetStorageFloat(string Name)
@@ -191,22 +195,22 @@ namespace Glider.Common.Objects
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
                 ? 0.0f
-                : GProcessMemoryManipulator.ReadFloatFromOffset(StorageAddress + descriptorOffset, "ReadSF." + Name);
+                : GameMemoryAccess.ReadStorageFloat(StorageAddress, descriptorOffset, Name);
         }
 
         protected int GetBaseInt(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBI." + OffsetName);
+            return GameMemoryAccess.ReadBaseInt(BaseAddress, OffsetName);
         }
 
         protected long GetBaseLong(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadLongFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBL." + OffsetName);
+            return GameMemoryAccess.ReadBaseLong(BaseAddress, OffsetName);
         }
 
         protected float GetBaseFloat(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadFloatFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBF." + OffsetName);
+            return GameMemoryAccess.ReadBaseFloat(BaseAddress, OffsetName);
         }
 
         protected void SetType(GObjectType Type)

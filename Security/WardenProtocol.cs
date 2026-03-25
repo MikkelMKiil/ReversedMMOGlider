@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WardenProtocol
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -441,11 +441,11 @@ public class WardenProtocol
             case 1:
                 var int32_2 = BitConverter.ToInt32(byte_0, 4);
                 genum10_0 = GEnum10.const_2;
-                return GProcessMemoryManipulator.ReadBytes(int32_2, 8192, "bsb1");
+                return GameMemoryAccess.ReadBytes(int32_2, 8192, "bsb1");
             case 2:
                 var int32_3 = BitConverter.ToInt32(byte_0, 4);
                 genum10_0 = GEnum10.const_3;
-                return GProcessMemoryManipulator.ReadBytes(int32_3, 4096, "bsb2");
+                return GameMemoryAccess.ReadBytes(int32_3, 4096, "bsb2");
             default:
                 var destinationArray = new byte[int32_1];
                 Array.Copy(byte_0, 4, destinationArray, 0, int32_1);

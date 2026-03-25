@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: RemoteViewerClient
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -349,7 +349,7 @@ public class RemoteViewerClient
                     if (!StartupClass.IsGliderInitialized)
                     {
                         Logger.smethod_1("Setting up bg stuff");
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
+                        StartupClass.MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
                         StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
                         StartupClass.IsGliderInitialized = true;
                     }
@@ -533,7 +533,7 @@ public class RemoteViewerClient
                     if (lower1 == "/selectgame")
                     {
                         StartupClass.smethod_22();
-                        GProcessMemoryManipulator.CloseCurrentProcessHandle();
+                        GameMemoryAccess.CloseCurrentProcessHandle();
                         method_6("Game selected\r\n");
                     }
 
@@ -981,7 +981,7 @@ public class RemoteViewerClient
             MemoryStream memoryStream = null;
             try
             {
-                var intptr_0 = GProcessMemoryManipulator.GetWindowHandle();
+                var intptr_0 = GameMemoryAccess.GetWindowHandle();
                 if (intptr_0 == IntPtr.Zero)
                 {
                     Console.WriteLine("Failed: no window handle to game\r\n");

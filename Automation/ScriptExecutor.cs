@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ScriptExecutor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -68,7 +68,7 @@ public class ScriptExecutor
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                         StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
+                        StartupClass.MainApplicationHandle = GameMemoryAccess.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
                         if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
                             Logger.LogMessage("No game window, no background mode!");

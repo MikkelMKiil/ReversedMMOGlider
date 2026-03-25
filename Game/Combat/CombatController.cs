@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: CombatController
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -198,7 +198,7 @@ public class CombatController
             StartupClass.MainForm.Activate();
         }
 
-        if (MessageBox.Show(StartupClass.MainForm, MessageProvider.GetMessage(int_15), GProcessMemoryManipulator.GenerateRandomString(),
+        if (MessageBox.Show(StartupClass.MainForm, MessageProvider.GetMessage(int_15), GameMemoryAccess.GenerateRandomString(),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Hand) != DialogResult.Yes)
             return;
         Process.Start("http://www.mmoglider.com/elitelink");
@@ -275,7 +275,7 @@ public class CombatController
 
     public void method_4()
     {
-        GProcessMemoryManipulator.GetCursorPosition();
+        GameMemoryAccess.GetCursorPosition();
         if (StartupClass.GliderManager != null)
             StartupClass.GliderManager.method_33(true);
         bool_2 = false;
@@ -338,7 +338,7 @@ public class CombatController
             }
 
             if (StartupClass.IsGliderInitialized && StartupClass.MainForm != null &&
-                GProcessMemoryManipulator.GetForegroundWindow() == StartupClass.MainApplicationHandle)
+                GameMemoryAccess.GetForegroundWindow() == StartupClass.MainApplicationHandle)
                 StartupClass.MainForm.Activate();
             StartupClass.int_7 = 0;
             StartupClass.int_8 = 0;
@@ -1404,8 +1404,8 @@ public class CombatController
             for (var double_2 = double_8; double_2 < double_9; double_2 += double_10)
             {
                 InputController.smethod_18(double_2, double_3);
-                GProcessMemoryManipulator.Sleep(20U);
-                if (GProcessMemoryManipulator.ReadInt64(int_29, "UnderCursor3") != long_1)
+                GameMemoryAccess.Sleep(20U);
+                if (GameMemoryAccess.ReadInt64(int_29, "UnderCursor3") != long_1)
                 {
                     if (bool_10)
                         return false;
@@ -1420,7 +1420,7 @@ public class CombatController
         if (flag)
         {
             StartupClass.smethod_39(500);
-            flag = GProcessMemoryManipulator.ReadInt64(int_29, "UnderCursor4") == long_1;
+            flag = GameMemoryAccess.ReadInt64(int_29, "UnderCursor4") == long_1;
         }
 
         Logger.smethod_1(MessageProvider.smethod_2(235, flag));
@@ -2077,7 +2077,7 @@ public class CombatController
             Logger.LogMessage(MessageProvider.smethod_2(786, gnode_0.Name));
             var num = 0;
             gnode_0.Hover();
-            if (!method_18(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType")))
+            if (!method_18(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType")))
             {
                 Logger.LogMessage("Can't harvest this, cursor never turned into something acceptable");
                 StartupClass.sortedList_2.Add(gnode_0.GUID, "");
@@ -2087,7 +2087,7 @@ public class CombatController
                 for (; num < 9; ++num)
                     if (!method_19())
                     {
-                        var int_15 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType");
+                        var int_15 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType");
                         if (method_18(int_15))
                         {
                             method_56();
@@ -2343,8 +2343,8 @@ public class CombatController
     private bool method_50()
     {
         method_14(
-            new GLocation(GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 8, "CorpseX"),
-                (double)GProcessMemoryManipulator.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 4, "CorpseY")), false);
+            new GLocation(GameMemoryAccess.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 8, "CorpseX"),
+                (double)GameMemoryAccess.ReadFloat(MemoryOffsetTable.Instance.GetIntOffset("CorpseLocation") - 4, "CorpseY")), false);
         return !gplayerSelf_0.IsDead;
     }
 
@@ -2473,7 +2473,7 @@ public class CombatController
                     if (!bool_21 || !gclass36_2.method_3() || GContext.Main.Me.PetGUID == 0L ||
                         GContext.Main.Me.TargetGUID != GContext.Main.Me.PetGUID)
                     {
-                        var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "LootWindow");
+                        var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "LootWindow");
                         if (num != 0 || !flag)
                         {
                             if (num != 0)
@@ -2532,7 +2532,7 @@ public class CombatController
                 break;
             }
 
-        var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage");
+        var str = GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage");
         Logger.smethod_1("Red message after loot: [" + str + "]");
         if (str.ToLower().IndexOf(MessageProvider.GetMessage(230)) > -1)
         {

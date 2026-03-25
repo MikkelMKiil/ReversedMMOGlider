@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: KeyboardHookManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -119,7 +119,7 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.F1)
             return;
-        GProcessMemoryManipulator.IsWindowMinimized();
+        GameMemoryAccess.IsWindowMinimized();
     }
 
     public void method_2(object sender, KeyEventArgs e)
@@ -320,7 +320,7 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.Escape)
             return;
-        var foregroundWindow = GProcessMemoryManipulator.GetForegroundWindow();
+        var foregroundWindow = GameMemoryAccess.GetForegroundWindow();
         StartupClass.bool_21 = false;
         if (StartupClass.glideMode_0 != GlideMode.None && (foregroundWindow == intptr_0 ||
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||

@@ -15,6 +15,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,7 +28,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>0.0.0.1</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -228,6 +228,7 @@
     <Compile Include="Game\Objects\Glider\Common\HealMode.cs" />
     <Compile Include="Game\Objects\Glider\Common\NetCheckResult.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\ConfigFieldType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GameMemoryAccess.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GBagItem.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GBarState.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GBuff.cs" />
@@ -407,8 +408,10 @@
     <Content Include="Offsets.static.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include=".github\" />
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\copilot-instructions.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

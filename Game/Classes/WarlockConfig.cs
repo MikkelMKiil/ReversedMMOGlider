@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WarlockConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -68,8 +68,8 @@ public class WarlockConfig : Form
         StopShards.Checked = ConfigManager.gclass61_0.method_5("Warlock.StopShards");
         Jump.Checked = ConfigManager.gclass61_0.method_5("Warlock.Jump");
         MessageProvider.smethod_3(this, "Warlock");
-        GProcessMemoryManipulator.smethod_48(this);
-        GProcessMemoryManipulator.smethod_51(helpProvider_0);
+        GameMemoryAccess.smethod_48(this);
+        GameMemoryAccess.smethod_51(helpProvider_0);
     }
 
     protected override void Dispose(bool disposing)
@@ -429,7 +429,7 @@ public class WarlockConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Warlock.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Warlock.html");
     }
 
     private void PetComboBox_SelectedIndexChanged(object sender, EventArgs e)

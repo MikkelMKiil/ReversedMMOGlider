@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WardenMonitor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -124,7 +124,7 @@ public class WardenMonitor
     {
         if (int_0 < 1 && StartupClass.bool_35)
         {
-            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
+            var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
             if (num != 0)
             {
                 Logger.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
@@ -148,7 +148,7 @@ public class WardenMonitor
 
     public void method_6(int int_3, int int_4)
     {
-        var byte_1 = GProcessMemoryManipulator.ReadBytes(int_3, int_4, "bsp");
+        var byte_1 = GameMemoryAccess.ReadBytes(int_3, int_4, "bsp");
         if (byte_1 == null)
             return;
         method_7(byte_1);
@@ -165,7 +165,7 @@ public class WardenMonitor
             Logger.LogMessage("** Exception processing bsb: " + ex.Message + "\r\n" + ex.StackTrace);
         }
 
-        GProcessMemoryManipulator.smethod_54();
+        GameMemoryAccess.smethod_54();
     }
 
     private WardenCheckStatus method_8()

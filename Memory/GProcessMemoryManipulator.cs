@@ -238,7 +238,7 @@ public class GProcessMemoryManipulator
 
         var bytes = smethod_20(int_29, int_30);
         if (bytes == null)
-            return "(read failed)";
+            throw new MemoryReadException(int_29, int_30, string_0);
         var count = 0;
         while (count < bytes.Length && bytes[count] != 0)
             ++count;
@@ -250,7 +250,7 @@ public class GProcessMemoryManipulator
     public static int ReadInt32(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 4, string_0);
-        return numArray == null ? 0 : BitConverter.ToInt32(numArray, 0);
+        return BitConverter.ToInt32(numArray, 0);
     }
 
     public static int smethod_11(int int_29, string string_0)
@@ -261,7 +261,7 @@ public class GProcessMemoryManipulator
     public static long ReadInt64(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 8, string_0);
-        return numArray == null ? 0L : BitConverter.ToInt64(numArray, 0);
+        return BitConverter.ToInt64(numArray, 0);
     }
 
     public static long smethod_12(int int_29, string string_0)
@@ -272,13 +272,13 @@ public class GProcessMemoryManipulator
     public static float ReadFloat(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 4, string_0);
-        return numArray == null ? 0.0f : BitConverter.ToSingle(numArray, 0);
+        return BitConverter.ToSingle(numArray, 0);
     }
 
     public static double ReadDouble(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 8, string_0);
-        return numArray == null ? 0.0 : BitConverter.ToDouble(numArray, 0);
+        return BitConverter.ToDouble(numArray, 0);
     }
 
     public static double smethod_14(int int_29, string string_0)
@@ -289,7 +289,7 @@ public class GProcessMemoryManipulator
     public static byte ReadByte(int int_29, string string_0)
     {
         var numArray = smethod_17(int_29, 1, string_0);
-        return numArray == null ? (byte)0 : numArray[0];
+        return numArray[0];
     }
 
     public static int WriteBytes(int int_29, byte[] byte_0, int int_30)
@@ -323,8 +323,10 @@ public class GProcessMemoryManipulator
         }
 
         var num1 = ReadProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31);
-        if (num1 != 0)
+        if (num1 == 0)
             int_27 = Marshal.GetLastWin32Error();
+        else
+            int_27 = 0;
         return num1;
     }
 
@@ -353,14 +355,9 @@ public class GProcessMemoryManipulator
                     Logger.smethod_1(MessageProvider.smethod_2(712, int_29.ToString("x"), string_0, int_27));
                 }
 
-                if (bool_1)
-                {
-                    if (StartupClass.bool_13)
-                        Logger.LogMessage(string.Format(MessageProvider.GetMessage(341), int_29, string_0));
-                    StartupClass.smethod_27(true, "ReadBytesFail");
-                }
-
-                return null;
+                if (bool_1 && StartupClass.bool_13)
+                    Logger.LogMessage(string.Format(MessageProvider.GetMessage(341), int_29, string_0));
+                throw new MemoryReadException(int_29, int_30, string_0);
             }
         }
 
@@ -375,31 +372,31 @@ public class GProcessMemoryManipulator
 
     public static byte[] ReadBytesRaw(int int_29, int int_30)
     {
-        return smethod_20(int_29, int_30);
+        return smethod_19(int_29, int_30, "ReadBytesRaw", false);
     }
 
     public static int ReadIntFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 4);
-        return bytes == null ? 0 : BitConverter.ToInt32(bytes, 0);
+        var bytes = smethod_17(int_29, 4, string_0);
+        return BitConverter.ToInt32(bytes, 0);
     }
 
     public static float ReadFloatFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 4);
-        return bytes == null ? 0f : BitConverter.ToSingle(bytes, 0);
+        var bytes = smethod_17(int_29, 4, string_0);
+        return BitConverter.ToSingle(bytes, 0);
     }
 
     public static float ReadFloatAlternate(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 1);
-        return bytes == null ? 0f : (float)bytes[0];
+        var bytes = smethod_17(int_29, 1, string_0);
+        return (float)bytes[0];
     }
 
     public static long ReadLongFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 8);
-        return bytes == null ? 0L : BitConverter.ToInt64(bytes, 0);
+        var bytes = smethod_17(int_29, 8, string_0);
+        return BitConverter.ToInt64(bytes, 0);
     }
 
     [DllImport("kernel32", SetLastError = true)]

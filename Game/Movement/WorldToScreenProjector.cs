@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WorldToScreenProjector
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -20,8 +20,8 @@ public class WorldToScreenProjector
     {
         double_1 = 0.0;
         double_2 = 0.0;
-        var num1 = GProcessMemoryManipulator.ReadInt32(
-            GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "camerabase") +
+        var num1 = GameMemoryAccess.ReadInt32(
+            GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "camerabase") +
             MemoryOffsetTable.Instance.GetIntOffset("CameraOff1"), "camerasub");
         var gclass4 = new Matrix3();
         gclass4.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_ViewMatrix"));
@@ -30,7 +30,7 @@ public class WorldToScreenProjector
         var gclass2_1 = new Vector3();
         gclass2_1.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_Position"));
         var gclass2_0_2 = Vector3.smethod_1(gclass2_0_1, gclass2_1);
-        var num2 = GProcessMemoryManipulator.ReadFloat(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
+        var num2 = GameMemoryAccess.ReadFloat(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
         if (Vector3.smethod_2(gclass2_0_2, gclass4.method_1(0)) < 0.0)
         {
             Logger.smethod_1("! Screen coord lookup failed, dotproduct is no good");
@@ -46,7 +46,7 @@ public class WorldToScreenProjector
             return false;
         }
 
-        var gstruct22 = GProcessMemoryManipulator.GetCursorPosition();
+        var gstruct22 = GameMemoryAccess.GetCursorPosition();
         var num3 = gstruct22.method_1() / 2f;
         var num4 = gstruct22.method_0() / 2f;
         var num5 = num3 / (float)Math.Tan(num2 * 44.0 / 2.0 * (Math.PI / 180.0));
