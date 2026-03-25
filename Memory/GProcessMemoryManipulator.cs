@@ -29,25 +29,25 @@ namespace Glider.Common.Objects
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool CloseHandle(IntPtr hObject);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("user32.dll", EntryPoint = "GetForegroundWindow")]
         private static extern IntPtr GetForegroundWindowNative();
 
-        [DllImport("kernel32.dll")]
+        [DllImport("user32.dll", EntryPoint = "GetWindowRect")]
         private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow")]
         private static extern bool SetForegroundWindowNative(IntPtr hWnd);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", EntryPoint = "ShowWindow")]
         private static extern bool ShowWindowNative(IntPtr hWnd, int nCmdShow);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", EntryPoint = "Sleep")]
         private static extern void SleepNative(uint dwMilliseconds);
 
         private const uint PROCESS_VM_READ = 0x0010;

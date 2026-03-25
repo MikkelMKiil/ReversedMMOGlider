@@ -1131,13 +1131,13 @@ public class StartupClass
                     if (IsAttached)
                     {
                         var gameProcessManager = GameProcessManager;
-                        if (gameProcessManager != null && Thread.CurrentThread == gameProcessManager.InitializationThread)
+                        if (gameProcessManager != null && Thread.CurrentThread == gameProcessManager.thread_0)
                             flag = true;
                     }
                     else
                     {
                         var combatController = ActiveCombatController;
-                        if (combatController != null && Thread.CurrentThread == combatController.InitializationThread)
+                        if (combatController != null && Thread.CurrentThread == combatController.thread_0)
                             flag = true;
                     }
 
@@ -1162,7 +1162,7 @@ public class StartupClass
                 if (CurrentGlideMode == GlideMode.Manual)
                 {
                     smethod_17(1, MessageProvider.GetMessage(101));
-                    if (ManualGlideController != null && Thread.CurrentThread == ManualGlideController.InitializationThread)
+                    if (ManualGlideController != null && Thread.CurrentThread == ManualGlideController.thread_0)
                         flag = true;
                     Logger.smethod_1(MessageProvider.GetMessage(102));
                     CurrentGlideMode = GlideMode.None;
@@ -1192,7 +1192,7 @@ public class StartupClass
         {
             if (ActiveCombatController.bool_9)
             {
-                CachedRatePerHour = (int)Math.Round(ActiveCombatController.CompiledClassCount / (DateTime.Now - SessionStartTime).TotalSeconds * 3600.0, 0);
+                CachedRatePerHour = (int)Math.Round(ActiveCombatController.int_8 / (DateTime.Now - SessionStartTime).TotalSeconds * 3600.0, 0);
                 ActiveCombatController.bool_9 = false;
             }
         }

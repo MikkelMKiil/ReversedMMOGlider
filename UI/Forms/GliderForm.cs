@@ -154,7 +154,7 @@ public class GliderForm : Form, ILogger
         this.method_13();
         StartupClass.MainForm = (Form)this;
         StartupClass.InitStartupMode(AppMode.Normal);
-        new ProcessEnumerator().method_0();
+        MemoryMaster.GetWoWHandle();
         this.method_5();
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
             this.method_26();
@@ -203,7 +203,7 @@ public class GliderForm : Form, ILogger
         this.method_24();
         StartupClass.MainForm = (Form)this;
         this.method_1();
-        StartupClass.smethod_59();
+        StartupClass.smethod_56();
     }
 
     private void method_1()

@@ -7,6 +7,7 @@
 #nullable disable
 using Glider.Common.Objects;
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -41,12 +42,27 @@ public class AutoLoginManager
     {
         try
         {
+            if (string_1 == null || string_1.Trim().Length == 0)
+            {
+                Logger.LogMessage("[Critical] Auto-login aborted: account profile name is empty.");
+                return false;
+            }
+
             string_0 = string_1;
             gclass14_0 = new EncryptedAccountStorage();
             if (!StartupClass.IsSomeConditionMet)
                 return false;
-            if (!gclass14_0.method_1("Accounts\\" + string_1 + ".xml"))
-                throw new Exception("Unable to read XML file (encrypted on another machine?)");
+
+            var accountPath = Path.Combine("Accounts", string_1 + ".xml");
+            if (!File.Exists(accountPath))
+            {
+                Logger.LogMessage("[Critical] Auto-login aborted: account profile file not found: " + accountPath);
+                return false;
+            }
+
+            if (!gclass14_0.method_1(accountPath))
+                throw new InvalidOperationException("Unable to read XML file (encrypted on another machine?)");
+
             GameMemoryAccess.GetProcessId();
             return method_3();
         }
