@@ -130,6 +130,7 @@ public class ConfigManager
         method_0("StopOnVanish", "True");
         method_0("LogMonsterChecks", "False");
         method_0("VerboseMainLoopLogging", "False");
+        method_0("Log_Memory", "False");
         method_0("UnloadShadow", "False");
         method_0("ExitOnWardenChangeReal", "False");
         method_0("ExitOnWardenChange", "True");

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'GliderRemastered'">
+    <EmbeddedResource Update="UI\Forms\*.resx">
+      <LogicalName>%(Filename).resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

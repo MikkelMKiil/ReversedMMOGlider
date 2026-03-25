@@ -518,11 +518,17 @@ internal static class GameMemoryAccess
         internal static void WorldToScreen(double x, double y, out int sx, out int sy)
         {
             GProcessMemoryManipulator.WorldToScreen(x, y, out sx, out sy);
+            if (ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+                Logger.LogMessage("[VerboseMainLoop] [WorldToScreen/GameMemoryAccess] input=(" + x + "," + y +
+                                  "), output=(" + sx + "," + sy + ")");
         }
 
         internal static void ScreenToWorld(out double x, out double y, int sx, int sy)
         {
             GProcessMemoryManipulator.ScreenToWorld(out x, out y, sx, sy);
+            if (ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+                Logger.LogMessage("[VerboseMainLoop] [ScreenToWorld/GameMemoryAccess] input=(" + sx + "," + sy +
+                                  "), output=(" + x + "," + y + ")");
         }
 
         internal static void Sleep(uint milliseconds)

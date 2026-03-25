@@ -870,9 +870,26 @@ namespace Glider.Common.Objects
 
         protected int GetFactionGroupRow(int CheckBaseAddress)
         {
-            var num1 = GameMemoryAccess.ReadFactionSub();
-            var num2 = GameMemoryAccess.ReadFactionOff2(GameMemoryAccess.ReadFactionOff1(CheckBaseAddress));
-            return GameMemoryAccess.ReadFactionLookup(GameMemoryAccess.ReadFactionBase(), num2 - num1);
+            var factionSub = GameMemoryAccess.ReadFactionSub();
+            var factionOff1 = GameMemoryAccess.ReadFactionOff1(CheckBaseAddress);
+            if (factionSub == 0 || factionOff1 == 0)
+                return 0;
+
+            var factionOff2 = GameMemoryAccess.ReadFactionOff2(factionOff1);
+            var factionBase = GameMemoryAccess.ReadFactionBase();
+            if (factionOff2 == 0 || factionBase == 0)
+                return 0;
+
+            var sub = unchecked((uint)factionSub);
+            var off2 = unchecked((uint)factionOff2);
+            if (off2 < sub)
+                return 0;
+
+            var rowDelta = off2 - sub;
+            if (rowDelta > 131072U)
+                return 0;
+
+            return GameMemoryAccess.ReadFactionLookup(factionBase, unchecked((int)rowDelta));
         }
 
         protected int GetFactionGroupRow(uint CheckBaseAddress)

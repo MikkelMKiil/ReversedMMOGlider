@@ -104,6 +104,7 @@ public class GliderForm : Form, ILogger
     private ToolStripMenuItem alwaysOnTopToolStripMenuItem1;
     private ToolStripMenuItem minimizeToTrayToolStripMenuItem;
     private ToolStripMenuItem verboseMainLoopLoggingToolStripMenuItem;
+    private ToolStripMenuItem logMemoryToolStripMenuItem;
     private ToolStripMenuItem exitToolStripMenuItem1;
     private ToolStripSeparator toolStripSeparator1;
     private ToolTip toolTip_0;
@@ -164,6 +165,7 @@ public class GliderForm : Form, ILogger
             this.alwaysOnTopToolStripMenuItem1.Checked = true;
         }
         this.verboseMainLoopLoggingToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
+        this.logMemoryToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("Log_Memory");
         if (!ConfigManager.gclass61_0.bool_0)
             GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"Welcome.html");
         MessageProvider.smethod_3((Form)this, nameof(GliderForm));
@@ -365,6 +367,7 @@ public class GliderForm : Form, ILogger
         this.alwaysOnTopToolStripMenuItem1 = new ToolStripMenuItem();
         this.minimizeToTrayToolStripMenuItem = new ToolStripMenuItem();
         this.verboseMainLoopLoggingToolStripMenuItem = new ToolStripMenuItem();
+        this.logMemoryToolStripMenuItem = new ToolStripMenuItem();
         this.toolStripSeparator1 = new ToolStripSeparator();
         this.exitToolStripMenuItem1 = new ToolStripMenuItem();
         this.Location_3d = new Label();
@@ -926,16 +929,17 @@ public class GliderForm : Form, ILogger
         this.exitToolStripMenuItem.Size = new Size(148, 22);
         this.exitToolStripMenuItem.Text = "Exit";
         this.exitToolStripMenuItem.Click += new EventHandler(this.exitToolStripMenuItem_Click);
-        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[5]
+        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[6]
         {
       (ToolStripItem) this.alwaysOnTopToolStripMenuItem1,
       (ToolStripItem) this.minimizeToTrayToolStripMenuItem,
       (ToolStripItem) this.verboseMainLoopLoggingToolStripMenuItem,
+      (ToolStripItem) this.logMemoryToolStripMenuItem,
       (ToolStripItem) this.toolStripSeparator1,
       (ToolStripItem) this.exitToolStripMenuItem1
         });
         this.ContextMenuStripWindow.Name = "ContextMenuStripWindow";
-        this.ContextMenuStripWindow.Size = new Size(220, 98);
+        this.ContextMenuStripWindow.Size = new Size(220, 120);
         this.alwaysOnTopToolStripMenuItem1.Name = "alwaysOnTopToolStripMenuItem1";
         this.alwaysOnTopToolStripMenuItem1.Size = new Size(160, 22);
         this.alwaysOnTopToolStripMenuItem1.Text = "Always on top";
@@ -949,6 +953,11 @@ public class GliderForm : Form, ILogger
         this.verboseMainLoopLoggingToolStripMenuItem.Size = new Size(219, 22);
         this.verboseMainLoopLoggingToolStripMenuItem.Text = "Verbose main loop logging";
         this.verboseMainLoopLoggingToolStripMenuItem.Click += new EventHandler(this.verboseMainLoopLoggingToolStripMenuItem_Click);
+        this.logMemoryToolStripMenuItem.CheckOnClick = true;
+        this.logMemoryToolStripMenuItem.Name = "logMemoryToolStripMenuItem";
+        this.logMemoryToolStripMenuItem.Size = new Size(219, 22);
+        this.logMemoryToolStripMenuItem.Text = "Log_Memory";
+        this.logMemoryToolStripMenuItem.Click += new EventHandler(this.logMemoryToolStripMenuItem_Click);
         this.toolStripSeparator1.Name = "toolStripSeparator1";
         this.toolStripSeparator1.Size = new Size(157, 6);
         this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
@@ -1170,7 +1179,7 @@ public class GliderForm : Form, ILogger
             if (target != null)
             {
                 this.AddFactionButton.Enabled = true;
-                this.method_30(this.THealthLabel_1, "THealthLabel", target.Health.ToString() + MessageProvider.GetMessage(104));
+                this.method_30(this.THealthLabel_1, "THealthLabel", ((int)(target.Health * 100.0)).ToString() + MessageProvider.GetMessage(104));
                 this.method_30(this.TDistanceLabel_1, "TDistanceLabel", Math.Round((double)target.DistanceToSelf, 2).ToString());
                 this.method_30(this.TFactionLabel_1, "TFactionLabel", target.FactionID.ToString());
                 if (StartupClass.gprofile_0.CheckFaction(target.FactionID, true))
@@ -1403,9 +1412,13 @@ public class GliderForm : Form, ILogger
             return;
         }
 
+        string resolvedTargetName = target.Name;
+        if ((resolvedTargetName == null || resolvedTargetName.StartsWith("(")) && me.TargetName != null && me.TargetName != "(none)")
+            resolvedTargetName = me.TargetName;
+
         Logger.LogMessage("1-Kill target object: " + target);
         Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + targetGuid.ToString("x"));
-        Logger.LogMessage("1-Kill target info: Name=\"" + target.Name + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
+        Logger.LogMessage("1-Kill target info: Name=\"" + resolvedTargetName + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
         StartupClass.smethod_21(false);
     }
 
@@ -2219,6 +2232,13 @@ public class GliderForm : Form, ILogger
         Logger.LogMessage("Verbose main loop logging " + (isEnabled ? "enabled" : "disabled"));
     }
 
+    private void logMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool isEnabled = this.logMemoryToolStripMenuItem.Checked;
+        ConfigManager.gclass61_0.method_0("Log_Memory", isEnabled.ToString());
+        Logger.LogMessage("Log_Memory " + (isEnabled ? "enabled" : "disabled"));
+    }
+
     private void exitToolStripMenuItem1_Click(object sender, EventArgs e) => this.Close();
 
     private void ShrinkButton_Click(object sender, EventArgs e)
@@ -2300,8 +2320,11 @@ public class GliderForm : Form, ILogger
         {
             GLocation targetLocation = target.Location;
             string targetCoords = targetLocation != null ? targetLocation.ToString3D() : "(unknown)";
+            string resolvedTargetName = target.Name;
+            if ((resolvedTargetName == null || resolvedTargetName.StartsWith("(")) && gplayerSelf_0.TargetName != null && gplayerSelf_0.TargetName != "(none)")
+                resolvedTargetName = gplayerSelf_0.TargetName;
             targetInfo = "GUID=0x" + target.GUID.ToString("x") +
-                         ", Name=\"" + target.Name + "\"" +
+                         ", Name=\"" + resolvedTargetName + "\"" +
                          ", HP=" + target.HealthPoints + "/" + target.HealthMax +
                          ", Dist=" + Math.Round(gplayerSelf_0.GetDistanceTo(target), 2).ToString("0.00") +
                          ", Coords=" + targetCoords;

@@ -120,9 +120,9 @@
     <EmbeddedResource Include="UI\Forms\DebuffPick.resx" />
     <EmbeddedResource Include="UI\Forms\EvoConfigWindow.resx" />
     <EmbeddedResource Include="UI\Forms\FactionReminder.resx" />
-    <EmbeddedResource Include="UI\Forms\GliderForm.resx"></EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\GliderForm.resx">`r`n      <LogicalName>GliderForm.resources</LogicalName>`r`n    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\GliderWarning.resx" />
-    <EmbeddedResource Include="UI\Forms\KeyEditor.resx"></EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\KeyEditor.resx">`r`n      <LogicalName>KeyEditor.resources</LogicalName>`r`n    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\LaunchpadReminder.resx" />
     <EmbeddedResource Include="UI\Forms\LaunchpadReminder_1.resx" />
     <EmbeddedResource Include="UI\Forms\PickWindow.resx" />

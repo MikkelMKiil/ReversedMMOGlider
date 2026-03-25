@@ -105,29 +105,31 @@ namespace Glider.Common.Objects
 
         public struct GStruct22
         {
-            public int X;
-            public int Y;
+            public int Width;
+            public int Height;
+            public int Left;
+            public int Top;
 
             /// <summary>
-            /// Returns the X coordinate (width).
+            /// Returns the window height.
             /// </summary>
-            public int method_0() => X;
+            public int method_0() => Height;
 
             /// <summary>
-            /// Returns the Y coordinate (height).
+            /// Returns the window width.
             /// </summary>
-            public int method_1() => Y;
+            public int method_1() => Width;
 
             /// <summary>
             /// Checks if the given coordinates are within the screen bounds.
             /// </summary>
             public bool method_5(int x, int y)
             {
-                return x >= 0 && x < X && y >= 0 && y < Y;
+                return x >= Left && x < Left + Width && y >= Top && y < Top + Height;
             }
 
-            public int int_0 => X;
-            public int int_1 => Y;
+            public int int_0 => Left;
+            public int int_1 => Top;
         }
 
         private static IntPtr _currentProcessHandle = IntPtr.Zero;
@@ -137,6 +139,49 @@ namespace Glider.Common.Objects
         internal static bool bool_2 { get; set; }
         internal static bool bool_3 { get; set; }
         internal static int int_27 { get; set; }
+
+        private static bool IsMemoryLoggingEnabled()
+        {
+            return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("Log_Memory");
+        }
+
+        private static string FormatAddressHex(int address)
+        {
+            return "0x" + unchecked((uint)address).ToString("x8");
+        }
+
+        private static string FormatAddressHex(uint address)
+        {
+            return "0x" + address.ToString("x8");
+        }
+
+        private static string FormatBytesForLog(byte[] bytes, int length)
+        {
+            if (bytes == null || bytes.Length == 0 || length <= 0)
+                return "<empty>";
+
+            var count = Math.Min(Math.Min(bytes.Length, length), 64);
+            var builder = new StringBuilder(count * 3);
+            for (var index = 0; index < count; ++index)
+            {
+                if (index > 0)
+                    builder.Append(' ');
+                builder.Append(bytes[index].ToString("x2"));
+            }
+
+            if (length > count)
+                builder.Append(" ...");
+
+            return builder.ToString();
+        }
+
+        private static void LogMemoryAccess(string message)
+        {
+            if (!IsMemoryLoggingEnabled())
+                return;
+
+            GContext.Main.Log("[Log_Memory] " + message);
+        }
 
         /// <summary>
         /// Reads a 32-bit signed integer from process memory at the specified address.
@@ -242,11 +287,13 @@ namespace Glider.Common.Objects
         private static byte[] ReadBytesInternal(int startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
         {
             var buffer = new byte[lengthToRead];
+            LogMemoryAccess("READ request addr=" + FormatAddressHex(startAddress) + ", len=" + lengthToRead + ", clue=" + (debugClue ?? "(none)") + ", allowPartial=" + allowPartialRead);
 
             if (_currentProcessHandle == IntPtr.Zero)
             {
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes failed: No process handle (clue = {debugClue})");
+                LogMemoryAccess("READ failed addr=" + FormatAddressHex(startAddress) + ", reason=no process handle");
                 return buffer;
             }
 
@@ -255,6 +302,7 @@ namespace Glider.Common.Objects
                 var lastError = Marshal.GetLastWin32Error();
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x} failed, error: {lastError} (clue = {debugClue})");
+                LogMemoryAccess("READ failed addr=" + FormatAddressHex(startAddress) + ", error=" + lastError + ", clue=" + (debugClue ?? "(none)"));
                 return allowPartialRead ? buffer : new byte[0];
             }
 
@@ -262,8 +310,11 @@ namespace Glider.Common.Objects
             {
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x}: Expected {lengthToRead} bytes, got {bytesRead} (clue = {debugClue})");
+                LogMemoryAccess("READ short addr=" + FormatAddressHex(startAddress) + ", expected=" + lengthToRead + ", got=" + bytesRead + ", clue=" + (debugClue ?? "(none)"));
                 return new byte[0];
             }
+
+            LogMemoryAccess("READ result addr=" + FormatAddressHex(startAddress) + ", bytesRead=" + bytesRead + ", data=" + FormatBytesForLog(buffer, bytesRead));
 
             return buffer;
         }
@@ -271,11 +322,13 @@ namespace Glider.Common.Objects
         private static byte[] ReadBytesInternal(uint startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
         {
             var buffer = new byte[lengthToRead];
+            LogMemoryAccess("READ request addr=" + FormatAddressHex(startAddress) + ", len=" + lengthToRead + ", clue=" + (debugClue ?? "(none)") + ", allowPartial=" + allowPartialRead);
 
             if (_currentProcessHandle == IntPtr.Zero)
             {
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes failed: No process handle (clue = {debugClue})");
+                LogMemoryAccess("READ failed addr=" + FormatAddressHex(startAddress) + ", reason=no process handle");
                 return buffer;
             }
 
@@ -284,6 +337,7 @@ namespace Glider.Common.Objects
                 var lastError = Marshal.GetLastWin32Error();
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x} failed, error: {lastError} (clue = {debugClue})");
+                LogMemoryAccess("READ failed addr=" + FormatAddressHex(startAddress) + ", error=" + lastError + ", clue=" + (debugClue ?? "(none)"));
                 return allowPartialRead ? buffer : new byte[0];
             }
 
@@ -291,8 +345,11 @@ namespace Glider.Common.Objects
             {
                 if (!string.IsNullOrEmpty(debugClue))
                     GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x}: Expected {lengthToRead} bytes, got {bytesRead} (clue = {debugClue})");
+                LogMemoryAccess("READ short addr=" + FormatAddressHex(startAddress) + ", expected=" + lengthToRead + ", got=" + bytesRead + ", clue=" + (debugClue ?? "(none)"));
                 return new byte[0];
             }
+
+            LogMemoryAccess("READ result addr=" + FormatAddressHex(startAddress) + ", bytesRead=" + bytesRead + ", data=" + FormatBytesForLog(buffer, bytesRead));
 
             return buffer;
         }
@@ -364,9 +421,12 @@ namespace Glider.Common.Objects
         /// </summary>
         internal static int WriteBytes(int startAddress, byte[] dataToWrite, int lengthToWrite)
         {
+            LogMemoryAccess("WRITE request addr=" + FormatAddressHex(startAddress) + ", len=" + lengthToWrite + ", data=" + FormatBytesForLog(dataToWrite, lengthToWrite));
+
             if (_currentProcessHandle == IntPtr.Zero)
             {
                 GContext.Main.Log($"[CRITICAL] WriteBytes failed: No process handle");
+                LogMemoryAccess("WRITE failed addr=" + FormatAddressHex(startAddress) + ", reason=no process handle");
                 return 0;
             }
 
@@ -374,8 +434,11 @@ namespace Glider.Common.Objects
             {
                 var lastError = Marshal.GetLastWin32Error();
                 GContext.Main.Log($"[CRITICAL] WriteBytes to 0x{startAddress:x} failed, error: {lastError}");
+                LogMemoryAccess("WRITE failed addr=" + FormatAddressHex(startAddress) + ", error=" + lastError);
                 return 0;
             }
+
+            LogMemoryAccess("WRITE result addr=" + FormatAddressHex(startAddress) + ", bytesWritten=" + bytesWritten);
 
             return bytesWritten;
         }
@@ -386,10 +449,15 @@ namespace Glider.Common.Objects
         internal static bool IsMemoryReadable(int startAddress)
         {
             if (_currentProcessHandle == IntPtr.Zero)
+            {
+                LogMemoryAccess("READABLE check addr=" + FormatAddressHex(startAddress) + " => false (no process handle)");
                 return false;
+            }
 
             var testBuffer = new byte[1];
-            return ReadProcessMemory(_currentProcessHandle, new IntPtr(startAddress), testBuffer, 1, out _);
+            var readable = ReadProcessMemory(_currentProcessHandle, new IntPtr(startAddress), testBuffer, 1, out _);
+            LogMemoryAccess("READABLE check addr=" + FormatAddressHex(startAddress) + " => " + readable);
+            return readable;
         }
 
         /// <summary>
@@ -399,16 +467,24 @@ namespace Glider.Common.Objects
         {
             int currentAddress = startAddress;
             int depth = 0;
+            LogMemoryAccess("PTRCHAIN begin addr=" + FormatAddressHex(startAddress) + ", requestedLen=" + lengthToRead + ", maxDepth=" + maxDepth);
 
             while (depth < maxDepth)
             {
                 var pointerBytes = ReadBytesRaw(currentAddress, 4);
                 if (pointerBytes.Length < 4)
+                {
+                    LogMemoryAccess("PTRCHAIN stop depth=" + depth + ", addr=" + FormatAddressHex(currentAddress) + ", reason=short read");
                     return currentAddress;
+                }
 
+                var nextAddress = BitConverter.ToInt32(pointerBytes, 0);
+                LogMemoryAccess("PTRCHAIN step depth=" + depth + ", from=" + FormatAddressHex(currentAddress) + ", to=" + FormatAddressHex(nextAddress) + ", raw=" + FormatBytesForLog(pointerBytes, pointerBytes.Length));
                 currentAddress = BitConverter.ToInt32(pointerBytes, 0);
                 depth++;
             }
+
+            LogMemoryAccess("PTRCHAIN end finalAddr=" + FormatAddressHex(currentAddress) + ", depth=" + depth);
 
             return currentAddress;
         }
@@ -527,8 +603,35 @@ namespace Glider.Common.Objects
 
         internal static GStruct22 GetCursorPosition()
         {
-            GetCursorPos(out POINT point);
-            return new GStruct22 { X = point.X, Y = point.Y };
+            RECT rect;
+            IntPtr windowHandle = StartupClass.MainApplicationHandle;
+            if (windowHandle == IntPtr.Zero)
+                windowHandle = GetForegroundWindowNative();
+
+            if (windowHandle != IntPtr.Zero && GetWindowRect(windowHandle, out rect))
+            {
+                var width = rect.Right - rect.Left;
+                var height = rect.Bottom - rect.Top;
+                if (width > 0 && height > 0)
+                {
+                    return new GStruct22
+                    {
+                        Left = rect.Left,
+                        Top = rect.Top,
+                        Width = width,
+                        Height = height
+                    };
+                }
+            }
+
+            var bounds = Screen.PrimaryScreen.Bounds;
+            return new GStruct22
+            {
+                Left = bounds.Left,
+                Top = bounds.Top,
+                Width = bounds.Width,
+                Height = bounds.Height
+            };
         }
 
         internal static IntPtr GetForegroundWindow()
@@ -574,16 +677,24 @@ namespace Glider.Common.Objects
 
         internal static void WorldToScreen(double x, double y, out int sx, out int sy)
         {
-            // This would require the game's camera matrix - placeholder implementation
-            sx = (int)x;
-            sy = (int)y;
+            var window = GetCursorPosition();
+            sx = window.int_0 + (int)(window.method_1() * x);
+            sy = window.int_1 + (int)(window.method_0() * y);
+            if (ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+                GContext.Main.Log("[VerboseMainLoop] [WorldToScreen/GProcess] input=(" + x + "," + y +
+                                  "), window=(" + window.int_0 + "," + window.int_1 + "," + window.method_1() +
+                                  "," + window.method_0() + "), output=(" + sx + "," + sy + ")");
         }
 
         internal static void ScreenToWorld(out double x, out double y, int sx, int sy)
         {
-            // This would require the game's camera matrix inverse - placeholder implementation
-            x = sx;
-            y = sy;
+            var window = GetCursorPosition();
+            x = window.method_1() <= 0 ? 0.0 : (sx - window.int_0) / (double)window.method_1();
+            y = window.method_0() <= 0 ? 0.0 : (sy - window.int_1) / (double)window.method_0();
+            if (ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+                GContext.Main.Log("[VerboseMainLoop] [ScreenToWorld/GProcess] input=(" + sx + "," + sy +
+                                  "), window=(" + window.int_0 + "," + window.int_1 + "," + window.method_1() +
+                                  "," + window.method_0() + "), output=(" + x + "," + y + ")");
         }
 
         internal static void Sleep(uint milliseconds)

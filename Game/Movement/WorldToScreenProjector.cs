@@ -12,12 +12,20 @@ public class WorldToScreenProjector
 {
     private const float float_0 = 0.0174532924f;
 
+    private static void smethod_1(string string_0)
+    {
+        if (ConfigManager.gclass61_0 == null || !ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+            return;
+        Logger.LogMessage("[VerboseMainLoop] " + string_0);
+    }
+
     public static bool smethod_0(
         GLocation glocation_0,
         double double_0,
         out double double_1,
         out double double_2)
     {
+        smethod_1("[WorldToScreen/Projector] begin location=" + glocation_0 + ", zOffset=" + double_0);
         double_1 = 0.0;
         double_2 = 0.0;
         var num1 = GameMemoryAccess.ReadInt32(
@@ -33,7 +41,7 @@ public class WorldToScreenProjector
         var num2 = GameMemoryAccess.ReadFloat(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
         if (Vector3.smethod_2(gclass2_0_2, gclass4.method_1(0)) < 0.0)
         {
-            Logger.smethod_1("! Screen coord lookup failed, dotproduct is no good");
+            smethod_1("[WorldToScreen/Projector] failed: dot product behind camera");
             return false;
         }
 
@@ -42,7 +50,7 @@ public class WorldToScreenProjector
         var gclass2_3 = new Vector3(-gclass2_2.float_1, -gclass2_2.float_2, gclass2_2.float_0);
         if (gclass2_3.float_2 <= 0.0)
         {
-            Logger.smethod_1("! Screen coord lookup failed, cameraz is no good");
+            smethod_1("[WorldToScreen/Projector] failed: camera Z <= 0 (" + gclass2_3.float_2 + ")");
             return false;
         }
 
@@ -57,10 +65,17 @@ public class WorldToScreenProjector
         {
             double_1 = num7 / (double)gstruct22.method_1();
             double_2 = num8 / (double)gstruct22.method_0();
+            smethod_1("[WorldToScreen/Projector] success: relative=(" + double_1 + "," + double_2 +
+                      "), pixel=(" + (gstruct22.int_0 + num7) + "," + (gstruct22.int_1 + num8) +
+                      "), window=(" + gstruct22.int_0 + "," + gstruct22.int_1 + "," + gstruct22.method_1() +
+                      "," + gstruct22.method_0() + ")");
             return true;
         }
 
-        Logger.smethod_1("! Screen coord lookup failed, would be clicking out of window");
+        smethod_1("[WorldToScreen/Projector] failed: projected click outside window, pixel=(" +
+                  (gstruct22.int_0 + num7) + "," + (gstruct22.int_1 + num8) + "), window=(" +
+                  gstruct22.int_0 + "," + gstruct22.int_1 + "," + gstruct22.method_1() + "," +
+                  gstruct22.method_0() + ")");
         return false;
     }
 }
