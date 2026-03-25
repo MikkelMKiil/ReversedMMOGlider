@@ -115,9 +115,6 @@
     <EmbeddedResource Include="Game\Objects\Glider\Common\Objects\GConfigWindow.resx">
       <DependentUpon>GConfigWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Security\SecCheck.resx">
-      <DependentUpon>SecCheck.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\ConfigForm.resx" />
     <EmbeddedResource Include="UI\Forms\DebuffList.resx" />
     <EmbeddedResource Include="UI\Forms\DebuffPick.resx" />
@@ -296,9 +293,6 @@
     <Compile Include="Memory\MemoryOffsetTable.cs" />
     <Compile Include="Memory\OffsetManager.cs" />
     <Compile Include="Memory\WoW335aDescriptors.cs" />
-    <Compile Include="Security\SecCheck.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="UI\Components\ChatFrameLocator.cs" />
     <Compile Include="UI\Components\DialogMonitor.cs" />
     <Compile Include="UI\Components\InputController.cs" />
