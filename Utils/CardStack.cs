@@ -49,13 +49,13 @@ public class CardStack
 
     public void method_2()
     {
-        InputController.smethod_18(int_1 / 800.0 + 0.045, int_2 / 500.0 + 0.025);
+        InputControllerShim.MoveNormalized(int_1 / 800.0 + 0.045, int_2 / 500.0 + 0.025);
     }
 
     public void method_3()
     {
         method_2();
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
     }
 
     public PlayingCard method_4()

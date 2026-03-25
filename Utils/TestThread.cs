@@ -1,4 +1,4 @@
-// Decompiled with JetBrains decompiler
+// Decompile with JetBrains decompiler
 // Type: TestThread
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -42,11 +42,8 @@ public class TestThread
                 Thread.Sleep(2000);
             }
 
-            InputController.smethod_21(true);
             smethod_52();
             Thread.Sleep(4000);
-            StartupClass.gclass68_0.method_7();
-            InputController.smethod_21(false);
             Logger.LogMessage("TestoThread done");
         }
         catch (Exception ex)
@@ -66,17 +63,17 @@ public class TestThread
             if (!StartupClass.IsGliderInitialized)
                 Thread.Sleep(3000);
             var gspellTimer = new GSpellTimer(5000, false);
-            StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
+            //StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
             while (!gspellTimer.IsReady)
             {
                 Thread.Sleep(20);
-                if (StartupClass.gclass68_0.method_8(true))
-                    break;
+                //if (StartupClass.gclass68_0.method_8(true))
+                //    break;
             }
 
             if (gspellTimer.IsReady)
                 Logger.LogMessage("Futility in test mouse spin");
-            StartupClass.gclass68_0.method_3(false);
+            //StartupClass.gclass68_0.method_3(false);
         }
         else
         {
@@ -100,7 +97,7 @@ public class TestThread
         else
         {
             Logger.LogMessage("Moving camera to target pitch of: " + Math.Round(float_0, 3));
-            StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
+            //StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
         }
     }
 
@@ -553,9 +550,9 @@ public class TestThread
             if (WorldToScreenProjector.smethod_0(GPlayerSelf.Me.Target.Location, 0.0, out double_1, out double_2))
             {
                 Logger.LogMessage("Conversion good, positioning cursor");
-                InputController.smethod_18(double_1, double_2);
+                //InputController.smethod_18(double_1, double_2);
                 Thread.Sleep(1000);
-                InputController.smethod_23(true);
+                //InputController.smethod_23(true);
             }
             else
             {
@@ -574,7 +571,7 @@ public class TestThread
 
     private static void smethod_42()
     {
-        InputController.smethod_28("/w dirtymeat woo! YeAhhh!  Money$$!!??");
+        //InputController.smethod_28("/w dirtymeat woo! YeAhhh!  Money$$!!??");
     }
 
     private static void smethod_43()

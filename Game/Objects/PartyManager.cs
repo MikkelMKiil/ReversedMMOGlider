@@ -213,9 +213,6 @@ public class PartyManager
                 Logger.LogMessage(MessageProvider.GetMessage(320));
                 return null;
             }
-
-            if (bool_3)
-                InputController.smethod_28(MessageProvider.smethod_2(705, string_1));
         }
 
         return gplayer;

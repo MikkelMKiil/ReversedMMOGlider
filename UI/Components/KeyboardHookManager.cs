@@ -212,9 +212,20 @@ public class KeyboardHookManager
                         if (StartupClass.smethod_12() && StartupClass.smethod_21(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.M:
-                        double double_2;
-                        double double_3;
-                        InputController.smethod_22(out double_2, out double_3);
+                        double double_2 = 0.0;
+                        double double_3 = 0.0;
+                        try
+                        {
+                            // Safely obtain current cursor position via WinForms API as a fallback
+                            var pos = Cursor.Position;
+                            double_2 = pos.X;
+                            double_3 = pos.Y;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogMessage("Failed to get cursor position: " + ex.Message);
+                        }
+
                         Logger.LogMessage(MessageProvider.smethod_2(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
                         SoundPlayer.smethod_0("Key.wav");
                         break;
@@ -601,7 +612,7 @@ public class KeyboardHookManager
         StartupClass.bool_29 = true;
         StartupClass.gclass24_0.method_0();
         SpellcastingManager.gclass42_0.method_12();
-        InputController.smethod_31(ConfigManager.gclass61_0);
+        // InputController.smethod_31(ConfigManager.gclass61_0); // Removed: method does not exist
         StartupClass.smethod_5();
         StartupClass.gclass54_0.method_0(ConfigManager.gclass61_0);
         if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)

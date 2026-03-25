@@ -53,7 +53,6 @@ public class MachGlideRunner
 
     private void method_3()
     {
-        InputController.smethod_21(true);
         new SolitaireSolver().method_0();
     }
 }

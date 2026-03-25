@@ -1,4 +1,5 @@
 // Decompiled with JetBrains decompiler
+
 // Type: UIElement
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -238,9 +239,9 @@ public class UIElement
 
     public void method_15()
     {
-        StartupClass.gclass68_0.method_3(true);
-        InputController.smethod_18(method_11() + (method_12() - method_11()) / 2.0,
-            method_13() + (method_14() - method_13()) / 2.0);
+        // StartupClass.gclass68_0.method_3(true);
+        // InputController.smethod_18(method_11() + (method_12() - method_11()) / 2.0,
+        //     method_13() + (method_14() - method_13()) / 2.0);
     }
 
     public static void smethod_1(float float_6, float float_7)
@@ -338,20 +339,20 @@ public class UIElement
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_23(bool_1);
+        // InputController.smethod_23(bool_1);
     }
 
     public void method_17(bool bool_1)
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_24(bool_1);
+        // InputController.smethod_24(bool_1);
     }
 
     public void method_18(bool bool_1)
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_25(bool_1);
+        // InputController.smethod_25(bool_1);
     }
 }

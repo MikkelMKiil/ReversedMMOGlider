@@ -50,9 +50,12 @@ public class InputController // Original: InputController
     public static bool UseClipboard;           // Original: bool_0
     public static bool IsCursorHooked = true;  // Original: bool_1
     public static bool IsGrabbingCursor = true;// Original: bool_2
+    // Stored normalized cursor position (0..1)
+    public static double double_0;
+    public static double double_1;
 
     private static readonly GSpellTimer ActionTimer = new GSpellTimer(1000); // Original: gspellTimer_0
-    private static Dictionary<short, short> ActiveKeys;                      // Original: dictionary_0
+    private static Dictionary<short, short> ActiveKeys = new Dictionary<short, short>();                      // Original: dictionary_0
     private static readonly GameTimer AntiAfkTimer = new GameTimer(11000);   // Original: gclass36_0
 
     private static int LastMouseX; // Original: int_21
@@ -91,6 +94,126 @@ public class InputController // Original: InputController
 
     [DllImport("user32.dll")]
     public static extern short VkKeyScan(char ch);
+
+    // Safe wrapper for other code that expects an accessible VkKeyScan
+    public static short VkKeyScanSafe(char ch) => VkKeyScan(ch);
+
+    // Compatibility shims for decompiled callers
+    public static void smethod_21(bool enable)
+    {
+        IsCursorHooked = enable;
+    }
+
+    public static void smethod_18(double nx, double ny)
+    {
+        double_0 = nx;
+        double_1 = ny;
+        try
+        {
+            var w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+            var h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            var x = (int)(nx * w);
+            var y = (int)(ny * h);
+            SetCursorPos(x, y);
+            LastMouseX = x;
+            LastMouseY = y;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("smethod_18 failed: " + ex.Message);
+        }
+    }
+
+    public static void smethod_23(bool right)
+    {
+        try
+        {
+            if (right)
+            {
+                SendMouseEvent(8);
+                Thread.Sleep(20);
+                SendMouseEvent(16);
+            }
+            else
+            {
+                SendMouseEvent(2);
+                Thread.Sleep(20);
+                SendMouseEvent(4);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("smethod_23 failed: " + ex.Message);
+        }
+    }
+
+    public static void smethod_28(string text)
+    {
+        // forward to shim which will send characters
+        InputControllerShim.SendText(text);
+    }
+
+    public static void smethod_31(object cfg)
+    {
+        // no-op compatibility shim
+    }
+
+    public static void smethod_22(out double nx, out double ny)
+    {
+        try
+        {
+            System.Drawing.Point p;
+            GetCursorPos(out var pt);
+            p = new System.Drawing.Point(pt.X, pt.Y);
+            var w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+            var h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+            nx = (double)p.X / w;
+            ny = (double)p.Y / h;
+        }
+        catch
+        {
+            nx = 0.0;
+            ny = 0.0;
+        }
+    }
+
+    public static void smethod_6(char c)
+    {
+        try
+        {
+            short vk = VkKeyScanSafe(c);
+            TapKey(vk);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("smethod_6 failed: " + ex.Message);
+        }
+    }
+
+    public static void smethod_4(char c, bool pressing)
+    {
+        try
+        {
+            short vk = VkKeyScanSafe(c);
+            SendKey(vk, pressing);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("smethod_4 failed: " + ex.Message);
+        }
+    }
+
+    public static void smethod_27()
+    {
+        try
+        {
+            ReleaseAllModifiers();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("smethod_27 failed: " + ex.Message);
+        }
+    }
 
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();

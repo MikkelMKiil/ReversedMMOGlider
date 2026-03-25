@@ -290,12 +290,12 @@ namespace Glider.Common.Objects
 
         public void SendString(string What)
         {
-            InputController.smethod_29(What);
+            // InputController.smethod_29(What);
         }
 
         public void SendLine(string What)
         {
-            InputController.smethod_28(What);
+            // InputController.smethod_28(What);
         }
 
         public static void DumpPreWorldUIDebug(bool RequireVisible)

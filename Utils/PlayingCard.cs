@@ -73,21 +73,21 @@ public class PlayingCard
 
     public void method_1()
     {
-        InputController.smethod_18(int_3 / 800.0 + 0.045, int_4 / 500.0 + 0.01);
+        InputControllerShim.MoveNormalized(int_3 / 800.0 + 0.045, int_4 / 500.0 + 0.01);
     }
 
     public void method_2()
     {
         method_1();
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
     }
 
     public void method_3()
     {
         method_1();
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
         Thread.Sleep(100);
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
     }
 
     public void method_4()
