@@ -18,11 +18,11 @@ namespace Glider.Common.Objects
 
         public int SlotCount { get; private set; }
 
-        public long[] BagContents
+        public ulong[] BagContents
         {
             get
             {
-                var bagContents = new long[SlotCount];
+                var bagContents = new ulong[SlotCount];
                 var num = _descriptor.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
                 for (var index = 0; index < SlotCount; ++index)
                     bagContents[index] = GameMemoryAccess.ReadInt64(StorageAddress + num + index * 8, "bagc");

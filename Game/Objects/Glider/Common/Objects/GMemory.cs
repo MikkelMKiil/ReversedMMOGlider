@@ -58,7 +58,7 @@ namespace Glider.Common.Objects
             return GameMemoryAccess.ReadInt32(StartAddress, DebugClue);
         }
 
-        public long ReadLong(int StartAddress, string DebugClue)
+        public ulong ReadLong(int StartAddress, string DebugClue)
         {
             return GameMemoryAccess.ReadInt64(StartAddress, DebugClue);
         }

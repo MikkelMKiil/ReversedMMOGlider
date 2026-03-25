@@ -7,6 +7,11 @@ using Glider.Common.Objects;
 
 internal static class GameMemoryAccess
 {
+    private static int ToAddress(long address)
+    {
+        return unchecked((int)address);
+    }
+
     internal static bool bool_2
     {
         get { return GProcessMemoryManipulator.bool_2; }
@@ -30,17 +35,22 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadInt32(baseAddress + 8, "GameObjStorage");
         }
 
-        // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
-        internal static long ReadObjectGuid(int baseAddress)
+        internal static uint ReadObjectStorageAddress(uint baseAddress)
         {
-            return GProcessMemoryManipulator.ReadInt64(baseAddress + 48, "NewObjGUID");
+            return unchecked((uint)ReadObjectStorageAddress(ToAddress(baseAddress)));
+        }
+
+        // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
+        internal static ulong ReadObjectGuid(int baseAddress)
+        {
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(baseAddress + 48, "NewObjGUID"));
         }
 
         // Used by: GObject.IsCursorOnObject
         // Used by: GUnit.IsCursorOnUnit
-        internal static long ReadUnderCursorGuid()
+        internal static ulong ReadUnderCursorGuid()
         {
-            return GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor");
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor"));
         }
 
         // Used by: GObject.QuickGetType
@@ -55,16 +65,31 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadInt32(baseAddress + 8, "GameObjStorage.Refresh");
         }
 
+        internal static uint ReadRefreshStorageAddress(uint baseAddress)
+        {
+            return unchecked((uint)ReadRefreshStorageAddress(ToAddress(baseAddress)));
+        }
+
         // Used by: GObject.GetStorageInt
         internal static int ReadStorageInt(int storageAddress, int descriptorOffset, string fieldName)
         {
             return GProcessMemoryManipulator.ReadIntFromOffset(storageAddress + descriptorOffset, "ReadSI." + fieldName);
         }
 
-        // Used by: GObject.GetStorageLong
-        internal static long ReadStorageLong(int storageAddress, int descriptorOffset, string fieldName)
+        internal static int ReadStorageInt(uint storageAddress, int descriptorOffset, string fieldName)
         {
-            return GProcessMemoryManipulator.ReadLongFromOffset(storageAddress + descriptorOffset, "ReadSL." + fieldName);
+            return ReadStorageInt(ToAddress(storageAddress), descriptorOffset, fieldName);
+        }
+
+        // Used by: GObject.GetStorageLong
+        internal static ulong ReadStorageULong(int storageAddress, int descriptorOffset, string fieldName)
+        {
+            return (ulong)GProcessMemoryManipulator.ReadULongFromOffset(storageAddress + descriptorOffset, "ReadSL." + fieldName);
+        }
+
+        internal static ulong ReadStorageULong(uint storageAddress, int descriptorOffset, string fieldName)
+        {
+            return ReadStorageULong(ToAddress(storageAddress), descriptorOffset, fieldName);
         }
 
         // Used by: GObject.GetStorageFloat
@@ -73,22 +98,42 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadFloatFromOffset(storageAddress + descriptorOffset, "ReadSF." + fieldName);
         }
 
+        internal static float ReadStorageFloat(uint storageAddress, int descriptorOffset, string fieldName)
+        {
+            return ReadStorageFloat(ToAddress(storageAddress), descriptorOffset, fieldName);
+        }
+
         // Used by: GObject.GetBaseInt
         internal static int ReadBaseInt(int baseAddress, string offsetName)
         {
             return GProcessMemoryManipulator.ReadIntFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBI." + offsetName);
         }
 
-        // Used by: GObject.GetBaseLong
-        internal static long ReadBaseLong(int baseAddress, string offsetName)
+        internal static int ReadBaseInt(uint baseAddress, string offsetName)
         {
-            return GProcessMemoryManipulator.ReadLongFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBL." + offsetName);
+            return ReadBaseInt(ToAddress(baseAddress), offsetName);
+        }
+
+        // Used by: GObject.GetBaseLong
+        internal static ulong ReadBaseLong(int baseAddress, string offsetName)
+        {
+            return unchecked((ulong)GProcessMemoryManipulator.ReadULongFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBL." + offsetName));
+        }
+
+        internal static ulong ReadBaseLong(uint baseAddress, string offsetName)
+        {
+            return ReadBaseLong(ToAddress(baseAddress), offsetName);
         }
 
         // Used by: GObject.GetBaseFloat
         internal static float ReadBaseFloat(int baseAddress, string offsetName)
         {
             return GProcessMemoryManipulator.ReadFloatFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBF." + offsetName);
+        }
+
+        internal static float ReadBaseFloat(uint baseAddress, string offsetName)
+        {
+            return ReadBaseFloat(ToAddress(baseAddress), offsetName);
         }
 
         // Used by: GMemory.WriteBytes
@@ -137,10 +182,30 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadInt32(startAddress, debugClue);
         }
 
-        // Used by: GMemory.ReadLong
-        internal static long ReadInt64(int startAddress, string debugClue)
+        internal static int ReadInt32(uint startAddress, string debugClue)
         {
-            return GProcessMemoryManipulator.ReadInt64(startAddress, debugClue);
+            return GProcessMemoryManipulator.ReadInt32(ToAddress(startAddress), debugClue);
+        }
+
+        internal static int ReadInt32(long startAddress, string debugClue)
+        {
+            return GProcessMemoryManipulator.ReadInt32(ToAddress(startAddress), debugClue);
+        }
+
+        // Used by: GMemory.ReadLong
+        internal static ulong ReadInt64(int startAddress, string debugClue)
+        {
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(startAddress, debugClue));
+        }
+
+        internal static ulong ReadInt64(uint startAddress, string debugClue)
+        {
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(startAddress, debugClue));
+        }
+
+        internal static ulong ReadInt64(long startAddress, string debugClue)
+        {
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(ToAddress(startAddress), debugClue));
         }
 
         // Used by: GMemory.ReadFloat
@@ -159,6 +224,16 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadIntFromOffset(startAddress, debugClue);
         }
 
+        internal static int ReadIntFromOffset(uint startAddress, string debugClue)
+        {
+            return GProcessMemoryManipulator.ReadIntFromOffset(ToAddress(startAddress), debugClue);
+        }
+
+        internal static int ReadIntFromOffset(long startAddress, string debugClue)
+        {
+            return GProcessMemoryManipulator.ReadIntFromOffset(ToAddress(startAddress), debugClue);
+        }
+
         // Used by: GMemory.ReadString
         internal static string ReadString(int startAddress, int maxLength, string debugClue)
         {
@@ -171,9 +246,9 @@ internal static class GameMemoryAccess
         }
 
         // Used by: GUnit.RaidTargetIcon
-        internal static long ReadRaidTargetGuid(int raidTargetIconOffset, int index)
+        internal static ulong ReadRaidTargetGuid(int raidTargetIconOffset, int index)
         {
-            return GProcessMemoryManipulator.ReadInt64(raidTargetIconOffset + index * 8, "rti");
+            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(raidTargetIconOffset + index * 8, "rti"));
         }
 
         // Used by: GUnit.LoadFields
@@ -200,10 +275,20 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags"), "movefl");
         }
 
+        internal static int ReadMovementFlags1(uint baseAddress)
+        {
+            return ReadMovementFlags1(ToAddress(baseAddress));
+        }
+
         // Used by: GUnit.LoadFields
         internal static int ReadMoveStruct2(int baseAddress)
         {
             return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveStruct2"), "movest2");
+        }
+
+        internal static int ReadMoveStruct2(uint baseAddress)
+        {
+            return ReadMoveStruct2(ToAddress(baseAddress));
         }
 
         // Used by: GUnit.LoadFields
@@ -222,6 +307,11 @@ internal static class GameMemoryAccess
         internal static int ReadFactionOff1(int checkBaseAddress)
         {
             return GProcessMemoryManipulator.ReadIntFromOffset(checkBaseAddress + MemoryOffsetTable.Instance.GetIntOffset("FactionOff1"), "fac1");
+        }
+
+        internal static int ReadFactionOff1(uint checkBaseAddress)
+        {
+            return ReadFactionOff1(ToAddress(checkBaseAddress));
         }
 
         // Used by: GUnit.GetFactionGroupRow
@@ -254,16 +344,31 @@ internal static class GameMemoryAccess
             return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
         }
 
+        internal static int ReadNewBuffBaseCount(uint baseAddress)
+        {
+            return ReadNewBuffBaseCount(ToAddress(baseAddress));
+        }
+
         // Used by: GUnit.LoadBuffList
         internal static int ReadNewBuffExtCount(int baseAddress)
         {
             return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
         }
 
+        internal static int ReadNewBuffExtCount(uint baseAddress)
+        {
+            return ReadNewBuffExtCount(ToAddress(baseAddress));
+        }
+
         // Used by: GUnit.LoadBuffList
         internal static int ReadNewBuffExtPointer(int baseAddress)
         {
             return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
+        }
+
+        internal static int ReadNewBuffExtPointer(uint baseAddress)
+        {
+            return ReadNewBuffExtPointer(ToAddress(baseAddress));
         }
 
         // Used by: GUnit.LoadBuffList
@@ -288,6 +393,11 @@ internal static class GameMemoryAccess
         internal static int ReadOldBuffSpellId(int auraBaseAddress, int index)
         {
             return GProcessMemoryManipulator.ReadInt32(auraBaseAddress + index * 4, "BuffSpell" + index);
+        }
+
+        internal static int ReadOldBuffSpellId(long auraBaseAddress, int index)
+        {
+            return ReadOldBuffSpellId(ToAddress(auraBaseAddress), index);
         }
 
         internal static string GenerateRandomString()
@@ -470,9 +580,12 @@ internal static class GameMemoryAccess
             GProcessMemoryManipulator.smethod_51(helpProvider);
         }
 
-        internal static bool smethod_52(out long playerGuid, out int mainTable)
+        internal static bool smethod_52(out ulong playerGuid, out int mainTable)
         {
-            return GProcessMemoryManipulator.smethod_52(out playerGuid, out mainTable);
+            long signedPlayerGuid;
+            var result = GProcessMemoryManipulator.smethod_52(out signedPlayerGuid, out mainTable);
+            playerGuid = unchecked((ulong)signedPlayerGuid);
+            return result;
         }
 
         internal static void smethod_53()

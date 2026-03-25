@@ -13,7 +13,7 @@ namespace Glider.Common.Objects
     {
         protected int _energy;
         protected int _energyMax;
-        protected long _petGuid;
+        protected ulong _petGuid;
         protected GPlayerClass _playerClass;
         protected GPlayerRace _playerRace;
         protected int _rage;
@@ -104,7 +104,7 @@ namespace Glider.Common.Objects
 
         public bool HasLivePet => Pet != null && !Pet.IsDead;
 
-        public long PetGUID
+        public ulong PetGUID
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        public GUnit Pet => PetGUID == 0L ? null : GObjectList.FindUnit(PetGUID);
+        public GUnit Pet => PetGUID == 0 ? null : GObjectList.FindUnit(PetGUID);
 
         public bool IsSameFaction => PlayerFaction == GContext.Main.Me.PlayerFaction;
 
@@ -206,9 +206,9 @@ namespace Glider.Common.Objects
                     _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
                 }
             }
-            _petGuid = GetStorageLong("UNIT_FIELD_SUMMON");
-            if (_petGuid == 0L)
-                _petGuid = GetStorageLong("UNIT_FIELD_CHARM");
+            _petGuid = GetStorageULong("UNIT_FIELD_SUMMON");
+            if (_petGuid == 0)
+                _petGuid = GetStorageULong("UNIT_FIELD_CHARM");
             _energy = GetStorageInt("UNIT_FIELD_POWER4");
             _energyMax = GetStorageInt("UNIT_FIELD_MAXPOWER4");
             _rage = GetStorageInt("UNIT_FIELD_POWER2") / 10;
@@ -231,7 +231,7 @@ namespace Glider.Common.Objects
                 targetGuid = num2Guid != 0 ? num2Guid : targetGuid;
 
                 var str = GameMemoryAccess.ReadString(num1 + 0x20, 32, "PlayerName"); // NAME_NODE_NAME_OFFSET = 0x20
-                if (targetGuid != GUID && GameMemoryAccess.ReadInt64(num1 + 24, "PlayerNamesGUID") != GUID)
+                if (targetGuid != GUID && (ulong)GameMemoryAccess.ReadInt64(num1 + 24, "PlayerNamesGUID") != GUID)
                 {
                     var num3 = num1;
                     num1 = GameMemoryAccess.ReadInt32(num1 + 0xC, "PlayerNext"); // NAME_NODE_NEXT_OFFSET = 0xC

@@ -34,7 +34,7 @@ public class PartyManager
     public int int_5;
     public int int_6;
     public int int_7;
-    public long[] long_0;
+    public ulong[] long_0;
     public SortedList[] Offsets;
     public string[] string_0;
     public string string_1;
@@ -126,7 +126,7 @@ public class PartyManager
                     return unitByTarget1;
                 }
 
-                if (gplayer.PetGUID != 0L)
+                if (gplayer.PetGUID != 0UL)
                 {
                     var unitByTarget2 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                     if (unitByTarget2 != null && !method_13(unitByTarget2.GUID))
@@ -148,7 +148,7 @@ public class PartyManager
                         var unitByTarget3 = GObjectList.FindUnitByTarget(gplayer.GUID);
                         if (unitByTarget3 == null || method_13(unitByTarget3.GUID))
                         {
-                            if (gplayer.PetGUID != 0L)
+                            if (gplayer.PetGUID != 0UL)
                             {
                                 var unitByTarget4 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                                 if (unitByTarget4 != null && !method_13(unitByTarget4.GUID))
@@ -187,7 +187,7 @@ public class PartyManager
                         Logger.LogMessage(MessageProvider.smethod_2(704, string_1));
                     }
 
-                    if (GPlayerSelf.Me.TargetGUID != 0L)
+                    if (GPlayerSelf.Me.TargetGUID != 0UL)
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(319));
                         StartupClass.gclass73_0.method_12(true);
@@ -262,7 +262,7 @@ public class PartyManager
                     var gunit_0 = method_3();
                     if (gunit_0 != null)
                         method_7(gunit_0);
-                    if (GPlayerSelf.Me.TargetGUID != 0L)
+                    if (GPlayerSelf.Me.TargetGUID != 0UL)
                         goto label_19;
                 }
                 else
@@ -333,7 +333,7 @@ public class PartyManager
             StartupClass.smethod_39(200);
             SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + index);
             StartupClass.smethod_39(500);
-            if (GPlayerSelf.Me.TargetGUID != 0L)
+            if (GPlayerSelf.Me.TargetGUID != 0UL)
             {
                 var unit = (GPlayer)GObjectList.FindUnit(GPlayerSelf.Me.TargetGUID);
                 if (unit != null)
@@ -355,7 +355,7 @@ public class PartyManager
 
         if (arrayList.Count <= 0)
             return;
-        long_0 = (long[])arrayList.ToArray(typeof(long));
+        long_0 = (ulong[])arrayList.ToArray(typeof(ulong));
         gplayer_0 = new GPlayer[long_0.Length];
         gclass36_0 = new GameTimer[long_0.Length];
         gclass36_1 = new GameTimer[long_0.Length];
@@ -372,7 +372,7 @@ public class PartyManager
             gplayer_0[index] = (GPlayer)GObjectList.FindUnit(long_0[index]);
     }
 
-    public bool method_13(long long_1)
+    public bool method_13(ulong long_1)
     {
         if (genum7_0 == PartyRole.const_0 || long_0 == null)
             return false;

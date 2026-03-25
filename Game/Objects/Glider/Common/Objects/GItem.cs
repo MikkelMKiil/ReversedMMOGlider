@@ -12,7 +12,7 @@ namespace Glider.Common.Objects
 {
     public class GItem : GObject
     {
-        private long _contained;
+        private ulong _contained;
         private int _durability;
         private int _durabilityMax;
         private int _flags;
@@ -27,7 +27,7 @@ namespace Glider.Common.Objects
             _durability = 0;
             _durabilityMax = 0;
             _stackSize = 0;
-            _contained = 0L;
+            _contained = 0;
             _flags = 0;
         }
 
@@ -84,7 +84,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        public long ContainerID
+        public ulong ContainerID
         {
             get
             {
@@ -98,7 +98,7 @@ namespace Glider.Common.Objects
             get
             {
                 Refresh();
-                return _contained == 0L ? null : GObjectList.FindObject(_contained);
+                return _contained == 0UL ? null : GObjectList.FindObject(_contained);
             }
         }
 
@@ -161,7 +161,7 @@ namespace Glider.Common.Objects
             _durabilityMax = GetStorageInt("ITEM_FIELD_MAXDURABILITY");
             Definition = new GItemDefinition(ItemDefID);
             _stackSize = GetStorageInt("ITEM_FIELD_STACK_COUNT");
-            _contained = GetStorageLong("ITEM_FIELD_CONTAINED");
+            _contained = GetStorageULong("ITEM_FIELD_CONTAINED");
             _flags = GetStorageInt("ITEM_FIELD_FLAGS");
         }
 

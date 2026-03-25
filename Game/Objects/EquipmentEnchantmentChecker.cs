@@ -68,14 +68,14 @@ public class EquipmentEnchantmentChecker
         bool_0 = Offsets.Count > 0;
     }
 
-    public long method_1(string string_0)
+    public ulong method_1(string string_0)
     {
         if (!bool_0)
-            return 0;
+            return 0UL;
         if (!Offsets.ContainsKey(string_0))
         {
             Logger.LogMessage("Bogus slot name: " + string_0);
-            return 0;
+            return 0UL;
         }
 
         var num1 = (int)Offsets[string_0] - 1;
@@ -146,7 +146,7 @@ public class EquipmentEnchantmentChecker
         {
             var num = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
             var GUID = GameMemoryAccess.ReadInt64(GPlayerSelf.Me.StorageAddress + num, "BagGuid1");
-            if (GUID != 0L)
+            if (GUID != 0UL)
             {
                 var gobject = GObjectList.FindObject(GUID);
                 if (gobject == null)
@@ -167,13 +167,13 @@ public class EquipmentEnchantmentChecker
         return list_0.ToArray();
     }
 
-    private void method_5(List<InventoryItem> list_0, int int_2, int int_3, int int_4)
+    private void method_5(List<InventoryItem> list_0, uint int_2, int int_3, int int_4)
     {
         for (var index = 0; index < int_3; ++index)
         {
             var num1 = int_4 + index * 8;
-            var num2 = GameMemoryAccess.ReadInt64(int_2 + num1, "ItemGUID");
-            if (num2 != 0L)
+            var num2 = GameMemoryAccess.ReadInt64(int_2 + (uint)num1, "ItemGUID");
+            if (num2 != 0UL)
             {
                 var gobject = GObjectList.FindObject(num2);
                 if (gobject == null)

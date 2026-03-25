@@ -130,7 +130,7 @@ public class TestThread
     {
         var equippedGuid = GContext.Main.Items.GetEquippedGUID(string_0);
         Logger.LogMessage("Item in \"" + string_0 + "\": 0x" + equippedGuid.ToString("x"));
-        if (equippedGuid == 0L)
+        if (equippedGuid == 0UL)
             return;
         GContext.Main.Items.DebugItem(equippedGuid);
     }
@@ -204,7 +204,7 @@ public class TestThread
                 for (var index = 0; index < bagContents2.Length; ++index)
                 {
                     var str = "0x" + bagContents2[index].ToString("x");
-                    if (bagContents2[index] != 0L)
+                    if (bagContents2[index] != 0UL)
                         str = ((GItem)GObjectList.FindObject(bagContents2[index])).ToString();
                     Logger.LogMessage("Bag " + bag.ToString("x") + "/" + index + " = " + str);
                 }

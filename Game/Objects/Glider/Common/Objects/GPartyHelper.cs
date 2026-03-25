@@ -12,11 +12,11 @@ namespace Glider.Common.Objects
 {
     public class GPartyHelper
     {
-        private readonly SortedList<long, PartyBuffBucket> PartyBuckets;
+        private readonly SortedList<ulong, PartyBuffBucket> PartyBuckets;
 
         public GPartyHelper()
         {
-            PartyBuckets = new SortedList<long, PartyBuffBucket>();
+            PartyBuckets = new SortedList<ulong, PartyBuffBucket>();
         }
 
         public GPartyMode Mode
@@ -59,15 +59,15 @@ namespace Glider.Common.Objects
 
         public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.gclass54_0.genum7_0 != PartyRole.const_0;
 
-        public long[] GetPartyMembers()
+        public ulong[] GetPartyMembers()
         {
-            var longList = new List<long>();
+            var longList = new List<ulong>();
             var int_29 = MemoryOffsetTable.Instance.GetIntOffset("PartyMembers");
             var num1 = 0;
             while (num1 < 4)
             {
                 var num2 = GameMemoryAccess.ReadInt64(int_29, "PartyMember" + num1);
-                if (num2 != 0L)
+                if (num2 != 0UL)
                     longList.Add(num2);
                 ++num1;
                 int_29 += 8;
@@ -101,7 +101,7 @@ namespace Glider.Common.Objects
                 InputController.smethod_9((short)(113 + (short)index));
         }
 
-        private PartyBuffBucket GetBuffsForPlayer(long GUID)
+        private PartyBuffBucket GetBuffsForPlayer(ulong GUID)
         {
             if (!PartyBuckets.ContainsKey(GUID))
             {

@@ -20,12 +20,12 @@ namespace Glider.Common.Objects
         protected int _tickFirstSeen;
         protected string _title;
         protected GObjectType _type;
-        public int BaseAddress;
+        public uint BaseAddress;
         public int FrameNumber;
-        public long GUID;
+        public ulong GUID;
         private int LastUpdate;
         public object ObjectTag;
-        public int StorageAddress;
+        public uint StorageAddress;
         public string Tag;
 
         protected GObject(int BaseAddress, int FrameNumber)
@@ -40,8 +40,8 @@ namespace Glider.Common.Objects
             _culled = false;
             Tag = null;
             ObjectTag = null;
-            this.BaseAddress = BaseAddress;
-            StorageAddress = GameMemoryAccess.ReadObjectStorageAddress(BaseAddress);
+            this.BaseAddress = unchecked((uint)BaseAddress);
+            StorageAddress = unchecked((uint)GameMemoryAccess.ReadObjectStorageAddress(BaseAddress));
             GUID = GameMemoryAccess.ReadObjectGuid(BaseAddress);
             this.FrameNumber = FrameNumber;
         }
@@ -178,14 +178,14 @@ namespace Glider.Common.Objects
                 : GameMemoryAccess.ReadStorageInt(StorageAddress, descriptorOffset, Name);
         }
 
-        protected long GetStorageLong(string Name)
+        protected ulong GetStorageULong(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
             if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
-                ? 0L
-                : GameMemoryAccess.ReadStorageLong(StorageAddress, descriptorOffset, Name);
+                ? 0UL
+                : GameMemoryAccess.ReadStorageULong(StorageAddress, descriptorOffset, Name);
         }
 
         protected float GetStorageFloat(string Name)
@@ -203,7 +203,7 @@ namespace Glider.Common.Objects
             return GameMemoryAccess.ReadBaseInt(BaseAddress, OffsetName);
         }
 
-        protected long GetBaseLong(string OffsetName)
+        protected ulong GetBaseLong(string OffsetName)
         {
             return GameMemoryAccess.ReadBaseLong(BaseAddress, OffsetName);
         }

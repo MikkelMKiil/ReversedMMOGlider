@@ -15,7 +15,7 @@ namespace Glider.Common.Objects
         private static readonly bool LogObjects = false;
         private static int FrameNumber;
         private static int LastUpdate;
-        private static readonly SortedList<long, GObject> LastSnapshot = new SortedList<long, GObject>();
+        private static readonly SortedList<ulong, GObject> LastSnapshot = new SortedList<ulong, GObject>();
 
         public static void ClearCache()
         {
@@ -34,12 +34,12 @@ namespace Glider.Common.Objects
             }
         }
 
-        private static SortedList<long, GObject> GetAll()
+        private static SortedList<ulong, GObject> GetAll()
         {
             return GetAll(false);
         }
 
-        private static SortedList<long, GObject> GetAll(bool BypassTimer)
+        private static SortedList<ulong, GObject> GetAll(bool BypassTimer)
         {
             var flag = false;
             lock (LastSnapshot)
@@ -72,7 +72,7 @@ namespace Glider.Common.Objects
                             Logger.smethod_1("Object list traversal aborted: detected cycle in object links");
                         break;
                     }
-                    long guid;
+                    ulong guid;
                     do
                     {
                         if ((BaseAddress & 1) == 0 && BaseAddress != 0 && BaseAddress != 28)
@@ -111,8 +111,8 @@ namespace Glider.Common.Objects
                     var existingObject = LastSnapshot[guid];
                     if (existingObject.BaseAddress != BaseAddress)
                     {
-                        existingObject.BaseAddress = BaseAddress;
-                        existingObject.StorageAddress = GameMemoryAccess.ReadInt32(BaseAddress + 8, "GameObjStorage");
+                        existingObject.BaseAddress = unchecked((uint)BaseAddress);
+                        existingObject.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(BaseAddress + 8, "GameObjStorage"));
                     }
 
                     existingObject.FrameNumber = FrameNumber;
@@ -130,7 +130,7 @@ namespace Glider.Common.Objects
                     if (IsLikelyObjectPointer(num2))
                     {
                         var guid1 = QuickGetGUID(num2);
-                        if (guid1 != 0L)
+                        if (guid1 != 0UL)
                         {
                             StartupClass.long_0 = guid1;
                             if (!LastSnapshot.ContainsKey(guid1) || !(LastSnapshot[guid1] is GPlayerSelf))
@@ -145,8 +145,8 @@ namespace Glider.Common.Objects
                                 var activePlayer = LastSnapshot[guid1];
                                 if (activePlayer.BaseAddress != num2)
                                 {
-                                    activePlayer.BaseAddress = num2;
-                                    activePlayer.StorageAddress = GameMemoryAccess.ReadInt32(num2 + 8, "GameObjStorage");
+                                    activePlayer.BaseAddress = unchecked((uint)num2);
+                                    activePlayer.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(num2 + 8, "GameObjStorage"));
                                 }
 
                                 activePlayer.FrameNumber = FrameNumber;
@@ -258,17 +258,22 @@ namespace Glider.Common.Objects
             return destinationArray;
         }
 
-        private static long QuickGetGUID(int BaseAddress)
+        private static ulong QuickGetGUID(int BaseAddress)
         {
             return GameMemoryAccess.ReadInt64(BaseAddress + 48, "QuickGUID");
         }
 
-        public static GUnit FindUnit(long GUID)
+        public static GUnit FindUnit(ulong GUID)
         {
             foreach (var unit in GetUnits())
                 if (unit.GUID == GUID)
                     return unit;
             return null;
+        }
+
+        public static GUnit FindUnit(long GUID)
+        {
+            return FindUnit(unchecked((ulong)GUID));
         }
 
         public static GUnit FindUnit(string DisplayName)
@@ -288,7 +293,7 @@ namespace Glider.Common.Objects
             return null;
         }
 
-        public static GUnit FindUnitByTarget(long TargetGUID)
+        public static GUnit FindUnitByTarget(ulong TargetGUID)
         {
             var units = GetUnits();
             var gunitList = new List<GUnit>();
@@ -298,7 +303,12 @@ namespace Glider.Common.Objects
             return gunitList.Count == 0 ? null : (GUnit)GetClosest(gunitList.ToArray());
         }
 
-        public static GObject FindObject(long GUID)
+        public static GUnit FindUnitByTarget(long TargetGUID)
+        {
+            return FindUnitByTarget(unchecked((ulong)TargetGUID));
+        }
+
+        public static GObject FindObject(ulong GUID)
         {
             foreach (var gobject in GetObjects())
                 if (gobject.GUID == GUID)
@@ -306,14 +316,19 @@ namespace Glider.Common.Objects
             return null;
         }
 
+        public static GObject FindObject(long GUID)
+        {
+            return FindObject(unchecked((ulong)GUID));
+        }
+
         public static GMonster GetNearestHostile()
         {
-            return GetNearestHostile(GContext.Main.Me.Location, 0L, false);
+            return GetNearestHostile(GContext.Main.Me.Location, 0UL, false);
         }
 
         public static GMonster GetNearestHostile(
             GLocation Location,
-            long ExcludeGUID,
+            ulong ExcludeGUID,
             bool IncludeInjured)
         {
             var monsters = GetMonsters();
@@ -333,6 +348,11 @@ namespace Glider.Common.Objects
             return nearestHostile;
         }
 
+        public static GMonster GetNearestHostile(GLocation Location, long ExcludeGUID, bool IncludeInjured)
+        {
+            return GetNearestHostile(Location, unchecked((ulong)ExcludeGUID), IncludeInjured);
+        }
+
         public static bool CheckForAttackers()
         {
             var attackers = GetAttackers(false);
@@ -343,7 +363,7 @@ namespace Glider.Common.Objects
             return false;
         }
 
-        public static GUnit GetNearestAttacker(long ExcludeGUID)
+        public static GUnit GetNearestAttacker(ulong ExcludeGUID)
         {
             var attackers = GetAttackers(true);
             GUnit nearestAttacker = null;
@@ -358,6 +378,11 @@ namespace Glider.Common.Objects
             return nearestAttacker;
         }
 
+        public static GUnit GetNearestAttacker(long ExcludeGUID)
+        {
+            return GetNearestAttacker(unchecked((ulong)ExcludeGUID));
+        }
+
         public static GUnit[] GetAttackers()
         {
             var gunitList = new List<GUnit>();
@@ -366,7 +391,7 @@ namespace Glider.Common.Objects
                 var flag = false;
                 if (unit.IsMonster && unit.TargetGUID == GContext.Main.Me.GUID)
                     flag = true;
-                if (GContext.Main.Me.PetGUID != 0L && unit.IsMonster && unit.TargetGUID == GContext.Main.Me.PetGUID)
+                if (GContext.Main.Me.PetGUID != 0UL && unit.IsMonster && unit.TargetGUID == GContext.Main.Me.PetGUID)
                     flag = true;
                 if (unit.IsPlayer && unit.GUID == GContext.Main.Me.TargetGUID)
                     flag = true;
@@ -399,7 +424,7 @@ namespace Glider.Common.Objects
                 var flag = false;
                 if (unit.IsMonster && unit.TargetGUID == GContext.Main.Me.GUID)
                     flag = true;
-                if (IncludePet && GContext.Main.Me.PetGUID != 0L && unit.IsMonster &&
+                if (IncludePet && GContext.Main.Me.PetGUID != 0UL && unit.IsMonster &&
                     unit.TargetGUID == GContext.Main.Me.PetGUID)
                     flag = true;
                 if (unit.IsPlayer && unit.GUID == GContext.Main.Me.TargetGUID)
@@ -438,7 +463,7 @@ namespace Glider.Common.Objects
                 {
                     var gmonster = (GMonster)unit;
                     if (gmonster.Reaction == GReaction.Hostile && gmonster.Health == 1.0 &&
-                        Math.Abs(gmonster.Location.Z - GContext.Main.Me.Location.Z) < 10.0 && gmonster.TargetGUID == 0L)
+                        Math.Abs(gmonster.Location.Z - GContext.Main.Me.Location.Z) < 10.0 && gmonster.TargetGUID == 0UL)
                         gunitList.Add(gmonster);
                 }
 
@@ -483,9 +508,14 @@ namespace Glider.Common.Objects
             return closestNeutralMonster;
         }
 
-        public static bool IsObjectPresent(long GUID)
+        public static bool IsObjectPresent(ulong GUID)
         {
             return GetAll().ContainsKey(GUID);
+        }
+
+        public static bool IsObjectPresent(long GUID)
+        {
+            return IsObjectPresent(unchecked((ulong)GUID));
         }
 
         public static GMonster GetNextProfileTarget()
@@ -559,7 +589,7 @@ namespace Glider.Common.Objects
             return false;
         }
 
-        public static int StealthCountGameObjects(long SeekPlayerID)
+        public static int StealthCountGameObjects(ulong SeekPlayerID)
         {
             var int5 = StartupClass.int_5;
             var num1 = 0;
@@ -605,9 +635,9 @@ namespace Glider.Common.Objects
             return !flag ? 0 : num1;
         }
 
-        public static bool TryGetLikelyPlayerGuid(out long guid_0)
+        public static bool TryGetLikelyPlayerGuid(out ulong guid_0)
         {
-            guid_0 = 0L;
+            guid_0 = 0UL;
             var int5 = StartupClass.int_5;
             if (int5 == 0)
                 return false;
@@ -630,7 +660,7 @@ namespace Glider.Common.Objects
                 if (GameMemoryAccess.ReadInt32(num + 20, "QuickType") == 4)
                 {
                     var int64 = GameMemoryAccess.ReadInt64(num + 48, "GameObjGUID");
-                    if (int64 != 0L)
+                    if (int64 != 0UL)
                     {
                         guid_0 = int64;
                         return true;

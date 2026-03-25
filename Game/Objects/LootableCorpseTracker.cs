@@ -19,9 +19,9 @@ public class LootableCorpseTracker
     public GameTimer gclass36_0;
     public GLocation glocation_0;
     protected int int_0;
-    public long long_0;
+    public ulong long_0;
 
-    public LootableCorpseTracker(long long_1, bool bool_3, GLocation glocation_1, bool bool_4)
+    public LootableCorpseTracker(ulong long_1, bool bool_3, GLocation glocation_1, bool bool_4)
     {
         long_0 = long_1;
         gclass36_0 = new GameTimer(60000);

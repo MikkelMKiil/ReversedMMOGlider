@@ -82,7 +82,7 @@ public class CombatController
     private int int_7;
     public int int_8;
     public int int_9;
-    private long long_0;
+    private ulong long_0;
     protected string string_0;
     public string[] string_1;
     public Thread thread_0;
@@ -863,7 +863,7 @@ public class CombatController
                     flag3 = false;
                     if (gclass54_0.int_0 != 0)
                     {
-                        var num = (int)Math.Abs(unit.GUID % gclass54_0.int_0);
+                        var num = (int)(unit.GUID % (ulong)gclass54_0.int_0);
                         Logger.smethod_1(MessageProvider.smethod_2(671, num, gclass54_0.int_1));
                         if (num == gclass54_0.int_1)
                         {
@@ -1389,7 +1389,7 @@ public class CombatController
         }
     }
 
-    public bool method_30(long long_1, double double_8, double double_9, double double_10)
+    public bool method_30(ulong long_1, double double_8, double double_9, double double_10)
     {
         var int_29 = MemoryOffsetTable.Instance.GetIntOffset("UnderCursor");
         var flag = false;
@@ -1425,7 +1425,7 @@ public class CombatController
     {
         gplayerSelf_0.Refresh();
         var channelingObjectId = gplayerSelf_0.ChannelingObjectID;
-        return channelingObjectId == 0L ? null : GObjectList.FindObject(channelingObjectId);
+        return channelingObjectId == 0UL ? null : GObjectList.FindObject(channelingObjectId);
     }
 
     public void method_32()
@@ -1473,7 +1473,7 @@ public class CombatController
                     StartupClass.smethod_39(200);
                     method_26();
                     gplayerSelf_0.Refresh();
-                    if (gplayerSelf_0.TargetGUID != 0L)
+                    if (gplayerSelf_0.TargetGUID != 0UL)
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(246));
                         method_12(true);
@@ -2117,7 +2117,7 @@ public class CombatController
         var gclass36_1 = new GameTimer(5000);
         var gclass36_2 = new GameTimer(2000);
         var gclass36_3 = new GameTimer(1000);
-        long num = 0;
+        ulong num = 0;
         while (true)
         {
             GPlayer gplayer;
@@ -2186,7 +2186,7 @@ public class CombatController
                 goto label_1;
             } while (gplayer == null);
 
-            if (gplayer.TargetGUID != 0L && gplayer.TargetGUID != num)
+            if (gplayer.TargetGUID != 0UL && gplayer.TargetGUID != num)
             {
                 Logger.smethod_1(MessageProvider.smethod_2(687, gplayer.TargetGUID.ToString("x")));
                 var unit = GObjectList.FindUnit(gplayer.TargetGUID);
@@ -2214,7 +2214,7 @@ public class CombatController
                     {
                         if (gclass54_0.method_17(unit))
                         {
-                            num = 0L;
+                            num = 0UL;
                             if (gclass54_0.int_2 > 0)
                                 StartupClass.smethod_39(gclass54_0.int_2 * 1000);
                             method_12(false);

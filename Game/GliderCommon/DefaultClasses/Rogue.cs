@@ -150,9 +150,9 @@ namespace Glider.Common.Objects
         #region Poison stuff
         void CheckPoison(string Key, string Slot)
         {
-            long ItemGUID = Context.Items.GetEquippedGUID(Slot);
+            ulong ItemGUID = Context.Items.GetEquippedGUID(Slot);
 
-            if (ItemGUID == 0)
+            if (ItemGUID == 0UL)
             {
                 Context.Log("No item equipped in \"" + Slot + "\"... !?");
                 return;

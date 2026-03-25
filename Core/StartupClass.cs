@@ -67,7 +67,7 @@ public class StartupClass
     public static UIElement GameClass8Instance;
     public static ChatLogManager GameClass69Instance;
     public static bool IsSomeConditionMet;
-    public static SortedList<long, LootableCorpseTracker> ProfileIdToProfileMap;
+    public static SortedList<ulong, LootableCorpseTracker> ProfileIdToProfileMap;
     public static AppMode ApplicationStartupMode;
     public static IntPtr MainApplicationHandle = IntPtr.Zero;
     public static string SomeStringData;
@@ -84,7 +84,7 @@ public class StartupClass
     public static OffsetManager ItemOffsetManager;
     public static OffsetManager ContainerOffsetManager;
     public static int ProfileEditorVersion;
-    public static long CurrentPlayerGuid;
+    public static ulong CurrentPlayerGuid;
     public static int ResolvedMainTableAddress;
     public static SortedList RuntimeProfileCache = new SortedList();
     public static bool IsStartupPending = true;
@@ -179,7 +179,7 @@ public class StartupClass
     public static OffsetManager gclass43_3 { get { return ItemOffsetManager; } set { ItemOffsetManager = value; } }
     public static OffsetManager gclass43_4 { get { return ContainerOffsetManager; } set { ContainerOffsetManager = value; } }
     public static int int_4 { get { return ProfileEditorVersion; } set { ProfileEditorVersion = value; } }
-    public static long long_0 { get { return CurrentPlayerGuid; } set { CurrentPlayerGuid = value; } }
+    public static ulong long_0 { get { return CurrentPlayerGuid; } set { CurrentPlayerGuid = value; } }
     public static int int_5 { get { return ResolvedMainTableAddress; } set { ResolvedMainTableAddress = value; } }
     public static SortedList sortedList_2 { get { return RuntimeProfileCache; } set { RuntimeProfileCache = value; } }
     public static bool bool_15 { get { return IsStartupPending; } set { IsStartupPending = value; } }
@@ -246,153 +246,170 @@ public class StartupClass
     {
         ApplicationStartupMode = appMode_1;
         ProfileMapping = new SortedList<string, SpellActionData>();
-        ProfileIdToProfileMap = new SortedList<long, LootableCorpseTracker>();
+        ProfileIdToProfileMap = new SortedList<ulong, LootableCorpseTracker>();
+
         if (appMode_1 == AppMode.PGEdit)
         {
-            ConfigManager.gclass61_0 = new ConfigManager();
-            MessageProvider.smethod_0(".\\");
-            RandomGenerator = new Random();
-            ActiveProfile = null;
-            ActiveProfilePath = null;
-            InitializationThread = null;
-            PartyStateManager = new PartyManager();
-            ProfileEditorVersion = 1;
-            if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
-            {
-                smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
-            }
-            else
-            {
-                ActiveProfile = new GProfile();
-                ActiveProfilePath = MessageProvider.GetMessage(70);
-            }
-
-            var gcontext = new GContext();
-            if (appMode_1 != AppMode.PGEdit)
-                CodeCompiler.smethod_10();
-            InputController.smethod_31(ConfigManager.gclass61_0);
-            smethod_5();
-            SpellcastingManager.gclass42_0 = new SpellcastingManager();
-            SpellcastingManager.gclass42_0.method_12();
-            smethod_7();
-            if (appMode_1 == AppMode.PGEdit)
-                return;
-            if (ConfigManager.gclass61_0.method_2("AppKey") != "demo")
-                CodeCompiler.smethod_14();
-            smethod_8();
+            InitializeProfileEditorMode();
+            return;
         }
-        else
-        {
-            Logger.LogMessage("Glider 1.8.0 starting up (Release)");
-            ConfigManager.gclass61_0 = new ConfigManager();
-            IsBetaAccessGranted = true;
-            if (Environment.CommandLine.ToLower().IndexOf("/l1") != -1)
-                IsDiagnosticLoggingEnabled = true;
-            if (Environment.CommandLine.ToLower().IndexOf("/mach") != -1)
-            {
-                IsAttached = true;
-                Logger.LogMessage("Mach flag, using open memory model");
-            }
 
-            if (Environment.CommandLine.ToLower().IndexOf("/resume") != -1)
-                IsResumeRequested = true;
-            MessageProvider.smethod_0(".\\");
-            SecurityDescriptor = new SecurityDescriptorHelper();
-            SecurityDescriptor.method_1();
-            RandomGenerator = new Random();
-            LicenseCheckTimer = new GameTimer(10000);
-            CurrentGlideMode = GlideMode.None;
-            WowVersionLabel = "0.0";
-            DynamicClassCount = 0;
-            CompiledClassCount = 0;
-            InternalClassCount = 0;
-            ActiveProfile = null;
-            ActiveProfilePath = null;
-            HasClassLoadMismatch = ActiveProfilePath != null;
-            IsProfileDirty = false;
-            InitializationThread = null;
-            StartupAttemptCount = 1;
-            LicenseCheckTimer = new GameTimer(660000);
-            HasSessionWarning = false;
-            SessionHeartbeatTimer = new GameTimer(30000);
-            IsGliderInitialized = false;
-            CameraController = new CameraRotator();
-            if (!IsAttached)
-            {
-                smethod_54();
-            }
-
-            if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
-            {
-                smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
-            }
-            else
-            {
-                ActiveProfile = new GProfile();
-                ActiveProfilePath = MessageProvider.GetMessage(70);
-            }
-
-            GliderUIManager = new WebNotificationService();
-            var gcontext = new GContext();
-            if (!IsAttached)
-                CodeCompiler.smethod_10();
-            InputController.smethod_31(ConfigManager.gclass61_0);
-            smethod_5();
-            PartyStateManager = new PartyManager();
-            PartyStateManager.method_0(ConfigManager.gclass61_0);
-            smethod_52();
-            SpellcastingManager.gclass42_0 = new SpellcastingManager();
-            SpellcastingManager.gclass42_0.method_12();
-            KeyboardHook = new KeyboardHookManager();
-            LicenseCheckTimer.method_4();
-            if (!IsAttached)
-                smethod_7();
-            else
-                WowVersionLabel = "EvoStub";
-            if (!IsAttached)
-                smethod_8();
-            HasClassLoadMismatch = DynamicClassCount != CompiledClassCount;
-            if (SecurityDescriptor.string_0 != null)
-            {
-                Logger.LogMessage(MessageProvider.smethod_2(72, SecurityDescriptor.string_0));
-                Environment.Exit(1);
-            }
-
-            GameMemoryWriter = new ScriptExecutor();
-            GameClass69Instance = new ChatLogManager();
-            smethod_30();
-            smethod_53();
-            smethod_9();
-        }
+        InitializeRuntimeMode();
     }
 
-    public static bool smethod_1(string string_11)
+    private static void InitializeProfileEditorMode()
     {
-        if (smethod_2(string_11))
+        ConfigManager.gclass61_0 = new ConfigManager();
+        MessageProvider.smethod_0(".\\");
+        RandomGenerator = new Random();
+        ActiveProfile = null;
+        ActiveProfilePath = null;
+        InitializationThread = null;
+        PartyStateManager = new PartyManager();
+        ProfileEditorVersion = 1;
+
+        LoadLastProfileOrCreateDefault();
+
+        new GContext();
+        InputController.smethod_31(ConfigManager.gclass61_0);
+        smethod_5();
+        SpellcastingManager.gclass42_0 = new SpellcastingManager();
+        SpellcastingManager.gclass42_0.method_12();
+        smethod_7();
+    }
+
+    private static void InitializeRuntimeMode()
+    {
+        Logger.LogMessage("Glider 1.8.0 starting up (Release)");
+        ConfigManager.gclass61_0 = new ConfigManager();
+        IsBetaAccessGranted = true;
+        ProcessStartupCommandLineFlags();
+        MessageProvider.smethod_0(".\\");
+        SecurityDescriptor = new SecurityDescriptorHelper();
+        SecurityDescriptor.method_1();
+        InitializeRuntimeState();
+        LoadLastProfileOrCreateDefault();
+        GliderUIManager = new WebNotificationService();
+        new GContext();
+        if (!IsAttached)
+            CodeCompiler.smethod_10();
+        InputController.smethod_31(ConfigManager.gclass61_0);
+        smethod_5();
+        PartyStateManager = new PartyManager();
+        PartyStateManager.method_0(ConfigManager.gclass61_0);
+        smethod_52();
+        SpellcastingManager.gclass42_0 = new SpellcastingManager();
+        SpellcastingManager.gclass42_0.method_12();
+        KeyboardHook = new KeyboardHookManager();
+        LicenseCheckTimer.method_4();
+        if (!IsAttached)
+            smethod_7();
+        else
+            WowVersionLabel = "EvoStub";
+
+        if (!IsAttached)
+            smethod_8();
+
+        HasClassLoadMismatch = DynamicClassCount != CompiledClassCount;
+        EnsureSecurityDescriptorIsValid();
+
+        GameMemoryWriter = new ScriptExecutor();
+        GameClass69Instance = new ChatLogManager();
+        smethod_30();
+        smethod_53();
+        smethod_9();
+    }
+
+    private static void ProcessStartupCommandLineFlags()
+    {
+        var commandLine = Environment.CommandLine.ToLower();
+
+        if (commandLine.IndexOf("/l1") != -1)
+            IsDiagnosticLoggingEnabled = true;
+
+        if (commandLine.IndexOf("/mach") != -1)
+        {
+            IsAttached = true;
+            Logger.LogMessage("Mach flag, using open memory model");
+        }
+
+        if (commandLine.IndexOf("/resume") != -1)
+            IsResumeRequested = true;
+    }
+
+    private static void InitializeRuntimeState()
+    {
+        RandomGenerator = new Random();
+        CurrentGlideMode = GlideMode.None;
+        WowVersionLabel = "0.0";
+        DynamicClassCount = 0;
+        CompiledClassCount = 0;
+        InternalClassCount = 0;
+        ActiveProfile = null;
+        ActiveProfilePath = null;
+        HasClassLoadMismatch = false;
+        IsProfileDirty = false;
+        InitializationThread = null;
+        StartupAttemptCount = 1;
+        LicenseCheckTimer = new GameTimer(660000);
+        HasSessionWarning = false;
+        SessionHeartbeatTimer = new GameTimer(30000);
+        IsGliderInitialized = false;
+        CameraController = new CameraRotator();
+    }
+
+    private static void LoadLastProfileOrCreateDefault()
+    {
+        var lastProfile = ConfigManager.gclass61_0.method_2("LastProfile");
+        if (lastProfile != null)
+        {
+            smethod_1(lastProfile);
+            return;
+        }
+
+        ActiveProfile = new GProfile();
+        ActiveProfilePath = MessageProvider.GetMessage(70);
+    }
+
+    private static void EnsureSecurityDescriptorIsValid()
+    {
+        if (SecurityDescriptor.string_0 == null)
+            return;
+
+        Logger.LogMessage(MessageProvider.smethod_2(72, SecurityDescriptor.string_0));
+        Environment.Exit(1);
+    }
+
+    public static bool smethod_1(string profilePath)
+    {
+        if (smethod_2(profilePath))
         {
             ProfileGroupStateManager = new ProfileGroupManager();
-            return ProfileGroupStateManager.method_4(string_11);
+            return ProfileGroupStateManager.method_4(profilePath);
         }
 
         ProfileGroupStateManager = null;
-        return smethod_3(string_11);
+        return smethod_3(profilePath);
     }
 
-    private static bool smethod_2(string string_11)
+    private static bool smethod_2(string profilePath)
     {
-        return string_11.ToLower().IndexOf("groups\\") != -1;
+        if (profilePath == null)
+            return false;
+
+        return profilePath.ToLower().IndexOf("groups\\") != -1;
     }
 
-    public static bool smethod_3(string string_11)
+    public static bool smethod_3(string profilePath)
     {
         ActiveProfile = new GProfile();
-        if (ActiveProfile.Load(string_11))
+        if (ActiveProfile.Load(profilePath))
         {
             RuntimeProfileCache.Clear();
             IsProfileDirty = false;
-            ActiveProfilePath = string_11;
+            ActiveProfilePath = profilePath;
             Logger.LogMessage(MessageProvider.smethod_2(109, ActiveProfilePath));
-            ConfigManager.gclass61_0.method_0("LastProfile", string_11);
+            ConfigManager.gclass61_0.method_0("LastProfile", profilePath);
             if (PartyStateManager != null && PartyStateManager.Offsets != null)
             {
                 PartyStateManager.Offsets = null;
@@ -404,7 +421,7 @@ public class StartupClass
             return true;
         }
 
-        Logger.LogMessage(MessageProvider.smethod_2(111, string_11));
+        Logger.LogMessage(MessageProvider.smethod_2(111, profilePath));
         if (IsInitializationComplete)
             StartupLogger.imethod_0();
         return false;
@@ -698,9 +715,6 @@ public class StartupClass
         IsInitializationComplete = true;
         StartupLogger.imethod_0();
         IsStartupPending = false;
-        if (IsSecCheckEnabled)
-            return;
-        smethod_61();
     }
 
     public static bool smethod_12()
@@ -1212,6 +1226,7 @@ public class StartupClass
     {
         if (Environment.CommandLine.ToLower().IndexOf("/kill") == -1)
             return;
+
         new Thread(smethod_32).Start();
     }
 
@@ -1224,26 +1239,29 @@ public class StartupClass
 
     private static void smethod_32()
     {
-        var string_11 = smethod_36("/kill");
-        KillEventHandle = CreateEvent(IntPtr.Zero, false, false, string_11);
+        var killEventName = smethod_36("/kill");
+        KillEventHandle = CreateEvent(IntPtr.Zero, false, false, killEventName);
         if (KillEventHandle == IntPtr.Zero)
         {
             Logger.LogMessage("Couldn't create named event");
+            return;
         }
-        else
-        {
-            WaitForSingleObject(KillEventHandle, KillEventWaitTimeout);
-            CloseHandle(KillEventHandle);
-            if (!ShouldProcessKillEvent)
-                return;
-            smethod_33();
-        }
+
+        WaitForSingleObject(KillEventHandle, KillEventWaitTimeout);
+        CloseHandle(KillEventHandle);
+        if (!ShouldProcessKillEvent)
+            return;
+
+        smethod_33();
     }
 
     private static void smethod_33()
     {
         SoundPlayer.smethod_1("GliderExit.wav");
-        KnownDebuffs.method_10();
+
+        if (KnownDebuffs != null)
+            KnownDebuffs.method_10();
+
         StartupLogger.imethod_4();
         smethod_31();
         Environment.Exit(0);
@@ -1310,91 +1328,7 @@ public class StartupClass
 
             LastMainLoopTickTime = tickNow;
 
-        smethod_63("Tick start");
-        if (IsExitRequested)
-        {
-            smethod_63("Exit requested, skipping tick");
-            return;
-        }
-
-        smethod_45();
-        smethod_63("Attach/refresh check completed");
-        if (IsResumeRequested && IsInitializationComplete)
-        {
-            smethod_63("Security handshake check");
-            GameMemoryAccess.smethod_53();
-            if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
-                GameMemoryWriter.method_2("OnGliderStart", false);
-        }
-
-        if (SpellCooldownTimer.IsReady)
-        {
-            smethod_63("Process probe timer fired");
-            SpellCooldownTimer.Reset();
-            GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
-            GameMemoryAccess.GetProcessId();
-        }
-
-        if (NeedsDeferredCompile && !IsAttached && !HasDeferredCompileRun)
-        {
-            smethod_63("Deferred startup compilation");
-            HasDeferredCompileRun = true;
-            CodeCompiler.smethod_14();
-            smethod_8();
-        }
-
-        if (!IsRuntimeAttached)
-        {
-            smethod_63("Not attached, tick complete");
-            return;
-        }
-
-        smethod_63("Refreshing object list");
-        GObjectList.GetObjects();
-        var me = GPlayerSelf.Me;
-        if (me == null)
-        {
-            smethod_63("Player object unavailable, tick complete");
-            return;
-        }
-
-        if (KnownDebuffs != null && DebuffRefreshTimer.method_3())
-        {
-            smethod_63("Debuff cache refresh");
-            DebuffRefreshTimer.method_4();
-            KnownDebuffs.method_8();
-        }
-
-        if (me.Stance != CurrentStance)
-        {
-            smethod_63("Stance changed");
-            if (CurrentStance != GStance.Unknown)
-                GContext.Main.Interface.UnFillAllKeys();
-            CurrentStance = me.Stance;
-        }
-
-        EnsureWorldUiReady(me);
-        smethod_63("Running chat/dialog updates");
-        GameClass69Instance.method_4();
-        DialogMonitor.smethod_1();
-        if (GameClass8Instance != null && GameClass8Instance.method_10() && CurrentGlideMode == GlideMode.Auto)
-        {
-            smethod_63("Auto mode popup dismiss");
-            InputController.smethod_9(27);
-        }
-
-        if (CurrentGlideMode == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
-            (DateTime.Now - SessionStartTime).TotalSeconds >= 8.0 && !IsGliderRunning)
-        {
-            smethod_63("Applying background display state");
-            IsGliderRunning = true;
-            smethod_46();
-        }
-
-        smethod_63("Running camera/input maintenance");
-        CameraController.method_7();
-        InputController.smethod_21(true);
-        smethod_63("Tick complete");
+            ExecuteMainLoopTick();
         }
         finally
         {
@@ -1402,16 +1336,158 @@ public class StartupClass
         }
     }
 
-    private static bool smethod_64()
+    private static void ExecuteMainLoopTick()
+    {
+        LogMainLoopStep("Tick start");
+
+        if (IsExitRequested)
+        {
+            LogMainLoopStep("Exit requested, skipping tick");
+            return;
+        }
+
+        smethod_45();
+        LogMainLoopStep("Attach/refresh check completed");
+
+        RunResumeHandshakeIfNeeded();
+        RunProcessProbeIfNeeded();
+        RunDeferredCompilationIfNeeded();
+
+        if (!IsRuntimeAttached)
+        {
+            LogMainLoopStep("Not attached, tick complete");
+            return;
+        }
+
+        if (!TryRefreshObjectState(out GPlayerSelf me))
+            return;
+
+        RefreshDebuffStateIfNeeded();
+        UpdatePlayerStanceIfNeeded(me);
+        EnsureWorldUiReady(me);
+
+        RunUiUpdateTick();
+        ApplyBackgroundModeIfNeeded();
+        RunInputMaintenance();
+
+        LogMainLoopStep("Tick complete");
+    }
+
+    private static void RunResumeHandshakeIfNeeded()
+    {
+        if (!IsResumeRequested || !IsInitializationComplete)
+            return;
+
+        LogMainLoopStep("Security handshake check");
+        GameMemoryAccess.smethod_53();
+        if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
+            GameMemoryWriter.method_2("OnGliderStart", false);
+    }
+
+    private static void RunProcessProbeIfNeeded()
+    {
+        if (!SpellCooldownTimer.IsReady)
+            return;
+
+        LogMainLoopStep("Process probe timer fired");
+        SpellCooldownTimer.Reset();
+        GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
+        GameMemoryAccess.GetProcessId();
+    }
+
+    private static void RunDeferredCompilationIfNeeded()
+    {
+        if (!NeedsDeferredCompile || IsAttached || HasDeferredCompileRun)
+            return;
+
+        LogMainLoopStep("Deferred startup compilation");
+        HasDeferredCompileRun = true;
+        CodeCompiler.smethod_14();
+        smethod_8();
+    }
+
+    private static bool TryRefreshObjectState(out GPlayerSelf player)
+    {
+        player = null;
+
+        LogMainLoopStep("Refreshing object list");
+        GObjectList.GetObjects();
+        player = GPlayerSelf.Me;
+        if (player != null)
+            return true;
+
+        LogMainLoopStep("Player object unavailable, tick complete");
+        return false;
+    }
+
+    private static void RefreshDebuffStateIfNeeded()
+    {
+        if (KnownDebuffs == null || !DebuffRefreshTimer.method_3())
+            return;
+
+        LogMainLoopStep("Debuff cache refresh");
+        DebuffRefreshTimer.method_4();
+        KnownDebuffs.method_8();
+    }
+
+    private static void UpdatePlayerStanceIfNeeded(GPlayerSelf player)
+    {
+        if (player.Stance == CurrentStance)
+            return;
+
+        LogMainLoopStep("Stance changed");
+        if (CurrentStance != GStance.Unknown)
+            GContext.Main.Interface.UnFillAllKeys();
+
+        CurrentStance = player.Stance;
+    }
+
+    private static void RunUiUpdateTick()
+    {
+        LogMainLoopStep("Running chat/dialog updates");
+        GameClass69Instance.method_4();
+        DialogMonitor.smethod_1();
+        if (GameClass8Instance == null || !GameClass8Instance.method_10() || CurrentGlideMode != GlideMode.Auto)
+            return;
+
+        LogMainLoopStep("Auto mode popup dismiss");
+        InputController.smethod_9(27);
+    }
+
+    private static void ApplyBackgroundModeIfNeeded()
+    {
+        if (CurrentGlideMode != GlideMode.Auto || !IsGliderInitialized || IsGliderRunning)
+            return;
+
+        if (ConfigManager.gclass61_0.method_2("BackgroundDisplay") == "Normal")
+            return;
+
+        if ((DateTime.Now - SessionStartTime).TotalSeconds < 8.0)
+            return;
+
+        LogMainLoopStep("Applying background display state");
+        IsGliderRunning = true;
+        smethod_46();
+    }
+
+    private static void RunInputMaintenance()
+    {
+        LogMainLoopStep("Running camera/input maintenance");
+        CameraController.method_7();
+        InputController.smethod_21(true);
+    }
+
+    private static bool IsVerboseMainLoopLoggingEnabled()
     {
         return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
     }
 
-    private static void smethod_63(string string_11)
+    private static void LogMainLoopStep(string step)
     {
-        if (!smethod_64() || StartupLogger == null)
+        if (!IsVerboseMainLoopLoggingEnabled() || StartupLogger == null)
             return;
-        StartupLogger.imethod_2("[Debug] [MainLoop] " + string_11);
+
+        StartupLogger.imethod_2("[Debug] [MainLoop] " + step);
     }
 
     private static void EnsureWorldUiReady(GPlayerSelf player)
@@ -1483,210 +1559,264 @@ public class StartupClass
         {
             if (!HasLoggedMissingProcess)
                 Logger.smethod_1("Attach attempt: no matching process found for AttachEXE");
+
             HasLoggedMissingProcess = true;
             return false;
         }
 
         HasLoggedMissingProcess = false;
-
         IsGliderAttached = true;
-        if (AdditionalApplicationHandle == IntPtr.Zero && !SkipHandleOpen)
-        {
-            AdditionalApplicationHandle = GameMemoryAccess.OpenProcessHandle(AnotherIntegerValue);
-            if (AdditionalApplicationHandle == IntPtr.Zero)
-            {
-                if (!IsGliderPaused)
-                {
-                    IsGliderPaused = true;
-                    Logger.LogMessage(MessageProvider.smethod_2(96, Marshal.GetLastWin32Error()));
-                }
 
-                return false;
-            }
-
-            GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
-
-            GameMemoryAccess.GetProcessId();
-            if (GameMemoryWriter != null)
-                GameMemoryWriter.method_2("OnGameFirstSeen", false);
-        }
+        if (!EnsureAttachProcessHandle())
+            return false;
 
         if (IsAttached)
             return true;
-        var int_14 = MemoryOffsetTable.Instance.GetIntOffset("UIParent");
-        if (int_14 > 0 && GameMemoryAccess.ReadInt32(int_14, "probeuip") == 0 && !IsAutoLoginTriggered &&
-            ((IsAutoLoginArmed && AutoLoginTimer.IsReady) || IsForegroundEnabled))
-        {
-            var str = ConfigManager.gclass61_0.method_2("AutoLog");
-            if (str != null && str.Length > 0 && IsSomeConditionMet && new AutoLoginManager().method_2())
-            {
-                IsAutoLoginTriggered = true;
-                GameMemoryWriter.method_2("DoAutoLog", false);
-            }
 
-            Logger.smethod_1("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
+        TryAutoLoginFromUiParentProbe();
+
+        if (TryDirectAttachProbe())
+            return true;
+
+        CurrentPlayerGuid = 0UL;
+        if (!TryResolveObjectManagerPointer())
+            return false;
+
+        var isObjectManagerGuidKnown = TryResolvePlayerGuidFromObjectManager();
+        if (CurrentPlayerGuid == 0UL)
+        {
+            ulong wotlkGuid;
+            if (TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out wotlkGuid))
+            {
+                CurrentPlayerGuid = wotlkGuid;
+                isObjectManagerGuidKnown = true;
+            }
         }
 
-        if (GameMemoryAccess.smethod_52(out CurrentPlayerGuid, out ResolvedMainTableAddress) && CurrentPlayerGuid != 0L)
+        if (CurrentPlayerGuid == 0UL && !TryResolvePlayerGuidFromPlayerIdAddresses())
         {
-            if (!isLikelyPlayerGuid(CurrentPlayerGuid))
-            {
-                Logger.smethod_1("Direct attach probe rejected implausible GUID: 0x" + CurrentPlayerGuid.ToString("x"));
-                CurrentPlayerGuid = 0L;
-            }
-            else
-            {
-                if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
-                    return true;
-                Logger.smethod_1("Direct attach probe failed object validation, trying static offsets fallback");
-            }
-        }
-        else
-        {
-            Logger.smethod_1("Direct attach probe failed, trying static offsets fallback");
-        }
-        CurrentPlayerGuid = 0L;
-        var int_18 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
-        var int_19 = int_18;
-        if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
-        {
-            var int_20 = MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe");
-            var int_21 = GameMemoryAccess.ReadInt32(int_18 + int_20, "MainTableProbe");
-            var int_22 = int_18 + int_20;
-            if (smethod_62(int_21))
-                int_19 = int_21;
-            else if (smethod_62(int_22))
-                int_19 = int_22;
-            else
-                int_19 = int_21;
-        }
-        ResolvedMainTableAddress = int_19;
-        if (ResolvedMainTableAddress == 0)
-        {
-            Logger.smethod_1("Attach probe failed: resolved MainTable pointer is zero");
+            Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
             return false;
         }
 
-        var bool_42 = false;
-        var bool_43 = false;
-        var int_23 = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
+        return ValidateAttachedPlayerGuid(isObjectManagerGuidKnown);
+    }
+
+    private static bool EnsureAttachProcessHandle()
+    {
+        if (AdditionalApplicationHandle != IntPtr.Zero || SkipHandleOpen)
+            return true;
+
+        AdditionalApplicationHandle = GameMemoryAccess.OpenProcessHandle(AnotherIntegerValue);
+        if (AdditionalApplicationHandle == IntPtr.Zero)
+        {
+            if (!IsGliderPaused)
+            {
+                IsGliderPaused = true;
+                Logger.LogMessage(MessageProvider.smethod_2(96, Marshal.GetLastWin32Error()));
+            }
+
+            return false;
+        }
+
+        GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
+        GameMemoryAccess.GetProcessId();
+        if (GameMemoryWriter != null)
+            GameMemoryWriter.method_2("OnGameFirstSeen", false);
+
+        return true;
+    }
+
+    private static void TryAutoLoginFromUiParentProbe()
+    {
+        var uiParentAddress = MemoryOffsetTable.Instance.GetIntOffset("UIParent");
+        if (uiParentAddress <= 0)
+            return;
+
+        if (GameMemoryAccess.ReadInt32(uiParentAddress, "probeuip") != 0)
+            return;
+
+        if (IsAutoLoginTriggered)
+            return;
+
+        if (!((IsAutoLoginArmed && AutoLoginTimer.IsReady) || IsForegroundEnabled))
+            return;
+
+        var autoLogSetting = ConfigManager.gclass61_0.method_2("AutoLog");
+        if (autoLogSetting != null && autoLogSetting.Length > 0 && IsSomeConditionMet && new AutoLoginManager().method_2())
+        {
+            IsAutoLoginTriggered = true;
+            GameMemoryWriter.method_2("DoAutoLog", false);
+        }
+
+        Logger.smethod_1("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
+    }
+
+    private static bool TryDirectAttachProbe()
+    {
+        if (!GameMemoryAccess.smethod_52(out CurrentPlayerGuid, out ResolvedMainTableAddress) || CurrentPlayerGuid == 0UL)
+        {
+            Logger.smethod_1("Direct attach probe failed, trying static offsets fallback");
+            return false;
+        }
+
+        if (!IsLikelyPlayerGuid(CurrentPlayerGuid))
+        {
+            Logger.smethod_1("Direct attach probe rejected implausible GUID: 0x" + CurrentPlayerGuid.ToString("x"));
+            CurrentPlayerGuid = 0UL;
+            return false;
+        }
+
+        if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
+            return true;
+
+        Logger.smethod_1("Direct attach probe failed object validation, trying static offsets fallback");
+        return false;
+    }
+
+    private static bool TryResolveObjectManagerPointer()
+    {
+        var baseMainTable = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
+        var resolvedMainTable = baseMainTable;
+
+        if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
+        {
+            var probeOffset = MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe");
+            var candidatePointer = GameMemoryAccess.ReadInt32(baseMainTable + probeOffset, "MainTableProbe");
+            var candidateAddress = baseMainTable + probeOffset;
+
+            if (smethod_62(candidatePointer))
+                resolvedMainTable = candidatePointer;
+            else if (smethod_62(candidateAddress))
+                resolvedMainTable = candidateAddress;
+            else
+                resolvedMainTable = candidatePointer;
+        }
+
+        ResolvedMainTableAddress = resolvedMainTable;
+        if (ResolvedMainTableAddress != 0)
+            return true;
+
+        Logger.smethod_1("Attach probe failed: resolved MainTable pointer is zero");
+        return false;
+    }
+
+    private static bool TryResolvePlayerGuidFromObjectManager()
+    {
+        var usedActivePlayerPointer = false;
+        var hasKnownObjectManagerGuid = false;
+
+        var activePlayerOffset = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
             ? MemoryOffsetTable.Instance.GetIntOffset("MainTableActivePlayer")
             : 24;
-        if (int_23 > 0)
+
+        if (activePlayerOffset > 0)
         {
-            var int_24 = GameMemoryAccess.ReadInt32(ResolvedMainTableAddress + int_23, "MainTableActivePlayer");
-            if (isLikelyObjectAddress(int_24))
+            var activePlayerAddress = GameMemoryAccess.ReadInt32(ResolvedMainTableAddress + activePlayerOffset, "MainTableActivePlayer");
+            if (IsLikelyObjectAddress(activePlayerAddress))
             {
-                var int64_1 = GameMemoryAccess.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
-                if (int64_1 != 0L && isLikelyPlayerGuid(int64_1))
+                var activePlayerGuid = GameMemoryAccess.ReadInt64(activePlayerAddress + 48, "MainTableActivePlayerGuid");
+                if (activePlayerGuid != 0UL && IsLikelyPlayerGuid(activePlayerGuid))
                 {
-                    CurrentPlayerGuid = int64_1;
-                    bool_42 = true;
-                    bool_43 = true;
+                    CurrentPlayerGuid = activePlayerGuid;
+                    usedActivePlayerPointer = true;
+                    hasKnownObjectManagerGuid = true;
                     Logger.smethod_1("Attach probe: using active player object GUID = 0x" + CurrentPlayerGuid.ToString("x"));
                 }
             }
         }
 
-        var int_25 = MemoryOffsetTable.Instance.HasOffset("MainTableLocalGuid")
+        var localGuidOffset = MemoryOffsetTable.Instance.HasOffset("MainTableLocalGuid")
             ? MemoryOffsetTable.Instance.GetIntOffset("MainTableLocalGuid")
             : 40;
-        if (!bool_42 && int_25 > 0)
+
+        if (!usedActivePlayerPointer && localGuidOffset > 0)
         {
-            var int64_2 = GameMemoryAccess.ReadInt64(ResolvedMainTableAddress + int_25, "MainTableLocalGuid");
-            if (int64_2 != 0L && isLikelyPlayerGuid(int64_2))
+            var localGuid = GameMemoryAccess.ReadInt64(ResolvedMainTableAddress + localGuidOffset, "MainTableLocalGuid");
+            if (localGuid != 0UL && IsLikelyPlayerGuid(localGuid))
             {
-                CurrentPlayerGuid = int64_2;
-                bool_43 = true;
+                CurrentPlayerGuid = localGuid;
+                hasKnownObjectManagerGuid = true;
                 Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + CurrentPlayerGuid.ToString("x"));
             }
-            else if (int64_2 != 0L)
+            else if (localGuid != 0UL)
             {
-                Logger.smethod_1("Attach probe note: rejected implausible object manager local GUID = 0x" + int64_2.ToString("x"));
+                Logger.smethod_1("Attach probe note: rejected implausible object manager local GUID = 0x" + localGuid.ToString("x"));
             }
         }
 
-        long long_2;
-        if (CurrentPlayerGuid == 0L && TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out long_2))
+        return hasKnownObjectManagerGuid;
+    }
+
+    private static bool TryResolvePlayerGuidFromPlayerIdAddresses()
+    {
+        var configuredPlayerIdAddress = MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr");
+        var playerIdCandidates = new int[] { configuredPlayerIdAddress, 0x00CD87A8, 0x00BD07A8 };
+
+        for (var candidateIndex = 0; candidateIndex < playerIdCandidates.Length; ++candidateIndex)
         {
-            CurrentPlayerGuid = long_2;
-            bool_43 = true;
-        }
+            var candidateAddress = playerIdCandidates[candidateIndex];
+            if (candidateAddress == 0)
+                continue;
 
-        if (CurrentPlayerGuid == 0L)
-        {
-            var configuredPlayerIdAddress = MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr");
-            var playerIdCandidates = new int[]
+            var playerGuidBytes = GameMemoryAccess.ReadBytesRaw(candidateAddress, 8);
+            if (playerGuidBytes != null)
             {
-                configuredPlayerIdAddress,
-                0x00CD87A8,
-                0x00BD07A8
-            };
-            for (var candidateIndex = 0; candidateIndex < playerIdCandidates.Length; ++candidateIndex)
-            {
-                var candidateAddress = playerIdCandidates[candidateIndex];
-                if (candidateAddress == 0)
-                    continue;
-
-                var playerGuidBytes = GameMemoryAccess.ReadBytesRaw(candidateAddress, 8);
-                if (playerGuidBytes == null)
-                    continue;
-
-                var playerGuid = BitConverter.ToInt64(playerGuidBytes, 0);
-                if (playerGuid != 0L && isLikelyPlayerGuid(playerGuid))
+                var playerGuid = BitConverter.ToUInt64(playerGuidBytes, 0);
+                if (playerGuid != 0UL && IsLikelyPlayerGuid(playerGuid))
                 {
                     CurrentPlayerGuid = playerGuid;
-                    bool_43 = true;
                     if (candidateAddress != configuredPlayerIdAddress)
                         Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
-                    break;
+
+                    return true;
                 }
-
-                var playerObjectPointer = GameMemoryAccess.ReadInt32(candidateAddress, "PlayerIdAddrPointer");
-                if (!isLikelyObjectAddress(playerObjectPointer))
-                    continue;
-
-                var playerObjectGuid = GameMemoryAccess.ReadInt64(playerObjectPointer + 48, "PlayerIdAddrPointerGuid");
-                if (playerObjectGuid == 0L || !isLikelyPlayerGuid(playerObjectGuid))
-                    continue;
-
-                CurrentPlayerGuid = playerObjectGuid;
-                bool_43 = true;
-                Logger.smethod_1("Attach probe: using PlayerIdAddr object pointer path at 0x" + candidateAddress.ToString("x") +
-                                 " -> object 0x" + playerObjectPointer.ToString("x") + " -> GUID 0x" + CurrentPlayerGuid.ToString("x"));
-                break;
             }
 
-            if (CurrentPlayerGuid == 0L)
-            {
-                Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
-                return false;
-            }
+            var playerObjectPointer = GameMemoryAccess.ReadInt32(candidateAddress, "PlayerIdAddrPointer");
+            if (!IsLikelyObjectAddress(playerObjectPointer))
+                continue;
+
+            var playerObjectGuid = GameMemoryAccess.ReadInt64(playerObjectPointer + 48, "PlayerIdAddrPointerGuid");
+            if (playerObjectGuid == 0UL || !IsLikelyPlayerGuid(playerObjectGuid))
+                continue;
+
+            CurrentPlayerGuid = playerObjectGuid;
+            Logger.smethod_1("Attach probe: using PlayerIdAddr object pointer path at 0x" + candidateAddress.ToString("x") +
+                             " -> object 0x" + playerObjectPointer.ToString("x") + " -> GUID 0x" + CurrentPlayerGuid.ToString("x"));
+            return true;
         }
 
-        var num = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
-        if (num > 0)
+        return false;
+    }
+
+    private static bool ValidateAttachedPlayerGuid(bool objectManagerGuidKnown)
+    {
+        var validationCount = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
+        if (validationCount > 0)
             return true;
-        long long_1;
-        if (GObjectList.TryGetLikelyPlayerGuid(out long_1))
+
+        ulong inferredGuid;
+        if (GObjectList.TryGetLikelyPlayerGuid(out inferredGuid))
         {
-            if (bool_43 && long_1 <= 4096L)
+            if (objectManagerGuidKnown && inferredGuid <= 4096UL)
             {
                 Logger.smethod_1("Attach probe note: ignoring low inferred GUID candidate because object manager GUID is already known");
                 return true;
             }
-            CurrentPlayerGuid = long_1;
+
+            CurrentPlayerGuid = inferredGuid;
             Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + CurrentPlayerGuid.ToString("x"));
-            num = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
-            if (num > 1)
+            validationCount = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
+            if (validationCount > 1)
                 return true;
         }
 
-        Logger.smethod_1("Attach probe failed: object validation count too low = " + num);
+        Logger.smethod_1("Attach probe failed: object validation count too low = " + validationCount);
         return false;
     }
 
-    private static bool isLikelyObjectAddress(int objectAddress)
+    private static bool IsLikelyObjectAddress(int objectAddress)
     {
         if ((objectAddress & 1) != 0 || objectAddress == 0 || objectAddress == 28 || objectAddress < 65536)
             return false;
@@ -1697,41 +1827,41 @@ public class StartupClass
         return objectType >= 1 && objectType <= 7;
     }
 
-    private static bool isLikelyPlayerGuid(long playerGuid)
+    private static bool IsLikelyPlayerGuid(ulong playerGuid)
     {
-        return playerGuid != 0L;
+        return playerGuid != 0UL;
     }
 
-    private static bool isLikelyMemoryPointer(int pointer)
+    private static bool IsLikelyMemoryPointer(int pointer)
     {
         return (pointer & 1) == 0 && pointer != 0 && pointer != 28 && pointer >= 65536;
     }
 
-    private static bool TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out long playerGuid)
+    private static bool TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out ulong playerGuid)
     {
-        playerGuid = 0L;
+        playerGuid = 0UL;
         var clientConnection = GameMemoryAccess.ReadInt32(WotlkClientConnectionAddress, "WotlkClientConnection");
-        if (isLikelyMemoryPointer(clientConnection))
+        if (IsLikelyMemoryPointer(clientConnection))
         {
             var objectManager = GameMemoryAccess.ReadInt32(clientConnection + WotlkObjectManagerOffset, "WotlkObjectManager");
-            if (isLikelyMemoryPointer(objectManager))
+            if (IsLikelyMemoryPointer(objectManager))
             {
                 var objectManagerGuid = GameMemoryAccess.ReadInt64(objectManager + WotlkObjectManagerLocalGuidOffset,
                     "WotlkObjectManagerLocalGuid");
-                if (isLikelyPlayerGuid(objectManagerGuid))
+                if (IsLikelyPlayerGuid(objectManagerGuid))
                 {
                     playerGuid = objectManagerGuid;
                     Logger.smethod_1("Attach probe: using WotLK ClientConnection/ObjectManager GUID path = 0x" + playerGuid.ToString("x"));
                     return true;
                 }
 
-                if (objectManagerGuid != 0L)
+                if (objectManagerGuid != 0UL)
                     Logger.smethod_1("Attach probe note: rejected WotLK ObjectManager GUID = 0x" + objectManagerGuid.ToString("x"));
             }
         }
 
         var staticGuid = GameMemoryAccess.ReadInt64(WotlkStaticPlayerGuidAddress, "WotlkStaticPlayerGuid");
-        if (isLikelyPlayerGuid(staticGuid))
+        if (IsLikelyPlayerGuid(staticGuid))
         {
             playerGuid = staticGuid;
             Logger.smethod_1("Attach probe: using WotLK static PlayerGUID address 0x" + WotlkStaticPlayerGuidAddress.ToString("x") +
@@ -1739,7 +1869,7 @@ public class StartupClass
             return true;
         }
 
-        if (staticGuid != 0L)
+        if (staticGuid != 0UL)
             Logger.smethod_1("Attach probe note: rejected WotLK static PlayerGUID value = 0x" + staticGuid.ToString("x"));
 
         return false;
@@ -1855,16 +1985,7 @@ public class StartupClass
             return;
     }
 
-    private static void smethod_54()
-    {
-        var str = ConfigManager.gclass61_0.method_2("ForceVersion");
-        if (str == null || str.Length <= 0 || MessageBox.Show(null,
-                "ForceVersion detected in configuration.  Running with this option increases the risk of detection and may cause Glider to crash.  Are you sure you want to continue?",
-                "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
-            DialogResult.No)
-            return;
-        Environment.Exit(0);
-    }
+
 
     public static void smethod_56()
     {
@@ -1898,23 +2019,6 @@ public class StartupClass
             return;
     }
 
-    private static void smethod_61()
-    {
-        IsSecCheckEnabled = true;
-        if (int.Parse("1.8.0".Replace(".", "")) >= InitializationCount)
-            return;
-        if (ConfigManager.gclass61_0.method_5("NoVersionPop"))
-        {
-            Logger.LogMessage("A new version of Glider is available for download.");
-        }
-        else
-        {
-            if (MessageBox.Show(MainForm, MessageProvider.GetMessage(876), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Exclamation) != DialogResult.Yes)
-                return;
-            Process.Start("http://www.mmoglider.com/Download.aspx?Update=True");
-        }
-    }
 
     public static void smethod_62()
     {

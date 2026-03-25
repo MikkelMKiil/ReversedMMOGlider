@@ -12,29 +12,33 @@ namespace Glider.Common.Objects
 {
     internal static class WotlkOffsets
     {
-        internal const int CurMgrPointer = 0x00CF0B90;
-        internal const int CurMgrOffset = 0x3568;
-        internal const int FirstObject = 0xAC;
-        internal const int PlayerGuid = 0x00CA1238;
-        internal const int TargetGuid = 0x00BD07A0;
+        internal const uint ClientConnection = 0x00C79CE0;
+        internal const uint CurMgrOffset = 0x2ED0;
+        internal const uint FirstObject = 0xAC;
+        internal const uint LocalGuid = 0xC0;
+        internal const uint PlayerGuid = LocalGuid;
+        internal const uint TargetGuid = 0x00BD07B0;
 
-        internal const int ObjStoragePointer = 0x8;
-        internal const int ObjType = 0x14;
-        internal const int ObjGuid = 0x30;
-        internal const int NextObject = 0x3C;
+        internal const uint ObjStoragePointer = 0x8;
+        internal const uint ObjType = 0x14;
+        internal const uint ObjGuid = 0x30;
+        internal const uint NextObject = 0x3C;
 
-        internal const int PosX = 0x9B8;
-        internal const int PosY = 0x9BC;
-        internal const int PosZ = 0x9C0;
+        internal const uint PosX = 0x9B8;
+        internal const uint PosY = 0x9BC;
+        internal const uint PosZ = 0x9C0;
 
-        internal const int DescriptorBase = 0x8;
-        internal const int UnitFieldHealth = 0x6C;
-        internal const int UnitFieldMaxHealth = 0x74;
-        internal const int UnitFieldPower1 = 0x70;
-        internal const int UnitFieldMaxPower1 = 0x78;
-        internal const int UnitFieldPower2 = 0x74;
-        internal const int UnitFieldPower4 = 0x7C;
-        internal const int UnitFieldFactionTemplate = 0x90;
+        internal const uint DescriptorBase = 0x8;
+        internal const uint UnitFieldHealth = 0x6C;
+        internal const uint UnitFieldMaxHealth = 0x74;
+        internal const uint UnitFieldPower1 = 0x70;
+        internal const uint UnitFieldMaxPower1 = 0x78;
+        internal const uint UnitFieldPower2 = 0x74;
+        internal const uint UnitFieldPower4 = 0x7C;
+        internal const uint UnitFieldFactionTemplate = 0x90;
+
+        internal const uint PlayerNameStore = 0x00C79D18;
+        internal const uint MapId = 0x00AB63BC;
     }
 
     /// <summary>
@@ -146,9 +150,36 @@ namespace Glider.Common.Objects
         }
 
         /// <summary>
+        /// Reads a 32-bit unsigned integer from process memory at the specified address.
+        /// </summary>
+        internal static uint ReadUInt32(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4)
+                return 0U;
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        internal static uint ReadUInt32(uint address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4)
+                return 0U;
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        /// <summary>
         /// Reads a 64-bit signed integer from process memory at the specified address.
         /// </summary>
         internal static long ReadInt64(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 8, debugClue);
+            if (bytes.Length < 8)
+                return 0;
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        internal static long ReadInt64(uint address, string debugClue)
         {
             var bytes = ReadBytes(address, 8, debugClue);
             if (bytes.Length < 8)
@@ -180,6 +211,11 @@ namespace Glider.Common.Objects
         /// Reads raw bytes from process memory. This is the core memory read operation.
         /// </summary>
         internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue)
+        {
+            return ReadBytesInternal(startAddress, lengthToRead, debugClue, false);
+        }
+
+        internal static byte[] ReadBytes(uint startAddress, int lengthToRead, string debugClue)
         {
             return ReadBytesInternal(startAddress, lengthToRead, debugClue, false);
         }
@@ -232,6 +268,35 @@ namespace Glider.Common.Objects
             return buffer;
         }
 
+        private static byte[] ReadBytesInternal(uint startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
+        {
+            var buffer = new byte[lengthToRead];
+
+            if (_currentProcessHandle == IntPtr.Zero)
+            {
+                if (!string.IsNullOrEmpty(debugClue))
+                    GContext.Main.Log($"[CRITICAL] ReadBytes failed: No process handle (clue = {debugClue})");
+                return buffer;
+            }
+
+            if (!ReadProcessMemory(_currentProcessHandle, new IntPtr((long)startAddress), buffer, lengthToRead, out int bytesRead))
+            {
+                var lastError = Marshal.GetLastWin32Error();
+                if (!string.IsNullOrEmpty(debugClue))
+                    GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x} failed, error: {lastError} (clue = {debugClue})");
+                return allowPartialRead ? buffer : new byte[0];
+            }
+
+            if (bytesRead < lengthToRead && !allowPartialRead)
+            {
+                if (!string.IsNullOrEmpty(debugClue))
+                    GContext.Main.Log($"[CRITICAL] ReadBytes from 0x{startAddress:x}: Expected {lengthToRead} bytes, got {bytesRead} (clue = {debugClue})");
+                return new byte[0];
+            }
+
+            return buffer;
+        }
+
         /// <summary>
         /// Reads a 32-bit integer directly from memory with offset calculation.
         /// </summary>
@@ -243,7 +308,7 @@ namespace Glider.Common.Objects
         /// <summary>
         /// Reads a 64-bit integer directly from memory with offset calculation.
         /// </summary>
-        internal static long ReadLongFromOffset(int address, string debugClue)
+        internal static long ReadULongFromOffset(int address, string debugClue)
         {
             return ReadInt64(address, debugClue);
         }
@@ -598,75 +663,68 @@ namespace Glider.Common.Objects
             playerGuid = 0L;
             mainTable = 0;
 
-            var wowBaseAddress = GetWowBaseAddress();
-            if (!IsLikelyMemoryPointer(wowBaseAddress))
+            var clientConnection = ReadUInt32(WotlkOffsets.ClientConnection, "ClientConnection");
+            if (!IsLikelyMemoryPointer(clientConnection))
             {
-                GContext.Main.Log("[CRITICAL] Attach probe failed: unable to resolve WoW base address");
+                GContext.Main.Log("[CRITICAL] Attach probe failed: ClientConnection pointer is invalid");
                 return false;
             }
 
-            var curMgrPointer = ReadInt32(wowBaseAddress + WotlkOffsets.CurMgrPointer, "CurMgrPointer");
-            if (!IsLikelyMemoryPointer(curMgrPointer))
-            {
-                GContext.Main.Log("[CRITICAL] Attach probe failed: CurMgr pointer is invalid");
-                return false;
-            }
-
-            var objectManager = ReadInt32(curMgrPointer + WotlkOffsets.CurMgrOffset, "CurMgrOffset");
+            var objectManager = ReadUInt32(clientConnection + WotlkOffsets.CurMgrOffset, "CurMgrOffset");
             if (!IsLikelyMemoryPointer(objectManager))
             {
-                GContext.Main.Log("[CRITICAL] Attach probe failed: object manager pointer is invalid");
+                GContext.Main.Log("[CRITICAL] Attach probe failed: ObjectManager pointer is invalid");
                 return false;
             }
 
-            var firstObject = ReadInt32(objectManager + WotlkOffsets.FirstObject, "FirstObject");
+            var firstObject = ReadUInt32(objectManager + WotlkOffsets.FirstObject, "FirstObject");
             if (!IsLikelyMemoryPointer(firstObject))
             {
                 GContext.Main.Log("[CRITICAL] Attach probe failed: first object pointer is invalid");
                 return false;
             }
 
-            playerGuid = ReadInt64(wowBaseAddress + WotlkOffsets.PlayerGuid, "PlayerGuid");
+            playerGuid = ReadInt64(objectManager + WotlkOffsets.LocalGuid, "LocalGUID");
             if (playerGuid == 0L)
             {
                 GContext.Main.Log("[CRITICAL] Attach probe failed: local player GUID is zero");
                 return false;
             }
 
-            mainTable = objectManager;
+            mainTable = unchecked((int)objectManager);
             return true;
         }
 
-        private static int GetWowBaseAddress()
+        private static uint GetWowBaseAddress()
         {
             if (_currentProcessId == 0)
-                return 0;
+                return 0U;
 
             try
             {
                 var process = Process.GetProcessById(_currentProcessId);
                 if (process == null || process.HasExited || process.MainModule == null)
-                    return 0;
+                    return 0U;
 
-                return process.MainModule.BaseAddress.ToInt32();
+                return unchecked((uint)process.MainModule.BaseAddress.ToInt32());
             }
             catch (InvalidOperationException)
             {
-                return 0;
+                return 0U;
             }
             catch (Win32Exception)
             {
-                return 0;
+                return 0U;
             }
             catch (NotSupportedException)
             {
-                return 0;
+                return 0U;
             }
         }
 
-        private static bool IsLikelyMemoryPointer(int pointer)
+        private static bool IsLikelyMemoryPointer(uint pointer)
         {
-            return (pointer & 1) == 0 && pointer != 0 && pointer != 28 && pointer >= 65536;
+            return (pointer & 1U) == 0U && pointer != 0U && pointer != 28U && pointer >= 65536U;
         }
 
         internal static void smethod_53()

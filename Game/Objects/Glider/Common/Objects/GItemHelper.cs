@@ -15,12 +15,12 @@ namespace Glider.Common.Objects
         {
         }
 
-        public long GetEquippedGUID(string SlotName)
+        public ulong GetEquippedGUID(string SlotName)
         {
             return StartupClass.gclass38_0.method_1(SlotName);
         }
 
-        public int[] GetItemEnchants(long ItemGUID)
+        public int[] GetItemEnchants(ulong ItemGUID)
         {
             var gobject = GObjectList.FindObject(ItemGUID);
             var intList = new List<int>();
@@ -46,7 +46,7 @@ namespace Glider.Common.Objects
             return StartupClass.gclass38_0.method_3(EnchantID);
         }
 
-        public void DebugItem(long GUID)
+        public void DebugItem(ulong GUID)
         {
             var itemEnchants = GetItemEnchants(GUID);
             GContext.Main.Log("Enchant count on 0x" + GUID.ToString("x") + ": " + itemEnchants.Length);

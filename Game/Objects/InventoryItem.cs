@@ -8,10 +8,10 @@
 public class InventoryItem
 {
     public int int_0;
-    public long long_0;
+    public ulong long_0;
     public string string_0;
 
-    public InventoryItem(long long_1, int int_1, string string_1)
+    public InventoryItem(ulong long_1, int int_1, string string_1)
     {
         long_0 = long_1;
         string_0 = string_1;

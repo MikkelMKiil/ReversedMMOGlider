@@ -115,7 +115,7 @@ public class PlayerTracker
         return false;
     }
 
-    private static PlayerTracker smethod_5(long long_0)
+    private static PlayerTracker smethod_5(ulong long_0)
     {
         foreach (var gclass21 in list_0)
             if (gclass21.gplayer_0.GUID == long_0)

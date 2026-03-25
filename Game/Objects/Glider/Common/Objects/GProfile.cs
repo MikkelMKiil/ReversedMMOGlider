@@ -23,7 +23,7 @@ namespace Glider.Common.Objects
         public bool AllowShortCircuit;
         public string[] AvoidList;
         public bool Beach;
-        public List<long> Blacklist;
+        public List<ulong> Blacklist;
         public bool BlacklistOn;
         public Stack<GLocation> Breadcrumbs;
         public int CurrentIndex;
@@ -60,7 +60,7 @@ namespace Glider.Common.Objects
             Waypoints = new List<GLocation>();
             GhostWaypoints = new List<GLocation>();
             VendorWaypoints = new List<GLocation>();
-            Blacklist = new List<long>();
+            Blacklist = new List<ulong>();
             BlacklistOn = false;
             Fishing = false;
             NaturalRun = true;
@@ -225,7 +225,7 @@ namespace Glider.Common.Objects
             StartupClass.sortedList_2.Clear();
         }
 
-        public bool IsBlacklisted(long GUID)
+        public bool IsBlacklisted(ulong GUID)
         {
             foreach (var num in Blacklist)
                 if (GUID == num)
@@ -233,7 +233,7 @@ namespace Glider.Common.Objects
             return false;
         }
 
-        public void ForceBlacklist(long GUID)
+        public void ForceBlacklist(ulong GUID)
         {
             if (GPlayerSelf.Me.TargetGUID == GUID)
                 GContext.Main.ClearTarget();
@@ -241,7 +241,7 @@ namespace Glider.Common.Objects
             Blacklist.Add(GUID);
         }
 
-        public void AddToBlacklist(long GUID)
+        public void AddToBlacklist(ulong GUID)
         {
             if (GPlayerSelf.Me.TargetGUID == GUID)
                 GContext.Main.ClearTarget();

@@ -124,9 +124,9 @@ public class GliderForm : Form, ILogger
     private int int_5;
     private Point point_0;
     private bool bool_10;
-    private long long_1 = -1L;
-    private int int_6 = -1;
-    private int int_7 = -1;
+    private ulong long_1 = 0;
+    private uint int_6 = 0;
+    private uint int_7 = 0;
     private int int_8;
     private int int_9;
     private readonly object object_0 = new object();
@@ -1165,7 +1165,7 @@ public class GliderForm : Form, ILogger
                 this.method_30(this.LabelMana_1, "LabelMana", StartupClass.CurrentGameClass.PowerValue);
             else
                 this.method_30(this.LabelMana_1, "LabelMana", currentPlayer.Power2.ToString() + " / " + (object)currentPlayer.Power2Max);
-            long targetGUID = currentPlayer.TargetGUID;
+            ulong targetGUID = currentPlayer.TargetGUID;
             GUnit target = targetGUID == 0L ? (GUnit)null : GObjectList.FindUnit(targetGUID);
             if (target != null)
             {
@@ -1381,7 +1381,29 @@ public class GliderForm : Form, ILogger
         StartupClass.smethod_24(false);
     }
 
-    private void KillButton_Click(object sender, EventArgs e) => StartupClass.smethod_21(false);
+    private void KillButton_Click(object sender, EventArgs e)
+    {
+        GPlayerSelf me = GPlayerSelf.Me;
+        if (me == null)
+        {
+            Logger.LogMessage("1-Kill requested, but player context is unavailable.");
+            StartupClass.smethod_21(false);
+            return;
+        }
+
+        GUnit target = me.Target;
+        if (target == null)
+        {
+            Logger.LogMessage("1-Kill requested with no target selected. TargetGUID=0x" + me.TargetGUID.ToString("x"));
+            StartupClass.smethod_21(false);
+            return;
+        }
+
+        Logger.LogMessage("1-Kill target object: " + target);
+        Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + me.TargetGUID.ToString("x"));
+        Logger.LogMessage("1-Kill target info: Name=\"" + target.Name + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
+        StartupClass.smethod_21(false);
+    }
 
     private void method_13()
     {
@@ -2258,16 +2280,16 @@ public class GliderForm : Form, ILogger
 
     private void method_31(GPlayerSelf gplayerSelf_0)
     {
-        long guid = gplayerSelf_0.GUID;
-        int baseAddress = gplayerSelf_0.BaseAddress;
-        int storageAddress = gplayerSelf_0.StorageAddress;
+        ulong guid = gplayerSelf_0.GUID;
+        uint baseAddress = (uint)gplayerSelf_0.BaseAddress;
+        uint storageAddress = (uint)gplayerSelf_0.StorageAddress;
         bool flag = guid != this.long_1 || baseAddress != this.int_6 || storageAddress != this.int_7;
         if (!flag && Environment.TickCount - this.int_8 < 1000)
             return;
 
         GLocation location = gplayerSelf_0.Location;
         string meCoords = location != null ? location.ToString3D() : "(unknown)";
-        long targetGuid = gplayerSelf_0.TargetGUID;
+        ulong targetGuid = gplayerSelf_0.TargetGUID;
         GUnit target = targetGuid != 0L ? GObjectList.FindUnit(targetGuid) : null;
         string targetInfo = "none";
         if (target != null)

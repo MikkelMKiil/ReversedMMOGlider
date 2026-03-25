@@ -12,9 +12,9 @@ namespace Glider.Common.Objects
     internal class PartyBuffBucket
     {
         public SortedList<string, PartyBuff> Buffs;
-        private long PlayerID;
+        private ulong PlayerID;
 
-        public PartyBuffBucket(long PlayerID)
+        public PartyBuffBucket(ulong PlayerID)
         {
             Buffs = new SortedList<string, PartyBuff>();
             this.PlayerID = PlayerID;
