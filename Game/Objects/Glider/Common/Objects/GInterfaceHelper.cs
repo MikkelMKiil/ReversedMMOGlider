@@ -25,6 +25,12 @@ namespace Glider.Common.Objects
         {
             get
             {
+                if (MemoryOffsetTable.Instance.HasOffset("GameState"))
+                {
+                    var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("GameState"), "gamestate");
+                    return num == 1;
+                }
+
                 var num1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
                 var num2 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
                 var int_29_1 = num1 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");

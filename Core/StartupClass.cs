@@ -157,6 +157,7 @@ public class StartupClass
     private static readonly GSpellTimer PeriodicSafetyTimer = new GSpellTimer(1080000, true);
     private static int MainLoopTickGuard;
     private static int LastMainLoopTickTime;
+    private static bool IsWorldUiReady;
     private const int MinMainLoopTickIntervalMs = 75;
     private const int WotlkClientConnectionAddress = 0x00C79CE0;
     private const int WotlkObjectManagerOffset = 0x2ED0;
@@ -744,14 +745,13 @@ public class StartupClass
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
                 CurrentGameClass.OnAttach();
-            UIElement.smethod_2("UIParent");
             smethod_17(1, MessageProvider.GetMessage(98));
             StartupLogger.imethod_0();
             EquipmentEnchantmentChecker = new EquipmentEnchantmentChecker();
             EquipmentEnchantmentChecker.method_0();
             GameClass69Instance.method_0();
-            DialogMonitor.smethod_0();
-            GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
+            IsWorldUiReady = false;
+            GameClass8Instance = null;
             IsGliderPaused = false;
             if (ProfileGroupStateManager != null)
                 ProfileGroupStateManager.method_6();
@@ -782,6 +782,7 @@ public class StartupClass
 
         IsRuntimeAttached = false;
         GameClass69Instance.method_3();
+        IsWorldUiReady = false;
         GameClass8Instance = null;
         smethod_17(1, MessageProvider.GetMessage(99));
     }
@@ -1372,6 +1373,7 @@ public class StartupClass
             CurrentStance = me.Stance;
         }
 
+        EnsureWorldUiReady(me);
         smethod_63("Running chat/dialog updates");
         GameClass69Instance.method_4();
         DialogMonitor.smethod_1();
@@ -1410,6 +1412,19 @@ public class StartupClass
         if (!smethod_64() || StartupLogger == null)
             return;
         StartupLogger.imethod_2("[Debug] [MainLoop] " + string_11);
+    }
+
+    private static void EnsureWorldUiReady(GPlayerSelf player)
+    {
+        if (IsWorldUiReady || player == null || long_0 <= 0L || player.BaseAddress == 0)
+            return;
+
+        if (GContext.Main == null || GContext.Main.Interface == null || GContext.Main.Interface.IsPreWorldVisible)
+            return;
+
+        DialogMonitor.smethod_0();
+        GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
+        IsWorldUiReady = true;
     }
 
     public static void smethod_39(int int_14)

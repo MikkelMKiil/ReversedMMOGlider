@@ -86,10 +86,23 @@
 
 	<!-- UI system -->
 	<UIParent>0x00B7436C</UIParent>
-	<UIName>0xB4</UIName>
-	<UINext>0x3C</UINext>
-	<UILabelText>0xCC</UILabelText>
-	<UIFontString>0xC8</UIFontString>
+   <GameState>0x00B674B0</GameState>
+	<UIGlue1>0x00CFA354</UIGlue1>
+	<UIGlue2>0x00CDA330</UIGlue2>
+	<UIGlueStep>0x0</UIGlueStep>
+	<UIName>0x1C</UIName>
+	<UINext>0x9C</UINext>
+	<UIParentOffset>0x94</UIParentOffset>
+	<UIChildren>0x98</UIChildren>
+	<UIChildStep>0x0</UIChildStep>
+	<UIChildNext>0x9C</UIChildNext>
+	<UIChildrenOneShot>0x0</UIChildrenOneShot>
+	<UIMenuVisible>0x64</UIMenuVisible>
+	<UILabelText>0xE4</UILabelText>
+	<UIFontString>0xE4</UIFontString>
+	<UITypeLabel>0x14</UITypeLabel>
+	<UITypeLabel1>0x11</UITypeLabel1>
+	<UITypeLabel2>0x11</UITypeLabel2>
 
 	<!-- Chat -->
 	<ChatFrameBase>0x00B75A60</ChatFrameBase>

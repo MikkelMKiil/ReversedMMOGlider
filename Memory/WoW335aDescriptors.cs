@@ -93,96 +93,94 @@ public static class WoW335aDescriptors
         { "OBJECT_FIELD_SCALE_X",           0x10 },
 
         // Unit fields (start at OBJECT_END = 0x18)
-        { "UNIT_FIELD_CHARM",               0x18 },  // uint64
-        { "UNIT_FIELD_SUMMON",              0x20 },  // uint64
-        { "UNIT_FIELD_CRITTER",             0x28 },  // uint64
-        { "UNIT_FIELD_CHARMEDBY",           0x30 },  // uint64
-        { "UNIT_FIELD_SUMMONEDBY",          0x38 },  // uint64
-        { "UNIT_FIELD_CREATEDBY",           0x40 },  // uint64
-        { "UNIT_FIELD_TARGET",              0x48 },  // uint64
-        { "UNIT_FIELD_CHANNEL_OBJECT",      0x50 },  // uint64
-        { "UNIT_FIELD_HEALTH",              0x58 },  // uint32
-        { "UNIT_FIELD_POWER1",              0x5C },  // uint32 (mana)
-        { "UNIT_FIELD_POWER2",              0x60 },  // uint32 (rage)
-        { "UNIT_FIELD_POWER3",              0x64 },  // uint32 (focus)
-        { "UNIT_FIELD_POWER4",              0x68 },  // uint32 (energy)
-        { "UNIT_FIELD_POWER5",              0x6C },  // uint32 (happiness)
-        { "UNIT_FIELD_POWER6",              0x70 },  // uint32
-        { "UNIT_FIELD_POWER7",              0x74 },  // uint32 (runic power)
-        { "UNIT_FIELD_MAXHEALTH",           0x78 },  // uint32
-        { "UNIT_FIELD_MAXPOWER1",           0x7C },  // uint32
-        { "UNIT_FIELD_MAXPOWER2",           0x80 },  // uint32
-        { "UNIT_FIELD_MAXPOWER3",           0x84 },  // uint32
-        { "UNIT_FIELD_MAXPOWER4",           0x88 },  // uint32
-        { "UNIT_FIELD_MAXPOWER5",           0x8C },  // uint32
-        { "UNIT_FIELD_MAXPOWER6",           0x90 },  // uint32
-        { "UNIT_FIELD_MAXPOWER7",           0x94 },  // uint32
-        { "UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER", 0x98 },   // 7x float
-        { "UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER", 0xB4 }, // 7x float
-        { "UNIT_FIELD_LEVEL",               0xD0 },  // uint32
-        { "UNIT_FIELD_FACTIONTEMPLATE",     0xD4 },  // uint32
-        { "UNIT_VIRTUAL_ITEM_SLOT_ID",      0xD8 },  // 3x uint32
-        { "UNIT_FIELD_FLAGS",               0xE4 },  // uint32
-        { "UNIT_FIELD_FLAGS_2",             0xE8 },  // uint32
-        { "UNIT_FIELD_AURASTATE",           0xEC },  // uint32
-        { "UNIT_FIELD_BASEATTACKTIME",      0xF0 },  // 2x uint32
-        { "UNIT_FIELD_RANGEDATTACKTIME",    0xF8 },  // uint32
-        { "UNIT_FIELD_BOUNDINGRADIUS",      0xFC },  // float
-        { "UNIT_FIELD_COMBATREACH",         0x100 }, // float
-        { "UNIT_FIELD_DISPLAYID",           0x104 }, // uint32
-        { "UNIT_FIELD_NATIVEDISPLAYID",     0x108 }, // uint32
-        { "UNIT_FIELD_MOUNTDISPLAYID",      0x10C }, // uint32
-        { "UNIT_FIELD_MINDAMAGE",           0x110 }, // float
-        { "UNIT_FIELD_MAXDAMAGE",           0x114 }, // float
-        { "UNIT_FIELD_MINOFFHANDDAMAGE",    0x118 }, // float
-        { "UNIT_FIELD_MAXOFFHANDDAMAGE",    0x11C }, // float
-        { "UNIT_FIELD_BYTES_1",             0x120 }, // uint32 (standstate, pet loyalty, shapeshift, stealth)
-        { "UNIT_FIELD_PETNUMBER",           0x124 }, // uint32
-        { "UNIT_FIELD_PET_NAME_TIMESTAMP",  0x128 }, // uint32
-        { "UNIT_FIELD_PETEXPERIENCE",       0x12C }, // uint32
-        { "UNIT_FIELD_PETNEXTLEVELEXP",     0x130 }, // uint32
-        { "UNIT_DYNAMIC_FLAGS",             0x134 }, // uint32
-        { "UNIT_CHANNEL_SPELL",             0x138 }, // uint32
-        { "UNIT_MOD_CAST_SPEED",            0x13C }, // float
-        { "UNIT_CREATED_BY_SPELL",          0x140 }, // uint32
-        { "UNIT_NPC_FLAGS",                 0x144 }, // uint32
-        { "UNIT_NPC_EMOTESTATE",            0x148 }, // uint32
-        { "UNIT_FIELD_STAT0",               0x14C }, // uint32 (strength)
-        { "UNIT_FIELD_STAT1",               0x150 }, // uint32 (agility)
-        { "UNIT_FIELD_STAT2",               0x154 }, // uint32 (stamina)
-        { "UNIT_FIELD_STAT3",               0x158 }, // uint32 (intellect)
-        { "UNIT_FIELD_STAT4",               0x15C }, // uint32 (spirit)
-        { "UNIT_FIELD_POSSTAT0",            0x160 }, // uint32
-        { "UNIT_FIELD_POSSTAT1",            0x164 }, // uint32
-        { "UNIT_FIELD_POSSTAT2",            0x168 }, // uint32
-        { "UNIT_FIELD_POSSTAT3",            0x16C }, // uint32
-        { "UNIT_FIELD_POSSTAT4",            0x170 }, // uint32
-        { "UNIT_FIELD_NEGSTAT0",            0x174 }, // uint32
-        { "UNIT_FIELD_NEGSTAT1",            0x178 }, // uint32
-        { "UNIT_FIELD_NEGSTAT2",            0x17C }, // uint32
-        { "UNIT_FIELD_NEGSTAT3",            0x180 }, // uint32
-        { "UNIT_FIELD_NEGSTAT4",            0x184 }, // uint32
-        { "UNIT_FIELD_RESISTANCES",         0x188 }, // 7x uint32 (physical, holy, fire, nature, frost, shadow, arcane)
-        { "UNIT_FIELD_RESISTANCEBUFFMODSPOSITIVE", 0x1A4 }, // 7x uint32
-        { "UNIT_FIELD_RESISTANCEBUFFMODSNEGATIVE", 0x1C0 }, // 7x uint32
-        { "UNIT_FIELD_BASE_MANA",           0x1DC }, // uint32
-        { "UNIT_FIELD_BASE_HEALTH",         0x1E0 }, // uint32
-        { "UNIT_FIELD_BYTES_2",             0x1E4 }, // uint32 (sheath state etc.)
-        { "UNIT_FIELD_ATTACK_POWER",        0x1E8 }, // uint32
-        { "UNIT_FIELD_ATTACK_POWER_MODS",   0x1EC }, // int32
-        { "UNIT_FIELD_ATTACK_POWER_MULTIPLIER", 0x1F0 }, // float
-        { "UNIT_FIELD_RANGED_ATTACK_POWER", 0x1F4 }, // uint32
-        { "UNIT_FIELD_RANGED_ATTACK_POWER_MODS", 0x1F8 }, // int32
-        { "UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER", 0x1FC }, // float
-        { "UNIT_FIELD_MINRANGEDDAMAGE",     0x200 }, // float
-        { "UNIT_FIELD_MAXRANGEDDAMAGE",     0x204 }, // float
-        { "UNIT_FIELD_POWER_COST_MODIFIER", 0x208 }, // 7x uint32
-        { "UNIT_FIELD_POWER_COST_MULTIPLIER", 0x224 }, // 7x float
-        { "UNIT_FIELD_MAXHEALTHMODIFIER",   0x240 }, // float
-        { "UNIT_FIELD_HOVERHEIGHT",         0x244 }, // float
-
-        // UNIT_FIELD_BYTES_0: race/class/gender/power type
-        { "UNIT_FIELD_BYTES_0",             0x248 },
+        { "UNIT_FIELD_CHARM",               0x18 },
+        { "UNIT_FIELD_SUMMON",              0x20 },
+        { "UNIT_FIELD_CRITTER",             0x28 },
+        { "UNIT_FIELD_CHARMEDBY",           0x30 },
+        { "UNIT_FIELD_SUMMONEDBY",          0x38 },
+        { "UNIT_FIELD_CREATEDBY",           0x40 },
+        { "UNIT_FIELD_TARGET",              0x48 },
+        { "UNIT_FIELD_CHANNEL_OBJECT",      0x50 },
+        { "UNIT_CHANNEL_SPELL",             0x58 },
+        { "UNIT_FIELD_BYTES_0",             0x5C },
+        { "UNIT_FIELD_HEALTH",              0x60 },
+        { "UNIT_FIELD_POWER1",              0x64 },
+        { "UNIT_FIELD_POWER2",              0x68 },
+        { "UNIT_FIELD_POWER3",              0x6C },
+        { "UNIT_FIELD_POWER4",              0x70 },
+        { "UNIT_FIELD_POWER5",              0x74 },
+        { "UNIT_FIELD_POWER6",              0x78 },
+        { "UNIT_FIELD_POWER7",              0x7C },
+        { "UNIT_FIELD_MAXHEALTH",           0x80 },
+        { "UNIT_FIELD_MAXPOWER1",           0x84 },
+        { "UNIT_FIELD_MAXPOWER2",           0x88 },
+        { "UNIT_FIELD_MAXPOWER3",           0x8C },
+        { "UNIT_FIELD_MAXPOWER4",           0x90 },
+        { "UNIT_FIELD_MAXPOWER5",           0x94 },
+        { "UNIT_FIELD_MAXPOWER6",           0x98 },
+        { "UNIT_FIELD_MAXPOWER7",           0x9C },
+        { "UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER", 0xA0 },
+        { "UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER", 0xBC },
+        { "UNIT_FIELD_LEVEL",               0xD8 },
+        { "UNIT_FIELD_FACTIONTEMPLATE",     0xDC },
+        { "UNIT_VIRTUAL_ITEM_SLOT_ID",      0xE0 },
+        { "UNIT_FIELD_FLAGS",               0xEC },
+        { "UNIT_FIELD_FLAGS_2",             0xF0 },
+        { "UNIT_FIELD_AURASTATE",           0xF4 },
+        { "UNIT_FIELD_BASEATTACKTIME",      0xF8 },
+        { "UNIT_FIELD_RANGEDATTACKTIME",    0x100 },
+        { "UNIT_FIELD_BOUNDINGRADIUS",      0x104 },
+        { "UNIT_FIELD_COMBATREACH",         0x108 },
+        { "UNIT_FIELD_DISPLAYID",           0x10C },
+        { "UNIT_FIELD_NATIVEDISPLAYID",     0x110 },
+        { "UNIT_FIELD_MOUNTDISPLAYID",      0x114 },
+        { "UNIT_FIELD_MINDAMAGE",           0x118 },
+        { "UNIT_FIELD_MAXDAMAGE",           0x11C },
+        { "UNIT_FIELD_MINOFFHANDDAMAGE",    0x120 },
+        { "UNIT_FIELD_MAXOFFHANDDAMAGE",    0x124 },
+        { "UNIT_FIELD_BYTES_1",             0x128 },
+        { "UNIT_FIELD_PETNUMBER",           0x12C },
+        { "UNIT_FIELD_PET_NAME_TIMESTAMP",  0x130 },
+        { "UNIT_FIELD_PETEXPERIENCE",       0x134 },
+        { "UNIT_FIELD_PETNEXTLEVELEXP",     0x138 },
+        { "UNIT_DYNAMIC_FLAGS",             0x13C },
+        { "UNIT_MOD_CAST_SPEED",            0x140 },
+        { "UNIT_CREATED_BY_SPELL",          0x144 },
+        { "UNIT_NPC_FLAGS",                 0x148 },
+        { "UNIT_NPC_EMOTESTATE",            0x14C },
+        { "UNIT_FIELD_STAT0",               0x150 },
+        { "UNIT_FIELD_STAT1",               0x154 },
+        { "UNIT_FIELD_STAT2",               0x158 },
+        { "UNIT_FIELD_STAT3",               0x15C },
+        { "UNIT_FIELD_STAT4",               0x160 },
+        { "UNIT_FIELD_POSSTAT0",            0x164 },
+        { "UNIT_FIELD_POSSTAT1",            0x168 },
+        { "UNIT_FIELD_POSSTAT2",            0x16C },
+        { "UNIT_FIELD_POSSTAT3",            0x170 },
+        { "UNIT_FIELD_POSSTAT4",            0x174 },
+        { "UNIT_FIELD_NEGSTAT0",            0x178 },
+        { "UNIT_FIELD_NEGSTAT1",            0x17C },
+        { "UNIT_FIELD_NEGSTAT2",            0x180 },
+        { "UNIT_FIELD_NEGSTAT3",            0x184 },
+        { "UNIT_FIELD_NEGSTAT4",            0x188 },
+        { "UNIT_FIELD_RESISTANCES",         0x18C },
+        { "UNIT_FIELD_RESISTANCEBUFFMODSPOSITIVE", 0x1A8 },
+        { "UNIT_FIELD_RESISTANCEBUFFMODSNEGATIVE", 0x1C4 },
+        { "UNIT_FIELD_BASE_MANA",           0x1E0 },
+        { "UNIT_FIELD_BASE_HEALTH",         0x1E4 },
+        { "UNIT_FIELD_BYTES_2",             0x1E8 },
+        { "UNIT_FIELD_ATTACK_POWER",        0x1EC },
+        { "UNIT_FIELD_ATTACK_POWER_MODS",   0x1F0 },
+        { "UNIT_FIELD_ATTACK_POWER_MULTIPLIER", 0x1F4 },
+        { "UNIT_FIELD_RANGED_ATTACK_POWER", 0x1F8 },
+        { "UNIT_FIELD_RANGED_ATTACK_POWER_MODS", 0x1FC },
+        { "UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER", 0x200 },
+        { "UNIT_FIELD_MINRANGEDDAMAGE",     0x204 },
+        { "UNIT_FIELD_MAXRANGEDDAMAGE",     0x208 },
+        { "UNIT_FIELD_POWER_COST_MODIFIER", 0x20C },
+        { "UNIT_FIELD_POWER_COST_MULTIPLIER", 0x228 },
+        { "UNIT_FIELD_MAXHEALTHMODIFIER",   0x244 },
+        { "UNIT_FIELD_HOVERHEIGHT",         0x248 },
     };
 
     // =========================================================================
@@ -203,140 +201,89 @@ public static class WoW335aDescriptors
         { "UNIT_FIELD_CREATEDBY",           0x40 },
         { "UNIT_FIELD_TARGET",              0x48 },
         { "UNIT_FIELD_CHANNEL_OBJECT",      0x50 },
-        { "UNIT_FIELD_HEALTH",              0x58 },
-        { "UNIT_FIELD_POWER1",              0x5C },
-        { "UNIT_FIELD_POWER2",              0x60 },
-        { "UNIT_FIELD_POWER3",              0x64 },
-        { "UNIT_FIELD_POWER4",              0x68 },
-        { "UNIT_FIELD_POWER5",              0x6C },
-        { "UNIT_FIELD_POWER7",              0x74 },
-        { "UNIT_FIELD_MAXHEALTH",           0x78 },
-        { "UNIT_FIELD_MAXPOWER1",           0x7C },
-        { "UNIT_FIELD_MAXPOWER4",           0x88 },
-        { "UNIT_FIELD_LEVEL",               0xD0 },
-        { "UNIT_FIELD_FACTIONTEMPLATE",     0xD4 },
-        { "UNIT_FIELD_FLAGS",               0xE4 },
-        { "UNIT_FIELD_BYTES_0",             0x248 },
-        { "UNIT_FIELD_BYTES_1",             0x120 },
-        { "UNIT_DYNAMIC_FLAGS",             0x134 },
+        { "UNIT_FIELD_BYTES_0",             0x5C },
+        { "UNIT_FIELD_HEALTH",              0x60 },
+        { "UNIT_FIELD_POWER1",              0x64 },
+        { "UNIT_FIELD_POWER2",              0x68 },
+        { "UNIT_FIELD_POWER3",              0x6C },
+        { "UNIT_FIELD_POWER4",              0x70 },
+        { "UNIT_FIELD_POWER5",              0x74 },
+        { "UNIT_FIELD_POWER7",              0x7C },
+        { "UNIT_FIELD_MAXHEALTH",           0x80 },
+        { "UNIT_FIELD_MAXPOWER1",           0x84 },
+        { "UNIT_FIELD_MAXPOWER4",           0x90 },
+        { "UNIT_FIELD_LEVEL",               0xD8 },
+        { "UNIT_FIELD_FACTIONTEMPLATE",     0xDC },
+        { "UNIT_FIELD_FLAGS",               0xEC },
+        { "UNIT_FIELD_BYTES_1",             0x128 },
+        { "UNIT_DYNAMIC_FLAGS",             0x13C },
 
-        // Player-specific fields 
-        // PLAYER_DUEL_ARBITER = UNIT_END = 0x298 area
-        { "PLAYER_FLAGS",                   0x2A0 },
-        { "PLAYER_GUILDID",                 0x2A4 },
-        { "PLAYER_GUILDRANK",               0x2A8 },
-        { "PLAYER_BYTES",                   0x2AC },
-        { "PLAYER_BYTES_2",                 0x2B0 },
-        { "PLAYER_BYTES_3",                 0x2B4 },
-        { "PLAYER_DUEL_TEAM",               0x2B8 },
-        { "PLAYER_GUILD_TIMESTAMP",         0x2BC },
+        // Player-specific fields
+        { "PLAYER_FLAGS",                   0x258 },
+        { "PLAYER_GUILDID",                 0x25C },
+        { "PLAYER_GUILDRANK",               0x260 },
+        { "PLAYER_BYTES",                   0x264 },
+        { "PLAYER_BYTES_2",                 0x268 },
+        { "PLAYER_BYTES_3",                 0x26C },
+        { "PLAYER_DUEL_TEAM",               0x270 },
+        { "PLAYER_GUILD_TIMESTAMP",         0x274 },
+        { "PLAYER_QUEST_LOG_1_1",           0x278 },
 
-        // Quest log — 25 quests, each with 5 fields (QuestID, State, Counts, Time, padding)
-        // PLAYER_QUEST_LOG_1_1 starts at descriptor index 0xB0 => byte offset 0x2C0
-        { "PLAYER_QUEST_LOG_1_1",           0x2C0 },
-
-        // Visible equipment slots (19 slots, 2 fields each — entryID + enchant)
-        // Starts after quest log region
-        { "PLAYER_VISIBLE_ITEM_1_ENTRYID",  0x4F8 },
+        { "PLAYER_VISIBLE_ITEM_1_ENTRYID",  0x46C },
 
         // Inventory/equipment slots
-        { "PLAYER_FIELD_INV_SLOT_HEAD",     0x5AC },  // 23 x uint64 = 0xB8 bytes (equipment 0-22)
-        { "PLAYER_FIELD_PACK_SLOT_1",       0x664 },  // 16 x uint64 = 0x80 bytes (backpack main slots)
-        { "PLAYER_FIELD_BANK_SLOT_1",       0x6E4 },  // 28 x uint64
+        { "PLAYER_FIELD_INV_SLOT_HEAD",     0x510 },
+        { "PLAYER_FIELD_PACK_SLOT_1",       0x5C8 },
+        { "PLAYER_FIELD_BANK_SLOT_1",       0x648 },
+        { "PLAYER_FIELD_BANKBAG_SLOT_1",    0x728 },
+        { "PLAYER_FIELD_VENDORBUYBACK_SLOT_1", 0x760 },
+        { "PLAYER_FIELD_KEYRING_SLOT_1",    0x7C0 },
 
-        // Key ring and other slots
-        { "PLAYER_FIELD_BANKBAG_SLOT_1",    0x7C4 },  // 7 x uint64
-        { "PLAYER_FIELD_VENDORBUYBACK_SLOT_1", 0x7FC }, // 12 x uint64
-        { "PLAYER_FIELD_KEYRING_SLOT_1",    0x85C },  // 32 x uint64
+        { "PLAYER_FARSIGHT",                0x9C0 },
+        { "PLAYER_FIELD_KNOWN_TITLES",      0x9C8 },
+        { "PLAYER_FIELD_KNOWN_TITLES1",     0x9D0 },
+        { "PLAYER_FIELD_KNOWN_CURRENCIES",  0x9E0 },
+        { "PLAYER_XP",                      0x9E8 },
+        { "PLAYER_NEXT_LEVEL_XP",           0x9EC },
+        { "PLAYER_SKILL_INFO_1_1",          0x9F0 },
 
-        // Frag bag
-        { "PLAYER_FARSIGHT",               0x99C },
-        { "PLAYER_FIELD_KNOWN_TITLES",     0x9A4 },
-        { "PLAYER_FIELD_KNOWN_CURRENCIES", 0x9BC },
+        { "PLAYER_CHARACTER_POINTS1",       0xFF0 },
+        { "PLAYER_CHARACTER_POINTS2",       0xFF4 },
+        { "PLAYER_TRACK_CREATURES",         0xFF8 },
+        { "PLAYER_TRACK_RESOURCES",         0xFFC },
+        { "PLAYER_BLOCK_PERCENTAGE",        0x1000 },
+        { "PLAYER_DODGE_PERCENTAGE",        0x1004 },
+        { "PLAYER_PARRY_PERCENTAGE",        0x1008 },
+        { "PLAYER_EXPERTISE",               0x100C },
+        { "PLAYER_OFFHAND_EXPERTISE",       0x1010 },
+        { "PLAYER_CRIT_PERCENTAGE",         0x1014 },
+        { "PLAYER_RANGED_CRIT_PERCENTAGE",  0x1018 },
+        { "PLAYER_OFFHAND_CRIT_PERCENTAGE", 0x101C },
+        { "PLAYER_SPELL_CRIT_PERCENTAGE1",  0x1020 },
+        { "PLAYER_SHIELD_BLOCK",            0x103C },
+        { "PLAYER_SHIELD_BLOCK_CRIT_PERCENTAGE", 0x1040 },
+        { "PLAYER_EXPLORED_ZONES_1",        0x1044 },
 
-        // XP
-        { "PLAYER_XP",                     0x9C4 },
-        { "PLAYER_NEXT_LEVEL_XP",          0x9C8 },
-
-        // Skill info — 384 x uint32 block
-        { "PLAYER_SKILL_INFO_1_1",         0x9CC },
-
-        // Character points
-        { "PLAYER_CHARACTER_POINTS1",      0xFCC },  // talent points
-        { "PLAYER_CHARACTER_POINTS2",      0xFD0 },  // professions (unused in 3.3.5)
-
-        // Track creatures/resources
-        { "PLAYER_TRACK_CREATURES",        0xFD4 },
-        { "PLAYER_TRACK_RESOURCES",        0xFD8 },
-
-        // Block/dodge/parry pct
-        { "PLAYER_BLOCK_PERCENTAGE",       0xFDC },
-        { "PLAYER_DODGE_PERCENTAGE",       0xFE0 },
-        { "PLAYER_PARRY_PERCENTAGE",       0xFE4 },
-
-        // Expertise
-        { "PLAYER_EXPERTISE",              0xFE8 },
-        { "PLAYER_OFFHAND_EXPERTISE",      0xFEC },
-
-        // Critical hit percentages
-        { "PLAYER_CRIT_PERCENTAGE",        0xFF0 },
-        { "PLAYER_RANGED_CRIT_PERCENTAGE", 0xFF4 },
-        { "PLAYER_OFFHAND_CRIT_PERCENTAGE",0xFF8 },
-
-        // Spell crit (7 schools)
-        { "PLAYER_SPELL_CRIT_PERCENTAGE1", 0xFFC },
-
-        // Shield block
-        { "PLAYER_SHIELD_BLOCK",           0x1018 },
-        { "PLAYER_SHIELD_BLOCK_CRIT_PERCENTAGE", 0x101C },
-
-        // Explored zones (128 uint32s)
-        { "PLAYER_EXPLORED_ZONES_1",       0x1020 },
-
-        // Rest state XP
-        { "PLAYER_REST_STATE_EXPERIENCE",  0x1220 },
-
-        // Coinage
-        { "PLAYER_FIELD_COINAGE",          0x1224 },
-
-        // Mod damage done (7 schools)
-        { "PLAYER_FIELD_MOD_DAMAGE_DONE_POS", 0x1228 },
-        { "PLAYER_FIELD_MOD_DAMAGE_DONE_NEG", 0x1244 },
-        { "PLAYER_FIELD_MOD_DAMAGE_DONE_PCT", 0x1260 },
-
-        // Healing done
-        { "PLAYER_FIELD_MOD_HEALING_DONE_POS", 0x127C },
-        { "PLAYER_FIELD_MOD_TARGET_RESISTANCE", 0x1280 },
-        { "PLAYER_FIELD_MOD_TARGET_PHYSICAL_RESISTANCE", 0x1284 },
-
-        // Player field bytes
-        { "PLAYER_FIELD_BYTES",            0x1288 },
-
-        // Ammo ID
-        { "PLAYER_AMMO_ID",               0x128C },
-
-        // Self resurrect spell
-        { "PLAYER_SELF_RES_SPELL",         0x1290 },
-
-        // PVP medals
-        { "PLAYER_FIELD_PVP_MEDALS",       0x1294 },
-
-        // Buyback prices + timestamps (12 each)
-        { "PLAYER_FIELD_BUYBACK_PRICE_1",  0x1298 },
-        { "PLAYER_FIELD_BUYBACK_TIMESTAMP_1", 0x12C8 },
-
-        // Kills
-        { "PLAYER_FIELD_KILLS",            0x12F8 },
-        { "PLAYER_FIELD_TODAY_CONTRIBUTION", 0x12FC },
-        { "PLAYER_FIELD_YESTERDAY_CONTRIBUTION", 0x1300 },
-        { "PLAYER_FIELD_LIFETIME_HONOURABLE_KILLS", 0x1304 },
-
-        // Glyph slots & glyphs (6 each)
-        { "PLAYER_FIELD_GLYPH_SLOTS_1",   0x131C },
-        { "PLAYER_FIELD_GLYPHS_1",        0x1334 },
-
-        // Known titles 3 (arena stuff)
-        { "PLAYER_FIELD_KNOWN_TITLES1",    0x134C },
+        { "PLAYER_REST_STATE_EXPERIENCE",   0x1244 },
+        { "PLAYER_FIELD_COINAGE",           0x1248 },
+        { "PLAYER_FIELD_MOD_DAMAGE_DONE_POS", 0x124C },
+        { "PLAYER_FIELD_MOD_DAMAGE_DONE_NEG", 0x1268 },
+        { "PLAYER_FIELD_MOD_DAMAGE_DONE_PCT", 0x1284 },
+        { "PLAYER_FIELD_MOD_HEALING_DONE_POS", 0x12A0 },
+        { "PLAYER_FIELD_MOD_TARGET_RESISTANCE", 0x12AC },
+        { "PLAYER_FIELD_MOD_TARGET_PHYSICAL_RESISTANCE", 0x12B0 },
+        { "PLAYER_FIELD_BYTES",             0x12B4 },
+        { "PLAYER_AMMO_ID",                 0x12B8 },
+        { "PLAYER_SELF_RES_SPELL",          0x12BC },
+        { "PLAYER_FIELD_PVP_MEDALS",        0x12C0 },
+        { "PLAYER_FIELD_BUYBACK_PRICE_1",   0x12C4 },
+        { "PLAYER_FIELD_BUYBACK_TIMESTAMP_1", 0x12F4 },
+        { "PLAYER_FIELD_KILLS",             0x1324 },
+        { "PLAYER_FIELD_TODAY_CONTRIBUTION", 0x1328 },
+        { "PLAYER_FIELD_YESTERDAY_CONTRIBUTION", 0x132C },
+        { "PLAYER_FIELD_LIFETIME_HONOURABLE_KILLS", 0x1330 },
+        { "PLAYER_FIELD_GLYPH_SLOTS_1",     0x1480 },
+        { "PLAYER_FIELD_GLYPHS_1",          0x1498 },
     };
 
     // =========================================================================

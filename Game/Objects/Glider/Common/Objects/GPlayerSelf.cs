@@ -250,7 +250,14 @@ namespace Glider.Common.Objects
 
         public bool IsGhost => HasWellKnownBuff("Ghost");
 
-        public override long TargetGUID => GameMemoryAccess.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("TargetId"), "PSelfTarget");
+        public override long TargetGUID
+        {
+            get
+            {
+                Refresh();
+                return _target;
+            }
+        }
 
         public long[] Bags => _bags;
 
