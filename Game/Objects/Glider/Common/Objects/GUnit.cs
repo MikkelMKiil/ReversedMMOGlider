@@ -91,7 +91,7 @@ namespace Glider.Common.Objects
                     }
                     catch (MemoryReadException ex)
                     {
-                        Logger.LoadProfile("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
+                        Logger.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
                                            ")");
                         Cull();
                         _reaction = GReaction.Unknown;
@@ -273,19 +273,19 @@ namespace Glider.Common.Objects
             {
                 if (Health < 1.0 && TicksSinceHealthDrop > DYING_SANITY_TIME)
                 {
-                    Logger.LoadProfile("Damaged and not dropping");
+                    Logger.smethod_1("Damaged and not dropping");
                     return true;
                 }
 
                 if (Health > 0.99 && StartupClass.CurrentGameClass.TicksSinceCombatStart > DYING_SANITY_TIME)
                 {
-                    Logger.LoadProfile("Undamaged and combat taking too long");
+                    Logger.smethod_1("Undamaged and combat taking too long");
                     return true;
                 }
 
                 if (StartupClass.GameClass69Instance.method_10() >= 4)
                     return false;
-                Logger.LoadProfile("Recent evade entry in combat log");
+                Logger.smethod_1("Recent evade entry in combat log");
                 return true;
             }
         }
@@ -509,24 +509,24 @@ namespace Glider.Common.Objects
 
         public bool Approach(double Distance, bool LeaveRunning)
         {
-            Logger.LoadProfile("Approaching \"" + Name + "\" to distance of " + Distance);
+            Logger.smethod_1("Approaching \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool ApproachSafe(double Distance, bool LeaveRunning)
         {
-            Logger.LoadProfile("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
+            Logger.smethod_1("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool GetBehind(bool Sneaking)
         {
-            Logger.LoadProfile("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
+            Logger.smethod_1("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
             if (IsFacingAway && DistanceToSelf < ConfigManager.gclass61_0.method_4("MeleeDistance"))
                 return true;
             if (DistanceToSelf > 20.0)
             {
-                Logger.LoadProfile("Too far away to GetBehind: \"" + Name + "\"");
+                Logger.smethod_1("Too far away to GetBehind: \"" + Name + "\"");
                 return false;
             }
 
@@ -555,7 +555,7 @@ namespace Glider.Common.Objects
                             GContext.Main.StartRun();
                         else
                             GContext.Main.ReleaseRun();
-                        Thread.Sleep(61);
+                        Thread.smethod_39(61);
                     }
                     else
                     {
@@ -590,7 +590,7 @@ namespace Glider.Common.Objects
                 Refresh(true);
                 var headingTo = GContext.Main.Movement.GetHeadingTo(GContext.Main.Me.Location, Location);
                 if (Math.Abs(GContext.Main.Movement.CompareHeadings(headingTo, Heading)) >= Math.PI / 2.0)
-                    Thread.Sleep(25);
+                    Thread.smethod_39(25);
                 else
                     break;
             }
@@ -602,7 +602,7 @@ namespace Glider.Common.Objects
             }
 
             GContext.Main.ReleaseRun();
-            Thread.Sleep(250 + StartupClass.random_0.Next() % 250);
+            Thread.smethod_39(250 + StartupClass.random_0.Next() % 250);
             GContext.Main.ReleaseKey(KeyName1);
             Face();
             GContext.Main.Me.Refresh(true);
@@ -809,7 +809,7 @@ namespace Glider.Common.Objects
             {
                 if (!int.TryParse(strArray[index], NumberStyles.HexNumber, null, out var value))
                 {
-                    Logger.LoadProfile($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
+                    Logger.smethod_1($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
                     continue;
                 }
                 wellKnownBuffList.Add(value);

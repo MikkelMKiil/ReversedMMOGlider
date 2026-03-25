@@ -15,7 +15,7 @@ using System.Xml;
 
 public class ProfileGroupManager
 {
-    private const double autoAddDistance = 8.0;
+    private const double double_0 = 8.0;
     public DateTime dateTime_0;
     public ProfileStepCondition gclass51_0;
     public AutomationStep gclass72_0;
@@ -110,7 +110,7 @@ public class ProfileGroupManager
     {
         AutomationStep gclass72_1 = null;
         var num = 99999.0;
-        Logger.LoadProfile("Looking for closest profile in group");
+        Logger.smethod_1("Looking for closest profile in group");
         foreach (var gclass72_2 in list_0)
             if (gclass72_2.ActiveGProfile.Waypoints.Count > 0 && gclass72_2.bool_2)
             {
@@ -140,26 +140,26 @@ public class ProfileGroupManager
         if (StartupClass.profileGroupManager == null)
             return;
         ++StartupClass.profileGroupManager.int_2;
-        Logger.LoadProfile("LogDeath, new count: " + StartupClass.profileGroupManager.int_2);
+        Logger.smethod_1("LogDeath, new count: " + StartupClass.profileGroupManager.int_2);
     }
 
-    public static void LoadProfile()
+    public static void smethod_1()
     {
         if (StartupClass.profileGroupManager == null)
             return;
         ++StartupClass.profileGroupManager.int_1;
-        Logger.LoadProfile("LogFollower, new count: " + StartupClass.profileGroupManager.int_1);
+        Logger.smethod_1("LogFollower, new count: " + StartupClass.profileGroupManager.int_1);
     }
 
-    public static void IsGroupProfile()
+    public static void smethod_2()
     {
         if (StartupClass.profileGroupManager == null)
             return;
         ++StartupClass.profileGroupManager.int_0;
-        Logger.LoadProfile("LogLoop, new count: " + StartupClass.profileGroupManager.int_0);
+        Logger.smethod_1("LogLoop, new count: " + StartupClass.profileGroupManager.int_0);
     }
 
-    public static bool LoadSingleProfile()
+    public static bool smethod_3()
     {
         return StartupClass.profileGroupManager != null && StartupClass.profileGroupManager.method_8() &&
                StartupClass.profileGroupManager.method_7();
@@ -180,7 +180,7 @@ public class ProfileGroupManager
         {
             if (gclass72_0.ActiveGProfile.Waypoints.Count != 0 && gclass72.ActiveGProfile.Waypoints.Count != 0)
             {
-                Logger.LoadProfile("Looking for waypoint match between: " + gclass72_0.string_0 + " and " +
+                Logger.smethod_1("Looking for waypoint match between: " + gclass72_0.string_0 + " and " +
                                    gclass72.string_0);
                 var num = method_10(gclass72_0.ActiveGProfile, gclass72.ActiveGProfile);
                 var waypoint = gclass72_0.ActiveGProfile.Waypoints[num];
@@ -192,7 +192,7 @@ public class ProfileGroupManager
             }
             else
             {
-                Logger.LoadProfile("One profile is missing waypoints, assuming we're already there");
+                Logger.smethod_1("One profile is missing waypoints, assuming we're already there");
             }
         }
 
@@ -203,7 +203,7 @@ public class ProfileGroupManager
         if (gclass72_0.ActiveGProfile.IgnoreAttackers && gclass72_0.bool_1 && !method_13())
             method_15();
         if (!gclass72_0.ActiveGProfile.IgnoreAttackers && method_13())
-            GetFileNameFromPath();
+            smethod_4();
         return true;
     }
 
@@ -212,7 +212,7 @@ public class ProfileGroupManager
         var gclass51_1 = gclass72_0.method_6(StepConditionType.const_0);
         if (gclass51_1 != null && int_0 > 0)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_1.int_1, "Always"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_1.int_1, "Always"));
             gclass51_0 = gclass51_1;
             return true;
         }
@@ -220,7 +220,7 @@ public class ProfileGroupManager
         var gclass51_2 = gclass72_0.method_6(StepConditionType.const_4);
         if (gclass51_2 != null && int_1 >= gclass51_2.int_0)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_2.int_1, "Alerts"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_2.int_1, "Alerts"));
             gclass51_0 = gclass51_2;
             return true;
         }
@@ -228,7 +228,7 @@ public class ProfileGroupManager
         var gclass51_3 = gclass72_0.method_6(StepConditionType.const_5);
         if (gclass51_3 != null && int_2 >= gclass51_3.int_0)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_3.int_1, "Deaths"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_3.int_1, "Deaths"));
             gclass51_0 = gclass51_3;
             return true;
         }
@@ -236,7 +236,7 @@ public class ProfileGroupManager
         var gclass51_4 = gclass72_0.method_6(StepConditionType.const_1);
         if (gclass51_4 != null && GPlayerSelf.Me.Level >= gclass51_4.int_0)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_4.int_1, "Level"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_4.int_1, "Level"));
             gclass51_0 = gclass51_4;
             return true;
         }
@@ -244,7 +244,7 @@ public class ProfileGroupManager
         var gclass51_5 = gclass72_0.method_6(StepConditionType.const_2);
         if (gclass51_5 != null && int_0 >= gclass51_5.int_0)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_5.int_1, "Loops"));
+            Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_5.int_1, "Loops"));
             gclass51_0 = gclass51_5;
             return true;
         }
@@ -252,42 +252,42 @@ public class ProfileGroupManager
         var gclass51_6 = gclass72_0.method_6(StepConditionType.const_3);
         if (gclass51_6 == null || (DateTime.Now - dateTime_0).TotalMinutes < gclass51_6.int_0)
             return false;
-        Logger.LogMessage(MessageProvider.IsGroupProfile(831, gclass51_6.int_1, "Time"));
+        Logger.LogMessage(MessageProvider.smethod_2(831, gclass51_6.int_1, "Time"));
         gclass51_0 = gclass51_6;
         return true;
     }
 
     private void method_9()
     {
-        GetFileNameFromPath();
+        smethod_4();
         var unit = GObjectList.FindUnit(gclass72_0.string_1);
         if (unit == null)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(835, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(835, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.StopGlide(false, "NoFlightMaster");
         }
 
         unit.Approach();
         if (!unit.Interact())
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(836, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.StopGlide(false, "CantClickFM");
         }
 
-        Thread.Sleep(4000);
-        var gclass8 = UIElement.IsGroupProfile("GossipTitleButton1");
+        Thread.smethod_39(4000);
+        var gclass8 = UIElement.smethod_2("GossipTitleButton1");
         if (gclass8 == null)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(836, gclass72_0.string_1, gclass72_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
             StartupClass.StopGlide(false, "NoGossipFrame");
         }
 
         if (gclass8.method_10())
         {
             Logger.LogMessage("Gossip title is visible, positioning cursor");
-            Thread.Sleep(1000);
+            Thread.smethod_39(1000);
             gclass8.method_16(false);
-            Thread.Sleep(5000);
+            Thread.smethod_39(5000);
         }
 
         var gclass13 = new FlightPointManager();
@@ -299,8 +299,8 @@ public class ProfileGroupManager
             StartupClass.StopGlide(false, "NoTaxiButton");
         }
 
-        UIElement.IsGroupProfile("TaxiButton" + num).method_16(false);
-        Thread.Sleep(5000);
+        UIElement.smethod_2("TaxiButton" + num).method_16(false);
+        Thread.smethod_39(5000);
         if (!method_11())
         {
             Logger.LogMessage("!! Clicked on flightpoint, but we don't seem to be flying");
@@ -314,9 +314,9 @@ public class ProfileGroupManager
         } while (method_11());
 
         Logger.LogMessage("Flight complete");
-        Thread.Sleep(500);
+        Thread.smethod_39(500);
         SpellcastingManager.gclass42_0.method_0("Common.Forward");
-        Thread.Sleep(500);
+        Thread.smethod_39(500);
     }
 
     private int method_10(GProfile ActiveGProfile, GProfile gprofile_1)
@@ -334,57 +334,57 @@ public class ProfileGroupManager
                 }
             }
 
-        Logger.LoadProfile("Best match is waypoint " + num1 + " in this profile");
+        Logger.smethod_1("Best match is waypoint " + num1 + " in this profile");
         return num1;
     }
 
     private bool method_11()
     {
         var location = GPlayerSelf.Me.Location;
-        Thread.Sleep(500);
+        Thread.smethod_39(500);
         return location.GetDistanceTo(GPlayerSelf.Me.Location) > 0.0;
     }
 
-    private void method_12(int pgEditProfileCount)
+    private void method_12(int int_4)
     {
-        Logger.LogMessage(MessageProvider.IsGroupProfile(833, pgEditProfileCount + 1));
+        Logger.LogMessage(MessageProvider.smethod_2(833, int_4 + 1));
         gclass72_0.ActiveGProfile.BeginProfile(GPlayerSelf.Me.Location);
         var currentIndex = gclass72_0.ActiveGProfile.CurrentIndex;
         var flag1 = false;
         int num1;
         if (gclass72_0.ActiveGProfile.Reversible)
         {
-            num1 = currentIndex >= pgEditProfileCount ? -1 : 1;
+            num1 = currentIndex >= int_4 ? -1 : 1;
         }
         else
         {
-            Logger.LoadProfile("MyIndex: " + currentIndex + ", DestIndex: " + pgEditProfileCount);
-            var num2 = currentIndex - pgEditProfileCount;
-            var num3 = pgEditProfileCount - currentIndex;
+            Logger.smethod_1("MyIndex: " + currentIndex + ", DestIndex: " + int_4);
+            var num2 = currentIndex - int_4;
+            var num3 = int_4 - currentIndex;
             if (num2 < 0)
                 num2 += gclass72_0.ActiveGProfile.Waypoints.Count;
             if (num3 < 0)
                 num3 += gclass72_0.ActiveGProfile.Waypoints.Count;
             num1 = num2 >= num3 ? 1 : -1;
-            Logger.LoadProfile("LeftSteps: " + num2 + ", RightSteps: " + num3 + ", Delta: " + num1);
+            Logger.smethod_1("LeftSteps: " + num2 + ", RightSteps: " + num3 + ", Delta: " + num1);
             if (num3 == 0 && num2 == 0)
             {
-                Logger.LoadProfile("Must be close to that waypoint, skipping move action");
+                Logger.smethod_1("Must be close to that waypoint, skipping move action");
                 return;
             }
         }
 
-        var resumeTimer = new GameTimer(15000);
-        resumeTimer.method_4();
+        var gclass36_1 = new GameTimer(15000);
+        gclass36_1.method_4();
         var index = currentIndex;
-        var attachCooldownTimer = new GameTimer(1700);
-        attachCooldownTimer.method_4();
+        var gclass36_2 = new GameTimer(1700);
+        gclass36_2.method_4();
         GLocation L = null;
         var flag2 = false;
         var flag3 = method_13();
         while (true)
         {
-            if (resumeTimer.method_3())
+            if (gclass36_1.method_3())
                 goto label_41;
         label_9:
             var waypoint1 = gclass72_0.ActiveGProfile.Waypoints[index];
@@ -419,9 +419,9 @@ public class ProfileGroupManager
                         }
                     }
 
-                    if (index == pgEditProfileCount)
+                    if (index == int_4)
                         flag1 = true;
-                    resumeTimer.method_4();
+                    gclass36_1.method_4();
                 }
                 else
                 {
@@ -429,7 +429,7 @@ public class ProfileGroupManager
                 }
             }
 
-            if (attachCooldownTimer.method_3())
+            if (gclass36_2.method_3())
             {
                 if (L == null)
                 {
@@ -465,7 +465,7 @@ public class ProfileGroupManager
                                 NewHeading -= 2.0 * Math.PI;
                             GContext.Main.Movement.SetHeading(NewHeading);
                             SpellcastingManager.gclass42_0.method_1("Common.Forward");
-                            Thread.Sleep(1700);
+                            Thread.smethod_39(1700);
                             flag2 = false;
                         }
                     }
@@ -473,7 +473,7 @@ public class ProfileGroupManager
                     L = GPlayerSelf.Me.Location;
                 }
 
-                attachCooldownTimer.method_4();
+                gclass36_2.method_4();
             }
 
             var waypoint2 = gclass72_0.ActiveGProfile.Waypoints[index];
@@ -489,7 +489,7 @@ public class ProfileGroupManager
                 flag3 = method_13();
             }
 
-            Thread.Sleep(200);
+            Thread.smethod_39(200);
             continue;
         label_41:
             Logger.LogMessage(MessageProvider.GetMessage(834));
@@ -498,14 +498,14 @@ public class ProfileGroupManager
         }
     }
 
-    public static void GetFileNameFromPath()
+    public static void smethod_4()
     {
         if (StartupClass.profileGroupManager == null)
             return;
         StartupClass.profileGroupManager.method_14();
     }
 
-    public static bool ApplyConfig()
+    public static bool smethod_5()
     {
         return StartupClass.profileGroupManager != null && StartupClass.profileGroupManager.method_13();
     }
@@ -538,12 +538,12 @@ public class ProfileGroupManager
                 StartupClass.combatController.method_52(true);
             }
 
-            Thread.Sleep(500);
+            Thread.smethod_39(500);
         }
 
         StartupClass.CurrentGameClass.LeaveForm();
         GContext.Main.ReleaseAllKeys();
-        Thread.Sleep(1500);
+        Thread.smethod_39(1500);
         var buffSnapshot = GPlayerSelf.Me.GetBuffSnapshot();
         if (!SpellcastingManager.gclass42_0.method_15("Common.PreMount"))
             GContext.Main.CastSpell("Common.PreMount");
@@ -553,9 +553,9 @@ public class ProfileGroupManager
         while (!gclass36.method_3())
         {
             int_3 = method_16(buffSnapshot);
-            Logger.LoadProfile("Looking for new mount buff id: " + int_3.ToString("x"));
+            Logger.smethod_1("Looking for new mount buff id: " + int_3.ToString("x"));
             if (int_3 == 0)
-                Thread.Sleep(100);
+                Thread.smethod_39(100);
             else
                 break;
         }
@@ -570,11 +570,11 @@ public class ProfileGroupManager
         var gbuffArray = method_20(gbuff_0, GPlayerSelf.Me.GetBuffSnapshot());
         if (gbuffArray.Length != 1)
             return 0;
-        Logger.LoadProfile("Mounted buffid: " + gbuffArray[0].SpellID + ", name =\"" + gbuffArray[0].SpellName + "\"");
+        Logger.smethod_1("Mounted buffid: " + gbuffArray[0].SpellID + ", name =\"" + gbuffArray[0].SpellName + "\"");
         return gbuffArray[0].SpellID;
     }
 
-    public static void ParseDouble()
+    public static void smethod_6()
     {
         if (StartupClass.profileGroupManager == null || !StartupClass.profileGroupManager.gclass72_0.bool_1)
             return;
@@ -586,14 +586,14 @@ public class ProfileGroupManager
         switch (genum15_0)
         {
             case StepStopAction.const_2:
-                Logger.LogMessage(MessageProvider.IsGroupProfile(844, "HearthAndLog"));
+                Logger.LogMessage(MessageProvider.smethod_2(844, "HearthAndLog"));
                 StartupClass.combatController.method_21(true);
                 break;
             case StepStopAction.const_1:
                 StartupClass.combatController.method_22();
                 break;
             case StepStopAction.const_0:
-                Logger.LogMessage(MessageProvider.IsGroupProfile(844, "Stop"));
+                Logger.LogMessage(MessageProvider.smethod_2(844, "Stop"));
                 StartupClass.StopGlide(false, "ForceStepStop");
                 break;
         }
@@ -606,7 +606,7 @@ public class ProfileGroupManager
             StartupClass.combatController.ActiveGProfile = gclass72_0.ActiveGProfile;
             gclass72_0.ActiveGProfile.Select();
             gclass72_0.ActiveGProfile.BeginProfile(GPlayerSelf.Me.Location);
-            Logger.LoadProfile("Going into run loop for: " + gclass72_0.string_0);
+            Logger.smethod_1("Going into run loop for: " + gclass72_0.string_0);
             if (!gclass72_0.ActiveGProfile.Fishing)
             {
                 if (gclass72_0.ActiveGProfile.NaturalRun)
@@ -627,10 +627,10 @@ public class ProfileGroupManager
         }
     }
 
-    private bool method_19(GBuff[] gbuff_0, int pgEditProfileCount)
+    private bool method_19(GBuff[] gbuff_0, int int_4)
     {
         foreach (var gbuff in gbuff_0)
-            if (gbuff.SpellID == pgEditProfileCount)
+            if (gbuff.SpellID == int_4)
                 return true;
         return false;
     }

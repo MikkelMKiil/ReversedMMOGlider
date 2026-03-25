@@ -37,7 +37,7 @@ public class PlayerTracker
         list_0.Clear();
     }
 
-    public static PlayerTracker[] LoadProfile()
+    public static PlayerTracker[] smethod_1()
     {
         lock (list_0)
         {
@@ -45,7 +45,7 @@ public class PlayerTracker
         }
     }
 
-    public static void IsGroupProfile()
+    public static void smethod_2()
     {
         lock (list_0)
         {
@@ -58,12 +58,12 @@ public class PlayerTracker
             foreach (var gplayer_1 in players)
             {
                 double distanceToSelf = gplayer_1.DistanceToSelf;
-                if (gplayer_1.GUID != StartupClass.playerGuid && !ResolveWowVersion(gplayer_1.Name))
+                if (gplayer_1.GUID != StartupClass.playerGuid && !smethod_7(gplayer_1.Name))
                 {
-                    var gclass21 = ApplyConfig(gplayer_1.GUID);
+                    var gclass21 = smethod_5(gplayer_1.GUID);
                     if (gclass21 == null)
                     {
-                        Logger.LogMessage(MessageProvider.IsGroupProfile(641, gplayer_1.Name, gplayer_1.PlayerRace.ToString(),
+                        Logger.LogMessage(MessageProvider.smethod_2(641, gplayer_1.Name, gplayer_1.PlayerRace.ToString(),
                             gplayer_1.PlayerClass.ToString()));
                         list_0.Add(new PlayerTracker(gplayer_1));
                     }
@@ -73,15 +73,15 @@ public class PlayerTracker
                         if (int_0 > 0 && (DateTime.Now - gclass21.dateTime_0).TotalSeconds >= int_0 && !gclass21.bool_0)
                         {
                             gclass21.bool_0 = true;
-                            Logger.LogMessage(MessageProvider.IsGroupProfile(642, int_0, gplayer_1.Name,
+                            Logger.LogMessage(MessageProvider.smethod_2(642, int_0, gplayer_1.Name,
                                 gplayer_1.GUID.ToString("x")));
                             SoundPlayer.smethod_0("PlayerNear.wav");
-                            ProfileGroupManager.LoadProfile();
+                            ProfileGroupManager.smethod_1();
                         }
 
                         if (int_1 > 0 && (DateTime.Now - gclass21.dateTime_0).TotalSeconds >= int_1)
                         {
-                            Logger.LogMessage(MessageProvider.IsGroupProfile(643, int_1, gplayer_1.Name,
+                            Logger.LogMessage(MessageProvider.smethod_2(643, int_1, gplayer_1.Name,
                                 gplayer_1.GUID.ToString("x")));
                             SoundPlayer.smethod_0("PlayerNear.wav");
                             StartupClass.combatController.method_21(true);
@@ -93,12 +93,12 @@ public class PlayerTracker
             do
             {
                 ;
-            } while (ParseDouble());
+            } while (smethod_6());
         }
     }
 
     [SpecialName]
-    public static bool LoadSingleProfile()
+    public static bool smethod_3()
     {
         foreach (var gclass21 in list_0)
             if (gclass21.gplayer_0.IsValid && gclass21.gplayer_0.IsSameFaction)
@@ -107,7 +107,7 @@ public class PlayerTracker
     }
 
     [SpecialName]
-    public static bool GetFileNameFromPath()
+    public static bool smethod_4()
     {
         foreach (var gclass21 in list_0)
             if (gclass21.gplayer_0.IsValid && !gclass21.gplayer_0.IsSameFaction)
@@ -115,22 +115,22 @@ public class PlayerTracker
         return false;
     }
 
-    private static PlayerTracker ApplyConfig(long playerGuid)
+    private static PlayerTracker smethod_5(long long_0)
     {
         foreach (var gclass21 in list_0)
-            if (gclass21.gplayer_0.GUID == playerGuid)
+            if (gclass21.gplayer_0.GUID == long_0)
                 return gclass21;
         return null;
     }
 
-    private static bool ParseDouble()
+    private static bool smethod_6()
     {
         for (var index = 0; index < list_0.Count; ++index)
         {
             var gclass21 = list_0[index];
             if (gclass21.bool_1)
             {
-                Logger.LogMessage(MessageProvider.IsGroupProfile(55, gclass21.gplayer_0.Name));
+                Logger.LogMessage(MessageProvider.smethod_2(55, gclass21.gplayer_0.Name));
                 list_0.RemoveAt(index);
                 return true;
             }
@@ -139,7 +139,7 @@ public class PlayerTracker
         return false;
     }
 
-    private static bool ResolveWowVersion(string string_0)
+    private static bool smethod_7(string string_0)
     {
         switch (StartupClass.partyManager.genum7_0)
         {
@@ -163,7 +163,7 @@ public class PlayerTracker
         return false;
     }
 
-    public static bool SelectActiveGameClass(GUnit gunit_0, string string_0, bool bool_2)
+    public static bool smethod_8(GUnit gunit_0, string string_0, bool bool_2)
     {
         var gmonster = (GMonster)gunit_0;
         if (!gmonster.IsTagged || gmonster.IsMine || StartupClass.glideMode_0 != GlideMode.Auto ||
@@ -181,12 +181,12 @@ public class PlayerTracker
 
         if (!gmonster.IsTargetingMe && !ConfigManager.gclass61_0.method_5("IgnoreTags"))
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(805, gmonster.Name));
-            CombatController.LoadProfile();
+            Logger.LogMessage(MessageProvider.smethod_2(805, gmonster.Name));
+            CombatController.smethod_1();
             return false;
         }
 
-        Logger.LogMessage(MessageProvider.IsGroupProfile(806, gmonster.Name));
+        Logger.LogMessage(MessageProvider.smethod_2(806, gmonster.Name));
         if (bool_2)
             SpellcastingManager.gclass42_0.method_0("Common.Back");
         if (string_0 != null)
@@ -199,19 +199,19 @@ public class PlayerTracker
                 if (gspellTimer2.IsReady)
                 {
                     SpellcastingManager.gclass42_0.method_1("Common.Back");
-                    Thread.Sleep(400);
+                    Thread.smethod_39(400);
                     SpellcastingManager.gclass42_0.method_2("Common.Back");
                     gspellTimer2.Reset();
                 }
             }
             else
             {
-                Logger.LogMessage(MessageProvider.IsGroupProfile(806, gmonster.Name));
-                CombatController.LoadProfile();
+                Logger.LogMessage(MessageProvider.smethod_2(806, gmonster.Name));
+                CombatController.smethod_1();
                 return false;
             }
 
-        Logger.LogMessage(MessageProvider.IsGroupProfile(807, gmonster.Name));
+        Logger.LogMessage(MessageProvider.smethod_2(807, gmonster.Name));
         return true;
     }
 }

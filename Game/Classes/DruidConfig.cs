@@ -77,8 +77,8 @@ public class DruidConfig : Form
             UseBearForm.Checked = true;
         if (ConfigManager.gclass61_0.method_2("Druid.UseForm") == "Cat")
             UseCatForm.Checked = true;
-        MessageProvider.LoadSingleProfile(this, "Druid");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Druid");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

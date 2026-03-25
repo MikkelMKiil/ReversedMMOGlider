@@ -21,16 +21,16 @@ public class KeyboardHookManager
     public const int int_1 = 13;
     private const int int_2 = 512;
     private const int int_3 = 513;
-    private const int pgEditProfileCount = 516;
-    private const int objectManagerBasePointer = 519;
-    private const int initCount = 514;
-    private const int knownVersion = 517;
-    private const int expectedVersion = 520;
-    private const int versionPatchLevel = 515;
-    private const int lastAclProcessId = 518;
-    private const int cachedGlideRate = 521;
-    private const int attachPidOverride = 256;
-    private const int killActionNestingCount = 257;
+    private const int int_4 = 516;
+    private const int int_5 = 519;
+    private const int int_6 = 514;
+    private const int int_7 = 517;
+    private const int int_8 = 520;
+    private const int int_9 = 515;
+    private const int int_10 = 518;
+    private const int int_11 = 521;
+    private const int int_12 = 256;
+    private const int int_13 = 257;
     private const int int_14 = 260;
     private const int int_15 = 261;
     public static bool bool_0 = true;
@@ -173,7 +173,7 @@ public class KeyboardHookManager
                         if (StartupClass.IsAttachedToGame())
                         {
                             method_3();
-                            Logger.LoadProfile(MessageProvider.GetMessage(287));
+                            Logger.smethod_1(MessageProvider.GetMessage(287));
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
@@ -214,8 +214,8 @@ public class KeyboardHookManager
                     case Keys.M:
                         double double_2;
                         double double_3;
-                        InputController.BringGameWindowToForeground(out double_2, out double_3);
-                        Logger.LogMessage(MessageProvider.IsGroupProfile(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
+                        InputController.smethod_22(out double_2, out double_3);
+                        Logger.LogMessage(MessageProvider.smethod_2(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
                         SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.N:
@@ -280,7 +280,7 @@ public class KeyboardHookManager
                                 {
                                     if (StartupClass.ActiveGProfile.GhostWaypoints.Count > 0)
                                     {
-                                        Logger.LogMessage(MessageProvider.IsGroupProfile(767,
+                                        Logger.LogMessage(MessageProvider.smethod_2(767,
                                             StartupClass.ActiveGProfile.GhostWaypoints.Count - 1));
                                         StartupClass.ActiveGProfile.GhostWaypoints.RemoveAt(
                                             StartupClass.ActiveGProfile.GhostWaypoints.Count - 1);
@@ -292,7 +292,7 @@ public class KeyboardHookManager
 
                                 if (StartupClass.ActiveGProfile.Waypoints.Count > 0)
                                 {
-                                    Logger.LogMessage(MessageProvider.IsGroupProfile(766,
+                                    Logger.LogMessage(MessageProvider.smethod_2(766,
                                         StartupClass.ActiveGProfile.Waypoints.Count - 1));
                                     StartupClass.ActiveGProfile.Waypoints.RemoveAt(StartupClass.ActiveGProfile.Waypoints.Count -
                                                                                1);
@@ -303,7 +303,7 @@ public class KeyboardHookManager
 
                         break;
                     default:
-                        Logger.LoadProfile("** Unknown command key: " + e.KeyCode);
+                        Logger.smethod_1("** Unknown command key: " + e.KeyCode);
                         break;
                 }
 
@@ -326,14 +326,14 @@ public class KeyboardHookManager
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||
                                                            !StartupClass.IsGliderInitialized))
         {
-            Logger.LoadProfile("Escape key picked up in hook, shutting action down");
+            Logger.smethod_1("Escape key picked up in hook, shutting action down");
             StartupClass.IsPendingStop = false;
             StartupClass.StopGlide(false, "EscapeFromHook");
         }
 
         if (!(foregroundWindow == intptr_0) || !StartupClass.GameMemoryWriter.method_1())
             return;
-        Logger.LoadProfile("Killing background script from Escape key");
+        Logger.smethod_1("Killing background script from Escape key");
         StartupClass.GameMemoryWriter.method_0();
     }
 
@@ -523,7 +523,7 @@ public class KeyboardHookManager
         if (int_21 >= 0 && (keyEventHandler_0 != null || keyEventHandler_1 != null || keyPressEventHandler_0 != null))
         {
             var structure = (GClass27)Marshal.PtrToStructure(intptr_1, typeof(GClass27));
-            if (structure.pgEditProfileCount != 102)
+            if (structure.int_4 != 102)
             {
                 if (keyEventHandler_0 != null && (int_22 == 256 || int_22 == 260))
                 {
@@ -576,7 +576,7 @@ public class KeyboardHookManager
             }
             else
             {
-                structure.pgEditProfileCount = 0;
+                structure.int_4 = 0;
             }
         }
 
@@ -601,7 +601,7 @@ public class KeyboardHookManager
         StartupClass.NeedsClassReload = true;
         StartupClass.keyboardHookManager.method_0();
         SpellcastingManager.gclass42_0.method_12();
-        InputController.Shutdown(ConfigManager.gclass61_0);
+        InputController.smethod_31(ConfigManager.gclass61_0);
         StartupClass.ApplyConfig();
         StartupClass.partyManager.method_0(ConfigManager.gclass61_0);
         if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.partyManager.bool_4 || !StartupClass.isInitializationSuccessful)
@@ -637,6 +637,6 @@ public class KeyboardHookManager
         public int int_1;
         public int int_2;
         public int int_3;
-        public int pgEditProfileCount;
+        public int int_4;
     }
 }

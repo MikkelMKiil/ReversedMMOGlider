@@ -32,7 +32,7 @@ public class NetworkSafetyChecker
             WarningDetailsUrl = null;
         }
 
-        Logger.LoadProfile(ToString());
+        Logger.smethod_1(ToString());
     }
 
     public override string ToString()
@@ -47,7 +47,7 @@ public class NetworkSafetyChecker
         WarningMessage = null;
         WarningTimestamp = null;
         WarningDetailsUrl = null;
-        Logger.LoadProfile("NetCheck bypassed (static offline mode).");
+        Logger.smethod_1("NetCheck bypassed (static offline mode).");
     }
 
     public bool ValidateNetworkSafety(bool showDialogs)

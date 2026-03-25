@@ -168,7 +168,7 @@ namespace Glider.Common.Objects
                 }
 
                 if (LogChecks)
-                    Logger.LoadProfile("Valid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
+                    Logger.smethod_1("Valid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
                                        DistanceToSelf);
                 return true;
             }
@@ -182,7 +182,7 @@ namespace Glider.Common.Objects
                 _skipReason = value;
                 if (!LogChecks)
                     return;
-                Logger.LoadProfile("Invalid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
+                Logger.smethod_1("Invalid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
                                    DistanceToSelf + " --> " + _skipReason);
             }
         }
@@ -281,7 +281,7 @@ namespace Glider.Common.Objects
             {
                 if (IsMine || IsTargetingMe)
                     return true;
-                Thread.Sleep(101);
+                Thread.smethod_39(101);
             }
 
             GContext.Main.Log("Never engaged: " + ToString());

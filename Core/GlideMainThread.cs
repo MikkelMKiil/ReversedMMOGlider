@@ -47,7 +47,7 @@ public class GlideMainThread
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(702, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(702, ex.Message, ex.StackTrace));
             StartupClass.StopGlide(false, "GlideThreadExcep");
         }
     }

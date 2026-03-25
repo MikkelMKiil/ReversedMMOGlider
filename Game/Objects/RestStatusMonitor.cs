@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 public class RestStatusMonitor
 {
-    protected const double autoAddDistance = 15.0;
+    protected const double double_0 = 15.0;
     public const double double_1 = 0.05;
     private const int int_0 = 4;
     public static double double_2;
@@ -25,9 +25,9 @@ public class RestStatusMonitor
     private GLocation glocation_0;
     public GPlayerSelf gplayerSelf_0;
     private readonly GSpellTimer gspellTimer_0;
-    private readonly GSpellTimer loginCooldownTimer = new GSpellTimer(5500);
+    private readonly GSpellTimer gspellTimer_1 = new GSpellTimer(5500);
     private int int_1;
-    public long playerGuid;
+    public long long_0;
 
     public RestStatusMonitor()
     {
@@ -45,7 +45,7 @@ public class RestStatusMonitor
 
     public void method_1()
     {
-        loginCooldownTimer.Reset();
+        gspellTimer_1.Reset();
         int_1 = 0;
         double_6 = 0.0;
     }
@@ -55,16 +55,16 @@ public class RestStatusMonitor
         if (gunit_0.Health != double_6)
         {
             double_6 = gunit_0.Health;
-            loginCooldownTimer.Reset();
+            gspellTimer_1.Reset();
             return false;
         }
 
-        if (!loginCooldownTimer.IsReady)
+        if (!gspellTimer_1.IsReady)
             return false;
-        loginCooldownTimer.Reset();
+        gspellTimer_1.Reset();
         var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage") ??
                   MessageProvider.GetMessage(6);
-        Logger.LoadProfile(MessageProvider.IsGroupProfile(7, str));
+        Logger.smethod_1(MessageProvider.smethod_2(7, str));
         ++int_1;
         if (int_1 == 4)
         {
@@ -123,7 +123,7 @@ public class RestStatusMonitor
 
     public void method_8(string string_0)
     {
-        Logger.LoadProfile(MessageProvider.IsGroupProfile(12, string_0));
+        Logger.smethod_1(MessageProvider.smethod_2(12, string_0));
         SpellcastingManager.gclass42_0.method_0(string_0);
     }
 
@@ -163,7 +163,7 @@ public class RestStatusMonitor
     [SpecialName]
     public virtual string vmethod_6()
     {
-        return MessageProvider.IsGroupProfile(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
+        return MessageProvider.smethod_2(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
     }
 
     public virtual void vmethod_7()
@@ -268,7 +268,7 @@ public class RestStatusMonitor
         double distanceTo = glocation_0.GetDistanceTo(gplayerSelf_0.Location);
         if (distanceTo <= 100.0)
             return;
-        Logger.LogMessage(MessageProvider.IsGroupProfile(634, distanceTo));
+        Logger.LogMessage(MessageProvider.smethod_2(634, distanceTo));
         glocation_0 = gplayerSelf_0.Location;
         StartupClass.combatController.method_58();
     }
@@ -291,7 +291,7 @@ public class RestStatusMonitor
         {
             Logger.LogMessage(MessageProvider.GetMessage(27));
             var actionInventory = GContext.Main.Interface.GetActionInventory("Common.ApplyBandage");
-            Logger.LoadProfile(MessageProvider.IsGroupProfile(28, actionInventory));
+            Logger.smethod_1(MessageProvider.smethod_2(28, actionInventory));
             if (actionInventory == 0)
                 return false;
             var gclass36 = new GameTimer(8000);
@@ -300,7 +300,7 @@ public class RestStatusMonitor
             StartupClass.Sleep(500);
             method_9("Common.TargetSelf");
             gspellTimer_0.Reset();
-            CombatController.LoadProfile();
+            CombatController.smethod_1();
         }
 
         return true;

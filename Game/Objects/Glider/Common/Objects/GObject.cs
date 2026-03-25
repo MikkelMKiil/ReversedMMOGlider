@@ -134,7 +134,7 @@ namespace Glider.Common.Objects
                 return false;
             if (!IsValid)
             {
-                Logger.LoadProfile("! Refresh invoked on invalid object: " + ToString());
+                Logger.smethod_1("! Refresh invoked on invalid object: " + ToString());
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace Glider.Common.Objects
             catch (MemoryReadException ex)
             {
                 Cull();
-                Logger.LoadProfile("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
+                Logger.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
                                    ", object data: " + ToString() + ")");
                 return false;
             }
@@ -253,14 +253,14 @@ namespace Glider.Common.Objects
             PawSpeedMS = ConfigManager.gclass61_0.method_3("PawSpeed");
             StartupClass.cameraRotator.method_3(true);
             if (StartupClass.IsGliderInitialized)
-                InputController.ParseProcessIdFromCommandLine(InputController.autoAddDistance, InputController.double_1);
+                InputController.smethod_18(InputController.double_0, InputController.double_1);
             if ((IsCursorOnObject && !StartupClass.IsGliderInitialized) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
                 TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
                 return true;
             foreach (var glocation in StartupClass.lootRouteParser.list_0)
             {
-                InputController.ParseProcessIdFromCommandLine(glocation.X, glocation.Y);
-                Thread.Sleep(PawSpeedMS);
+                InputController.smethod_18(glocation.X, glocation.Y);
+                Thread.smethod_39(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
             }
@@ -282,8 +282,8 @@ namespace Glider.Common.Objects
         {
             if (!Hover())
                 return false;
-            InputController.AddWaypoint(true);
-            Thread.Sleep(371);
+            InputController.smethod_23(true);
+            Thread.smethod_39(371);
             return true;
         }
 
@@ -291,8 +291,8 @@ namespace Glider.Common.Objects
         {
             if (!Hover())
                 return false;
-            InputController.AddWaypoint(false);
-            Thread.Sleep(271);
+            InputController.smethod_23(false);
+            Thread.smethod_39(271);
             return true;
         }
 
@@ -302,16 +302,16 @@ namespace Glider.Common.Objects
             double double_2;
             if (WorldToScreenProjector.smethod_0(Location, ZAdjust, out double_1, out double_2))
             {
-                InputController.ParseProcessIdFromCommandLine(double_1, double_2);
-                Thread.Sleep(PawSpeedMS);
+                InputController.smethod_18(double_1, double_2);
+                Thread.smethod_39(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
                 GContext.Main.ReleaseSpinRun();
                 for (var num1 = -0.02; num1 <= 0.02; num1 += 0.01)
                     for (var num2 = -0.02; num2 <= 0.02; num2 += 0.01)
                     {
-                        InputController.ParseProcessIdFromCommandLine(double_1 + num1, double_2 + num2);
-                        Thread.Sleep(PawSpeedMS);
+                        InputController.smethod_18(double_1 + num1, double_2 + num2);
+                        Thread.smethod_39(PawSpeedMS);
                         if (IsCursorOnObject)
                             return true;
                     }

@@ -14,7 +14,7 @@ public class MachGlideRunner
 
     public bool method_0()
     {
-        Logger.LoadProfile("Starting mach glide thread");
+        Logger.smethod_1("Starting mach glide thread");
         thread_0 = new Thread(method_2);
         thread_0.Start();
         return true;

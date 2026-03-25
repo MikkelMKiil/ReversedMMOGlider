@@ -41,8 +41,8 @@ public class PaladinConfig : Form
         UseCrusaderStrike.Checked = ConfigManager.gclass61_0.method_2("Paladin.UseCrusaderStrike") == "True";
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Paladin.AvoidAdds") == "True";
         AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Paladin.AvoidAddDistance");
-        MessageProvider.LoadSingleProfile(this, "Paladin");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Paladin");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

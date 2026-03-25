@@ -63,13 +63,13 @@ namespace Glider.Common.Objects
                 {
                     if (++num > 8192)
                     {
-                        Logger.LoadProfile("Object list traversal aborted: exceeded safety iteration cap");
+                        Logger.smethod_1("Object list traversal aborted: exceeded safety iteration cap");
                         break;
                     }
                     if (BaseAddress != 0 && !hashSet.Add(BaseAddress))
                     {
                         if (BaseAddress != num1)
-                            Logger.LoadProfile("Object list traversal aborted: detected cycle in object links");
+                            Logger.smethod_1("Object list traversal aborted: detected cycle in object links");
                         break;
                     }
                     long guid;
@@ -111,7 +111,7 @@ namespace Glider.Common.Objects
                     LastSnapshot[guid].FrameNumber = FrameNumber;
                     continue;
                 label_13:
-                    Logger.LoadProfile("+ Adding new object: " + LastSnapshot[guid]);
+                    Logger.smethod_1("+ Adding new object: " + LastSnapshot[guid]);
                 }
 
                 var num3 = MemoryOffsetTable.Instance.HasOffset("MainTableActivePlayer")
@@ -150,7 +150,7 @@ namespace Glider.Common.Objects
                     if (gobject.FrameNumber != FrameNumber)
                     {
                         if (LogObjects)
-                            Logger.LoadProfile("+ Culling old object: " + gobject);
+                            Logger.smethod_1("+ Culling old object: " + gobject);
                         gobject.Cull();
                         LastSnapshot.RemoveAt(index);
                         --index;
@@ -390,16 +390,16 @@ namespace Glider.Common.Objects
             var num2 = 0;
             lock (LastSnapshot)
             {
-                Logger.LoadProfile("-- GObjectList.DumpDebug invoked, LastUpdate = " + LastUpdate + ", Current = " +
+                Logger.smethod_1("-- GObjectList.DumpDebug invoked, LastUpdate = " + LastUpdate + ", Current = " +
                                    Environment.TickCount);
                 var lastSnapshot = LastSnapshot;
                 foreach (var key in lastSnapshot.Keys)
                 {
                     ++num1;
-                    Logger.LoadProfile(key.ToString("x16") + " --> " + lastSnapshot[key]);
+                    Logger.smethod_1(key.ToString("x16") + " --> " + lastSnapshot[key]);
                 }
 
-                Logger.LoadProfile("-- Object dump done, hits: " + num1 + ", unit hits: " + num2);
+                Logger.smethod_1("-- Object dump done, hits: " + num1 + ", unit hits: " + num2);
             }
         }
 
@@ -479,7 +479,7 @@ namespace Glider.Common.Objects
                 }
 
             if (gmonster == null && ConfigManager.gclass61_0.method_5("LogMonsterChecks"))
-                Logger.LoadProfile("FindClosestToMe is returning null, nobody worth killing right now");
+                Logger.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
             if (gmonster == null)
                 return null;
             var num2 = ConfigManager.gclass61_0.method_3("ExtraPull");
@@ -547,20 +547,20 @@ namespace Glider.Common.Objects
             {
                 if (++num2 > 8192)
                 {
-                    Logger.LoadProfile("Attach probe note: stealth object traversal hit safety cap");
+                    Logger.smethod_1("Attach probe note: stealth object traversal hit safety cap");
                     break;
                 }
                 if (num3 != 0 && !hashSet.Add(num3))
                 {
                     if (num3 != num4)
-                        Logger.LoadProfile("Attach probe note: stealth traversal detected cycle");
+                        Logger.smethod_1("Attach probe note: stealth traversal detected cycle");
                     break;
                 }
                 if ((num3 & 1) == 0 && num3 != 0 && num3 != 28)
                 {
                     if (GProcessMemoryManipulator.ReadInt64(num3 + 48, "GameObjGUID") == SeekPlayerID)
                     {
-                        Logger.LoadProfile("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
+                        Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;
                     }
 
@@ -574,7 +574,7 @@ namespace Glider.Common.Objects
             }
 
             if (num1 > 0)
-                Logger.LoadProfile("Stealth object count: " + num1 + ", hitme = " + flag);
+                Logger.smethod_1("Stealth object count: " + num1 + ", hitme = " + flag);
             return !flag ? 0 : num1;
         }
 
@@ -595,7 +595,7 @@ namespace Glider.Common.Objects
                 if (num != 0 && !hashSet.Add(num))
                 {
                     if (num != num2)
-                        Logger.LoadProfile("Attach probe note: player GUID traversal detected cycle");
+                        Logger.smethod_1("Attach probe note: player GUID traversal detected cycle");
                     break;
                 }
                 if ((num & 1) != 0 || num == 0 || num == 28)
@@ -607,7 +607,7 @@ namespace Glider.Common.Objects
                     {
                         if (int64 <= 4096L)
                         {
-                            Logger.LoadProfile("Attach probe note: inferred low player GUID candidate = 0x" + int64.ToString("x"));
+                            Logger.smethod_1("Attach probe note: inferred low player GUID candidate = 0x" + int64.ToString("x"));
                             num = GProcessMemoryManipulator.ReadInt32(num + 60, "GameObjNext");
                             continue;
                         }

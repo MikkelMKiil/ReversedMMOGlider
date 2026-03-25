@@ -16,16 +16,16 @@ public class LootableCorpseTracker
     public bool bool_1;
     public bool bool_2;
     public DateTime dateTime_0;
-    public GameTimer licenseCheckTimer;
+    public GameTimer gclass36_0;
     public GLocation glocation_0;
     protected int int_0;
-    public long playerGuid;
+    public long long_0;
 
     public LootableCorpseTracker(long long_1, bool bool_3, GLocation glocation_1, bool bool_4)
     {
-        playerGuid = long_1;
-        licenseCheckTimer = new GameTimer(60000);
-        licenseCheckTimer.method_5();
+        long_0 = long_1;
+        gclass36_0 = new GameTimer(60000);
+        gclass36_0.method_5();
         dateTime_0 = DateTime.Now;
         bool_0 = bool_3;
         glocation_0 = glocation_1;
@@ -37,7 +37,7 @@ public class LootableCorpseTracker
     [SpecialName]
     public bool method_0()
     {
-        return !bool_1 && int_0 < 3 && licenseCheckTimer.method_3();
+        return !bool_1 && int_0 < 3 && gclass36_0.method_3();
     }
 
     public void method_1()
@@ -48,31 +48,31 @@ public class LootableCorpseTracker
     public void method_2()
     {
         ++int_0;
-        licenseCheckTimer.method_4();
+        gclass36_0.method_4();
     }
 
     public static void smethod_0(LootableCorpseTracker gclass5_0, string string_0)
     {
-        if (!StartupClass.ProfileIdToProfileMap.ContainsKey(gclass5_0.playerGuid))
+        if (!StartupClass.ProfileIdToProfileMap.ContainsKey(gclass5_0.long_0))
         {
-            Logger.LoadProfile("Queueing new lootable corpse: 0x" + gclass5_0.playerGuid.ToString("x") + ", IsMine=" +
+            Logger.smethod_1("Queueing new lootable corpse: 0x" + gclass5_0.long_0.ToString("x") + ", IsMine=" +
                                gclass5_0.bool_0 + ", name = \"" + string_0 + "\"");
-            StartupClass.ProfileIdToProfileMap.Add(gclass5_0.playerGuid, gclass5_0);
+            StartupClass.ProfileIdToProfileMap.Add(gclass5_0.long_0, gclass5_0);
         }
         else
         {
-            StartupClass.ProfileIdToProfileMap[gclass5_0.playerGuid].glocation_0 = gclass5_0.glocation_0;
+            StartupClass.ProfileIdToProfileMap[gclass5_0.long_0].glocation_0 = gclass5_0.glocation_0;
         }
     }
 
-    public static bool LoadProfile()
+    public static bool smethod_1()
     {
-        var gclass5 = IsGroupProfile(GPlayerSelf.Me.Location);
+        var gclass5 = smethod_2(GPlayerSelf.Me.Location);
         return gclass5 != null && gclass5.glocation_0.DistanceToSelf <
-            (double)(StartupClass.CurrentGameClass.PullDistance + StartupClass.combatController.objectManagerBasePointer);
+            (double)(StartupClass.CurrentGameClass.PullDistance + StartupClass.combatController.int_5);
     }
 
-    public static LootableCorpseTracker IsGroupProfile(GLocation glocation_1)
+    public static LootableCorpseTracker smethod_2(GLocation glocation_1)
     {
         if (ConfigManager.gclass61_0.method_5("SkipLoot") || StartupClass.combatController.bool_5)
             return null;
@@ -81,11 +81,11 @@ public class LootableCorpseTracker
         foreach (var gclass5_0 in StartupClass.ProfileIdToProfileMap.Values)
             if (gclass5_0.method_0())
             {
-                var unit = GObjectList.FindUnit(gclass5_0.playerGuid);
+                var unit = GObjectList.FindUnit(gclass5_0.long_0);
                 if (unit != null && unit.IsValid)
                 {
                     double distanceTo = unit.Location.GetDistanceTo(glocation_1);
-                    if (unit.IsLootable || GetFileNameFromPath(unit, gclass5_0))
+                    if (unit.IsLootable || smethod_4(unit, gclass5_0))
                     {
                         GContext.Main.IsHostileNear(unit.Location);
                         if (!GContext.Main.IsHostileNear(unit.Location) && (gclass5 == null || distanceTo < num))
@@ -104,7 +104,7 @@ public class LootableCorpseTracker
         return gclass5;
     }
 
-    public static void LoadSingleProfile()
+    public static void smethod_3()
     {
         LootableCorpseTracker gclass5_1 = null;
         foreach (var gclass5_2 in StartupClass.ProfileIdToProfileMap.Values)
@@ -116,21 +116,21 @@ public class LootableCorpseTracker
 
         if (gclass5_1 == null)
             return;
-        StartupClass.ProfileIdToProfileMap.Remove(gclass5_1.playerGuid);
+        StartupClass.ProfileIdToProfileMap.Remove(gclass5_1.long_0);
     }
 
-    private static bool GetFileNameFromPath(GUnit gunit_0, LootableCorpseTracker gclass5_0)
+    private static bool smethod_4(GUnit gunit_0, LootableCorpseTracker gclass5_0)
     {
         return ConfigManager.gclass61_0.method_5("AutoSkin") && gunit_0.IsSkinnable && GPlayerSelf.Me.HasSkinning &&
                (gclass5_0.bool_0 ||
-                (ConfigManager.gclass61_0.method_5("NinjaSkin") && ApplyConfig(gclass5_0.glocation_0) > 15.0));
+                (ConfigManager.gclass61_0.method_5("NinjaSkin") && smethod_5(gclass5_0.glocation_0) > 15.0));
     }
 
-    private static double ApplyConfig(GLocation glocation_1)
+    private static double smethod_5(GLocation glocation_1)
     {
         var num = 999.0;
         foreach (var player in GObjectList.GetPlayers())
-            if (player.GUID != GPlayerSelf.Me.GUID && !PartyManager.partyManager.method_13(player.GUID))
+            if (player.GUID != GPlayerSelf.Me.GUID && !PartyManager.gclass54_0.method_13(player.GUID))
             {
                 double distanceTo = player.Location.GetDistanceTo(glocation_1);
                 if (distanceTo < num)
@@ -140,7 +140,7 @@ public class LootableCorpseTracker
         return num;
     }
 
-    public static void ParseDouble()
+    public static void smethod_6()
     {
         foreach (var monster in GObjectList.GetMonsters())
             if (monster.IsDead && (monster.IsLootable || monster.IsSkinnable))
@@ -151,9 +151,9 @@ public class LootableCorpseTracker
     {
         foreach (var unit in GObjectList.GetUnits())
             if (unit.DistanceToSelf < 10.0 && !unit.IsDead && unit.GUID != GContext.Main.Me.PetGUID &&
-                unit.GUID != GPlayerSelf.Me.GUID && !PartyManager.partyManager.method_13(unit.GUID))
+                unit.GUID != GPlayerSelf.Me.GUID && !PartyManager.gclass54_0.method_13(unit.GUID))
             {
-                Logger.LoadProfile("Skipping TurboLoot, this guy is too close: " + unit);
+                Logger.smethod_1("Skipping TurboLoot, this guy is too close: " + unit);
                 return false;
             }
 
@@ -171,7 +171,7 @@ public class LootableCorpseTracker
         var flag2 = false;
         while (!gspellTimer1.IsReady)
         {
-            Logger.LoadProfile("LootFute loop top");
+            Logger.smethod_1("LootFute loop top");
             if (GContext.Main.Me.IsUnderAttack || !gunit_0.Hover())
                 return false;
             StartupClass.combatController.method_56();
@@ -186,27 +186,27 @@ public class LootableCorpseTracker
 
             if (!flag1)
             {
-                DialogMonitor.LoadProfile();
+                DialogMonitor.smethod_1();
                 if (DialogMonitor.bool_1)
                 {
                     if (DialogMonitor.string_0.ToLower().IndexOf(MessageProvider.GetMessage(871)) != -1)
                     {
                         Logger.LogMessage("Bind-on-pickup dialog is visible, accepting");
-                        Thread.Sleep(600);
-                        UIElement.IsGroupProfile("StaticPopup1Button1").method_16(false);
-                        Thread.Sleep(600);
+                        Thread.smethod_39(600);
+                        UIElement.smethod_2("StaticPopup1Button1").method_16(false);
+                        Thread.smethod_39(600);
                     }
                     else
                     {
                         Logger.LogMessage("Unknown dialog visible during loot: \"" + DialogMonitor.string_0 +
                                            "\", dismissing");
-                        DialogMonitor.IsGroupProfile();
+                        DialogMonitor.smethod_2();
                     }
                 }
             }
             else
             {
-                Logger.LoadProfile("Breaking out of LootFute");
+                Logger.smethod_1("Breaking out of LootFute");
                 break;
             }
         }
@@ -222,17 +222,17 @@ public class LootableCorpseTracker
         ++StartupClass.expectedVersion;
         if (!ConfigManager.gclass61_0.method_5("AutoSkin"))
         {
-            Logger.LoadProfile("Skinning disabled, won't try it");
+            Logger.smethod_1("Skinning disabled, won't try it");
             return true;
         }
 
         if (GContext.Main.T_Skinnable.GetCount(gunit_0.Name) < -2)
         {
-            Logger.LoadProfile("This guy is never skinnable, won't try it");
+            Logger.smethod_1("This guy is never skinnable, won't try it");
             return true;
         }
 
-        Logger.LoadProfile("Going to try skinning it, too!");
+        Logger.smethod_1("Going to try skinning it, too!");
         gspellTimer1.Reset();
         var gspellTimer3 = new GSpellTimer(2000, false);
         while (!gspellTimer1.IsReady)
@@ -246,7 +246,7 @@ public class LootableCorpseTracker
                     if (GContext.Main.Me.IsCasting)
                     {
                         flag2 = true;
-                        Logger.LoadProfile("Channeling detected in skin paw");
+                        Logger.smethod_1("Channeling detected in skin paw");
                         break;
                     }
 
@@ -255,20 +255,20 @@ public class LootableCorpseTracker
             }
             else
             {
-                Logger.LoadProfile("Been too long and monster is still not skinnable");
+                Logger.smethod_1("Been too long and monster is still not skinnable");
                 break;
             }
 
         if (!flag2)
         {
-            CombatController.LoadProfile();
+            CombatController.smethod_1();
             GContext.Main.T_Skinnable.Decrement(gunit_0.Name);
             return true;
         }
 
         GContext.Main.T_Skinnable.Increment(gunit_0.Name);
         var gspellTimer4 = new GSpellTimer(5000, false);
-        Logger.LoadProfile("Waiting for skinning flag to clear");
+        Logger.smethod_1("Waiting for skinning flag to clear");
         var flag3 = false;
         while (!gspellTimer4.IsReadySlow)
         {
@@ -283,25 +283,25 @@ public class LootableCorpseTracker
                         return false;
                     if (!GPlayerSelf.Me.IsCasting)
                     {
-                        Logger.LoadProfile("I stopped casting, skinning must be good (gulp!)");
-                        Thread.Sleep(1371);
+                        Logger.smethod_1("I stopped casting, skinning must be good (gulp!)");
+                        Thread.smethod_39(1371);
                         break;
                     }
                 }
                 else
                 {
-                    Logger.LoadProfile("Skinnable flag gone!");
+                    Logger.smethod_1("Skinnable flag gone!");
                     break;
                 }
             }
             else
             {
-                Logger.LoadProfile("Loot window gone!");
+                Logger.smethod_1("Loot window gone!");
                 break;
             }
         }
 
-        CombatController.LoadProfile();
+        CombatController.smethod_1();
         return true;
     }
 }

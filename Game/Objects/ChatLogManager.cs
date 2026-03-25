@@ -40,7 +40,7 @@ public class ChatLogManager
 
     public void method_0()
     {
-        Logger.LoadProfile("Chat Manager connecting");
+        Logger.smethod_1("Chat Manager connecting");
         lock (this)
         {
             method_1();
@@ -72,7 +72,7 @@ public class ChatLogManager
     {
         lock (this)
         {
-            Logger.LoadProfile("Chat Manager disconnecting");
+            Logger.smethod_1("Chat Manager disconnecting");
             gclass75_0 = null;
             gclass75_1 = null;
         }
@@ -93,7 +93,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(817, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(817, ex.Message, ex.StackTrace));
             method_3();
         }
     }
@@ -103,7 +103,7 @@ public class ChatLogManager
         var string_3 = gclass75_0.method_1();
         if (string_3 == null)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(818, "Chat", gclass75_0.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(818, "Chat", gclass75_0.string_1));
             gclass75_0.method_0();
         }
         else
@@ -116,7 +116,7 @@ public class ChatLogManager
                 foreach (var str1 in string_3)
                     if (str1 == null)
                     {
-                        Logger.LoadProfile("* Null chat entry... !?");
+                        Logger.smethod_1("* Null chat entry... !?");
                     }
                     else
                     {
@@ -130,14 +130,14 @@ public class ChatLogManager
                         {
                             if (strArray[1].Trim() == MessageProvider.GetMessage(34))
                             {
-                                Logger.LogMessage(MessageProvider.IsGroupProfile(35, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.smethod_2(35, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_7(strArray[1].Trim(), str1);
                             }
 
                             if (strArray[1].Trim() == MessageProvider.GetMessage(743))
                             {
-                                Logger.LogMessage(MessageProvider.IsGroupProfile(744, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.smethod_2(744, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_6(strArray[1].Trim(), str1);
                             }
@@ -182,7 +182,7 @@ public class ChatLogManager
                 Logger.LogMessage(MessageProvider.GetMessage(40));
                 var str = ConfigManager.gclass61_0.method_2("ChatAutoReplyText");
                 if (str.Length > 0)
-                    InputController.ExecuteStopGlide("/r " + str);
+                    InputController.smethod_28("/r " + str);
                 StartupClass.Sleep(5000);
                 StartupClass.StopGlide(false, "GMWhisper");
             }
@@ -199,7 +199,7 @@ public class ChatLogManager
         var string_3 = gclass75_1.method_1();
         if (string_3 == null)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(818, "Combat", gclass75_1.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(818, "Combat", gclass75_1.string_1));
             gclass75_1.method_0();
         }
         else
@@ -207,7 +207,7 @@ public class ChatLogManager
             if (string_3.Length == 0)
                 return;
             method_16("Combat.log", string_3);
-            var lower1 = MessageProvider.IsGroupProfile(813, string_1).ToLower();
+            var lower1 = MessageProvider.smethod_2(813, string_1).ToLower();
             foreach (var str in string_3)
             {
                 StartupClass.NotifyStatusChange(4, str);
@@ -219,14 +219,14 @@ public class ChatLogManager
                     if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
                         lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        Logger.LoadProfile(MessageProvider.GetMessage(746));
+                        Logger.smethod_1(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
                     if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
                         lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        Logger.LoadProfile(MessageProvider.GetMessage(746));
+                        Logger.smethod_1(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
@@ -238,7 +238,7 @@ public class ChatLogManager
 
                     if (lower2.IndexOf(string_1.ToLower() + MessageProvider.GetMessage(36).ToLower()) > -1)
                     {
-                        Logger.LoadProfile(MessageProvider.GetMessage(747));
+                        Logger.smethod_1(MessageProvider.GetMessage(747));
                         dateTime_2 = DateTime.Now;
                     }
 
@@ -255,7 +255,7 @@ public class ChatLogManager
 
     public void method_9(string string_2)
     {
-        Logger.LoadProfile(MessageProvider.IsGroupProfile(639, string_2));
+        Logger.smethod_1(MessageProvider.smethod_2(639, string_2));
         string_1 = string_2;
     }
 
@@ -308,7 +308,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(42, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(42, ex.Message));
         }
     }
 
@@ -324,7 +324,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(44, ex.Message));
+            Logger.LogMessage(MessageProvider.smethod_2(44, ex.Message));
         }
     }
 
@@ -332,16 +332,16 @@ public class ChatLogManager
     {
         try
         {
-            return LoadProfile(string_2);
+            return smethod_1(string_2);
         }
         catch (Exception ex)
         {
-            Logger.LoadProfile("! Couldn't clean chat line: " + string_2);
+            Logger.smethod_1("! Couldn't clean chat line: " + string_2);
             return string_2;
         }
     }
 
-    private static string LoadProfile(string string_2)
+    private static string smethod_1(string string_2)
     {
         var flag = false;
         while (!flag)
@@ -392,12 +392,12 @@ public class ChatLogManager
         for (var index = 0; index <= 10; ++index)
         {
             var str = GProcessMemoryManipulator.ReadString(num1 + index * num2, 100, "ChatFrameName");
-            Logger.LoadProfile(MessageProvider.IsGroupProfile(821, index + 1, str));
+            Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;
         }
 
-        Logger.LogMessage(MessageProvider.IsGroupProfile(822, string_2));
+        Logger.LogMessage(MessageProvider.smethod_2(822, string_2));
         return 1;
     }
 }

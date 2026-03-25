@@ -102,7 +102,7 @@ public class ApplicationLogger : ILogger
         }
         catch (IOException ex)
         {
-            Console.WriteLine(MessageProvider.IsGroupProfile(90, ex.Message));
+            Console.WriteLine(MessageProvider.smethod_2(90, ex.Message));
         }
     }
 
@@ -126,7 +126,7 @@ public class ApplicationLogger : ILogger
     {
         while (true)
         {
-            Thread.Sleep(200);
+            Thread.smethod_39(200);
             if (bool_0 && StartupClass.IsGameProcessAttached)
                 goto label_6;
         label_1:

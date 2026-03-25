@@ -120,20 +120,20 @@ public class ProfileProps : Form
         }
 
         method_4();
-        MessageProvider.LoadSingleProfile(this, nameof(ProfileProps));
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, nameof(ProfileProps));
+        GProcessMemoryManipulator.smethod_48(this);
         if (ActiveGProfile == null)
             return;
         if (gprofile_1.Waypoints.Count > 0)
         {
             WaypointsLabel.Text =
-                MessageProvider.ParseDouble("ProfileProps.WaypointsLabel.Contains", gprofile_1.Waypoints.Count);
+                MessageProvider.smethod_6("ProfileProps.WaypointsLabel.Contains", gprofile_1.Waypoints.Count);
             ClearWaypoints.Enabled = true;
         }
 
         if (gprofile_1.GhostWaypoints.Count > 0)
         {
-            GhostWaypointsLabel.Text = MessageProvider.ParseDouble("ProfileProps.GhostWaypointsLabel.Contains",
+            GhostWaypointsLabel.Text = MessageProvider.smethod_6("ProfileProps.GhostWaypointsLabel.Contains",
                 gprofile_1.GhostWaypoints.Count);
             ClearGhostWaypoints.Enabled = true;
         }
@@ -141,7 +141,7 @@ public class ProfileProps : Form
         if (gprofile_1.VendorWaypoints.Count <= 0)
             return;
         VendorWaypointsLabel.Text =
-            MessageProvider.ParseDouble("ProfileProps.VendorWaypointsLabel.Contains", gprofile_1.VendorWaypoints.Count);
+            MessageProvider.smethod_6("ProfileProps.VendorWaypointsLabel.Contains", gprofile_1.VendorWaypoints.Count);
         ClearVendorWaypoints.Enabled = true;
     }
 
@@ -756,7 +756,7 @@ public class ProfileProps : Form
     {
         ActiveGProfile.Waypoints.Clear();
         ClearWaypoints.Enabled = false;
-        WaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.WaypointsLabel");
+        WaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.WaypointsLabel");
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -768,7 +768,7 @@ public class ProfileProps : Form
     {
         ActiveGProfile.GhostWaypoints.Clear();
         ClearGhostWaypoints.Enabled = false;
-        GhostWaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.GhostWaypointsLabel");
+        GhostWaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.GhostWaypointsLabel");
     }
 
     private void Fishing_CheckedChanged(object sender, EventArgs e)
@@ -806,6 +806,6 @@ public class ProfileProps : Form
         VendorAR.Text = "";
         VendorFW.Text = "";
         ClearVendorWaypoints.Enabled = false;
-        VendorWaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.VendorWaypointsLabel");
+        VendorWaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.VendorWaypointsLabel");
     }
 }

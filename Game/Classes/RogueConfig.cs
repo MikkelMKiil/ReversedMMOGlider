@@ -74,8 +74,8 @@ public class RogueConfig : Form
         UseRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseRush") == "True";
         SaveRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.SaveRush") == "True";
         UseGhostly.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseGhostly") == "True";
-        MessageProvider.LoadSingleProfile(this, "Rogue");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Rogue");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

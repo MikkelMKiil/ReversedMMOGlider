@@ -57,7 +57,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.partyManager.genum7_0 != PartyRole.const_0;
+        public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.gclass54_0.genum7_0 != PartyRole.const_0;
 
         public long[] GetPartyMembers()
         {
@@ -98,7 +98,7 @@ namespace Glider.Common.Objects
             if (index == partyMembers.Length)
                 Logger.LogMessage("!! Never found party member to target: " + Target);
             else
-                InputController.StartMainThread((short)(113 + (short)index));
+                InputController.smethod_9((short)(113 + (short)index));
         }
 
         private PartyBuffBucket GetBuffsForPlayer(long GUID)

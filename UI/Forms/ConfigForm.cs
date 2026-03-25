@@ -278,7 +278,7 @@ public class ConfigForm : Form
     public ConfigForm(bool bool_4)
     {
         InitializeComponent();
-        MessageProvider.ResolveWowVersion(PartyHealMode, "Common.PartyHealMode");
+        MessageProvider.smethod_7(PartyHealMode, "Common.PartyHealMode");
         for (var index = 0; index < StartupClass.ProfileMapping.Keys.Count; ++index)
         {
             var key = StartupClass.ProfileMapping.Keys[index];
@@ -415,12 +415,12 @@ public class ConfigForm : Form
         BypassLootSanity.Checked = ConfigManager.gclass61_0.method_5(nameof(BypassLootSanity));
         RelogEnabled.Checked = ConfigManager.gclass61_0.method_5(nameof(RelogEnabled));
         StrafeObstacles.Checked = ConfigManager.gclass61_0.method_2(nameof(StrafeObstacles)) == "True";
-        MessageProvider.LoadSingleProfile(this, "Config");
+        MessageProvider.smethod_3(this, "Config");
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
-        GliderVersionLabel.Text = MessageProvider.ParseDouble("Config.GliderVersionLabel", "1.8.0", "Release");
-        WowVersionLabel.Text = MessageProvider.ParseDouble("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
-        DebuffsKnown.Text = MessageProvider.ParseDouble("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+        GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
+        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
+        DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             InitialProfile.Text = ConfigManager.gclass61_0.method_2("LastProfile");
         else
@@ -466,8 +466,8 @@ public class ConfigForm : Form
         method_11();
         method_16();
         method_18();
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
-        GProcessMemoryManipulator.RestoreGameWindow(helpProvider_0);
+        GProcessMemoryManipulator.smethod_48(this);
+        GProcessMemoryManipulator.smethod_51(helpProvider_0);
         StartupClass.partyManager.bool_4 = false;
         bool_3 = true;
         StartupClass.MainWindowHandle = this;
@@ -3299,13 +3299,13 @@ public class ConfigForm : Form
         debuffList.method_0();
         if (debuffList.Offsets.Keys.Count == 0)
         {
-            var num1 = (int)MessageBox.Show(this, MessageProvider.GetFileNameFromPath("DebuffList.NoneNew"),
-                MessageProvider.GetFileNameFromPath("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            var num1 = (int)MessageBox.Show(this, MessageProvider.smethod_4("DebuffList.NoneNew"),
+                MessageProvider.smethod_4("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         else
         {
             var num2 = (int)debuffList.ShowDialog(this);
-            DebuffsKnown.Text = MessageProvider.ParseDouble("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+            DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         }
     }
 
@@ -3317,7 +3317,7 @@ public class ConfigForm : Form
     private void BackgroundEnable_CheckedChanged(object sender, EventArgs e)
     {
         groupBox25.Enabled = BackgroundEnable.Checked;
-        if (bool_1 || !AllowWW.Checked || WardenProtocol.IsGroupProfile(false) != WardenStateValue.const_1)
+        if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
             return;
         var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
@@ -3396,8 +3396,8 @@ public class ConfigForm : Form
             if (!StartupClass.ProfileMapping.ContainsKey(selectedItem))
                 return;
             var profile = StartupClass.ProfileMapping[selectedItem];
-            ((GGameClass)profile.object_0).Shutdown();
-            profile.object_0 = CodeCompiler.ResolveWowVersion(selectedItem, assembly_0, false, true);
+            ((GGameClass)profile.object_0).smethod_31();
+            profile.object_0 = CodeCompiler.smethod_7(selectedItem, assembly_0, false, true);
         }
     }
 
@@ -3430,13 +3430,13 @@ public class ConfigForm : Form
                 ClassList.Items.Remove(profile);
             }
 
-            CodeCompiler.ApplyConfig(selectedItem);
+            CodeCompiler.smethod_5(selectedItem);
             ConfigManager.gclass61_0.method_13("CustomClasses", selectedItem);
         }
         else
         {
             string string_1;
-            if (CodeCompiler.TryAttach(selectedItem, out string_1))
+            if (CodeCompiler.smethod_13(selectedItem, out string_1))
             {
                 ConfigManager.gclass61_0.method_12("CustomClasses", selectedItem);
                 ClassList.Items.Add(StartupClass.ProfileMapping[selectedItem]);
@@ -3535,8 +3535,8 @@ public class ConfigForm : Form
                 {
                     var str = key;
                     var string_6 = "Common.Class" + key;
-                    if (MessageProvider.ApplyConfig(string_6))
-                        str = MessageProvider.GetFileNameFromPath(string_6);
+                    if (MessageProvider.smethod_5(string_6))
+                        str = MessageProvider.smethod_4(string_6);
                     Offsets.Add(key, str);
                     KeyEditClass.Items.Add(str);
                 }

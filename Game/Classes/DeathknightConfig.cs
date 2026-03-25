@@ -35,8 +35,8 @@ public class DeathknightConfig : Form
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_5("Deathknight.AvoidAdds");
         UseGhoul.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseGhoul");
         UseCorpseDust.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseCorpseDust");
-        MessageProvider.LoadSingleProfile(this, "Deathknight");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Deathknight");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)

@@ -60,9 +60,9 @@ public class MageConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 4; ++index)
-            IceBarrier.Items.Add(MessageProvider.GetFileNameFromPath("Mage.IceBarrier" + index));
+            IceBarrier.Items.Add(MessageProvider.smethod_4("Mage.IceBarrier" + index));
         for (var index = 0; index < 3; ++index)
-            Finisher.Items.Add(MessageProvider.GetFileNameFromPath("Mage.Finisher" + index));
+            Finisher.Items.Add(MessageProvider.smethod_4("Mage.Finisher" + index));
         FireblastCooldown.Text = ConfigManager.gclass61_0.method_2("Mage.FireblastCooldownSec");
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Mage.PullDistance");
         FinishLife.Text = ConfigManager.gclass61_0.method_2("Mage.FinishLife");
@@ -83,8 +83,8 @@ public class MageConfig : Form
         UseDampen.Checked = ConfigManager.gclass61_0.method_2("Mage.UseDampen") == "True";
         IceBarrier.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.IceBarrier");
         Finisher.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.Finisher");
-        MessageProvider.LoadSingleProfile(this, "Mage");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Mage");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

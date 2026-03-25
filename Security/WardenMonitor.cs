@@ -18,7 +18,7 @@ public class WardenMonitor
     private const string string_0 =
         "<RSAKeyValue><Modulus>oR97bOVGOLZngLaX0hquQQXn76zCgVZCD4UhxNJJ1iZ1vpsdY4orqNni+dugxzFm5naMWb2ecqXt99lTD8CJfMePvrhhIo0qR8HiSSxKmkUIhuRBUv84LgB4rTE36xtIV76jkV7qbYsr8qmYh5iD7R/cswBFQwCqbnBalDK3L70=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
 
-    private const uint infiniteWaitTimeout = 4294967295;
+    private const uint uint_0 = 4294967295;
     private readonly bool bool_0;
     private bool bool_1;
     private byte[] byte_0;
@@ -43,7 +43,7 @@ public class WardenMonitor
         bool_1 = false;
         Offsets = new SortedList<string, int>();
         method_1();
-        Logger.LoadProfile("TW: Setting up VAP");
+        Logger.smethod_1("TW: Setting up VAP");
         gclass71_1.method_24(int_3);
         if (MemoryOffsetTable.Instance.HasOffset("FLPeek"))
             gclass71_1.method_25(MemoryOffsetTable.Instance.GetIntOffset("FLPeek"));
@@ -99,7 +99,7 @@ public class WardenMonitor
             }
         }
 
-        Logger.LoadProfile("TW event guy is done");
+        Logger.smethod_1("TW event guy is done");
     }
 
     private void method_3()
@@ -112,7 +112,7 @@ public class WardenMonitor
             var genum0_0 = method_8();
             if (genum0_0 != WardenCheckStatus.const_0)
             {
-                Logger.LoadProfile("ThisPoll is bad");
+                Logger.smethod_1("ThisPoll is bad");
                 StartupClass.HandleWardenCheckResult(genum0_0);
             }
         }
@@ -127,7 +127,7 @@ public class WardenMonitor
             var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("Warden1"), "twsanity");
             if (num != 0)
             {
-                Logger.LoadProfile("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
+                Logger.smethod_1("WF: " + int_0 + ", check: 0x" + num.ToString("x"));
                 StartupClass.HandleWardenCheckResult(WardenCheckStatus.const_2);
             }
             else
@@ -146,9 +146,9 @@ public class WardenMonitor
         dateTime_0 = DateTime.Now;
     }
 
-    public void method_6(int int_3, int pgEditProfileCount)
+    public void method_6(int int_3, int int_4)
     {
-        var byte_1 = GProcessMemoryManipulator.ReadBytes(int_3, pgEditProfileCount, "bsp");
+        var byte_1 = GProcessMemoryManipulator.ReadBytes(int_3, int_4, "bsp");
         if (byte_1 == null)
             return;
         method_7(byte_1);
@@ -165,7 +165,7 @@ public class WardenMonitor
             Logger.LogMessage("** Exception processing bsb: " + ex.Message + "\r\n" + ex.StackTrace);
         }
 
-        GProcessMemoryManipulator.WarnIfForceVersionSet();
+        GProcessMemoryManipulator.smethod_54();
     }
 
     private WardenCheckStatus method_8()
@@ -197,7 +197,7 @@ public class WardenMonitor
                 {
                     gclass71_0.method_30();
                     flag1 = true;
-                    Thread.Sleep(2000);
+                    Thread.smethod_39(2000);
                     return WardenCheckStatus.const_3;
                 }
 
@@ -378,7 +378,7 @@ public class WardenMonitor
         var int_0 = gclass46.method_6();
         if (byte_0 == null || int_0 != int_2)
         {
-            byte_0 = EncryptedDataTransport.LoadProfile(int_0);
+            byte_0 = EncryptedDataTransport.smethod_1(int_0);
             if (byte_0 == null)
             {
                 string_1 = "(getwdf)";
@@ -394,7 +394,7 @@ public class WardenMonitor
         gclass19_0.method_1(byte_0);
         if (int_0 != 2 && int_0 != 4)
         {
-            Logger.LoadProfile("Unexpected Warden rev from TW: " + int_0);
+            Logger.smethod_1("Unexpected Warden rev from TW: " + int_0);
             var gclass16 = this;
             gclass16.string_1 = gclass16.string_1 + "(nocorer=" + int_0 + ")";
             return WardenCheckStatus.const_1;
@@ -406,15 +406,15 @@ public class WardenMonitor
         {
             case WardenMatchResult.const_0:
                 string_1 += "(error)";
-                Logger.LoadProfile("TW error during match, not safe, last error = " + gclass46.string_0);
+                Logger.smethod_1("TW error during match, not safe, last error = " + gclass46.string_0);
                 return WardenCheckStatus.const_2;
             case WardenMatchResult.const_1:
                 string_1 += "(match)";
-                Logger.LoadProfile("TW matched ok");
+                Logger.smethod_1("TW matched ok");
                 return WardenCheckStatus.const_0;
             case WardenMatchResult.const_2:
                 string_1 += "(unsafe)";
-                Logger.LoadProfile("TW mismatched, not safe, last error = " + gclass46.string_0);
+                Logger.smethod_1("TW mismatched, not safe, last error = " + gclass46.string_0);
                 return WardenCheckStatus.const_1;
             default:
                 return WardenCheckStatus.const_0;

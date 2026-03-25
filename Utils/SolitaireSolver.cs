@@ -18,7 +18,7 @@ public class SolitaireSolver
     {
         int_0 = 100;
         StartupClass.BringGameWindowToForeground();
-        Thread.Sleep(500);
+        Thread.smethod_39(500);
         var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
             StartupClass.StopGlide(false, "NoSolitaireModuleInSolitaire");
@@ -28,7 +28,7 @@ public class SolitaireSolver
         var gclass34_0 = new SolitaireGameState(int_1);
         while (method_3(gclass34_0))
         {
-            Thread.Sleep(int_0);
+            Thread.smethod_39(int_0);
             gclass34_0.method_2();
             if (gclass34_0.method_4())
             {
@@ -45,12 +45,12 @@ public class SolitaireSolver
 
     private void method_2(string string_0)
     {
-        Logger.LoadProfile(string_0);
+        Logger.smethod_1(string_0);
     }
 
     private bool method_3(SolitaireGameState gclass34_0)
     {
-        Logger.LoadProfile("--- DoGameMove invoked");
+        Logger.smethod_1("--- DoGameMove invoked");
         if (method_4(gclass34_0) || method_5(gclass34_0) || method_8(gclass34_0) || method_6(gclass34_0) ||
             method_7(gclass34_0) || method_9(gclass34_0))
             return true;
@@ -61,7 +61,7 @@ public class SolitaireSolver
         }
 
         gclass34_0.gclass80_0.method_3();
-        Thread.Sleep(1000);
+        Thread.smethod_39(1000);
         gclass34_0.method_2();
         if (gclass34_0.gclass80_0.gclass7_0.Length > 0)
         {
@@ -117,7 +117,7 @@ public class SolitaireSolver
                         {
                             method_2("Moving card from stack #" + index1 + " to stack #" + index2);
                             gclass7.method_2();
-                            Thread.Sleep(int_0);
+                            Thread.smethod_39(int_0);
                             gclass7_0.method_2();
                             gclass7.method_4();
                             return true;
@@ -144,7 +144,7 @@ public class SolitaireSolver
                     {
                         method_2("Moving king from stack #" + index1 + " to empty stack #" + index2);
                         gclass7.method_2();
-                        Thread.Sleep(int_0);
+                        Thread.smethod_39(int_0);
                         gclass80_2.method_3();
                         gclass7.method_4();
                         return true;
@@ -167,7 +167,7 @@ public class SolitaireSolver
             {
                 method_2("Moving draw card to stack #" + index);
                 gclass7.method_2();
-                Thread.Sleep(int_0);
+                Thread.smethod_39(int_0);
                 if (gclass7.method_7())
                     gclass34_0.gclass80_3[index].method_3();
                 else
@@ -196,7 +196,7 @@ public class SolitaireSolver
                         {
                             method_1("Moving stacked card home: " + gclass7_2);
                             gclass7_2.method_2();
-                            Thread.Sleep(int_0);
+                            Thread.smethod_39(int_0);
                             gclass7_0.method_2();
                             gclass7_2.method_4();
                             return true;
@@ -207,7 +207,7 @@ public class SolitaireSolver
                 {
                     method_1("Moving draw card home: " + gclass7_1);
                     gclass7_1.method_2();
-                    Thread.Sleep(int_0);
+                    Thread.smethod_39(int_0);
                     gclass7_0.method_2();
                     gclass7_1.method_4();
                     return true;
@@ -231,7 +231,7 @@ public class SolitaireSolver
     public static extern bool EnumProcessModules(
         IntPtr intptr_0,
         [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] [In] [Out]
-        uint[] infiniteWaitTimeout,
+        uint[] uint_0,
         uint uint_1,
         [MarshalAs(UnmanagedType.U4)] out uint uint_2);
 
@@ -240,13 +240,13 @@ public class SolitaireSolver
         IntPtr intptr_0,
         IntPtr intptr_1,
         [Out] StringBuilder stringBuilder_0,
-        uint infiniteWaitTimeout);
+        uint uint_0);
 
     public static int smethod_0(IntPtr intptr_0, string string_0)
     {
-        var infiniteWaitTimeout = new uint[1024];
+        var uint_0 = new uint[1024];
         uint uint_2;
-        if (!EnumProcessModules(intptr_0, infiniteWaitTimeout, 4096U, out uint_2))
+        if (!EnumProcessModules(intptr_0, uint_0, 4096U, out uint_2))
         {
             Logger.LogMessage("EnumProcessModules failed!  Last error = " + Marshal.GetLastWin32Error());
             return 0;
@@ -256,10 +256,10 @@ public class SolitaireSolver
         var stringBuilder_0 = new StringBuilder(200);
         for (var index = 0; index < num; ++index)
         {
-            var moduleFileNameEx = (int)GetModuleFileNameEx(intptr_0, new IntPtr(infiniteWaitTimeout[index]), stringBuilder_0, 200U);
-            Logger.LogMessage("0x" + infiniteWaitTimeout[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
+            var moduleFileNameEx = (int)GetModuleFileNameEx(intptr_0, new IntPtr(uint_0[index]), stringBuilder_0, 200U);
+            Logger.LogMessage("0x" + uint_0[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
             if (stringBuilder_0.ToString().ToLower().EndsWith(string_0.ToLower()))
-                return (int)infiniteWaitTimeout[index];
+                return (int)uint_0[index];
         }
 
         Logger.LogMessage("GetModuleAddress never found what we wanted!");

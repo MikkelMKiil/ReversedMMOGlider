@@ -55,8 +55,8 @@ public class PriestConfig : Form
         UseShadowform.Checked = ConfigManager.gclass61_0.method_2("Priest.UseShadowform") == "True";
         UseVampiric.Checked = ConfigManager.gclass61_0.method_2("Priest.UseVampiric") == "True";
         ExtraFlay.Checked = ConfigManager.gclass61_0.method_2("Priest.ExtraFlay") == "True";
-        MessageProvider.LoadSingleProfile(this, "Priest");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Priest");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

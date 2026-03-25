@@ -21,10 +21,10 @@ public class TestThread
         if (bool_0)
             Logger.LogMessage("Can't start another TestoThread, wait a minute!");
         else
-            new Thread(LoadProfile).Start();
+            new Thread(smethod_1).Start();
     }
 
-    private static void LoadProfile()
+    private static void smethod_1()
     {
         try
         {
@@ -41,15 +41,15 @@ public class TestThread
             else
             {
                 StartupClass.BringGameWindowToForeground();
-                Thread.Sleep(2000);
+                Thread.smethod_39(2000);
             }
 
             if (StartupClass.GliderManager != null)
                 StartupClass.GliderManager.method_33(true);
-            ApplyLnCommandLineArg();
-            Thread.Sleep(4000);
+            smethod_52();
+            Thread.smethod_39(4000);
             StartupClass.cameraRotator.method_7();
-            InputController.StartManualGlide(false);
+            InputController.smethod_21(false);
             if (StartupClass.GliderManager != null)
                 StartupClass.GliderManager.method_33(false);
             Logger.LogMessage("TestoThread done");
@@ -64,17 +64,17 @@ public class TestThread
         }
     }
 
-    private static void IsGroupProfile()
+    private static void smethod_2()
     {
         if (GContext.Main.Me.Target != null)
         {
             if (!StartupClass.IsGliderInitialized)
-                Thread.Sleep(3000);
+                Thread.smethod_39(3000);
             var gspellTimer = new GSpellTimer(5000, false);
             StartupClass.cameraRotator.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
             while (!gspellTimer.IsReady)
             {
-                Thread.Sleep(20);
+                Thread.smethod_39(20);
                 if (StartupClass.cameraRotator.method_8(true))
                     break;
             }
@@ -89,12 +89,12 @@ public class TestThread
         }
     }
 
-    private static void LoadSingleProfile()
+    private static void smethod_3()
     {
         Logger.LogMessage("GPlayerSelf.Me.IsSitting: " + GPlayerSelf.Me.IsSitting);
     }
 
-    private static void GetFileNameFromPath()
+    private static void smethod_4()
     {
         if (ggameCamera_0 == null)
         {
@@ -109,7 +109,7 @@ public class TestThread
         }
     }
 
-    private static void ApplyConfig()
+    private static void smethod_5()
     {
         if (GPlayerSelf.Me.Target == null)
         {
@@ -125,13 +125,13 @@ public class TestThread
         }
     }
 
-    private static void ParseDouble()
+    private static void smethod_6()
     {
-        ResolveWowVersion("MainHandSlot");
-        ResolveWowVersion("SecondaryHandSlot");
+        smethod_7("MainHandSlot");
+        smethod_7("SecondaryHandSlot");
     }
 
-    private static void ResolveWowVersion(string string_0)
+    private static void smethod_7(string string_0)
     {
         var equippedGuid = GContext.Main.Items.GetEquippedGUID(string_0);
         Logger.LogMessage("Item in \"" + string_0 + "\": 0x" + equippedGuid.ToString("x"));
@@ -140,7 +140,7 @@ public class TestThread
         GContext.Main.Items.DebugItem(equippedGuid);
     }
 
-    private static void SelectActiveGameClass()
+    private static void smethod_8()
     {
         var flag1 = false;
         while (GPlayerSelf.Me.IsInCombat)
@@ -156,26 +156,26 @@ public class TestThread
         Logger.LogMessage("Player left combat, bailing out of test loop");
     }
 
-    private static void StartMainThread()
+    private static void smethod_9()
     {
-        var gclass8_1 = UIElement.IsGroupProfile("UIParent");
-        var gclass8_2 = UIElement.IsGroupProfile("StaticPopup1");
+        var gclass8_1 = UIElement.smethod_2("UIParent");
+        var gclass8_2 = UIElement.smethod_2("StaticPopup1");
         Logger.LogMessage("parent: " + gclass8_1.method_2());
         Logger.LogMessage("sp1: " + gclass8_2.method_2());
     }
 
-    private static void RunMainThreadSafe()
+    private static void smethod_10()
     {
         Logger.LogMessage("Stealthed: " + GPlayerSelf.Me.HasWellKnownBuff("Stealth"));
     }
 
-    private static void RunInitializationFlow()
+    private static void smethod_11()
     {
         GContext.Main.CastSpell("Priest.Shield");
         GContext.Main.CastSpell("Priest.MindBlast");
     }
 
-    private static void IsAttachedToGame()
+    private static void smethod_12()
     {
         var num1 = -1;
         while (true)
@@ -183,7 +183,7 @@ public class TestThread
             int num2;
             do
             {
-                Thread.Sleep(100);
+                Thread.smethod_39(100);
                 num2 = GProcessMemoryManipulator.ReadInt32(11257960, "bst");
             } while (num2 == num1);
 
@@ -192,7 +192,7 @@ public class TestThread
         }
     }
 
-    private static void TryAttach()
+    private static void smethod_13()
     {
         foreach (object obj in GObjectList.GetObjects())
             Logger.LogMessage(obj.ToString());
@@ -223,7 +223,7 @@ public class TestThread
         Logger.LogMessage("ObjectList test done");
     }
 
-    private static void ExecuteAttachOrDetach()
+    private static void smethod_14()
     {
         if (GPlayerSelf.Me.HasAmmo)
             Logger.LogMessage("I have ammo!");
@@ -231,7 +231,7 @@ public class TestThread
             Logger.LogMessage("Out of Ammo--Help!");
     }
 
-    private static void Detach()
+    private static void smethod_15()
     {
         while (true)
         {
@@ -243,7 +243,7 @@ public class TestThread
         }
     }
 
-    private static void ApplyAclForProcess()
+    private static void smethod_16()
     {
         if (GContext.Main.Interface.IsKeyEnabled("Common.Potion"))
             Logger.LogMessage("Key Enabled");
@@ -251,7 +251,7 @@ public class TestThread
             Logger.LogMessage("Key Disabled");
     }
 
-    private static void NotifyStatusChange()
+    private static void smethod_17()
     {
         var unit = GObjectList.FindUnit("Innkeeper Heather");
         if (unit == null)
@@ -282,11 +282,11 @@ public class TestThread
         }
     }
 
-    private static void ParseProcessIdFromCommandLine()
+    private static void smethod_18()
     {
         while (GPlayerSelf.Me.Target != null)
         {
-            Thread.Sleep(1000);
+            Thread.smethod_39(1000);
             GContext.Main.Log("Populated/Firing/Ready: " + GContext.Main.Interface.IsKeyPopulated("Warlock.Wand") +
                               "/" + GContext.Main.Interface.IsKeyFiring("Warlock.Wand") + "/" +
                               GContext.Main.Interface.IsKeyReady("Warlock.Wand"));
@@ -295,18 +295,18 @@ public class TestThread
         GContext.Main.Log("Wand test all done");
     }
 
-    private static void IsNumericString()
+    private static void smethod_19()
     {
         while (GPlayerSelf.Me.Target != null)
         {
             var target = GPlayerSelf.Me.Target;
-            Thread.Sleep(200);
+            Thread.smethod_39(200);
             GContext.Main.Log("Casting/Energy/Ready: " + target.IsCasting + "/" + GPlayerSelf.Me.Energy + "/" +
                               GContext.Main.Interface.IsKeyReady("Rogue.Kick"));
         }
     }
 
-    private static void SendInputString()
+    private static void smethod_20()
     {
         var byNamePreWorld = GContext.Main.Interface.GetByNamePreWorld("GlueDialog");
         if (byNamePreWorld == null)
@@ -325,7 +325,7 @@ public class TestThread
         }
     }
 
-    private static void StartManualGlide()
+    private static void smethod_21()
     {
         var byKeyName = GContext.Main.Interface.GetByKeyName("Common.Eat");
         if (byKeyName == null)
@@ -333,7 +333,7 @@ public class TestThread
         GContext.Main.Log("Food interface object: " + byKeyName);
     }
 
-    private static void BringGameWindowToForeground()
+    private static void smethod_22()
     {
         foreach (var gobject in GObjectList.GetObjects())
             if (gobject.Type == GObjectType.Item && ((GItem)gobject).IsEquipped)
@@ -361,15 +361,15 @@ public class TestThread
         Logger.LogMessage("ObjectList test done");
     }
 
-    private static void AddWaypoint()
+    private static void smethod_23()
     {
         Logger.LogMessage("Put cursor on item!");
-        Thread.Sleep(3000);
+        Thread.smethod_39(3000);
         Logger.LogMessage("Cursor Type: " +
                            GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
     }
 
-    private static void StartAutoGlide()
+    private static void smethod_24()
     {
         Logger.LogMessage("Testing Creature Type:");
         Logger.LogMessage(GPlayerSelf.Me.Target.CreatureType.ToString());
@@ -378,7 +378,7 @@ public class TestThread
         Logger.LogMessage("IsDead :" + GPlayerSelf.Me.IsDead);
     }
 
-    private static void StartDetachedGlide()
+    private static void smethod_25()
     {
         var target = GPlayerSelf.Me.Target;
         if (target == null)
@@ -394,7 +394,7 @@ public class TestThread
         }
     }
 
-    private static void ToggleFactionForTarget()
+    private static void smethod_26()
     {
         var target = GPlayerSelf.Me.Target;
         if (target == null)
@@ -403,7 +403,7 @@ public class TestThread
             Logger.LogMessage("Raid target icon is: " + target.RaidTargetIcon);
     }
 
-    private static void StopGlide()
+    private static void smethod_27()
     {
         var buffSnapshot = GPlayerSelf.Me.Target.GetBuffSnapshot(false);
         Logger.LogMessage("Retrieved " + buffSnapshot.Length + " buffs for self");
@@ -411,12 +411,12 @@ public class TestThread
             Logger.LogMessage(obj.ToString());
     }
 
-    private static void ExecuteStopGlide()
+    private static void smethod_28()
     {
         Logger.LogMessage("Profile has Z stuff: " + GContext.Main.Profile.AllCoordsHaveZ());
     }
 
-    private static void GetGlideRate()
+    private static void smethod_29()
     {
         Logger.LogMessage("Starting Object Test 3..2..1");
         var objects = GObjectList.GetObjects();
@@ -425,12 +425,12 @@ public class TestThread
             Logger.LogMessage("object Type: " + gobject.Type + " | Name: " + gobject.Name);
     }
 
-    private static void SetupKillEventListener()
+    private static void smethod_30()
     {
         var byName = GContext.Main.Interface.GetByName("QuestFrame");
         var childObject = GContext.Main.Interface.GetByName("QuestDetailScrollChildFrame")
             .GetChildObject("QuestTitleText");
-        Thread.Sleep(777);
+        Thread.smethod_39(777);
         if (!byName.IsVisible)
         {
             Logger.LogMessage("No quest frame, skipping gossip check");
@@ -444,7 +444,7 @@ public class TestThread
         }
     }
 
-    private static void Shutdown()
+    private static void smethod_31()
     {
         for (var SlotNumber = 1; SlotNumber <= 130; ++SlotNumber)
         {
@@ -469,12 +469,12 @@ public class TestThread
         }
     }
 
-    private static void WaitForKillEvent()
+    private static void smethod_32()
     {
         SpellcastingManager.gclass42_0.Offsets["Rogue.Sinister"].FilloutKey();
     }
 
-    private static void ExecuteShutdown()
+    private static void smethod_33()
     {
         var flag1 = GContext.Main.Interface.IsKeyReady("Rogue.Stealth");
         var gspellTimer = new GSpellTimer(30000, false);
@@ -490,12 +490,12 @@ public class TestThread
         }
     }
 
-    private static void TriggerKillEvent()
+    private static void smethod_34()
     {
         Logger.LogMessage("My stance is: " + GPlayerSelf.Me.Stance);
     }
 
-    private static void CancelKillEvent()
+    private static void smethod_35()
     {
         var visibleInterfaceObject = SpellcastingManager.gclass42_0.Offsets["Rogue.Sinister"].FindVisibleInterfaceObject();
         if (visibleInterfaceObject == null)
@@ -505,18 +505,18 @@ public class TestThread
         else
         {
             Logger.LogMessage("Found it: \"" + visibleInterfaceObject + "\"");
-            UIElement.IsGroupProfile(visibleInterfaceObject).method_16(false);
+            UIElement.smethod_2(visibleInterfaceObject).method_16(false);
         }
     }
 
-    private static void ParseCommandLineArg()
+    private static void smethod_36()
     {
         SpellcastingManager.gclass42_0.method_23();
         SpellcastingManager.gclass42_0.Offsets["Common.Potion"].FilloutKey();
         Logger.LogMessage("Potion ready flag: " + GContext.Main.Interface.IsKeyReady("Common.Potion"));
     }
 
-    private static void HandleWardenCheckResult()
+    private static void smethod_37()
     {
         SpellcastingManager.gclass42_0.method_23();
         foreach (var gkey in SpellcastingManager.gclass42_0.Offsets.Values)
@@ -524,7 +524,7 @@ public class TestThread
                 gkey.FilloutKey();
     }
 
-    private static void TickMainLoop()
+    private static void smethod_38()
     {
         if (GPlayerSelf.Me.Target == null)
         {
@@ -540,12 +540,12 @@ public class TestThread
         }
     }
 
-    private static void Sleep()
+    private static void smethod_39()
     {
         Logger.LogMessage("The count is: " + GContext.Main.Interface.GetActionInventory("Common.Test"));
     }
 
-    private static void SleepWithJitter()
+    private static void smethod_40()
     {
         if (GPlayerSelf.Me.Target == null)
         {
@@ -558,9 +558,9 @@ public class TestThread
             if (WorldToScreenProjector.smethod_0(GPlayerSelf.Me.Target.Location, 0.0, out double_1, out double_2))
             {
                 Logger.LogMessage("Conversion good, positioning cursor");
-                InputController.ParseProcessIdFromCommandLine(double_1, double_2);
-                Thread.Sleep(1000);
-                InputController.AddWaypoint(true);
+                InputController.smethod_18(double_1, double_2);
+                Thread.smethod_39(1000);
+                InputController.smethod_23(true);
             }
             else
             {
@@ -569,7 +569,7 @@ public class TestThread
         }
     }
 
-    private static void HandleTargetVanish()
+    private static void smethod_41()
     {
         if (GPlayerSelf.Me.Target == null)
             Logger.LogMessage("Target something first");
@@ -577,19 +577,19 @@ public class TestThread
             GPlayerSelf.Me.Target.Interact();
     }
 
-    private static void GetFileNameFromBackslash()
+    private static void smethod_42()
     {
-        InputController.ExecuteStopGlide("/w dirtymeat woo! YeAhhh!  Money$$!!??");
+        InputController.smethod_28("/w dirtymeat woo! YeAhhh!  Money$$!!??");
     }
 
-    private static void GetDirectoryFromPath()
+    private static void smethod_43()
     {
         foreach (var quest in GPlayerSelf.Me.Quests)
             Logger.LogMessage("Quest: 0x" + quest.ToString("x"));
         Logger.LogMessage("Cutting teeth quest: " + GPlayerSelf.Me.IsOnQuest(788));
     }
 
-    private static void ProbeProcessAttach()
+    private static void smethod_44()
     {
         var memory = GContext.Main.Memory;
         Logger.LogMessage("Byte at test addr: " + memory.ReadByte(7146512, "memtestread").ToString("x"));
@@ -598,18 +598,18 @@ public class TestThread
         Logger.LogMessage("Now byte is: " + memory.ReadByte(7146512, "memtestread2").ToString("x"));
     }
 
-    private static void TryAutoAttach()
+    private static void smethod_45()
     {
         Logger.LogMessage("My move flags1: 0x" + GPlayerSelf.Me.MovementFlags1.ToString("x"));
         Logger.LogMessage("My move flags2: 0x" + GPlayerSelf.Me.MovementFlags2.ToString("x"));
     }
 
-    private static void HandleBackgroundDisplay()
+    private static void smethod_46()
     {
         GInterfaceHelper.DumpUIDebug(true);
     }
 
-    private static void HideGameWindow()
+    private static void smethod_47()
     {
         var byNamePreWorld = GContext.Main.Interface.GetByNamePreWorld("CharacterSelectCharacterFrame");
         if (byNamePreWorld != null && byNamePreWorld.IsVisible)
@@ -624,7 +624,7 @@ public class TestThread
         }
     }
 
-    public static void ShrinkGameWindow(GInterfaceObject ginterfaceObject_0)
+    public static void smethod_48(GInterfaceObject ginterfaceObject_0)
     {
         if (ginterfaceObject_0 == null || !ginterfaceObject_0.IsVisible)
             return;
@@ -633,14 +633,14 @@ public class TestThread
         GContext.Main.DisableCursorHook();
     }
 
-    private static void RestoreHiddenWindow()
+    private static void smethod_49()
     {
         for (var index = 1; index < 65; ++index)
         {
             var byName = GContext.Main.Interface.GetByName("TaxiButton" + index);
             if (byName != null && byName.IsVisible)
             {
-                ShrinkGameWindow(byName);
+                smethod_48(byName);
                 var childObject = GContext.Main.Interface.GetByName("GameTooltip")
                     .GetChildObject("GameTooltipTextLeft1");
                 Logger.LogMessage("Tooltip for " + index + " sez \"" + childObject.LabelText + "\"");
@@ -653,12 +653,12 @@ public class TestThread
         }
     }
 
-    private static void RestoreShrunkWindow()
+    private static void smethod_50()
     {
         GContext.Main.Interface.GetByName("ActionButton12").Hover();
     }
 
-    private static void RestoreGameWindow()
+    private static void smethod_51()
     {
         for (var index = 1; index <= 32; ++index)
         {
@@ -668,8 +668,8 @@ public class TestThread
         }
     }
 
-    private static void ApplyLnCommandLineArg()
+    private static void smethod_52()
     {
-        SleepWithJitter();
+        smethod_40();
     }
 }

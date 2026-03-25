@@ -129,7 +129,7 @@ public class WebNotificationService
         {
             do
             {
-                Thread.Sleep(1000);
+                Thread.smethod_39(1000);
             } while ((DateTime.Now - dateTime_0).TotalSeconds < int_0);
 
             method_4("Touching remote server");
@@ -163,7 +163,7 @@ public class WebNotificationService
         var array = w1.ToArray();
         var str = Encoding.ASCII.GetString(array);
         if (ConfigManager.gclass61_0.method_5("LogNotifyQuery"))
-            Logger.LoadProfile("xmlText:\r\n" + str);
+            Logger.smethod_1("xmlText:\r\n" + str);
         if (method_9(array))
             lock (this)
             {
@@ -190,7 +190,7 @@ public class WebNotificationService
             var streamReader = new StreamReader(response.GetResponseStream());
             var end = streamReader.ReadToEnd();
             if (ConfigManager.gclass61_0.method_5("LogNotifyResponse"))
-                Logger.LoadProfile("Response from post:\r\n" + end);
+                Logger.smethod_1("Response from post:\r\n" + end);
             method_4("Response received from post: " + end.Length + " bytes");
             streamReader.Close();
             response.Close();
@@ -250,7 +250,7 @@ public class WebNotificationService
             }
 
             var element4 = xmlDocument.CreateElement("PlayersNearby");
-            foreach (var gclass21 in PlayerTracker.LoadProfile())
+            foreach (var gclass21 in PlayerTracker.smethod_1())
             {
                 var element5 = xmlDocument.CreateElement("Player");
                 method_13(element5, "Name", gclass21.gplayer_0.Name);

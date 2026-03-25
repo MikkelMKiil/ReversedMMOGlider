@@ -69,8 +69,8 @@ public class WarriorConfig : Form
         UseShieldBash.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseShieldBash") == "True";
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Warrior.AvoidAdds") == "True";
         UseMortalStrike.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseMortalStrike") == "True";
-        MessageProvider.LoadSingleProfile(this, "Warrior");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Warrior");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

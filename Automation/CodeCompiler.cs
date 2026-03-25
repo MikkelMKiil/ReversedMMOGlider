@@ -24,7 +24,7 @@ public class CodeCompiler
         {
             var path = "Classes\\" + string_0;
             if (File.Exists(path))
-                return IsGroupProfile(File.ReadAllText(path), out string_1);
+                return smethod_2(File.ReadAllText(path), out string_1);
             string_1 = "Source file does not exist";
             return null;
         }
@@ -35,7 +35,7 @@ public class CodeCompiler
         }
     }
 
-    public static void LoadProfile(string string_0, CompilerParameters compilerParameters_0)
+    public static void smethod_1(string string_0, CompilerParameters compilerParameters_0)
     {
         var str1 = string_0;
         var chArray = new char[1] { '\r' };
@@ -48,7 +48,7 @@ public class CodeCompiler
             }
     }
 
-    private static Assembly IsGroupProfile(string string_0, out string string_1)
+    private static Assembly smethod_2(string string_0, out string string_1)
     {
         var flag = false;
         var stringBuilder = new StringBuilder();
@@ -63,7 +63,7 @@ public class CodeCompiler
         compilerParameters.ReferencedAssemblies.Add("System.dll");
         compilerParameters.ReferencedAssemblies.Add("System.Xml.dll");
         compilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
-        LoadProfile(string_0, compilerParameters);
+        smethod_1(string_0, compilerParameters);
         var compilerResults = codeDomProvider.CompileAssemblyFromSource(compilerParameters, string_0);
         var errors = compilerResults.Errors;
         if (errors.Count > 0)
@@ -92,7 +92,7 @@ public class CodeCompiler
         return typeof(GGameClass).Assembly.Location;
     }
 
-    private static string LoadSingleProfile(string string_0)
+    private static string smethod_3(string string_0)
     {
         var asm = typeof(CodeCompiler).Assembly;
         Stream manifestResourceStream = null;
@@ -132,17 +132,17 @@ public class CodeCompiler
         return end;
     }
 
-    public static void GetFileNameFromPath()
+    public static void smethod_4()
     {
         var array = new string[StartupClass.ProfileMapping.Keys.Count];
         StartupClass.ProfileMapping.Keys.CopyTo(array, 0);
         foreach (var string_0 in array)
-            ApplyConfig(string_0);
+            smethod_5(string_0);
     }
 
-    public static void ApplyConfig(string string_0)
+    public static void smethod_5(string string_0)
     {
-        Logger.LoadProfile("Unloading custom class: \"" + string_0 + "\"");
+        Logger.smethod_1("Unloading custom class: \"" + string_0 + "\"");
         if (!StartupClass.ProfileMapping.ContainsKey(string_0))
         {
             Logger.LogMessage("Can't unload \"" + string_0 + "\", it isn't loaded!");
@@ -151,13 +151,13 @@ public class CodeCompiler
         {
             try
             {
-                if (Detach())
+                if (smethod_15())
                     if (StartupClass.ProfileMapping[string_0].object_0 != null)
                         if (!StartupClass.ProfileMapping[string_0].bool_0)
                         {
                             StartupClass.ProfileMapping[string_0].method_0();
                             if (StartupClass.ProfileMapping[string_0].genum1_0 == SpellEnabledState.const_1)
-                                ((GGameClass)StartupClass.ProfileMapping[string_0].object_0).Shutdown();
+                                ((GGameClass)StartupClass.ProfileMapping[string_0].object_0).smethod_31();
                         }
             }
             catch (Exception ex)
@@ -169,7 +169,7 @@ public class CodeCompiler
         }
     }
 
-    private static string ParseDouble(string string_0)
+    private static string smethod_6(string string_0)
     {
         var strArray = File.ReadAllLines("Classes\\" + string_0);
         string str1 = null;
@@ -178,13 +178,13 @@ public class CodeCompiler
             {
                 var num = str2.IndexOf(' ');
                 str1 = str2.Substring(num + 1).Trim();
-                Logger.LoadProfile("Override class to instantiate: \"" + str1 + "\"");
+                Logger.smethod_1("Override class to instantiate: \"" + str1 + "\"");
             }
 
         return str1;
     }
 
-    public static GGameClass ResolveWowVersion(
+    public static GGameClass smethod_7(
         string string_0,
         Assembly assembly_0,
         bool bool_0,
@@ -194,7 +194,7 @@ public class CodeCompiler
         Type type1 = null;
         string str = null;
         if (bool_1)
-            str = ParseDouble(string_0);
+            str = smethod_6(string_0);
         if (str == null)
         {
             foreach (var type2 in exportedTypes)
@@ -202,7 +202,7 @@ public class CodeCompiler
                 {
                     type1 = type2;
                     str = type1.FullName;
-                    Logger.LoadProfile("Guessed class name: \"" + str + "\"");
+                    Logger.smethod_1("Guessed class name: \"" + str + "\"");
                     break;
                 }
 
@@ -250,9 +250,9 @@ public class CodeCompiler
         }
     }
 
-    private static void SelectActiveGameClass(string string_0)
+    private static void smethod_8(string string_0)
     {
-        var str = LoadSingleProfile(string_0);
+        var str = smethod_3(string_0);
         if (str == null)
             return;
         var path = "DefaultClasses\\" + string_0;
@@ -264,21 +264,21 @@ public class CodeCompiler
         streamWriter.Close();
     }
 
-    public static void StartMainThread(SpellActionData gclass22_0)
+    public static void smethod_9(SpellActionData gclass22_0)
     {
         var string_0 = gclass22_0.string_1.Substring(0, gclass22_0.string_1.IndexOf(' '));
         Logger.LogMessage("Compiling internal: \"" + string_0 + "\"");
         string string_1;
         var assembly_0 =
-            IsGroupProfile(
-                LoadSingleProfile(string_0) ?? throw new Exception("Can't get default class source: \"" + string_0 + "\""),
+            smethod_2(
+                smethod_3(string_0) ?? throw new Exception("Can't get default class source: \"" + string_0 + "\""),
                 out string_1);
         if (assembly_0 == null)
             Logger.LogMessage("!! Exception compiling internal class \"" + string_0 + "\": " + string_1);
         else
             try
             {
-                var ggameClass = ResolveWowVersion("(Internal) " + string_0, assembly_0, false, false);
+                var ggameClass = smethod_7("(Internal) " + string_0, assembly_0, false, false);
                 if (ggameClass == null)
                     return;
                 Logger.LogMessage("Compiled internal class: \"" + string_0 + "\", displayname = \"" +
@@ -292,23 +292,23 @@ public class CodeCompiler
             }
     }
 
-    public static void RunMainThreadSafe()
+    public static void smethod_10()
     {
-        RunInitializationFlow("Paladin.cs (internal)", "Paladin");
-        RunInitializationFlow("Mage.cs (internal)", "Mage");
-        RunInitializationFlow("Priest.cs (internal)", "Priest");
-        RunInitializationFlow("Druid.cs (internal)", "Druid");
-        RunInitializationFlow("Shaman.cs (internal)", "Shaman");
-        RunInitializationFlow("Rogue.cs (internal)", "Rogue");
-        RunInitializationFlow("Warlock.cs (internal)", "Warlock");
-        RunInitializationFlow("Warrior.cs (internal)", "Warrior");
-        RunInitializationFlow("Hunter.cs (internal)", "Hunter");
-        RunInitializationFlow("Deathknight.cs (internal)", "Deathknight");
+        smethod_11("Paladin.cs (internal)", "Paladin");
+        smethod_11("Mage.cs (internal)", "Mage");
+        smethod_11("Priest.cs (internal)", "Priest");
+        smethod_11("Druid.cs (internal)", "Druid");
+        smethod_11("Shaman.cs (internal)", "Shaman");
+        smethod_11("Rogue.cs (internal)", "Rogue");
+        smethod_11("Warlock.cs (internal)", "Warlock");
+        smethod_11("Warrior.cs (internal)", "Warrior");
+        smethod_11("Hunter.cs (internal)", "Hunter");
+        smethod_11("Deathknight.cs (internal)", "Deathknight");
     }
 
-    private static void RunInitializationFlow(string string_0, string string_1)
+    private static void smethod_11(string string_0, string string_1)
     {
-        var gclass22 = new SpellActionData(MessageProvider.GetFileNameFromPath("Common.Class" + string_1));
+        var gclass22 = new SpellActionData(MessageProvider.smethod_4("Common.Class" + string_1));
         gclass22.bool_0 = true;
         gclass22.string_1 = string_0;
         gclass22.genum1_0 = SpellEnabledState.const_1;
@@ -316,23 +316,23 @@ public class CodeCompiler
         StartupClass.ProfileMapping.Add(string_0, gclass22);
     }
 
-    public static void IsAttachedToGame()
+    public static void smethod_12()
     {
         if (!Directory.Exists("DefaultClasses"))
             Directory.CreateDirectory("DefaultClasses");
-        SelectActiveGameClass("Druid.cs");
-        SelectActiveGameClass("Mage.cs");
-        SelectActiveGameClass("Paladin.cs");
-        SelectActiveGameClass("Priest.cs");
-        SelectActiveGameClass("Rogue.cs");
-        SelectActiveGameClass("Shaman.cs");
-        SelectActiveGameClass("Warrior.cs");
-        SelectActiveGameClass("Hunter.cs");
-        SelectActiveGameClass("Warlock.cs");
-        SelectActiveGameClass("Deathknight.cs");
+        smethod_8("Druid.cs");
+        smethod_8("Mage.cs");
+        smethod_8("Paladin.cs");
+        smethod_8("Priest.cs");
+        smethod_8("Rogue.cs");
+        smethod_8("Shaman.cs");
+        smethod_8("Warrior.cs");
+        smethod_8("Hunter.cs");
+        smethod_8("Warlock.cs");
+        smethod_8("Deathknight.cs");
     }
 
-    public static bool TryAttach(string string_0, out string string_1)
+    public static bool smethod_13(string string_0, out string string_1)
     {
         string_1 = "";
         if (StartupClass.ProfileMapping.ContainsKey(string_0))
@@ -348,32 +348,32 @@ public class CodeCompiler
             Logger.LogMessage("Compile successful with warnings on \"" + string_0 + "\": " + string_1);
         else
             Logger.LogMessage("Compile successful on \"" + string_0 + "\"");
-        var ggameClass = ResolveWowVersion(string_0, assembly_0, true, true);
+        var ggameClass = smethod_7(string_0, assembly_0, true, true);
         if (ggameClass != null && StartupClass.IsGameProcessAttached)
             ggameClass.OnAttach();
         return ggameClass != null;
     }
 
-    public static void ExecuteAttachOrDetach()
+    public static void smethod_14()
     {
         var strArray = ConfigManager.gclass61_0.method_10("CustomClasses");
         var stringList = new List<string>();
         if (strArray == null)
             return;
         foreach (var string_0 in strArray)
-            if (!TryAttach(string_0, out var _))
+            if (!smethod_13(string_0, out var _))
                 stringList.Add(string_0);
         foreach (var string_4 in stringList)
             ConfigManager.gclass61_0.method_13("CustomClasses", string_4);
     }
 
     [SpecialName]
-    private static bool Detach()
+    private static bool smethod_15()
     {
         return StartupClass.ApplicationStartupMode == AppMode.Invisible || StartupClass.ApplicationStartupMode == AppMode.Normal;
     }
 
-    public static SpellActionData ApplyAclForProcess(GGameClass ggameClass_0)
+    public static SpellActionData smethod_16(GGameClass ggameClass_0)
     {
         foreach (var gclass22 in StartupClass.ProfileMapping.Values)
             if (gclass22.object_0 == ggameClass_0)

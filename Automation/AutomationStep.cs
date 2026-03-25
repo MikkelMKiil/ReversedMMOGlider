@@ -147,7 +147,7 @@ public class AutomationStep
         }
         else
         {
-            Logger.LoadProfile("Loaded profile: " + string_0);
+            Logger.smethod_1("Loaded profile: " + string_0);
         }
     }
 }

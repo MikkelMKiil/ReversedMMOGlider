@@ -52,7 +52,7 @@ public class ShamanConfig : Form
     public ShamanConfig()
     {
         InitializeComponent();
-        MessageProvider.ResolveWowVersion(ShockMode, "Common.ShockMode");
+        MessageProvider.smethod_7(ShockMode, "Common.ShockMode");
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Shaman.PullDistance");
         ShockLife.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockLife");
         ShockMana.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockMana");
@@ -85,8 +85,8 @@ public class ShamanConfig : Form
                 break;
         }
 
-        MessageProvider.LoadSingleProfile(this, "Shaman");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Shaman");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

@@ -48,7 +48,7 @@ public class WarlockConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 6; ++index)
-            PetComboBox.Items.Add(MessageProvider.GetFileNameFromPath("Warlock.Pet" + index));
+            PetComboBox.Items.Add(MessageProvider.smethod_4("Warlock.Pet" + index));
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Warlock.PullDistance");
         SpellLockLife.Text = ConfigManager.gclass61_0.method_2("Warlock.SpellLockLife");
         FarmShards.Text = ConfigManager.gclass61_0.method_2("Warlock.FarmShards");
@@ -67,9 +67,9 @@ public class WarlockConfig : Form
         PetComboBox.SelectedIndex = int.Parse(ConfigManager.gclass61_0.method_2("Warlock.Pet"));
         StopShards.Checked = ConfigManager.gclass61_0.method_5("Warlock.StopShards");
         Jump.Checked = ConfigManager.gclass61_0.method_5("Warlock.Jump");
-        MessageProvider.LoadSingleProfile(this, "Warlock");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
-        GProcessMemoryManipulator.RestoreGameWindow(helpProvider_0);
+        MessageProvider.smethod_3(this, "Warlock");
+        GProcessMemoryManipulator.smethod_48(this);
+        GProcessMemoryManipulator.smethod_51(helpProvider_0);
     }
 
     protected override void Dispose(bool disposing)

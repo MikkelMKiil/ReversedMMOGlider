@@ -53,8 +53,8 @@ public class HunterConfig : Form
         TrapAdds.Checked = ConfigManager.gclass61_0.method_5("Hunter.TrapAdds");
         FeedMacro.Checked = ConfigManager.gclass61_0.method_5("Hunter.FeedMacro");
         UseViper.Checked = ConfigManager.gclass61_0.method_5("Hunter.UseViper");
-        MessageProvider.LoadSingleProfile(this, "Hunter");
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, "Hunter");
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)

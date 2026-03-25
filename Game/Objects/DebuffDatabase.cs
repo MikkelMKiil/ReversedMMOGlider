@@ -75,11 +75,11 @@ public class DebuffDatabase
                 }
 
             xmlTextReader.Close();
-            Logger.LogMessage(MessageProvider.IsGroupProfile(797, num1, num2));
+            Logger.LogMessage(MessageProvider.smethod_2(797, num1, num2));
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
         }
     }
 
@@ -198,7 +198,7 @@ public class DebuffDatabase
             if (gbuff != null && gbuff.SpellID > 0 && !Offsets.ContainsKey(gbuff.SpellID) &&
                 !sortedList_1.ContainsKey(gbuff.SpellID) && gbuff.SpellName != null && gbuff.SpellName.Length > 0)
             {
-                Logger.LoadProfile(MessageProvider.IsGroupProfile(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                Logger.smethod_1(MessageProvider.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
                 sortedList_1.Add(gbuff.SpellID, gbuff.SpellName);
             }
     }
@@ -250,7 +250,7 @@ public class DebuffDatabase
                 return;
             foreach (var gbuff in buffSnapshot)
                 if (gbuff != null)
-                    Logger.LogMessage(MessageProvider.IsGroupProfile(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                    Logger.LogMessage(MessageProvider.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
         }
         catch (Exception ex)
         {

@@ -13,8 +13,8 @@ public class EquipmentEnchantmentChecker
 {
     private const int int_0 = 8;
     public bool bool_0;
-    public OffsetManager playerOffsetManager;
-    public OffsetManager npcOffsetManager;
+    public OffsetManager gclass43_0;
+    public OffsetManager gclass43_1;
     public int int_1;
     public SortedList Offsets;
 
@@ -87,20 +87,20 @@ public class EquipmentEnchantmentChecker
     {
         if (!bool_0)
         {
-            Logger.LoadProfile("Can't check for buff, setup is not good!");
+            Logger.smethod_1("Can't check for buff, setup is not good!");
             return true;
         }
 
-        Logger.LoadProfile("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
+        Logger.smethod_1("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
         for (var index = 0; index < 8; ++index)
         {
             var num = StartupClass.itemOffsetManager.GetOffsetValue("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
             var int_2 = GProcessMemoryManipulator.ReadInt32(gobject_0.StorageAddress + num, "EnchantID");
             if (int_2 > 0)
             {
-                Logger.LoadProfile("EnchantID: " + int_2);
+                Logger.smethod_1("EnchantID: " + int_2);
                 var str = method_3(int_2);
-                Logger.LoadProfile("Enchant name: " + str);
+                Logger.smethod_1("Enchant name: " + str);
                 if (str.ToLower().IndexOf(string_0) > -1)
                     return true;
             }
@@ -111,7 +111,7 @@ public class EquipmentEnchantmentChecker
 
     public string method_3(int int_2)
     {
-        Logger.LoadProfile("GetEnchantmentName: " + int_2.ToString("x"));
+        Logger.smethod_1("GetEnchantmentName: " + int_2.ToString("x"));
         var num1 = MemoryOffsetTable.Instance.GetIntOffset("EnchantRowJump");
         var num2 = MemoryOffsetTable.Instance.GetIntOffset("EnchantRowCount");
         var num3 = 0;
@@ -119,13 +119,13 @@ public class EquipmentEnchantmentChecker
             num3 = -1;
         var num4 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") + num1, "EnchantNamesBase");
         var num5 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") - num2, "EnchantNamesCount");
-        Logger.LoadProfile("Rows @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") + num1).ToString("x") + " = 0x" +
+        Logger.smethod_1("Rows @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") + num1).ToString("x") + " = 0x" +
                            num4.ToString("x"));
-        Logger.LoadProfile("Count @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") - num2).ToString("x") +
+        Logger.smethod_1("Count @ 0x" + (MemoryOffsetTable.Instance.GetIntOffset("EnchantNames") - num2).ToString("x") +
                            " = 0x" + num5.ToString("x"));
         if (int_2 > num5)
             return "(enchantid out of range!)";
-        Logger.LoadProfile("The row @ " + (num4 + (int_2 + num3) * 4).ToString("x"));
+        Logger.smethod_1("The row @ " + (num4 + (int_2 + num3) * 4).ToString("x"));
         var num6 = GProcessMemoryManipulator.ReadInt32(num4 + (int_2 + num3) * 4, "EnchantRow");
         if (num6 == 0)
             return "(no row for that enchantid: " + int_2 + ")";
@@ -133,7 +133,7 @@ public class EquipmentEnchantmentChecker
         if (int_29 == 0)
             return "(null pointer to enchant name!)";
         var str = GProcessMemoryManipulator.ReadString(int_29, 100, "EnchantName");
-        Logger.LoadProfile("EnchantName: \"" + str + "\"");
+        Logger.smethod_1("EnchantName: \"" + str + "\"");
         return str;
     }
 
@@ -151,7 +151,7 @@ public class EquipmentEnchantmentChecker
                 var gobject = GObjectList.FindObject(GUID);
                 if (gobject == null)
                 {
-                    Logger.LoadProfile("! Null bag: " + GUID.ToString("x"));
+                    Logger.smethod_1("! Null bag: " + GUID.ToString("x"));
                 }
                 else
                 {
@@ -167,18 +167,18 @@ public class EquipmentEnchantmentChecker
         return list_0.ToArray();
     }
 
-    private void method_5(List<InventoryItem> list_0, int int_2, int int_3, int pgEditProfileCount)
+    private void method_5(List<InventoryItem> list_0, int int_2, int int_3, int int_4)
     {
         for (var index = 0; index < int_3; ++index)
         {
-            var num1 = pgEditProfileCount + index * 8;
+            var num1 = int_4 + index * 8;
             var num2 = GProcessMemoryManipulator.ReadInt64(int_2 + num1, "ItemGUID");
             if (num2 != 0L)
             {
                 var gobject = GObjectList.FindObject(num2);
                 if (gobject == null)
                 {
-                    Logger.LoadProfile("! Couldn't find item in list: " + num2.ToString("x"));
+                    Logger.smethod_1("! Couldn't find item in list: " + num2.ToString("x"));
                 }
                 else
                 {

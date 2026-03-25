@@ -27,8 +27,8 @@ public class DebuffList : Form
     public DebuffList()
     {
         InitializeComponent();
-        MessageProvider.LoadSingleProfile(this, nameof(DebuffList));
-        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        MessageProvider.smethod_3(this, nameof(DebuffList));
+        GProcessMemoryManipulator.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -106,7 +106,7 @@ public class DebuffList : Form
         try
         {
             var xmlTextReader = new XmlTextReader(str1);
-            Logger.LoadProfile("Reading from xml");
+            Logger.smethod_1("Reading from xml");
             while (xmlTextReader.Read())
                 if (xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.Name == "Debuff")
                 {
@@ -127,7 +127,7 @@ public class DebuffList : Form
 
                     if (!Offsets.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
                     {
-                        Logger.LoadProfile(num.ToString("x") + " = \"" + str2 + "\"");
+                        Logger.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
                         Offsets.Add(num, str2);
                         DebuffBox.Items.Add(str2 + " (" + num.ToString("x") + ")");
                     }
@@ -137,7 +137,7 @@ public class DebuffList : Form
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
         }
     }
 

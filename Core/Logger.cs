@@ -12,7 +12,7 @@ public class Logger
         StartupClass.ginterface0_0.imethod_2(string_0);
     }
 
-    public static void LoadProfile(string string_0)
+    public static void smethod_1(string string_0)
     {
         StartupClass.ginterface0_0.imethod_3(string_0);
     }
