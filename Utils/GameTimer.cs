@@ -20,7 +20,7 @@ public class GameTimer
 
     public GameTimer(int int_2, int int_3)
     {
-        int_0 = StartupClass.random_0.Next() % (int_3 - int_2);
+        int_0 = StartupClass.rng.Next() % (int_3 - int_2);
         int_0 += int_2;
         method_4();
     }

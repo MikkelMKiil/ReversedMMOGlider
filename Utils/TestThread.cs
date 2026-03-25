@@ -33,8 +33,8 @@ public class TestThread
             if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                 StartupClass.GliderManager != null)
             {
-                StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.wowProcessId);
+                StartupClass.GliderManager.method_34(StartupClass.wowProcessId, StartupClass.MainApplicationHandle);
                 StartupClass.IsGliderInitialized = true;
                 Logger.LogMessage("Setting up for background mode!");
             }

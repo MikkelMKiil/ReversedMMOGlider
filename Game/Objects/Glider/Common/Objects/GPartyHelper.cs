@@ -41,7 +41,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (StartupClass.glideMode_0 != GlideMode.Auto || StartupClass.partyManager.genum7_0 == PartyRole.const_0)
+                if (StartupClass.currentGlideMode != GlideMode.Auto || StartupClass.partyManager.genum7_0 == PartyRole.const_0)
                     return GHealDisposition.Never;
                 switch (ConfigManager.gclass61_0.method_2("PartyHealMode"))
                 {

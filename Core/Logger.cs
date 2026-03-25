@@ -9,11 +9,11 @@ public class Logger
 {
     public static void LogMessage(string string_0)
     {
-        StartupClass.ginterface0_0.imethod_2(string_0);
+        StartupClass.uiLogger.imethod_2(string_0);
     }
 
     public static void smethod_1(string string_0)
     {
-        StartupClass.ginterface0_0.imethod_3(string_0);
+        StartupClass.uiLogger.imethod_3(string_0);
     }
 }

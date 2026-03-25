@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: SpellcastingManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -715,8 +715,8 @@ public class SpellcastingManager
     {
         if (!Offsets.ContainsKey("Common.BarCombat"))
             return;
-        var num1 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarCombat"].CharCode);
-        var num2 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarRest"].CharCode);
+        var num1 = StartupClass.barCharacters.IndexOf(Offsets["Common.BarCombat"].CharCode);
+        var num2 = StartupClass.barCharacters.IndexOf(Offsets["Common.BarRest"].CharCode);
         foreach (var gkey in Offsets.Values)
         {
             var num3 = 0;

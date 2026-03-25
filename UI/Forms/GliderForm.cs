@@ -142,7 +142,7 @@ public class GliderForm : Form, ILogger
     {
         Application.ThreadException += new ThreadExceptionEventHandler(this.method_19);
         GliderForm.gliderForm_0 = this;
-        StartupClass.ginterface0_0 = (ILogger)this;
+        StartupClass.uiLogger = (ILogger)this;
         this.string_0 = "";
         this.method_13();
         StartupClass.MainForm = (Form)this;
@@ -1052,7 +1052,7 @@ public class GliderForm : Form, ILogger
     {
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
         {
-            if (StartupClass.glideMode_0 != GlideMode.None)
+            if (StartupClass.currentGlideMode != GlideMode.None)
             {
                 StartupClass.IsPendingStop = false;
                 StartupClass.StopGlide(false, "StopButtonClicked");
@@ -1066,7 +1066,7 @@ public class GliderForm : Form, ILogger
         else
         {
             StartupClass.IsPendingStop = false;
-            if (StartupClass.glideMode_0 != GlideMode.None)
+            if (StartupClass.currentGlideMode != GlideMode.None)
                 StartupClass.StopGlide(false, "StopButtonClicked");
         }
         this.method_16();
@@ -1199,7 +1199,7 @@ public class GliderForm : Form, ILogger
             }
             if (StartupClass.combatController != null && StartupClass.combatController.int_8 > 0 && StartupClass.combatController.bool_9)
             {
-                this.XPHour_1.Text = Math.Round((double)StartupClass.combatController.int_8 / (DateTime.Now - StartupClass.dateTime_0).TotalSeconds * 3600.0, 0).ToString();
+                this.XPHour_1.Text = Math.Round((double)StartupClass.combatController.int_8 / (DateTime.Now - StartupClass.sessionStartTime).TotalSeconds * 3600.0, 0).ToString();
                 StartupClass.combatController.bool_9 = false;
             }
             if (GPlayerSelf.Me != null)
@@ -1215,7 +1215,7 @@ public class GliderForm : Form, ILogger
             ((ILogger)this).imethod_2(MessageProvider.GetMessage(105));
             InputController.smethod_28(MessageProvider.GetMessage(655));
         }
-        if (StartupClass.AnotherIntegerValue == 0 && StartupClass.attachPidOverride != 0 && StartupClass.IsGliderAttached)
+        if (StartupClass.wowProcessId == 0 && StartupClass.attachPidOverride != 0 && StartupClass.IsGliderAttached)
             this.method_25();
         if (!this.gclass36_0.method_3() || !(StartupClass.MainApplicationHandle != IntPtr.Zero))
             return;
@@ -1428,7 +1428,7 @@ public class GliderForm : Form, ILogger
             this.LabelAttached.Text = "Yes*";
         if (!StartupClass.isInputStringFourCharacters)
             StartupClass.licenseCheckTimer = (GameTimer)null;
-        if (StartupClass.thread_0 != null)
+        if (StartupClass.initializationThread != null)
         {
             this.method_14(false);
             this.StopButton.Enabled = false;
@@ -1438,7 +1438,7 @@ public class GliderForm : Form, ILogger
             this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!Idle");
         }
         else if (StartupClass.IsDetached)
-            this.method_15(StartupClass.glideMode_0 == GlideMode.None);
+            this.method_15(StartupClass.currentGlideMode == GlideMode.None);
         else if (!StartupClass.IsGameProcessAttached)
         {
             this.ConfigButton.Enabled = true;
@@ -1452,13 +1452,13 @@ public class GliderForm : Form, ILogger
             if (ConfigManager.gclass61_0.method_5("AltLayout"))
             {
                 this.StopButton.Enabled = true;
-                if (StartupClass.glideMode_0 == GlideMode.None)
+                if (StartupClass.currentGlideMode == GlideMode.None)
                     this.StopButton.Text = this.WaypointsPanel.Visible ? MessageProvider.smethod_4("GliderForm.StopButton.Default") : MessageProvider.smethod_4("GliderForm.StopButton.Waypoints");
                 else
                     this.StopButton.Text = MessageProvider.smethod_4("GliderForm.StopButton.Stop");
             }
-            this.method_15(StartupClass.glideMode_0 == GlideMode.None);
-            this.method_12(StartupClass.glideMode_0 == GlideMode.None);
+            this.method_15(StartupClass.currentGlideMode == GlideMode.None);
+            this.method_12(StartupClass.currentGlideMode == GlideMode.None);
         }
     }
 
@@ -1493,7 +1493,7 @@ public class GliderForm : Form, ILogger
             this.Location_3d.Text = GPlayerSelf.Me.Location.ToString3D().Replace(" ", ", ");
             this.Location_3d.ForeColor = SystemColors.Highlight;
         }
-        if (!this.label11.Checked || StartupClass.glideMode_0 != GlideMode.None)
+        if (!this.label11.Checked || StartupClass.currentGlideMode != GlideMode.None)
             return;
         if (this.glocation_1 == null)
         {
@@ -1504,13 +1504,13 @@ public class GliderForm : Form, ILogger
             if ((double)GPlayerSelf.Me.Location.GetDistanceTo(this.glocation_1) <= StartupClass.autoAddDistance)
                 return;
             if (this.WPTypeAuto_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_0;
+                StartupClass.waypointMode = WaypointType.const_0;
             if (this.WPTypeNormal_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_1;
+                StartupClass.waypointMode = WaypointType.const_1;
             if (this.WPTypeGhost_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_2;
+                StartupClass.waypointMode = WaypointType.const_2;
             if (this.WPTypeVendor_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_3;
+                StartupClass.waypointMode = WaypointType.const_3;
             StartupClass.AddWaypoint();
             this.glocation_1 = GPlayerSelf.Me.Location;
             SoundPlayer.smethod_0("Key.wav");
@@ -2211,28 +2211,28 @@ public class GliderForm : Form, ILogger
     {
         if (!this.WPTypeAuto_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_0;
+        StartupClass.waypointMode = WaypointType.const_0;
     }
 
     private void WPTypeNormal_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeNormal_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_1;
+        StartupClass.waypointMode = WaypointType.const_1;
     }
 
     private void WPTypeGhost_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeGhost_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_2;
+        StartupClass.waypointMode = WaypointType.const_2;
     }
 
     private void WPTypeVendor_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeVendor_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_3;
+        StartupClass.waypointMode = WaypointType.const_3;
     }
 
     private void Location_3d_Click(object sender, EventArgs e)

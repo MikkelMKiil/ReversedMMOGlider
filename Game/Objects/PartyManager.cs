@@ -92,7 +92,7 @@ public class PartyManager
 
     public static PartyRole smethod_0()
     {
-        return StartupClass.glideMode_0 != GlideMode.Auto ? PartyRole.const_0 : gclass54_0.genum7_0;
+        return StartupClass.currentGlideMode != GlideMode.Auto ? PartyRole.const_0 : gclass54_0.genum7_0;
     }
 
     public void method_1()
@@ -299,13 +299,13 @@ public class PartyManager
 
     private void method_8()
     {
-        switch (StartupClass.random_0.Next() % 2)
+        switch (StartupClass.rng.Next() % 2)
         {
             case 0:
                 SpellcastingManager.gclass42_0.method_0("Common.Jump");
                 break;
             case 1:
-                GContext.Main.Movement.SetHeading(StartupClass.random_0.NextDouble() * 2.0 * Math.PI);
+                GContext.Main.Movement.SetHeading(StartupClass.rng.NextDouble() * 2.0 * Math.PI);
                 break;
         }
     }

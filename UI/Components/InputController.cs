@@ -499,13 +499,13 @@ public class InputController
             Logger.smethod_1(MessageProvider.smethod_2(689, string_1));
             ClipboardHelper.smethod_0(string_1);
             smethod_9(13);
-            StartupClass.Sleep(300 + StartupClass.random_0.Next() % 300);
+            StartupClass.Sleep(300 + StartupClass.rng.Next() % 300);
             smethod_3('v');
         }
         else
         {
             smethod_9(13);
-            StartupClass.Sleep(300 + StartupClass.random_0.Next() % 300);
+            StartupClass.Sleep(300 + StartupClass.rng.Next() % 300);
             foreach (var char_0 in string_1)
             {
                 smethod_7(char_0);
@@ -513,7 +513,7 @@ public class InputController
             }
         }
 
-        StartupClass.Sleep(300 + StartupClass.random_0.Next() % 300);
+        StartupClass.Sleep(300 + StartupClass.rng.Next() % 300);
         smethod_9(13);
     }
 
@@ -525,7 +525,7 @@ public class InputController
             StartupClass.Sleep(20);
         }
 
-        StartupClass.Sleep(300 + StartupClass.random_0.Next() % 300);
+        StartupClass.Sleep(300 + StartupClass.rng.Next() % 300);
     }
 
     public static void smethod_30(string string_1)

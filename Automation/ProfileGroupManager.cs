@@ -443,7 +443,7 @@ public class ProfileGroupManager
                         {
                             Logger.LogMessage(MessageProvider.GetMessage(742));
                             var string_1 = "Common.StrafeLeft";
-                            if (StartupClass.random_0.Next() % 2 == 0)
+                            if (StartupClass.rng.Next() % 2 == 0)
                                 string_1 = "Common.StrafeRight";
                             SpellcastingManager.gclass42_0.method_1(string_1);
                             StartupClass.Sleep(1200);
@@ -458,7 +458,7 @@ public class ProfileGroupManager
                             GContext.Main.PressKey("Common.Back");
                             StartupClass.Sleep(2000);
                             GContext.Main.ReleaseKey("Common.Back");
-                            var NewHeading = StartupClass.random_0.Next() % 2 != 0
+                            var NewHeading = StartupClass.rng.Next() % 2 != 0
                                 ? GPlayerSelf.Me.Heading + Math.PI / 2.0
                                 : GPlayerSelf.Me.Heading - Math.PI / 2.0;
                             if (NewHeading > 2.0 * Math.PI)

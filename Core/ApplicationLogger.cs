@@ -56,9 +56,9 @@ public class ApplicationLogger : ILogger
     public void method_0()
     {
         method_1();
-        StartupClass.ginterface0_0 = this;
+        StartupClass.uiLogger = this;
         StartupClass.InitStartupMode(AppMode.Normal);
-        StartupClass.genum2_0 = WaypointType.const_0;
+        StartupClass.waypointMode = WaypointType.const_0;
         thread_0 = new Thread(method_3);
         thread_0.Start();
     }

@@ -293,7 +293,7 @@ public class ConfigForm : Form
         }
 
         if (ClassList.SelectedIndex == -1)
-            ClassList.SelectedIndex = (int)StartupClass.gameClass_0;
+            ClassList.SelectedIndex = (int)StartupClass.selectedGameClass;
         AltLayout.Enabled = true;
         AllowWW.Enabled = true;
         if (bool_4)
@@ -419,7 +419,7 @@ public class ConfigForm : Form
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
         GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
-        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
+        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.wowVersionLabel);
         DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             InitialProfile.Text = ConfigManager.gclass61_0.method_2("LastProfile");

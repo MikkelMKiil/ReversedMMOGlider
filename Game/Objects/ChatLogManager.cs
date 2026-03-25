@@ -131,14 +131,14 @@ public class ChatLogManager
                             if (strArray[1].Trim() == MessageProvider.GetMessage(34))
                             {
                                 Logger.LogMessage(MessageProvider.smethod_2(35, strArray[0].Trim()));
-                                if (StartupClass.glideMode_0 == GlideMode.Auto)
+                                if (StartupClass.currentGlideMode == GlideMode.Auto)
                                     method_7(strArray[1].Trim(), str1);
                             }
 
                             if (strArray[1].Trim() == MessageProvider.GetMessage(743))
                             {
                                 Logger.LogMessage(MessageProvider.smethod_2(744, strArray[0].Trim()));
-                                if (StartupClass.glideMode_0 == GlideMode.Auto)
+                                if (StartupClass.currentGlideMode == GlideMode.Auto)
                                     method_6(strArray[1].Trim(), str1);
                             }
                         }

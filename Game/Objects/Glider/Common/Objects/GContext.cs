@@ -58,7 +58,7 @@ namespace Glider.Common.Objects
 
         public bool MouseSpin { get; private set; }
 
-        public Random RNG => StartupClass.random_0;
+        public Random RNG => StartupClass.rng;
 
         public bool IsRunning => Running;
 
@@ -80,7 +80,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                switch (StartupClass.glideMode_0)
+                switch (StartupClass.currentGlideMode)
                 {
                     case GlideMode.None:
                         return GGlideMode.None;
@@ -89,14 +89,14 @@ namespace Glider.Common.Objects
                     case GlideMode.Auto:
                         return GGlideMode.Glide;
                     default:
-                        throw new NotImplementedException("Don't know about GlideMode: " + StartupClass.glideMode_0);
+                        throw new NotImplementedException("Don't know about GlideMode: " + StartupClass.currentGlideMode);
                 }
             }
         }
 
         public int MaxCombatDuration => 90000;
 
-        public bool IsGliding => StartupClass.glideMode_0 != GlideMode.None;
+        public bool IsGliding => StartupClass.currentGlideMode != GlideMode.None;
 
         public bool IsAttached => StartupClass.IsGameProcessAttached;
 
@@ -105,7 +105,7 @@ namespace Glider.Common.Objects
         public string RedMessage =>
             GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
 
-        public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
+        public bool IsManualKill => StartupClass.currentGlideMode == GlideMode.Manual;
 
         public GProfile Profile => StartupClass.ActiveGProfile;
 

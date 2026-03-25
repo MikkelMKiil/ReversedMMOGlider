@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: AutoLoginManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -43,7 +43,7 @@ public class AutoLoginManager
         {
             string_0 = string_1;
             gclass14_0 = new EncryptedAccountStorage();
-            if (!StartupClass.IsSomeConditionMet)
+            if (!StartupClass.IsLicenseValid)
                 return false;
             if (!gclass14_0.method_1("Accounts\\" + string_1 + ".xml"))
                 throw new Exception("Unable to read XML file (encrypted on another machine?)");

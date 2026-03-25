@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GClass30
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -77,7 +77,7 @@ public class MessageProvider
         try
         {
             gclass30_0 = new MessageProvider(string_6);
-            StartupClass.numbers_string = GetMessage(2);
+            StartupClass.barCharacters = GetMessage(2);
         }
         catch (Exception ex)
         {

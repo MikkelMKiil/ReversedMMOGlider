@@ -17,7 +17,7 @@ public class GlideMainThread
     public GlideMainThread()
     {
         gplayerSelf_0 = GPlayerSelf.Me;
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.uiLogger.imethod_0();
         thread_0 = null;
         thread_0 = new Thread(method_1);
         thread_0.Start();
@@ -58,7 +58,7 @@ public class GlideMainThread
             StartupClass.GliderManager != null)
         {
             StartupClass.IsGliderInitialized = true;
-            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+            StartupClass.GliderManager.method_34(StartupClass.wowProcessId, StartupClass.MainApplicationHandle);
         }
 
         var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);

@@ -117,6 +117,6 @@ public class NetworkSafetyChecker
     {
         if (StartupClass.GliderManager != null && !StartupClass.IsDriverResident)
             StartupClass.GliderManager.method_11();
-        StartupClass.ginterface0_0.imethod_4();
+        StartupClass.uiLogger.imethod_4();
     }
 }

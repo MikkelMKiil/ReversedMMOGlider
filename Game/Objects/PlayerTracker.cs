@@ -52,7 +52,7 @@ public class PlayerTracker
             foreach (var gclass21 in list_0)
                 gclass21.bool_1 = true;
             var players = GObjectList.GetPlayers();
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 20.0 &&
+            if ((DateTime.Now - StartupClass.sessionStartTime).TotalMinutes >= 20.0 &&
                 ConfigManager.gclass61_0.method_2("AppKey").Length < 8)
                 StartupClass.ActiveGProfile.Waypoints.Clear();
             foreach (var gplayer_1 in players)
@@ -166,14 +166,14 @@ public class PlayerTracker
     public static bool smethod_8(GUnit gunit_0, string string_0, bool bool_2)
     {
         var gmonster = (GMonster)gunit_0;
-        if (!gmonster.IsTagged || gmonster.IsMine || StartupClass.glideMode_0 != GlideMode.Auto ||
+        if (!gmonster.IsTagged || gmonster.IsMine || StartupClass.currentGlideMode != GlideMode.Auto ||
             ConfigManager.gclass61_0.method_5("BypassTagCheck") || StartupClass.combatController.bool_1)
             return true;
         StartupClass.combatController.bool_1 = true;
         SoundPlayer.smethod_0("BadTag.wav");
-        ++StartupClass.SomeIntegerValue;
+        ++StartupClass.badTagCount;
         SpellcastingManager.gclass42_0.method_0("Common.PetFollow");
-        if (StartupClass.SomeIntegerValue >= ConfigManager.gclass61_0.method_3("BadTagLimit"))
+        if (StartupClass.badTagCount >= ConfigManager.gclass61_0.method_3("BadTagLimit"))
         {
             StartupClass.combatController.bool_2 = true;
             Logger.LogMessage(MessageProvider.GetMessage(808));

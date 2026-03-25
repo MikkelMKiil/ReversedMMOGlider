@@ -60,15 +60,15 @@ public class StartupClass
     public static bool IsGliderPaused;
     public static bool IsGliderInitialized;
     public static ISXWardenIntegration GameClass32Instance;
-    public static int SomeIntegerValue;
+    public static int badTagCount;
     public static UIElement GameClass8Instance;
     public static ChatLogManager GameClass69Instance;
-    public static bool IsSomeConditionMet;
+    public static bool IsLicenseValid;
     public static SortedList<long, LootableCorpseTracker> ProfileIdToProfileMap;
     public static AppMode ApplicationStartupMode;
     public static IntPtr MainApplicationHandle = IntPtr.Zero;
-    public static string SomeStringData;
-    public static int AnotherIntegerValue;
+    public static string wowInstallPath;
+    public static int wowProcessId;
     public static IntPtr AdditionalApplicationHandle;
     public static bool IsGameProcessAttached;
     public static GProfile ActiveGProfile;
@@ -86,18 +86,18 @@ public class StartupClass
     public static SortedList corpseSortedList = new SortedList();
     public static bool IsLoading = true;
     public static int initCount = 1;
-    public static DateTime dateTime_0;
-    public static string WowVersionLabel_string = "";
+    public static DateTime sessionStartTime;
+    public static string wowVersionLabel = "";
     public static bool IsProfileModified;
     public static bool IsBetaVersion = false;
     public static bool IsBetaAccessGranted;
     public static GameTimer licenseCheckTimer;
-    public static GlideMode glideMode_0;
+    public static GlideMode currentGlideMode;
     public static int knownVersion;
     public static int expectedVersion;
     public static int versionPatchLevel;
     public static bool IsVersionMismatch;
-    public static Thread thread_0;
+    public static Thread initializationThread;
     public static PartyManager partyManager;
     public static bool IsAutoLoginPending;
     public static bool IsFocusTimerActive;
@@ -106,22 +106,22 @@ public class StartupClass
     public static SecurityDescriptorHelper securityDescriptorHelper;
     public static bool isInitializationSuccessful;
     public static RemoteViewerServer remoteViewerServer;
-    public static GameClass gameClass_0;
+    public static GameClass selectedGameClass;
     public static bool HasShownKeyAlert;
     public static bool isInputStringFourCharacters = true;
     public static DateTime expiryTime;
     public static bool isTimeAdded;
-    public static bool bool_26 = false;
-    public static ILogger ginterface0_0;
+    public static bool legacyUnusedFlag = false;
+    public static ILogger uiLogger;
     public static bool IsInitializationComplete;
     public static int lastAclProcessId;
     public static CombatController combatController;
     public static byte[] byte_0 = null;
     public static bool IsPendingStop = false;
     public static GlideMainThread glideMainThread;
-    public static string numbers_string = "1234567890-=";
+    public static string barCharacters = "1234567890-=";
     public static int cachedGlideRate;
-    public static WaypointType genum2_0 = WaypointType.const_0;
+    public static WaypointType waypointMode = WaypointType.const_0;
     public static bool NeedsClassReload;
     public static EquipmentEnchantmentChecker enchantmentChecker;
     public static double autoAddDistance;
@@ -129,7 +129,7 @@ public class StartupClass
     public static string[] friendWhitelist;
     public static ProfileGroupManager profileGroupManager;
     public static int attachPidOverride;
-    public static Random random_0;
+    public static Random rng;
     public static LootRouteParser lootRouteParser;
     public static GameTimer attachCooldownTimer = new GameTimer(6000);
     public static bool IsResumeMode;
@@ -166,10 +166,10 @@ public class StartupClass
         {
             ConfigManager.gclass61_0 = new ConfigManager();
             MessageProvider.smethod_0(".\\");
-            random_0 = new Random();
+            rng = new Random();
             ActiveGProfile = null;
             currentProfilePath = null;
-            thread_0 = null;
+            initializationThread = null;
             partyManager = new PartyManager();
             pgEditProfileCount = 1;
             if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
@@ -184,8 +184,8 @@ public class StartupClass
 
             var gcontext = new GContext();
             if (appMode_1 != AppMode.PGEdit)
-                CodeCompiler.RunMainThreadSafe();
-            InputController.Shutdown(ConfigManager.gclass61_0);
+                CodeCompiler.smethod_10();
+            InputController.smethod_31(ConfigManager.gclass61_0);
             ApplyConfig();
             SpellcastingManager.gclass42_0 = new SpellcastingManager();
             SpellcastingManager.gclass42_0.method_12();
@@ -193,7 +193,7 @@ public class StartupClass
             if (appMode_1 == AppMode.PGEdit)
                 return;
             if (ConfigManager.gclass61_0.method_2("AppKey") != "demo")
-                CodeCompiler.ExecuteAttachOrDetach();
+                CodeCompiler.smethod_14();
             SelectActiveGameClass();
         }
         else
@@ -215,10 +215,10 @@ public class StartupClass
             securityDescriptorHelper = new SecurityDescriptorHelper();
             securityDescriptorHelper.method_1();
             GameClass32Instance = null;
-            random_0 = new Random();
+            rng = new Random();
             licenseCheckTimer = new GameTimer(10000);
-            glideMode_0 = GlideMode.None;
-            WowVersionLabel_string = "0.0";
+            currentGlideMode = GlideMode.None;
+            wowVersionLabel = "0.0";
             knownVersion = 0;
             expectedVersion = 0;
             versionPatchLevel = 0;
@@ -226,7 +226,7 @@ public class StartupClass
             currentProfilePath = null;
             IsVersionMismatch = currentProfilePath != null;
             IsProfileModified = false;
-            thread_0 = null;
+            initializationThread = null;
             initCount = 1;
             licenseCheckTimer = new GameTimer(660000);
             IsFocusTimerActive = false;
@@ -254,8 +254,8 @@ public class StartupClass
             GliderUIManager = new WebNotificationService();
             var gcontext = new GContext();
             if (!IsAttached)
-                CodeCompiler.RunMainThreadSafe();
-            InputController.Shutdown(ConfigManager.gclass61_0);
+                CodeCompiler.smethod_10();
+            InputController.smethod_31(ConfigManager.gclass61_0);
             ApplyConfig();
             partyManager = new PartyManager();
             partyManager.method_0(ConfigManager.gclass61_0);
@@ -267,13 +267,13 @@ public class StartupClass
             if (!IsAttached)
                 ResolveWowVersion();
             else
-                WowVersionLabel_string = "EvoStub";
+                wowVersionLabel = "EvoStub";
             if (!IsAttached)
                 SelectActiveGameClass();
             IsVersionMismatch = knownVersion != expectedVersion;
             if (securityDescriptorHelper.string_0 != null)
             {
-                Logger.LogMessage(MessageProvider.IsGroupProfile(72, securityDescriptorHelper.string_0));
+                Logger.LogMessage(MessageProvider.smethod_2(72, securityDescriptorHelper.string_0));
                 Environment.Exit(1);
             }
 
@@ -310,7 +310,7 @@ public class StartupClass
             corpseSortedList.Clear();
             IsProfileModified = false;
             currentProfilePath = profilePath;
-            Logger.LogMessage(MessageProvider.IsGroupProfile(109, currentProfilePath));
+            Logger.LogMessage(MessageProvider.smethod_2(109, currentProfilePath));
             ConfigManager.gclass61_0.method_0("LastProfile", profilePath);
             if (partyManager != null && partyManager.Offsets != null)
             {
@@ -319,13 +319,13 @@ public class StartupClass
             }
 
             if (IsInitializationComplete)
-                ginterface0_0.imethod_0();
+                uiLogger.imethod_0();
             return true;
         }
 
-        Logger.LogMessage(MessageProvider.IsGroupProfile(111, profilePath));
+        Logger.LogMessage(MessageProvider.smethod_2(111, profilePath));
         if (IsInitializationComplete)
-            ginterface0_0.imethod_0();
+            uiLogger.imethod_0();
         return false;
     }
 
@@ -338,7 +338,7 @@ public class StartupClass
     {
         if (IsAttached)
             return;
-        numbers_string = ConfigManager.gclass61_0.method_2("BarCharacters");
+        barCharacters = ConfigManager.gclass61_0.method_2("BarCharacters");
         if (GContext.Main != null)
             GContext.Main.ApplyConfig();
         DebuffsKnown_string = new DebuffDatabase();
@@ -369,7 +369,7 @@ public class StartupClass
         {
             if (remoteViewerServer != null && remoteViewerServer.int_0 != ConfigManager.gclass61_0.method_3("ListenPort"))
             {
-                Logger.LogMessage(MessageProvider.IsGroupProfile(142, remoteViewerServer.int_0));
+                Logger.LogMessage(MessageProvider.smethod_2(142, remoteViewerServer.int_0));
                 remoteViewerServer.method_1();
                 remoteViewerServer = null;
             }
@@ -377,7 +377,7 @@ public class StartupClass
             if (remoteViewerServer == null)
             {
                 remoteViewerServer = new RemoteViewerServer();
-                Logger.LogMessage(MessageProvider.IsGroupProfile(143, remoteViewerServer.int_0));
+                Logger.LogMessage(MessageProvider.smethod_2(143, remoteViewerServer.int_0));
                 remoteViewerServer.method_0();
             }
         }
@@ -406,8 +406,8 @@ public class StartupClass
     {
         if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
         {
-            WowVersionLabel_string = ConfigManager.gclass61_0.method_2("ForceVersion");
-            Logger.LogMessage(MessageProvider.IsGroupProfile(81, WowVersionLabel_string));
+            wowVersionLabel = ConfigManager.gclass61_0.method_2("ForceVersion");
+            Logger.LogMessage(MessageProvider.smethod_2(81, wowVersionLabel));
         }
 
         string wowInstallPath;
@@ -417,20 +417,20 @@ public class StartupClass
             return;
         }
 
-        SomeStringData = wowInstallPath;
-        var fileName = Path.Combine(SomeStringData, "WoW.exe");
-        Logger.LoadProfile(MessageProvider.IsGroupProfile(84, fileName));
+        wowInstallPath = wowInstallPath;
+        var fileName = Path.Combine(wowInstallPath, "WoW.exe");
+        Logger.smethod_1(MessageProvider.smethod_2(84, fileName));
         var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
         if (versionInfo == null)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(85, fileName));
+            Logger.LogMessage(MessageProvider.smethod_2(85, fileName));
             return;
         }
 
         if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
             return;
-        WowVersionLabel_string = versionInfo.FileVersion;
-        Logger.LogMessage(MessageProvider.IsGroupProfile(86, WowVersionLabel_string));
+        wowVersionLabel = versionInfo.FileVersion;
+        Logger.LogMessage(MessageProvider.smethod_2(86, wowVersionLabel));
     }
 
     private static bool TryResolveWowInstallPath(out string installPath)
@@ -473,7 +473,7 @@ public class StartupClass
             }
             catch (Exception ex)
             {
-                Logger.LoadProfile("Unable to query running WoW path: " + ex.Message);
+                Logger.smethod_1("Unable to query running WoW path: " + ex.Message);
             }
 
         if (string.IsNullOrEmpty(installPath))
@@ -493,11 +493,11 @@ public class StartupClass
             str = gameClass + ".cs (internal)";
             if (!ProfileMapping.ContainsKey(str))
             {
-                Logger.LoadProfile("No dynamic class: \"" + str + "\"");
+                Logger.smethod_1("No dynamic class: \"" + str + "\"");
                 str = gameClass.ToString();
             }
 
-            Logger.LoadProfile("Promoting name to: \"" + str + "\"");
+            Logger.smethod_1("Promoting name to: \"" + str + "\"");
             ConfigManager.gclass61_0.method_0("CustomClassName", str);
         }
 
@@ -522,7 +522,7 @@ public class StartupClass
         var object0 = (GGameClass)ProfileMapping[str].object_0;
         if (IsGameProcessAttached)
         {
-            Logger.LoadProfile("Calling OnAttach for new class");
+            Logger.smethod_1("Calling OnAttach for new class");
             object0.OnAttach();
         }
 
@@ -535,8 +535,8 @@ public class StartupClass
     {
         isInitializationSuccessful = false;
         MemoryOffsetTable.Instance = new MemoryOffsetTable();
-        thread_0 = new Thread(RunMainThreadSafe);
-        thread_0.Start();
+        initializationThread = new Thread(RunMainThreadSafe);
+        initializationThread.Start();
     }
 
     private static void RunMainThreadSafe()
@@ -547,7 +547,7 @@ public class StartupClass
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(73, ex.Message + ex.StackTrace));
+            Logger.LogMessage(MessageProvider.smethod_2(73, ex.Message + ex.StackTrace));
         }
     }
 
@@ -562,17 +562,17 @@ public class StartupClass
             Sleep(1000);
         }
 
-        thread_0 = null;
+        initializationThread = null;
         if (isInitializationSuccessful)
             DebugPrivilegeElevator.smethod_0();
         if (!isInputStringFourCharacters)
         {
             Logger.LogMessage(MessageProvider.GetMessage(76));
             if (isTimeAdded)
-                Logger.LogMessage(MessageProvider.IsGroupProfile(77, expiryTime.ToString()));
-            if (IsSomeConditionMet)
+                Logger.LogMessage(MessageProvider.smethod_2(77, expiryTime.ToString()));
+            if (IsLicenseValid)
             {
-                CodeCompiler.IsAttachedToGame();
+                CodeCompiler.smethod_12();
                 if (GameMemoryWriter != null)
                     GameMemoryWriter.method_7();
                 switch (ApplicationInitializer.InitializationCount)
@@ -581,7 +581,7 @@ public class StartupClass
                         Logger.LogMessage(MessageProvider.GetMessage(846));
                         break;
                     case 1:
-                        Logger.LogMessage(MessageProvider.IsGroupProfile(880, ApplicationInitializer.InitializationTime.ToShortDateString()));
+                        Logger.LogMessage(MessageProvider.smethod_2(880, ApplicationInitializer.InitializationTime.ToShortDateString()));
                         break;
                     case 2:
                         Logger.LogMessage(MessageProvider.GetMessage(881));
@@ -603,14 +603,14 @@ public class StartupClass
                     MemoryOffsetTable.Instance.GetIntOffset("VAPeek"));
             }
 
-            if (IsSomeConditionMet && !IsClassInitializing && !IsAttached)
+            if (IsLicenseValid && !IsClassInitializing && !IsAttached)
                 NeedsClassInit = true;
             if (GameMemoryWriter != null)
                 GameMemoryWriter.method_2("OnGliderStart", false);
         }
         else
         {
-            IsSomeConditionMet = false;
+            IsLicenseValid = false;
             if (IsBetaVersion)
             {
                 IsBetaAccessGranted = true;
@@ -623,7 +623,7 @@ public class StartupClass
         if (ApplicationStartupMode == AppMode.Normal)
             Logger.LogMessage(MessageProvider.GetMessage(79));
         IsInitializationComplete = true;
-        ginterface0_0.imethod_0();
+        uiLogger.imethod_0();
         IsLoading = false;
         if (IsSecCheckEnabled)
             return;
@@ -646,12 +646,12 @@ public class StartupClass
 
     public static void ExecuteAttachOrDetach()
     {
-        Logger.LoadProfile("--- Attach code in");
+        Logger.smethod_1("--- Attach code in");
         if (IsAttached)
         {
             SoundPlayer.smethod_0("Attach.wav");
             IsDetached = true;
-            ginterface0_0.imethod_0();
+            uiLogger.imethod_0();
         }
         else
         {
@@ -667,14 +667,14 @@ public class StartupClass
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
                 CurrentGameClass.OnAttach();
-            UIElement.IsGroupProfile("UIParent");
+            UIElement.smethod_2("UIParent");
             NotifyStatusChange(1, MessageProvider.GetMessage(98));
-            ginterface0_0.imethod_0();
+            uiLogger.imethod_0();
             enchantmentChecker = new EquipmentEnchantmentChecker();
             enchantmentChecker.method_0();
             GameClass69Instance.method_0();
             DialogMonitor.smethod_0();
-            GameClass8Instance = UIElement.IsGroupProfile("GameMenuFrame");
+            GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
             IsGliderPaused = false;
             if (profileGroupManager != null)
                 profileGroupManager.method_6();
@@ -687,11 +687,11 @@ public class StartupClass
             }
             else
             {
-                Logger.LoadProfile("No WH present at attach");
+                Logger.smethod_1("No WH present at attach");
             }
 
             ShouldReattachAfterStop = false;
-            Logger.LoadProfile("--- Attach code out");
+            Logger.smethod_1("--- Attach code out");
             if (!IsStopRequested)
                 return;
             IsStopRequested = false;
@@ -705,12 +705,12 @@ public class StartupClass
             return;
         IsAutoLoginPending = false;
         IsDetaching = true;
-        Logger.LoadProfile("AppContext.Detach invoked");
-        if (attachPidOverride == 0 && !GProcessMemoryManipulator.HandleAutoLogin(AnotherIntegerValue))
+        Logger.smethod_1("AppContext.Detach invoked");
+        if (attachPidOverride == 0 && !GProcessMemoryManipulator.HandleAutoLogin(wowProcessId))
         {
             GProcessMemoryManipulator.CloseProcessHandle(AdditionalApplicationHandle);
             AdditionalApplicationHandle = IntPtr.Zero;
-            AnotherIntegerValue = 0;
+            wowProcessId = 0;
         }
 
         IsGameProcessAttached = false;
@@ -726,7 +726,7 @@ public class StartupClass
         lastAclProcessId = pid;
         if (!securityDescriptorHelper.method_2(pid))
         {
-            Logger.LogMessage(MessageProvider.IsGroupProfile(91, securityDescriptorHelper.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(91, securityDescriptorHelper.string_0));
             Logger.LogMessage(MessageProvider.GetMessage(92));
         }
         else
@@ -734,7 +734,7 @@ public class StartupClass
             Logger.LogMessage(MessageProvider.GetMessage(93));
             if (securityDescriptorHelper.string_1 == null)
                 return;
-            Logger.LogMessage(MessageProvider.IsGroupProfile(94, securityDescriptorHelper.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(94, securityDescriptorHelper.string_1));
         }
     }
 
@@ -799,7 +799,7 @@ public class StartupClass
                         }
                         catch (Exception ex)
                         {
-                            Logger.LoadProfile(MessageProvider.IsGroupProfile(144, input));
+                            Logger.smethod_1(MessageProvider.smethod_2(144, input));
                         }
                 }
             }
@@ -834,7 +834,7 @@ public class StartupClass
             return false;
         }
 
-        if (glideMode_0 != GlideMode.None)
+        if (currentGlideMode != GlideMode.None)
         {
             Logger.LogMessage(MessageProvider.GetMessage(114));
             return false;
@@ -855,7 +855,7 @@ public class StartupClass
 
         if (!ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             BringGameWindowToForeground();
-        glideMode_0 = GlideMode.Manual;
+        currentGlideMode = GlideMode.Manual;
         glideMainThread = new GlideMainThread();
         return true;
     }
@@ -882,7 +882,7 @@ public class StartupClass
         }
 
         var flag = false;
-        switch (genum2_0)
+        switch (waypointMode)
         {
             case WaypointType.const_0:
                 flag = GPlayerSelf.Me.IsDead;
@@ -895,20 +895,20 @@ public class StartupClass
                 break;
         }
 
-        if (genum2_0 == WaypointType.const_3)
+        if (waypointMode == WaypointType.const_3)
         {
             ActiveGProfile.VendorWaypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.IsGroupProfile(870, ActiveGProfile.VendorWaypoints.Count));
+            Logger.LogMessage(MessageProvider.smethod_2(870, ActiveGProfile.VendorWaypoints.Count));
         }
         else if (!flag)
         {
             ActiveGProfile.Waypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.IsGroupProfile(658, ActiveGProfile.Waypoints.Count));
+            Logger.LogMessage(MessageProvider.smethod_2(658, ActiveGProfile.Waypoints.Count));
         }
         else
         {
             ActiveGProfile.GhostWaypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.IsGroupProfile(659, ActiveGProfile.GhostWaypoints.Count));
+            Logger.LogMessage(MessageProvider.smethod_2(659, ActiveGProfile.GhostWaypoints.Count));
         }
 
         IsProfileModified = true;
@@ -927,7 +927,7 @@ public class StartupClass
 
         if (ConfigManager.gclass61_0.method_5("AllowNetCheck") && !new NetworkSafetyChecker().ValidateNetworkSafety(true))
             return false;
-        if (glideMode_0 != GlideMode.None)
+        if (currentGlideMode != GlideMode.None)
         {
             Logger.LogMessage(MessageProvider.GetMessage(117));
             return false;
@@ -963,11 +963,11 @@ public class StartupClass
 
         if (!IsGliderInitialized)
             BringGameWindowToForeground();
-        glideMode_0 = GlideMode.Auto;
+        currentGlideMode = GlideMode.Auto;
         combatController = new CombatController();
         if (combatController.method_1())
             return true;
-        glideMode_0 = GlideMode.None;
+        currentGlideMode = GlideMode.None;
         return false;
     }
 
@@ -976,12 +976,12 @@ public class StartupClass
         GameProcessManager = new MachGlideRunner();
         if (!GameProcessManager.method_0())
         {
-            glideMode_0 = GlideMode.None;
+            currentGlideMode = GlideMode.None;
             return false;
         }
 
-        glideMode_0 = GlideMode.Auto;
-        ginterface0_0.imethod_0();
+        currentGlideMode = GlideMode.Auto;
+        uiLogger.imethod_0();
         return true;
     }
 
@@ -1026,7 +1026,7 @@ public class StartupClass
 
     public static void StopGlide(bool detach, string reason)
     {
-        if (glideMode_0 == GlideMode.None && !detach)
+        if (currentGlideMode == GlideMode.None && !detach)
             return;
         var flag = false;
         try
@@ -1056,14 +1056,14 @@ public class StartupClass
         lock (killActionLock)
         {
             var flag = false;
-            if (glideMode_0 != GlideMode.None || IsGameProcessAttached && detach)
+            if (currentGlideMode != GlideMode.None || IsGameProcessAttached && detach)
             {
                 RestoreGameWindow();
                 cameraRotator.method_3(true);
-                Logger.LoadProfile(MessageProvider.IsGroupProfile(652, detach, (int)glideMode_0, reason));
+                Logger.smethod_1(MessageProvider.smethod_2(652, detach, (int)currentGlideMode, reason));
                 cameraRotator.method_3(true);
                 InputController.StartManualGlide(false);
-                if (glideMode_0 == GlideMode.Auto)
+                if (currentGlideMode == GlideMode.Auto)
                 {
                     if (detach)
                         ShouldReattachAfterStop = true;
@@ -1083,8 +1083,8 @@ public class StartupClass
                             flag = true;
                     }
 
-                    Logger.LoadProfile(MessageProvider.GetMessage(100));
-                    glideMode_0 = GlideMode.None;
+                    Logger.smethod_1(MessageProvider.GetMessage(100));
+                    currentGlideMode = GlideMode.None;
                     if (IsAttached)
                     {
                         var gameProcessManager = GameProcessManager;
@@ -1101,13 +1101,13 @@ public class StartupClass
                     }
                 }
 
-                if (glideMode_0 == GlideMode.Manual)
+                if (currentGlideMode == GlideMode.Manual)
                 {
                     NotifyStatusChange(1, MessageProvider.GetMessage(101));
                     if (glideMainThread != null && Thread.CurrentThread == glideMainThread.thread_0)
                         flag = true;
-                    Logger.LoadProfile(MessageProvider.GetMessage(102));
-                    glideMode_0 = GlideMode.None;
+                    Logger.smethod_1(MessageProvider.GetMessage(102));
+                    currentGlideMode = GlideMode.None;
                     if (glideMainThread != null)
                         glideMainThread.method_0();
                     glideMainThread = null;
@@ -1115,7 +1115,7 @@ public class StartupClass
 
                 if (detach)
                     Detach();
-                ginterface0_0.imethod_0();
+                uiLogger.imethod_0();
                 GContext.Main.ReleaseAllKeys();
                 if (GliderManager != null)
                     GliderManager.method_33(false);
@@ -1127,7 +1127,7 @@ public class StartupClass
 
     public static int GetGlideRate()
     {
-        if (glideMode_0 != GlideMode.Auto)
+        if (currentGlideMode != GlideMode.Auto)
             return cachedGlideRate;
         if (combatController == null)
             return 0;
@@ -1135,7 +1135,7 @@ public class StartupClass
         {
             if (combatController.bool_9)
             {
-                cachedGlideRate = (int)Math.Round(combatController.expectedVersion / (DateTime.Now - dateTime_0).TotalSeconds * 3600.0, 0);
+                cachedGlideRate = (int)Math.Round(combatController.int_8 / (DateTime.Now - sessionStartTime).TotalSeconds * 3600.0, 0);
                 combatController.bool_9 = false;
             }
         }
@@ -1155,7 +1155,7 @@ public class StartupClass
         if (GameMemoryReader != null)
             GameMemoryReader.method_0();
         GameMemoryWriter.method_0();
-        CodeCompiler.GetFileNameFromPath();
+        CodeCompiler.smethod_4();
         GliderUIManager.method_5();
     }
 
@@ -1179,9 +1179,9 @@ public class StartupClass
 
     private static void ExecuteShutdown()
     {
-        SoundPlayer.LoadProfile("GliderExit.wav");
+        SoundPlayer.smethod_1("GliderExit.wav");
         DebuffsKnown_string.method_10();
-        ginterface0_0.imethod_4();
+        uiLogger.imethod_4();
         if (GliderManager != null && !IsDriverResident)
             GliderManager.method_11();
         Shutdown();
@@ -1211,10 +1211,10 @@ public class StartupClass
         string eventName);
 
     [DllImport("kernel32", SetLastError = true)]
-    internal static extern int WaitForSingleObject(IntPtr securityAttributes, uint milliseconds);
+    internal static extern int WaitForSingleObject(IntPtr handle, uint milliseconds);
 
     [DllImport("Kernel32.dll", SetLastError = true)]
-    private static extern void SetEvent(IntPtr securityAttributes);
+    private static extern void SetEvent(IntPtr handle);
 
     public static string ParseCommandLineArg(string argName)
     {
@@ -1233,23 +1233,23 @@ public class StartupClass
     }
 
     [DllImport("kernel32")]
-    private static extern bool CloseHandle(IntPtr securityAttributes);
+    private static extern bool CloseHandle(IntPtr handle);
 
-    public static void HandleWardenCheckResult(WardenCheckStatus genum0_0)
+    public static void HandleWardenCheckResult(WardenCheckStatus result)
     {
-        Logger.LogMessage("StopOnTW invoked, result = " + (int)genum0_0);
-        if (genum0_0 == WardenCheckStatus.const_2)
+        Logger.LogMessage("StopOnTW invoked, result = " + (int)result);
+        if (result == WardenCheckStatus.const_2)
             File.WriteAllText("TWfail.txt", "guh!");
-        if (genum0_0 == WardenCheckStatus.const_1)
+        if (result == WardenCheckStatus.const_1)
             File.WriteAllText("TWunsafe.txt", "guh!");
-        if (genum0_0 == WardenCheckStatus.const_3)
+        if (result == WardenCheckStatus.const_3)
             File.WriteAllText("DeadSession.txt", "guh!");
         IsExitRequested = true;
         if (GameMemoryReader != null)
             GameMemoryReader.method_0();
         if (!IsDriverResident && GliderManager != null)
             GliderManager.method_11();
-        ginterface0_0.imethod_4();
+        uiLogger.imethod_4();
     }
 
     public static void TickMainLoop()
@@ -1282,7 +1282,7 @@ public class StartupClass
         if (NeedsClassInit && !IsAttached && !IsClassInitializing)
         {
             IsClassInitializing = true;
-            CodeCompiler.ExecuteAttachOrDetach();
+            CodeCompiler.smethod_14();
             SelectActiveGameClass();
         }
 
@@ -1308,11 +1308,11 @@ public class StartupClass
         }
 
         GameClass69Instance.method_4();
-        DialogMonitor.LoadProfile();
-        if (GameClass8Instance != null && GameClass8Instance.method_10() && glideMode_0 == GlideMode.Auto)
+        DialogMonitor.smethod_0();
+        if (GameClass8Instance != null && GameClass8Instance.method_10() && currentGlideMode == GlideMode.Auto)
             InputController.StartMainThread(27);
-        if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
-            (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !IsGliderRunning)
+        if (currentGlideMode == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
+            (DateTime.Now - sessionStartTime).TotalSeconds >= 8.0 && !IsGliderRunning)
         {
             IsGliderRunning = true;
             HandleBackgroundDisplay();
@@ -1342,9 +1342,9 @@ public class StartupClass
             if (GameClass69Instance == null || GameClass69Instance.method_10() >= 10)
                 return false;
             Logger.LogMessage(MessageProvider.GetMessage(830));
-            if (glideMode_0 == GlideMode.Auto)
+            if (currentGlideMode == GlideMode.Auto)
                 ActiveGProfile.ForceBlacklist(gunit_0.GUID);
-            CombatController.LoadProfile();
+            CombatController.smethod_1();
             return true;
         }
 
@@ -1373,11 +1373,11 @@ public class StartupClass
 
     public static bool ProbeProcessAttach()
     {
-        AnotherIntegerValue = GProcessMemoryManipulator.AttachToWowProcess();
-        if (AnotherIntegerValue == 0)
+        wowProcessId = GProcessMemoryManipulator.AttachToWowProcess();
+        if (wowProcessId == 0)
         {
             if (!HasLoggedNoProcessFound)
-                Logger.LoadProfile("Attach attempt: no matching process found for AttachEXE");
+                Logger.smethod_1("Attach attempt: no matching process found for AttachEXE");
             HasLoggedNoProcessFound = true;
             return false;
         }
@@ -1387,27 +1387,27 @@ public class StartupClass
         IsGliderAttached = true;
         if (AdditionalApplicationHandle == IntPtr.Zero && !IsOpenMemoryModel)
         {
-            AdditionalApplicationHandle = GProcessMemoryManipulator.OpenProcessHandle(AnotherIntegerValue);
+            AdditionalApplicationHandle = GProcessMemoryManipulator.OpenProcessHandle(wowProcessId);
             if (AdditionalApplicationHandle == IntPtr.Zero)
             {
                 if (!IsGliderPaused)
                 {
                     IsGliderPaused = true;
-                    Logger.LogMessage(MessageProvider.IsGroupProfile(96, Marshal.GetLastWin32Error()));
+                    Logger.LogMessage(MessageProvider.smethod_2(96, Marshal.GetLastWin32Error()));
                 }
 
                 return false;
             }
 
             GProcessMemoryManipulator.bool_3 = GProcessMemoryManipulator.IsWowProcessRunning();
-            if (GliderManager != null && !GliderManager.method_26(AnotherIntegerValue))
+            if (GliderManager != null && !GliderManager.method_26(wowProcessId))
             {
                 Logger.LogMessage(
                     "Some other Glider is already open on that game, maybe we'll attach to some other one");
                 CloseHandle(AdditionalApplicationHandle);
                 AdditionalApplicationHandle = IntPtr.Zero;
-                GProcessMemoryManipulator.SetProcessId(AnotherIntegerValue);
-                AnotherIntegerValue = 0;
+                GProcessMemoryManipulator.SetProcessId(wowProcessId);
+                wowProcessId = 0;
                 return false;
             }
 
@@ -1423,13 +1423,13 @@ public class StartupClass
             ((IsLoginTimerActive && loginCooldownTimer.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
-            if (str != null && str.Length > 0 && IsSomeConditionMet && new AutoLoginManager().method_2())
+            if (str != null && str.Length > 0 && IsLicenseValid && new AutoLoginManager().method_2())
             {
                 IsAutoLoginPending = true;
                 GameMemoryWriter.method_2("DoAutoLog", false);
             }
 
-            Logger.LoadProfile("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
+            Logger.smethod_1("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
         }
 
         if (MemoryOffsetTable.Instance.HasOffset("TLSSlot") && MemoryOffsetTable.Instance.GetIntOffset("TLSSlot") > 0)
@@ -1438,11 +1438,11 @@ public class StartupClass
             {
                 if (GObjectList.StealthCountGameObjects(playerGuid) > 0)
                     return true;
-                Logger.LoadProfile("TLS attach probe failed object validation, trying static offsets fallback");
+                Logger.smethod_1("TLS attach probe failed object validation, trying static offsets fallback");
             }
             else
             {
-                Logger.LoadProfile("TLS attach probe failed, trying static offsets fallback");
+                Logger.smethod_1("TLS attach probe failed, trying static offsets fallback");
             }
         }
         playerGuid = 0L;
@@ -1463,7 +1463,7 @@ public class StartupClass
         objectManagerBasePointer = int_19;
         if (objectManagerBasePointer == 0)
         {
-            Logger.LoadProfile("Attach probe failed: resolved MainTable pointer is zero");
+            Logger.smethod_1("Attach probe failed: resolved MainTable pointer is zero");
             return false;
         }
 
@@ -1483,7 +1483,7 @@ public class StartupClass
                     playerGuid = int64_1;
                     manualReset = true;
                     initialState = true;
-                    Logger.LoadProfile("Attach probe: using active player object GUID = 0x" + playerGuid.ToString("x"));
+                    Logger.smethod_1("Attach probe: using active player object GUID = 0x" + playerGuid.ToString("x"));
                 }
             }
         }
@@ -1498,7 +1498,7 @@ public class StartupClass
             {
                 playerGuid = int64_2;
                 initialState = true;
-                Logger.LoadProfile("Attach probe: using object manager local GUID = 0x" + playerGuid.ToString("x"));
+                Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + playerGuid.ToString("x"));
             }
         }
 
@@ -1526,14 +1526,14 @@ public class StartupClass
                 {
                     playerGuid = playerGuid;
                     if (candidateAddress != configuredPlayerIdAddress)
-                        Logger.LoadProfile("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
+                        Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
                     break;
                 }
             }
 
             if (playerGuid == 0L)
             {
-                Logger.LoadProfile("Attach probe failed: Player GUID is zero across local and static sources");
+                Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
                 return false;
             }
         }
@@ -1546,17 +1546,17 @@ public class StartupClass
         {
             if (initialState && long_1 <= 4096L)
             {
-                Logger.LoadProfile("Attach probe note: ignoring low inferred GUID candidate because object manager GUID is already known");
+                Logger.smethod_1("Attach probe note: ignoring low inferred GUID candidate because object manager GUID is already known");
                 return true;
             }
             playerGuid = long_1;
-            Logger.LoadProfile("Attach probe: inferred player GUID from object list = 0x" + playerGuid.ToString("x"));
+            Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + playerGuid.ToString("x"));
             num = GObjectList.StealthCountGameObjects(playerGuid);
             if (num > 1)
                 return true;
         }
 
-        Logger.LoadProfile("Attach probe failed: object validation count too low = " + num);
+        Logger.smethod_1("Attach probe failed: object validation count too low = " + num);
         return false;
     }
 
@@ -1656,9 +1656,9 @@ public class StartupClass
     {
         if (Environment.CommandLine.ToLower().IndexOf("/driver") != -1)
         {
-            SoundPlayer.LoadProfile("Kill.wav");
+            SoundPlayer.smethod_1("Kill.wav");
             GliderManager = new WardenProtocol(ParseCommandLineArg("/driver"));
-            Logger.LoadProfile("Sending data to shadow driver");
+            Logger.smethod_1("Sending data to shadow driver");
             if (!GliderManager.method_38())
             {
                 if (MessageBox.Show(null, MessageProvider.GetMessage(862), "Glider", MessageBoxButtons.YesNo,
@@ -1673,7 +1673,7 @@ public class StartupClass
 
             if (Environment.CommandLine.ToLower().IndexOf("/holddriver") != -1)
             {
-                Logger.LoadProfile("DriverName is static, will leave driver resident");
+                Logger.smethod_1("DriverName is static, will leave driver resident");
                 IsDriverResident = true;
             }
         }
@@ -1723,7 +1723,7 @@ public class StartupClass
     public static void HandleAutoLogin()
     {
         IsStopRequested = false;
-        if (!IsSomeConditionMet)
+        if (!IsLicenseValid)
         {
             Logger.LogMessage(MessageProvider.GetMessage(868));
             CombatController.smethod_0(869);
@@ -1734,14 +1734,14 @@ public class StartupClass
             if (!new AutoLoginManager().method_1(string_1))
                 return;
             pendingAutoLoginName = string_1;
-            Logger.LoadProfile("Autolog is good!");
+            Logger.smethod_1("Autolog is good!");
             IsStopRequested = true;
         }
     }
 
-    public static bool IsDecryptedStreamEmpty(GDataEncryptionManager gclass56_0)
+    public static bool IsDecryptedStreamEmpty(GDataEncryptionManager encryptionManager)
     {
-        return gclass56_0.ReadIntFromDecryptedStream() == 0;
+        return encryptionManager.ReadIntFromDecryptedStream() == 0;
     }
 
     public static void ShowSecurityCheck()
@@ -1805,16 +1805,16 @@ public class StartupClass
 
     public static void SetupBackgroundMode()
     {
-        if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
+        if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsLicenseValid)
         {
-            Logger.LoadProfile("Setting up bg stuff");
-            MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(AnotherIntegerValue);
-            GliderManager.method_34(AnotherIntegerValue, MainApplicationHandle);
+            Logger.smethod_1("Setting up bg stuff");
+            MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(wowProcessId);
+            GliderManager.method_34(wowProcessId, MainApplicationHandle);
             IsGliderInitialized = true;
         }
         else
         {
-            Logger.LoadProfile("No bg stuff setup");
+            Logger.smethod_1("No bg stuff setup");
         }
     }
 

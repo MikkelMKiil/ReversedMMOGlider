@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GClass52
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -43,7 +43,7 @@ public class ApplicationInitializer
             StartupClass.IsBetaVersion = false;
             StartupClass.isTimeAdded = false;
             if (isValidationRequired)
-                StartupClass.IsSomeConditionMet = true;
+                StartupClass.IsLicenseValid = true;
             Logger.LogMessage("Loaded " + int_0 + " static offsets from \"" + StaticOffsetFileName + "\".");
         }
         catch (Exception ex)
@@ -212,7 +212,7 @@ public class ApplicationInitializer
         {
             case "_SED":
                 InitializationTime = DateTime.Parse(string_2);
-                StartupClass.IsSomeConditionMet = true;
+                StartupClass.IsLicenseValid = true;
                 IsInitialized = true;
                 break;
             case "_STI":
@@ -239,7 +239,7 @@ public class ApplicationInitializer
 
     public static string GetRealmFromConfigFile()
     {
-        var path = StartupClass.SomeStringData + "\\realmlist.wtf";
+        var path = StartupClass.wowInstallPath + "\\realmlist.wtf";
         try
         {
             var streamReader = new StreamReader(path);

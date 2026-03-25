@@ -576,7 +576,7 @@ namespace Glider.Common.Objects
             }
 
             bool flag;
-            var KeyName1 = (flag = StartupClass.random_0.Next() % 2 == 0) ? "Common.StrafeRight" : "Common.StrafeLeft";
+            var KeyName1 = (flag = StartupClass.rng.Next() % 2 == 0) ? "Common.StrafeRight" : "Common.StrafeLeft";
             var DeltaRads = flag ? Math.PI / 2.0 : -1.0 * Math.PI / 2.0;
             var NewHeading = GContext.Main.Movement.AdjustHeading(GContext.Main.Me.Heading, DeltaRads);
             GContext.Main.StartRun();
@@ -602,7 +602,7 @@ namespace Glider.Common.Objects
             }
 
             GContext.Main.ReleaseRun();
-            Thread.Sleep(250 + StartupClass.random_0.Next() % 250);
+            Thread.Sleep(250 + StartupClass.rng.Next() % 250);
             GContext.Main.ReleaseKey(KeyName1);
             Face();
             GContext.Main.Me.Refresh(true);

@@ -111,11 +111,11 @@ public class CombatController
 
         if (StartupClass.CurrentGameClass != null && StartupClass.CurrentProfile != null)
         {
-            if (!StartupClass.IsSomeConditionMet && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
+            if (!StartupClass.IsLicenseValid && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             {
                 smethod_0(865);
             }
-            else if (!StartupClass.IsSomeConditionMet && !StartupClass.CurrentProfile.bool_0)
+            else if (!StartupClass.IsLicenseValid && !StartupClass.CurrentProfile.bool_0)
             {
                 smethod_0(866);
             }
@@ -126,7 +126,7 @@ public class CombatController
                 int_4 = ConfigManager.gclass61_0.method_3("StuckLimit");
                 StartupClass.ProfileIdToProfileMap.Clear();
                 StartupClass.Sleep(200);
-                StartupClass.ginterface0_0.imethod_0();
+                StartupClass.uiLogger.imethod_0();
                 gclass54_0 = PartyManager.gclass54_0;
                 if (GContext.Main.MouseSpin)
                 {
@@ -134,7 +134,7 @@ public class CombatController
                     float_0 = ggameCamera_0.Pitch;
                 }
 
-                StartupClass.SomeIntegerValue = 0;
+                StartupClass.badTagCount = 0;
                 gplayerSelf_0 = GPlayerSelf.Me;
                 int_9 = gplayerSelf_0.Experience;
                 if (ConfigManager.gclass61_0.method_5("ResetBuffs"))
@@ -169,8 +169,8 @@ public class CombatController
                 if (StartupClass.isTimeAdded && DateTime.Now > StartupClass.expiryTime)
                     return;
                 int_8 = 0;
-                StartupClass.dateTime_0 = DateTime.Now;
-                PlayerTracker.dateTime_1 = StartupClass.dateTime_0;
+                StartupClass.sessionStartTime = DateTime.Now;
+                PlayerTracker.dateTime_1 = StartupClass.sessionStartTime;
                 int_10 = int.Parse(ConfigManager.gclass61_0.method_2("MaxResurrect"));
                 int_11 = int.Parse(ConfigManager.gclass61_0.method_2("HarvestRange"));
                 int_12 = int.Parse(ConfigManager.gclass61_0.method_2("MailBoxRange"));
@@ -240,23 +240,23 @@ public class CombatController
             Logger.smethod_1("Catching ThreadInterrupted in GliderThread");
             if (!StartupClass.IsPendingStop)
                 return;
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0)
+            if ((DateTime.Now - StartupClass.sessionStartTime).TotalMinutes >= 2.0)
                 SoundPlayer.smethod_0("GlideStop.wav");
             Logger.smethod_1("Considering relog, enabled: " + ConfigManager.gclass61_0.method_5("RelogEnabled") +
-                               ", elite: " + StartupClass.IsSomeConditionMet + ", AutoLogNickname: " +
+                               ", elite: " + StartupClass.IsLicenseValid + ", AutoLogNickname: " +
                                (StartupClass.pendingAutoLoginName == null ? "(null)" : (object)StartupClass.pendingAutoLoginName) +
                                ", consider: " + StartupClass.IsDetaching);
-            if (!ConfigManager.gclass61_0.method_5("RelogEnabled") || !StartupClass.IsSomeConditionMet ||
+            if (!ConfigManager.gclass61_0.method_5("RelogEnabled") || !StartupClass.IsLicenseValid ||
                 StartupClass.pendingAutoLoginName == null || !StartupClass.IsDetaching)
                 return;
             Logger.LogMessage("Queuing up relog");
             StartupClass.loginCooldownTimer =
-                new GSpellTimer((int)(StartupClass.random_0.NextDouble() * 8000.0) + 8000, false);
+                new GSpellTimer((int)(StartupClass.rng.NextDouble() * 8000.0) + 8000, false);
             StartupClass.IsLoginTimerActive = true;
         }
         catch (Exception ex1)
         {
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0 && StartupClass.IsPendingStop)
+            if ((DateTime.Now - StartupClass.sessionStartTime).TotalMinutes >= 2.0 && StartupClass.IsPendingStop)
                 SoundPlayer.smethod_0("GlideStop.wav");
             Logger.LogMessage(MessageProvider.smethod_2(668, ex1.Message, ex1.StackTrace));
             try
@@ -286,7 +286,7 @@ public class CombatController
         var location = gplayerSelf_0.Location;
         PlayerTracker.smethod_0();
         gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
-        if (!CodeCompiler.smethod_16(StartupClass.CurrentGameClass).bool_0 && !StartupClass.IsSomeConditionMet)
+        if (!CodeCompiler.smethod_16(StartupClass.CurrentGameClass).bool_0 && !StartupClass.IsLicenseValid)
         {
             Logger.LogMessage(MessageProvider.GetMessage(854));
             StartupClass.StopGlide(false, "CCStart");
@@ -304,7 +304,7 @@ public class CombatController
                     ConfigManager.gclass61_0.method_4("MaxStartDistance") && !gplayerSelf_0.IsDead)
                 {
                     var flag = false;
-                    if (gprofile_0.IsVendorEnabled && StartupClass.IsSomeConditionMet)
+                    if (gprofile_0.IsVendorEnabled && StartupClass.IsLicenseValid)
                     {
                         var closestVendorWaypoint = gprofile_0.FindClosestVendorWaypoint(gplayerSelf_0.Location);
                         if (gplayerSelf_0.Location.GetDistanceTo(closestVendorWaypoint) <=
@@ -511,7 +511,7 @@ public class CombatController
 
     public void method_8()
     {
-        if (!StartupClass.IsSomeConditionMet && !StartupClass.CurrentProfile.bool_0)
+        if (!StartupClass.IsLicenseValid && !StartupClass.CurrentProfile.bool_0)
             gprofile_0.Waypoints.Clear();
         if (gplayerSelf_0.IsDead)
         {
@@ -527,7 +527,7 @@ public class CombatController
             StartupClass.CurrentGameClass.RunningAction();
             if (flag1 || flag2)
                 method_8();
-            if (!gprofile_0.IsVendorEnabled || !StartupClass.IsSomeConditionMet || !method_61())
+            if (!gprofile_0.IsVendorEnabled || !StartupClass.IsLicenseValid || !method_61())
                 return;
             GContext.Main.HearthSoon(true);
         }
@@ -892,7 +892,7 @@ public class CombatController
                 else
                 {
                     method_60();
-                    if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 20.0 &&
+                    if ((DateTime.Now - StartupClass.sessionStartTime).TotalMinutes >= 20.0 &&
                         MemoryOffsetTable.Instance.HasOffset("ArmorAlt2") &&
                         !char.IsDigit(ConfigManager.gclass61_0.method_2("AppKey")[0]))
                     {
@@ -1323,7 +1323,7 @@ public class CombatController
     public GameTimer method_28()
     {
         var gclass36 =
-            new GameTimer((!bool_12 ? 40 + StartupClass.random_0.Next() % 160 : 10 + StartupClass.random_0.Next() % 30) *
+            new GameTimer((!bool_12 ? 40 + StartupClass.rng.Next() % 160 : 10 + StartupClass.rng.Next() % 30) *
                          1000);
         gclass36.method_4();
         return gclass36;
@@ -1331,7 +1331,7 @@ public class CombatController
 
     public void method_29()
     {
-        var num = StartupClass.random_0.Next() % 15 + 5;
+        var num = StartupClass.rng.Next() % 15 + 5;
         var gclass36 = new GameTimer(60000);
         gclass36.method_4();
         while (!gclass36.method_3())
@@ -1518,7 +1518,7 @@ public class CombatController
 
     public void method_34(int int_15, int int_16)
     {
-        StartupClass.Sleep(StartupClass.random_0.Next() % (int_16 - int_15) + int_15);
+        StartupClass.Sleep(StartupClass.rng.Next() % (int_16 - int_15) + int_15);
     }
 
     public void method_35()
@@ -1744,7 +1744,7 @@ public class CombatController
                                 {
                                     Logger.LogMessage(MessageProvider.GetMessage(742));
                                     var string_1 = "Common.StrafeLeft";
-                                    if (StartupClass.random_0.Next() % 2 == 0)
+                                    if (StartupClass.rng.Next() % 2 == 0)
                                         string_1 = "Common.StrafeRight";
                                     SpellcastingManager.gclass42_0.method_1(string_1);
                                     StartupClass.Sleep(1200);
@@ -1760,7 +1760,7 @@ public class CombatController
                                     StartupClass.Sleep(2000);
                                     GContext.Main.ReleaseKey("Common.Back");
                                     var DeltaRads = Math.PI / 2.0;
-                                    if (StartupClass.random_0.Next() % 2 == 0)
+                                    if (StartupClass.rng.Next() % 2 == 0)
                                         DeltaRads *= -1.0;
                                     var NewHeading =
                                         GContext.Main.Movement.AdjustHeading(gplayerSelf_0.Heading, DeltaRads);
@@ -1842,14 +1842,14 @@ public class CombatController
                         SpellcastingManager.gclass42_0.method_0("Common.Jump");
                         StartupClass.Sleep(1800);
                         method_27();
-                        if (bool_12 && StartupClass.random_0.Next() % 10 == 0)
+                        if (bool_12 && StartupClass.rng.Next() % 10 == 0)
                             this.gclass36_1.method_5();
                     }
                     else if (distanceTo1 > 20.0 && bool_13 && gclass36_0.method_3() && GContext.Main.IsRunning)
                     {
-                        if (StartupClass.random_0.Next() % 10 == 0)
+                        if (StartupClass.rng.Next() % 10 == 0)
                         {
-                            var string_1 = StartupClass.random_0.Next() % 2 == 0
+                            var string_1 = StartupClass.rng.Next() % 2 == 0
                                 ? "Common.StrafeLeft"
                                 : "Common.StrafeRight";
                             SpellcastingManager.gclass42_0.method_1(string_1);
@@ -1857,7 +1857,7 @@ public class CombatController
                             SpellcastingManager.gclass42_0.method_2(string_1);
                         }
 
-                        gclass36_0 = new GameTimer(1000 + StartupClass.random_0.Next() % 1500);
+                        gclass36_0 = new GameTimer(1000 + StartupClass.rng.Next() % 1500);
                         gclass36_0.method_4();
                     }
 
@@ -2021,7 +2021,7 @@ public class CombatController
 
     protected double method_43(double double_8)
     {
-        var num = StartupClass.random_0.NextDouble() * (Math.PI / 2.0) - Math.PI / 4.0;
+        var num = StartupClass.rng.NextDouble() * (Math.PI / 2.0) - Math.PI / 4.0;
         double_8 += num;
         if (double_8 < 0.0)
             double_8 += 2.0 * Math.PI;
@@ -2633,8 +2633,8 @@ public class CombatController
             }
 
             ++StartupClass.expectedVersion;
-            if (StartupClass.SomeIntegerValue > 0)
-                --StartupClass.SomeIntegerValue;
+            if (StartupClass.badTagCount > 0)
+                --StartupClass.badTagCount;
             if (gplayerSelf_0.HasSkinning && ConfigManager.gclass61_0.method_5("AutoSkin"))
                 return;
             gclass5_0.method_1();
@@ -2658,10 +2658,10 @@ public class CombatController
     private void method_59(GUnit gunit_0)
     {
         SoundPlayer.smethod_0("BadTag.wav");
-        ++StartupClass.SomeIntegerValue;
+        ++StartupClass.badTagCount;
         if (GContext.Main.Me.Pet != null)
             SpellcastingManager.gclass42_0.method_0("Common.PetFollow");
-        if (StartupClass.SomeIntegerValue >= ConfigManager.gclass61_0.method_3("BadTagLimit"))
+        if (StartupClass.badTagCount >= ConfigManager.gclass61_0.method_3("BadTagLimit"))
         {
             StartupClass.combatController.bool_2 = true;
             Logger.LogMessage(MessageProvider.GetMessage(808));
@@ -2767,7 +2767,7 @@ public class CombatController
 
     private void method_63()
     {
-        if (gprofile_0.IsVendorEnabled && bool_3 && StartupClass.IsSomeConditionMet)
+        if (gprofile_0.IsVendorEnabled && bool_3 && StartupClass.IsLicenseValid)
         {
             StartupClass.IsFocusTimerActive = false;
             Logger.LogMessage("Starting up vendor stuff");
@@ -3060,7 +3060,7 @@ public class CombatController
             foreach (var gbagItem in gbagItem_1)
             {
                 Logger.smethod_1("Sell: " + gbagItem.Item.Name);
-                Thread.Sleep(500 + StartupClass.random_0.Next() % 1000);
+                Thread.Sleep(500 + StartupClass.rng.Next() % 1000);
                 gbagItem.Click(true);
             }
         else

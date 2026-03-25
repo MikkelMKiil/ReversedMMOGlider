@@ -98,7 +98,7 @@ public class RestStatusMonitor
     [SpecialName]
     public bool method_4()
     {
-        return StartupClass.glideMode_0 == GlideMode.Auto && StartupClass.partyManager.healMode_0 == HealMode.Dedicated &&
+        return StartupClass.currentGlideMode == GlideMode.Auto && StartupClass.partyManager.healMode_0 == HealMode.Dedicated &&
                StartupClass.partyManager.genum7_0 != PartyRole.const_0;
     }
 
@@ -246,9 +246,9 @@ public class RestStatusMonitor
     {
         for (var index = 0; index < 5; ++index)
         {
-            GContext.Main.Movement.SetHeading(StartupClass.random_0.NextDouble() * 6.14);
+            GContext.Main.Movement.SetHeading(StartupClass.rng.NextDouble() * 6.14);
             StartupClass.combatController.method_34(1500, 5000);
-            if (StartupClass.random_0.Next() % 3 == 0)
+            if (StartupClass.rng.Next() % 3 == 0)
             {
                 SpellcastingManager.gclass42_0.method_0("Common.Jump");
                 StartupClass.combatController.method_34(1500, 3000);
@@ -263,7 +263,7 @@ public class RestStatusMonitor
 
     public void method_12()
     {
-        if (StartupClass.glideMode_0 != GlideMode.Auto || glocation_0 == null)
+        if (StartupClass.currentGlideMode != GlideMode.Auto || glocation_0 == null)
             return;
         double distanceTo = glocation_0.GetDistanceTo(gplayerSelf_0.Location);
         if (distanceTo <= 100.0)

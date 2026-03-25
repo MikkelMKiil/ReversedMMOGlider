@@ -52,7 +52,7 @@ public class ScriptExecutor
     public void method_2(string string_0, bool bool_0)
     {
         Logger.smethod_1("ScriptHelper.Execute: " + string_0);
-        if (StartupClass.glideMode_0 == GlideMode.None)
+        if (StartupClass.currentGlideMode == GlideMode.None)
         {
             if (thread_0 != null && thread_0 == Thread.CurrentThread)
                 method_4(string_0, bool_0);
@@ -68,14 +68,14 @@ public class ScriptExecutor
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
                         StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.GetMainWindowHandle(StartupClass.wowProcessId);
                         if (StartupClass.MainApplicationHandle == IntPtr.Zero)
                         {
                             Logger.LogMessage("No game window, no background mode!");
                         }
                         else
                         {
-                            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                            StartupClass.GliderManager.method_34(StartupClass.wowProcessId, StartupClass.MainApplicationHandle);
                             StartupClass.IsGliderInitialized = true;
                             Logger.LogMessage("Setting up for background mode!");
                         }
@@ -131,7 +131,7 @@ public class ScriptExecutor
             method_5(string_0);
         try
         {
-            if (Offsets[string_0] != null && !bool_0 && StartupClass.IsSomeConditionMet)
+            if (Offsets[string_0] != null && !bool_0 && StartupClass.IsLicenseValid)
             {
                 Offsets[string_0].Setup();
                 Offsets[string_0].Execute();
@@ -157,7 +157,7 @@ public class ScriptExecutor
 
     private void method_5(string string_0)
     {
-        if (StartupClass.IsSomeConditionMet)
+        if (StartupClass.IsLicenseValid)
         {
             var str1 = ConfigManager.gclass61_0.method_2("ScriptsFolder");
             if (GContext.Main.Profile != null && GContext.Main.Profile.ScriptOverride != null)

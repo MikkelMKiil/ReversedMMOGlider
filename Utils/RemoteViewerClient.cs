@@ -332,7 +332,7 @@ public class RemoteViewerClient
             else if (lower1 == "/grabmouse" && strArray1.Length > 1)
             {
                 var lower3 = strArray1[1].ToLower();
-                if (!StartupClass.IsSomeConditionMet)
+                if (!StartupClass.IsLicenseValid)
                 {
                     method_6("Not Elite, can't grab mouse\r\n");
                 }
@@ -349,8 +349,8 @@ public class RemoteViewerClient
                     if (!StartupClass.IsGliderInitialized)
                     {
                         Logger.smethod_1("Setting up bg stuff");
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                        StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
+                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.wowProcessId);
+                        StartupClass.GliderManager.method_34(StartupClass.wowProcessId, StartupClass.MainApplicationHandle);
                         StartupClass.IsGliderInitialized = true;
                     }
 
@@ -428,7 +428,7 @@ public class RemoteViewerClient
                 if (lower1 == "/say" && strArray1.Length > 1)
                 {
                     var str = string_1.Substring(4);
-                    if (StartupClass.glideMode_0 == GlideMode.Auto)
+                    if (StartupClass.currentGlideMode == GlideMode.Auto)
                     {
                         StartupClass.combatController.method_23(str, false);
                         method_6("Queued for sending\r\n");
@@ -448,7 +448,7 @@ public class RemoteViewerClient
 
                 if (lower1 == "/loadprofile" && strArray1.Length > 1)
                 {
-                    if (StartupClass.glideMode_0 != GlideMode.None)
+                    if (StartupClass.currentGlideMode != GlideMode.None)
                     {
                         method_6("Failed: can't load a profile while gliding!\r\n");
                         return;
@@ -471,7 +471,7 @@ public class RemoteViewerClient
                     if (lower1 == "/queuekeys" && strArray1.Length > 1)
                     {
                         var str = string_1.Substring(string_1.IndexOf(" ") + 1);
-                        if (StartupClass.glideMode_0 == GlideMode.Auto)
+                        if (StartupClass.currentGlideMode == GlideMode.Auto)
                         {
                             StartupClass.combatController.method_23(str, true);
                             method_6("Queued for sending\r\n");
@@ -526,8 +526,8 @@ public class RemoteViewerClient
                     {
                         method_6("Version: 1.8.0\r\n");
                         method_6("Subversion: Release\r\n");
-                        method_6("Elite: " + StartupClass.IsSomeConditionMet + "\r\n");
-                        method_6("Game: " + StartupClass.WowVersionLabel_string + "\r\n");
+                        method_6("Elite: " + StartupClass.IsLicenseValid + "\r\n");
+                        method_6("Game: " + StartupClass.wowVersionLabel + "\r\n");
                     }
 
                     if (lower1 == "/selectgame")
@@ -574,7 +574,7 @@ public class RemoteViewerClient
 
                     if (lower1 == "/config")
                     {
-                        if (StartupClass.glideMode_0 != GlideMode.None)
+                        if (StartupClass.currentGlideMode != GlideMode.None)
                         {
                             method_6("Failed: can't reconfigure while gliding, stop first!\r\n");
                         }
@@ -604,7 +604,7 @@ public class RemoteViewerClient
                     if (lower1 == "/status")
                     {
                         var bool13 = StartupClass.IsGameProcessAttached;
-                        var glideMode0 = StartupClass.glideMode_0;
+                        var glideMode0 = StartupClass.currentGlideMode;
                         var stringBuilder = new StringBuilder();
                         method_6("Version: 1.8.0\r\n");
                         method_6("Attached: " + bool13 + "\r\n");
@@ -668,7 +668,7 @@ public class RemoteViewerClient
 
                     if (lower1 == "/clearsay")
                     {
-                        if (StartupClass.glideMode_0 != GlideMode.Auto)
+                        if (StartupClass.currentGlideMode != GlideMode.Auto)
                         {
                             method_6("Not gliding, nothing to clear\r\n");
                             return;
@@ -698,7 +698,7 @@ public class RemoteViewerClient
                             }
                         }
 
-                        if (StartupClass.glideMode_0 != GlideMode.None)
+                        if (StartupClass.currentGlideMode != GlideMode.None)
                         {
                             method_6("Can't start glide, already in auto mode\r\n");
                             return;
@@ -716,7 +716,7 @@ public class RemoteViewerClient
                             return;
                         }
 
-                        if (StartupClass.glideMode_0 == GlideMode.None)
+                        if (StartupClass.currentGlideMode == GlideMode.None)
                         {
                             method_6("Already stopped\r\n");
                             return;

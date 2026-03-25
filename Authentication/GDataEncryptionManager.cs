@@ -100,9 +100,9 @@ public class GDataEncryptionManager
         var int_3_2 = 0;
         try
         {
-            if (StartupClass.WowVersionLabel_string.Length > 3)
+            if (StartupClass.wowVersionLabel.Length > 3)
                 int_3_2 = int.Parse(
-                    StartupClass.WowVersionLabel_string.Substring(StartupClass.WowVersionLabel_string.Length - 4));
+                    StartupClass.wowVersionLabel.Substring(StartupClass.wowVersionLabel.Length - 4));
         }
         catch (Exception ex)
         {

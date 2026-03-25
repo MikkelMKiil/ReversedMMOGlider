@@ -213,7 +213,7 @@ public class WebNotificationService
         method_12(element1, "CustomerID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials"));
         method_12(element1, "QueryID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials") + "-" + Guid.NewGuid());
         method_12(element1, "Profile", StartupClass.currentProfilePath == null ? "(no profile)" : StartupClass.currentProfilePath);
-        method_12(element1, "Gliding", StartupClass.glideMode_0 == GlideMode.Auto ? "1" : "0");
+        method_12(element1, "Gliding", StartupClass.currentGlideMode == GlideMode.Auto ? "1" : "0");
         method_12(element1, "GliderVersion", "1.8.0");
         method_12(element1, "GliderSubVersion", "Release");
         if (StartupClass.IsGameProcessAttached)

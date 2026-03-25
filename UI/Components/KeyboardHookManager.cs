@@ -126,17 +126,17 @@ public class KeyboardHookManager
     {
         if (bool_1)
         {
-            if (e.KeyCode == Keys.MediaStop && StartupClass.glideMode_0 != GlideMode.None)
+            if (e.KeyCode == Keys.MediaStop && StartupClass.currentGlideMode != GlideMode.None)
             {
                 StartupClass.IsPendingStop = false;
                 StartupClass.StopGlide(false, "StopKeyFromHook");
             }
 
-            if (e.KeyCode == Keys.MediaNextTrack && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaNextTrack && StartupClass.currentGlideMode == GlideMode.None)
                 StartupClass.StartManualGlide(true);
-            if (e.KeyCode == Keys.MediaPreviousTrack && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaPreviousTrack && StartupClass.currentGlideMode == GlideMode.None)
                 StartupClass.AddWaypoint();
-            if (e.KeyCode == Keys.MediaPlayPause && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaPlayPause && StartupClass.currentGlideMode == GlideMode.None)
                 StartupClass.StartAutoGlide(true);
         }
 
@@ -223,7 +223,7 @@ public class KeyboardHookManager
                         {
                             StartupClass.ActiveGProfile = new GProfile();
                             StartupClass.currentProfilePath = "Profiles\\NewProfile.xml";
-                            StartupClass.ginterface0_0.imethod_0();
+                            StartupClass.uiLogger.imethod_0();
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
@@ -239,7 +239,7 @@ public class KeyboardHookManager
                     case Keys.Q:
                         if (StartupClass.IsAttachedToGame())
                         {
-                            StartupClass.ginterface0_0.imethod_1();
+                            StartupClass.uiLogger.imethod_1();
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
@@ -322,7 +322,7 @@ public class KeyboardHookManager
             return;
         var foregroundWindow = GProcessMemoryManipulator.GetForegroundWindow();
         StartupClass.IsFocusTimerActive = false;
-        if (StartupClass.glideMode_0 != GlideMode.None && (foregroundWindow == intptr_0 ||
+        if (StartupClass.currentGlideMode != GlideMode.None && (foregroundWindow == intptr_0 ||
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||
                                                            !StartupClass.IsGliderInitialized))
         {
@@ -352,9 +352,9 @@ public class KeyboardHookManager
     private void method_5()
     {
         bool_5 = false;
-        if (StartupClass.glideMode_0 == GlideMode.Auto)
+        if (StartupClass.currentGlideMode == GlideMode.Auto)
             StartupClass.combatController.method_23(string_0, false);
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.uiLogger.imethod_0();
     }
 
     private void method_6(object sender, KeyPressEventArgs e)
@@ -368,7 +368,7 @@ public class KeyboardHookManager
 
     private void method_7()
     {
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.uiLogger.imethod_0();
     }
 
     [SpecialName]
@@ -590,7 +590,7 @@ public class KeyboardHookManager
             return;
         Logger.LogMessage("Loaded profile: " + StartupClass.currentProfilePath);
         SoundPlayer.smethod_0("Key.wav");
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.uiLogger.imethod_0();
     }
 
     private void method_21()

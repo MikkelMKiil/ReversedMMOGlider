@@ -81,10 +81,10 @@ public class GProcessMemoryManipulator
 
     public static string GenerateRandomString()
     {
-        var num = StartupClass.random_0.Next() % 10 + 8;
+        var num = StartupClass.rng.Next() % 10 + 8;
         var stringBuilder = new StringBuilder();
         while (stringBuilder.Length < num)
-            stringBuilder.Append((char)(StartupClass.random_0.Next() % 26 + 97));
+            stringBuilder.Append((char)(StartupClass.rng.Next() % 26 + 97));
         return stringBuilder.ToString();
     }
 
@@ -111,18 +111,18 @@ public class GProcessMemoryManipulator
         {
             if (gclass65.method_2(StartupClass.attachPidOverride) == 0)
                 return 0;
-            StartupClass.AnotherIntegerValue = StartupClass.attachPidOverride;
-            StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
-            return StartupClass.AnotherIntegerValue;
+            StartupClass.wowProcessId = StartupClass.attachPidOverride;
+            StartupClass.MainApplicationHandle = smethod_29(StartupClass.wowProcessId);
+            return StartupClass.wowProcessId;
         }
 
         if (StartupClass.AdditionalApplicationHandle != IntPtr.Zero)
         {
-            if (smethod_56(StartupClass.AnotherIntegerValue))
-                return StartupClass.AnotherIntegerValue;
+            if (smethod_56(StartupClass.wowProcessId))
+                return StartupClass.wowProcessId;
             CloseHandle(StartupClass.AdditionalApplicationHandle);
             StartupClass.AdditionalApplicationHandle = IntPtr.Zero;
-            StartupClass.AnotherIntegerValue = 0;
+            StartupClass.wowProcessId = 0;
             StartupClass.IsForegroundEnabled = true;
             StartupClass.IsGliderInitialized = false;
         }
@@ -142,27 +142,27 @@ public class GProcessMemoryManipulator
 
         if (num == 0)
             return 0;
-        StartupClass.AnotherIntegerValue = num;
-        StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
-        return StartupClass.AnotherIntegerValue;
+        StartupClass.wowProcessId = num;
+        StartupClass.MainApplicationHandle = smethod_29(StartupClass.wowProcessId);
+        return StartupClass.wowProcessId;
     }
 
     public static Rectangle GetWindowRectangle()
     {
         var gstruct22_0 = new GStruct22();
-        GetWindowRect(smethod_29(StartupClass.AnotherIntegerValue), out gstruct22_0);
+        GetWindowRect(smethod_29(StartupClass.wowProcessId), out gstruct22_0);
         return new Rectangle(gstruct22_0.int_0, gstruct22_0.int_1, gstruct22_0.int_2 - gstruct22_0.int_0,
             gstruct22_0.int_3 - gstruct22_0.int_1);
     }
 
     public static IntPtr GetWindowHandle()
     {
-        return smethod_29(StartupClass.AnotherIntegerValue);
+        return smethod_29(StartupClass.wowProcessId);
     }
 
     public static GStruct22 GetCursorPosition()
     {
-        var intptr_2 = smethod_29(StartupClass.AnotherIntegerValue);
+        var intptr_2 = smethod_29(StartupClass.wowProcessId);
         var gstruct22_0 = new GStruct22(0, 0, 0, 0);
         if (!GetClientRect(intptr_2, out gstruct22_0))
         {
@@ -597,7 +597,7 @@ public class GProcessMemoryManipulator
 
     public static string GetProcessExecutablePath()
     {
-        var path = StartupClass.SomeStringData + "wtf\\config.wtf";
+        var path = StartupClass.wowInstallPath + "wtf\\config.wtf";
         var str1 = "(unknown)";
         try
         {
@@ -845,7 +845,7 @@ public class GProcessMemoryManipulator
         int_29 = 0;
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
+        var numArray = gclass65.method_4(StartupClass.wowProcessId);
         if (numArray.Length == 0)
             return false;
         var num1 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("TLSSlot"), "TLSSlot");
@@ -885,12 +885,12 @@ public class GProcessMemoryManipulator
 
     public static void smethod_53()
     {
-        if (StartupClass.AnotherIntegerValue == 0)
+        if (StartupClass.wowProcessId == 0)
             return;
         StartupClass.IsResumeMode = false;
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
+        var numArray = gclass65.method_4(StartupClass.wowProcessId);
         var intptr_2 = numArray.Length == 1
             ? OpenThread(2U, false, numArray[0])
             : throw new Exception("!! Unexpected number of threads in game: " + numArray.Length);
@@ -902,7 +902,7 @@ public class GProcessMemoryManipulator
 
     public static void smethod_54()
     {
-        smethod_55(StartupClass.AnotherIntegerValue);
+        smethod_55(StartupClass.wowProcessId);
     }
 
     public static void smethod_55(int int_29)

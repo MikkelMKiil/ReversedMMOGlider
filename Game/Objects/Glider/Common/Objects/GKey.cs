@@ -188,7 +188,7 @@ namespace Glider.Common.Objects
                     var num2 = 1;
                     if (BarState == GBarState.Combat || BarState == GBarState.Indifferent || BarState == GBarState.Rest)
                         return;
-                    var num3 = StartupClass.numbers_string.IndexOf(CharCode);
+                    var num3 = StartupClass.barCharacters.IndexOf(CharCode);
                     if (num3 == -1)
                         return;
                     var num4 = (int)(BarState - 3);
@@ -310,7 +310,7 @@ namespace Glider.Common.Objects
             }
 
             BarState = (GBarState)(3 + num);
-            CharCode = StartupClass.numbers_string[index];
+            CharCode = StartupClass.barCharacters[index];
             return true;
         }
 
