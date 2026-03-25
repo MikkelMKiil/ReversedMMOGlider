@@ -1,4 +1,4 @@
-// Decompiled with JetBrains decompiler
+﻿// Decompiled with JetBrains decompiler
 // Type: StartupClass
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -27,7 +27,6 @@ public class StartupClass
     public const int releaseId = 6703;
     public static bool IsInitialized;
     public static bool IsSecCheckEnabled;
-    public static SecCheck SecurityCheckInstance;
     public static int InitializationCount = 0;
 
     public static string[] ClassesString = new string[10]
@@ -74,92 +73,166 @@ public class StartupClass
     public static string SomeStringData;
     public static int AnotherIntegerValue;
     public static IntPtr AdditionalApplicationHandle;
-    public static bool bool_13;
-    public static GProfile gprofile_0;
-    public static string string_5;
-    public static bool bool_14 = false;
-    public static CameraRotator gclass68_0;
-    public static OffsetManager gclass43_0;
-    public static OffsetManager gclass43_1;
-    public static OffsetManager gclass43_2;
-    public static OffsetManager gclass43_3;
-    public static OffsetManager gclass43_4;
-    public static int int_4;
-    public static long long_0;
-    public static int int_5;
-    public static SortedList sortedList_2 = new SortedList();
-    public static bool bool_15 = true;
-    public static int int_6 = 1;
-    public static DateTime dateTime_0;
-    public static string WowVersionLabel_string = "";
-    public static bool bool_16;
+    public static bool IsRuntimeAttached;
+    public static GProfile ActiveProfile;
+    public static string ActiveProfilePath;
+    public static bool SkipHandleOpen = false;
+    public static CameraRotator CameraController;
+    public static OffsetManager PlayerOffsetManager;
+    public static OffsetManager NpcOffsetManager;
+    public static OffsetManager ObjectOffsetManager;
+    public static OffsetManager ItemOffsetManager;
+    public static OffsetManager ContainerOffsetManager;
+    public static int ProfileEditorVersion;
+    public static long CurrentPlayerGuid;
+    public static int ResolvedMainTableAddress;
+    public static SortedList RuntimeProfileCache = new SortedList();
+    public static bool IsStartupPending = true;
+    public static int StartupAttemptCount = 1;
+    public static DateTime SessionStartTime;
+    public static string WowVersionLabel = "";
+    public static bool IsProfileDirty;
     public static bool IsBetaVersion = false;
     public static bool IsBetaAccessGranted;
-    public static GameTimer gclass36_0;
-    public static GlideMode glideMode_0;
-    public static int int_7;
-    public static int int_8;
-    public static int int_9;
-    public static bool bool_19;
-    public static Thread thread_0;
-    public static PartyManager gclass54_0;
-    public static bool bool_20;
-    public static bool bool_21;
-    public static GameTimer gclass36_1;
-    public static KeyboardHookManager gclass24_0;
-    public static SecurityDescriptorHelper gclass11_0;
+    public static GameTimer LicenseCheckTimer;
+    public static GlideMode CurrentGlideMode;
+    public static int DynamicClassCount;
+    public static int CompiledClassCount;
+    public static int InternalClassCount;
+    public static bool HasClassLoadMismatch;
+    public static Thread InitializationThread;
+    public static PartyManager PartyStateManager;
+    public static bool IsAutoLoginTriggered;
+    public static bool HasSessionWarning;
+    public static GameTimer SessionHeartbeatTimer;
+    public static KeyboardHookManager KeyboardHook;
+    public static SecurityDescriptorHelper SecurityDescriptor;
     public static bool isInitializationSuccessful;
-    public static RemoteViewerServer gclass79_0;
-    public static GameClass gameClass_0;
-    public static bool bool_23;
+    public static RemoteViewerServer RemoteViewer;
+    public static GameClass SelectedGameClass;
+    public static bool HasShownStartupNotice;
     public static bool isInputStringFourCharacters = true;
     public static DateTime expiryTime;
     public static bool isTimeAdded;
-    public static bool bool_26 = false;
-    public static ILogger ginterface0_0;
-    public static bool bool_27;
-    public static int int_10;
-    public static CombatController gclass73_0;
-    public static byte[] byte_0 = null;
-    public static bool bool_28 = false;
-    public static GlideMainThread gclass60_0;
-    public static string numbers_string = "1234567890-=";
-    public static int int_11;
-    public static WaypointType genum2_0 = WaypointType.const_0;
-    public static bool bool_29;
-    public static EquipmentEnchantmentChecker gclass38_0;
-    public static double double_0;
-    public static DebuffDatabase DebuffsKnown_string;
-    public static string[] string_8;
-    public static ProfileGroupManager gclass48_0;
-    public static int int_12;
-    public static Random random_0;
-    public static LootRouteParser gclass33_0;
-    public static GameTimer gclass36_2 = new GameTimer(6000);
-    public static bool bool_30;
-    public static bool bool_31 = false;
-    public static GSpellTimer gspellTimer_1 = null;
-    public static bool bool_32;
-    public static string string_9;
-    public static bool bool_33;
-    public static bool bool_34;
-    public static bool bool_35;
-    public static bool bool_36;
-    public static bool bool_37;
-    public static bool bool_38;
-    public static SpellbookManager gclass63_0;
+    public static bool HasAppliedTimeExtension = false;
+    public static ILogger StartupLogger;
+    public static bool IsInitializationComplete;
+    public static int LastSecurityCode;
+    public static CombatController ActiveCombatController;
+    public static byte[] RuntimePayloadBuffer = null;
+    public static bool HasQueuedPayload = false;
+    public static GlideMainThread ManualGlideController;
+    public static string ActionBarCharacters = "1234567890-=";
+    public static int CachedRatePerHour;
+    public static WaypointType SelectedWaypointType = WaypointType.const_0;
+    public static bool RequiresConfigReload;
+    public static EquipmentEnchantmentChecker EquipmentEnchantmentChecker;
+    public static double AutoAddDistance;
+    public static DebuffDatabase KnownDebuffs;
+    public static string[] FriendWhitelist;
+    public static ProfileGroupManager ProfileGroupStateManager;
+    public static int AttachAttemptCount;
+    public static Random RandomGenerator;
+    public static LootRouteParser LootRoutePattern;
+    public static GameTimer AttachRefreshTimer = new GameTimer(6000);
+    public static bool IsResumeRequested;
+    public static bool IsAutoLoginArmed = false;
+    public static GSpellTimer AutoLoginTimer = null;
+    public static bool IsDetachInProgress;
+    public static string AutoLoginSetting;
+    public static bool HasManualPause;
+    public static bool IsDiagnosticLoggingEnabled;
+    public static bool HasLoggedMissingProcess;
+    public static bool DetachAfterStopRequested;
+    public static bool HasDeferredCompileRun;
+    public static bool NeedsDeferredCompile;
+    public static SpellbookManager SpellbookStateManager;
     private static readonly object killActionLock = new object();
-    private static int int_13;
-    public static IntPtr intptr_2 = IntPtr.Zero;
-    public static bool bool_39 = true;
-    public static uint uint_0 = uint.MaxValue;
-    private static readonly GameTimer gclass36_3 = new GameTimer(3500);
-    private static GameTimer gclass36_4 = new GameTimer(6000);
-    private static readonly GSpellTimer gspellTimer_2 = new GSpellTimer(1080000, true);
-    private static string string_10 = null;
-    private static Size size_0;
-    public static bool bool_40;
-    public static bool bool_41;
+    private static int KillActionDepth;
+    public static IntPtr KillEventHandle = IntPtr.Zero;
+    public static bool ShouldProcessKillEvent = true;
+    public static uint KillEventWaitTimeout = uint.MaxValue;
+    private static readonly GameTimer DebuffRefreshTimer = new GameTimer(3500);
+    private static GameTimer ForegroundRefreshTimer = new GameTimer(6000);
+    private static readonly GSpellTimer PeriodicSafetyTimer = new GSpellTimer(1080000, true);
+    private static string PendingErrorMessage = null;
+    private static Size OriginalWindowSize;
+    public static bool IsWindowHidden;
+    public static bool IsWindowShrunk;
+
+    public static bool bool_13 { get { return IsRuntimeAttached; } set { IsRuntimeAttached = value; } }
+    public static GProfile gprofile_0 { get { return ActiveProfile; } set { ActiveProfile = value; } }
+    public static string string_5 { get { return ActiveProfilePath; } set { ActiveProfilePath = value; } }
+    public static bool bool_14 { get { return SkipHandleOpen; } set { SkipHandleOpen = value; } }
+    public static CameraRotator gclass68_0 { get { return CameraController; } set { CameraController = value; } }
+    public static OffsetManager gclass43_0 { get { return PlayerOffsetManager; } set { PlayerOffsetManager = value; } }
+    public static OffsetManager gclass43_1 { get { return NpcOffsetManager; } set { NpcOffsetManager = value; } }
+    public static OffsetManager gclass43_2 { get { return ObjectOffsetManager; } set { ObjectOffsetManager = value; } }
+    public static OffsetManager gclass43_3 { get { return ItemOffsetManager; } set { ItemOffsetManager = value; } }
+    public static OffsetManager gclass43_4 { get { return ContainerOffsetManager; } set { ContainerOffsetManager = value; } }
+    public static int int_4 { get { return ProfileEditorVersion; } set { ProfileEditorVersion = value; } }
+    public static long long_0 { get { return CurrentPlayerGuid; } set { CurrentPlayerGuid = value; } }
+    public static int int_5 { get { return ResolvedMainTableAddress; } set { ResolvedMainTableAddress = value; } }
+    public static SortedList sortedList_2 { get { return RuntimeProfileCache; } set { RuntimeProfileCache = value; } }
+    public static bool bool_15 { get { return IsStartupPending; } set { IsStartupPending = value; } }
+    public static int int_6 { get { return StartupAttemptCount; } set { StartupAttemptCount = value; } }
+    public static DateTime dateTime_0 { get { return SessionStartTime; } set { SessionStartTime = value; } }
+    public static string WowVersionLabel_string { get { return WowVersionLabel; } set { WowVersionLabel = value; } }
+    public static bool bool_16 { get { return IsProfileDirty; } set { IsProfileDirty = value; } }
+    public static GameTimer gclass36_0 { get { return LicenseCheckTimer; } set { LicenseCheckTimer = value; } }
+    public static GlideMode glideMode_0 { get { return CurrentGlideMode; } set { CurrentGlideMode = value; } }
+    public static int int_7 { get { return DynamicClassCount; } set { DynamicClassCount = value; } }
+    public static int int_8 { get { return CompiledClassCount; } set { CompiledClassCount = value; } }
+    public static int int_9 { get { return InternalClassCount; } set { InternalClassCount = value; } }
+    public static bool bool_19 { get { return HasClassLoadMismatch; } set { HasClassLoadMismatch = value; } }
+    public static Thread thread_0 { get { return InitializationThread; } set { InitializationThread = value; } }
+    public static PartyManager gclass54_0 { get { return PartyStateManager; } set { PartyStateManager = value; } }
+    public static bool bool_20 { get { return IsAutoLoginTriggered; } set { IsAutoLoginTriggered = value; } }
+    public static bool bool_21 { get { return HasSessionWarning; } set { HasSessionWarning = value; } }
+    public static GameTimer gclass36_1 { get { return SessionHeartbeatTimer; } set { SessionHeartbeatTimer = value; } }
+    public static KeyboardHookManager gclass24_0 { get { return KeyboardHook; } set { KeyboardHook = value; } }
+    public static SecurityDescriptorHelper gclass11_0 { get { return SecurityDescriptor; } set { SecurityDescriptor = value; } }
+    public static RemoteViewerServer gclass79_0 { get { return RemoteViewer; } set { RemoteViewer = value; } }
+    public static GameClass gameClass_0 { get { return SelectedGameClass; } set { SelectedGameClass = value; } }
+    public static bool bool_23 { get { return HasShownStartupNotice; } set { HasShownStartupNotice = value; } }
+    public static bool bool_26 { get { return HasAppliedTimeExtension; } set { HasAppliedTimeExtension = value; } }
+    public static ILogger ginterface0_0 { get { return StartupLogger; } set { StartupLogger = value; } }
+    public static bool bool_27 { get { return IsInitializationComplete; } set { IsInitializationComplete = value; } }
+    public static int int_10 { get { return LastSecurityCode; } set { LastSecurityCode = value; } }
+    public static CombatController gclass73_0 { get { return ActiveCombatController; } set { ActiveCombatController = value; } }
+    public static byte[] byte_0 { get { return RuntimePayloadBuffer; } set { RuntimePayloadBuffer = value; } }
+    public static bool bool_28 { get { return HasQueuedPayload; } set { HasQueuedPayload = value; } }
+    public static GlideMainThread gclass60_0 { get { return ManualGlideController; } set { ManualGlideController = value; } }
+    public static string numbers_string { get { return ActionBarCharacters; } set { ActionBarCharacters = value; } }
+    public static int int_11 { get { return CachedRatePerHour; } set { CachedRatePerHour = value; } }
+    public static WaypointType genum2_0 { get { return SelectedWaypointType; } set { SelectedWaypointType = value; } }
+    public static bool bool_29 { get { return RequiresConfigReload; } set { RequiresConfigReload = value; } }
+    public static EquipmentEnchantmentChecker gclass38_0 { get { return EquipmentEnchantmentChecker; } set { EquipmentEnchantmentChecker = value; } }
+    public static double double_0 { get { return AutoAddDistance; } set { AutoAddDistance = value; } }
+    public static DebuffDatabase DebuffsKnown_string { get { return KnownDebuffs; } set { KnownDebuffs = value; } }
+    public static string[] string_8 { get { return FriendWhitelist; } set { FriendWhitelist = value; } }
+    public static ProfileGroupManager gclass48_0 { get { return ProfileGroupStateManager; } set { ProfileGroupStateManager = value; } }
+    public static int int_12 { get { return AttachAttemptCount; } set { AttachAttemptCount = value; } }
+    public static Random random_0 { get { return RandomGenerator; } set { RandomGenerator = value; } }
+    public static LootRouteParser gclass33_0 { get { return LootRoutePattern; } set { LootRoutePattern = value; } }
+    public static GameTimer gclass36_2 { get { return AttachRefreshTimer; } set { AttachRefreshTimer = value; } }
+    public static bool bool_30 { get { return IsResumeRequested; } set { IsResumeRequested = value; } }
+    public static bool bool_31 { get { return IsAutoLoginArmed; } set { IsAutoLoginArmed = value; } }
+    public static GSpellTimer gspellTimer_1 { get { return AutoLoginTimer; } set { AutoLoginTimer = value; } }
+    public static bool bool_32 { get { return IsDetachInProgress; } set { IsDetachInProgress = value; } }
+    public static string string_9 { get { return AutoLoginSetting; } set { AutoLoginSetting = value; } }
+    public static bool bool_33 { get { return HasManualPause; } set { HasManualPause = value; } }
+    public static bool bool_34 { get { return IsDiagnosticLoggingEnabled; } set { IsDiagnosticLoggingEnabled = value; } }
+    public static bool bool_35 { get { return HasLoggedMissingProcess; } set { HasLoggedMissingProcess = value; } }
+    public static bool bool_36 { get { return DetachAfterStopRequested; } set { DetachAfterStopRequested = value; } }
+    public static bool bool_37 { get { return HasDeferredCompileRun; } set { HasDeferredCompileRun = value; } }
+    public static bool bool_38 { get { return NeedsDeferredCompile; } set { NeedsDeferredCompile = value; } }
+    public static SpellbookManager gclass63_0 { get { return SpellbookStateManager; } set { SpellbookStateManager = value; } }
+    public static IntPtr intptr_2 { get { return KillEventHandle; } set { KillEventHandle = value; } }
+    public static bool bool_39 { get { return ShouldProcessKillEvent; } set { ShouldProcessKillEvent = value; } }
+    public static uint uint_0 { get { return KillEventWaitTimeout; } set { KillEventWaitTimeout = value; } }
+    public static bool bool_40 { get { return IsWindowHidden; } set { IsWindowHidden = value; } }
+    public static bool bool_41 { get { return IsWindowShrunk; } set { IsWindowShrunk = value; } }
 
     public static void InitStartupMode(AppMode appMode_1)
     {
@@ -170,20 +243,20 @@ public class StartupClass
         {
             ConfigManager.gclass61_0 = new ConfigManager();
             MessageProvider.smethod_0(".\\");
-            random_0 = new Random();
-            gprofile_0 = null;
-            string_5 = null;
-            thread_0 = null;
-            gclass54_0 = new PartyManager();
-            int_4 = 1;
+            RandomGenerator = new Random();
+            ActiveProfile = null;
+            ActiveProfilePath = null;
+            InitializationThread = null;
+            PartyStateManager = new PartyManager();
+            ProfileEditorVersion = 1;
             if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             {
                 smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
             }
             else
             {
-                gprofile_0 = new GProfile();
-                string_5 = MessageProvider.GetMessage(70);
+                ActiveProfile = new GProfile();
+                ActiveProfilePath = MessageProvider.GetMessage(70);
             }
 
             var gcontext = new GContext();
@@ -206,7 +279,7 @@ public class StartupClass
             ConfigManager.gclass61_0 = new ConfigManager();
             IsBetaAccessGranted = true;
             if (Environment.CommandLine.ToLower().IndexOf("/l1") != -1)
-                bool_34 = true;
+                IsDiagnosticLoggingEnabled = true;
             if (Environment.CommandLine.ToLower().IndexOf("/mach") != -1)
             {
                 IsAttached = true;
@@ -214,28 +287,28 @@ public class StartupClass
             }
 
             if (Environment.CommandLine.ToLower().IndexOf("/resume") != -1)
-                bool_30 = true;
+                IsResumeRequested = true;
             MessageProvider.smethod_0(".\\");
-            gclass11_0 = new SecurityDescriptorHelper();
-            gclass11_0.method_1();
-            random_0 = new Random();
-            gclass36_0 = new GameTimer(10000);
-            glideMode_0 = GlideMode.None;
-            WowVersionLabel_string = "0.0";
-            int_7 = 0;
-            int_8 = 0;
-            int_9 = 0;
-            gprofile_0 = null;
-            string_5 = null;
-            bool_19 = string_5 != null;
-            bool_16 = false;
-            thread_0 = null;
-            int_6 = 1;
-            gclass36_0 = new GameTimer(660000);
-            bool_21 = false;
-            gclass36_1 = new GameTimer(30000);
+            SecurityDescriptor = new SecurityDescriptorHelper();
+            SecurityDescriptor.method_1();
+            RandomGenerator = new Random();
+            LicenseCheckTimer = new GameTimer(10000);
+            CurrentGlideMode = GlideMode.None;
+            WowVersionLabel = "0.0";
+            DynamicClassCount = 0;
+            CompiledClassCount = 0;
+            InternalClassCount = 0;
+            ActiveProfile = null;
+            ActiveProfilePath = null;
+            HasClassLoadMismatch = ActiveProfilePath != null;
+            IsProfileDirty = false;
+            InitializationThread = null;
+            StartupAttemptCount = 1;
+            LicenseCheckTimer = new GameTimer(660000);
+            HasSessionWarning = false;
+            SessionHeartbeatTimer = new GameTimer(30000);
             IsGliderInitialized = false;
-            gclass68_0 = new CameraRotator();
+            CameraController = new CameraRotator();
             if (!IsAttached)
             {
                 smethod_54();
@@ -247,8 +320,8 @@ public class StartupClass
             }
             else
             {
-                gprofile_0 = new GProfile();
-                string_5 = MessageProvider.GetMessage(70);
+                ActiveProfile = new GProfile();
+                ActiveProfilePath = MessageProvider.GetMessage(70);
             }
 
             GliderUIManager = new WebNotificationService();
@@ -257,23 +330,23 @@ public class StartupClass
                 CodeCompiler.smethod_10();
             InputController.smethod_31(ConfigManager.gclass61_0);
             smethod_5();
-            gclass54_0 = new PartyManager();
-            gclass54_0.method_0(ConfigManager.gclass61_0);
+            PartyStateManager = new PartyManager();
+            PartyStateManager.method_0(ConfigManager.gclass61_0);
             smethod_52();
             SpellcastingManager.gclass42_0 = new SpellcastingManager();
             SpellcastingManager.gclass42_0.method_12();
-            gclass24_0 = new KeyboardHookManager();
-            gclass36_0.method_4();
+            KeyboardHook = new KeyboardHookManager();
+            LicenseCheckTimer.method_4();
             if (!IsAttached)
                 smethod_7();
             else
-                WowVersionLabel_string = "EvoStub";
+                WowVersionLabel = "EvoStub";
             if (!IsAttached)
                 smethod_8();
-            bool_19 = int_7 != int_8;
-            if (gclass11_0.string_0 != null)
+            HasClassLoadMismatch = DynamicClassCount != CompiledClassCount;
+            if (SecurityDescriptor.string_0 != null)
             {
-                Logger.LogMessage(MessageProvider.smethod_2(72, gclass11_0.string_0));
+                Logger.LogMessage(MessageProvider.smethod_2(72, SecurityDescriptor.string_0));
                 Environment.Exit(1);
             }
 
@@ -289,11 +362,11 @@ public class StartupClass
     {
         if (smethod_2(string_11))
         {
-            gclass48_0 = new ProfileGroupManager();
-            return gclass48_0.method_4(string_11);
+            ProfileGroupStateManager = new ProfileGroupManager();
+            return ProfileGroupStateManager.method_4(string_11);
         }
 
-        gclass48_0 = null;
+        ProfileGroupStateManager = null;
         return smethod_3(string_11);
     }
 
@@ -304,28 +377,28 @@ public class StartupClass
 
     public static bool smethod_3(string string_11)
     {
-        gprofile_0 = new GProfile();
-        if (gprofile_0.Load(string_11))
+        ActiveProfile = new GProfile();
+        if (ActiveProfile.Load(string_11))
         {
-            sortedList_2.Clear();
-            bool_16 = false;
-            string_5 = string_11;
-            Logger.LogMessage(MessageProvider.smethod_2(109, string_5));
+            RuntimeProfileCache.Clear();
+            IsProfileDirty = false;
+            ActiveProfilePath = string_11;
+            Logger.LogMessage(MessageProvider.smethod_2(109, ActiveProfilePath));
             ConfigManager.gclass61_0.method_0("LastProfile", string_11);
-            if (gclass54_0 != null && gclass54_0.Offsets != null)
+            if (PartyStateManager != null && PartyStateManager.Offsets != null)
             {
-                gclass54_0.Offsets = null;
+                PartyStateManager.Offsets = null;
                 Logger.LogMessage(MessageProvider.GetMessage(110));
             }
 
-            if (bool_27)
-                ginterface0_0.imethod_0();
+            if (IsInitializationComplete)
+                StartupLogger.imethod_0();
             return true;
         }
 
         Logger.LogMessage(MessageProvider.smethod_2(111, string_11));
-        if (bool_27)
-            ginterface0_0.imethod_0();
+        if (IsInitializationComplete)
+            StartupLogger.imethod_0();
         return false;
     }
 
@@ -338,13 +411,13 @@ public class StartupClass
     {
         if (IsAttached)
             return;
-        numbers_string = ConfigManager.gclass61_0.method_2("BarCharacters");
+        ActionBarCharacters = ConfigManager.gclass61_0.method_2("BarCharacters");
         if (GContext.Main != null)
             GContext.Main.ApplyConfig();
-        DebuffsKnown_string = new DebuffDatabase();
-        if (bool_29)
+        KnownDebuffs = new DebuffDatabase();
+        if (RequiresConfigReload)
         {
-            bool_29 = false;
+            RequiresConfigReload = false;
             smethod_8();
         }
 
@@ -352,48 +425,48 @@ public class StartupClass
             CurrentGameClass.LoadConfig();
         RestStatusMonitor.double_2 = smethod_6(ConfigManager.gclass61_0.method_2("MeleeDistance"));
         RestStatusMonitor.double_3 = smethod_6(ConfigManager.gclass61_0.method_2("RangedDistance"));
-        double_0 = smethod_6(ConfigManager.gclass61_0.method_2("AutoAddDistance"));
+        AutoAddDistance = smethod_6(ConfigManager.gclass61_0.method_2("AutoAddDistance"));
         SoundPlayer.bool_0 = ConfigManager.gclass61_0.method_5("Silent");
         if (ApplicationStartupMode == AppMode.PGEdit)
             return;
         if (!ConfigManager.gclass61_0.method_5("ListenEnabled"))
         {
-            if (gclass79_0 != null)
+            if (RemoteViewer != null)
             {
                 Logger.LogMessage(MessageProvider.GetMessage(141));
-                gclass79_0.method_1();
-                gclass79_0 = null;
+                RemoteViewer.method_1();
+                RemoteViewer = null;
             }
         }
         else
         {
-            if (gclass79_0 != null && gclass79_0.int_0 != ConfigManager.gclass61_0.method_3("ListenPort"))
+            if (RemoteViewer != null && RemoteViewer.int_0 != ConfigManager.gclass61_0.method_3("ListenPort"))
             {
-                Logger.LogMessage(MessageProvider.smethod_2(142, gclass79_0.int_0));
-                gclass79_0.method_1();
-                gclass79_0 = null;
+                Logger.LogMessage(MessageProvider.smethod_2(142, RemoteViewer.int_0));
+                RemoteViewer.method_1();
+                RemoteViewer = null;
             }
 
-            if (gclass79_0 == null)
+            if (RemoteViewer == null)
             {
-                gclass79_0 = new RemoteViewerServer();
-                Logger.LogMessage(MessageProvider.smethod_2(143, gclass79_0.int_0));
-                gclass79_0.method_0();
+                RemoteViewer = new RemoteViewerServer();
+                Logger.LogMessage(MessageProvider.smethod_2(143, RemoteViewer.int_0));
+                RemoteViewer.method_0();
             }
         }
 
-        string_8 = ConfigManager.gclass61_0.method_2("FriendWhitelist").Split(' ');
-        gclass33_0 = new LootRouteParser(ConfigManager.gclass61_0.method_2("LootPattern"));
+        FriendWhitelist = ConfigManager.gclass61_0.method_2("FriendWhitelist").Split(' ');
+        LootRoutePattern = new LootRouteParser(ConfigManager.gclass61_0.method_2("LootPattern"));
         GliderUIManager.method_2();
         if (ConfigManager.gclass61_0.method_5("UseHook") && !KeyboardHookManager.bool_0)
         {
-            gclass24_0 = new KeyboardHookManager();
+            KeyboardHook = new KeyboardHookManager();
         }
         else
         {
-            if (gclass24_0 == null || !KeyboardHookManager.bool_0 || ConfigManager.gclass61_0.method_5("UseHook"))
+            if (KeyboardHook == null || !KeyboardHookManager.bool_0 || ConfigManager.gclass61_0.method_5("UseHook"))
                 return;
-            gclass24_0.method_17();
+            KeyboardHook.method_17();
         }
     }
 
@@ -406,8 +479,8 @@ public class StartupClass
     {
         if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
         {
-            WowVersionLabel_string = ConfigManager.gclass61_0.method_2("ForceVersion");
-            Logger.LogMessage(MessageProvider.smethod_2(81, WowVersionLabel_string));
+            WowVersionLabel = ConfigManager.gclass61_0.method_2("ForceVersion");
+            Logger.LogMessage(MessageProvider.smethod_2(81, WowVersionLabel));
         }
 
         string string_11;
@@ -429,8 +502,8 @@ public class StartupClass
 
         if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
             return;
-        WowVersionLabel_string = versionInfo.FileVersion;
-        Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel_string));
+        WowVersionLabel = versionInfo.FileVersion;
+        Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel));
     }
 
     private static bool TryResolveWowInstallPath(out string string_11)
@@ -513,14 +586,14 @@ public class StartupClass
             else
             {
                 str = ProfileMapping.Keys[0];
-                if (!bool_37)
+                if (!HasDeferredCompileRun)
                     Logger.LogMessage("Switching to: " + str);
             }
         }
 
         ProfileMapping[str].method_0();
         var object0 = (GGameClass)ProfileMapping[str].object_0;
-        if (bool_13)
+        if (IsRuntimeAttached)
         {
             Logger.smethod_1("Calling OnAttach for new class");
             object0.OnAttach();
@@ -535,8 +608,8 @@ public class StartupClass
     {
         isInitializationSuccessful = false;
         MemoryOffsetTable.Instance = new MemoryOffsetTable();
-        thread_0 = new Thread(smethod_10);
-        thread_0.Start();
+        InitializationThread = new Thread(smethod_10);
+        InitializationThread.Start();
     }
 
     private static void smethod_10()
@@ -554,15 +627,15 @@ public class StartupClass
     private static void smethod_11()
     {
         ApplicationInitializer.InitializeAndValidate(ConfigManager.gclass61_0.method_2("AppKey"), true);
-        bool_13 = false;
-        if (isInputStringFourCharacters && !bool_23)
+        IsRuntimeAttached = false;
+        if (isInputStringFourCharacters && !HasShownStartupNotice)
         {
-            bool_23 = true;
+            HasShownStartupNotice = true;
             Logger.LogMessage(MessageProvider.GetMessage(75));
             smethod_39(1000);
         }
 
-        thread_0 = null;
+        InitializationThread = null;
         if (!isInputStringFourCharacters)
         {
             Logger.LogMessage(MessageProvider.GetMessage(76));
@@ -593,10 +666,10 @@ public class StartupClass
                 }
             }
 
-            bool_19 = false;
+            HasClassLoadMismatch = false;
 
-            if (IsSomeConditionMet && !bool_37 && !IsAttached)
-                bool_38 = true;
+            if (IsSomeConditionMet && !HasDeferredCompileRun && !IsAttached)
+                NeedsDeferredCompile = true;
             if (GameMemoryWriter != null)
                 GameMemoryWriter.method_2("OnGliderStart", false);
         }
@@ -608,15 +681,15 @@ public class StartupClass
                 IsBetaAccessGranted = true;
                 Logger.LogMessage(MessageProvider.GetMessage(78));
                 smethod_39(2000);
-                gclass36_0.method_5();
+                LicenseCheckTimer.method_5();
             }
         }
 
         if (ApplicationStartupMode == AppMode.Normal)
             Logger.LogMessage(MessageProvider.GetMessage(79));
-        bool_27 = true;
-        ginterface0_0.imethod_0();
-        bool_15 = false;
+        IsInitializationComplete = true;
+        StartupLogger.imethod_0();
+        IsStartupPending = false;
         if (IsSecCheckEnabled)
             return;
         smethod_61();
@@ -624,13 +697,13 @@ public class StartupClass
 
     public static bool smethod_12()
     {
-        return bool_13;
+        return IsRuntimeAttached;
     }
 
     public static void smethod_13()
     {
         GameMemoryAccess.bool_2 = false;
-        bool_13 = false;
+        IsRuntimeAttached = false;
         if (!smethod_44())
             return;
         smethod_14();
@@ -643,41 +716,41 @@ public class StartupClass
         {
             SoundPlayer.smethod_0("Attach.wav");
             IsDetached = true;
-            ginterface0_0.imethod_0();
+            StartupLogger.imethod_0();
         }
         else
         {
             IsForegroundEnabled = false;
-            gclass36_2.method_4();
+            AttachRefreshTimer.method_4();
             GameMemoryAccess.bool_2 = false;
-            gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
-            gclass43_0.PopulateOffsetList();
-            gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
-            gclass43_3.PopulateOffsetList();
-            gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
-            gclass43_1.PopulateOffsetList();
-            gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
-            gclass43_2.PopulateOffsetList();
-            gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
-            gclass43_4.PopulateOffsetList();
-            gclass63_0 = new SpellbookManager();
+            PlayerOffsetManager = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
+            PlayerOffsetManager.PopulateOffsetList();
+            ItemOffsetManager = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
+            ItemOffsetManager.PopulateOffsetList();
+            NpcOffsetManager = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
+            NpcOffsetManager.PopulateOffsetList();
+            ObjectOffsetManager = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
+            ObjectOffsetManager.PopulateOffsetList();
+            ContainerOffsetManager = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
+            ContainerOffsetManager.PopulateOffsetList();
+            SpellbookStateManager = new SpellbookManager();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
                 CurrentGameClass.OnAttach();
             UIElement.smethod_2("UIParent");
             smethod_17(1, MessageProvider.GetMessage(98));
-            ginterface0_0.imethod_0();
-            gclass38_0 = new EquipmentEnchantmentChecker();
-            gclass38_0.method_0();
+            StartupLogger.imethod_0();
+            EquipmentEnchantmentChecker = new EquipmentEnchantmentChecker();
+            EquipmentEnchantmentChecker.method_0();
             GameClass69Instance.method_0();
             DialogMonitor.smethod_0();
             GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
             IsGliderPaused = false;
-            if (gclass48_0 != null)
-                gclass48_0.method_6();
-            bool_13 = true;
+            if (ProfileGroupStateManager != null)
+                ProfileGroupStateManager.method_6();
+            IsRuntimeAttached = true;
             SoundPlayer.smethod_0("Attach.wav");
-            bool_36 = false;
+            DetachAfterStopRequested = false;
             Logger.smethod_1("--- Attach code out");
             if (!IsStopRequested)
                 return;
@@ -688,19 +761,19 @@ public class StartupClass
 
     public static void smethod_15()
     {
-        if (!bool_13)
+        if (!IsRuntimeAttached)
             return;
-        bool_20 = false;
-        bool_32 = true;
+        IsAutoLoginTriggered = false;
+        IsDetachInProgress = true;
         Logger.smethod_1("AppContext.Detach invoked");
-        if (int_12 == 0 && !GameMemoryAccess.smethod_56(AnotherIntegerValue))
+        if (AttachAttemptCount == 0 && !GameMemoryAccess.smethod_56(AnotherIntegerValue))
         {
             GameMemoryAccess.CloseProcessHandle(AdditionalApplicationHandle);
             AdditionalApplicationHandle = IntPtr.Zero;
             AnotherIntegerValue = 0;
         }
 
-        bool_13 = false;
+        IsRuntimeAttached = false;
         GameClass69Instance.method_3();
         GameClass8Instance = null;
         smethod_17(1, MessageProvider.GetMessage(99));
@@ -708,27 +781,27 @@ public class StartupClass
 
     public static void smethod_16(int int_14)
     {
-        if (int_10 == int_14)
+        if (LastSecurityCode == int_14)
             return;
-        int_10 = int_14;
-        if (!gclass11_0.method_2(int_14))
+        LastSecurityCode = int_14;
+        if (!SecurityDescriptor.method_2(int_14))
         {
-            Logger.LogMessage(MessageProvider.smethod_2(91, gclass11_0.string_0));
+            Logger.LogMessage(MessageProvider.smethod_2(91, SecurityDescriptor.string_0));
             Logger.LogMessage(MessageProvider.GetMessage(92));
         }
         else
         {
             Logger.LogMessage(MessageProvider.GetMessage(93));
-            if (gclass11_0.string_1 == null)
+            if (SecurityDescriptor.string_1 == null)
                 return;
-            Logger.LogMessage(MessageProvider.smethod_2(94, gclass11_0.string_1));
+            Logger.LogMessage(MessageProvider.smethod_2(94, SecurityDescriptor.string_1));
         }
     }
 
     public static void smethod_17(int int_14, string string_11)
     {
-        if (gclass79_0 != null)
-            gclass79_0.method_5(int_14, string_11);
+        if (RemoteViewer != null)
+            RemoteViewer.method_5(int_14, string_11);
         if (GliderUIManager == null)
             return;
         if ((int_14 & 32) > 0)
@@ -813,24 +886,24 @@ public class StartupClass
 
     public static bool smethod_21(bool bool_42)
     {
-        if (!bool_27)
+        if (!IsInitializationComplete)
             return false;
-        if (bool_19)
+        if (HasClassLoadMismatch)
         {
             Logger.LogMessage(MessageProvider.GetMessage(113));
             return false;
         }
 
-        if (glideMode_0 != GlideMode.None)
+        if (CurrentGlideMode != GlideMode.None)
         {
             Logger.LogMessage(MessageProvider.GetMessage(114));
             return false;
         }
 
-        if (!bool_13)
+        if (!IsRuntimeAttached)
         {
             smethod_13();
-            if (!bool_13)
+            if (!IsRuntimeAttached)
                 return false;
         }
 
@@ -842,8 +915,8 @@ public class StartupClass
 
         if (!ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             smethod_22();
-        glideMode_0 = GlideMode.Manual;
-        gclass60_0 = new GlideMainThread();
+        CurrentGlideMode = GlideMode.Manual;
+        ManualGlideController = new GlideMainThread();
         return true;
     }
 
@@ -856,20 +929,20 @@ public class StartupClass
 
     public static bool smethod_23()
     {
-        if (!bool_13)
+        if (!IsRuntimeAttached)
         {
             Logger.LogMessage(MessageProvider.GetMessage(107));
             return false;
         }
 
-        if (gprofile_0 == null)
+        if (ActiveProfile == null)
         {
             Logger.LogMessage(MessageProvider.GetMessage(108));
             return false;
         }
 
         var flag = false;
-        switch (genum2_0)
+        switch (SelectedWaypointType)
         {
             case WaypointType.const_0:
                 flag = GPlayerSelf.Me.IsDead;
@@ -882,29 +955,29 @@ public class StartupClass
                 break;
         }
 
-        if (genum2_0 == WaypointType.const_3)
+        if (SelectedWaypointType == WaypointType.const_3)
         {
-            gprofile_0.VendorWaypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.smethod_2(870, gprofile_0.VendorWaypoints.Count));
+            ActiveProfile.VendorWaypoints.Add(GPlayerSelf.Me.Location);
+            Logger.LogMessage(MessageProvider.smethod_2(870, ActiveProfile.VendorWaypoints.Count));
         }
         else if (!flag)
         {
-            gprofile_0.Waypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.smethod_2(658, gprofile_0.Waypoints.Count));
+            ActiveProfile.Waypoints.Add(GPlayerSelf.Me.Location);
+            Logger.LogMessage(MessageProvider.smethod_2(658, ActiveProfile.Waypoints.Count));
         }
         else
         {
-            gprofile_0.GhostWaypoints.Add(GPlayerSelf.Me.Location);
-            Logger.LogMessage(MessageProvider.smethod_2(659, gprofile_0.GhostWaypoints.Count));
+            ActiveProfile.GhostWaypoints.Add(GPlayerSelf.Me.Location);
+            Logger.LogMessage(MessageProvider.smethod_2(659, ActiveProfile.GhostWaypoints.Count));
         }
 
-        bool_16 = true;
+        IsProfileDirty = true;
         return true;
     }
 
     public static bool smethod_24(bool bool_42)
     {
-        if (!bool_27)
+        if (!IsInitializationComplete)
             return false;
         if (isTimeAdded && DateTime.Now > expiryTime)
         {
@@ -912,20 +985,20 @@ public class StartupClass
             return false;
         }
 
-        if (glideMode_0 != GlideMode.None)
+        if (CurrentGlideMode != GlideMode.None)
         {
             Logger.LogMessage(MessageProvider.GetMessage(117));
             return false;
         }
 
-        if (!bool_13 && !IsDetached)
+        if (!IsRuntimeAttached && !IsDetached)
         {
             smethod_13();
-            if (!bool_13)
+            if (!IsRuntimeAttached)
                 return false;
         }
 
-        if (bool_19)
+        if (HasClassLoadMismatch)
         {
             Logger.LogMessage(MessageProvider.GetMessage(118));
             return false;
@@ -933,14 +1006,14 @@ public class StartupClass
 
         if (IsDetached)
             return smethod_25();
-        if (gclass48_0 == null && (gprofile_0 == null || (gprofile_0.Waypoints.Count < 2 && !gprofile_0.Fishing)))
+        if (ProfileGroupStateManager == null && (ActiveProfile == null || (ActiveProfile.Waypoints.Count < 2 && !ActiveProfile.Fishing)))
         {
             Logger.LogMessage(MessageProvider.GetMessage(119));
             return false;
         }
 
         if (GPlayerSelf.Me.IsDead &&
-            (gprofile_0.GhostWaypoints.Count == 0 || !ConfigManager.gclass61_0.method_5("Resurrect")))
+            (ActiveProfile.GhostWaypoints.Count == 0 || !ConfigManager.gclass61_0.method_5("Resurrect")))
         {
             Logger.LogMessage(MessageProvider.GetMessage(120));
             return false;
@@ -948,11 +1021,11 @@ public class StartupClass
 
         if (!IsGliderInitialized)
             smethod_22();
-        glideMode_0 = GlideMode.Auto;
-        gclass73_0 = new CombatController();
-        if (gclass73_0.method_1())
+        CurrentGlideMode = GlideMode.Auto;
+        ActiveCombatController = new CombatController();
+        if (ActiveCombatController.method_1())
             return true;
-        glideMode_0 = GlideMode.None;
+        CurrentGlideMode = GlideMode.None;
         return false;
     }
 
@@ -961,18 +1034,18 @@ public class StartupClass
         GameProcessManager = new MachGlideRunner();
         if (!GameProcessManager.method_0())
         {
-            glideMode_0 = GlideMode.None;
+            CurrentGlideMode = GlideMode.None;
             return false;
         }
 
-        glideMode_0 = GlideMode.Auto;
-        ginterface0_0.imethod_0();
+        CurrentGlideMode = GlideMode.Auto;
+        StartupLogger.imethod_0();
         return true;
     }
 
     public static bool smethod_26()
     {
-        if (!bool_13)
+        if (!IsRuntimeAttached)
         {
             Logger.LogMessage(MessageProvider.GetMessage(130));
             return false;
@@ -990,20 +1063,20 @@ public class StartupClass
             return false;
         }
 
-        if (gprofile_0 == null)
+        if (ActiveProfile == null)
         {
             Logger.LogMessage(MessageProvider.GetMessage(133));
             return false;
         }
 
-        if (gprofile_0.CheckFaction(GPlayerSelf.Me.Target.FactionID, true))
+        if (ActiveProfile.CheckFaction(GPlayerSelf.Me.Target.FactionID, true))
         {
             Logger.LogMessage(MessageProvider.GetMessage(128));
         }
         else
         {
             Logger.LogMessage(MessageProvider.GetMessage(129));
-            gprofile_0.SetFactionsFromString(gprofile_0.GetFactionsAsString() + " " + GPlayerSelf.Me.Target.FactionID);
+            ActiveProfile.SetFactionsFromString(ActiveProfile.GetFactionsAsString() + " " + GPlayerSelf.Me.Target.FactionID);
         }
 
         return true;
@@ -1011,12 +1084,12 @@ public class StartupClass
 
     public static void smethod_27(bool bool_42, string string_11)
     {
-        if (glideMode_0 == GlideMode.None && !bool_42)
+        if (CurrentGlideMode == GlideMode.None && !bool_42)
             return;
         var flag = false;
         try
         {
-            ++int_13;
+            ++KillActionDepth;
             smethod_28(bool_42, string_11);
         }
         catch (ThreadInterruptedException ex)
@@ -1029,7 +1102,7 @@ public class StartupClass
         }
         finally
         {
-            --int_13;
+            --KillActionDepth;
         }
 
         if (flag)
@@ -1041,35 +1114,35 @@ public class StartupClass
         lock (killActionLock)
         {
             var flag = false;
-            if (glideMode_0 != GlideMode.None || bool_13 && bool_42)
+            if (CurrentGlideMode != GlideMode.None || IsRuntimeAttached && bool_42)
             {
                 smethod_51();
-                gclass68_0.method_3(true);
-                Logger.smethod_1(MessageProvider.smethod_2(652, bool_42, (int)glideMode_0, string_11));
-                gclass68_0.method_3(true);
+                CameraController.method_3(true);
+                Logger.smethod_1(MessageProvider.smethod_2(652, bool_42, (int)CurrentGlideMode, string_11));
+                CameraController.method_3(true);
                 InputController.smethod_21(false);
-                if (glideMode_0 == GlideMode.Auto)
+                if (CurrentGlideMode == GlideMode.Auto)
                 {
                     if (bool_42)
-                        bool_36 = true;
+                        DetachAfterStopRequested = true;
                     if (CurrentGameClass != null)
                         CurrentGameClass.OnStopGlide();
                     smethod_17(1, MessageProvider.GetMessage(100));
                     if (IsAttached)
                     {
                         var gameProcessManager = GameProcessManager;
-                        if (gameProcessManager != null && Thread.CurrentThread == gameProcessManager.thread_0)
+                        if (gameProcessManager != null && Thread.CurrentThread == gameProcessManager.InitializationThread)
                             flag = true;
                     }
                     else
                     {
-                        var combatController = gclass73_0;
-                        if (combatController != null && Thread.CurrentThread == combatController.thread_0)
+                        var combatController = ActiveCombatController;
+                        if (combatController != null && Thread.CurrentThread == combatController.InitializationThread)
                             flag = true;
                     }
 
                     Logger.smethod_1(MessageProvider.GetMessage(100));
-                    glideMode_0 = GlideMode.None;
+                    CurrentGlideMode = GlideMode.None;
                     if (IsAttached)
                     {
                         var gameProcessManager = GameProcessManager;
@@ -1079,28 +1152,28 @@ public class StartupClass
                     }
                     else
                     {
-                        var combatController = gclass73_0;
-                        gclass73_0 = null;
+                        var combatController = ActiveCombatController;
+                        ActiveCombatController = null;
                         if (combatController != null)
                             combatController.method_2();
                     }
                 }
 
-                if (glideMode_0 == GlideMode.Manual)
+                if (CurrentGlideMode == GlideMode.Manual)
                 {
                     smethod_17(1, MessageProvider.GetMessage(101));
-                    if (gclass60_0 != null && Thread.CurrentThread == gclass60_0.thread_0)
+                    if (ManualGlideController != null && Thread.CurrentThread == ManualGlideController.InitializationThread)
                         flag = true;
                     Logger.smethod_1(MessageProvider.GetMessage(102));
-                    glideMode_0 = GlideMode.None;
-                    if (gclass60_0 != null)
-                        gclass60_0.method_0();
-                    gclass60_0 = null;
+                    CurrentGlideMode = GlideMode.None;
+                    if (ManualGlideController != null)
+                        ManualGlideController.method_0();
+                    ManualGlideController = null;
                 }
 
                 if (bool_42)
                     smethod_15();
-                ginterface0_0.imethod_0();
+                StartupLogger.imethod_0();
                 GContext.Main.ReleaseAllKeys();
                 InputController.smethod_21(false);
                 if (flag)
@@ -1111,20 +1184,20 @@ public class StartupClass
 
     public static int smethod_29()
     {
-        if (glideMode_0 != GlideMode.Auto)
-            return int_11;
-        if (gclass73_0 == null)
+        if (CurrentGlideMode != GlideMode.Auto)
+            return CachedRatePerHour;
+        if (ActiveCombatController == null)
             return 0;
-        lock (gclass73_0)
+        lock (ActiveCombatController)
         {
-            if (gclass73_0.bool_9)
+            if (ActiveCombatController.bool_9)
             {
-                int_11 = (int)Math.Round(gclass73_0.int_8 / (DateTime.Now - dateTime_0).TotalSeconds * 3600.0, 0);
-                gclass73_0.bool_9 = false;
+                CachedRatePerHour = (int)Math.Round(ActiveCombatController.CompiledClassCount / (DateTime.Now - SessionStartTime).TotalSeconds * 3600.0, 0);
+                ActiveCombatController.bool_9 = false;
             }
         }
 
-        return int_11;
+        return CachedRatePerHour;
     }
 
     private static void smethod_30()
@@ -1144,16 +1217,16 @@ public class StartupClass
     private static void smethod_32()
     {
         var string_11 = smethod_36("/kill");
-        intptr_2 = CreateEvent(IntPtr.Zero, false, false, string_11);
-        if (intptr_2 == IntPtr.Zero)
+        KillEventHandle = CreateEvent(IntPtr.Zero, false, false, string_11);
+        if (KillEventHandle == IntPtr.Zero)
         {
             Logger.LogMessage("Couldn't create named event");
         }
         else
         {
-            WaitForSingleObject(intptr_2, uint_0);
-            CloseHandle(intptr_2);
-            if (!bool_39)
+            WaitForSingleObject(KillEventHandle, KillEventWaitTimeout);
+            CloseHandle(KillEventHandle);
+            if (!ShouldProcessKillEvent)
                 return;
             smethod_33();
         }
@@ -1162,25 +1235,25 @@ public class StartupClass
     private static void smethod_33()
     {
         SoundPlayer.smethod_1("GliderExit.wav");
-        DebuffsKnown_string.method_10();
-        ginterface0_0.imethod_4();
+        KnownDebuffs.method_10();
+        StartupLogger.imethod_4();
         smethod_31();
         Environment.Exit(0);
     }
 
     public static void smethod_34()
     {
-        if (intptr_2 == IntPtr.Zero)
+        if (KillEventHandle == IntPtr.Zero)
             smethod_33();
-        SetEvent(intptr_2);
+        SetEvent(KillEventHandle);
     }
 
     public static void smethod_35()
     {
-        if (intptr_2 == IntPtr.Zero)
+        if (KillEventHandle == IntPtr.Zero)
             return;
-        bool_39 = false;
-        SetEvent(intptr_2);
+        ShouldProcessKillEvent = false;
+        SetEvent(KillEventHandle);
     }
 
     [DllImport("kernel32.dll")]
@@ -1226,7 +1299,7 @@ public class StartupClass
 
         smethod_45();
         smethod_63("Attach/refresh check completed");
-        if (bool_30 && bool_27)
+        if (IsResumeRequested && IsInitializationComplete)
         {
             smethod_63("Security handshake check");
             GameMemoryAccess.smethod_53();
@@ -1242,15 +1315,15 @@ public class StartupClass
             GameMemoryAccess.GetProcessId();
         }
 
-        if (bool_38 && !IsAttached && !bool_37)
+        if (NeedsDeferredCompile && !IsAttached && !HasDeferredCompileRun)
         {
             smethod_63("Deferred startup compilation");
-            bool_37 = true;
+            HasDeferredCompileRun = true;
             CodeCompiler.smethod_14();
             smethod_8();
         }
 
-        if (!bool_13)
+        if (!IsRuntimeAttached)
         {
             smethod_63("Not attached, tick complete");
             return;
@@ -1265,11 +1338,11 @@ public class StartupClass
             return;
         }
 
-        if (DebuffsKnown_string != null && gclass36_3.method_3())
+        if (KnownDebuffs != null && DebuffRefreshTimer.method_3())
         {
             smethod_63("Debuff cache refresh");
-            gclass36_3.method_4();
-            DebuffsKnown_string.method_8();
+            DebuffRefreshTimer.method_4();
+            KnownDebuffs.method_8();
         }
 
         if (me.Stance != CurrentStance)
@@ -1283,14 +1356,14 @@ public class StartupClass
         smethod_63("Running chat/dialog updates");
         GameClass69Instance.method_4();
         DialogMonitor.smethod_1();
-        if (GameClass8Instance != null && GameClass8Instance.method_10() && glideMode_0 == GlideMode.Auto)
+        if (GameClass8Instance != null && GameClass8Instance.method_10() && CurrentGlideMode == GlideMode.Auto)
         {
             smethod_63("Auto mode popup dismiss");
             InputController.smethod_9(27);
         }
 
-        if (glideMode_0 == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
-            (DateTime.Now - dateTime_0).TotalSeconds >= 8.0 && !IsGliderRunning)
+        if (CurrentGlideMode == GlideMode.Auto && IsGliderInitialized && ConfigManager.gclass61_0.method_2("BackgroundDisplay") != "Normal" &&
+            (DateTime.Now - SessionStartTime).TotalSeconds >= 8.0 && !IsGliderRunning)
         {
             smethod_63("Applying background display state");
             IsGliderRunning = true;
@@ -1298,7 +1371,7 @@ public class StartupClass
         }
 
         smethod_63("Running camera/input maintenance");
-        gclass68_0.method_7();
+        CameraController.method_7();
         InputController.smethod_21(true);
         smethod_63("Tick complete");
     }
@@ -1310,9 +1383,9 @@ public class StartupClass
 
     private static void smethod_63(string string_11)
     {
-        if (!smethod_64() || ginterface0_0 == null)
+        if (!smethod_64() || StartupLogger == null)
             return;
-        ginterface0_0.imethod_2("[Debug] [MainLoop] " + string_11);
+        StartupLogger.imethod_2("[Debug] [MainLoop] " + string_11);
     }
 
     public static void smethod_39(int int_14)
@@ -1335,8 +1408,8 @@ public class StartupClass
             if (GameClass69Instance == null || GameClass69Instance.method_10() >= 10)
                 return false;
             Logger.LogMessage(MessageProvider.GetMessage(830));
-            if (glideMode_0 == GlideMode.Auto)
-                gprofile_0.ForceBlacklist(gunit_0.GUID);
+            if (CurrentGlideMode == GlideMode.Auto)
+                ActiveProfile.ForceBlacklist(gunit_0.GUID);
             CombatController.smethod_1();
             return true;
         }
@@ -1369,16 +1442,16 @@ public class StartupClass
         AnotherIntegerValue = GameMemoryAccess.AttachToWowProcess();
         if (AnotherIntegerValue == 0)
         {
-            if (!bool_35)
+            if (!HasLoggedMissingProcess)
                 Logger.smethod_1("Attach attempt: no matching process found for AttachEXE");
-            bool_35 = true;
+            HasLoggedMissingProcess = true;
             return false;
         }
 
-        bool_35 = false;
+        HasLoggedMissingProcess = false;
 
         IsGliderAttached = true;
-        if (AdditionalApplicationHandle == IntPtr.Zero && !bool_14)
+        if (AdditionalApplicationHandle == IntPtr.Zero && !SkipHandleOpen)
         {
             AdditionalApplicationHandle = GameMemoryAccess.OpenProcessHandle(AnotherIntegerValue);
             if (AdditionalApplicationHandle == IntPtr.Zero)
@@ -1402,13 +1475,13 @@ public class StartupClass
         if (IsAttached)
             return true;
         var int_14 = MemoryOffsetTable.Instance.GetIntOffset("UIParent");
-        if (int_14 > 0 && GameMemoryAccess.ReadInt32(int_14, "probeuip") == 0 && !bool_20 &&
-            ((bool_31 && gspellTimer_1.IsReady) || IsForegroundEnabled))
+        if (int_14 > 0 && GameMemoryAccess.ReadInt32(int_14, "probeuip") == 0 && !IsAutoLoginTriggered &&
+            ((IsAutoLoginArmed && AutoLoginTimer.IsReady) || IsForegroundEnabled))
         {
             var str = ConfigManager.gclass61_0.method_2("AutoLog");
             if (str != null && str.Length > 0 && IsSomeConditionMet && new AutoLoginManager().method_2())
             {
-                bool_20 = true;
+                IsAutoLoginTriggered = true;
                 GameMemoryWriter.method_2("DoAutoLog", false);
             }
 
@@ -1417,9 +1490,9 @@ public class StartupClass
 
         if (MemoryOffsetTable.Instance.HasOffset("TLSSlot") && MemoryOffsetTable.Instance.GetIntOffset("TLSSlot") > 0)
         {
-            if (GameMemoryAccess.smethod_52(out long_0, out int_5) && long_0 != 0L)
+            if (GameMemoryAccess.smethod_52(out CurrentPlayerGuid, out ResolvedMainTableAddress) && CurrentPlayerGuid != 0L)
             {
-                if (GObjectList.StealthCountGameObjects(long_0) > 0)
+                if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
                     return true;
                 Logger.smethod_1("TLS attach probe failed object validation, trying static offsets fallback");
             }
@@ -1428,7 +1501,7 @@ public class StartupClass
                 Logger.smethod_1("TLS attach probe failed, trying static offsets fallback");
             }
         }
-        long_0 = 0L;
+        CurrentPlayerGuid = 0L;
         var int_18 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
         var int_19 = int_18;
         if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
@@ -1443,8 +1516,8 @@ public class StartupClass
             else
                 int_19 = int_21;
         }
-        int_5 = int_19;
-        if (int_5 == 0)
+        ResolvedMainTableAddress = int_19;
+        if (ResolvedMainTableAddress == 0)
         {
             Logger.smethod_1("Attach probe failed: resolved MainTable pointer is zero");
             return false;
@@ -1457,16 +1530,16 @@ public class StartupClass
             : 24;
         if (int_23 > 0)
         {
-            var int_24 = GameMemoryAccess.ReadInt32(int_5 + int_23, "MainTableActivePlayer");
+            var int_24 = GameMemoryAccess.ReadInt32(ResolvedMainTableAddress + int_23, "MainTableActivePlayer");
             if (isLikelyObjectAddress(int_24))
             {
                 var int64_1 = GameMemoryAccess.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
                 if (int64_1 != 0L)
                 {
-                    long_0 = int64_1;
+                    CurrentPlayerGuid = int64_1;
                     bool_42 = true;
                     bool_43 = true;
-                    Logger.smethod_1("Attach probe: using active player object GUID = 0x" + long_0.ToString("x"));
+                    Logger.smethod_1("Attach probe: using active player object GUID = 0x" + CurrentPlayerGuid.ToString("x"));
                 }
             }
         }
@@ -1476,16 +1549,16 @@ public class StartupClass
             : 40;
         if (!bool_42 && int_25 > 0)
         {
-            var int64_2 = GameMemoryAccess.ReadInt64(int_5 + int_25, "MainTableLocalGuid");
+            var int64_2 = GameMemoryAccess.ReadInt64(ResolvedMainTableAddress + int_25, "MainTableLocalGuid");
             if (int64_2 != 0L)
             {
-                long_0 = int64_2;
+                CurrentPlayerGuid = int64_2;
                 bool_43 = true;
-                Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + long_0.ToString("x"));
+                Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + CurrentPlayerGuid.ToString("x"));
             }
         }
 
-        if (long_0 == 0L)
+        if (CurrentPlayerGuid == 0L)
         {
             var configuredPlayerIdAddress = MemoryOffsetTable.Instance.GetIntOffset("PlayerIdAddr");
             var playerIdCandidates = new int[]
@@ -1507,21 +1580,21 @@ public class StartupClass
                 var playerGuid = BitConverter.ToInt64(playerGuidBytes, 0);
                 if (playerGuid != 0L)
                 {
-                    long_0 = playerGuid;
+                    CurrentPlayerGuid = playerGuid;
                     if (candidateAddress != configuredPlayerIdAddress)
                         Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
                     break;
                 }
             }
 
-            if (long_0 == 0L)
+            if (CurrentPlayerGuid == 0L)
             {
                 Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
                 return false;
             }
         }
 
-        var num = GObjectList.StealthCountGameObjects(long_0);
+        var num = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
         if (num > 0)
             return true;
         long long_1;
@@ -1532,9 +1605,9 @@ public class StartupClass
                 Logger.smethod_1("Attach probe note: ignoring low inferred GUID candidate because object manager GUID is already known");
                 return true;
             }
-            long_0 = long_1;
-            Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + long_0.ToString("x"));
-            num = GObjectList.StealthCountGameObjects(long_0);
+            CurrentPlayerGuid = long_1;
+            Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + CurrentPlayerGuid.ToString("x"));
+            num = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
             if (num > 1)
                 return true;
         }
@@ -1567,7 +1640,7 @@ public class StartupClass
 
     public static void smethod_45()
     {
-        if (bool_13 || IsDetached || !isInitializationSuccessful || !smethod_44())
+        if (IsRuntimeAttached || IsDetached || !isInitializationSuccessful || !smethod_44())
             return;
         smethod_14();
     }
@@ -1587,37 +1660,37 @@ public class StartupClass
 
     public static void smethod_47()
     {
-        if (bool_40)
+        if (IsWindowHidden)
             return;
         GameMemoryAccess.SetForegroundWindow(MainApplicationHandle);
-        bool_40 = true;
+        IsWindowHidden = true;
     }
 
     public static void smethod_48()
     {
-        if (bool_41)
+        if (IsWindowShrunk)
             return;
         double width = ConfigManager.gclass61_0.method_3("ShrinkWidth");
-        GameMemoryAccess.GetWindowSize(MainApplicationHandle, out size_0);
-        var height = size_0.Height / (double)size_0.Width * width;
+        GameMemoryAccess.GetWindowSize(MainApplicationHandle, out OriginalWindowSize);
+        var height = OriginalWindowSize.Height / (double)OriginalWindowSize.Width * width;
         GameMemoryAccess.SetWindowSize(MainApplicationHandle, new Size((int)width, (int)height));
-        bool_41 = true;
+        IsWindowShrunk = true;
     }
 
     public static void smethod_49()
     {
-        if (!bool_40)
+        if (!IsWindowHidden)
             return;
         GameMemoryAccess.ShowWindow(MainApplicationHandle);
-        bool_40 = false;
+        IsWindowHidden = false;
     }
 
     public static void smethod_50()
     {
-        if (!bool_41)
+        if (!IsWindowShrunk)
             return;
-        GameMemoryAccess.SetWindowSize(MainApplicationHandle, size_0);
-        bool_41 = false;
+        GameMemoryAccess.SetWindowSize(MainApplicationHandle, OriginalWindowSize);
+        IsWindowShrunk = false;
     }
 
     public static void smethod_51()
@@ -1645,7 +1718,7 @@ public class StartupClass
             if (Environment.CommandLine.ToLower().IndexOf("/holddriver") != -1)
             {
                 Logger.smethod_1("DriverName is static, will leave driver resident");
-                bool_33 = true;
+                HasManualPause = true;
             }
         }
         else
@@ -1656,8 +1729,8 @@ public class StartupClass
         Environment.CommandLine.ToLower().IndexOf("/shadowread");
         if (Environment.CommandLine.ToLower().IndexOf("/attachpid") != -1)
         {
-            int_12 = int.Parse(smethod_36("/attachpid"));
-            Logger.LogMessage("/attachpid specified, looking for: " + int_12);
+            AttachAttemptCount = int.Parse(smethod_36("/attachpid"));
+            Logger.LogMessage("/attachpid specified, looking for: " + AttachAttemptCount);
         }
 
         if (!ConfigManager.gclass61_0.method_5("UnloadShadow"))
@@ -1688,7 +1761,7 @@ public class StartupClass
             var string_1 = ConfigManager.gclass61_0.method_2("AutoLog");
             if (!new AutoLoginManager().method_1(string_1))
                 return;
-            string_9 = string_1;
+            AutoLoginSetting = string_1;
             Logger.smethod_1("Autolog is good!");
             IsStopRequested = true;
         }
@@ -1699,45 +1772,12 @@ public class StartupClass
         return gclass56_0.ReadIntFromDecryptedStream() == 0;
     }
 
-    public static void smethod_58()
-    {
-        if (IsInitialized)
-        {
-            SecurityCheckInstance.Focus();
-            SecurityCheckInstance.method_0();
-        }
-        else
-        {
-            IsInitialized = true;
-            SecurityCheckInstance = new SecCheck();
-            SecurityCheckInstance.Show();
-            ConfigManager.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
-            ConfigManager.gclass61_0.method_8();
-        }
-    }
-
-    public static void smethod_59()
-    {
-        if (!ConfigManager.gclass61_0.method_5("AllowAutoSecCheck"))
-            return;
-        if (ConfigManager.gclass61_0.method_2("LastSecCheck") == null)
-        {
-            ConfigManager.gclass61_0.method_0("LastSecCheck", DateTime.Now.ToShortDateString());
-        }
-        else
-        {
-            if ((DateTime.Now - DateTime.Parse(ConfigManager.gclass61_0.method_2("LastSecCheck"))).TotalDays < 7.0)
-                return;
-            smethod_60();
-        }
-    }
 
     private static void smethod_60()
     {
         if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
-        smethod_58();
     }
 
     private static void smethod_61()
@@ -1793,3 +1833,4 @@ public class StartupClass
         return "(could not find macro in list!)";
     }
 }
+

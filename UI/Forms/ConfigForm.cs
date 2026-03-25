@@ -1665,24 +1665,6 @@ public class ConfigForm : Form
         groupBox21.TabIndex = 9;
         groupBox21.TabStop = false;
         groupBox21.Text = "Other";
-        AllowAutoSecCheck.AutoSize = true;
-        AllowAutoSecCheck.Location = new Point(12, 139);
-        AllowAutoSecCheck.Name = "AllowAutoSecCheck";
-        AllowAutoSecCheck.Size = new Size(188, 17);
-        AllowAutoSecCheck.TabIndex = 6;
-        AllowAutoSecCheck.Text = "Prompt for SecCheck occasionally";
-        DoSecCheck.Location = new Point(80, 191);
-        DoSecCheck.Name = "DoSecCheck";
-        DoSecCheck.Size = new Size(117, 25);
-        DoSecCheck.TabIndex = 3;
-        DoSecCheck.Text = "SecCheck";
-        DoSecCheck.Click += DoSecCheck_Click;
-        AllowNetCheck.AutoSize = true;
-        AllowNetCheck.Location = new Point(12, 116);
-        AllowNetCheck.Name = "AllowNetCheck";
-        AllowNetCheck.Size = new Size(115, 17);
-        AllowNetCheck.TabIndex = 5;
-        AllowNetCheck.Text = "NetCheck enabled";
         StopOnVanish.AutoSize = true;
         StopOnVanish.Location = new Point(12, 93);
         StopOnVanish.Name = "StopOnVanish";
@@ -3492,12 +3474,6 @@ public class ConfigForm : Form
         if (!bool_2)
             ;
     }
-
-    private void DoSecCheck_Click(object sender, EventArgs e)
-    {
-        StartupClass.smethod_58();
-    }
-
     private void GliderDebug_CheckedChanged(object sender, EventArgs e)
     {
         ConfigManager.gclass61_0.method_0("GliderDebug", GliderDebug.Checked.ToString());
