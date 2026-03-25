@@ -483,6 +483,8 @@ namespace Glider.Common.Objects
         {
             if (MouseSpin && StartupClass.gclass68_0.method_9())
                 StartupClass.gclass68_0.method_8(Fast);
+            if (!MouseSpin && Me != null)
+                Me.Refresh(true);
             if (MouseSpin || SpinningKey == null ||
                 Math.Abs(Movement.CompareHeadings(GPlayerSelf.Me.Heading, TargetHeading)) >= Math.PI / 18.0)
                 return;

@@ -307,6 +307,8 @@ namespace Glider.Common.Objects
 
         public void BasePatrolTowards(object DestOrUnit)
         {
+            if (GContext.Main.Me != null)
+                GContext.Main.Me.Refresh(true);
             var Target = DestOrUnit.GetType() != typeof(GLocation)
                 ? ((GObject)DestOrUnit).Location
                 : (GLocation)DestOrUnit;
@@ -500,13 +502,16 @@ namespace Glider.Common.Objects
             SpellcastingManager.gclass42_0.method_2(SpinKey);
             GPlayerSelf.Me.Refresh(true);
             var num = CompareHeadings(heading, GPlayerSelf.Me.Heading);
-            if (Math.Abs(num) > 0.02)
+            if (Math.Abs(num) <= 0.02)
             {
-                if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
-                    InputController.int_19 -= 15;
-                else
-                    InputController.int_19 += 15;
+                Logger.smethod_1("TapSpin produced no heading change, escalating to full spin");
+                return false;
             }
+
+            if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
+                InputController.int_19 -= 15;
+            else
+                InputController.int_19 += 15;
 
             return true;
         }

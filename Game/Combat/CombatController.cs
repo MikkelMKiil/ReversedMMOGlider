@@ -85,6 +85,7 @@ public class CombatController
     private ulong long_0;
     protected string string_0;
     public string[] string_1;
+    private string string_2;
     public Thread thread_0;
 
     public CombatController()
@@ -270,6 +271,20 @@ public class CombatController
         }
     }
 
+    private void LogVerboseLoopState(string string_2, string string_3)
+    {
+        var str = string_2 + "|" + string_3;
+        if (this.string_2 == str)
+            return;
+        this.string_2 = str;
+        Logger.LogMessage("[Loop] " + string_3);
+    }
+
+    private void LogVerboseLoop(string string_2)
+    {
+        Logger.LogMessage("[Loop] " + string_2);
+    }
+
     public void method_4()
     {
         GameMemoryAccess.GetCursorPosition();
@@ -282,13 +297,16 @@ public class CombatController
         var location = gplayerSelf_0.Location;
         PlayerTracker.smethod_0();
         gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
+        LogVerboseLoop("Profile initialized. Goal: follow waypoints, engage valid targets, maintain survivability, and stop only on explicit guard conditions.");
         if (!CodeCompiler.smethod_16(StartupClass.CurrentGameClass).bool_0 && !StartupClass.IsSomeConditionMet)
         {
+            LogVerboseLoop("Stopping before loop: class script validation failed and elite bypass is unavailable.");
             Logger.LogMessage(MessageProvider.GetMessage(854));
             StartupClass.smethod_27(false, "CCStart");
         }
         else if (CodeCompiler.smethod_16(StartupClass.CurrentGameClass).bool_1)
         {
+            LogVerboseLoop("Skipping regular glide loop: class declared patrol override, handing control to custom patrol implementation.");
             Logger.smethod_1("Class has patrol override, skipping regular stuff (!!!)");
             StartupClass.CurrentGameClass.Patrol();
         }
@@ -314,6 +332,7 @@ public class CombatController
 
                     if (!flag)
                     {
+                        LogVerboseLoop("Stopping before loop: start point is beyond MaxStartDistance and no vendor waypoint is close enough to safely resume.");
                         GContext.Main.Movement.SetHeading(gprofile_0.CurrentWaypoint);
                         Logger.LogMessage(MessageProvider.smethod_2(669,
                             Math.Round(gplayerSelf_0.Location.GetDistanceTo(gprofile_0.CurrentWaypoint), 0)));
@@ -364,21 +383,28 @@ public class CombatController
                 SpellcastingManager.gclass42_0.method_0("Common.Back");
             if (StartupClass.gclass48_0 != null)
             {
+                LogVerboseLoop("Entering grouped profile runner (group controller owns movement/combat decisions).");
                 Logger.smethod_1("Pass off to main loop");
                 StartupClass.gclass48_0.method_18();
             }
             else if (gclass54_0.genum7_0 == PartyRole.const_2)
             {
+                LogVerboseLoop("Entering assist mode loop because party role is assist.");
                 method_46();
             }
             else if (gprofile_0.NaturalRun && !gprofile_0.Fishing)
             {
+                LogVerboseLoop("Entering natural run loop (profile requests natural movement pathing).");
                 method_39();
             }
             else
             {
                 if (gprofile_0.Fishing)
+                {
+                    LogVerboseLoop("Entering fishing loop before combat loop because profile is flagged as fishing.");
                     method_29();
+                }
+                LogVerboseLoop("Entering primary glide loop (waypoint movement + pull/combat checks).");
                 method_5();
             }
         }
@@ -386,6 +412,7 @@ public class CombatController
 
     public void method_5()
     {
+        LogVerboseLoop("Primary glide loop started. Decision order: maintenance -> combat check -> waypoint progression -> death/safety handling.");
         method_9();
     label_17:
         while (true)
@@ -405,6 +432,7 @@ public class CombatController
                     {
                         if (!gprofile_0.Fishing)
                         {
+                            LogVerboseLoopState("waypoint.consume", "No profile-group transition pending: consuming current waypoint and continuing normal path progression.");
                             ++int_7;
                             gprofile_0.ConsumeCurrentWaypoint();
                             method_9();
@@ -412,13 +440,17 @@ public class CombatController
 
                         if (gplayerSelf_0.IsDead)
                         {
+                            LogVerboseLoopState("death.detected", "Player is dead during main loop; evaluating resurrect policy and ghost waypoint availability.");
                             Logger.LogMessage(MessageProvider.GetMessage(157));
                             if (!(ConfigManager.gclass61_0.method_2("Resurrect") != "True"))
                             {
                                 if (gprofile_0.GhostWaypoints.Count != 0)
                                 {
                                     if (StartupClass.int_9 < int_10)
+                                    {
+                                        LogVerboseLoopState("death.recover", "Proceeding with ghost recovery: resurrect enabled, ghost waypoints available, and death count below MaxResurrect.");
                                         method_14(GPlayerSelf.Me.Location, true);
+                                    }
                                     else
                                         goto label_20;
                                 }
@@ -438,6 +470,7 @@ public class CombatController
 
                     goto label_3;
                 label_16:
+                    LogVerboseLoopState("fishing.loop", "Fishing profile active: running fishing action loop before standard waypoint progression.");
                     method_29();
                     goto label_2;
                 } while (int_7 != gprofile_0.Waypoints.Count * 2 || gprofile_0.Fishing ||
@@ -445,9 +478,11 @@ public class CombatController
 
                 goto label_13;
             label_3:
+                LogVerboseLoopState("profile.swap", "Profile-group transition requested; reloading active profile reference for next iteration.");
                 gprofile_0 = StartupClass.gprofile_0;
             } while (gprofile_0.IgnoreAttackers);
 
+            LogVerboseLoopState("profile.group.advance", "Advancing profile-group state because attackers are not ignored and transition gate is clear.");
             ProfileGroupManager.smethod_4();
         }
 
@@ -466,16 +501,19 @@ public class CombatController
 
         goto label_17;
     label_18:
+        LogVerboseLoop("Stopping glide: cannot proceed with death recovery because resurrect is disabled in configuration.");
         Logger.LogMessage(MessageProvider.GetMessage(158));
         method_13();
         StartupClass.smethod_27(false, "ResurrectConfigOff");
         return;
     label_19:
+        LogVerboseLoop("Stopping glide: cannot proceed with death recovery because no ghost waypoints are configured.");
         Logger.LogMessage(MessageProvider.GetMessage(159));
         method_13();
         StartupClass.smethod_27(false, "NoGhostWPs");
         return;
     label_20:
+        LogVerboseLoop("Stopping glide: cannot proceed with death recovery because MaxResurrect limit has been reached.");
         Logger.LogMessage(MessageProvider.GetMessage(160));
         method_13();
         StartupClass.smethod_27(false, "TooManyDeaths");
@@ -534,6 +572,7 @@ public class CombatController
         method_19();
         if (!gprofile_0.Fishing)
         {
+            LogVerboseLoopState("waypoint.heading", "Setting heading toward current waypoint and entering movement loop.");
             Logger.LogMessage(MessageProvider.smethod_2(166, gprofile_0.CurrentWaypoint));
             GContext.Main.Movement.SetHeading(gprofile_0.CurrentWaypoint);
         }
@@ -566,10 +605,12 @@ public class CombatController
                         int_14 = 3000;
                     if (num > 160.0 && distanceTo > 40.0)
                         int_14 = 6000;
+                    LogVerboseLoopState("waypoint.approach", "Proceeding to waypoint: still outside proximity threshold, pressing forward for calibrated move window.");
                     GContext.Main.Movement.SetHeading(gprofile_0.CurrentWaypoint);
                     SpellcastingManager.gclass42_0.method_1("Common.Forward");
                     if (gclass36_1.method_3() && int_14 > 2000)
                     {
+                        LogVerboseLoopState("waypoint.jump", "Injecting jump while traveling to reduce pathing stalls on long movement segments.");
                         StartupClass.smethod_39(500);
                         SpellcastingManager.gclass42_0.method_0("Common.Jump");
                         method_27();
@@ -581,9 +622,11 @@ public class CombatController
                     continue;
                 }
 
+                LogVerboseLoopState("waypoint.reached", "Waypoint reached within closeness threshold; exiting movement phase and entering rest/next-step handling.");
                 break;
             }
 
+            LogVerboseLoopState("waypoint.abort.dead", "Movement loop aborted because player is dead; deferring to death-handling logic.");
             goto label_19;
         label_17:
             StartupClass.CurrentGameClass.RunningAction();
@@ -601,7 +644,10 @@ public class CombatController
     public int method_10()
     {
         if (gprofile_0.IgnoreAttackers || gprofile_0.Fishing)
+        {
+            LogVerboseLoopState("combat.skip.profile", "Skipping combat scan because profile mode suppresses attacker engagement (ignore attackers or fishing).");
             return 0;
+        }
         var num = 0;
         Logger.smethod_1(MessageProvider.GetMessage(168));
         GMonster nextProfileTarget;
@@ -616,8 +662,10 @@ public class CombatController
                     double distanceToSelf = nextProfileTarget.DistanceToSelf;
                     if (distanceToSelf <= StartupClass.CurrentGameClass.PullDistance + int_5)
                     {
+                        LogVerboseLoopState("combat.target.inrange", "Combat candidate found within pull envelope; evaluating approach/target/engage path.");
                         if (distanceToSelf > StartupClass.CurrentGameClass.PullDistance)
                         {
+                            LogVerboseLoopState("combat.target.approach", "Candidate is inside extra-pull range but outside direct pull range; approaching before pull.");
                             Logger.LogMessage(MessageProvider.GetMessage(172));
                             if (!nextProfileTarget.Approach(StartupClass.CurrentGameClass.PullDistance - 1, false))
                                 goto label_13;
@@ -645,11 +693,13 @@ public class CombatController
                     }
                     else
                     {
+                        LogVerboseLoopState("combat.target.toofar", "Skipping candidate: target is outside pull + extra-pull range; continue waypoint movement.");
                         goto label_12;
                     }
                 }
                 else
                 {
+                    LogVerboseLoopState("combat.target.none", "No suitable profile target found during scan; continue waypoint movement.");
                     goto label_11;
                 }
             }
@@ -668,13 +718,16 @@ public class CombatController
         Logger.smethod_1(MessageProvider.GetMessage(171));
         return num;
     label_13:
+        LogVerboseLoop("Combat did not proceed: approach phase failed while moving into pull distance.");
         Logger.LogMessage(MessageProvider.GetMessage(173));
         return num;
     label_14:
+        LogVerboseLoop("Combat did not proceed: could not set selected candidate as current target.");
         Logger.LogMessage(MessageProvider.GetMessage(174));
         StartupClass.gprofile_0.AddToBlacklist(nextProfileTarget.GUID);
         return num;
     label_15:
+        LogVerboseLoop("Combat did not proceed: target mismatch after selection; candidate was blacklisted to avoid repeat stalls.");
         Logger.smethod_1(MessageProvider.smethod_2(670, nextProfileTarget.GUID.ToString("x"),
             gplayerSelf_0.TargetGUID.ToString("x")));
         StartupClass.gprofile_0.AddToBlacklist(nextProfileTarget.GUID);
@@ -1591,11 +1644,24 @@ public class CombatController
             GContext.Main.PulseSpin(!GContext.Main.IsRunning);
             if (GContext.Main.Overspin)
             {
+                string targetInfo = "none";
+                if (gmonster != null)
+                    targetInfo = "name=\"" + gmonster.Name + "\", dist=" + Math.Round(gmonster.DistanceToSelf, 2) + ", guid=0x" + gmonster.GUID.ToString("x");
+                double waypointDistance = gprofile_0.CurrentWaypoint == null
+                    ? -1.0
+                    : gplayerSelf_0.Location.GetDistanceTo(gprofile_0.CurrentWaypoint);
+                Logger.LogMessage("[Loop] Overspin detected in natural run. Running=" + GContext.Main.IsRunning +
+                                  ", MouseSpin=" + GContext.Main.MouseSpin +
+                                  ", WaypointDist=" + Math.Round(waypointDistance, 2) +
+                                  ", Me=" + gplayerSelf_0.Location.ToString3D() +
+                                  ", Target=" + targetInfo +
+                                  ", Action=ReleaseSpinRun+Reprofile");
                 GContext.Main.ReleaseSpinRun();
                 Logger.LogMessage("Spinning for too long, letting go of key and re-syncing");
                 Thread.Sleep(5000);
                 gmonster = null;
                 gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
+                Logger.LogMessage("[Loop] Overspin recovery completed. Re-profiled from current location and will re-acquire waypoint heading.");
             }
 
             if (gclass36_1.method_3())
@@ -1735,6 +1801,9 @@ public class CombatController
                         {
                             if (gplayerSelf_0.Location.GetDistanceTo(glocation_2) < 3.0)
                             {
+                                Logger.LogMessage("[Loop] Natural run movement stall detected. Delta<3.0 over watchdog interval, stuckCount=" +
+                                                  (num1 + 1) + "/" + int_4 +
+                                                  ", CurrentWaypoint=" + gprofile_0.DebugCurrentWaypoint());
                                 if (ConfigManager.gclass61_0.method_5("StrafeObstacles") && !flag1)
                                 {
                                     Logger.LogMessage(MessageProvider.GetMessage(742));
@@ -1772,6 +1841,7 @@ public class CombatController
                             if (num1 > int_4)
                             {
                                 Logger.LogMessage("Stuck too many times");
+                                Logger.LogMessage("[Loop] Stuck threshold exceeded. Recovery policy: blacklist target or waypoint fallback/skip.");
                                 if (gmonster != null)
                                 {
                                     Logger.LogMessage("Blacklisting this target");
