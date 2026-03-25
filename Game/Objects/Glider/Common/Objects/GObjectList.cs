@@ -163,6 +163,19 @@ namespace Glider.Common.Objects
                     var gobject = LastSnapshot.Values[index];
                     if (gobject.FrameNumber != FrameNumber)
                     {
+                        if (gobject is GPlayerSelf && gobject.GUID == StartupClass.long_0)
+                        {
+                            gobject.FrameNumber = FrameNumber;
+                            continue;
+                        }
+
+                        if (gobject is GPlayerSelf || gobject.GUID == StartupClass.long_0)
+                        {
+                            GPlayerSelf.Me = null;
+                            if (GContext.Main != null)
+                                GContext.Main.Me = null;
+                        }
+
                         if (LogObjects)
                             Logger.smethod_1("+ Culling old object: " + gobject);
                         gobject.Cull();
@@ -619,12 +632,6 @@ namespace Glider.Common.Objects
                     var int64 = GameMemoryAccess.ReadInt64(num + 48, "GameObjGUID");
                     if (int64 != 0L)
                     {
-                        if (int64 <= 4096L)
-                        {
-                            Logger.smethod_1("Attach probe note: inferred low player GUID candidate = 0x" + int64.ToString("x"));
-                            num = GameMemoryAccess.ReadInt32(num + 60, "GameObjNext");
-                            continue;
-                        }
                         guid_0 = int64;
                         return true;
                     }
@@ -644,13 +651,7 @@ namespace Glider.Common.Objects
 
         private static bool IsLikelyObjectPointer(int int_0)
         {
-            if ((int_0 & 1) != 0 || int_0 == 0 || int_0 == 28 || int_0 < 65536)
-                return false;
-            var objectType = GameMemoryAccess.ReadBytesRaw(int_0 + 20, 4);
-            if (objectType == null || objectType.Length < 4)
-                return false;
-            var quickType = BitConverter.ToInt32(objectType, 0);
-            return quickType >= 1 && quickType <= 7;
+            return (int_0 & 1) == 0 && int_0 != 0 && int_0 != 28 && int_0 >= 65536;
         }
     }
 }

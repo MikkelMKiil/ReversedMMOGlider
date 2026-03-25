@@ -155,6 +155,13 @@ public class StartupClass
     private static readonly GameTimer DebuffRefreshTimer = new GameTimer(3500);
     private static GameTimer ForegroundRefreshTimer = new GameTimer(6000);
     private static readonly GSpellTimer PeriodicSafetyTimer = new GSpellTimer(1080000, true);
+    private static int MainLoopTickGuard;
+    private static int LastMainLoopTickTime;
+    private const int MinMainLoopTickIntervalMs = 75;
+    private const int WotlkClientConnectionAddress = 0x00C79CE0;
+    private const int WotlkObjectManagerOffset = 0x2ED0;
+    private const int WotlkObjectManagerLocalGuidOffset = 0xC0;
+    private const int WotlkStaticPlayerGuidAddress = 0x00CA1238;
     private static string PendingErrorMessage = null;
     private static Size OriginalWindowSize;
     public static bool IsWindowHidden;
@@ -1290,6 +1297,18 @@ public class StartupClass
 
     public static void smethod_38()
     {
+        if (Interlocked.Exchange(ref MainLoopTickGuard, 1) == 1)
+            return;
+
+        try
+        {
+            var tickNow = Environment.TickCount;
+            var elapsed = unchecked(tickNow - LastMainLoopTickTime);
+            if (LastMainLoopTickTime != 0 && elapsed >= 0 && elapsed < MinMainLoopTickIntervalMs)
+                return;
+
+            LastMainLoopTickTime = tickNow;
+
         smethod_63("Tick start");
         if (IsExitRequested)
         {
@@ -1374,6 +1393,11 @@ public class StartupClass
         CameraController.method_7();
         InputController.smethod_21(true);
         smethod_63("Tick complete");
+        }
+        finally
+        {
+            Interlocked.Exchange(ref MainLoopTickGuard, 0);
+        }
     }
 
     private static bool smethod_64()
@@ -1488,18 +1512,23 @@ public class StartupClass
             Logger.smethod_1("Attach probe note: UIParent resolved to zero, continuing with TLS/static attach checks");
         }
 
-        if (MemoryOffsetTable.Instance.HasOffset("TLSSlot") && MemoryOffsetTable.Instance.GetIntOffset("TLSSlot") > 0)
+        if (GameMemoryAccess.smethod_52(out CurrentPlayerGuid, out ResolvedMainTableAddress) && CurrentPlayerGuid != 0L)
         {
-            if (GameMemoryAccess.smethod_52(out CurrentPlayerGuid, out ResolvedMainTableAddress) && CurrentPlayerGuid != 0L)
+            if (!isLikelyPlayerGuid(CurrentPlayerGuid))
             {
-                if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
-                    return true;
-                Logger.smethod_1("TLS attach probe failed object validation, trying static offsets fallback");
+                Logger.smethod_1("Direct attach probe rejected implausible GUID: 0x" + CurrentPlayerGuid.ToString("x"));
+                CurrentPlayerGuid = 0L;
             }
             else
             {
-                Logger.smethod_1("TLS attach probe failed, trying static offsets fallback");
+                if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
+                    return true;
+                Logger.smethod_1("Direct attach probe failed object validation, trying static offsets fallback");
             }
+        }
+        else
+        {
+            Logger.smethod_1("Direct attach probe failed, trying static offsets fallback");
         }
         CurrentPlayerGuid = 0L;
         var int_18 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
@@ -1534,7 +1563,7 @@ public class StartupClass
             if (isLikelyObjectAddress(int_24))
             {
                 var int64_1 = GameMemoryAccess.ReadInt64(int_24 + 48, "MainTableActivePlayerGuid");
-                if (int64_1 != 0L)
+                if (int64_1 != 0L && isLikelyPlayerGuid(int64_1))
                 {
                     CurrentPlayerGuid = int64_1;
                     bool_42 = true;
@@ -1550,12 +1579,23 @@ public class StartupClass
         if (!bool_42 && int_25 > 0)
         {
             var int64_2 = GameMemoryAccess.ReadInt64(ResolvedMainTableAddress + int_25, "MainTableLocalGuid");
-            if (int64_2 != 0L)
+            if (int64_2 != 0L && isLikelyPlayerGuid(int64_2))
             {
                 CurrentPlayerGuid = int64_2;
                 bool_43 = true;
                 Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + CurrentPlayerGuid.ToString("x"));
             }
+            else if (int64_2 != 0L)
+            {
+                Logger.smethod_1("Attach probe note: rejected implausible object manager local GUID = 0x" + int64_2.ToString("x"));
+            }
+        }
+
+        long long_2;
+        if (CurrentPlayerGuid == 0L && TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out long_2))
+        {
+            CurrentPlayerGuid = long_2;
+            bool_43 = true;
         }
 
         if (CurrentPlayerGuid == 0L)
@@ -1578,13 +1618,28 @@ public class StartupClass
                     continue;
 
                 var playerGuid = BitConverter.ToInt64(playerGuidBytes, 0);
-                if (playerGuid != 0L)
+                if (playerGuid != 0L && isLikelyPlayerGuid(playerGuid))
                 {
                     CurrentPlayerGuid = playerGuid;
+                    bool_43 = true;
                     if (candidateAddress != configuredPlayerIdAddress)
                         Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
                     break;
                 }
+
+                var playerObjectPointer = GameMemoryAccess.ReadInt32(candidateAddress, "PlayerIdAddrPointer");
+                if (!isLikelyObjectAddress(playerObjectPointer))
+                    continue;
+
+                var playerObjectGuid = GameMemoryAccess.ReadInt64(playerObjectPointer + 48, "PlayerIdAddrPointerGuid");
+                if (playerObjectGuid == 0L || !isLikelyPlayerGuid(playerObjectGuid))
+                    continue;
+
+                CurrentPlayerGuid = playerObjectGuid;
+                bool_43 = true;
+                Logger.smethod_1("Attach probe: using PlayerIdAddr object pointer path at 0x" + candidateAddress.ToString("x") +
+                                 " -> object 0x" + playerObjectPointer.ToString("x") + " -> GUID 0x" + CurrentPlayerGuid.ToString("x"));
+                break;
             }
 
             if (CurrentPlayerGuid == 0L)
@@ -1625,6 +1680,54 @@ public class StartupClass
             return false;
         var objectType = BitConverter.ToInt32(objectTypeBytes, 0);
         return objectType >= 1 && objectType <= 7;
+    }
+
+    private static bool isLikelyPlayerGuid(long playerGuid)
+    {
+        return playerGuid != 0L;
+    }
+
+    private static bool isLikelyMemoryPointer(int pointer)
+    {
+        return (pointer & 1) == 0 && pointer != 0 && pointer != 28 && pointer >= 65536;
+    }
+
+    private static bool TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out long playerGuid)
+    {
+        playerGuid = 0L;
+        var clientConnection = GameMemoryAccess.ReadInt32(WotlkClientConnectionAddress, "WotlkClientConnection");
+        if (isLikelyMemoryPointer(clientConnection))
+        {
+            var objectManager = GameMemoryAccess.ReadInt32(clientConnection + WotlkObjectManagerOffset, "WotlkObjectManager");
+            if (isLikelyMemoryPointer(objectManager))
+            {
+                var objectManagerGuid = GameMemoryAccess.ReadInt64(objectManager + WotlkObjectManagerLocalGuidOffset,
+                    "WotlkObjectManagerLocalGuid");
+                if (isLikelyPlayerGuid(objectManagerGuid))
+                {
+                    playerGuid = objectManagerGuid;
+                    Logger.smethod_1("Attach probe: using WotLK ClientConnection/ObjectManager GUID path = 0x" + playerGuid.ToString("x"));
+                    return true;
+                }
+
+                if (objectManagerGuid != 0L)
+                    Logger.smethod_1("Attach probe note: rejected WotLK ObjectManager GUID = 0x" + objectManagerGuid.ToString("x"));
+            }
+        }
+
+        var staticGuid = GameMemoryAccess.ReadInt64(WotlkStaticPlayerGuidAddress, "WotlkStaticPlayerGuid");
+        if (isLikelyPlayerGuid(staticGuid))
+        {
+            playerGuid = staticGuid;
+            Logger.smethod_1("Attach probe: using WotLK static PlayerGUID address 0x" + WotlkStaticPlayerGuidAddress.ToString("x") +
+                             " = 0x" + playerGuid.ToString("x"));
+            return true;
+        }
+
+        if (staticGuid != 0L)
+            Logger.smethod_1("Attach probe note: rejected WotLK static PlayerGUID value = 0x" + staticGuid.ToString("x"));
+
+        return false;
     }
 
     private static bool smethod_62(int int_14)

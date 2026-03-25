@@ -1129,6 +1129,13 @@ public class GliderForm : Form, ILogger
             GObjectList.SetCacheDirty();
             GObjectList.GetObjects();
             currentPlayer = GPlayerSelf.Me;
+            if (currentPlayer != null && !currentPlayer.IsValid)
+            {
+                GPlayerSelf.Me = null;
+                if (GContext.Main != null)
+                    GContext.Main.Me = null;
+                currentPlayer = null;
+            }
         }
 
         if (StartupClass.bool_13 && currentPlayer != null)
@@ -2257,7 +2264,24 @@ public class GliderForm : Form, ILogger
         bool flag = guid != this.long_1 || baseAddress != this.int_6 || storageAddress != this.int_7;
         if (!flag && Environment.TickCount - this.int_8 < 1000)
             return;
-        ((ILogger)this).imethod_2("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x"));
+
+        GLocation location = gplayerSelf_0.Location;
+        string meCoords = location != null ? location.ToString3D() : "(unknown)";
+        long targetGuid = gplayerSelf_0.TargetGUID;
+        GUnit target = targetGuid != 0L ? GObjectList.FindUnit(targetGuid) : null;
+        string targetInfo = "none";
+        if (target != null)
+        {
+            GLocation targetLocation = target.Location;
+            string targetCoords = targetLocation != null ? targetLocation.ToString3D() : "(unknown)";
+            targetInfo = "GUID=0x" + target.GUID.ToString("x") +
+                         ", Name=\"" + target.Name + "\"" +
+                         ", HP=" + target.HealthPoints + "/" + target.HealthMax +
+                         ", Dist=" + Math.Round(gplayerSelf_0.GetDistanceTo(target), 2).ToString("0.00") +
+                         ", Coords=" + targetCoords;
+        }
+
+        ((ILogger)this).imethod_2("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x") + ", HP=" + gplayerSelf_0.HealthPoints + "/" + gplayerSelf_0.HealthMax + ", Rage=" + gplayerSelf_0.Rage + ", Coords=" + meCoords + ", Target=" + targetInfo);
         this.long_1 = guid;
         this.int_6 = baseAddress;
         this.int_7 = storageAddress;

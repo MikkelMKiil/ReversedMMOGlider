@@ -1,6 +1,7 @@
 #nullable disable
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -9,6 +10,33 @@ using System.Windows.Forms;
 
 namespace Glider.Common.Objects
 {
+    internal static class WotlkOffsets
+    {
+        internal const int CurMgrPointer = 0x00CF0B90;
+        internal const int CurMgrOffset = 0x3568;
+        internal const int FirstObject = 0xAC;
+        internal const int PlayerGuid = 0x00CA1238;
+        internal const int TargetGuid = 0x00BD07A0;
+
+        internal const int ObjStoragePointer = 0x8;
+        internal const int ObjType = 0x14;
+        internal const int ObjGuid = 0x30;
+        internal const int NextObject = 0x3C;
+
+        internal const int PosX = 0x9B8;
+        internal const int PosY = 0x9BC;
+        internal const int PosZ = 0x9C0;
+
+        internal const int DescriptorBase = 0x8;
+        internal const int UnitFieldHealth = 0x6C;
+        internal const int UnitFieldMaxHealth = 0x74;
+        internal const int UnitFieldPower1 = 0x70;
+        internal const int UnitFieldMaxPower1 = 0x78;
+        internal const int UnitFieldPower2 = 0x74;
+        internal const int UnitFieldPower4 = 0x7C;
+        internal const int UnitFieldFactionTemplate = 0x90;
+    }
+
     /// <summary>
     /// Central process memory manipulation handler for WoW (WOTLK 3.3.5a).
     /// Provides low-level read/write operations to external process memory.
@@ -567,10 +595,78 @@ namespace Glider.Common.Objects
 
         internal static bool smethod_52(out long playerGuid, out int mainTable)
         {
-            // Placeholder for player GUID retrieval
-            playerGuid = 0;
+            playerGuid = 0L;
             mainTable = 0;
-            return false;
+
+            var wowBaseAddress = GetWowBaseAddress();
+            if (!IsLikelyMemoryPointer(wowBaseAddress))
+            {
+                GContext.Main.Log("[CRITICAL] Attach probe failed: unable to resolve WoW base address");
+                return false;
+            }
+
+            var curMgrPointer = ReadInt32(wowBaseAddress + WotlkOffsets.CurMgrPointer, "CurMgrPointer");
+            if (!IsLikelyMemoryPointer(curMgrPointer))
+            {
+                GContext.Main.Log("[CRITICAL] Attach probe failed: CurMgr pointer is invalid");
+                return false;
+            }
+
+            var objectManager = ReadInt32(curMgrPointer + WotlkOffsets.CurMgrOffset, "CurMgrOffset");
+            if (!IsLikelyMemoryPointer(objectManager))
+            {
+                GContext.Main.Log("[CRITICAL] Attach probe failed: object manager pointer is invalid");
+                return false;
+            }
+
+            var firstObject = ReadInt32(objectManager + WotlkOffsets.FirstObject, "FirstObject");
+            if (!IsLikelyMemoryPointer(firstObject))
+            {
+                GContext.Main.Log("[CRITICAL] Attach probe failed: first object pointer is invalid");
+                return false;
+            }
+
+            playerGuid = ReadInt64(wowBaseAddress + WotlkOffsets.PlayerGuid, "PlayerGuid");
+            if (playerGuid == 0L)
+            {
+                GContext.Main.Log("[CRITICAL] Attach probe failed: local player GUID is zero");
+                return false;
+            }
+
+            mainTable = objectManager;
+            return true;
+        }
+
+        private static int GetWowBaseAddress()
+        {
+            if (_currentProcessId == 0)
+                return 0;
+
+            try
+            {
+                var process = Process.GetProcessById(_currentProcessId);
+                if (process == null || process.HasExited || process.MainModule == null)
+                    return 0;
+
+                return process.MainModule.BaseAddress.ToInt32();
+            }
+            catch (InvalidOperationException)
+            {
+                return 0;
+            }
+            catch (Win32Exception)
+            {
+                return 0;
+            }
+            catch (NotSupportedException)
+            {
+                return 0;
+            }
+        }
+
+        private static bool IsLikelyMemoryPointer(int pointer)
+        {
+            return (pointer & 1) == 0 && pointer != 0 && pointer != 28 && pointer >= 65536;
         }
 
         internal static void smethod_53()
