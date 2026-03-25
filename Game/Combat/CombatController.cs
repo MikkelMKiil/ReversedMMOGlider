@@ -105,7 +105,6 @@ public class CombatController
         {
             case 'C':
             case 'c':
-                if (StartupClass.GliderManager != null) StartupClass.GliderManager.method_22();
                 break;
         }
 
@@ -154,8 +153,6 @@ public class CombatController
                 int_5 = ConfigManager.gclass61_0.method_3("ExtraPull");
                 if (MemoryOffsetTable.Instance.HasOffset("ActionBarEnabled"))
                 {
-                    if (StartupClass.GliderManager != null)
-                        StartupClass.GliderManager.method_28(0);
                     Environment.Exit(0);
                 }
 
@@ -276,8 +273,7 @@ public class CombatController
     public void method_4()
     {
         GameMemoryAccess.GetCursorPosition();
-        if (StartupClass.GliderManager != null)
-            StartupClass.GliderManager.method_33(true);
+        InputController.smethod_21(true);
         bool_2 = false;
         bool_3 = false;
         StartupClass.bool_21 = false;
@@ -896,8 +892,6 @@ public class CombatController
                         MemoryOffsetTable.Instance.HasOffset("ArmorAlt2") &&
                         !char.IsDigit(ConfigManager.gclass61_0.method_2("AppKey")[0]))
                     {
-                        if (StartupClass.GliderManager != null)
-                            StartupClass.GliderManager.method_28(0);
                         Environment.Exit(0);
                     }
 

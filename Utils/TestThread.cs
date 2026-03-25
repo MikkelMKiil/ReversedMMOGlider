@@ -30,13 +30,11 @@ public class TestThread
         {
             bool_0 = true;
             Logger.LogMessage("TestoThread starting");
-            if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
-                StartupClass.GliderManager != null)
+            if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             {
-                StartupClass.MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-                StartupClass.IsGliderInitialized = true;
-                Logger.LogMessage("Setting up for background mode!");
+                StartupClass.smethod_62();
+                if (StartupClass.IsGliderInitialized)
+                    Logger.LogMessage("Setting up for background mode!");
             }
             else
             {
@@ -44,14 +42,11 @@ public class TestThread
                 Thread.Sleep(2000);
             }
 
-            if (StartupClass.GliderManager != null)
-                StartupClass.GliderManager.method_33(true);
+            InputController.smethod_21(true);
             smethod_52();
             Thread.Sleep(4000);
             StartupClass.gclass68_0.method_7();
             InputController.smethod_21(false);
-            if (StartupClass.GliderManager != null)
-                StartupClass.GliderManager.method_33(false);
             Logger.LogMessage("TestoThread done");
         }
         catch (Exception ex)

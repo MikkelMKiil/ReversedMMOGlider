@@ -57,12 +57,7 @@ public class GlideMainThread
 
     public void method_2()
     {
-        if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
-            StartupClass.GliderManager != null)
-        {
-            StartupClass.IsGliderInitialized = true;
-            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-        }
+        StartupClass.smethod_62();
 
         var player = GPlayerSelf.Me ?? gplayerSelf_0;
         if (player == null)

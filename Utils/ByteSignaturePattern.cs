@@ -29,20 +29,6 @@ public class ByteSignaturePattern
         }
     }
 
-    public ByteSignaturePattern(MemoryStream memoryStream_0)
-    {
-        var length = WardenCheckDatabase.smethod_0(memoryStream_0) - 25874;
-        Console.WriteLine("Constructing WildByte from obf stream, length = " + length);
-        int_0 = new int[length];
-        for (var index = 0; index < length; ++index)
-        {
-            var num1 = WardenCheckDatabase.smethod_0(memoryStream_0);
-            Console.WriteLine("o: " + num1.ToString("x8") + ", shifted: 0x" + (num1 >> 24).ToString("x"));
-            var num2 = num1 >> 24 != 1 ? num1 & byte.MaxValue : -1;
-            int_0[index] = num2;
-        }
-    }
-
     [SpecialName]
     public int method_0()
     {

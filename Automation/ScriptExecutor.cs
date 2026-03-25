@@ -66,19 +66,11 @@ public class ScriptExecutor
                     }
 
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
-                        StartupClass.GliderManager != null && StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
+                        StartupClass.AdditionalApplicationHandle != IntPtr.Zero && !StartupClass.IsAttached)
                     {
-                        StartupClass.MainApplicationHandle = GameMemoryAccess.GetMainWindowHandle(StartupClass.AnotherIntegerValue);
-                        if (StartupClass.MainApplicationHandle == IntPtr.Zero)
-                        {
-                            Logger.LogMessage("No game window, no background mode!");
-                        }
-                        else
-                        {
-                            StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-                            StartupClass.IsGliderInitialized = true;
+                        StartupClass.smethod_62();
+                        if (StartupClass.IsGliderInitialized)
                             Logger.LogMessage("Setting up for background mode!");
-                        }
                     }
                     else
                     {
@@ -87,8 +79,7 @@ public class ScriptExecutor
                     }
 
                     Logger.smethod_1("Firing up script on new thread");
-                    if (StartupClass.GliderManager != null)
-                        StartupClass.GliderManager.method_33(true);
+                    InputController.smethod_21(true);
                     thread_0 = new Thread(method_3);
                     thread_0.Start(new BoolStringOption
                     {
@@ -120,9 +111,7 @@ public class ScriptExecutor
             thread_0 = null;
         StartupClass.gclass68_0.method_7();
         InputController.smethod_21(false);
-        if (StartupClass.GliderManager == null)
-            return;
-        StartupClass.GliderManager.method_33(false);
+        InputController.smethod_21(false);
     }
 
     protected void method_4(string string_0, bool bool_0)

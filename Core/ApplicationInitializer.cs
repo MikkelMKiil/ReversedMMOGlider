@@ -143,10 +143,7 @@ public class ApplicationInitializer
         try
         {
             if (string_1 == "SF")
-            {
-                WardenMonitor.smethod_0(string_2);
                 return true;
-            }
 
             if (string_1.StartsWith("Buff_"))
             {

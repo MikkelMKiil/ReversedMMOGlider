@@ -757,16 +757,12 @@ namespace Glider.Common.Objects
 
         public void EnableCursorHook()
         {
-            if (StartupClass.GliderManager == null)
-                return;
-            StartupClass.GliderManager.method_33(true);
+            InputController.smethod_21(true);
         }
 
         public void DisableCursorHook()
         {
-            if (StartupClass.GliderManager == null)
-                return;
-            StartupClass.GliderManager.method_33(false);
+            InputController.smethod_21(false);
         }
 
         public void WaitForNotFiring(string KeyName)

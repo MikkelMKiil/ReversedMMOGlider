@@ -9,54 +9,32 @@ using System.Collections;
 
 public class OffsetManager
 {
-    private const int DescriptorEndMask = 1073741824;
-    private readonly int initialOffset;
+    private readonly string descriptorName;
     private readonly SortedList OffsetList;
-    private string descriptorName;
 
     public OffsetManager(string descriptorName, int initialOffset)
     {
         this.descriptorName = descriptorName;
-        this.initialOffset = initialOffset;
         OffsetList = new SortedList();
     }
 
+    /// <summary>
+    /// Populates the offset list using static WoW 3.3.5a descriptor data.
+    /// Replaces the old dynamic descriptor scanning that is no longer functional.
+    /// </summary>
     public void PopulateOffsetList()
     {
-        var currentOffset = initialOffset;
-        var descriptorCount = 0;
-        while (true)
-        {
-            var descriptorStringPtr = GameMemoryAccess.ReadInt32(currentOffset, "DescriptorStringPtr");
-            if ((descriptorStringPtr & DescriptorEndMask) != DescriptorEndMask)
-            {
-                var descriptorKey = GameMemoryAccess.ReadString(descriptorStringPtr, 64, "DescriptorString");
-                switch (descriptorKey)
-                {
-                    case null:
-                        goto NullDescriptorKey;
-                    case "OBJECT_FIELD_GUID":
-                        if (descriptorCount > 2)
-                            goto ExceededDescriptorCount;
-                        break;
-                }
+        WoW335aDescriptors.PopulateOffsetManager(this, descriptorName);
+        Logger.smethod_1("OffsetManager: Loaded " + OffsetList.Count + " static descriptors for '" + descriptorName + "'");
+    }
 
-                if (!OffsetList.ContainsKey(descriptorKey))
-                    OffsetList.Add(descriptorKey, descriptorCount * 4);
-                currentOffset += 20;
-                ++descriptorCount;
-            }
-            else
-            {
-                goto ExitLoop;
-            }
-        }
-
-    NullDescriptorKey:
-        return;
-    ExceededDescriptorCount:
-        return;
-    ExitLoop:;
+    /// <summary>
+    /// Adds an offset entry to the descriptor table.
+    /// </summary>
+    public void AddOffset(string key, int byteOffset)
+    {
+        if (!OffsetList.ContainsKey(key))
+            OffsetList.Add(key, byteOffset);
     }
 
     public int GetOffsetValue(string descriptorKey)

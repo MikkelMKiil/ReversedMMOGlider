@@ -340,29 +340,21 @@ public class RemoteViewerClient
                 {
                     method_6("BackgroundEnable not set, can't grab mouse\r\n");
                 }
-                else if (StartupClass.GliderManager == null)
-                {
-                    method_6("No Shadow driver, can't grab mouse\r\n");
-                }
                 else
                 {
                     if (!StartupClass.IsGliderInitialized)
                     {
-                        Logger.smethod_1("Setting up bg stuff");
-                        StartupClass.MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                        StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-                        StartupClass.IsGliderInitialized = true;
+                        StartupClass.smethod_62();
                     }
 
                     switch (lower3)
                     {
                         case "true":
-                            StartupClass.GliderManager.method_33(true);
+                            InputController.smethod_21(true);
                             method_6("Mouse grabbed\r\n");
                             break;
                         case "false":
                             InputController.smethod_21(false);
-                            StartupClass.GliderManager.method_33(false);
                             method_6("Mouse released\r\n");
                             break;
                         default:

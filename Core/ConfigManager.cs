@@ -98,8 +98,6 @@ public class ConfigManager
         method_0("MaxStartDistance", "50");
         method_0("TurboLoot", "True");
         method_0("SpellLeadDelay", "333");
-        method_0("LogWW", "True");
-        method_0("AllowWW", "True");
         method_0("AllowNetCheck", "True");
         method_0("AlertOnPopup", "True");
         method_0("CorpseShortCircuit", "30");

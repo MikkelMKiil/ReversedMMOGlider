@@ -22,7 +22,6 @@ public class ConfigForm : Form
     private Button AccountCreate;
     private CheckBox AllowAutoSecCheck;
     private CheckBox AllowNetCheck;
-    private CheckBox AllowWW;
     private CheckBox AltLayout;
     private TextBox AmmoAmount;
     private ComboBox AutoLogCharacter;
@@ -295,7 +294,6 @@ public class ConfigForm : Form
         if (ClassList.SelectedIndex == -1)
             ClassList.SelectedIndex = (int)StartupClass.gameClass_0;
         AltLayout.Enabled = true;
-        AllowWW.Enabled = true;
         if (bool_4)
             tabControl1.Controls.Add(TabInvisible);
         ChatLogFrame.Text = ConfigManager.gclass61_0.method_2(nameof(ChatLogFrame));
@@ -305,7 +303,7 @@ public class ConfigForm : Form
         WebNotifyURL.Text = ConfigManager.gclass61_0.method_2(nameof(WebNotifyURL));
         UseTray.Checked = ConfigManager.gclass61_0.method_2(nameof(UseTray)) == "True";
         BackgroundEnable.Checked = ConfigManager.gclass61_0.method_2(nameof(BackgroundEnable)) == "True";
-        BackgroundEnable.Enabled = StartupClass.GliderManager != null;
+        BackgroundEnable.Enabled = true;
         ShiftLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(ShiftLoot)) == "True";
         UseHook.Checked = ConfigManager.gclass61_0.method_2(nameof(UseHook)) == "True";
         MouseSpin.Checked = ConfigManager.gclass61_0.method_2(nameof(MouseSpin)) == "True";
@@ -347,7 +345,6 @@ public class ConfigForm : Form
         BandageHealth.Text = ConfigManager.gclass61_0.method_2(nameof(BandageHealth));
         JumpMore.Checked = ConfigManager.gclass61_0.method_2(nameof(JumpMore)) == "True";
         Strafe.Checked = ConfigManager.gclass61_0.method_2(nameof(Strafe)) == "True";
-        AllowWW.Checked = ConfigManager.gclass61_0.method_5(nameof(AllowWW));
         SkipLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(SkipLoot)) == "True";
         HarvestRange.Text = ConfigManager.gclass61_0.method_2(nameof(HarvestRange));
         PickupJunk.Checked = ConfigManager.gclass61_0.method_2(nameof(PickupJunk)) == "True";
@@ -600,7 +597,6 @@ public class ConfigForm : Form
         DoSecCheck = new Button();
         AllowNetCheck = new CheckBox();
         StopOnVanish = new CheckBox();
-        AllowWW = new CheckBox();
         TeleportLogout = new CheckBox();
         TeleportStop = new CheckBox();
         groupBox9 = new GroupBox();
@@ -1661,7 +1657,6 @@ public class ConfigForm : Form
         groupBox21.Controls.Add(DoSecCheck);
         groupBox21.Controls.Add(AllowNetCheck);
         groupBox21.Controls.Add(StopOnVanish);
-        groupBox21.Controls.Add(AllowWW);
         groupBox21.Controls.Add(TeleportLogout);
         groupBox21.Controls.Add(TeleportStop);
         groupBox21.Location = new Point(357, 8);
@@ -1694,14 +1689,6 @@ public class ConfigForm : Form
         StopOnVanish.Size = new Size(151, 17);
         StopOnVanish.TabIndex = 4;
         StopOnVanish.Text = "Stop on vanishing monster";
-        AllowWW.AutoSize = true;
-        AllowWW.Location = new Point(12, 23);
-        AllowWW.Name = "AllowWW";
-        AllowWW.Size = new Size(99, 17);
-        AllowWW.TabIndex = 1;
-        AllowWW.Text = "Enable Tripwire";
-        AllowWW.UseVisualStyleBackColor = true;
-        AllowWW.CheckedChanged += AllowWW_CheckedChanged;
         TeleportLogout.AutoSize = true;
         TeleportLogout.Enabled = false;
         TeleportLogout.Location = new Point(12, 69);
@@ -2880,7 +2867,6 @@ public class ConfigForm : Form
         var selectedItem = (SpellActionData)ClassList.SelectedItem;
         ConfigManager.gclass61_0.method_0("CustomClassName", selectedItem.string_1);
         ConfigManager.gclass61_0.method_0("AllowNetCheck", AllowNetCheck.Checked.ToString());
-        ConfigManager.gclass61_0.method_0("AllowWW", AllowWW.Checked.ToString());
         ConfigManager.gclass61_0.method_0("ManageGamePos", ManageGamePos.Checked.ToString());
         ConfigManager.gclass61_0.method_0("UseMediaKeys", MediaKeysBox.Checked.ToString());
         ConfigManager.gclass61_0.method_0("AutoSkin", AutoSkin.Checked.ToString());
@@ -3317,11 +3303,8 @@ public class ConfigForm : Form
     private void BackgroundEnable_CheckedChanged(object sender, EventArgs e)
     {
         groupBox25.Enabled = BackgroundEnable.Checked;
-        if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
+        if (bool_1)
             return;
-        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK,
-            MessageBoxIcon.Hand);
-        BackgroundEnable.Checked = false;
     }
 
     private void method_11()
@@ -3458,10 +3441,6 @@ public class ConfigForm : Form
     private void Resurrect_CheckedChanged(object sender, EventArgs e)
     {
         MaxResurrect.Enabled = Resurrect.Checked;
-    }
-
-    private void AllowWW_CheckedChanged(object sender, EventArgs e)
-    {
     }
 
     private void AccountCreate_Click(object sender, EventArgs e)

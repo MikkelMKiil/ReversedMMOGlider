@@ -53,8 +53,7 @@ public class MachGlideRunner
 
     private void method_3()
     {
-        if (StartupClass.GliderManager != null)
-            StartupClass.GliderManager.method_33(true);
+        InputController.smethod_21(true);
         new SolitaireSolver().method_0();
     }
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project was exported from assembly: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe-->
   <PropertyGroup>
@@ -226,7 +226,6 @@
     <Compile Include="Game\Objects\Glider\Common\GameClass.cs" />
     <Compile Include="Game\Objects\Glider\Common\GlideMode.cs" />
     <Compile Include="Game\Objects\Glider\Common\HealMode.cs" />
-    <Compile Include="Game\Objects\Glider\Common\NetCheckResult.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\ConfigFieldType.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GameMemoryAccess.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GBagItem.cs" />
@@ -286,7 +285,6 @@
     <Compile Include="Game\Objects\Glider\Common\Objects\GUnit.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\PartyBuff.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\PartyBuffBucket.cs" />
-    <Compile Include="Game\Objects\Glider\Common\WFConditionType.cs" />
     <Compile Include="Game\Objects\InventoryItem.cs" />
     <Compile Include="Game\Objects\LootableCorpseTracker.cs" />
     <Compile Include="Game\Objects\PartyManager.cs" />
@@ -294,29 +292,13 @@
     <Compile Include="Game\Objects\PlayerTracker.cs" />
     <Compile Include="Game\Objects\RestStatusMonitor.cs" />
     <Compile Include="Game\Objects\WaypointType.cs" />
-    <Compile Include="Memory\DebugPrivilegeElevator.cs" />
-    <Compile Include="Memory\GProcessMemoryManipulator.cs" />
+    <Compile Include="Memory\MemoryMaster.cs" />
     <Compile Include="Memory\MemoryOffsetTable.cs" />
-    <Compile Include="Memory\MemoryReadException.cs" />
     <Compile Include="Memory\OffsetManager.cs" />
-    <Compile Include="Memory\PEImageParser.cs" />
-    <Compile Include="Memory\ProcessEnumerator.cs" />
-    <Compile Include="Memory\ProcessInfo.cs" />
-    <Compile Include="Memory\ProcessListEntry.cs" />
-    <Compile Include="Security\ISXWardenIntegration.cs" />
-    <Compile Include="Security\NetworkSafetyChecker.cs" />
+    <Compile Include="Memory\WoW335aDescriptors.cs" />
     <Compile Include="Security\SecCheck.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Security\WardenCheckDatabase.cs" />
-    <Compile Include="Security\WardenCheckDiagram.cs" />
-    <Compile Include="Security\WardenCheckStatus.cs" />
-    <Compile Include="Security\WardenCondition.cs" />
-    <Compile Include="Security\WardenMatchResult.cs" />
-    <Compile Include="Security\WardenMonitor.cs" />
-    <Compile Include="Security\WardenPatternMatcher.cs" />
-    <Compile Include="Security\WardenProtocol.cs" />
-    <Compile Include="Security\WardenStateValue.cs" />
     <Compile Include="UI\Components\ChatFrameLocator.cs" />
     <Compile Include="UI\Components\DialogMonitor.cs" />
     <Compile Include="UI\Components\InputController.cs" />

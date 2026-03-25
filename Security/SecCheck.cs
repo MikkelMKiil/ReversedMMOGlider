@@ -108,8 +108,6 @@ public class SecCheck : Form
     {
         var flag = false;
         TheList.Items.Clear();
-        if (!ConfigManager.gclass61_0.method_5("AllowWW"))
-            method_1("High", "Tripwire is not enabled", "Tripwire");
         if (!ConfigManager.gclass61_0.method_5("ChatEnabled"))
         {
             method_1("High", "Chat processing is disabled", "ChatEnable");
@@ -128,8 +126,6 @@ public class SecCheck : Form
             method_1("High", "Follower detection is off/slow", "FollowerDetect");
         if (ConfigManager.gclass61_0.method_3("FriendLogout") == 0 || ConfigManager.gclass61_0.method_3("FriendLogout") > 5)
             method_1("High", "Follower logout is off/slow", "FollowerLogout");
-        if (!ConfigManager.gclass61_0.method_5("AllowNetCheck"))
-            method_1("Medium", "NetCheck is not enabled", "NetCheck");
         if (!ConfigManager.gclass61_0.method_5("EscapeClear"))
             method_1("Medium", "Clear target with Escape is disabled", "EscapeClear");
         if (flag)

@@ -208,26 +208,10 @@ public class GliderForm : Form, ILogger
 
     private void method_1()
     {
-        bool flag1 = File.Exists("TWfail.txt");
-        bool flag2 = File.Exists("TWunsafe.txt");
-        bool flag3 = File.Exists("DeadSession.txt");
-        if (flag1)
-        {
-            File.Delete("TWfail.txt");
-            GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"TripwireFailed.html");
-        }
-        else if (flag2)
-        {
-            File.Delete("TWunsafe.txt");
-            GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"TripwireUnsafe.html");
-        }
-        else
-        {
-            if (!flag3)
-                return;
-            File.Delete("DeadSession.txt");
-            GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"DeadSession.html");
-        }
+        if (!File.Exists("DeadSession.txt"))
+            return;
+        File.Delete("DeadSession.txt");
+        GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"DeadSession.html");
     }
 
     private void method_2(object sender, KeyEventArgs e)
@@ -1593,10 +1577,6 @@ public class GliderForm : Form, ILogger
         Logger.smethod_1("Shutdown: KillAction");
         StartupClass.smethod_27(true, "WindowClosing");
         Logger.smethod_1("Shutdown: Done");
-        if (StartupClass.GliderManager != null && !StartupClass.bool_33)
-        {
-            StartupClass.GliderManager.method_11();
-        }
         base.OnClosing(cancelEventArgs_0);
     }
 

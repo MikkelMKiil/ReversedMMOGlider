@@ -146,7 +146,7 @@ namespace Glider.Common.Objects
 
                 LoadFields();
             }
-            catch (MemoryReadException ex)
+            catch (InvalidOperationException ex)
             {
                 Logger.LogMessage("!! CRITICAL: Refresh memory read failed for object GUID=0x" + GUID.ToString("x") +
                                   ", BaseAddr=0x" + BaseAddress.ToString("x8") + ": " + ex);

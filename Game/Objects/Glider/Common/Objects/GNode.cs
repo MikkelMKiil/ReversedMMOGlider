@@ -66,10 +66,27 @@ namespace Glider.Common.Objects
 
         protected override void LoadFields()
         {
+            // GameObjects in 3.3.5a store position in their CGGameObject_C base struct,
+            // at the same offsets as units (X/Y/Z from MemoryOffsetTable).
+            var x = GetBaseFloat("X");
+            var y = GetBaseFloat("Y");
+            var z = GetBaseFloat("Z");
+
+            // Fallback: if base struct position is zero, try descriptor fields
+            if (x == 0.0f && y == 0.0f && z == 0.0f)
+            {
+                x = GetStorageFloat("GAMEOBJECT_POS_X");
+                y = GetStorageFloat("GAMEOBJECT_POS_Y");
+                z = GetStorageFloat("GAMEOBJECT_POS_Z");
+            }
+
+            _location = new GLocation(x, y, z);
+
+            // Rotation/facing from descriptor if available, else from base struct
             _heading = GetStorageFloat("GAMEOBJECT_FACING");
-            _rotation = GetStorageFloat("GAMEOBJECT_ROTATION");
-            _location = new GLocation(GetStorageFloat("GAMEOBJECT_POS_X"), GetStorageFloat("GAMEOBJECT_POS_Y"),
-                GetStorageFloat("GAMEOBJECT_POS_Z"));
+            if (_heading == 0.0f)
+                _heading = GetBaseFloat("Heading");
+            _rotation = GetStorageFloat("GAMEOBJECT_PARENTROTATION");
         }
 
         protected void SetDisplayInfo()

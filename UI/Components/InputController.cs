@@ -307,7 +307,10 @@ public class InputController
 
     public static void smethod_15(out int int_25, out int int_26)
     {
-        StartupClass.GliderManager.method_36(out int_21, out int_22);
+        GStruct12 gstruct12_0;
+        GetCursorPos(out gstruct12_0);
+        int_21 = gstruct12_0.int_0;
+        int_22 = gstruct12_0.int_1;
         int_25 = int_21;
         int_26 = int_22;
     }

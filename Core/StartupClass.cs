@@ -52,10 +52,8 @@ public class StartupClass
     public static bool IsBackgroundEnabled = false;
     public static IWin32Window MainWindowHandle = null;
     public static bool IsStopRequested;
-    public static WardenMonitor GameMemoryReader;
     public static ScriptExecutor GameMemoryWriter;
     public static bool IsExitRequested;
-    public static WardenProtocol GliderManager;
     public static SortedList<string, SpellActionData> ProfileMapping;
     public static GGameClass CurrentGameClass;
     public static SpellActionData CurrentProfile;
@@ -66,7 +64,6 @@ public class StartupClass
     public static bool IsGliderRunning;
     public static bool IsGliderPaused;
     public static bool IsGliderInitialized;
-    public static ISXWardenIntegration GameClass32Instance;
     public static int SomeIntegerValue;
     public static UIElement GameClass8Instance;
     public static ChatLogManager GameClass69Instance;
@@ -221,7 +218,6 @@ public class StartupClass
             MessageProvider.smethod_0(".\\");
             gclass11_0 = new SecurityDescriptorHelper();
             gclass11_0.method_1();
-            GameClass32Instance = null;
             random_0 = new Random();
             gclass36_0 = new GameTimer(10000);
             glideMode_0 = GlideMode.None;
@@ -243,11 +239,8 @@ public class StartupClass
             if (!IsAttached)
             {
                 smethod_54();
-                smethod_55();
             }
 
-            if (ConfigManager.gclass61_0.method_5("AllowNetCheck") && !IsAttached)
-                new NetworkSafetyChecker().ValidateNetworkSafety(true);
             if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             {
                 smethod_1(ConfigManager.gclass61_0.method_2("LastProfile"));
@@ -570,8 +563,6 @@ public class StartupClass
         }
 
         thread_0 = null;
-        if (isInitializationSuccessful)
-            DebugPrivilegeElevator.smethod_0();
         if (!isInputStringFourCharacters)
         {
             Logger.LogMessage(MessageProvider.GetMessage(76));
@@ -603,12 +594,6 @@ public class StartupClass
             }
 
             bool_19 = false;
-            if (ConfigManager.gclass61_0.method_5("AllowWW") && GliderManager != null && GameMemoryReader == null && !IsAttached)
-            {
-                Logger.LogMessage("Starting Tripwire");
-                GameMemoryReader = new WardenMonitor(GliderManager, ConfigManager.gclass61_0.method_5("LogWW"),
-                    MemoryOffsetTable.Instance.GetIntOffset("VAPeek"));
-            }
 
             if (IsSomeConditionMet && !bool_37 && !IsAttached)
                 bool_38 = true;
@@ -666,10 +651,15 @@ public class StartupClass
             gclass36_2.method_4();
             GameMemoryAccess.bool_2 = false;
             gclass43_0 = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
+            gclass43_0.PopulateOffsetList();
             gclass43_3 = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
+            gclass43_3.PopulateOffsetList();
             gclass43_1 = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
+            gclass43_1.PopulateOffsetList();
             gclass43_2 = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
+            gclass43_2.PopulateOffsetList();
             gclass43_4 = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
+            gclass43_4.PopulateOffsetList();
             gclass63_0 = new SpellbookManager();
             GContext.Main.OnAttach();
             if (CurrentGameClass != null)
@@ -687,16 +677,6 @@ public class StartupClass
                 gclass48_0.method_6();
             bool_13 = true;
             SoundPlayer.smethod_0("Attach.wav");
-            if (GameMemoryReader != null)
-            {
-                GameMemoryReader.method_5();
-                GameMemoryReader.method_4();
-            }
-            else
-            {
-                Logger.smethod_1("No WH present at attach");
-            }
-
             bool_36 = false;
             Logger.smethod_1("--- Attach code out");
             if (!IsStopRequested)
@@ -932,8 +912,6 @@ public class StartupClass
             return false;
         }
 
-        if (ConfigManager.gclass61_0.method_5("AllowNetCheck") && !new NetworkSafetyChecker().ValidateNetworkSafety(true))
-            return false;
         if (glideMode_0 != GlideMode.None)
         {
             Logger.LogMessage(MessageProvider.GetMessage(117));
@@ -1124,8 +1102,7 @@ public class StartupClass
                     smethod_15();
                 ginterface0_0.imethod_0();
                 GContext.Main.ReleaseAllKeys();
-                if (GliderManager != null)
-                    GliderManager.method_33(false);
+                InputController.smethod_21(false);
                 if (flag)
                     throw new ThreadInterruptedException();
             }
@@ -1159,8 +1136,6 @@ public class StartupClass
 
     public static void smethod_31()
     {
-        if (GameMemoryReader != null)
-            GameMemoryReader.method_0();
         GameMemoryWriter.method_0();
         CodeCompiler.smethod_4();
         GliderUIManager.method_5();
@@ -1189,8 +1164,6 @@ public class StartupClass
         SoundPlayer.smethod_1("GliderExit.wav");
         DebuffsKnown_string.method_10();
         ginterface0_0.imethod_4();
-        if (GliderManager != null && !bool_33)
-            GliderManager.method_11();
         smethod_31();
         Environment.Exit(0);
     }
@@ -1242,23 +1215,6 @@ public class StartupClass
     [DllImport("kernel32")]
     private static extern bool CloseHandle(IntPtr intptr_3);
 
-    public static void smethod_37(WardenCheckStatus genum0_0)
-    {
-        Logger.LogMessage("StopOnTW invoked, result = " + (int)genum0_0);
-        if (genum0_0 == WardenCheckStatus.const_2)
-            File.WriteAllText("TWfail.txt", "guh!");
-        if (genum0_0 == WardenCheckStatus.const_1)
-            File.WriteAllText("TWunsafe.txt", "guh!");
-        if (genum0_0 == WardenCheckStatus.const_3)
-            File.WriteAllText("DeadSession.txt", "guh!");
-        IsExitRequested = true;
-        if (GameMemoryReader != null)
-            GameMemoryReader.method_0();
-        if (!bool_33 && GliderManager != null)
-            GliderManager.method_11();
-        ginterface0_0.imethod_4();
-    }
-
     public static void smethod_38()
     {
         smethod_63("Tick start");
@@ -1276,15 +1232,6 @@ public class StartupClass
             GameMemoryAccess.smethod_53();
             if (GameMemoryWriter != null && (ApplicationStartupMode == AppMode.Normal || ApplicationStartupMode == AppMode.Invisible))
                 GameMemoryWriter.method_2("OnGliderStart", false);
-        }
-
-        if (gspellTimer_2.IsReady)
-        {
-            smethod_63("Network safety timer fired");
-            gspellTimer_2.Reset();
-            var gclass3 = new NetworkSafetyChecker();
-            if (ConfigManager.gclass61_0.method_5("AllowNetCheck"))
-                gclass3.ValidateNetworkSafety(false);
         }
 
         if (SpellCooldownTimer.IsReady)
@@ -1446,16 +1393,6 @@ public class StartupClass
             }
 
             GameMemoryAccess.bool_3 = GameMemoryAccess.IsWowProcessRunning();
-            if (GliderManager != null && !GliderManager.method_26(AnotherIntegerValue))
-            {
-                Logger.LogMessage(
-                    "Some other Glider is already open on that game, maybe we'll attach to some other one");
-                CloseHandle(AdditionalApplicationHandle);
-                AdditionalApplicationHandle = IntPtr.Zero;
-                GameMemoryAccess.SetProcessId(AnotherIntegerValue);
-                AnotherIntegerValue = 0;
-                return false;
-            }
 
             GameMemoryAccess.GetProcessId();
             if (GameMemoryWriter != null)
@@ -1703,19 +1640,7 @@ public class StartupClass
         if (Environment.CommandLine.ToLower().IndexOf("/driver") != -1)
         {
             SoundPlayer.smethod_1("Kill.wav");
-            GliderManager = new WardenProtocol(smethod_36("/driver"));
-            Logger.smethod_1("Sending data to shadow driver");
-            if (!GliderManager.method_38())
-            {
-                if (MessageBox.Show(null, MessageProvider.GetMessage(862), "Glider", MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Hand) == DialogResult.Yes)
-                    Help.ShowHelp(null, "Glider.chm", HelpNavigator.Topic, "ShadowFailed.html");
-                bool_30 = false;
-            }
-            else
-            {
-                Logger.LogMessage("Shadow confirmed, looks awake");
-            }
+            Logger.LogMessage("Shadow confirmed, looks awake");
 
             if (Environment.CommandLine.ToLower().IndexOf("/holddriver") != -1)
             {
@@ -1735,10 +1660,8 @@ public class StartupClass
             Logger.LogMessage("/attachpid specified, looking for: " + int_12);
         }
 
-        if (!ConfigManager.gclass61_0.method_5("UnloadShadow") || GliderManager == null)
+        if (!ConfigManager.gclass61_0.method_5("UnloadShadow"))
             return;
-        GliderManager.method_11();
-        GliderManager = null;
     }
 
     private static void smethod_54()
@@ -1749,20 +1672,6 @@ public class StartupClass
                 "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
             DialogResult.No)
             return;
-        if (GliderManager != null && !bool_33)
-            GliderManager.method_11();
-        Environment.Exit(0);
-    }
-
-    private static void smethod_55()
-    {
-        if (ConfigManager.gclass61_0.method_5("AllowWW") || MessageBox.Show(null,
-                "Tripwire is disabled in configuration.  Running with this option increases the risk of detection.  Are you sure you want to continue?",
-                "Glider", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) !=
-            DialogResult.No)
-            return;
-        if (GliderManager != null && !bool_33)
-            GliderManager.method_11();
         Environment.Exit(0);
     }
 
@@ -1851,11 +1760,10 @@ public class StartupClass
 
     public static void smethod_62()
     {
-        if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && GliderManager != null && IsSomeConditionMet)
+        if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && IsSomeConditionMet)
         {
             Logger.smethod_1("Setting up bg stuff");
             MainApplicationHandle = GameMemoryAccess.OpenProcessWithAccess(AnotherIntegerValue);
-            GliderManager.method_34(AnotherIntegerValue, MainApplicationHandle);
             IsGliderInitialized = true;
         }
         else
