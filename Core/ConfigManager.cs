@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ConfigManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -69,7 +69,7 @@ public class ConfigManager
 
     public double method_4(string string_3)
     {
-        return Offsets.ContainsKey(string_3) ? StartupClass.smethod_6((string)Offsets[string_3]) : 0.0;
+        return Offsets.ContainsKey(string_3) ? StartupClass.ParseDouble((string)Offsets[string_3]) : 0.0;
     }
 
     public bool method_5(string string_3)

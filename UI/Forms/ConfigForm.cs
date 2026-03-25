@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ConfigForm
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -278,7 +278,7 @@ public class ConfigForm : Form
     public ConfigForm(bool bool_4)
     {
         InitializeComponent();
-        MessageProvider.smethod_7(PartyHealMode, "Common.PartyHealMode");
+        MessageProvider.ResolveWowVersion(PartyHealMode, "Common.PartyHealMode");
         for (var index = 0; index < StartupClass.ProfileMapping.Keys.Count; ++index)
         {
             var key = StartupClass.ProfileMapping.Keys[index];
@@ -415,12 +415,12 @@ public class ConfigForm : Form
         BypassLootSanity.Checked = ConfigManager.gclass61_0.method_5(nameof(BypassLootSanity));
         RelogEnabled.Checked = ConfigManager.gclass61_0.method_5(nameof(RelogEnabled));
         StrafeObstacles.Checked = ConfigManager.gclass61_0.method_2(nameof(StrafeObstacles)) == "True";
-        MessageProvider.smethod_3(this, "Config");
+        MessageProvider.LoadSingleProfile(this, "Config");
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
-        GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
-        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
-        DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+        GliderVersionLabel.Text = MessageProvider.ParseDouble("Config.GliderVersionLabel", "1.8.0", "Release");
+        WowVersionLabel.Text = MessageProvider.ParseDouble("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
+        DebuffsKnown.Text = MessageProvider.ParseDouble("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             InitialProfile.Text = ConfigManager.gclass61_0.method_2("LastProfile");
         else
@@ -466,9 +466,9 @@ public class ConfigForm : Form
         method_11();
         method_16();
         method_18();
-        GProcessMemoryManipulator.smethod_48(this);
-        GProcessMemoryManipulator.smethod_51(helpProvider_0);
-        StartupClass.gclass54_0.bool_4 = false;
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        GProcessMemoryManipulator.RestoreGameWindow(helpProvider_0);
+        StartupClass.partyManager.bool_4 = false;
         bool_3 = true;
         StartupClass.MainWindowHandle = this;
     }
@@ -2931,40 +2931,40 @@ public class ConfigForm : Form
             ConfigManager.gclass61_0.method_0("AutoStop", "False");
         if (ProductKeyBox.Text.Trim().Length == 0)
             ConfigManager.gclass61_0.method_0("AppKey", "demo");
-        if (StartupClass.smethod_19(SpellLeadDelay.Text))
+        if (StartupClass.IsNumericString(SpellLeadDelay.Text))
             ConfigManager.gclass61_0.method_0("SpellLeadDelay", SpellLeadDelay.Text);
-        if (StartupClass.smethod_19(ExtraPull.Text))
+        if (StartupClass.IsNumericString(ExtraPull.Text))
             ConfigManager.gclass61_0.method_0("ExtraPull", ExtraPull.Text);
-        if (StartupClass.smethod_19(StopAfterMinutes.Text))
+        if (StartupClass.IsNumericString(StopAfterMinutes.Text))
             ConfigManager.gclass61_0.method_0("AutoStopMinutes", StopAfterMinutes.Text);
-        if (StartupClass.smethod_19(MaxResurrect.Text))
+        if (StartupClass.IsNumericString(MaxResurrect.Text))
             ConfigManager.gclass61_0.method_0("MaxResurrect", MaxResurrect.Text);
-        if (StartupClass.smethod_19(RestHealth.Text))
+        if (StartupClass.IsNumericString(RestHealth.Text))
             ConfigManager.gclass61_0.method_0("RestHealth", RestHealth.Text);
-        if (StartupClass.smethod_19(RestMana.Text))
+        if (StartupClass.IsNumericString(RestMana.Text))
             ConfigManager.gclass61_0.method_0("RestMana", RestMana.Text);
-        if (StartupClass.smethod_19(KeyDelay.Text))
+        if (StartupClass.IsNumericString(KeyDelay.Text))
             ConfigManager.gclass61_0.method_0("KeyDelay", KeyDelay.Text);
-        if (StartupClass.smethod_19(FoodAmount.Text))
+        if (StartupClass.IsNumericString(FoodAmount.Text))
             ConfigManager.gclass61_0.method_0("FoodAmount", FoodAmount.Text);
-        if (StartupClass.smethod_19(AmmoAmount.Text))
+        if (StartupClass.IsNumericString(AmmoAmount.Text))
             ConfigManager.gclass61_0.method_0("AmmoAmount", AmmoAmount.Text);
-        if (StartupClass.smethod_19(WaterAmount.Text))
+        if (StartupClass.IsNumericString(WaterAmount.Text))
             ConfigManager.gclass61_0.method_0("WaterAmount", WaterAmount.Text);
-        if (StartupClass.smethod_19(PawSpeed.Text))
+        if (StartupClass.IsNumericString(PawSpeed.Text))
             ConfigManager.gclass61_0.method_0("PawSpeed", PawSpeed.Text);
-        if (StartupClass.smethod_19(HarvestRange.Text))
+        if (StartupClass.IsNumericString(HarvestRange.Text))
             ConfigManager.gclass61_0.method_0("HarvestRange", HarvestRange.Text);
-        if (StartupClass.smethod_19(BandageHealth.Text))
+        if (StartupClass.IsNumericString(BandageHealth.Text))
             ConfigManager.gclass61_0.method_0("BandageHealth", BandageHealth.Text);
         if (method_2(FriendAlert.Text))
             ConfigManager.gclass61_0.method_0("FriendAlert", FriendAlert.Text);
-        if (StartupClass.smethod_19(FriendLogout.Text))
+        if (StartupClass.IsNumericString(FriendLogout.Text))
             ConfigManager.gclass61_0.method_0("FriendLogout", FriendLogout.Text);
-        if (StartupClass.smethod_19(MaxPopups.Text))
+        if (StartupClass.IsNumericString(MaxPopups.Text))
             ConfigManager.gclass61_0.method_0("MaxPopups", MaxPopups.Text);
         ConfigManager.gclass61_0.method_0("LootCheckHostiles", LootCheckHostiles.Checked.ToString());
-        if (StartupClass.smethod_19(LootSafeDistance.Text))
+        if (StartupClass.IsNumericString(LootSafeDistance.Text))
             ConfigManager.gclass61_0.method_0("LootCheckDistance", LootSafeDistance.Text);
         if (method_2(MeleeDistance.Text))
             ConfigManager.gclass61_0.method_0("MeleeDistance", MeleeDistance.Text);
@@ -2988,17 +2988,17 @@ public class ConfigForm : Form
                 break;
         }
 
-        if (StartupClass.smethod_19(PartyLooters.Text))
+        if (StartupClass.IsNumericString(PartyLooters.Text))
             ConfigManager.gclass61_0.method_0("PartyLooters", PartyLooters.Text);
-        if (StartupClass.smethod_19(PartyLootPos.Text))
+        if (StartupClass.IsNumericString(PartyLootPos.Text))
             ConfigManager.gclass61_0.method_0("PartyLootPos", PartyLootPos.Text);
-        if (StartupClass.smethod_19(PartyAttackDelay.Text))
+        if (StartupClass.IsNumericString(PartyAttackDelay.Text))
             ConfigManager.gclass61_0.method_0("PartyAttackDelay", PartyAttackDelay.Text);
-        if (StartupClass.smethod_19(PartyLeaderWait.Text))
+        if (StartupClass.IsNumericString(PartyLeaderWait.Text))
             ConfigManager.gclass61_0.method_0("PartyLeaderWait", PartyLeaderWait.Text);
-        if (StartupClass.smethod_19(PartyFollowerStart.Text))
+        if (StartupClass.IsNumericString(PartyFollowerStart.Text))
             ConfigManager.gclass61_0.method_0("PartyFollowerStart", PartyFollowerStart.Text);
-        if (StartupClass.smethod_19(PartyFollowerStop.Text))
+        if (StartupClass.IsNumericString(PartyFollowerStop.Text))
             ConfigManager.gclass61_0.method_0("PartyFollowerStop", PartyFollowerStop.Text);
         if (PartySolo.Checked)
             ConfigManager.gclass61_0.method_0("PartyMode", "Solo");
@@ -3012,7 +3012,7 @@ public class ConfigForm : Form
         ConfigManager.gclass61_0.method_0("PartyMember3", PartyMember3.Text.Trim());
         ConfigManager.gclass61_0.method_0("PartyMember4", PartyMember4.Text.Trim());
         ConfigManager.gclass61_0.method_0("ListenEnabled", ListenEnabled.Checked.ToString());
-        if (StartupClass.smethod_19(ListenPort.Text))
+        if (StartupClass.IsNumericString(ListenPort.Text))
             ConfigManager.gclass61_0.method_0("ListenPort", ListenPort.Text);
         ConfigManager.gclass61_0.method_0("ListenPassword", ListenPassword.Text);
         ConfigManager.gclass61_0.method_0("RelogEnabled", RelogEnabled.Checked.ToString());
@@ -3123,7 +3123,7 @@ public class ConfigForm : Form
             return;
         if (ConfigManager.gclass61_0.method_2("RemindActionBars") == null)
             method_3();
-        StartupClass.bool_29 = true;
+        StartupClass.NeedsClassReload = true;
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -3211,42 +3211,42 @@ public class ConfigForm : Form
 
     private void PartyMember1_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void method_6(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void PartyMember2_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void method_7(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void PartyMember3_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void method_8(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void PartyMember4_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void method_9(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.partyManager.bool_4 = true;
     }
 
     private void ListenEnabled_CheckedChanged(object sender, EventArgs e)
@@ -3257,7 +3257,7 @@ public class ConfigForm : Form
 
     private void ClassList_SelectedIndexChanged(object sender, EventArgs e)
     {
-        StartupClass.bool_29 = true;
+        StartupClass.NeedsClassReload = true;
     }
 
     private void SetInitial_Click(object sender, EventArgs e)
@@ -3299,13 +3299,13 @@ public class ConfigForm : Form
         debuffList.method_0();
         if (debuffList.Offsets.Keys.Count == 0)
         {
-            var num1 = (int)MessageBox.Show(this, MessageProvider.smethod_4("DebuffList.NoneNew"),
-                MessageProvider.smethod_4("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            var num1 = (int)MessageBox.Show(this, MessageProvider.GetFileNameFromPath("DebuffList.NoneNew"),
+                MessageProvider.GetFileNameFromPath("DebuffList.NoneNewTitle"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         else
         {
             var num2 = (int)debuffList.ShowDialog(this);
-            DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+            DebuffsKnown.Text = MessageProvider.ParseDouble("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
         }
     }
 
@@ -3317,7 +3317,7 @@ public class ConfigForm : Form
     private void BackgroundEnable_CheckedChanged(object sender, EventArgs e)
     {
         groupBox25.Enabled = BackgroundEnable.Checked;
-        if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
+        if (bool_1 || !AllowWW.Checked || WardenProtocol.IsGroupProfile(false) != WardenStateValue.const_1)
             return;
         var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
             MessageBoxIcon.Hand);
@@ -3397,7 +3397,7 @@ public class ConfigForm : Form
                 return;
             var profile = StartupClass.ProfileMapping[selectedItem];
             ((GGameClass)profile.object_0).Shutdown();
-            profile.object_0 = CodeCompiler.smethod_7(selectedItem, assembly_0, false, true);
+            profile.object_0 = CodeCompiler.ResolveWowVersion(selectedItem, assembly_0, false, true);
         }
     }
 
@@ -3430,13 +3430,13 @@ public class ConfigForm : Form
                 ClassList.Items.Remove(profile);
             }
 
-            CodeCompiler.smethod_5(selectedItem);
+            CodeCompiler.ApplyConfig(selectedItem);
             ConfigManager.gclass61_0.method_13("CustomClasses", selectedItem);
         }
         else
         {
             string string_1;
-            if (CodeCompiler.smethod_13(selectedItem, out string_1))
+            if (CodeCompiler.TryAttach(selectedItem, out string_1))
             {
                 ConfigManager.gclass61_0.method_12("CustomClasses", selectedItem);
                 ClassList.Items.Add(StartupClass.ProfileMapping[selectedItem]);
@@ -3516,7 +3516,7 @@ public class ConfigForm : Form
 
     private void DoSecCheck_Click(object sender, EventArgs e)
     {
-        StartupClass.smethod_58();
+        StartupClass.ShowSecurityCheck();
     }
 
     private void GliderDebug_CheckedChanged(object sender, EventArgs e)
@@ -3535,8 +3535,8 @@ public class ConfigForm : Form
                 {
                     var str = key;
                     var string_6 = "Common.Class" + key;
-                    if (MessageProvider.smethod_5(string_6))
-                        str = MessageProvider.smethod_4(string_6);
+                    if (MessageProvider.ApplyConfig(string_6))
+                        str = MessageProvider.GetFileNameFromPath(string_6);
                     Offsets.Add(key, str);
                     KeyEditClass.Items.Add(str);
                 }

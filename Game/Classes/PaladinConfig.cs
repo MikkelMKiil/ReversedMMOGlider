@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PaladinConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -41,8 +41,8 @@ public class PaladinConfig : Form
         UseCrusaderStrike.Checked = ConfigManager.gclass61_0.method_2("Paladin.UseCrusaderStrike") == "True";
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Paladin.AvoidAdds") == "True";
         AvoidAddDistance.Text = ConfigManager.gclass61_0.method_2("Paladin.AvoidAddDistance");
-        MessageProvider.smethod_3(this, "Paladin");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Paladin");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -225,12 +225,12 @@ public class PaladinConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Paladin.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(FinishJudgeLife.Text))
+        if (StartupClass.IsNumericString(FinishJudgeLife.Text))
             ConfigManager.gclass61_0.method_0("Paladin.FinishJudgeLife",
                 (double.Parse(FinishJudgeLife.Text) / 100.0).ToString());
-        if (StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (StartupClass.IsNumericString(AvoidAddDistance.Text))
             ConfigManager.gclass61_0.method_0("Paladin.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Paladin.UseDivineFavor", UseDivineFavor.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Paladin.UseWrath", UseWrath.Checked.ToString());

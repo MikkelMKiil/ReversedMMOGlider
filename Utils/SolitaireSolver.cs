@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: SolitaireSolver
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -17,14 +17,14 @@ public class SolitaireSolver
     public void method_0()
     {
         int_0 = 100;
-        StartupClass.smethod_22();
+        StartupClass.BringGameWindowToForeground();
         Thread.Sleep(500);
         var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
-            StartupClass.smethod_27(false, "NoSolitaireModuleInSolitaire");
+            StartupClass.StopGlide(false, "NoSolitaireModuleInSolitaire");
         var int_1 = GProcessMemoryManipulator.ReadInt32(num + SolitaireMemoryOffsets.int_0, "md0");
         if (int_1 == 0)
-            StartupClass.smethod_27(false, "NoGameInSolitaire");
+            StartupClass.StopGlide(false, "NoGameInSolitaire");
         var gclass34_0 = new SolitaireGameState(int_1);
         while (method_3(gclass34_0))
         {
@@ -45,12 +45,12 @@ public class SolitaireSolver
 
     private void method_2(string string_0)
     {
-        Logger.smethod_1(string_0);
+        Logger.LoadProfile(string_0);
     }
 
     private bool method_3(SolitaireGameState gclass34_0)
     {
-        Logger.smethod_1("--- DoGameMove invoked");
+        Logger.LoadProfile("--- DoGameMove invoked");
         if (method_4(gclass34_0) || method_5(gclass34_0) || method_8(gclass34_0) || method_6(gclass34_0) ||
             method_7(gclass34_0) || method_9(gclass34_0))
             return true;
@@ -231,7 +231,7 @@ public class SolitaireSolver
     public static extern bool EnumProcessModules(
         IntPtr intptr_0,
         [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] [In] [Out]
-        uint[] uint_0,
+        uint[] infiniteWaitTimeout,
         uint uint_1,
         [MarshalAs(UnmanagedType.U4)] out uint uint_2);
 
@@ -240,13 +240,13 @@ public class SolitaireSolver
         IntPtr intptr_0,
         IntPtr intptr_1,
         [Out] StringBuilder stringBuilder_0,
-        uint uint_0);
+        uint infiniteWaitTimeout);
 
     public static int smethod_0(IntPtr intptr_0, string string_0)
     {
-        var uint_0 = new uint[1024];
+        var infiniteWaitTimeout = new uint[1024];
         uint uint_2;
-        if (!EnumProcessModules(intptr_0, uint_0, 4096U, out uint_2))
+        if (!EnumProcessModules(intptr_0, infiniteWaitTimeout, 4096U, out uint_2))
         {
             Logger.LogMessage("EnumProcessModules failed!  Last error = " + Marshal.GetLastWin32Error());
             return 0;
@@ -256,10 +256,10 @@ public class SolitaireSolver
         var stringBuilder_0 = new StringBuilder(200);
         for (var index = 0; index < num; ++index)
         {
-            var moduleFileNameEx = (int)GetModuleFileNameEx(intptr_0, new IntPtr(uint_0[index]), stringBuilder_0, 200U);
-            Logger.LogMessage("0x" + uint_0[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
+            var moduleFileNameEx = (int)GetModuleFileNameEx(intptr_0, new IntPtr(infiniteWaitTimeout[index]), stringBuilder_0, 200U);
+            Logger.LogMessage("0x" + infiniteWaitTimeout[index].ToString("x") + " = \"" + stringBuilder_0 + "\"");
             if (stringBuilder_0.ToString().ToLower().EndsWith(string_0.ToLower()))
-                return (int)uint_0[index];
+                return (int)infiniteWaitTimeout[index];
         }
 
         Logger.LogMessage("GetModuleAddress never found what we wanted!");

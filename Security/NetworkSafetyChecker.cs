@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: NetworkSafetyChecker
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -32,7 +32,7 @@ public class NetworkSafetyChecker
             WarningDetailsUrl = null;
         }
 
-        Logger.smethod_1(ToString());
+        Logger.LoadProfile(ToString());
     }
 
     public override string ToString()
@@ -47,7 +47,7 @@ public class NetworkSafetyChecker
         WarningMessage = null;
         WarningTimestamp = null;
         WarningDetailsUrl = null;
-        Logger.smethod_1("NetCheck bypassed (static offline mode).");
+        Logger.LoadProfile("NetCheck bypassed (static offline mode).");
     }
 
     public bool ValidateNetworkSafety(bool showDialogs)
@@ -115,7 +115,7 @@ public class NetworkSafetyChecker
 
     public void StopGlider()
     {
-        if (StartupClass.GliderManager != null && !StartupClass.bool_33)
+        if (StartupClass.GliderManager != null && !StartupClass.IsDriverResident)
             StartupClass.GliderManager.method_11();
         StartupClass.ginterface0_0.imethod_4();
     }

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: DeathknightConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -35,8 +35,8 @@ public class DeathknightConfig : Form
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_5("Deathknight.AvoidAdds");
         UseGhoul.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseGhoul");
         UseCorpseDust.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseCorpseDust");
-        MessageProvider.smethod_3(this, "Deathknight");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Deathknight");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -51,9 +51,9 @@ public class DeathknightConfig : Form
 
     private void MyOKButton_Click(object sender, EventArgs e)
     {
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Deathknight.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Deathknight.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Deathknight.UseGhoul", UseGhoul.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Deathknight.UseCorpseDust", UseCorpseDust.Checked.ToString());

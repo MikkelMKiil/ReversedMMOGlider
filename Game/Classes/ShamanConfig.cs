@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ShamanConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -52,7 +52,7 @@ public class ShamanConfig : Form
     public ShamanConfig()
     {
         InitializeComponent();
-        MessageProvider.smethod_7(ShockMode, "Common.ShockMode");
+        MessageProvider.ResolveWowVersion(ShockMode, "Common.ShockMode");
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Shaman.PullDistance");
         ShockLife.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockLife");
         ShockMana.Text = ConfigManager.gclass61_0.method_2("Shaman.ShockMana");
@@ -85,8 +85,8 @@ public class ShamanConfig : Form
                 break;
         }
 
-        MessageProvider.smethod_3(this, "Shaman");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Shaman");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -451,13 +451,13 @@ public class ShamanConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Shaman.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(ShockMana.Text))
+        if (StartupClass.IsNumericString(ShockMana.Text))
             ConfigManager.gclass61_0.method_0("Shaman.ShockMana", ShockMana.Text);
-        if (StartupClass.smethod_19(ShockLife.Text))
+        if (StartupClass.IsNumericString(ShockLife.Text))
             ConfigManager.gclass61_0.method_0("Shaman.ShockLife", ShockLife.Text);
-        if (StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (StartupClass.IsNumericString(AvoidAddDistance.Text))
             ConfigManager.gclass61_0.method_0("Shaman.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Shaman.ShootRunners", ShootRunners.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Shaman.UseSwiftness", UseSwiftness.Checked.ToString());

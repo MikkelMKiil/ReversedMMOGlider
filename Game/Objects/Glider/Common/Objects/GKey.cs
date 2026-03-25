@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GKey
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -120,16 +120,16 @@ namespace Glider.Common.Objects
         {
             if (CharCode == char.MinValue && VK == 0)
             {
-                Logger.smethod_1(MessageProvider.smethod_2(57, KeyName));
+                Logger.LoadProfile(MessageProvider.IsGroupProfile(57, KeyName));
             }
             else
             {
                 EnsureBar();
                 ShiftThisKey(true);
                 if (CharCode == char.MinValue)
-                    InputController.smethod_9(VK);
+                    InputController.StartMainThread(VK);
                 else
-                    InputController.smethod_6(char.ToLower(CharCode));
+                    InputController.ParseDouble(char.ToLower(CharCode));
                 ShiftThisKey(false);
             }
         }
@@ -148,7 +148,7 @@ namespace Glider.Common.Objects
         {
             if (CharCode == char.MinValue && VK == 0)
             {
-                Logger.smethod_1(MessageProvider.smethod_2(57, KeyName));
+                Logger.LoadProfile(MessageProvider.IsGroupProfile(57, KeyName));
             }
             else
             {
@@ -157,7 +157,7 @@ namespace Glider.Common.Objects
                 if (CharCode == char.MinValue)
                     InputController.smethod_0(VK, Pressing);
                 else
-                    InputController.smethod_4(CharCode, Pressing);
+                    InputController.GetFileNameFromPath(CharCode, Pressing);
                 ShiftThisKey(false);
             }
         }
@@ -171,7 +171,7 @@ namespace Glider.Common.Objects
         {
             if (Filled)
                 return;
-            if (!StartupClass.bool_13)
+            if (!StartupClass.IsGameProcessAttached)
             {
                 UnFill();
             }
@@ -227,7 +227,7 @@ namespace Glider.Common.Objects
                                 {
                                     var flag = false;
                                     if (SameSpells == null)
-                                        SameSpells = StartupClass.gclass63_0.method_13(SIM);
+                                        SameSpells = StartupClass.spellbookManager.method_13(SIM);
                                     if (SameSpells == null)
                                         return;
                                     foreach (var sameSpell in SameSpells)
@@ -244,7 +244,7 @@ namespace Glider.Common.Objects
                             else
                             {
                                 LiveSIM = new GItemDefinition(SIM).SpellID;
-                                StartupClass.gclass63_0.method_9(LiveSIM);
+                                StartupClass.spellbookManager.method_9(LiveSIM);
                                 Filled = true;
                                 return;
                             }
@@ -257,7 +257,7 @@ namespace Glider.Common.Objects
                     }
 
                     if (!FailQuietly)
-                        Logger.smethod_1("! Could not find this spell on any action bar: " + ToString());
+                        Logger.LoadProfile("! Could not find this spell on any action bar: " + ToString());
                     Filled = true;
                 }
             }
@@ -346,7 +346,7 @@ namespace Glider.Common.Objects
             if (!ComplainedVisible)
             {
                 ComplainedVisible = true;
-                Logger.smethod_1("Could not find interface object for " + KeyName +
+                Logger.LoadProfile("Could not find interface object for " + KeyName +
                                    ", make sure it's visible somewhere!");
             }
 
@@ -360,7 +360,7 @@ namespace Glider.Common.Objects
                 if (MatchesShortcut(new GShortcut(StartSlotIndex + index)))
                 {
                     var string_1 = BaseObjectName + "Button" + (index + 1);
-                    var gclass8 = UIElement.smethod_2(string_1);
+                    var gclass8 = UIElement.IsGroupProfile(string_1);
                     if (gclass8 != null && gclass8.method_10())
                     {
                         HitName = string_1;

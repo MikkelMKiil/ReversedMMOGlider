@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GDataEncryptionManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -106,11 +106,11 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            Logger.smethod_1("Could not parse game version, must be alphanumeric.  Using placeholder.");
+            Logger.LoadProfile("Could not parse game version, must be alphanumeric.  Using placeholder.");
             int_3_2 = 0;
         }
 
-        WriteIntToStream(StartupClass.int_4);
+        WriteIntToStream(StartupClass.pgEditProfileCount);
         WriteStringToStream(ConfigManager.gclass61_0.method_2("AppKey"));
         if (GProcessMemoryManipulator.bool_3)
             WriteIntToStream(int_3_1);
@@ -158,7 +158,7 @@ public class GDataEncryptionManager
         var inputBuffer = SendDataWithInternalStack(string_3);
         if (inputBuffer == null)
         {
-            Logger.smethod_1("Internal stack didn't work, switching to IE");
+            Logger.LoadProfile("Internal stack didn't work, switching to IE");
             inputBuffer = SendDataWithIE(string_3);
         }
 
@@ -172,7 +172,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            Logger.smethod_1("Exception decrypting response from server, no good");
+            Logger.LoadProfile("Exception decrypting response from server, no good");
             return false;
         }
     }
@@ -185,7 +185,7 @@ public class GDataEncryptionManager
         }
         catch (Exception ex)
         {
-            Logger.smethod_1("Exception getting message from server with internal stack:\r\n" + ex.Message + "\r\n" +
+            Logger.LoadProfile("Exception getting message from server with internal stack:\r\n" + ex.Message + "\r\n" +
                                ex.StackTrace);
             return null;
         }
@@ -226,7 +226,7 @@ public class GDataEncryptionManager
             if (!bool_0)
             {
                 Logger.LogMessage("Exception posting EM, uh-oh!");
-                Logger.smethod_1("EM POST failure details: " + ex.Message);
+                Logger.LoadProfile("EM POST failure details: " + ex.Message);
                 bool_0 = true;
             }
             return null;

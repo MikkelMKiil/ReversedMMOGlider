@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GPlayerSelf
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -349,7 +349,7 @@ namespace Glider.Common.Objects
             var longList = new List<long>();
             for (var index = 1; index < 5; ++index)
             {
-                var num1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
+                var num1 = StartupClass.playerOffsetManager.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
                 var num2 = GProcessMemoryManipulator.ReadInt64(Me.StorageAddress + num1, "BagGuid1");
                 longList.Add(num2);
             }
@@ -366,7 +366,7 @@ namespace Glider.Common.Objects
                 if (bagContents1[Slot] != 0L)
                 {
                     var gitem = (GItem)GObjectList.FindObject(bagContents1[Slot]);
-                    Logger.smethod_1("Backpack Item:" + gitem.Name);
+                    Logger.LoadProfile("Backpack Item:" + gitem.Name);
                     if (BagAction == GItemBagAction.Mail && gitem.IsMailable)
                         gbagItemList.Add(new GBagItem(gitem, "ContainerFrame1", Slot, SlotCount));
                     if (BagAction == GItemBagAction.Sell && gitem.IsSellable)
@@ -384,7 +384,7 @@ namespace Glider.Common.Objects
                         if (bagContents2[Slot] != 0L)
                         {
                             var gitem = (GItem)GObjectList.FindObject(bagContents2[Slot]);
-                            Logger.smethod_1("Bag Item:" + gitem.Name);
+                            Logger.LoadProfile("Bag Item:" + gitem.Name);
                             if (BagAction == GItemBagAction.Mail && gitem.IsMailable)
                                 gbagItemList.Add(new GBagItem(gitem, "ContainerFrame" + (index + 2), Slot,
                                     gcontainer.SlotCount));

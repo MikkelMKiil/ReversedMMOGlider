@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: MachGlideRunner
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -14,7 +14,7 @@ public class MachGlideRunner
 
     public bool method_0()
     {
-        Logger.smethod_1("Starting mach glide thread");
+        Logger.LoadProfile("Starting mach glide thread");
         thread_0 = new Thread(method_2);
         thread_0.Start();
         return true;
@@ -38,7 +38,7 @@ public class MachGlideRunner
         try
         {
             method_3();
-            StartupClass.smethod_27(false, "MachStopClean");
+            StartupClass.StopGlide(false, "MachStopClean");
         }
         catch (ThreadInterruptedException ex)
         {
@@ -47,7 +47,7 @@ public class MachGlideRunner
         catch (Exception ex)
         {
             Logger.LogMessage("! Exception in MachThreadBody: " + ex.Message + "\r\n" + ex.StackTrace);
-            StartupClass.smethod_27(true, "MTBExcep");
+            StartupClass.StopGlide(true, "MTBExcep");
         }
     }
 

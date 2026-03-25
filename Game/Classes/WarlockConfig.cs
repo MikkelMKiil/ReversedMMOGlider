@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WarlockConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -48,7 +48,7 @@ public class WarlockConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 6; ++index)
-            PetComboBox.Items.Add(MessageProvider.smethod_4("Warlock.Pet" + index));
+            PetComboBox.Items.Add(MessageProvider.GetFileNameFromPath("Warlock.Pet" + index));
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Warlock.PullDistance");
         SpellLockLife.Text = ConfigManager.gclass61_0.method_2("Warlock.SpellLockLife");
         FarmShards.Text = ConfigManager.gclass61_0.method_2("Warlock.FarmShards");
@@ -67,9 +67,9 @@ public class WarlockConfig : Form
         PetComboBox.SelectedIndex = int.Parse(ConfigManager.gclass61_0.method_2("Warlock.Pet"));
         StopShards.Checked = ConfigManager.gclass61_0.method_5("Warlock.StopShards");
         Jump.Checked = ConfigManager.gclass61_0.method_5("Warlock.Jump");
-        MessageProvider.smethod_3(this, "Warlock");
-        GProcessMemoryManipulator.smethod_48(this);
-        GProcessMemoryManipulator.smethod_51(helpProvider_0);
+        MessageProvider.LoadSingleProfile(this, "Warlock");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        GProcessMemoryManipulator.RestoreGameWindow(helpProvider_0);
     }
 
     protected override void Dispose(bool disposing)
@@ -397,11 +397,11 @@ public class WarlockConfig : Form
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Warlock.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(SpellLockLife.Text))
+        if (StartupClass.IsNumericString(SpellLockLife.Text))
             ConfigManager.gclass61_0.method_0("Warlock.SpellLockLife", SpellLockLife.Text);
-        if (StartupClass.smethod_19(FarmShards.Text))
+        if (StartupClass.IsNumericString(FarmShards.Text))
             ConfigManager.gclass61_0.method_0("Warlock.FarmShards", FarmShards.Text);
         else
             ConfigManager.gclass61_0.method_0("Warlock.FarmShards", "0");

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GSpells
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -18,10 +18,10 @@ namespace Glider.Common.Objects
         {
             if (SpellNameCache.ContainsKey(SpellID))
                 return SpellNameCache[SpellID];
-            StartupClass.gclass63_0.method_9(SpellID);
-            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].string_0);
-            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].gbuffType_0);
-            return StartupClass.gclass63_0.Offsets[SpellID].string_0;
+            StartupClass.spellbookManager.method_9(SpellID);
+            SpellNameCache.Add(SpellID, StartupClass.spellbookManager.Offsets[SpellID].string_0);
+            BuffTypeCache.Add(SpellID, StartupClass.spellbookManager.Offsets[SpellID].gbuffType_0);
+            return StartupClass.spellbookManager.Offsets[SpellID].string_0;
         }
 
         public static string GetSpellNameAndBuffType(int SpellID, out GBuffType BuffType)
@@ -33,15 +33,15 @@ namespace Glider.Common.Objects
                 return SpellNameCache[SpellID];
             }
 
-            StartupClass.gclass63_0.method_9(SpellID);
-            SpellNameCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].string_0);
-            BuffTypeCache.Add(SpellID, StartupClass.gclass63_0.Offsets[SpellID].gbuffType_0);
-            return StartupClass.gclass63_0.Offsets[SpellID].string_0;
+            StartupClass.spellbookManager.method_9(SpellID);
+            SpellNameCache.Add(SpellID, StartupClass.spellbookManager.Offsets[SpellID].string_0);
+            BuffTypeCache.Add(SpellID, StartupClass.spellbookManager.Offsets[SpellID].gbuffType_0);
+            return StartupClass.spellbookManager.Offsets[SpellID].string_0;
         }
 
         public static int[] CrossReferenceSpell(int SpellID)
         {
-            return StartupClass.gclass63_0.method_13(SpellID);
+            return StartupClass.spellbookManager.method_13(SpellID);
         }
     }
 }

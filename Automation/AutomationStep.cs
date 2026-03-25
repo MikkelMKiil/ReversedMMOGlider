@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: AutomationStep
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -14,7 +14,7 @@ public class AutomationStep
     public bool bool_0;
     public bool bool_1;
     public bool bool_2;
-    public GProfile gprofile_0;
+    public GProfile ActiveGProfile;
     private readonly List<ProfileStepCondition> list_0;
     public string string_0;
     public string string_1;
@@ -31,7 +31,7 @@ public class AutomationStep
         return new string[2]
         {
             int_0.ToString(),
-            StartupClass.smethod_42(string_0)
+            StartupClass.GetFileNameFromBackslash(string_0)
         };
     }
 
@@ -139,15 +139,15 @@ public class AutomationStep
 
     public void method_10()
     {
-        gprofile_0 = new GProfile();
-        if (!gprofile_0.Load(string_0))
+        ActiveGProfile = new GProfile();
+        if (!ActiveGProfile.Load(string_0))
         {
-            Logger.LogMessage("Can't load profile: \"" + gprofile_0 + "\", giving up!");
-            StartupClass.smethod_27(false, "LoadProfileFail");
+            Logger.LogMessage("Can't load profile: \"" + ActiveGProfile + "\", giving up!");
+            StartupClass.StopGlide(false, "LoadProfileFail");
         }
         else
         {
-            Logger.smethod_1("Loaded profile: " + string_0);
+            Logger.LoadProfile("Loaded profile: " + string_0);
         }
     }
 }

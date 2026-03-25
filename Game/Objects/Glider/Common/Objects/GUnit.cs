@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GUnit
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -91,7 +91,7 @@ namespace Glider.Common.Objects
                     }
                     catch (MemoryReadException ex)
                     {
-                        Logger.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
+                        Logger.LoadProfile("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
                                            ")");
                         Cull();
                         _reaction = GReaction.Unknown;
@@ -273,19 +273,19 @@ namespace Glider.Common.Objects
             {
                 if (Health < 1.0 && TicksSinceHealthDrop > DYING_SANITY_TIME)
                 {
-                    Logger.smethod_1("Damaged and not dropping");
+                    Logger.LoadProfile("Damaged and not dropping");
                     return true;
                 }
 
                 if (Health > 0.99 && StartupClass.CurrentGameClass.TicksSinceCombatStart > DYING_SANITY_TIME)
                 {
-                    Logger.smethod_1("Undamaged and combat taking too long");
+                    Logger.LoadProfile("Undamaged and combat taking too long");
                     return true;
                 }
 
                 if (StartupClass.GameClass69Instance.method_10() >= 4)
                     return false;
-                Logger.smethod_1("Recent evade entry in combat log");
+                Logger.LoadProfile("Recent evade entry in combat log");
                 return true;
             }
         }
@@ -375,7 +375,7 @@ namespace Glider.Common.Objects
             _channelingID = GetStorageLong("UNIT_FIELD_CHANNEL_OBJECT");
             _castingID = 0;
             _channelingSpellID = 0;
-            if (GUID == StartupClass.long_0)
+            if (GUID == StartupClass.playerGuid)
             {
                 if (MemoryOffsetTable.Instance.HasOffset("PlayerCasting"))
                     _castingID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCasting"), "PlayerCasting");
@@ -509,24 +509,24 @@ namespace Glider.Common.Objects
 
         public bool Approach(double Distance, bool LeaveRunning)
         {
-            Logger.smethod_1("Approaching \"" + Name + "\" to distance of " + Distance);
+            Logger.LoadProfile("Approaching \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool ApproachSafe(double Distance, bool LeaveRunning)
         {
-            Logger.smethod_1("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
+            Logger.LoadProfile("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
         public bool GetBehind(bool Sneaking)
         {
-            Logger.smethod_1("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
+            Logger.LoadProfile("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
             if (IsFacingAway && DistanceToSelf < ConfigManager.gclass61_0.method_4("MeleeDistance"))
                 return true;
             if (DistanceToSelf > 20.0)
             {
-                Logger.smethod_1("Too far away to GetBehind: \"" + Name + "\"");
+                Logger.LoadProfile("Too far away to GetBehind: \"" + Name + "\"");
                 return false;
             }
 
@@ -809,7 +809,7 @@ namespace Glider.Common.Objects
             {
                 if (!int.TryParse(strArray[index], NumberStyles.HexNumber, null, out var value))
                 {
-                    Logger.smethod_1($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
+                    Logger.LoadProfile($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
                     continue;
                 }
                 wellKnownBuffList.Add(value);
@@ -915,7 +915,7 @@ namespace Glider.Common.Objects
 
             var gbuffList = new List<GBuff>();
             var num1 = 16;
-            var num2 = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
+            var num2 = StorageAddress + StartupClass.npcOffsetManager.GetOffsetValue("UNIT_FIELD_AURA");
             if (IsPlayer)
                 num1 = 40;
             for (var index = 0; index < 56; ++index)

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WebNotificationService
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -163,7 +163,7 @@ public class WebNotificationService
         var array = w1.ToArray();
         var str = Encoding.ASCII.GetString(array);
         if (ConfigManager.gclass61_0.method_5("LogNotifyQuery"))
-            Logger.smethod_1("xmlText:\r\n" + str);
+            Logger.LoadProfile("xmlText:\r\n" + str);
         if (method_9(array))
             lock (this)
             {
@@ -190,7 +190,7 @@ public class WebNotificationService
             var streamReader = new StreamReader(response.GetResponseStream());
             var end = streamReader.ReadToEnd();
             if (ConfigManager.gclass61_0.method_5("LogNotifyResponse"))
-                Logger.smethod_1("Response from post:\r\n" + end);
+                Logger.LoadProfile("Response from post:\r\n" + end);
             method_4("Response received from post: " + end.Length + " bytes");
             streamReader.Close();
             response.Close();
@@ -212,11 +212,11 @@ public class WebNotificationService
         xmlDocument.AppendChild(element1);
         method_12(element1, "CustomerID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials"));
         method_12(element1, "QueryID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials") + "-" + Guid.NewGuid());
-        method_12(element1, "Profile", StartupClass.string_5 == null ? "(no profile)" : StartupClass.string_5);
+        method_12(element1, "Profile", StartupClass.currentProfilePath == null ? "(no profile)" : StartupClass.currentProfilePath);
         method_12(element1, "Gliding", StartupClass.glideMode_0 == GlideMode.Auto ? "1" : "0");
         method_12(element1, "GliderVersion", "1.8.0");
         method_12(element1, "GliderSubVersion", "Release");
-        if (StartupClass.bool_13)
+        if (StartupClass.IsGameProcessAttached)
         {
             var element2 = xmlDocument.CreateElement("Player");
             method_12(element2, "Name", GPlayerSelf.Me.Name);
@@ -230,8 +230,8 @@ public class WebNotificationService
             method_12(element2, "HealthMax", GPlayerSelf.Me.HealthMax.ToString());
             method_12(element2, "SecondAttr", GPlayerSelf.Me.Power2.ToString());
             method_12(element2, "SecondAttrMax", GPlayerSelf.Me.Power2Max.ToString());
-            method_12(element2, "KLD", StartupClass.int_7 + "/" + StartupClass.int_8 + "/" + StartupClass.int_9);
-            method_12(element2, "XPHour", StartupClass.smethod_29().ToString());
+            method_12(element2, "KLD", StartupClass.knownVersion + "/" + StartupClass.expectedVersion + "/" + StartupClass.versionPatchLevel);
+            method_12(element2, "XPHour", StartupClass.GetGlideRate().ToString());
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
             method_12(element2, "WorldMap: ",
@@ -250,7 +250,7 @@ public class WebNotificationService
             }
 
             var element4 = xmlDocument.CreateElement("PlayersNearby");
-            foreach (var gclass21 in PlayerTracker.smethod_1())
+            foreach (var gclass21 in PlayerTracker.LoadProfile())
             {
                 var element5 = xmlDocument.CreateElement("Player");
                 method_13(element5, "Name", gclass21.gplayer_0.Name);

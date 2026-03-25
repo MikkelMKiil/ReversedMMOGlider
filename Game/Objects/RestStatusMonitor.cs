@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: RestStatusMonitor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 public class RestStatusMonitor
 {
-    protected const double double_0 = 15.0;
+    protected const double autoAddDistance = 15.0;
     public const double double_1 = 0.05;
     private const int int_0 = 4;
     public static double double_2;
@@ -25,9 +25,9 @@ public class RestStatusMonitor
     private GLocation glocation_0;
     public GPlayerSelf gplayerSelf_0;
     private readonly GSpellTimer gspellTimer_0;
-    private readonly GSpellTimer gspellTimer_1 = new GSpellTimer(5500);
+    private readonly GSpellTimer loginCooldownTimer = new GSpellTimer(5500);
     private int int_1;
-    public long long_0;
+    public long playerGuid;
 
     public RestStatusMonitor()
     {
@@ -45,7 +45,7 @@ public class RestStatusMonitor
 
     public void method_1()
     {
-        gspellTimer_1.Reset();
+        loginCooldownTimer.Reset();
         int_1 = 0;
         double_6 = 0.0;
     }
@@ -55,16 +55,16 @@ public class RestStatusMonitor
         if (gunit_0.Health != double_6)
         {
             double_6 = gunit_0.Health;
-            gspellTimer_1.Reset();
+            loginCooldownTimer.Reset();
             return false;
         }
 
-        if (!gspellTimer_1.IsReady)
+        if (!loginCooldownTimer.IsReady)
             return false;
-        gspellTimer_1.Reset();
+        loginCooldownTimer.Reset();
         var str = GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset("RedMessage"), 128, "RedMessage") ??
                   MessageProvider.GetMessage(6);
-        Logger.smethod_1(MessageProvider.smethod_2(7, str));
+        Logger.LoadProfile(MessageProvider.IsGroupProfile(7, str));
         ++int_1;
         if (int_1 == 4)
         {
@@ -98,8 +98,8 @@ public class RestStatusMonitor
     [SpecialName]
     public bool method_4()
     {
-        return StartupClass.glideMode_0 == GlideMode.Auto && StartupClass.gclass54_0.healMode_0 == HealMode.Dedicated &&
-               StartupClass.gclass54_0.genum7_0 != PartyRole.const_0;
+        return StartupClass.glideMode_0 == GlideMode.Auto && StartupClass.partyManager.healMode_0 == HealMode.Dedicated &&
+               StartupClass.partyManager.genum7_0 != PartyRole.const_0;
     }
 
     public bool method_5(GMonster gmonster_0, double double_7, int int_2)
@@ -123,7 +123,7 @@ public class RestStatusMonitor
 
     public void method_8(string string_0)
     {
-        Logger.smethod_1(MessageProvider.smethod_2(12, string_0));
+        Logger.LoadProfile(MessageProvider.IsGroupProfile(12, string_0));
         SpellcastingManager.gclass42_0.method_0(string_0);
     }
 
@@ -163,7 +163,7 @@ public class RestStatusMonitor
     [SpecialName]
     public virtual string vmethod_6()
     {
-        return MessageProvider.smethod_2(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
+        return MessageProvider.IsGroupProfile(632, gplayerSelf_0.Mana, (int)(gplayerSelf_0.Mana * 100.0));
     }
 
     public virtual void vmethod_7()
@@ -247,11 +247,11 @@ public class RestStatusMonitor
         for (var index = 0; index < 5; ++index)
         {
             GContext.Main.Movement.SetHeading(StartupClass.random_0.NextDouble() * 6.14);
-            StartupClass.gclass73_0.method_34(1500, 5000);
+            StartupClass.combatController.method_34(1500, 5000);
             if (StartupClass.random_0.Next() % 3 == 0)
             {
                 SpellcastingManager.gclass42_0.method_0("Common.Jump");
-                StartupClass.gclass73_0.method_34(1500, 3000);
+                StartupClass.combatController.method_34(1500, 3000);
             }
         }
     }
@@ -268,9 +268,9 @@ public class RestStatusMonitor
         double distanceTo = glocation_0.GetDistanceTo(gplayerSelf_0.Location);
         if (distanceTo <= 100.0)
             return;
-        Logger.LogMessage(MessageProvider.smethod_2(634, distanceTo));
+        Logger.LogMessage(MessageProvider.IsGroupProfile(634, distanceTo));
         glocation_0 = gplayerSelf_0.Location;
-        StartupClass.gclass73_0.method_58();
+        StartupClass.combatController.method_58();
     }
 
     public void method_13()
@@ -291,16 +291,16 @@ public class RestStatusMonitor
         {
             Logger.LogMessage(MessageProvider.GetMessage(27));
             var actionInventory = GContext.Main.Interface.GetActionInventory("Common.ApplyBandage");
-            Logger.smethod_1(MessageProvider.smethod_2(28, actionInventory));
+            Logger.LoadProfile(MessageProvider.IsGroupProfile(28, actionInventory));
             if (actionInventory == 0)
                 return false;
             var gclass36 = new GameTimer(8000);
-            StartupClass.smethod_39(200);
+            StartupClass.Sleep(200);
             SpellcastingManager.gclass42_0.method_0("Common.ApplyBandage");
-            StartupClass.smethod_39(500);
+            StartupClass.Sleep(500);
             method_9("Common.TargetSelf");
             gspellTimer_0.Reset();
-            CombatController.smethod_1();
+            CombatController.LoadProfile();
         }
 
         return true;

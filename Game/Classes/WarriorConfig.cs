@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WarriorConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -69,8 +69,8 @@ public class WarriorConfig : Form
         UseShieldBash.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseShieldBash") == "True";
         AvoidAdds.Checked = ConfigManager.gclass61_0.method_2("Warrior.AvoidAdds") == "True";
         UseMortalStrike.Checked = ConfigManager.gclass61_0.method_2("Warrior.UseMortalStrike") == "True";
-        MessageProvider.smethod_3(this, "Warrior");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Warrior");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -439,15 +439,15 @@ public class WarriorConfig : Form
         ConfigManager.gclass61_0.method_0("Warrior.UseShieldBash", UseShieldBash.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Warrior.AvoidAdds", AvoidAdds.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Warrior.UseMortalStrike", UseMortalStrike.Checked.ToString());
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Warrior.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(HeroicRage.Text))
+        if (StartupClass.IsNumericString(HeroicRage.Text))
             ConfigManager.gclass61_0.method_0("Warrior.HeroicRage", HeroicRage.Text);
-        if (StartupClass.smethod_19(HeroicCooldown.Text))
+        if (StartupClass.IsNumericString(HeroicCooldown.Text))
             ConfigManager.gclass61_0.method_0("Warrior.HeroicCooldown", HeroicCooldown.Text);
-        if (StartupClass.smethod_19(ShieldBashLife.Text))
+        if (StartupClass.IsNumericString(ShieldBashLife.Text))
             ConfigManager.gclass61_0.method_0("Warrior.ShieldBashLife", ShieldBashLife.Text);
-        if (!StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (!StartupClass.IsNumericString(AvoidAddDistance.Text))
             return;
         ConfigManager.gclass61_0.method_0("Warrior.AvoidAddDistance", AvoidAddDistance.Text);
     }

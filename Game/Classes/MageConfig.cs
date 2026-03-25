@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: MageConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -60,9 +60,9 @@ public class MageConfig : Form
     {
         InitializeComponent();
         for (var index = 0; index < 4; ++index)
-            IceBarrier.Items.Add(MessageProvider.smethod_4("Mage.IceBarrier" + index));
+            IceBarrier.Items.Add(MessageProvider.GetFileNameFromPath("Mage.IceBarrier" + index));
         for (var index = 0; index < 3; ++index)
-            Finisher.Items.Add(MessageProvider.smethod_4("Mage.Finisher" + index));
+            Finisher.Items.Add(MessageProvider.GetFileNameFromPath("Mage.Finisher" + index));
         FireblastCooldown.Text = ConfigManager.gclass61_0.method_2("Mage.FireblastCooldownSec");
         PullDistance.Text = ConfigManager.gclass61_0.method_2("Mage.PullDistance");
         FinishLife.Text = ConfigManager.gclass61_0.method_2("Mage.FinishLife");
@@ -83,8 +83,8 @@ public class MageConfig : Form
         UseDampen.Checked = ConfigManager.gclass61_0.method_2("Mage.UseDampen") == "True";
         IceBarrier.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.IceBarrier");
         Finisher.SelectedIndex = ConfigManager.gclass61_0.method_3("Mage.Finisher");
-        MessageProvider.smethod_3(this, "Mage");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Mage");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -499,19 +499,19 @@ public class MageConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(FireblastCooldown.Text))
+        if (StartupClass.IsNumericString(FireblastCooldown.Text))
             ConfigManager.gclass61_0.method_0("Mage.FireblastCooldownSec", FireblastCooldown.Text);
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Mage.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(FinishLife.Text))
+        if (StartupClass.IsNumericString(FinishLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.FinishLife", FinishLife.Text);
-        if (StartupClass.smethod_19(FireblastDistance.Text))
+        if (StartupClass.IsNumericString(FireblastDistance.Text))
             ConfigManager.gclass61_0.method_0("Mage.FireblastDistance", FireblastDistance.Text);
-        if (StartupClass.smethod_19(CounterspellLife.Text))
+        if (StartupClass.IsNumericString(CounterspellLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.CounterspellLife", CounterspellLife.Text);
-        if (StartupClass.smethod_19(ShieldLife.Text))
+        if (StartupClass.IsNumericString(ShieldLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.ShieldLife", ShieldLife.Text);
-        if (StartupClass.smethod_19(MeleeSpellCooldown.Text))
+        if (StartupClass.IsNumericString(MeleeSpellCooldown.Text))
             ConfigManager.gclass61_0.method_0("Mage.MeleeSpellCooldown", MeleeSpellCooldown.Text);
         ConfigManager.gclass61_0.method_0("Mage.UseManaStones", UseManaStones.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Mage.SaveBlast", SaveBlast.Checked.ToString());

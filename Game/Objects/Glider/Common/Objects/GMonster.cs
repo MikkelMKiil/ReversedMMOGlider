@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GMonster
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -74,7 +74,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (StartupClass.gprofile_0 != null)
+                if (StartupClass.ActiveGProfile != null)
                 {
                     if (CreatureType == GCreatureType.Critter)
                     {
@@ -100,37 +100,37 @@ namespace Glider.Common.Objects
                         return false;
                     }
 
-                    if (Level < StartupClass.gprofile_0.MinLevel && StartupClass.gprofile_0.MinLevel != 0)
+                    if (Level < StartupClass.ActiveGProfile.MinLevel && StartupClass.ActiveGProfile.MinLevel != 0)
                     {
                         SkipReason = "level below min";
                         return false;
                     }
 
-                    if (Level > StartupClass.gprofile_0.MaxLevel && StartupClass.gprofile_0.MaxLevel != 0)
+                    if (Level > StartupClass.ActiveGProfile.MaxLevel && StartupClass.ActiveGProfile.MaxLevel != 0)
                     {
                         SkipReason = "level above max";
                         return false;
                     }
 
-                    if (!StartupClass.gprofile_0.CheckFaction(FactionID))
+                    if (!StartupClass.ActiveGProfile.CheckFaction(FactionID))
                     {
                         SkipReason = "CheckFaction does not like (" + FactionID + ")";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.Beach && Math.Abs(GContext.Main.Me.Location.Z - Location.Z) > 5.0)
+                    if (StartupClass.ActiveGProfile.Beach && Math.Abs(GContext.Main.Me.Location.Z - Location.Z) > 5.0)
                     {
                         SkipReason = "altitude too low for beach profile";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.AvoidList != null && IsInList(StartupClass.gprofile_0.AvoidList))
+                    if (StartupClass.ActiveGProfile.AvoidList != null && IsInList(StartupClass.ActiveGProfile.AvoidList))
                     {
                         SkipReason = "on avoid list for profile";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.IsBlacklisted(GUID))
+                    if (StartupClass.ActiveGProfile.IsBlacklisted(GUID))
                     {
                         SkipReason = "blacklisted";
                         return false;
@@ -168,7 +168,7 @@ namespace Glider.Common.Objects
                 }
 
                 if (LogChecks)
-                    Logger.smethod_1("Valid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
+                    Logger.LoadProfile("Valid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
                                        DistanceToSelf);
                 return true;
             }
@@ -182,7 +182,7 @@ namespace Glider.Common.Objects
                 _skipReason = value;
                 if (!LogChecks)
                     return;
-                Logger.smethod_1("Invalid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
+                Logger.LoadProfile("Invalid: " + Name + " (" + GUID.ToString("x") + "), range to self = " +
                                    DistanceToSelf + " --> " + _skipReason);
             }
         }

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GInterfaceHelper
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -55,7 +55,7 @@ namespace Glider.Common.Objects
             {
                 if (Cache.ContainsKey(ObjectName))
                     return Cache[ObjectName];
-                var InnerObject = UIElement.smethod_2(ObjectName);
+                var InnerObject = UIElement.IsGroupProfile(ObjectName);
                 if (InnerObject == null)
                     return null;
                 var byName = new GInterfaceObject(InnerObject);
@@ -66,13 +66,13 @@ namespace Glider.Common.Objects
 
         public GInterfaceObject GetByNamePreWorld(string ObjectName)
         {
-            var InnerObject = UIElement.smethod_3(ObjectName);
+            var InnerObject = UIElement.LoadSingleProfile(ObjectName);
             return InnerObject == null ? null : new GInterfaceObject(InnerObject);
         }
 
         public static string[] GetAllInterfaceObjectNames()
         {
-            return UIElement.smethod_5();
+            return UIElement.ApplyConfig();
         }
 
         public GInterfaceObject GetByKeyName(string KeyName)
@@ -113,7 +113,7 @@ namespace Glider.Common.Objects
         {
             var gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
             gkey.FilloutKey();
-            Logger.smethod_1(MessageProvider.smethod_2(627, gkey.KeyName, gkey.CharCode));
+            Logger.LoadProfile(MessageProvider.IsGroupProfile(627, gkey.KeyName, gkey.CharCode));
             var num1 = MemoryOffsetTable.Instance.GetIntOffset("BarBase");
             var num2 = MemoryOffsetTable.Instance.GetIntOffset("BarSize");
             var num3 = 0;
@@ -127,11 +127,11 @@ namespace Glider.Common.Objects
                 {
                     case GBarState.Combat:
                         num3 = int.Parse(new string(SpellcastingManager.gclass42_0.Offsets["Common.BarCombat"].CharCode, 1));
-                        Logger.smethod_1(MessageProvider.smethod_2(3, num3));
+                        Logger.LoadProfile(MessageProvider.IsGroupProfile(3, num3));
                         break;
                     case GBarState.Rest:
                         num3 = int.Parse(new string(SpellcastingManager.gclass42_0.Offsets["Common.BarRest"].CharCode, 1));
-                        Logger.smethod_1(MessageProvider.smethod_2(4, num3));
+                        Logger.LoadProfile(MessageProvider.IsGroupProfile(4, num3));
                         break;
                     case GBarState.Bar1:
                         num3 = 1;
@@ -208,7 +208,7 @@ namespace Glider.Common.Objects
             }
 
             gkey.FilloutKey();
-            return StartupClass.gclass63_0.method_15(gkey.LiveSIM);
+            return StartupClass.spellbookManager.method_15(gkey.LiveSIM);
         }
 
         public static void DumpUIDebug(bool RequireVisible)
@@ -229,10 +229,10 @@ namespace Glider.Common.Objects
                 if (gclass8.method_10() || !RequireVisible)
                 {
                     ++num;
-                    Logger.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
+                    Logger.LoadProfile("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
                                        gclass8.method_10() + ", label=\"" + gclass8.method_3() + "\"");
                     gclass8.method_8();
-                    Logger.smethod_1("");
+                    Logger.LoadProfile("");
                 }
 
                 goto label_1;
@@ -284,12 +284,12 @@ namespace Glider.Common.Objects
 
         public void SendString(string What)
         {
-            InputController.smethod_29(What);
+            InputController.GetGlideRate(What);
         }
 
         public void SendLine(string What)
         {
-            InputController.smethod_28(What);
+            InputController.ExecuteStopGlide(What);
         }
 
         public static void DumpPreWorldUIDebug(bool RequireVisible)
@@ -318,10 +318,10 @@ namespace Glider.Common.Objects
                     if (gclass8.method_10() || !RequireVisible)
                     {
                         ++num5;
-                        Logger.smethod_1("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
+                        Logger.LoadProfile("Object @ 0x" + int_1.ToString("x8") + ": \"" + str + "\", visible=" +
                                            gclass8.method_10());
                         gclass8.method_8();
-                        Logger.smethod_1("");
+                        Logger.LoadProfile("");
                     }
 
                     goto label_2;

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ApplicationLogger
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -34,7 +34,7 @@ public class ApplicationLogger : ILogger
 
         if (string_0.StartsWith("[Debug]"))
             return;
-        StartupClass.smethod_17(2, string_0);
+        StartupClass.NotifyStatusChange(2, string_0);
     }
 
     void ILogger.imethod_0()
@@ -102,7 +102,7 @@ public class ApplicationLogger : ILogger
         }
         catch (IOException ex)
         {
-            Console.WriteLine(MessageProvider.smethod_2(90, ex.Message));
+            Console.WriteLine(MessageProvider.IsGroupProfile(90, ex.Message));
         }
     }
 
@@ -127,29 +127,29 @@ public class ApplicationLogger : ILogger
         while (true)
         {
             Thread.Sleep(200);
-            if (bool_0 && StartupClass.bool_13)
+            if (bool_0 && StartupClass.IsGameProcessAttached)
                 goto label_6;
         label_1:
             if (!StartupClass.isInputStringFourCharacters)
-                StartupClass.gclass36_0 = null;
-            if (StartupClass.gclass36_0 != null && StartupClass.gclass36_0.method_3())
+                StartupClass.licenseCheckTimer = null;
+            if (StartupClass.licenseCheckTimer != null && StartupClass.licenseCheckTimer.method_3())
             {
-                StartupClass.gclass36_0 = null;
-                StartupClass.bool_19 = true;
+                StartupClass.licenseCheckTimer = null;
+                StartupClass.IsVersionMismatch = true;
                 Logger.LogMessage(MessageProvider.GetMessage(103));
-                StartupClass.smethod_27(false, "Timer2Up");
+                StartupClass.StopGlide(false, "Timer2Up");
             }
 
-            StartupClass.smethod_38();
+            StartupClass.TickMainLoop();
             continue;
         label_6:
             if (glocation_0 == null)
             {
                 glocation_0 = GPlayerSelf.Me.Location;
             }
-            else if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) > StartupClass.double_0)
+            else if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) > StartupClass.autoAddDistance)
             {
-                StartupClass.smethod_23();
+                StartupClass.AddWaypoint();
                 glocation_0 = GPlayerSelf.Me.Location;
                 SoundPlayer.smethod_0("Key.wav");
                 goto label_1;

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: UIElement
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -30,7 +30,7 @@ public class UIElement
         bool_0 = true;
         method_1();
         if (string_0 == "UIParent" || string_0 == "GlueParent")
-            smethod_1(float_4, float_3);
+            LoadProfile(float_4, float_3);
         list_0 = null;
     }
 
@@ -182,19 +182,19 @@ public class UIElement
 
     public void method_8()
     {
-        Logger.smethod_1("Dumping children of \"" + string_0 + "\"");
+        Logger.LoadProfile("Dumping children of \"" + string_0 + "\"");
         var gclass8Array = method_9();
         if (gclass8Array != null && gclass8Array.Length != 0)
         {
             foreach (var gclass8 in gclass8Array)
                 if (gclass8.string_0 != "(no name)")
-                    Logger.smethod_1("- UIObject @ 0x" + gclass8.int_0.ToString("x8") + ", Name=\"" +
+                    Logger.LoadProfile("- UIObject @ 0x" + gclass8.int_0.ToString("x8") + ", Name=\"" +
                                        gclass8.string_0 + "\", Visible=" + gclass8.method_10() + ", Label=\"" +
                                        gclass8.method_3() + "\"");
         }
         else
         {
-            Logger.smethod_1("No children!");
+            Logger.LoadProfile("No children!");
         }
     }
 
@@ -238,27 +238,27 @@ public class UIElement
 
     public void method_15()
     {
-        StartupClass.gclass68_0.method_3(true);
-        InputController.smethod_18(method_11() + (method_12() - method_11()) / 2.0,
+        StartupClass.cameraRotator.method_3(true);
+        InputController.ParseProcessIdFromCommandLine(method_11() + (method_12() - method_11()) / 2.0,
             method_13() + (method_14() - method_13()) / 2.0);
     }
 
-    public static void smethod_1(float float_6, float float_7)
+    public static void LoadProfile(float float_6, float float_7)
     {
         float_0 = float_6;
         float_1 = float_7;
     }
 
-    public static UIElement smethod_2(string string_1)
+    public static UIElement IsGroupProfile(string string_1)
     {
         var int_1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_1 != 0)
-            return smethod_4(int_1, string_1);
-        Logger.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
+            return GetFileNameFromPath(int_1, string_1);
+        Logger.LoadProfile("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
         return null;
     }
 
-    public static UIElement smethod_3(string string_1)
+    public static UIElement LoadSingleProfile(string string_1)
     {
         var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue1"), "uig1");
         var num2 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIGlue2"), "uig2");
@@ -266,10 +266,10 @@ public class UIElement
         var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
         var int_1 = GProcessMemoryManipulator.ReadInt32(int_29_1, "uigm1");
         var num3 = GProcessMemoryManipulator.ReadInt32(int_29_2, "uigm2");
-        return int_1 == num3 && int_1 != 0 ? smethod_4(int_1, string_1) : null;
+        return int_1 == num3 && int_1 != 0 ? GetFileNameFromPath(int_1, string_1) : null;
     }
 
-    private static UIElement smethod_4(int int_1, string string_1)
+    private static UIElement GetFileNameFromPath(int int_1, string string_1)
     {
         do
         {
@@ -297,21 +297,21 @@ public class UIElement
 
         goto label_7;
     label_5:
-        Logger.smethod_1("Invalid object in list while searching, giving up");
+        Logger.LoadProfile("Invalid object in list while searching, giving up");
         return null;
     label_6:
         return new UIElement(int_1);
     label_7:
-        Logger.smethod_1(MessageProvider.smethod_2(820, string_1));
+        Logger.LoadProfile(MessageProvider.IsGroupProfile(820, string_1));
         return null;
     }
 
-    public static string[] smethod_5()
+    public static string[] ApplyConfig()
     {
         var num1 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (num1 == 0)
         {
-            Logger.smethod_1("! UIParent points to nowhere, can't find dump list of object names");
+            Logger.LoadProfile("! UIParent points to nowhere, can't find dump list of object names");
             return null;
         }
 
@@ -338,20 +338,20 @@ public class UIElement
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_23(bool_1);
+        InputController.AddWaypoint(bool_1);
     }
 
     public void method_17(bool bool_1)
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_24(bool_1);
+        InputController.StartAutoGlide(bool_1);
     }
 
     public void method_18(bool bool_1)
     {
         method_15();
         Thread.Sleep(300);
-        InputController.smethod_25(bool_1);
+        InputController.StartDetachedGlide(bool_1);
     }
 }

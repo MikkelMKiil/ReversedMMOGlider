@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GameTimer
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -40,7 +40,7 @@ public class GameTimer
         var int_14 = method_0();
         if (int_14 <= 0)
             return;
-        StartupClass.smethod_39(int_14);
+        StartupClass.Sleep(int_14);
     }
 
     public bool method_3()

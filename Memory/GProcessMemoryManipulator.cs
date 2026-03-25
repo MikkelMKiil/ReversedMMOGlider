@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GClass78
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -19,7 +19,7 @@ public class GProcessMemoryManipulator
 {
     public delegate bool GDelegate1(IntPtr intptr_0, IntPtr intptr_1);
 
-    private const uint uint_0 = 2035711;
+    private const uint infiniteWaitTimeout = 2035711;
     private const uint uint_1 = 131088;
     private const uint uint_2 = 16;
     private const uint uint_3 = 32;
@@ -32,13 +32,13 @@ public class GProcessMemoryManipulator
     private const int int_1 = 16;
     public const int int_2 = 1;
     public const int int_3 = 2;
-    public const int int_4 = 8;
-    public const int int_5 = 32;
-    public const int int_6 = 64;
-    public const int int_7 = 128;
-    public const int int_8 = 256;
-    public const int int_9 = 512;
-    public const int int_10 = 1024;
+    public const int pgEditProfileCount = 8;
+    public const int objectManagerBasePointer = 32;
+    public const int initCount = 64;
+    public const int knownVersion = 128;
+    public const int expectedVersion = 256;
+    public const int versionPatchLevel = 512;
+    public const int lastAclProcessId = 1024;
     private const uint uint_9 = 1;
     private const uint uint_10 = 2;
     private const uint uint_11 = 4;
@@ -50,9 +50,9 @@ public class GProcessMemoryManipulator
     private const uint uint_17 = 256;
     private const uint uint_18 = 512;
     private const uint uint_19 = 1024;
-    private const int int_11 = 0;
-    private const int int_12 = 0;
-    private const int int_13 = 1;
+    private const int cachedGlideRate = 0;
+    private const int attachPidOverride = 0;
+    private const int killActionNestingCount = 1;
     private const int int_14 = 1;
     private const int int_15 = 2;
     private const int int_16 = 3;
@@ -93,12 +93,12 @@ public class GProcessMemoryManipulator
         return GenerateRandomString();
     }
 
-    public static int smethod_1()
+    public static int LoadProfile()
     {
-        return StartupClass.smethod_18();
+        return StartupClass.ParseProcessIdFromCommandLine();
     }
 
-    public static GStruct22 smethod_4()
+    public static GStruct22 GetFileNameFromPath()
     {
         return GetCursorPosition();
     }
@@ -107,18 +107,18 @@ public class GProcessMemoryManipulator
     {
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
-        if (StartupClass.int_12 != 0)
+        if (StartupClass.attachPidOverride != 0)
         {
-            if (gclass65.method_2(StartupClass.int_12) == 0)
+            if (gclass65.method_2(StartupClass.attachPidOverride) == 0)
                 return 0;
-            StartupClass.AnotherIntegerValue = StartupClass.int_12;
-            StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
+            StartupClass.AnotherIntegerValue = StartupClass.attachPidOverride;
+            StartupClass.MainApplicationHandle = GetGlideRate(StartupClass.AnotherIntegerValue);
             return StartupClass.AnotherIntegerValue;
         }
 
         if (StartupClass.AdditionalApplicationHandle != IntPtr.Zero)
         {
-            if (smethod_56(StartupClass.AnotherIntegerValue))
+            if (HandleAutoLogin(StartupClass.AnotherIntegerValue))
                 return StartupClass.AnotherIntegerValue;
             CloseHandle(StartupClass.AdditionalApplicationHandle);
             StartupClass.AdditionalApplicationHandle = IntPtr.Zero;
@@ -143,44 +143,44 @@ public class GProcessMemoryManipulator
         if (num == 0)
             return 0;
         StartupClass.AnotherIntegerValue = num;
-        StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
+        StartupClass.MainApplicationHandle = GetGlideRate(StartupClass.AnotherIntegerValue);
         return StartupClass.AnotherIntegerValue;
     }
 
     public static Rectangle GetWindowRectangle()
     {
         var gstruct22_0 = new GStruct22();
-        GetWindowRect(smethod_29(StartupClass.AnotherIntegerValue), out gstruct22_0);
+        GetWindowRect(GetGlideRate(StartupClass.AnotherIntegerValue), out gstruct22_0);
         return new Rectangle(gstruct22_0.int_0, gstruct22_0.int_1, gstruct22_0.int_2 - gstruct22_0.int_0,
             gstruct22_0.int_3 - gstruct22_0.int_1);
     }
 
     public static IntPtr GetWindowHandle()
     {
-        return smethod_29(StartupClass.AnotherIntegerValue);
+        return GetGlideRate(StartupClass.AnotherIntegerValue);
     }
 
     public static GStruct22 GetCursorPosition()
     {
-        var intptr_2 = smethod_29(StartupClass.AnotherIntegerValue);
+        var killEventHandle = GetGlideRate(StartupClass.AnotherIntegerValue);
         var gstruct22_0 = new GStruct22(0, 0, 0, 0);
-        if (!GetClientRect(intptr_2, out gstruct22_0))
+        if (!GetClientRect(killEventHandle, out gstruct22_0))
         {
             Logger.LogMessage("GetClientRect failed, last error: " + Marshal.GetLastWin32Error());
-            StartupClass.smethod_27(false, "GetClientRectBurp");
+            StartupClass.StopGlide(false, "GetClientRectBurp");
         }
 
         var point_0_1 = new Point(gstruct22_0.int_0, gstruct22_0.int_1);
         var point_0_2 = new Point(gstruct22_0.int_2, gstruct22_0.int_3);
-        ClientToScreen(intptr_2, ref point_0_1);
-        ClientToScreen(intptr_2, ref point_0_2);
+        ClientToScreen(killEventHandle, ref point_0_1);
+        ClientToScreen(killEventHandle, ref point_0_2);
         gstruct22_0 = new GStruct22(point_0_1.X, point_0_1.Y, point_0_2.X, point_0_2.Y);
         return gstruct22_0;
     }
 
     public static void SetProcessId(int int_29)
     {
-        Logger.smethod_1("Forgetting app: " + int_29);
+        Logger.LoadProfile("Forgetting app: " + int_29);
         Offsets.Add(int_29, "");
     }
 
@@ -196,9 +196,9 @@ public class GProcessMemoryManipulator
         return StartupClass.GliderManager != null ? StartupClass.GliderManager.method_20(int_29) : IntPtr.Zero;
     }
 
-    public static void CloseProcessHandle(IntPtr intptr_2)
+    public static void CloseProcessHandle(IntPtr killEventHandle)
     {
-        CloseHandle(intptr_2);
+        CloseHandle(killEventHandle);
     }
 
     public static string BytesToHexString(byte[] byte_0)
@@ -215,10 +215,10 @@ public class GProcessMemoryManipulator
 
     public static string ReadString(int int_29, int int_30, string string_0)
     {
-        return smethod_10(int_29, int_30, string_0);
+        return RunMainThreadSafe(int_29, int_30, string_0);
     }
 
-    public static string smethod_10(int int_29, int int_30, string string_0)
+    public static string RunMainThreadSafe(int int_29, int int_30, string string_0)
     {
         return ReadStringInternal(int_29, int_30, string_0);
     }
@@ -232,11 +232,11 @@ public class GProcessMemoryManipulator
             if (num < int_30)
             {
                 int_30 = num;
-                Logger.smethod_1("Cutting down maximum read on region end: 0x" + int_30.ToString("x"));
+                Logger.LoadProfile("Cutting down maximum read on region end: 0x" + int_30.ToString("x"));
             }
         }
 
-        var bytes = smethod_20(int_29, int_30);
+        var bytes = SendInputString(int_29, int_30);
         if (bytes == null)
             return "(read failed)";
         var count = 0;
@@ -249,46 +249,46 @@ public class GProcessMemoryManipulator
 
     public static int ReadInt32(int int_29, string string_0)
     {
-        var numArray = smethod_17(int_29, 4, string_0);
+        var numArray = NotifyStatusChange(int_29, 4, string_0);
         return numArray == null ? 0 : BitConverter.ToInt32(numArray, 0);
     }
 
-    public static int smethod_11(int int_29, string string_0)
+    public static int RunInitializationFlow(int int_29, string string_0)
     {
         return ReadInt32(int_29, string_0);
     }
 
     public static long ReadInt64(int int_29, string string_0)
     {
-        var numArray = smethod_17(int_29, 8, string_0);
+        var numArray = NotifyStatusChange(int_29, 8, string_0);
         return numArray == null ? 0L : BitConverter.ToInt64(numArray, 0);
     }
 
-    public static long smethod_12(int int_29, string string_0)
+    public static long IsAttachedToGame(int int_29, string string_0)
     {
         return ReadInt64(int_29, string_0);
     }
 
     public static float ReadFloat(int int_29, string string_0)
     {
-        var numArray = smethod_17(int_29, 4, string_0);
+        var numArray = NotifyStatusChange(int_29, 4, string_0);
         return numArray == null ? 0.0f : BitConverter.ToSingle(numArray, 0);
     }
 
     public static double ReadDouble(int int_29, string string_0)
     {
-        var numArray = smethod_17(int_29, 8, string_0);
+        var numArray = NotifyStatusChange(int_29, 8, string_0);
         return numArray == null ? 0.0 : BitConverter.ToDouble(numArray, 0);
     }
 
-    public static double smethod_14(int int_29, string string_0)
+    public static double ExecuteAttachOrDetach(int int_29, string string_0)
     {
         return ReadDouble(int_29, string_0);
     }
 
     public static byte ReadByte(int int_29, string string_0)
     {
-        var numArray = smethod_17(int_29, 1, string_0);
+        var numArray = NotifyStatusChange(int_29, 1, string_0);
         return numArray == null ? (byte)0 : numArray[0];
     }
 
@@ -298,24 +298,24 @@ public class GProcessMemoryManipulator
         return WriteProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31) != 0 ? int_31 : 0;
     }
 
-    public static byte[] smethod_17(int int_29, int int_30, string string_0)
+    public static byte[] NotifyStatusChange(int int_29, int int_30, string string_0)
     {
-        return smethod_19(int_29, int_30, string_0, false);
+        return IsNumericString(int_29, int_30, string_0, false);
     }
 
     public static byte[] ReadBytes(int int_29, int int_30, string string_0)
     {
-        return smethod_17(int_29, int_30, string_0);
+        return NotifyStatusChange(int_29, int_30, string_0);
     }
 
     public static byte[] ReadBytes(int int_29, int int_30, string string_0, bool bool_4)
     {
-        return smethod_19(int_29, int_30, string_0, bool_4);
+        return IsNumericString(int_29, int_30, string_0, bool_4);
     }
 
     private static int ReadProcessMemoryInternal(int int_29, byte[] byte_0, int int_30, out int int_31)
     {
-        if (StartupClass.bool_14 && StartupClass.GliderManager != null)
+        if (StartupClass.IsOpenMemoryModel && StartupClass.GliderManager != null)
         {
             var num = StartupClass.GliderManager.method_41(int_29, byte_0, int_30, out int_31);
             int_27 = num < int_30 ? 299 : 0;
@@ -328,16 +328,16 @@ public class GProcessMemoryManipulator
         return num1;
     }
 
-    private static int smethod_18(int int_29, byte[] byte_0, int int_30, out int int_31)
+    private static int ParseProcessIdFromCommandLine(int int_29, byte[] byte_0, int int_30, out int int_31)
     {
         return ReadProcessMemoryInternal(int_29, byte_0, int_30, out int_31);
     }
 
-    public static byte[] smethod_19(int int_29, int int_30, string string_0, bool bool_4)
+    public static byte[] IsNumericString(int int_29, int int_30, string string_0, bool bool_4)
     {
         var byte_0 = new byte[int_30];
         int int_31;
-        if (smethod_18(int_29, byte_0, int_30, out int_31) == 0)
+        if (ParseProcessIdFromCommandLine(int_29, byte_0, int_30, out int_31) == 0)
         {
             if (int_27 == 299 && bool_4)
             {
@@ -350,14 +350,14 @@ public class GProcessMemoryManipulator
                 if (!bool_2)
                 {
                     bool_2 = true;
-                    Logger.smethod_1(MessageProvider.smethod_2(712, int_29.ToString("x"), string_0, int_27));
+                    Logger.LoadProfile(MessageProvider.IsGroupProfile(712, int_29.ToString("x"), string_0, int_27));
                 }
 
                 if (bool_1)
                 {
-                    if (StartupClass.bool_13)
+                    if (StartupClass.IsGameProcessAttached)
                         Logger.LogMessage(string.Format(MessageProvider.GetMessage(341), int_29, string_0));
-                    StartupClass.smethod_27(true, "ReadBytesFail");
+                    StartupClass.StopGlide(true, "ReadBytesFail");
                 }
 
                 return null;
@@ -367,43 +367,43 @@ public class GProcessMemoryManipulator
         return byte_0;
     }
 
-    public static byte[] smethod_20(int int_29, int int_30)
+    public static byte[] SendInputString(int int_29, int int_30)
     {
         var byte_0 = new byte[int_30];
-        return smethod_18(int_29, byte_0, int_30, out var _) == 0 ? null : byte_0;
+        return ParseProcessIdFromCommandLine(int_29, byte_0, int_30, out var _) == 0 ? null : byte_0;
     }
 
     public static byte[] ReadBytesRaw(int int_29, int int_30)
     {
-        return smethod_20(int_29, int_30);
+        return SendInputString(int_29, int_30);
     }
 
     public static int ReadIntFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 4);
+        var bytes = SendInputString(int_29, 4);
         return bytes == null ? 0 : BitConverter.ToInt32(bytes, 0);
     }
 
     public static float ReadFloatFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 4);
+        var bytes = SendInputString(int_29, 4);
         return bytes == null ? 0f : BitConverter.ToSingle(bytes, 0);
     }
 
     public static float ReadFloatAlternate(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 1);
+        var bytes = SendInputString(int_29, 1);
         return bytes == null ? 0f : (float)bytes[0];
     }
 
     public static long ReadLongFromOffset(int int_29, string string_0)
     {
-        var bytes = smethod_20(int_29, 8);
+        var bytes = SendInputString(int_29, 8);
         return bytes == null ? 0L : BitConverter.ToInt64(bytes, 0);
     }
 
     [DllImport("kernel32", SetLastError = true)]
-    private static extern int ResumeThread(IntPtr intptr_2);
+    private static extern int ResumeThread(IntPtr killEventHandle);
 
     [DllImport("kernel32", SetLastError = true)]
     private static extern int GetProcAddress(int int_29, string string_0);
@@ -412,11 +412,11 @@ public class GProcessMemoryManipulator
     private static extern int GetModuleHandle(string string_0);
 
     [DllImport("user32.dll")]
-    private static extern bool SetWindowText(IntPtr intptr_2, string string_0);
+    private static extern bool SetWindowText(IntPtr killEventHandle, string string_0);
 
     [DllImport("user32.dll")]
     private static extern uint RealGetWindowClass(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         StringBuilder stringBuilder_0,
         int int_29);
 
@@ -427,20 +427,20 @@ public class GProcessMemoryManipulator
     public static extern IntPtr GetForegroundWindow();
 
     [DllImport("User32.dll")]
-    public static extern bool EnumChildWindows(IntPtr intptr_2, Delegate delegate_0, IntPtr intptr_3);
+    public static extern bool EnumChildWindows(IntPtr killEventHandle, Delegate delegate_0, IntPtr intptr_3);
 
     [DllImport("User32.dll")]
     public static extern int GetWindowText(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         StringBuilder stringBuilder_0,
         int int_29);
 
     [DllImport("User32.dll")]
-    public static extern bool ClientToScreen(IntPtr intptr_2, ref Point point_0);
+    public static extern bool ClientToScreen(IntPtr killEventHandle, ref Point point_0);
 
     [DllImport("kernel32.dll")]
     public static extern int VirtualQueryEx(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         int int_29,
         out GStruct21 gstruct21_0,
         int int_30);
@@ -449,25 +449,25 @@ public class GProcessMemoryManipulator
     private static extern IntPtr OpenProcess(uint uint_23, bool bool_4, int int_29);
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool TerminateProcess(IntPtr intptr_2, uint uint_23);
+    private static extern bool TerminateProcess(IntPtr killEventHandle, uint uint_23);
 
     [DllImport("kernel32")]
-    private static extern bool CloseHandle(IntPtr intptr_2);
+    private static extern bool CloseHandle(IntPtr killEventHandle);
 
     [DllImport("kernel32", SetLastError = true)]
     public static extern int ReadProcessMemory(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         int int_29,
         byte[] byte_0,
         int int_30,
         out int int_31);
 
     [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr intptr_2);
+    public static extern bool SetForegroundWindow(IntPtr killEventHandle);
 
     [DllImport("kernel32", SetLastError = true)]
     private static extern int VirtualProtectEx(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         int int_29,
         int int_30,
         int int_31,
@@ -475,40 +475,40 @@ public class GProcessMemoryManipulator
 
     [DllImport("kernel32", SetLastError = true)]
     private static extern int WriteProcessMemory(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         int int_29,
         byte[] byte_0,
         int int_30,
         out int int_31);
 
     [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr intptr_2, out GStruct22 gstruct22_0);
+    private static extern bool GetWindowRect(IntPtr killEventHandle, out GStruct22 gstruct22_0);
 
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool GetClientRect(IntPtr intptr_2, out GStruct22 gstruct22_0);
+    private static extern bool GetClientRect(IntPtr killEventHandle, out GStruct22 gstruct22_0);
 
-    public static void WorldToScreen(double double_0, double double_1, out int int_29, out int int_30)
+    public static void WorldToScreen(double autoAddDistance, double double_1, out int int_29, out int int_30)
     {
-        var gstruct22 = smethod_4();
-        int_29 = gstruct22.int_0 + (int)(double_0 * gstruct22.method_1());
+        var gstruct22 = GetFileNameFromPath();
+        int_29 = gstruct22.int_0 + (int)(autoAddDistance * gstruct22.method_1());
         int_30 = gstruct22.int_1 + (int)(double_1 * gstruct22.method_0());
     }
 
-    public static void ScreenToWorld(out double double_0, out double double_1, int int_29, int int_30)
+    public static void ScreenToWorld(out double autoAddDistance, out double double_1, int int_29, int int_30)
     {
-        var gstruct22 = smethod_4();
-        double_0 = (int_29 - gstruct22.int_0) / (double)gstruct22.method_1();
+        var gstruct22 = GetFileNameFromPath();
+        autoAddDistance = (int_29 - gstruct22.int_0) / (double)gstruct22.method_1();
         double_1 = (int_30 - gstruct22.int_1) / (double)gstruct22.method_0();
     }
 
     [DllImport("user32")]
-    public static extern int EnumWindows(GDelegate1 gdelegate1_0, IntPtr intptr_2);
+    public static extern int EnumWindows(GDelegate1 gdelegate1_0, IntPtr killEventHandle);
 
     [DllImport("kernel32.dll")]
     public static extern int GetCurrentProcessId();
 
     [DllImport("user32")]
-    public static extern int GetWindowThreadProcessId(IntPtr intptr_2, out int int_29);
+    public static extern int GetWindowThreadProcessId(IntPtr killEventHandle, out int int_29);
 
     public static IntPtr GetMainWindowHandle(int int_29)
     {
@@ -516,7 +516,7 @@ public class GProcessMemoryManipulator
         gclass36.method_4();
         while (!gclass36.method_3())
         {
-            var num = smethod_29(int_29);
+            var num = GetGlideRate(int_29);
             if (num != IntPtr.Zero)
                 return num;
             Thread.Sleep(500);
@@ -525,7 +525,7 @@ public class GProcessMemoryManipulator
         return new IntPtr(0);
     }
 
-    public static IntPtr smethod_29(int int_29)
+    public static IntPtr GetGlideRate(int int_29)
     {
         return OpenProcessWithAccess(int_29);
     }
@@ -542,22 +542,22 @@ public class GProcessMemoryManipulator
     public static IntPtr OpenProcessWithAccess(int int_29)
     {
         if (int_29 == 0)
-            int_29 = smethod_1();
+            int_29 = LoadProfile();
         if (int_29 == 0)
             return IntPtr.Zero;
         intptr_0 = IntPtr.Zero;
         int_28 = int_29;
-        EnumWindows(smethod_30, IntPtr.Zero);
+        EnumWindows(SetupKillEventListener, IntPtr.Zero);
         return intptr_0;
     }
 
-    private static bool smethod_30(IntPtr intptr_2, IntPtr intptr_3)
+    private static bool SetupKillEventListener(IntPtr killEventHandle, IntPtr intptr_3)
     {
         int int_29;
-        GetWindowThreadProcessId(intptr_2, out int_29);
+        GetWindowThreadProcessId(killEventHandle, out int_29);
         if (int_29 != int_28)
             return true;
-        intptr_0 = intptr_2;
+        intptr_0 = killEventHandle;
         return false;
     }
 
@@ -591,7 +591,7 @@ public class GProcessMemoryManipulator
             StartupClass.GameMemoryReader.method_6(MemoryOffsetTable.Instance.GetIntOffset("JulieDrop"),
                 MemoryOffsetTable.Instance.GetIntOffset("JulieSize"));
         if (num4 > 0)
-            StartupClass.smethod_37(WardenCheckStatus.const_1);
+            StartupClass.HandleWardenCheckResult(WardenCheckStatus.const_1);
         return num4;
     }
 
@@ -634,21 +634,21 @@ public class GProcessMemoryManipulator
 
     public static int GetProcessIdFromWindow()
     {
-        var int_29 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("GameTimeType"), "gt1");
-        var num1 = smethod_11(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF1"), "gt2");
-        long long_0 = 0;
+        var int_29 = RunInitializationFlow(MemoryOffsetTable.Instance.GetIntOffset("GameTimeType"), "gt1");
+        var num1 = RunInitializationFlow(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF1"), "gt2");
+        long playerGuid = 0;
         if (num1 >= 2)
         {
-            int num2 = QueryPerformanceCounter(ref long_0);
+            int num2 = QueryPerformanceCounter(ref playerGuid);
         }
         else
         {
-            long_0 = Environment.TickCount;
+            playerGuid = Environment.TickCount;
         }
 
-        var num3 = smethod_14(int_29, "gt0");
-        var num4 = smethod_14(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF2"), "gt3");
-        return (int)(long_0 * num3 + num4);
+        var num3 = ExecuteAttachOrDetach(int_29, "gt0");
+        var num4 = ExecuteAttachOrDetach(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF2"), "gt3");
+        return (int)(playerGuid * num3 + num4);
     }
 
     public static bool IsMemoryReadable(int int_29)
@@ -656,11 +656,11 @@ public class GProcessMemoryManipulator
         GStruct21 gstruct21_0;
         if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) != 28)
         {
-            Logger.smethod_1("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
+            Logger.LoadProfile("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
             return false;
         }
 
-        return gstruct21_0.uint_0 == 4U || gstruct21_0.uint_0 == 64U;
+        return gstruct21_0.infiniteWaitTimeout == 4U || gstruct21_0.infiniteWaitTimeout == 64U;
     }
 
     public static int ReadPointerChain(int int_29, int int_30, int int_31)
@@ -671,14 +671,14 @@ public class GProcessMemoryManipulator
     }
 
     [DllImport("kernel32.dll")]
-    private static extern short QueryPerformanceCounter(ref long long_0);
+    private static extern short QueryPerformanceCounter(ref long playerGuid);
 
     [DllImport("kernel32.dll")]
     public static extern void Sleep(uint uint_23);
 
     [DllImport("user32.dll")]
     private static extern bool SetWindowPos(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         IntPtr intptr_3,
         int int_29,
         int int_30,
@@ -687,62 +687,62 @@ public class GProcessMemoryManipulator
         uint uint_23);
 
     [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr intptr_2, int int_29);
+    private static extern bool ShowWindow(IntPtr killEventHandle, int int_29);
 
-    public static void ShowWindow(IntPtr intptr_2)
+    public static void ShowWindow(IntPtr killEventHandle)
     {
-        ShowWindow(intptr_2, 5);
+        ShowWindow(killEventHandle, 5);
     }
 
-    public static void HideWindow(IntPtr intptr_2)
+    public static void HideWindow(IntPtr killEventHandle)
     {
-        ShowWindow(intptr_2, 0);
+        ShowWindow(killEventHandle, 0);
     }
 
-    //public static void SetForegroundWindow(IntPtr intptr_2)
+    //public static void SetForegroundWindow(IntPtr killEventHandle)
     //{
-    //    ShowWindow(intptr_2, 0);
+    //    ShowWindow(killEventHandle, 0);
     //}
 
-    public static bool GetWindowPosition(IntPtr intptr_2, out Point point_0)
+    public static bool GetWindowPosition(IntPtr killEventHandle, out Point point_0)
     {
         point_0 = new Point();
         point_0.X = 0;
         point_0.Y = 0;
         GStruct22 gstruct22_0;
-        if (!GetWindowRect(intptr_2, out gstruct22_0))
+        if (!GetWindowRect(killEventHandle, out gstruct22_0))
             return false;
         point_0.X = gstruct22_0.int_0;
         point_0.Y = gstruct22_0.int_1;
         return true;
     }
 
-    public static bool GetWindowSize(IntPtr intptr_2, out Size size_0)
+    public static bool GetWindowSize(IntPtr killEventHandle, out Size originalWindowSize)
     {
-        size_0 = new Size();
-        size_0.Width = 0;
-        size_0.Height = 0;
+        originalWindowSize = new Size();
+        originalWindowSize.Width = 0;
+        originalWindowSize.Height = 0;
         GStruct22 gstruct22_0;
-        if (!GetWindowRect(intptr_2, out gstruct22_0))
+        if (!GetWindowRect(killEventHandle, out gstruct22_0))
             return false;
-        size_0.Width = gstruct22_0.method_1() - 1;
-        size_0.Height = gstruct22_0.method_0() - 1;
+        originalWindowSize.Width = gstruct22_0.method_1() - 1;
+        originalWindowSize.Height = gstruct22_0.method_0() - 1;
         return true;
     }
 
-    public static void SetWindowPosition(IntPtr intptr_2, Point point_0)
+    public static void SetWindowPosition(IntPtr killEventHandle, Point point_0)
     {
-        SetWindowPos(intptr_2, IntPtr.Zero, point_0.X, point_0.Y, 0, 0, 277U);
+        SetWindowPos(killEventHandle, IntPtr.Zero, point_0.X, point_0.Y, 0, 0, 277U);
     }
 
-    public static void SetWindowSize(IntPtr intptr_2, Size size_0)
+    public static void SetWindowSize(IntPtr killEventHandle, Size originalWindowSize)
     {
-        SetWindowPos(intptr_2, IntPtr.Zero, 0, 0, size_0.Width, size_0.Height, 278U);
+        SetWindowPos(killEventHandle, IntPtr.Zero, 0, 0, originalWindowSize.Width, originalWindowSize.Height, 278U);
     }
 
-    public static void GetForegroundWindow(IntPtr intptr_2, Size size_0, Point point_0)
+    public static void GetForegroundWindow(IntPtr killEventHandle, Size originalWindowSize, Point point_0)
     {
-        SetWindowPos(intptr_2, IntPtr.Zero, point_0.X, point_0.Y, size_0.Width, size_0.Height, 276U);
+        SetWindowPos(killEventHandle, IntPtr.Zero, point_0.X, point_0.Y, originalWindowSize.Width, originalWindowSize.Height, 276U);
     }
 
     public static void IsWindowVisible(
@@ -753,49 +753,49 @@ public class GProcessMemoryManipulator
     {
         var url = string_0;
         Help.ShowHelp(control_0, url, helpNavigator_0, object_0);
-        smethod_45();
+        TryAutoAttach();
     }
 
-    private static void smethod_45()
+    private static void TryAutoAttach()
     {
-        StartupClass.smethod_45();
+        StartupClass.TryAutoAttach();
     }
 
     public static void IsWindowMinimized()
     {
-        new Thread(smethod_46).Start();
+        new Thread(HandleBackgroundDisplay).Start();
     }
 
-    public static void smethod_46()
+    public static void HandleBackgroundDisplay()
     {
         try
         {
-            for (var index = 50; index > 0 && !smethod_47(); --index)
-                StartupClass.smethod_39(100);
+            for (var index = 50; index > 0 && !HideGameWindow(); --index)
+                StartupClass.Sleep(100);
         }
         catch (Exception ex)
         {
-            Logger.smethod_1(MessageProvider.smethod_2(347, ex.Message));
+            Logger.LoadProfile(MessageProvider.IsGroupProfile(347, ex.Message));
         }
     }
 
-    public static bool smethod_47()
+    public static bool HideGameWindow()
     {
-        var intptr_2 = smethod_49();
-        if (!(intptr_2 != IntPtr.Zero))
+        var killEventHandle = RestoreHiddenWindow();
+        if (!(killEventHandle != IntPtr.Zero))
             return false;
         if (ConfigManager.gclass61_0.method_2("TitleBarRename") == "True")
         {
             if (ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True")
-                SetWindowText(intptr_2, MessageProvider.smethod_2(348, smethod_0()));
+                SetWindowText(killEventHandle, MessageProvider.IsGroupProfile(348, smethod_0()));
             else
-                SetWindowText(intptr_2, MessageProvider.smethod_2(713, "TitleBarName"));
+                SetWindowText(killEventHandle, MessageProvider.IsGroupProfile(713, "TitleBarName"));
         }
 
         return true;
     }
 
-    public static void smethod_48(Form form_0)
+    public static void ShrinkGameWindow(Form form_0)
     {
         if (!(ConfigManager.gclass61_0.method_2("TitleBarRename") == "True") ||
             !(ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True"))
@@ -803,28 +803,28 @@ public class GProcessMemoryManipulator
         form_0.Text = smethod_0();
     }
 
-    private static IntPtr smethod_49()
+    private static IntPtr RestoreHiddenWindow()
     {
         intptr_1 = IntPtr.Zero;
-        EnumWindows(smethod_50, IntPtr.Zero);
+        EnumWindows(RestoreShrunkWindow, IntPtr.Zero);
         return intptr_1;
     }
 
-    private static bool smethod_50(IntPtr intptr_2, IntPtr intptr_3)
+    private static bool RestoreShrunkWindow(IntPtr killEventHandle, IntPtr intptr_3)
     {
         var stringBuilder_0_1 = new StringBuilder(256);
-        GetWindowText(intptr_2, stringBuilder_0_1, stringBuilder_0_1.Capacity - 1);
+        GetWindowText(killEventHandle, stringBuilder_0_1, stringBuilder_0_1.Capacity - 1);
         if (stringBuilder_0_1.Length == 0 || stringBuilder_0_1.ToString().ToLower().IndexOf("glider") <= -1)
             return true;
         var stringBuilder_0_2 = new StringBuilder(256);
-        var windowClass = (int)RealGetWindowClass(intptr_2, stringBuilder_0_2, stringBuilder_0_2.Capacity - 1);
+        var windowClass = (int)RealGetWindowClass(killEventHandle, stringBuilder_0_2, stringBuilder_0_2.Capacity - 1);
         if (!(stringBuilder_0_2.ToString() == "HH Parent"))
             return true;
-        intptr_1 = intptr_2;
+        intptr_1 = killEventHandle;
         return false;
     }
 
-    public static void smethod_51(HelpProvider helpProvider_0)
+    public static void RestoreGameWindow(HelpProvider helpProvider_0)
     {
     }
 
@@ -833,41 +833,41 @@ public class GProcessMemoryManipulator
 
     [DllImport("ntdll.dll", SetLastError = true)]
     private static extern int NtQueryInformationThread(
-        IntPtr intptr_2,
+        IntPtr killEventHandle,
         uint uint_23,
         IntPtr intptr_3,
         uint uint_24,
         out uint uint_25);
 
-    public static bool smethod_52(out long long_0, out int int_29)
+    public static bool ApplyLnCommandLineArg(out long playerGuid, out int int_29)
     {
-        long_0 = 0L;
+        playerGuid = 0L;
         int_29 = 0;
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
         if (numArray.Length == 0)
             return false;
-        var num1 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("TLSSlot"), "TLSSlot");
+        var num1 = RunInitializationFlow(MemoryOffsetTable.Instance.GetIntOffset("TLSSlot"), "TLSSlot");
         foreach (var uint_24 in numArray)
         {
-            var intptr_2 = OpenThread(64U, false, uint_24);
-            if (intptr_2.ToInt32() > 0)
+            var killEventHandle = OpenThread(64U, false, uint_24);
+            if (killEventHandle.ToInt32() > 0)
             {
                 var structure = new Class3();
                 var num2 = Marshal.AllocHGlobal(80);
-                var num3 = NtQueryInformationThread(intptr_2, 0U, num2, (uint)Marshal.SizeOf(structure), out var _);
+                var num3 = NtQueryInformationThread(killEventHandle, 0U, num2, (uint)Marshal.SizeOf(structure), out var _);
                 Marshal.PtrToStructure(num2, structure);
                 Marshal.FreeHGlobal(num2);
-                CloseHandle(intptr_2);
+                CloseHandle(killEventHandle);
                 if (num3 == 0)
                 {
-                    var num4 = smethod_11(smethod_11(structure.int_1 + 44, "TLSOffset") + 4 * num1, "TargetTLSSlot");
-                    var num5 = smethod_12(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSPlayerID"), "TLSPlayerID");
-                    var num6 = smethod_11(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSMainTable"), "TLSMainTable");
+                    var num4 = RunInitializationFlow(RunInitializationFlow(structure.int_1 + 44, "TLSOffset") + 4 * num1, "TargetTLSSlot");
+                    var num5 = IsAttachedToGame(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSPlayerID"), "TLSPlayerID");
+                    var num6 = RunInitializationFlow(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSMainTable"), "TLSMainTable");
                     if (num5 > 0L)
                     {
-                        long_0 = num5;
+                        playerGuid = num5;
                         int_29 = num6;
                         break;
                     }
@@ -875,46 +875,46 @@ public class GProcessMemoryManipulator
             }
             else
             {
-                Logger.smethod_1("OpenThread failed, last error = " + Marshal.GetLastWin32Error());
+                Logger.LoadProfile("OpenThread failed, last error = " + Marshal.GetLastWin32Error());
                 return false;
             }
         }
 
-        return long_0 != 0L;
+        return playerGuid != 0L;
     }
 
-    public static void smethod_53()
+    public static void InitializeDriverAndPid()
     {
         if (StartupClass.AnotherIntegerValue == 0)
             return;
-        StartupClass.bool_30 = false;
+        StartupClass.IsResumeMode = false;
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
         var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
-        var intptr_2 = numArray.Length == 1
+        var killEventHandle = numArray.Length == 1
             ? OpenThread(2U, false, numArray[0])
             : throw new Exception("!! Unexpected number of threads in game: " + numArray.Length);
-        if (intptr_2.ToInt32() <= 0)
+        if (killEventHandle.ToInt32() <= 0)
             throw new Exception("!! Unable to open main thread in game: " + Marshal.GetLastWin32Error());
-        ResumeThread(intptr_2);
-        CloseHandle(intptr_2);
+        ResumeThread(killEventHandle);
+        CloseHandle(killEventHandle);
     }
 
-    public static void smethod_54()
+    public static void WarnIfForceVersionSet()
     {
-        smethod_55(StartupClass.AnotherIntegerValue);
+        WarnIfTripwireDisabled(StartupClass.AnotherIntegerValue);
     }
 
-    public static void smethod_55(int int_29)
+    public static void WarnIfTripwireDisabled(int int_29)
     {
-        var intptr_2 = OpenProcess(1U, false, int_29);
-        if (intptr_2.ToInt32() <= 0)
+        var killEventHandle = OpenProcess(1U, false, int_29);
+        if (killEventHandle.ToInt32() <= 0)
             return;
-        TerminateProcess(intptr_2, 0U);
-        CloseHandle(intptr_2);
+        TerminateProcess(killEventHandle, 0U);
+        CloseHandle(killEventHandle);
     }
 
-    public static bool smethod_56(int int_29)
+    public static bool HandleAutoLogin(int int_29)
     {
         var gclass65 = new ProcessEnumerator();
         gclass65.method_0();
@@ -926,7 +926,7 @@ public class GProcessMemoryManipulator
     {
         [FieldOffset(0)] public int int_0;
         [FieldOffset(4)] public int int_1;
-        [FieldOffset(8)] public uint uint_0;
+        [FieldOffset(8)] public uint infiniteWaitTimeout;
         [FieldOffset(12)] public int int_2;
         [FieldOffset(16)] public uint uint_1;
         [FieldOffset(20)] public uint uint_2;
@@ -941,12 +941,12 @@ public class GProcessMemoryManipulator
         public int int_2;
         public int int_3;
 
-        public GStruct22(int int_4, int int_5, int int_6, int int_7)
+        public GStruct22(int pgEditProfileCount, int objectManagerBasePointer, int initCount, int knownVersion)
         {
-            int_0 = int_4;
-            int_1 = int_5;
-            int_2 = int_6;
-            int_3 = int_7;
+            int_0 = pgEditProfileCount;
+            int_1 = objectManagerBasePointer;
+            int_2 = initCount;
+            int_3 = knownVersion;
         }
 
         [SpecialName]
@@ -993,9 +993,9 @@ public class GProcessMemoryManipulator
         {
             return "L/R=" + int_0 + "/" + int_2 + ", T/B=" + int_1 + "/" + int_3;
         }
-        public bool method_5(int int_4, int int_5)
+        public bool method_5(int pgEditProfileCount, int objectManagerBasePointer)
         {
-            return int_4 >= int_0 && int_4 < int_2 && int_5 >= int_1 && int_5 < int_3;
+            return pgEditProfileCount >= int_0 && pgEditProfileCount < int_2 && objectManagerBasePointer >= int_1 && objectManagerBasePointer < int_3;
         }
     }
 
@@ -1008,9 +1008,9 @@ public class GProcessMemoryManipulator
         public int int_1;
         public int int_2;
         public int int_3;
-        public int int_4;
-        public int int_5;
-        public int int_6;
+        public int pgEditProfileCount;
+        public int objectManagerBasePointer;
+        public int initCount;
     }
 
 }

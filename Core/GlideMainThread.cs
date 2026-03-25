@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GlideMainThread
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -38,17 +38,17 @@ public class GlideMainThread
     {
         try
         {
-            if (!StartupClass.bool_19)
+            if (!StartupClass.IsVersionMismatch)
                 method_2();
-            StartupClass.smethod_27(false, "GlideThreadReturned");
+            StartupClass.StopGlide(false, "GlideThreadReturned");
         }
         catch (ThreadInterruptedException ex)
         {
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(702, ex.Message, ex.StackTrace));
-            StartupClass.smethod_27(false, "GlideThreadExcep");
+            Logger.LogMessage(MessageProvider.IsGroupProfile(702, ex.Message, ex.StackTrace));
+            StartupClass.StopGlide(false, "GlideThreadExcep");
         }
     }
 
@@ -76,7 +76,7 @@ public class GlideMainThread
             }
             else
             {
-                StartupClass.smethod_17(1, MessageProvider.GetMessage(308));
+                StartupClass.NotifyStatusChange(1, MessageProvider.GetMessage(308));
                 StartupClass.GameClass69Instance.method_9(unit.Name);
                 SpellcastingManager.gclass42_0.method_23();
                 GContext.Main.Me.SetTargetName(unit.Name);

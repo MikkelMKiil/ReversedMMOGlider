@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PriestConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -55,8 +55,8 @@ public class PriestConfig : Form
         UseShadowform.Checked = ConfigManager.gclass61_0.method_2("Priest.UseShadowform") == "True";
         UseVampiric.Checked = ConfigManager.gclass61_0.method_2("Priest.UseVampiric") == "True";
         ExtraFlay.Checked = ConfigManager.gclass61_0.method_2("Priest.ExtraFlay") == "True";
-        MessageProvider.smethod_3(this, "Priest");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Priest");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -320,13 +320,13 @@ public class PriestConfig : Form
         ConfigManager.gclass61_0.method_0("Priest.UseShadowform", UseShadowform.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Priest.UseVampiric", UseVampiric.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Priest.ExtraFlay", ExtraFlay.Checked.ToString());
-        if (StartupClass.smethod_19(MindblastCooldown.Text))
+        if (StartupClass.IsNumericString(MindblastCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.MindblastCooldown", MindblastCooldown.Text);
-        if (StartupClass.smethod_19(ShadowWordCooldown.Text))
+        if (StartupClass.IsNumericString(ShadowWordCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.ShadowWordCooldown", ShadowWordCooldown.Text);
-        if (StartupClass.smethod_19(ShieldCooldown.Text))
+        if (StartupClass.IsNumericString(ShieldCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.ShieldCooldown", ShieldCooldown.Text);
-        if (!StartupClass.smethod_19(PullDistance.Text))
+        if (!StartupClass.IsNumericString(PullDistance.Text))
             return;
         ConfigManager.gclass61_0.method_0("Priest.PullDistance", PullDistance.Text);
     }

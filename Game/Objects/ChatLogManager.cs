@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ChatLogManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -40,7 +40,7 @@ public class ChatLogManager
 
     public void method_0()
     {
-        Logger.smethod_1("Chat Manager connecting");
+        Logger.LoadProfile("Chat Manager connecting");
         lock (this)
         {
             method_1();
@@ -72,7 +72,7 @@ public class ChatLogManager
     {
         lock (this)
         {
-            Logger.smethod_1("Chat Manager disconnecting");
+            Logger.LoadProfile("Chat Manager disconnecting");
             gclass75_0 = null;
             gclass75_1 = null;
         }
@@ -93,7 +93,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(817, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(817, ex.Message, ex.StackTrace));
             method_3();
         }
     }
@@ -103,7 +103,7 @@ public class ChatLogManager
         var string_3 = gclass75_0.method_1();
         if (string_3 == null)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(818, "Chat", gclass75_0.string_1));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(818, "Chat", gclass75_0.string_1));
             gclass75_0.method_0();
         }
         else
@@ -116,13 +116,13 @@ public class ChatLogManager
                 foreach (var str1 in string_3)
                     if (str1 == null)
                     {
-                        Logger.smethod_1("* Null chat entry... !?");
+                        Logger.LoadProfile("* Null chat entry... !?");
                     }
                     else
                     {
-                        StartupClass.smethod_17(32, str1);
+                        StartupClass.NotifyStatusChange(32, str1);
                         var str2 = smethod_0(str1);
-                        StartupClass.smethod_17(8, str2);
+                        StartupClass.NotifyStatusChange(8, str2);
                         GContext.Main.FireChatLog(str1, str2);
                         str2.ToLower();
                         var strArray = str2.Split(' ');
@@ -130,14 +130,14 @@ public class ChatLogManager
                         {
                             if (strArray[1].Trim() == MessageProvider.GetMessage(34))
                             {
-                                Logger.LogMessage(MessageProvider.smethod_2(35, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.IsGroupProfile(35, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_7(strArray[1].Trim(), str1);
                             }
 
                             if (strArray[1].Trim() == MessageProvider.GetMessage(743))
                             {
-                                Logger.LogMessage(MessageProvider.smethod_2(744, strArray[0].Trim()));
+                                Logger.LogMessage(MessageProvider.IsGroupProfile(744, strArray[0].Trim()));
                                 if (StartupClass.glideMode_0 == GlideMode.Auto)
                                     method_6(strArray[1].Trim(), str1);
                             }
@@ -182,14 +182,14 @@ public class ChatLogManager
                 Logger.LogMessage(MessageProvider.GetMessage(40));
                 var str = ConfigManager.gclass61_0.method_2("ChatAutoReplyText");
                 if (str.Length > 0)
-                    InputController.smethod_28("/r " + str);
-                StartupClass.smethod_39(5000);
-                StartupClass.smethod_27(false, "GMWhisper");
+                    InputController.ExecuteStopGlide("/r " + str);
+                StartupClass.Sleep(5000);
+                StartupClass.StopGlide(false, "GMWhisper");
             }
             else
             {
                 Logger.LogMessage(MessageProvider.GetMessage(41));
-                StartupClass.smethod_27(false, "GMTalk");
+                StartupClass.StopGlide(false, "GMTalk");
             }
         }
     }
@@ -199,7 +199,7 @@ public class ChatLogManager
         var string_3 = gclass75_1.method_1();
         if (string_3 == null)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(818, "Combat", gclass75_1.string_1));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(818, "Combat", gclass75_1.string_1));
             gclass75_1.method_0();
         }
         else
@@ -207,10 +207,10 @@ public class ChatLogManager
             if (string_3.Length == 0)
                 return;
             method_16("Combat.log", string_3);
-            var lower1 = MessageProvider.smethod_2(813, string_1).ToLower();
+            var lower1 = MessageProvider.IsGroupProfile(813, string_1).ToLower();
             foreach (var str in string_3)
             {
-                StartupClass.smethod_17(4, str);
+                StartupClass.NotifyStatusChange(4, str);
                 if (string_1 != null)
                 {
                     var lower2 = str.ToLower();
@@ -219,14 +219,14 @@ public class ChatLogManager
                     if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
                         lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        Logger.smethod_1(MessageProvider.GetMessage(746));
+                        Logger.LoadProfile(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
                     if (lower2.EndsWith(string_1.ToLower() + MessageProvider.GetMessage(625).ToLower()) ||
                         lower2.IndexOf(MessageProvider.GetMessage(626) + string_1) > -1)
                     {
-                        Logger.smethod_1(MessageProvider.GetMessage(746));
+                        Logger.LoadProfile(MessageProvider.GetMessage(746));
                         dateTime_1 = DateTime.Now;
                     }
 
@@ -238,7 +238,7 @@ public class ChatLogManager
 
                     if (lower2.IndexOf(string_1.ToLower() + MessageProvider.GetMessage(36).ToLower()) > -1)
                     {
-                        Logger.smethod_1(MessageProvider.GetMessage(747));
+                        Logger.LoadProfile(MessageProvider.GetMessage(747));
                         dateTime_2 = DateTime.Now;
                     }
 
@@ -255,7 +255,7 @@ public class ChatLogManager
 
     public void method_9(string string_2)
     {
-        Logger.smethod_1(MessageProvider.smethod_2(639, string_2));
+        Logger.LoadProfile(MessageProvider.IsGroupProfile(639, string_2));
         string_1 = string_2;
     }
 
@@ -308,7 +308,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(42, ex.Message));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(42, ex.Message));
         }
     }
 
@@ -324,7 +324,7 @@ public class ChatLogManager
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(44, ex.Message));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(44, ex.Message));
         }
     }
 
@@ -332,16 +332,16 @@ public class ChatLogManager
     {
         try
         {
-            return smethod_1(string_2);
+            return LoadProfile(string_2);
         }
         catch (Exception ex)
         {
-            Logger.smethod_1("! Couldn't clean chat line: " + string_2);
+            Logger.LoadProfile("! Couldn't clean chat line: " + string_2);
             return string_2;
         }
     }
 
-    private static string smethod_1(string string_2)
+    private static string LoadProfile(string string_2)
     {
         var flag = false;
         while (!flag)
@@ -392,12 +392,12 @@ public class ChatLogManager
         for (var index = 0; index <= 10; ++index)
         {
             var str = GProcessMemoryManipulator.ReadString(num1 + index * num2, 100, "ChatFrameName");
-            Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
+            Logger.LoadProfile(MessageProvider.IsGroupProfile(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;
         }
 
-        Logger.LogMessage(MessageProvider.smethod_2(822, string_2));
+        Logger.LogMessage(MessageProvider.IsGroupProfile(822, string_2));
         return 1;
     }
 }

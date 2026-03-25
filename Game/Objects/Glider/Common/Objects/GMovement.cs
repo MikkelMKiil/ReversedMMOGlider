@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GMovement
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -46,7 +46,7 @@ namespace Glider.Common.Objects
             }
             else if (Target.DistanceToSelf > GContext.Main.MeleeDistance)
             {
-                Logger.smethod_1("TweakMelee: too far away to tweak, ignoring");
+                Logger.LoadProfile("TweakMelee: too far away to tweak, ignoring");
             }
             else
             {
@@ -239,7 +239,7 @@ namespace Glider.Common.Objects
                 var flag2 = false;
                 if (Math.Abs(CompareHeadings(GContext.Main.Me.GetHeadingTo(Target), GContext.Main.Me.Heading)) > 1.0)
                 {
-                    Logger.smethod_1(MessageProvider.GetMessage(18));
+                    Logger.LoadProfile(MessageProvider.GetMessage(18));
                     flag2 = true;
                 }
 
@@ -288,7 +288,7 @@ namespace Glider.Common.Objects
                     gspellTimer1.Reset();
                 }
 
-                StartupClass.smethod_39(107);
+                StartupClass.Sleep(107);
                 if (num1 >= 4)
                 {
                     Logger.LogMessage("Stuck too many times in MoveToMonster, giving up");
@@ -319,7 +319,7 @@ namespace Glider.Common.Objects
                 GContext.Main.StartRun();
             if (Math.Abs(Delta) < Math.PI / 18.0)
             {
-                Logger.smethod_1("Heading close enough, releasing spin");
+                Logger.LoadProfile("Heading close enough, releasing spin");
                 GContext.Main.ReleaseSpin();
             }
             else
@@ -358,7 +358,7 @@ namespace Glider.Common.Objects
                 if (Math.Abs(CompareHeadings(GPlayerSelf.Me.Location.GetHeadingTo(Target), GContext.Main.Me.Heading)) >
                     1.0)
                 {
-                    Logger.smethod_1(MessageProvider.GetMessage(18));
+                    Logger.LoadProfile(MessageProvider.GetMessage(18));
                     flag2 = true;
                 }
 
@@ -396,7 +396,7 @@ namespace Glider.Common.Objects
                                 NewHeading -= 2.0 * Math.PI;
                             if (NewHeading < 0.0)
                                 NewHeading += 2.0 * Math.PI;
-                            Logger.smethod_1("Current: " + GPlayerSelf.Me.Heading + ", new: " + NewHeading);
+                            Logger.LoadProfile("Current: " + GPlayerSelf.Me.Heading + ", new: " + NewHeading);
                             SetHeading(NewHeading, Distance > 20.0 ? 0.5 : 0.3);
                             GContext.Main.StartRun();
                             Thread.Sleep(1000 + StartupClass.random_0.Next() % 1500);
@@ -408,7 +408,7 @@ namespace Glider.Common.Objects
                     gspellTimer1.Reset();
                 }
 
-                StartupClass.smethod_39(50);
+                StartupClass.Sleep(50);
             }
 
             if (!LeaveRunning)
@@ -447,11 +447,11 @@ namespace Glider.Common.Objects
             for (var index = 0; index < 5; ++index)
             {
                 SetHeading(StartupClass.random_0.NextDouble() * 6.14);
-                StartupClass.gclass73_0.method_34(1500, 5000);
+                StartupClass.combatController.method_34(1500, 5000);
                 if (StartupClass.random_0.Next() % 3 == 0)
                 {
                     SpellcastingManager.gclass42_0.method_0("Common.Jump");
-                    StartupClass.gclass73_0.method_34(1500, 3000);
+                    StartupClass.combatController.method_34(1500, 3000);
                 }
             }
         }
@@ -496,7 +496,7 @@ namespace Glider.Common.Objects
                 return false;
             var heading = GPlayerSelf.Me.Heading;
             SpellcastingManager.gclass42_0.method_1(SpinKey);
-            StartupClass.smethod_39(int_14);
+            StartupClass.Sleep(int_14);
             SpellcastingManager.gclass42_0.method_2(SpinKey);
             GPlayerSelf.Me.Refresh(true);
             var num = CompareHeadings(heading, GPlayerSelf.Me.Heading);
@@ -518,7 +518,7 @@ namespace Glider.Common.Objects
             var flag = false;
             if (Target.DistanceToSelf > GContext.Main.MeleeDistance)
             {
-                Logger.smethod_1("TweakSpell: too far away to tweak, ignoring");
+                Logger.LoadProfile("TweakSpell: too far away to tweak, ignoring");
             }
             else
             {

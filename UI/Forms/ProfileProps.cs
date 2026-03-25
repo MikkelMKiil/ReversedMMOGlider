@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ProfileProps
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -26,7 +26,7 @@ public class ProfileProps : Form
     private TextBox FactionsBox;
     private CheckBox Fishing;
     private Label GhostWaypointsLabel;
-    public GProfile gprofile_0;
+    public GProfile ActiveGProfile;
     private GroupBox groupBox1;
     private GroupBox groupBox2;
     private GroupBox groupBox3;
@@ -68,9 +68,9 @@ public class ProfileProps : Form
 
     public ProfileProps(GProfile gprofile_1)
     {
-        gprofile_0 = gprofile_1;
+        ActiveGProfile = gprofile_1;
         InitializeComponent();
-        if (gprofile_0 == null)
+        if (ActiveGProfile == null)
         {
             Text = "Create New Profile";
             Circle.Checked = true;
@@ -120,20 +120,20 @@ public class ProfileProps : Form
         }
 
         method_4();
-        MessageProvider.smethod_3(this, nameof(ProfileProps));
-        GProcessMemoryManipulator.smethod_48(this);
-        if (gprofile_0 == null)
+        MessageProvider.LoadSingleProfile(this, nameof(ProfileProps));
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
+        if (ActiveGProfile == null)
             return;
         if (gprofile_1.Waypoints.Count > 0)
         {
             WaypointsLabel.Text =
-                MessageProvider.smethod_6("ProfileProps.WaypointsLabel.Contains", gprofile_1.Waypoints.Count);
+                MessageProvider.ParseDouble("ProfileProps.WaypointsLabel.Contains", gprofile_1.Waypoints.Count);
             ClearWaypoints.Enabled = true;
         }
 
         if (gprofile_1.GhostWaypoints.Count > 0)
         {
-            GhostWaypointsLabel.Text = MessageProvider.smethod_6("ProfileProps.GhostWaypointsLabel.Contains",
+            GhostWaypointsLabel.Text = MessageProvider.ParseDouble("ProfileProps.GhostWaypointsLabel.Contains",
                 gprofile_1.GhostWaypoints.Count);
             ClearGhostWaypoints.Enabled = true;
         }
@@ -141,7 +141,7 @@ public class ProfileProps : Form
         if (gprofile_1.VendorWaypoints.Count <= 0)
             return;
         VendorWaypointsLabel.Text =
-            MessageProvider.smethod_6("ProfileProps.VendorWaypointsLabel.Contains", gprofile_1.VendorWaypoints.Count);
+            MessageProvider.ParseDouble("ProfileProps.VendorWaypointsLabel.Contains", gprofile_1.VendorWaypoints.Count);
         ClearVendorWaypoints.Enabled = true;
     }
 
@@ -640,34 +640,34 @@ public class ProfileProps : Form
     {
         if (!method_2())
             return;
-        if (gprofile_0 == null)
-            gprofile_0 = new GProfile();
-        gprofile_0.MinLevel = method_0(MinLevelBox.Text);
-        gprofile_0.MaxLevel = method_0(MaxLevelBox.Text);
-        gprofile_0.LureMinutes = method_0(LureTimer.Text);
+        if (ActiveGProfile == null)
+            ActiveGProfile = new GProfile();
+        ActiveGProfile.MinLevel = method_0(MinLevelBox.Text);
+        ActiveGProfile.MaxLevel = method_0(MaxLevelBox.Text);
+        ActiveGProfile.LureMinutes = method_0(LureTimer.Text);
         if (FactionsBox.Text.Length > 0)
-            gprofile_0.SetFactionsFromString(FactionsBox.Text);
+            ActiveGProfile.SetFactionsFromString(FactionsBox.Text);
         else
-            gprofile_0.Factions = null;
-        gprofile_0.Beach = Beach.Checked;
-        gprofile_0.IgnoreAttackers = IgnoreAttackers.Checked;
-        gprofile_0.Reversible = OutAndBack.Checked;
-        gprofile_0.Fishing = Fishing.Checked;
-        gprofile_0.BlacklistOn = BlacklistOn.Checked;
-        gprofile_0.NaturalRun = NaturalRun.Checked;
-        gprofile_0.ReverseWaypoints = ReverseWaypoints.Checked;
-        gprofile_0.SkipWaypoints = SkipWaypoints.Checked;
-        gprofile_0.Wander = Wander.Checked;
-        gprofile_0.RunFromAvoids = RunFromAvoids.Checked;
-        gprofile_0.OneShot = OneShot.Checked;
-        gprofile_0.UseBreadcrumbs = UseBreadcrumbs.Checked;
-        gprofile_0.AllowShortCircuit = AllowShortCircuit.Checked;
-        gprofile_0.VendorAR = VendorAR.Text.Length <= 0 ? null : VendorAR.Text;
-        gprofile_0.VendorRepair = VendorRepair.Text.Length <= 0 ? null : VendorRepair.Text;
-        gprofile_0.VendorFW = VendorFW.Text.Length <= 0 ? null : VendorFW.Text;
-        StartupClass.bool_16 = true;
-        StartupClass.int_6 = !gprofile_0.ReverseWaypoints || gprofile_0.Reversible ? 1 : -1;
-        gprofile_0.AvoidList = null;
+            ActiveGProfile.Factions = null;
+        ActiveGProfile.Beach = Beach.Checked;
+        ActiveGProfile.IgnoreAttackers = IgnoreAttackers.Checked;
+        ActiveGProfile.Reversible = OutAndBack.Checked;
+        ActiveGProfile.Fishing = Fishing.Checked;
+        ActiveGProfile.BlacklistOn = BlacklistOn.Checked;
+        ActiveGProfile.NaturalRun = NaturalRun.Checked;
+        ActiveGProfile.ReverseWaypoints = ReverseWaypoints.Checked;
+        ActiveGProfile.SkipWaypoints = SkipWaypoints.Checked;
+        ActiveGProfile.Wander = Wander.Checked;
+        ActiveGProfile.RunFromAvoids = RunFromAvoids.Checked;
+        ActiveGProfile.OneShot = OneShot.Checked;
+        ActiveGProfile.UseBreadcrumbs = UseBreadcrumbs.Checked;
+        ActiveGProfile.AllowShortCircuit = AllowShortCircuit.Checked;
+        ActiveGProfile.VendorAR = VendorAR.Text.Length <= 0 ? null : VendorAR.Text;
+        ActiveGProfile.VendorRepair = VendorRepair.Text.Length <= 0 ? null : VendorRepair.Text;
+        ActiveGProfile.VendorFW = VendorFW.Text.Length <= 0 ? null : VendorFW.Text;
+        StartupClass.IsProfileModified = true;
+        StartupClass.initCount = !ActiveGProfile.ReverseWaypoints || ActiveGProfile.Reversible ? 1 : -1;
+        ActiveGProfile.AvoidList = null;
         if (AvoidList.Text.Length > 2)
         {
             var arrayList = new ArrayList();
@@ -677,7 +677,7 @@ public class ProfileProps : Form
                 if (str.Length > 2)
                     arrayList.Add(str.Replace("\n", ""));
             if (arrayList.Count > 0)
-                gprofile_0.AvoidList = (string[])arrayList.ToArray(typeof(string));
+                ActiveGProfile.AvoidList = (string[])arrayList.ToArray(typeof(string));
         }
 
         DialogResult = DialogResult.OK;
@@ -754,9 +754,9 @@ public class ProfileProps : Form
 
     private void ClearWaypoints_Click(object sender, EventArgs e)
     {
-        gprofile_0.Waypoints.Clear();
+        ActiveGProfile.Waypoints.Clear();
         ClearWaypoints.Enabled = false;
-        WaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.WaypointsLabel");
+        WaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.WaypointsLabel");
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -766,9 +766,9 @@ public class ProfileProps : Form
 
     private void ClearGhostWaypoints_Click(object sender, EventArgs e)
     {
-        gprofile_0.GhostWaypoints.Clear();
+        ActiveGProfile.GhostWaypoints.Clear();
         ClearGhostWaypoints.Enabled = false;
-        GhostWaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.GhostWaypointsLabel");
+        GhostWaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.GhostWaypointsLabel");
     }
 
     private void Fishing_CheckedChanged(object sender, EventArgs e)
@@ -801,11 +801,11 @@ public class ProfileProps : Form
 
     private void ClearVendorWaypoints_Click(object sender, EventArgs e)
     {
-        gprofile_0.VendorWaypoints.Clear();
+        ActiveGProfile.VendorWaypoints.Clear();
         VendorRepair.Text = "";
         VendorAR.Text = "";
         VendorFW.Text = "";
         ClearVendorWaypoints.Enabled = false;
-        VendorWaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.VendorWaypointsLabel");
+        VendorWaypointsLabel.Text = MessageProvider.GetFileNameFromPath("ProfileProps.VendorWaypointsLabel");
     }
 }

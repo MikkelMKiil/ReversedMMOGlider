@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: DebuffDatabase
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -75,11 +75,11 @@ public class DebuffDatabase
                 }
 
             xmlTextReader.Close();
-            Logger.LogMessage(MessageProvider.smethod_2(797, num1, num2));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(797, num1, num2));
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(799, ex.Message, ex.StackTrace));
         }
     }
 
@@ -186,7 +186,7 @@ public class DebuffDatabase
 
     public void method_8()
     {
-        if (!StartupClass.bool_13)
+        if (!StartupClass.IsGameProcessAttached)
             return;
         var me = GPlayerSelf.Me;
         if (me == null)
@@ -198,7 +198,7 @@ public class DebuffDatabase
             if (gbuff != null && gbuff.SpellID > 0 && !Offsets.ContainsKey(gbuff.SpellID) &&
                 !sortedList_1.ContainsKey(gbuff.SpellID) && gbuff.SpellName != null && gbuff.SpellName.Length > 0)
             {
-                Logger.smethod_1(MessageProvider.smethod_2(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                Logger.LoadProfile(MessageProvider.IsGroupProfile(800, gbuff.SpellID.ToString("x"), gbuff.SpellName));
                 sortedList_1.Add(gbuff.SpellID, gbuff.SpellName);
             }
     }
@@ -250,7 +250,7 @@ public class DebuffDatabase
                 return;
             foreach (var gbuff in buffSnapshot)
                 if (gbuff != null)
-                    Logger.LogMessage(MessageProvider.smethod_2(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
+                    Logger.LogMessage(MessageProvider.IsGroupProfile(798, gbuff.SpellID.ToString("x"), gbuff.SpellName));
         }
         catch (Exception ex)
         {

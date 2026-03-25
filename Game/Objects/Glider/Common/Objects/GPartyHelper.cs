@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GPartyHelper
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -23,7 +23,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                switch (StartupClass.gclass54_0.genum7_0)
+                switch (StartupClass.partyManager.genum7_0)
                 {
                     case PartyRole.const_0:
                         return GPartyMode.Solo;
@@ -41,7 +41,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (StartupClass.glideMode_0 != GlideMode.Auto || StartupClass.gclass54_0.genum7_0 == PartyRole.const_0)
+                if (StartupClass.glideMode_0 != GlideMode.Auto || StartupClass.partyManager.genum7_0 == PartyRole.const_0)
                     return GHealDisposition.Never;
                 switch (ConfigManager.gclass61_0.method_2("PartyHealMode"))
                 {
@@ -57,7 +57,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.gclass54_0.genum7_0 != PartyRole.const_0;
+        public bool HealParty => HealMode != GHealDisposition.Never && PartyManager.partyManager.genum7_0 != PartyRole.const_0;
 
         public long[] GetPartyMembers()
         {
@@ -98,7 +98,7 @@ namespace Glider.Common.Objects
             if (index == partyMembers.Length)
                 Logger.LogMessage("!! Never found party member to target: " + Target);
             else
-                InputController.smethod_9((short)(113 + (short)index));
+                InputController.StartMainThread((short)(113 + (short)index));
         }
 
         private PartyBuffBucket GetBuffsForPlayer(long GUID)

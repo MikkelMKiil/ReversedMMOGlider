@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: RogueConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -74,8 +74,8 @@ public class RogueConfig : Form
         UseRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseRush") == "True";
         SaveRush.Checked = ConfigManager.gclass61_0.method_2("Rogue.SaveRush") == "True";
         UseGhostly.Checked = ConfigManager.gclass61_0.method_2("Rogue.UseGhostly") == "True";
-        MessageProvider.smethod_3(this, "Rogue");
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, "Rogue");
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -433,15 +433,15 @@ public class RogueConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsNumericString(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Rogue.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(EvasionCooldown.Text))
+        if (StartupClass.IsNumericString(EvasionCooldown.Text))
             ConfigManager.gclass61_0.method_0("Rogue.EvasionCooldown", EvasionCooldown.Text);
-        if (StartupClass.smethod_19(SinisterCost.Text))
+        if (StartupClass.IsNumericString(SinisterCost.Text))
             ConfigManager.gclass61_0.method_0("Rogue.SinisterCost", SinisterCost.Text);
-        if (StartupClass.smethod_19(EviscMultiplier.Text))
+        if (StartupClass.IsNumericString(EviscMultiplier.Text))
             ConfigManager.gclass61_0.method_0("Rogue.EviscMultiplier", EviscMultiplier.Text);
-        if (StartupClass.smethod_19(KickLife.Text))
+        if (StartupClass.IsNumericString(KickLife.Text))
             ConfigManager.gclass61_0.method_0("Rogue.KickLife", KickLife.Text);
         ConfigManager.gclass61_0.method_0("Rogue.UseColdblood", UseColdblood.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Rogue.UseBackstab", UseBackstab.Checked.ToString());

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: KeyEditor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -45,20 +45,20 @@ public class KeyEditor : Form
 
     public KeyEditor(string string_2, string string_3)
     {
-        if (StartupClass.bool_13)
+        if (StartupClass.IsGameProcessAttached)
             SpellcastingManager.gclass42_0.method_23();
         string_0 = string_2;
         InitializeComponent();
-        MessageProvider.smethod_3(this, nameof(KeyEditor));
+        MessageProvider.LoadSingleProfile(this, nameof(KeyEditor));
         var keyEditor = this;
         keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.GenerateRandomString() + "]";
         foreach (var key in SpellcastingManager.gclass42_0.Offsets.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
-        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Char"));
-        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.VChar"));
-        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Spell"));
-        KeyType.Items.Add(MessageProvider.smethod_4("KeyType.Item"));
+        KeyType.Items.Add(MessageProvider.GetFileNameFromPath("KeyType.Char"));
+        KeyType.Items.Add(MessageProvider.GetFileNameFromPath("KeyType.VChar"));
+        KeyType.Items.Add(MessageProvider.GetFileNameFromPath("KeyType.Spell"));
+        KeyType.Items.Add(MessageProvider.GetFileNameFromPath("KeyType.Item"));
         BarState.Items.Add("Any");
         BarState.Items.Add("1");
         BarState.Items.Add("2");
@@ -347,13 +347,13 @@ public class KeyEditor : Form
         {
             if (gkey_0.VK != 0)
                 KeyChar.Text = "0x" + gkey_0.VK.ToString("x");
-            label4.Text = MessageProvider.smethod_4("KeyEditor.label4.Alt");
+            label4.Text = MessageProvider.GetFileNameFromPath("KeyEditor.label4.Alt");
         }
         else
         {
             if (gkey_0.CharCode != char.MinValue)
                 KeyChar.Text = "" + gkey_0.CharCode;
-            label4.Text = MessageProvider.smethod_4("KeyEditor.label4");
+            label4.Text = MessageProvider.GetFileNameFromPath("KeyEditor.label4");
         }
 
         SS_Shift.Checked = (gkey_0.ShiftState & 1) > 0;
@@ -437,7 +437,7 @@ public class KeyEditor : Form
                     {
                         case GShortcutType.Spell:
                             class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
-                                              StartupClass.gclass63_0.method_11(gshortcut_0.ShortcutValue);
+                                              StartupClass.spellbookManager.method_11(gshortcut_0.ShortcutValue);
                             break;
                         case GShortcutType.Item:
                             class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
@@ -464,7 +464,7 @@ public class KeyEditor : Form
             var class0_1 = new IntStringEntry();
             class0_1.int_0 = -1;
             class0_1.string_0 = "0x" + gkey_0.SIM.ToString("x") + " ";
-            class0_1.string_0 += StartupClass.gclass63_0.method_11(gkey_0.SIM);
+            class0_1.string_0 += StartupClass.spellbookManager.method_11(gkey_0.SIM);
             class0_1.string_0 += " (not on visible bar!)";
             Spell.Items.Add(class0_1);
             Spell.SelectedIndex = Spell.Items.Count - 1;
@@ -555,7 +555,7 @@ public class KeyEditor : Form
     {
         if (!bool_0)
             return false;
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.GenerateRandomString() + "]",
+        var num = (int)MessageBox.Show(this, MessageProvider.GetFileNameFromPath(string_2), "Key Error [" + GProcessMemoryManipulator.GenerateRandomString() + "]",
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
         return true;

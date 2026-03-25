@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GProfile
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -108,7 +108,7 @@ namespace Glider.Common.Objects
         public void Save(string OutputFile)
         {
             Name = OutputFile;
-            Logger.LogMessage(MessageProvider.smethod_2(768, OutputFile));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(768, OutputFile));
             var xmlDocument_0 = new XmlDocument();
             xmlDocument_0.AppendChild(xmlDocument_0.CreateXmlDeclaration("1.0", null, null));
             xmlDocument_0.AppendChild(xmlDocument_0.CreateElement("GlideProfile"));
@@ -212,17 +212,17 @@ namespace Glider.Common.Objects
             }
             catch (Exception ex)
             {
-                Logger.LogMessage(MessageProvider.smethod_2(64, ex.Message));
+                Logger.LogMessage(MessageProvider.IsGroupProfile(64, ex.Message));
                 return false;
             }
         }
 
         public void Select()
         {
-            StartupClass.int_6 = 1;
+            StartupClass.initCount = 1;
             if (ReverseWaypoints)
-                StartupClass.int_6 = -1;
-            StartupClass.sortedList_2.Clear();
+                StartupClass.initCount = -1;
+            StartupClass.corpseSortedList.Clear();
         }
 
         public bool IsBlacklisted(long GUID)
@@ -237,7 +237,7 @@ namespace Glider.Common.Objects
         {
             if (GPlayerSelf.Me.TargetGUID == GUID)
                 GContext.Main.ClearTarget();
-            Logger.LogMessage(MessageProvider.smethod_2(648, GUID.ToString("x")));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(648, GUID.ToString("x")));
             Blacklist.Add(GUID);
         }
 
@@ -247,7 +247,7 @@ namespace Glider.Common.Objects
                 GContext.Main.ClearTarget();
             if (!BlacklistOn)
                 return;
-            Logger.LogMessage(MessageProvider.smethod_2(648, GUID.ToString("x")));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(648, GUID.ToString("x")));
             Blacklist.Add(GUID);
         }
 
@@ -407,11 +407,11 @@ namespace Glider.Common.Objects
                 var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                 if (closestWaypointIndex == CurrentIndex)
                     return;
-                Logger.smethod_1("## Way off course, re-syncing to closest waypoint (current wp is #" + CurrentIndex +
+                Logger.LoadProfile("## Way off course, re-syncing to closest waypoint (current wp is #" + CurrentIndex +
                                    ", distance = " + CurrentWaypoint.GetDistanceTo(GPlayerSelf.Me.Location) +
                                    " yards)");
                 CurrentIndex = closestWaypointIndex;
-                Logger.smethod_1("## New is #" + CurrentIndex + ", distance = " +
+                Logger.LoadProfile("## New is #" + CurrentIndex + ", distance = " +
                                    CurrentWaypoint.GetDistanceTo(GPlayerSelf.Me.Location) + " yards)");
             }
             else
@@ -434,7 +434,7 @@ namespace Glider.Common.Objects
 
                     if (num2 < 18.3 && num3 < Breadcrumbs.Count - 1)
                     {
-                        Logger.smethod_1("## Looped back, tearing down breadcrumb list to #" + (num3 + 1));
+                        Logger.LoadProfile("## Looped back, tearing down breadcrumb list to #" + (num3 + 1));
                         while (Breadcrumbs.Peek() != glocation)
                             Breadcrumbs.Pop();
                         return;
@@ -442,21 +442,21 @@ namespace Glider.Common.Objects
 
                     distanceTo = Breadcrumbs.Peek().GetDistanceTo(GPlayerSelf.Me.Location);
                     num1 = 18.3;
-                    Logger.smethod_1("## Distance to last breadcrumb: " + distanceTo + " yards");
+                    Logger.LoadProfile("## Distance to last breadcrumb: " + distanceTo + " yards");
                 }
                 else
                 {
                     index1 = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                     num1 = 27.6;
                     distanceTo = Waypoints[index1].GetDistanceTo(GPlayerSelf.Me.Location);
-                    Logger.smethod_1("## Distance to profile: " + distanceTo + " yards");
+                    Logger.LoadProfile("## Distance to profile: " + distanceTo + " yards");
                 }
 
                 if (distanceTo < num1)
                     return;
                 if (Breadcrumbs.Count == 0)
                 {
-                    Logger.smethod_1("## Starting breadcrumbs, syncing profile to closest waypoint");
+                    Logger.LoadProfile("## Starting breadcrumbs, syncing profile to closest waypoint");
                     CurrentIndex = index1;
                 }
 
@@ -496,7 +496,7 @@ namespace Glider.Common.Objects
             var ghostWaypointIndex = GetClosestGhostWaypointIndex(GPlayerSelf.Me.Location);
             var lastGhostIndex = GetLastGhostIndex(ghostWaypointIndex);
             var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-            Logger.smethod_1("## Creating ghost walk path (GhostIndex=" + ghostWaypointIndex + ", LastGhostIndex=" +
+            Logger.LoadProfile("## Creating ghost walk path (GhostIndex=" + ghostWaypointIndex + ", LastGhostIndex=" +
                                lastGhostIndex + ", Me.Location=" + GPlayerSelf.Me.Location + ")");
             int index1;
             if (GPlayerSelf.Me.Location.GetDistanceTo(Waypoints[closestWaypointIndex]) >
@@ -504,7 +504,7 @@ namespace Glider.Common.Objects
             {
                 for (var index2 = ghostWaypointIndex; index2 <= lastGhostIndex; ++index2)
                 {
-                    Logger.smethod_1("## Queueing gwp #" + index2 + ": " + GhostWaypoints[index2]);
+                    Logger.LoadProfile("## Queueing gwp #" + index2 + ": " + GhostWaypoints[index2]);
                     ghostwalkPath.Enqueue(GhostWaypoints[index2]);
                 }
 
@@ -512,7 +512,7 @@ namespace Glider.Common.Objects
             }
             else
             {
-                Logger.smethod_1("## Real waypoint is closer than ghost, skipping GWP's");
+                Logger.LoadProfile("## Real waypoint is closer than ghost, skipping GWP's");
                 index1 = closestWaypointIndex;
             }
 
@@ -520,12 +520,12 @@ namespace Glider.Common.Objects
             if (Breadcrumbs.Count == 0)
             {
                 num1 = GetClosestWaypointIndex(Corpse);
-                Logger.smethod_1("## No breadcrumbs, last waypoint index = " + num1);
+                Logger.LoadProfile("## No breadcrumbs, last waypoint index = " + num1);
             }
             else
             {
                 num1 = CurrentIndex;
-                Logger.smethod_1("## Breadcrumbs present, last waypoint index = " + num1);
+                Logger.LoadProfile("## Breadcrumbs present, last waypoint index = " + num1);
             }
 
             int num2;
@@ -541,15 +541,15 @@ namespace Glider.Common.Objects
                     num3 += Waypoints.Count;
                 if (num4 < 0)
                     num4 += Waypoints.Count;
-                Logger.smethod_1("## LGI: " + lastGhostIndex + ", LWI: " + num1 + ", PSteps: " + num3 + ", NSteps: " +
+                Logger.LoadProfile("## LGI: " + lastGhostIndex + ", LWI: " + num1 + ", PSteps: " + num3 + ", NSteps: " +
                                    num4);
                 num2 = num3 >= num4 ? 1 : -1;
             }
 
-            Logger.smethod_1("## CurrentWPI: " + index1 + ", LastWPI: " + num1 + ", Vector: " + num2);
+            Logger.LoadProfile("## CurrentWPI: " + index1 + ", LastWPI: " + num1 + ", Vector: " + num2);
             while (index1 != num1)
             {
-                Logger.smethod_1("## Queuing rwp #" + index1 + ": " + Waypoints[index1]);
+                Logger.LoadProfile("## Queuing rwp #" + index1 + ": " + Waypoints[index1]);
                 ghostwalkPath.Enqueue(Waypoints[index1]);
                 index1 += num2;
                 if (index1 == Waypoints.Count)
@@ -563,7 +563,7 @@ namespace Glider.Common.Objects
                 var array = Breadcrumbs.ToArray();
                 for (var index3 = 0; index3 < array.Length; ++index3)
                 {
-                    Logger.smethod_1("## Queuing bwp #" + (index3 + 1) + ": " + array[index3]);
+                    Logger.LoadProfile("## Queuing bwp #" + (index3 + 1) + ": " + array[index3]);
                     ghostwalkPath.Enqueue(array[index3]);
                 }
             }
@@ -583,17 +583,17 @@ namespace Glider.Common.Objects
             var num = GContext.Main.Movement.CompareHeadings(GPlayerSelf.Me.Heading, headingTo);
             string str;
             if (num < 0.0)
-                str = MessageProvider.smethod_2(664, Math.Round(Math.Abs(num) / Math.PI * 180.0, 1));
+                str = MessageProvider.IsGroupProfile(664, Math.Round(Math.Abs(num) / Math.PI * 180.0, 1));
             else
-                str = MessageProvider.smethod_2(665, Math.Round(num / Math.PI * 180.0, 1));
-            return MessageProvider.smethod_2(666, WPIndex, str, Math.Round(distanceTo, 2));
+                str = MessageProvider.IsGroupProfile(665, Math.Round(num / Math.PI * 180.0, 1));
+            return MessageProvider.IsGroupProfile(666, WPIndex, str, Math.Round(distanceTo, 2));
         }
 
         public string[] GetWaypointNotes()
         {
             var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-            var WPIndex1 = closestWaypointIndex + StartupClass.int_6;
-            var WPIndex2 = closestWaypointIndex - StartupClass.int_6;
+            var WPIndex1 = closestWaypointIndex + StartupClass.initCount;
+            var WPIndex2 = closestWaypointIndex - StartupClass.initCount;
             if (WPIndex1 < 0)
                 WPIndex1 = Waypoints.Count - 1;
             if (WPIndex1 == Waypoints.Count)
@@ -654,7 +654,7 @@ namespace Glider.Common.Objects
 
         public GLocation BeginProfile(GLocation Source)
         {
-            Logger.smethod_1("## BeginProfile invoked");
+            Logger.LoadProfile("## BeginProfile invoked");
             var closestWaypointIndex = GetClosestWaypointIndex(Source);
             var L = Waypoints[closestWaypointIndex];
             CurrentIndex = closestWaypointIndex;
@@ -663,18 +663,18 @@ namespace Glider.Common.Objects
                 if (GPlayerSelf.Me.Location.GetDistanceTo(Breadcrumbs.Peek()) <
                     (double)GPlayerSelf.Me.Location.GetDistanceTo(L))
                 {
-                    Logger.smethod_1("## Closest spot is a breadcrumb, taking that instead");
+                    Logger.LoadProfile("## Closest spot is a breadcrumb, taking that instead");
                     L = Breadcrumbs.Peek();
                 }
                 else
                 {
-                    Logger.smethod_1("## Got crumbs, but they're too far away, wiping trail");
+                    Logger.LoadProfile("## Got crumbs, but they're too far away, wiping trail");
                     ClearBreadcrumbs();
                 }
             }
             else
             {
-                Logger.smethod_1("## No breadcrumbs to start profile");
+                Logger.LoadProfile("## No breadcrumbs to start profile");
             }
 
             return L;
@@ -689,13 +689,13 @@ namespace Glider.Common.Objects
 
         public void ConsumeCurrentWaypoint()
         {
-            Logger.smethod_1("## ConsumeCurrentWaypoint invoked");
+            Logger.LoadProfile("## ConsumeCurrentWaypoint invoked");
             if (Breadcrumbs.Count > 0)
             {
                 if (AllowShortCircuit &&
                     GetClosestWaypoint(GPlayerSelf.Me.Location).GetDistanceTo(GPlayerSelf.Me.Location) < 27.6)
                 {
-                    Logger.smethod_1("## Short-circuiting back onto regular waypoints");
+                    Logger.LoadProfile("## Short-circuiting back onto regular waypoints");
                     ClearBreadcrumbs();
                     CurrentIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
                 }
@@ -704,23 +704,23 @@ namespace Glider.Common.Objects
                     Breadcrumbs.Pop();
                     if (Breadcrumbs.Count > 0)
                     {
-                        Logger.smethod_1("## On crumbs, next waypoint is bwp #" + Breadcrumbs.Count + ": " +
+                        Logger.LoadProfile("## On crumbs, next waypoint is bwp #" + Breadcrumbs.Count + ": " +
                                            Breadcrumbs.Peek());
                     }
                     else
                     {
                         CurrentIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-                        Logger.smethod_1("## Off crumbs, next waypoint is rwp #" + CurrentIndex + ": " +
+                        Logger.LoadProfile("## Off crumbs, next waypoint is rwp #" + CurrentIndex + ": " +
                                            Waypoints[CurrentIndex]);
                     }
                 }
             }
             else
             {
-                CurrentIndex += StartupClass.int_6;
+                CurrentIndex += StartupClass.initCount;
                 if (CurrentIndex < 0 || CurrentIndex >= Waypoints.Count)
                 {
-                    ProfileGroupManager.smethod_2();
+                    ProfileGroupManager.IsGroupProfile();
                     OneShotHit = OneShot && OneShotStepCheck > 4;
                 }
 
@@ -730,7 +730,7 @@ namespace Glider.Common.Objects
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(67));
                         CurrentIndex = 1;
-                        StartupClass.int_6 = 1;
+                        StartupClass.initCount = 1;
                     }
                     else
                     {
@@ -745,7 +745,7 @@ namespace Glider.Common.Objects
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(65));
                         CurrentIndex = Waypoints.Count - 2;
-                        StartupClass.int_6 = -1;
+                        StartupClass.initCount = -1;
                     }
                     else
                     {
@@ -754,13 +754,13 @@ namespace Glider.Common.Objects
                     }
                 }
 
-                Logger.smethod_1("## Next waypoint is rwp #" + CurrentIndex + ": " + Waypoints[CurrentIndex]);
+                Logger.LoadProfile("## Next waypoint is rwp #" + CurrentIndex + ": " + Waypoints[CurrentIndex]);
             }
         }
 
         private int PeekNextWaypointIndex(int StartIndex)
         {
-            StartIndex += StartupClass.int_6;
+            StartIndex += StartupClass.initCount;
             if (StartIndex < 0)
                 StartIndex = !Reversible ? Waypoints.Count - 1 : 1;
             if (StartIndex == Waypoints.Count)
@@ -782,9 +782,9 @@ namespace Glider.Common.Objects
                 Breadcrumbs.Pop();
             if (Breadcrumbs.Count != 0)
                 return;
-            StartupClass.int_6 *= -1;
+            StartupClass.initCount *= -1;
             ConsumeCurrentWaypoint();
-            StartupClass.int_6 *= -1;
+            StartupClass.initCount *= -1;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ScriptExecutor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -51,7 +51,7 @@ public class ScriptExecutor
 
     public void method_2(string string_0, bool bool_0)
     {
-        Logger.smethod_1("ScriptHelper.Execute: " + string_0);
+        Logger.LoadProfile("ScriptHelper.Execute: " + string_0);
         if (StartupClass.glideMode_0 == GlideMode.None)
         {
             if (thread_0 != null && thread_0 == Thread.CurrentThread)
@@ -82,11 +82,11 @@ public class ScriptExecutor
                     }
                     else
                     {
-                        StartupClass.smethod_22();
+                        StartupClass.BringGameWindowToForeground();
                         Thread.Sleep(2000);
                     }
 
-                    Logger.smethod_1("Firing up script on new thread");
+                    Logger.LoadProfile("Firing up script on new thread");
                     if (StartupClass.GliderManager != null)
                         StartupClass.GliderManager.method_33(true);
                     thread_0 = new Thread(method_3);
@@ -118,8 +118,8 @@ public class ScriptExecutor
 
         if (flag)
             thread_0 = null;
-        StartupClass.gclass68_0.method_7();
-        InputController.smethod_21(false);
+        StartupClass.cameraRotator.method_7();
+        InputController.StartManualGlide(false);
         if (StartupClass.GliderManager == null)
             return;
         StartupClass.GliderManager.method_33(false);
@@ -162,21 +162,21 @@ public class ScriptExecutor
             var str1 = ConfigManager.gclass61_0.method_2("ScriptsFolder");
             if (GContext.Main.Profile != null && GContext.Main.Profile.ScriptOverride != null)
             {
-                Logger.smethod_1("Using profile's script override folder");
+                Logger.LoadProfile("Using profile's script override folder");
                 str1 = GContext.Main.Profile.ScriptOverride;
             }
 
             if (!str1.EndsWith("\\"))
                 str1 += "\\";
             var str2 = str1 + string_0 + ".cs";
-            Logger.smethod_1("Considering: \"" + str2 + "\"");
+            Logger.LoadProfile("Considering: \"" + str2 + "\"");
             if (File.Exists(str2))
             {
                 Offsets[string_0] = method_11(str2);
             }
             else
             {
-                Logger.smethod_1("No such file, skipping");
+                Logger.LoadProfile("No such file, skipping");
                 Offsets[string_0] = null;
             }
         }
@@ -284,7 +284,7 @@ public class ScriptExecutor
             return null;
         }
 
-        Logger.smethod_1("Compiling script, length = " + string_0.Length + " bytes");
+        Logger.LoadProfile("Compiling script, length = " + string_0.Length + " bytes");
         string string_1;
         var assembly_0 = method_13(string_0, out string_1);
         if (assembly_0 == null)
@@ -316,7 +316,7 @@ public class ScriptExecutor
         compilerParameters.WarningLevel = 4;
         compilerParameters.IncludeDebugInformation = true;
         compilerParameters.ReferencedAssemblies.Add(CodeCompiler.GetCompilerReferenceAssembly());
-        CodeCompiler.smethod_1(string_0, compilerParameters);
+        CodeCompiler.LoadProfile(string_0, compilerParameters);
         var compilerResults = codeDomProvider.CompileAssemblyFromSource(compilerParameters, string_0);
         var errors = compilerResults.Errors;
         if (errors.Count > 0)

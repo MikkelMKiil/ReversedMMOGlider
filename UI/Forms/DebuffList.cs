@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: DebuffList
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -27,8 +27,8 @@ public class DebuffList : Form
     public DebuffList()
     {
         InitializeComponent();
-        MessageProvider.smethod_3(this, nameof(DebuffList));
-        GProcessMemoryManipulator.smethod_48(this);
+        MessageProvider.LoadSingleProfile(this, nameof(DebuffList));
+        GProcessMemoryManipulator.ShrinkGameWindow(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -106,7 +106,7 @@ public class DebuffList : Form
         try
         {
             var xmlTextReader = new XmlTextReader(str1);
-            Logger.smethod_1("Reading from xml");
+            Logger.LoadProfile("Reading from xml");
             while (xmlTextReader.Read())
                 if (xmlTextReader.NodeType == XmlNodeType.Element && xmlTextReader.Name == "Debuff")
                 {
@@ -127,7 +127,7 @@ public class DebuffList : Form
 
                     if (!Offsets.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
                     {
-                        Logger.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
+                        Logger.LoadProfile(num.ToString("x") + " = \"" + str2 + "\"");
                         Offsets.Add(num, str2);
                         DebuffBox.Items.Add(str2 + " (" + num.ToString("x") + ")");
                     }
@@ -137,7 +137,7 @@ public class DebuffList : Form
         }
         catch (Exception ex)
         {
-            Logger.LogMessage(MessageProvider.smethod_2(799, ex.Message, ex.StackTrace));
+            Logger.LogMessage(MessageProvider.IsGroupProfile(799, ex.Message, ex.StackTrace));
         }
     }
 

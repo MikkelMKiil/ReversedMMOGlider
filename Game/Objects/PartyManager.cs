@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PartyManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -13,14 +13,14 @@ using System.Threading;
 
 public class PartyManager
 {
-    public static PartyManager gclass54_0;
+    public static PartyManager partyManager;
     public bool bool_0;
     public bool bool_1;
     public bool bool_2;
     public bool bool_3;
     public bool bool_4;
-    public GameTimer[] gclass36_0;
-    public GameTimer[] gclass36_1;
+    public GameTimer[] licenseCheckTimer;
+    public GameTimer[] resumeTimer;
     public PartyRole genum7_0;
     public GPlayer[] gplayer_0;
     public GPlayer gplayer_1;
@@ -30,18 +30,18 @@ public class PartyManager
     public int int_1;
     public int int_2;
     public int int_3;
-    public int int_4;
-    public int int_5;
-    public int int_6;
-    public int int_7;
-    public long[] long_0;
+    public int pgEditProfileCount;
+    public int objectManagerBasePointer;
+    public int initCount;
+    public int knownVersion;
+    public long[] playerGuid;
     public SortedList[] Offsets;
     public string[] string_0;
     public string string_1;
 
     public void method_0(ConfigManager gclass61_0)
     {
-        gclass54_0 = this;
+        partyManager = this;
         switch (ConfigManager.gclass61_0.method_2("PartyMode"))
         {
             case "Solo":
@@ -72,9 +72,9 @@ public class PartyManager
         int_1 = gclass61_0.method_3("PartyLootPos") - 1;
         int_2 = gclass61_0.method_3("PartyAttackDelay");
         int_3 = gclass61_0.method_3("PartyLootDelay");
-        int_4 = gclass61_0.method_3("PartyLeaderWait");
-        int_5 = gclass61_0.method_3("PartyFollowerStart");
-        int_6 = gclass61_0.method_3("PartyFollowerStop");
+        pgEditProfileCount = gclass61_0.method_3("PartyLeaderWait");
+        objectManagerBasePointer = gclass61_0.method_3("PartyFollowerStart");
+        initCount = gclass61_0.method_3("PartyFollowerStop");
         string_1 = ConfigManager.gclass61_0.method_2("PartyLeaderName");
         bool_0 = gclass61_0.method_5("PartyAdds");
         bool_1 = gclass61_0.method_5("PartyHeal");
@@ -92,12 +92,12 @@ public class PartyManager
 
     public static PartyRole smethod_0()
     {
-        return StartupClass.glideMode_0 != GlideMode.Auto ? PartyRole.const_0 : gclass54_0.genum7_0;
+        return StartupClass.glideMode_0 != GlideMode.Auto ? PartyRole.const_0 : partyManager.genum7_0;
     }
 
     public void method_1()
     {
-        int_7 = 0;
+        knownVersion = 0;
     }
 
     public GPlayer method_2(string string_2)
@@ -122,7 +122,7 @@ public class PartyManager
                 var unitByTarget1 = GObjectList.FindUnitByTarget(gplayer.GUID);
                 if (unitByTarget1 != null && !method_13(unitByTarget1.GUID))
                 {
-                    Logger.smethod_1(MessageProvider.smethod_2(315, unitByTarget1.Name));
+                    Logger.LoadProfile(MessageProvider.IsGroupProfile(315, unitByTarget1.Name));
                     return unitByTarget1;
                 }
 
@@ -131,7 +131,7 @@ public class PartyManager
                     var unitByTarget2 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                     if (unitByTarget2 != null && !method_13(unitByTarget2.GUID))
                     {
-                        Logger.smethod_1(MessageProvider.smethod_2(316, unitByTarget2.Name));
+                        Logger.LoadProfile(MessageProvider.IsGroupProfile(316, unitByTarget2.Name));
                         return unitByTarget2;
                     }
                 }
@@ -153,14 +153,14 @@ public class PartyManager
                                 var unitByTarget4 = GObjectList.FindUnitByTarget(gplayer.PetGUID);
                                 if (unitByTarget4 != null && !method_13(unitByTarget4.GUID))
                                 {
-                                    Logger.smethod_1(MessageProvider.smethod_2(318, unitByTarget4.Name));
+                                    Logger.LoadProfile(MessageProvider.IsGroupProfile(318, unitByTarget4.Name));
                                     return unitByTarget4;
                                 }
                             }
                         }
                         else
                         {
-                            Logger.smethod_1(MessageProvider.smethod_2(317, unitByTarget3.Name));
+                            Logger.LoadProfile(MessageProvider.IsGroupProfile(317, unitByTarget3.Name));
                             return unitByTarget3;
                         }
                     }
@@ -184,16 +184,16 @@ public class PartyManager
                     if (!flag)
                     {
                         flag = true;
-                        Logger.LogMessage(MessageProvider.smethod_2(704, string_1));
+                        Logger.LogMessage(MessageProvider.IsGroupProfile(704, string_1));
                     }
 
                     if (GPlayerSelf.Me.TargetGUID != 0L)
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(319));
-                        StartupClass.gclass73_0.method_12(true);
+                        StartupClass.combatController.method_12(true);
                     }
 
-                    StartupClass.smethod_39(1000);
+                    StartupClass.Sleep(1000);
                 }
                 else
                 {
@@ -206,16 +206,16 @@ public class PartyManager
         }
 
     label_8:
-        if (gplayer.DistanceToSelf > (double)int_5)
+        if (gplayer.DistanceToSelf > (double)objectManagerBasePointer)
         {
-            if (!gplayer.Approach(int_6, false))
+            if (!gplayer.Approach(initCount, false))
             {
                 Logger.LogMessage(MessageProvider.GetMessage(320));
                 return null;
             }
 
             if (bool_3)
-                InputController.smethod_28(MessageProvider.smethod_2(705, string_1));
+                InputController.ExecuteStopGlide(MessageProvider.IsGroupProfile(705, string_1));
         }
 
         return gplayer;
@@ -242,14 +242,14 @@ public class PartyManager
                     if (gplayer_2[index] == null)
                     {
                         if (!flag1)
-                            Logger.LogMessage(MessageProvider.smethod_2(706, string_0[index]));
+                            Logger.LogMessage(MessageProvider.IsGroupProfile(706, string_0[index]));
                         flag2 = false;
                         GContext.Main.ReleaseSpinRun();
                     }
-                    else if (gplayer_2[index].DistanceToSelf > (double)int_4 || gplayer_2[index].IsSitting)
+                    else if (gplayer_2[index].DistanceToSelf > (double)pgEditProfileCount || gplayer_2[index].IsSitting)
                     {
                         if (!flag1)
-                            Logger.LogMessage(MessageProvider.smethod_2(707, string_0[index],
+                            Logger.LogMessage(MessageProvider.IsGroupProfile(707, string_0[index],
                                 Math.Round(gplayer_2[index].DistanceToSelf, 2)));
                         flag2 = false;
                         GContext.Main.ReleaseSpinRun();
@@ -258,7 +258,7 @@ public class PartyManager
                 flag1 = true;
                 if (!flag2)
                 {
-                    StartupClass.smethod_39(1300);
+                    StartupClass.Sleep(1300);
                     var gunit_0 = method_3();
                     if (gunit_0 != null)
                         method_7(gunit_0);
@@ -283,17 +283,17 @@ public class PartyManager
 
     public bool method_7(GUnit gunit_0)
     {
-        Logger.LogMessage(MessageProvider.smethod_2(202, Math.Round(gunit_0.DistanceToSelf, 2)));
+        Logger.LogMessage(MessageProvider.IsGroupProfile(202, Math.Round(gunit_0.DistanceToSelf, 2)));
         GContext.Main.ReleaseSpinRun();
         gunit_0.Face();
         gunit_0.SetAsTarget(false);
         if (GPlayerSelf.Me.TargetGUID == gunit_0.GUID)
         {
-            StartupClass.gclass73_0.method_12(true);
+            StartupClass.combatController.method_12(true);
             return true;
         }
 
-        StartupClass.gprofile_0.ForceBlacklist(gunit_0.GUID);
+        StartupClass.ActiveGProfile.ForceBlacklist(gunit_0.GUID);
         return false;
     }
 
@@ -312,12 +312,12 @@ public class PartyManager
 
     public void method_9()
     {
-        long_0 = null;
+        playerGuid = null;
     }
 
     public void method_10()
     {
-        if (long_0 != null)
+        if (playerGuid != null)
             return;
         method_11();
     }
@@ -325,26 +325,26 @@ public class PartyManager
     public void method_11()
     {
         var arrayList = new ArrayList();
-        long_0 = null;
+        playerGuid = null;
         gplayer_0 = null;
         for (var index = 1; index <= 4; ++index)
         {
-            CombatController.smethod_1();
-            StartupClass.smethod_39(200);
+            CombatController.LoadProfile();
+            StartupClass.Sleep(200);
             SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + index);
-            StartupClass.smethod_39(500);
+            StartupClass.Sleep(500);
             if (GPlayerSelf.Me.TargetGUID != 0L)
             {
                 var unit = (GPlayer)GObjectList.FindUnit(GPlayerSelf.Me.TargetGUID);
                 if (unit != null)
-                    Logger.LogMessage(MessageProvider.smethod_2(708, unit.Name));
+                    Logger.LogMessage(MessageProvider.IsGroupProfile(708, unit.Name));
                 else
                     Logger.LogMessage(MessageProvider.GetMessage(326));
                 arrayList.Add(GPlayerSelf.Me.TargetGUID);
                 if (genum7_0 == PartyRole.const_2 && unit.Name.ToLower() == string_1.ToLower())
                 {
-                    int_7 = index;
-                    Logger.smethod_1("Found leader in slot: " + index);
+                    knownVersion = index;
+                    Logger.LoadProfile("Found leader in slot: " + index);
                 }
             }
             else
@@ -355,40 +355,40 @@ public class PartyManager
 
         if (arrayList.Count <= 0)
             return;
-        long_0 = (long[])arrayList.ToArray(typeof(long));
-        gplayer_0 = new GPlayer[long_0.Length];
-        gclass36_0 = new GameTimer[long_0.Length];
-        gclass36_1 = new GameTimer[long_0.Length];
+        playerGuid = (long[])arrayList.ToArray(typeof(long));
+        gplayer_0 = new GPlayer[playerGuid.Length];
+        licenseCheckTimer = new GameTimer[playerGuid.Length];
+        resumeTimer = new GameTimer[playerGuid.Length];
         if (Offsets != null)
             return;
-        Offsets = new SortedList[long_0.Length];
+        Offsets = new SortedList[playerGuid.Length];
     }
 
     public void method_12()
     {
-        if (long_0 == null)
+        if (playerGuid == null)
             return;
-        for (var index = 0; index < long_0.Length; ++index)
-            gplayer_0[index] = (GPlayer)GObjectList.FindUnit(long_0[index]);
+        for (var index = 0; index < playerGuid.Length; ++index)
+            gplayer_0[index] = (GPlayer)GObjectList.FindUnit(playerGuid[index]);
     }
 
     public bool method_13(long long_1)
     {
-        if (genum7_0 == PartyRole.const_0 || long_0 == null)
+        if (genum7_0 == PartyRole.const_0 || playerGuid == null)
             return false;
-        foreach (var num in long_0)
+        foreach (var num in playerGuid)
             if (num == long_1)
                 return true;
         return long_1 == GPlayerSelf.Me.GUID;
     }
 
-    public void method_14(int int_8, string string_2, GUnit gunit_0)
+    public void method_14(int expectedVersion, string string_2, GUnit gunit_0)
     {
-        Logger.smethod_1(MessageProvider.smethod_2(709, string_2, int_8 + 1));
-        SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + (int_8 + 1));
-        StartupClass.smethod_39(300);
-        if (gplayer_0[int_8].DistanceToSelf > 29.0)
-            gplayer_0[int_8].Approach(29.0);
+        Logger.LoadProfile(MessageProvider.IsGroupProfile(709, string_2, expectedVersion + 1));
+        SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + (expectedVersion + 1));
+        StartupClass.Sleep(300);
+        if (gplayer_0[expectedVersion].DistanceToSelf > 29.0)
+            gplayer_0[expectedVersion].Approach(29.0);
         GContext.Main.CastSpell(string_2);
         if (gunit_0 != null)
         {
@@ -400,49 +400,49 @@ public class PartyManager
         }
         else
         {
-            CombatController.smethod_1();
+            CombatController.LoadProfile();
         }
     }
 
-    public bool method_15(int int_8, string string_2, int int_9)
+    public bool method_15(int expectedVersion, string string_2, int versionPatchLevel)
     {
         if (Offsets == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
             return false;
-        if (Offsets[int_8] == null)
-            Offsets[int_8] = new SortedList();
-        if (Offsets[int_8].ContainsKey(string_2))
+        if (Offsets[expectedVersion] == null)
+            Offsets[expectedVersion] = new SortedList();
+        if (Offsets[expectedVersion].ContainsKey(string_2))
         {
-            var gclass12 = (TimedStringEntry)Offsets[int_8][string_2];
-            if (!gclass12.gclass36_0.method_3())
+            var gclass12 = (TimedStringEntry)Offsets[expectedVersion][string_2];
+            if (!gclass12.licenseCheckTimer.method_3())
                 return false;
-            method_14(int_8, string_2, null);
-            gclass12.gclass36_0.method_4();
+            method_14(expectedVersion, string_2, null);
+            gclass12.licenseCheckTimer.method_4();
             return true;
         }
 
-        var gclass12_1 = new TimedStringEntry(string_2, int_9);
-        method_14(int_8, string_2, null);
-        Offsets[int_8].Add(string_2, gclass12_1);
+        var gclass12_1 = new TimedStringEntry(string_2, versionPatchLevel);
+        method_14(expectedVersion, string_2, null);
+        Offsets[expectedVersion].Add(string_2, gclass12_1);
         return true;
     }
 
-    public bool method_16(int int_8, string string_2)
+    public bool method_16(int expectedVersion, string string_2)
     {
         if (Offsets == null || !bool_2 || GPlayerSelf.Me.Mana < 0.2)
             return false;
-        if (Offsets[int_8] == null)
-            Offsets[int_8] = new SortedList();
-        return !Offsets[int_8].ContainsKey(string_2) ||
-               ((TimedStringEntry)Offsets[int_8][string_2]).gclass36_0.method_3();
+        if (Offsets[expectedVersion] == null)
+            Offsets[expectedVersion] = new SortedList();
+        return !Offsets[expectedVersion].ContainsKey(string_2) ||
+               ((TimedStringEntry)Offsets[expectedVersion][string_2]).licenseCheckTimer.method_3();
     }
 
     public bool method_17(GUnit gunit_0)
     {
-        Logger.smethod_1("Assisting on target: " + gunit_0);
-        if (int_7 != 0)
+        Logger.LoadProfile("Assisting on target: " + gunit_0);
+        if (knownVersion != 0)
         {
-            Logger.smethod_1("Using assist key to pick up target");
-            SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + int_7);
+            Logger.LoadProfile("Using assist key to pick up target");
+            SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + knownVersion);
             Thread.Sleep(100);
             SpellcastingManager.gclass42_0.method_0("Common.Assist");
             var gclass36 = new GameTimer(2000);
@@ -454,11 +454,11 @@ public class PartyManager
                     return true;
             }
 
-            Logger.smethod_1("Never got target with assist key, using tab");
+            Logger.LoadProfile("Never got target with assist key, using tab");
             return gunit_0.SetAsTarget(false);
         }
 
-        Logger.smethod_1("LeaderSlot is empty, attempting to pick up target with tab");
+        Logger.LoadProfile("LeaderSlot is empty, attempting to pick up target with tab");
         return gunit_0.SetAsTarget(false);
     }
 }

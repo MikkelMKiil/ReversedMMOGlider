@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GBuff
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -16,7 +16,7 @@ namespace Glider.Common.Objects
             this.SpellID = SpellID;
             this.ChargesLeft = ChargesLeft;
             this.IsHarmful = IsHarmful;
-            var gclass64 = StartupClass.gclass63_0.method_7(SpellID);
+            var gclass64 = StartupClass.spellbookManager.method_7(SpellID);
             if (gclass64 != null)
             {
                 _spellName = gclass64.string_0;
