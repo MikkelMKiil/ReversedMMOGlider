@@ -267,7 +267,7 @@ namespace Glider.Common.Objects
         /// <summary>
         /// Gets the GUnit object for this unit's target. Returns null if there is no target.
         /// </summary>
-        public GUnit Target => TargetGUID == 0 ? null : GObjectList.FindUnit(TargetGUID);
+        public GUnit Target => GObjectList.ResolveUnitByGuid(TargetGUID);
 
         /// <summary>
         /// Gets a value indicating whether the unit is dead.

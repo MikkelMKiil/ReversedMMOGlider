@@ -1165,8 +1165,8 @@ public class GliderForm : Form, ILogger
                 this.method_30(this.LabelMana_1, "LabelMana", StartupClass.CurrentGameClass.PowerValue);
             else
                 this.method_30(this.LabelMana_1, "LabelMana", currentPlayer.Power2.ToString() + " / " + (object)currentPlayer.Power2Max);
-            ulong targetGUID = currentPlayer.TargetGUID;
-            GUnit target = targetGUID == 0L ? (GUnit)null : GObjectList.FindUnit(targetGUID);
+            ulong targetGUID;
+            GUnit target = GObjectList.ResolveCurrentTarget(currentPlayer, out targetGUID);
             if (target != null)
             {
                 this.AddFactionButton.Enabled = true;
@@ -1391,16 +1391,20 @@ public class GliderForm : Form, ILogger
             return;
         }
 
-        GUnit target = me.Target;
+        ulong targetGuid;
+        GUnit target = GObjectList.ResolveCurrentTarget(me, out targetGuid);
         if (target == null)
         {
-            Logger.LogMessage("1-Kill requested with no target selected. TargetGUID=0x" + me.TargetGUID.ToString("x"));
+            if (targetGuid == 0UL)
+                Logger.LogMessage("1-Kill requested with no target selected. TargetGUID=0x0");
+            else
+                Logger.LogMessage("1-Kill requested but selected target could not be resolved. TargetGUID=0x" + targetGuid.ToString("x"));
             StartupClass.smethod_21(false);
             return;
         }
 
         Logger.LogMessage("1-Kill target object: " + target);
-        Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + me.TargetGUID.ToString("x"));
+        Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + targetGuid.ToString("x"));
         Logger.LogMessage("1-Kill target info: Name=\"" + target.Name + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
         StartupClass.smethod_21(false);
     }
@@ -2289,8 +2293,8 @@ public class GliderForm : Form, ILogger
 
         GLocation location = gplayerSelf_0.Location;
         string meCoords = location != null ? location.ToString3D() : "(unknown)";
-        ulong targetGuid = gplayerSelf_0.TargetGUID;
-        GUnit target = targetGuid != 0L ? GObjectList.FindUnit(targetGuid) : null;
+        ulong targetGuid;
+        GUnit target = GObjectList.ResolveCurrentTarget(gplayerSelf_0, out targetGuid);
         string targetInfo = "none";
         if (target != null)
         {
@@ -2301,6 +2305,10 @@ public class GliderForm : Form, ILogger
                          ", HP=" + target.HealthPoints + "/" + target.HealthMax +
                          ", Dist=" + Math.Round(gplayerSelf_0.GetDistanceTo(target), 2).ToString("0.00") +
                          ", Coords=" + targetCoords;
+        }
+        else if (targetGuid != 0UL)
+        {
+            targetInfo = "GUID=0x" + targetGuid.ToString("x") + " (unresolved)";
         }
 
         ((ILogger)this).imethod_2("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x") + ", HP=" + gplayerSelf_0.HealthPoints + "/" + gplayerSelf_0.HealthMax + ", Rage=" + gplayerSelf_0.Rage + ", Coords=" + meCoords + ", Target=" + targetInfo);

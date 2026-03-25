@@ -196,9 +196,14 @@ namespace Glider.Common.Objects
 
         private static GObject[] GetObjects(GObjectType ObjectType)
         {
+            return GetObjects(ObjectType, false);
+        }
+
+        private static GObject[] GetObjects(GObjectType ObjectType, bool BypassTimer)
+        {
             lock (LastSnapshot)
             {
-                var all = GetAll();
+                var all = GetAll(BypassTimer);
                 var gobjectList = new List<GObject>();
                 if (all == null)
                     return null;
@@ -216,7 +221,12 @@ namespace Glider.Common.Objects
 
         public static GUnit[] GetUnits()
         {
-            var objects = GetObjects(GObjectType.Any);
+            return GetUnits(false);
+        }
+
+        private static GUnit[] GetUnits(bool BypassTimer)
+        {
+            var objects = GetObjects(GObjectType.Any, BypassTimer);
             var gunitList = new List<GUnit>();
             foreach (var gobject in objects)
                 if (gobject.Type == GObjectType.Player || gobject.Type == GObjectType.Monster)
@@ -260,15 +270,137 @@ namespace Glider.Common.Objects
 
         private static ulong QuickGetGUID(int BaseAddress)
         {
-            return GameMemoryAccess.ReadInt64(BaseAddress + 48, "QuickGUID");
+            return GameMemoryAccess.ReadObjectGuid(BaseAddress);
+        }
+
+        public static GUnit ResolveUnitByGuid(ulong GUID)
+        {
+            if (GUID == 0UL)
+                return null;
+
+            GUnit resolvedUnit;
+            if (TryResolveUnitByGuidFromSnapshot(GUID, false, out resolvedUnit))
+                return resolvedUnit;
+            if (TryResolveUnitByGuidFromSnapshot(GUID, true, out resolvedUnit))
+                return resolvedUnit;
+            if (TryMaterializeUnitByGuid(GUID, out resolvedUnit))
+                return resolvedUnit;
+
+            Logger.LogMessage("[CRITICAL] ResolveUnitByGuid failed for GUID=0x" + GUID.ToString("x") +
+                              ". Target exists in player memory but is missing from object snapshot.");
+
+            return null;
+        }
+
+        /// <summary>
+        /// Resolves the current target for a player from a single GUID snapshot.
+        /// </summary>
+        public static GUnit ResolveCurrentTarget(GPlayerSelf player, out ulong targetGuid)
+        {
+            targetGuid = 0UL;
+            if (player == null)
+                return null;
+
+            targetGuid = player.TargetGUID;
+            return ResolveUnitByGuid(targetGuid);
         }
 
         public static GUnit FindUnit(ulong GUID)
         {
-            foreach (var unit in GetUnits())
-                if (unit.GUID == GUID)
-                    return unit;
-            return null;
+            return ResolveUnitByGuid(GUID);
+        }
+
+        private static bool TryResolveUnitByGuidFromSnapshot(ulong guid, bool bypassTimer, out GUnit unit)
+        {
+            unit = null;
+
+            var snapshot = GetAll(bypassTimer);
+            if (snapshot == null || !snapshot.ContainsKey(guid))
+                return false;
+
+            var obj = snapshot[guid];
+            unit = obj as GUnit;
+            if (unit != null)
+                return true;
+
+            var refreshed = GObject.Create(unchecked((int)obj.BaseAddress), FrameNumber);
+            snapshot[guid] = refreshed;
+            unit = refreshed as GUnit;
+            if (unit != null)
+                return true;
+
+            Logger.LogMessage("[CRITICAL] ResolveUnitByGuid found GUID=0x" + guid.ToString("x") +
+                              " but object is non-unit. Type=" + refreshed.Type + ", Class=" + refreshed.GetType().Name +
+                              ", Base=0x" + refreshed.BaseAddress.ToString("x") +
+                              ", Storage=0x" + refreshed.StorageAddress.ToString("x"));
+            return false;
+        }
+
+        private static bool TryMaterializeUnitByGuid(ulong guid, out GUnit unit)
+        {
+            unit = null;
+
+            var objectManagerBase = StartupClass.int_5;
+            if (objectManagerBase == 0)
+                return false;
+
+            var baseAddress = GetFirstObjectPointer(objectManagerBase);
+            var firstAddress = baseAddress;
+            var iterations = 0;
+            var visited = new HashSet<int>();
+
+            while ((baseAddress & 1) == 0 && baseAddress != 0 && baseAddress != 28)
+            {
+                if (++iterations > 8192)
+                    break;
+
+                if (!visited.Add(baseAddress))
+                {
+                    if (baseAddress != firstAddress)
+                        Logger.smethod_1("ResolveUnitByGuid materialize traversal detected cycle");
+                    break;
+                }
+
+                var storageGuid = GameMemoryAccess.ReadObjectGuid(baseAddress);
+                var legacyGuid = GameMemoryAccess.ReadInt64(baseAddress + 48, "GameObjGUID.Legacy");
+                if (storageGuid == guid || legacyGuid == guid)
+                {
+                    var obj = GObject.Create(baseAddress, FrameNumber);
+                    lock (LastSnapshot)
+                    {
+                        if (LastSnapshot.ContainsKey(obj.GUID))
+                            LastSnapshot[obj.GUID] = obj;
+                        else
+                            LastSnapshot.Add(obj.GUID, obj);
+                    }
+
+                    unit = obj as GUnit;
+                    if (unit != null)
+                    {
+                        if (obj.GUID != guid)
+                            Logger.LogMessage("[CRITICAL] ResolveUnitByGuid GUID mismatch while materializing. Requested=0x" + guid.ToString("x") +
+                                              ", Materialized=0x" + obj.GUID.ToString("x") +
+                                              ", StorageGUID=0x" + storageGuid.ToString("x") +
+                                              ", LegacyGUID=0x" + legacyGuid.ToString("x") +
+                                              ", Base=0x" + obj.BaseAddress.ToString("x") +
+                                              ", Storage=0x" + obj.StorageAddress.ToString("x"));
+                        return true;
+                    }
+
+                    Logger.LogMessage("[CRITICAL] ResolveUnitByGuid matched raw object but materialized non-unit. Requested=0x" + guid.ToString("x") +
+                                      ", MaterializedType=" + obj.Type +
+                                      ", Class=" + obj.GetType().Name +
+                                      ", StorageGUID=0x" + storageGuid.ToString("x") +
+                                      ", LegacyGUID=0x" + legacyGuid.ToString("x") +
+                                      ", Base=0x" + obj.BaseAddress.ToString("x") +
+                                      ", Storage=0x" + obj.StorageAddress.ToString("x"));
+                    return false;
+                }
+
+                baseAddress = GameMemoryAccess.ReadInt32(baseAddress + 60, "GameObjNext");
+            }
+
+            return false;
         }
 
         public static GUnit FindUnit(long GUID)
@@ -615,7 +747,7 @@ namespace Glider.Common.Objects
                 }
                 if ((num3 & 1) == 0 && num3 != 0 && num3 != 28)
                 {
-                    if (GameMemoryAccess.ReadInt64(num3 + 48, "GameObjGUID") == SeekPlayerID)
+                    if (GameMemoryAccess.ReadObjectGuid(num3) == SeekPlayerID)
                     {
                         Logger.smethod_1("Found myself in object list (0x" + SeekPlayerID.ToString("x") + ")");
                         flag = true;
@@ -659,7 +791,7 @@ namespace Glider.Common.Objects
                     break;
                 if (GameMemoryAccess.ReadInt32(num + 20, "QuickType") == 4)
                 {
-                    var int64 = GameMemoryAccess.ReadInt64(num + 48, "GameObjGUID");
+                    var int64 = GameMemoryAccess.ReadObjectGuid(num);
                     if (int64 != 0UL)
                     {
                         guid_0 = int64;

@@ -181,9 +181,15 @@ namespace Glider.Common.Objects
         protected ulong GetStorageULong(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
-            if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
+            var isMissing = descriptorOffset == 0 && !string.Equals(Name, "OBJECT_FIELD_GUID", StringComparison.Ordinal);
+
+            if (isMissing && MemoryOffsetTable.Instance.HasOffset(Name))
+            {
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
-            return descriptorOffset == 0
+                isMissing = false;
+            }
+
+            return isMissing
                 ? 0UL
                 : GameMemoryAccess.ReadStorageULong(StorageAddress, descriptorOffset, Name);
         }

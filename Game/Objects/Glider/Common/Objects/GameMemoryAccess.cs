@@ -43,7 +43,12 @@ internal static class GameMemoryAccess
         // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
         internal static ulong ReadObjectGuid(int baseAddress)
         {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(baseAddress + 48, "NewObjGUID"));
+            var storageAddress = ReadObjectStorageAddress(baseAddress);
+            if (storageAddress == 0)
+                return 0UL;
+
+            // OBJECT_FIELD_GUID is at descriptor offset 0x00 in WoW 3.3.5a.
+            return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
         }
 
         // Used by: GObject.IsCursorOnObject

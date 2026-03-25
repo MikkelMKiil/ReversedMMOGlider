@@ -709,10 +709,11 @@ public class CombatController
             StartupClass.smethod_39(300);
         }
 
-        var unit = GObjectList.FindUnit(gplayerSelf_0.TargetGUID);
+        ulong targetGuid;
+        var unit = GObjectList.ResolveCurrentTarget(gplayerSelf_0, out targetGuid);
         if (unit == null)
         {
-            Logger.LogMessage("Could not find target: 0x" + gplayerSelf_0.TargetGUID.ToString("x") +
+            Logger.LogMessage("Could not find target: 0x" + targetGuid.ToString("x") +
                                " in object list... ?!");
             smethod_1();
         }
@@ -727,7 +728,7 @@ public class CombatController
             Logger.LogMessage(MessageProvider.GetMessage(863));
             smethod_1();
         }
-        else if (gclass54_0.method_13(gplayerSelf_0.TargetGUID))
+        else if (gclass54_0.method_13(targetGuid))
         {
             Logger.LogMessage(MessageProvider.GetMessage(179));
             smethod_1();
@@ -737,9 +738,9 @@ public class CombatController
             if (unit.IsPlayer)
             {
                 Logger.LogMessage(MessageProvider.smethod_2(180, unit.Name));
-                if (long_0 != gplayerSelf_0.TargetGUID)
+                if (long_0 != targetGuid)
                 {
-                    long_0 = gplayerSelf_0.TargetGUID;
+                    long_0 = targetGuid;
                     SoundPlayer.smethod_0("PlayerAttack.wav");
                 }
 
