@@ -8,7 +8,6 @@
 using Glider.Common;
 using Glider.Common.Objects;
 using System;
-using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -78,32 +77,12 @@ public class ApplicationLogger : ILogger
 
     private void method_1()
     {
-        var path = "Glider.log";
-        if (File.Exists(path))
-            File.Delete(path);
-        using (File.Create(path))
-        {
-        }
+        UnifiedLogger.Default.Reset();
     }
 
     private void method_2(string string_0)
     {
-        var now = DateTime.Now;
-        var path = "Glider.log";
-        try
-        {
-            var streamWriter = File.AppendText(path);
-            if (StartupClass.IsBetaAccessGranted)
-                streamWriter.WriteLine(now.ToLongTimeString() + " (" + now.Millisecond + ") " + string_0);
-            else
-                streamWriter.WriteLine(now.ToLongTimeString() + " " + string_0);
-            streamWriter.Flush();
-            streamWriter.Close();
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine(MessageProvider.smethod_2(90, ex.Message));
-        }
+        UnifiedLogger.Default.AppendLine(UnifiedLogger.FormatApplicationEntry(DateTime.Now, string_0, StartupClass.IsBetaAccessGranted));
     }
 
     public void method_3()

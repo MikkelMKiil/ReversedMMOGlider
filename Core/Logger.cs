@@ -7,13 +7,25 @@
 #nullable disable
 public class Logger
 {
+    private static ILogger GetLogger()
+    {
+        if (StartupClass.ginterface0_0 == null)
+            StartupClass.ginterface0_0 = UnifiedLogger.Default;
+        return StartupClass.ginterface0_0;
+    }
+
     public static void LogMessage(string string_0)
     {
-        StartupClass.ginterface0_0.imethod_2(string_0);
+        GetLogger().imethod_2(string_0);
+    }
+
+    public static void LogDebug(string string_0)
+    {
+        GetLogger().imethod_3(string_0);
     }
 
     public static void smethod_1(string string_0)
     {
-        StartupClass.ginterface0_0.imethod_3(string_0);
+        LogDebug(string_0);
     }
 }

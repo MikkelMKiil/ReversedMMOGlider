@@ -5,42 +5,29 @@
 // Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
 
 #nullable disable
-using System;
-using System.IO;
-
 public class FileLogger : ILogger
 {
-    private readonly string string_0;
+    private readonly UnifiedLogger unifiedLogger_0;
 
     public FileLogger(string string_1)
     {
-        string_0 = string_1;
+        unifiedLogger_0 = string_1 == UnifiedLogger.Default.LogFilePath ? UnifiedLogger.Default : new UnifiedLogger(string_1);
     }
 
     // Changed from explicit to implicit implementation
     public void imethod_2(string string_1)
     {
-        var now = DateTime.Now;
-        try
-        {
-            var streamWriter = File.AppendText(string_0);
-            streamWriter.WriteLine(now.ToString("HH:mm:ss.ffff ") + string_1);
-            streamWriter.Flush();
-            streamWriter.Close();
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine("Unable to write to log: " + ex.Message);
-        }
+        unifiedLogger_0.AppendLine(UnifiedLogger.FormatCompactEntry(DateTime.Now, string_1));
     }
 
     public void imethod_3(string string_1)
     {
-        this.imethod_2("[Debug] " + string_1);
+        unifiedLogger_0.AppendLine(UnifiedLogger.FormatCompactEntry(DateTime.Now, "[Debug] " + string_1));
     }
 
     public void imethod_4()
     {
+        unifiedLogger_0.imethod_4();
     }
 
     public void imethod_1()

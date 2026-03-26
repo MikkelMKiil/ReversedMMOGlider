@@ -288,9 +288,7 @@ public class GliderForm : Form, ILogger
     private static void Main()
     {
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-        // Ensure a default logger is available before any early startup logging
-        // (root-cause fix: StartupClass.StartupLogger was null when CrashHandler/Register called Logger)
-        StartupClass.ginterface0_0 = new FileLogger("Glider.log");
+        StartupClass.ginterface0_0 = UnifiedLogger.Default;
 
         // Register our global crash handlers to capture and persist richer crash information
         try
