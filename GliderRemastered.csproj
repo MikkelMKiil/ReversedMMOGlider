@@ -298,11 +298,7 @@
     <Compile Include="Game\Objects\RestStatusMonitor.cs" />
     <Compile Include="Game\Objects\WaypointType.cs" />
     <Compile Include="Memory\GameMemoryConstants.cs" />
-    <Compile Include="Memory\GProcessMemoryManipulator.cs" />
-    <Compile Include="Memory\MemoryMaster.cs" />
-    <Compile Include="Memory\MemoryOffsetTable.cs" />
-    <Compile Include="Memory\OffsetManager.cs" />
-    <Compile Include="Memory\WoW335aDescriptors.cs" />
+    <Compile Include="Memory\MemoryRequestHandler.cs" />
     <Compile Include="UI\Components\ChatFrameLocator.cs" />
     <Compile Include="UI\Components\DialogMonitor.cs" />
     <Compile Include="UI\Components\InputController.cs" />

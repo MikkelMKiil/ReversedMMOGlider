@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Glider.Common.Objects
 {
     internal static class GameMemoryConstants
@@ -120,6 +122,37 @@ namespace Glider.Common.Objects
                    table.HasOffset("PlayerIdAddr") &&
                    table.HasOffset("D_Player") &&
                    table.HasOffset("D_Object");
+        }
+
+        internal static void PopulateOffsetManager(OffsetManager manager, string descriptorType)
+        {
+            Dictionary<string, int> fields;
+
+            switch (descriptorType)
+            {
+                case "Player":
+                    fields = DescriptorFields.PlayerFields;
+                    break;
+                case "NPC":
+                    fields = DescriptorFields.UnitFields;
+                    break;
+                case "Object":
+                    fields = DescriptorFields.GameObjectFields;
+                    break;
+                case "Item":
+                    fields = DescriptorFields.ItemFields;
+                    break;
+                case "Container":
+                    fields = DescriptorFields.ContainerFields;
+                    break;
+                default:
+                    Logger.LogMessage("GameMemoryConstants: Unknown descriptor type '" + descriptorType + "', using UnitFields");
+                    fields = DescriptorFields.UnitFields;
+                    break;
+            }
+
+            foreach (var kvp in fields)
+                manager.AddOffset(kvp.Key, kvp.Value);
         }
 
         private static void AddInt(MemoryOffsetTable table, ref int count, string key, int value)
@@ -319,6 +352,284 @@ namespace Glider.Common.Objects
         {
             internal const string BuffStealth = "1784 5215 1785 1786 1787 11305 11306 11307 11308 11309 31526 58984";
             internal const string BuffGhost = "8326 20584";
+        }
+
+        internal static class DescriptorFields
+        {
+            internal static readonly Dictionary<string, int> ObjectFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "OBJECT_FIELD_SCALE_X",       0x10 },
+                { "OBJECT_FIELD_PADDING",       0x14 },
+            };
+
+            internal static readonly Dictionary<string, int> ItemFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "OBJECT_FIELD_SCALE_X",       0x10 },
+                { "ITEM_FIELD_OWNER",           0x18 },
+                { "ITEM_FIELD_CONTAINED",       0x20 },
+                { "ITEM_FIELD_CREATOR",         0x28 },
+                { "ITEM_FIELD_GIFTCREATOR",     0x30 },
+                { "ITEM_FIELD_STACK_COUNT",     0x38 },
+                { "ITEM_FIELD_DURATION",        0x3C },
+                { "ITEM_FIELD_SPELL_CHARGES",   0x40 },
+                { "ITEM_FIELD_FLAGS",           0x54 },
+                { "ITEM_FIELD_ENCHANTMENT_1_1", 0x58 },
+                { "ITEM_FIELD_PROPERTY_SEED",   0xC0 },
+                { "ITEM_FIELD_RANDOM_PROPERTIES_ID", 0xC4 },
+                { "ITEM_FIELD_DURABILITY",      0xC8 },
+                { "ITEM_FIELD_MAXDURABILITY",   0xCC },
+                { "ITEM_FIELD_CREATE_PLAYED_TIME", 0xD0 },
+            };
+
+            internal static readonly Dictionary<string, int> ContainerFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "OBJECT_FIELD_SCALE_X",       0x10 },
+                { "ITEM_FIELD_OWNER",           0x18 },
+                { "ITEM_FIELD_CONTAINED",       0x20 },
+                { "ITEM_FIELD_STACK_COUNT",     0x38 },
+                { "ITEM_FIELD_FLAGS",           0x54 },
+                { "ITEM_FIELD_DURABILITY",      0xC8 },
+                { "ITEM_FIELD_MAXDURABILITY",   0xCC },
+                { "CONTAINER_FIELD_NUM_SLOTS",  0xD8 },
+                { "CONTAINER_FIELD_ALIGN_PAD",  0xDC },
+                { "CONTAINER_FIELD_SLOT_1",     0xE0 },
+            };
+
+            internal static readonly Dictionary<string, int> UnitFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",              0x00 },
+                { "OBJECT_FIELD_TYPE",              0x08 },
+                { "OBJECT_FIELD_ENTRY",             0x0C },
+                { "OBJECT_FIELD_SCALE_X",           0x10 },
+                { "UNIT_FIELD_CHARM",               0x18 },
+                { "UNIT_FIELD_SUMMON",              0x20 },
+                { "UNIT_FIELD_CRITTER",             0x28 },
+                { "UNIT_FIELD_CHARMEDBY",           0x30 },
+                { "UNIT_FIELD_SUMMONEDBY",          0x38 },
+                { "UNIT_FIELD_CREATEDBY",           0x40 },
+                { "UNIT_FIELD_TARGET",              0x48 },
+                { "UNIT_FIELD_CHANNEL_OBJECT",      0x50 },
+                { "UNIT_CHANNEL_SPELL",             0x58 },
+                { "UNIT_FIELD_BYTES_0",             0x5C },
+                { "UNIT_FIELD_HEALTH",              0x60 },
+                { "UNIT_FIELD_POWER1",              0x64 },
+                { "UNIT_FIELD_POWER2",              0x68 },
+                { "UNIT_FIELD_POWER3",              0x6C },
+                { "UNIT_FIELD_POWER4",              0x70 },
+                { "UNIT_FIELD_POWER5",              0x74 },
+                { "UNIT_FIELD_POWER6",              0x78 },
+                { "UNIT_FIELD_POWER7",              0x7C },
+                { "UNIT_FIELD_MAXHEALTH",           0x80 },
+                { "UNIT_FIELD_MAXPOWER1",           0x84 },
+                { "UNIT_FIELD_MAXPOWER2",           0x88 },
+                { "UNIT_FIELD_MAXPOWER3",           0x8C },
+                { "UNIT_FIELD_MAXPOWER4",           0x90 },
+                { "UNIT_FIELD_MAXPOWER5",           0x94 },
+                { "UNIT_FIELD_MAXPOWER6",           0x98 },
+                { "UNIT_FIELD_MAXPOWER7",           0x9C },
+                { "UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER", 0xA0 },
+                { "UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER", 0xBC },
+                { "UNIT_FIELD_LEVEL",               0xD8 },
+                { "UNIT_FIELD_FACTIONTEMPLATE",     0xDC },
+                { "UNIT_VIRTUAL_ITEM_SLOT_ID",      0xE0 },
+                { "UNIT_FIELD_FLAGS",               0xEC },
+                { "UNIT_FIELD_FLAGS_2",             0xF0 },
+                { "UNIT_FIELD_AURASTATE",           0xF4 },
+                { "UNIT_FIELD_BASEATTACKTIME",      0xF8 },
+                { "UNIT_FIELD_RANGEDATTACKTIME",    0x100 },
+                { "UNIT_FIELD_BOUNDINGRADIUS",      0x104 },
+                { "UNIT_FIELD_COMBATREACH",         0x108 },
+                { "UNIT_FIELD_DISPLAYID",           0x10C },
+                { "UNIT_FIELD_NATIVEDISPLAYID",     0x110 },
+                { "UNIT_FIELD_MOUNTDISPLAYID",      0x114 },
+                { "UNIT_FIELD_MINDAMAGE",           0x118 },
+                { "UNIT_FIELD_MAXDAMAGE",           0x11C },
+                { "UNIT_FIELD_MINOFFHANDDAMAGE",    0x120 },
+                { "UNIT_FIELD_MAXOFFHANDDAMAGE",    0x124 },
+                { "UNIT_FIELD_BYTES_1",             0x128 },
+                { "UNIT_FIELD_PETNUMBER",           0x12C },
+                { "UNIT_FIELD_PET_NAME_TIMESTAMP",  0x130 },
+                { "UNIT_FIELD_PETEXPERIENCE",       0x134 },
+                { "UNIT_FIELD_PETNEXTLEVELEXP",     0x138 },
+                { "UNIT_DYNAMIC_FLAGS",             0x13C },
+                { "UNIT_MOD_CAST_SPEED",            0x140 },
+                { "UNIT_CREATED_BY_SPELL",          0x144 },
+                { "UNIT_NPC_FLAGS",                 0x148 },
+                { "UNIT_NPC_EMOTESTATE",            0x14C },
+                { "UNIT_FIELD_STAT0",               0x150 },
+                { "UNIT_FIELD_STAT1",               0x154 },
+                { "UNIT_FIELD_STAT2",               0x158 },
+                { "UNIT_FIELD_STAT3",               0x15C },
+                { "UNIT_FIELD_STAT4",               0x160 },
+                { "UNIT_FIELD_POSSTAT0",            0x164 },
+                { "UNIT_FIELD_POSSTAT1",            0x168 },
+                { "UNIT_FIELD_POSSTAT2",            0x16C },
+                { "UNIT_FIELD_POSSTAT3",            0x170 },
+                { "UNIT_FIELD_POSSTAT4",            0x174 },
+                { "UNIT_FIELD_NEGSTAT0",            0x178 },
+                { "UNIT_FIELD_NEGSTAT1",            0x17C },
+                { "UNIT_FIELD_NEGSTAT2",            0x180 },
+                { "UNIT_FIELD_NEGSTAT3",            0x184 },
+                { "UNIT_FIELD_NEGSTAT4",            0x188 },
+                { "UNIT_FIELD_RESISTANCES",         0x18C },
+                { "UNIT_FIELD_RESISTANCEBUFFMODSPOSITIVE", 0x1A8 },
+                { "UNIT_FIELD_RESISTANCEBUFFMODSNEGATIVE", 0x1C4 },
+                { "UNIT_FIELD_BASE_MANA",           0x1E0 },
+                { "UNIT_FIELD_BASE_HEALTH",         0x1E4 },
+                { "UNIT_FIELD_BYTES_2",             0x1E8 },
+                { "UNIT_FIELD_ATTACK_POWER",        0x1EC },
+                { "UNIT_FIELD_ATTACK_POWER_MODS",   0x1F0 },
+                { "UNIT_FIELD_ATTACK_POWER_MULTIPLIER", 0x1F4 },
+                { "UNIT_FIELD_RANGED_ATTACK_POWER", 0x1F8 },
+                { "UNIT_FIELD_RANGED_ATTACK_POWER_MODS", 0x1FC },
+                { "UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER", 0x200 },
+                { "UNIT_FIELD_MINRANGEDDAMAGE",     0x204 },
+                { "UNIT_FIELD_MAXRANGEDDAMAGE",     0x208 },
+                { "UNIT_FIELD_POWER_COST_MODIFIER", 0x20C },
+                { "UNIT_FIELD_POWER_COST_MULTIPLIER", 0x228 },
+                { "UNIT_FIELD_MAXHEALTHMODIFIER",   0x244 },
+                { "UNIT_FIELD_HOVERHEIGHT",         0x248 },
+            };
+
+            internal static readonly Dictionary<string, int> PlayerFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",              0x00 },
+                { "OBJECT_FIELD_TYPE",              0x08 },
+                { "OBJECT_FIELD_ENTRY",             0x0C },
+                { "UNIT_FIELD_CHARM",               0x18 },
+                { "UNIT_FIELD_SUMMON",              0x20 },
+                { "UNIT_FIELD_CREATEDBY",           0x40 },
+                { "UNIT_FIELD_TARGET",              0x48 },
+                { "UNIT_FIELD_CHANNEL_OBJECT",      0x50 },
+                { "UNIT_FIELD_BYTES_0",             0x5C },
+                { "UNIT_FIELD_HEALTH",              0x60 },
+                { "UNIT_FIELD_POWER1",              0x64 },
+                { "UNIT_FIELD_POWER2",              0x68 },
+                { "UNIT_FIELD_POWER3",              0x6C },
+                { "UNIT_FIELD_POWER4",              0x70 },
+                { "UNIT_FIELD_POWER5",              0x74 },
+                { "UNIT_FIELD_POWER7",              0x7C },
+                { "UNIT_FIELD_MAXHEALTH",           0x80 },
+                { "UNIT_FIELD_MAXPOWER1",           0x84 },
+                { "UNIT_FIELD_MAXPOWER4",           0x90 },
+                { "UNIT_FIELD_LEVEL",               0xD8 },
+                { "UNIT_FIELD_FACTIONTEMPLATE",     0xDC },
+                { "UNIT_FIELD_FLAGS",               0xEC },
+                { "UNIT_FIELD_BYTES_1",             0x128 },
+                { "UNIT_DYNAMIC_FLAGS",             0x13C },
+                { "PLAYER_FLAGS",                   0x258 },
+                { "PLAYER_GUILDID",                 0x25C },
+                { "PLAYER_GUILDRANK",               0x260 },
+                { "PLAYER_BYTES",                   0x264 },
+                { "PLAYER_BYTES_2",                 0x268 },
+                { "PLAYER_BYTES_3",                 0x26C },
+                { "PLAYER_DUEL_TEAM",               0x270 },
+                { "PLAYER_GUILD_TIMESTAMP",         0x274 },
+                { "PLAYER_QUEST_LOG_1_1",           0x278 },
+                { "PLAYER_VISIBLE_ITEM_1_ENTRYID",  0x46C },
+                { "PLAYER_FIELD_INV_SLOT_HEAD",     0x510 },
+                { "PLAYER_FIELD_PACK_SLOT_1",       0x5C8 },
+                { "PLAYER_FIELD_BANK_SLOT_1",       0x648 },
+                { "PLAYER_FIELD_BANKBAG_SLOT_1",    0x728 },
+                { "PLAYER_FIELD_VENDORBUYBACK_SLOT_1", 0x760 },
+                { "PLAYER_FIELD_KEYRING_SLOT_1",    0x7C0 },
+                { "PLAYER_FARSIGHT",                0x9C0 },
+                { "PLAYER_FIELD_KNOWN_TITLES",      0x9C8 },
+                { "PLAYER_FIELD_KNOWN_TITLES1",     0x9D0 },
+                { "PLAYER_FIELD_KNOWN_CURRENCIES",  0x9E0 },
+                { "PLAYER_XP",                      0x9E8 },
+                { "PLAYER_NEXT_LEVEL_XP",           0x9EC },
+                { "PLAYER_SKILL_INFO_1_1",          0x9F0 },
+                { "PLAYER_CHARACTER_POINTS1",       0xFF0 },
+                { "PLAYER_CHARACTER_POINTS2",       0xFF4 },
+                { "PLAYER_TRACK_CREATURES",         0xFF8 },
+                { "PLAYER_TRACK_RESOURCES",         0xFFC },
+                { "PLAYER_BLOCK_PERCENTAGE",        0x1000 },
+                { "PLAYER_DODGE_PERCENTAGE",        0x1004 },
+                { "PLAYER_PARRY_PERCENTAGE",        0x1008 },
+                { "PLAYER_EXPERTISE",               0x100C },
+                { "PLAYER_OFFHAND_EXPERTISE",       0x1010 },
+                { "PLAYER_CRIT_PERCENTAGE",         0x1014 },
+                { "PLAYER_RANGED_CRIT_PERCENTAGE",  0x1018 },
+                { "PLAYER_OFFHAND_CRIT_PERCENTAGE", 0x101C },
+                { "PLAYER_SPELL_CRIT_PERCENTAGE1",  0x1020 },
+                { "PLAYER_SHIELD_BLOCK",            0x103C },
+                { "PLAYER_SHIELD_BLOCK_CRIT_PERCENTAGE", 0x1040 },
+                { "PLAYER_EXPLORED_ZONES_1",        0x1044 },
+                { "PLAYER_REST_STATE_EXPERIENCE",   0x1244 },
+                { "PLAYER_FIELD_COINAGE",           0x1248 },
+                { "PLAYER_FIELD_MOD_DAMAGE_DONE_POS", 0x124C },
+                { "PLAYER_FIELD_MOD_DAMAGE_DONE_NEG", 0x1268 },
+                { "PLAYER_FIELD_MOD_DAMAGE_DONE_PCT", 0x1284 },
+                { "PLAYER_FIELD_MOD_HEALING_DONE_POS", 0x12A0 },
+                { "PLAYER_FIELD_MOD_TARGET_RESISTANCE", 0x12AC },
+                { "PLAYER_FIELD_MOD_TARGET_PHYSICAL_RESISTANCE", 0x12B0 },
+                { "PLAYER_FIELD_BYTES",             0x12B4 },
+                { "PLAYER_AMMO_ID",                 0x12B8 },
+                { "PLAYER_SELF_RES_SPELL",          0x12BC },
+                { "PLAYER_FIELD_PVP_MEDALS",        0x12C0 },
+                { "PLAYER_FIELD_BUYBACK_PRICE_1",   0x12C4 },
+                { "PLAYER_FIELD_BUYBACK_TIMESTAMP_1", 0x12F4 },
+                { "PLAYER_FIELD_KILLS",             0x1324 },
+                { "PLAYER_FIELD_TODAY_CONTRIBUTION", 0x1328 },
+                { "PLAYER_FIELD_YESTERDAY_CONTRIBUTION", 0x132C },
+                { "PLAYER_FIELD_LIFETIME_HONOURABLE_KILLS", 0x1330 },
+                { "PLAYER_FIELD_GLYPH_SLOTS_1",     0x1480 },
+                { "PLAYER_FIELD_GLYPHS_1",          0x1498 },
+            };
+
+            internal static readonly Dictionary<string, int> GameObjectFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "OBJECT_FIELD_SCALE_X",       0x10 },
+                { "OBJECT_FIELD_CREATED_BY",    0x18 },
+                { "GAMEOBJECT_DISPLAYID",       0x20 },
+                { "GAMEOBJECT_FLAGS",           0x24 },
+                { "GAMEOBJECT_PARENTROTATION",  0x28 },
+                { "GAMEOBJECT_DYNAMIC",         0x38 },
+                { "GAMEOBJECT_FACTION",         0x3C },
+                { "GAMEOBJECT_LEVEL",           0x40 },
+                { "GAMEOBJECT_BYTES_1",         0x44 },
+            };
+
+            internal static readonly Dictionary<string, int> DynamicObjectFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "DYNAMICOBJECT_CASTER",       0x18 },
+                { "DYNAMICOBJECT_BYTES",        0x20 },
+                { "DYNAMICOBJECT_SPELLID",      0x24 },
+                { "DYNAMICOBJECT_RADIUS",       0x28 },
+                { "DYNAMICOBJECT_CASTTIME",     0x2C },
+            };
+
+            internal static readonly Dictionary<string, int> CorpseFields = new Dictionary<string, int>
+            {
+                { "OBJECT_FIELD_GUID",          0x00 },
+                { "OBJECT_FIELD_TYPE",          0x08 },
+                { "OBJECT_FIELD_ENTRY",         0x0C },
+                { "CORPSE_FIELD_OWNER",         0x18 },
+                { "CORPSE_FIELD_PARTY",         0x20 },
+                { "CORPSE_FIELD_DISPLAY_ID",    0x28 },
+                { "CORPSE_FIELD_ITEM",          0x2C },
+                { "CORPSE_FIELD_BYTES_1",       0x78 },
+                { "CORPSE_FIELD_BYTES_2",       0x7C },
+                { "CORPSE_FIELD_GUILD",         0x80 },
+                { "CORPSE_FIELD_FLAGS",         0x84 },
+                { "CORPSE_FIELD_DYNAMIC_FLAGS", 0x88 },
+            };
         }
     }
 }

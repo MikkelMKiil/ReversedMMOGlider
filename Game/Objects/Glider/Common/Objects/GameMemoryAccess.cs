@@ -7,637 +7,119 @@ using Glider.Common.Objects;
 
 internal static class GameMemoryAccess
 {
-    private static int ToAddress(long address)
-    {
-        return unchecked((int)address);
-    }
-
-    internal static bool bool_2
-    {
-        get { return GProcessMemoryManipulator.bool_2; }
-        set { GProcessMemoryManipulator.bool_2 = value; }
-    }
-
-    internal static bool bool_3
-    {
-        get { return GProcessMemoryManipulator.bool_3; }
-        set { GProcessMemoryManipulator.bool_3 = value; }
-    }
-
-    internal static int int_27
-    {
-        get { return GProcessMemoryManipulator.int_27; }
-    }
-
-    internal static uint ReadObjectStorageAddress(uint baseAddress)
-    {
-        // Ensure baseAddress isn't 0 before adding offsets
-        if (baseAddress == 0) return 0;
-
-        // Read the pointer at [base + 8]
-        return GProcessMemoryManipulator.ReadUInt32(baseAddress + 8, "GameObjStorage");
-    }
-    // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
-    internal static ulong ReadObjectGuid(int baseAddress)
-    {
-        var storageAddress = ReadObjectStorageAddress((uint)baseAddress);
-        if (storageAddress == 0)
-            return 0UL;
-
-        // OBJECT_FIELD_GUID is at descriptor offset 0x00 in WoW 3.3.5a.
-        return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
-    }
-
-    // uint overload to preserve unsigned address semantics for BaseAddress
-    internal static ulong ReadObjectGuid(uint baseAddress)
-    {
-        var storageAddress = ReadObjectStorageAddress(baseAddress);
-        if (storageAddress == 0)
-            return 0UL;
-
-        return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
-    }
-
-        // Used by: GObject.IsCursorOnObject
-        // Used by: GUnit.IsCursorOnUnit
-        internal static ulong ReadUnderCursorGuid()
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor"));
-        }
-
-        // Used by: GObject.QuickGetType
-        internal static int ReadQuickObjectType(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + 20, "QuickType");
-        }
-
-        // uint overload to accept unsigned base addresses without forcing signed conversion
-        internal static int ReadQuickObjectType(uint baseAddress)
-        {
-            return ReadQuickObjectType(ToAddress(baseAddress));
-        }
-
-        // Used by: GObject.Refresh(bool BypassTimer)
-        internal static int ReadRefreshStorageAddress(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + 8, "GameObjStorage.Refresh");
-        }
-
-        internal static uint ReadRefreshStorageAddress(uint baseAddress)
-        {
-            return unchecked((uint)ReadRefreshStorageAddress(ToAddress(baseAddress)));
-        }
-
-        // Used by: GObject.GetStorageInt
-        internal static int ReadStorageInt(int storageAddress, int descriptorOffset, string fieldName)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(storageAddress + descriptorOffset, "ReadSI." + fieldName);
-        }
-
-        internal static int ReadStorageInt(uint storageAddress, int descriptorOffset, string fieldName)
-        {
-            return ReadStorageInt(ToAddress(storageAddress), descriptorOffset, fieldName);
-        }
-
-        // Used by: GObject.GetStorageLong
-        internal static ulong ReadStorageULong(int storageAddress, int descriptorOffset, string fieldName)
-        {
-            return (ulong)GProcessMemoryManipulator.ReadULongFromOffset(storageAddress + descriptorOffset, "ReadSL." + fieldName);
-        }
-
-        internal static ulong ReadStorageULong(uint storageAddress, int descriptorOffset, string fieldName)
-        {
-            return ReadStorageULong(ToAddress(storageAddress), descriptorOffset, fieldName);
-        }
-
-        // Used by: GObject.GetStorageFloat
-        internal static float ReadStorageFloat(int storageAddress, int descriptorOffset, string fieldName)
-        {
-            return GProcessMemoryManipulator.ReadFloatFromOffset(storageAddress + descriptorOffset, "ReadSF." + fieldName);
-        }
-
-        internal static float ReadStorageFloat(uint storageAddress, int descriptorOffset, string fieldName)
-        {
-            return ReadStorageFloat(ToAddress(storageAddress), descriptorOffset, fieldName);
-        }
-
-        // Used by: GObject.GetBaseInt
-        internal static int ReadBaseInt(int baseAddress, string offsetName)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBI." + offsetName);
-        }
-
-        internal static int ReadBaseInt(uint baseAddress, string offsetName)
-        {
-            return ReadBaseInt(ToAddress(baseAddress), offsetName);
-        }
-
-        // Used by: GObject.GetBaseLong
-        internal static ulong ReadBaseLong(int baseAddress, string offsetName)
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadULongFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBL." + offsetName));
-        }
-
-        internal static ulong ReadBaseLong(uint baseAddress, string offsetName)
-        {
-            return ReadBaseLong(ToAddress(baseAddress), offsetName);
-        }
-
-        // Used by: GObject.GetBaseFloat
-        internal static float ReadBaseFloat(int baseAddress, string offsetName)
-        {
-            return GProcessMemoryManipulator.ReadFloatFromOffset(baseAddress + MemoryOffsetTable.Instance.GetIntOffset(offsetName), "ReadBF." + offsetName);
-        }
-
-        internal static float ReadBaseFloat(uint baseAddress, string offsetName)
-        {
-            return ReadBaseFloat(ToAddress(baseAddress), offsetName);
-        }
-
-        // Used by: GMemory.WriteBytes
-        internal static bool IsMemoryReadable(int startAddress)
-        {
-            return GProcessMemoryManipulator.IsMemoryReadable(startAddress);
-        }
-
-        // Used by: GMemory.WriteBytes
-        internal static int ReadPointerChain(int startAddress, int lengthToRead, int maxDepth)
-        {
-            return GProcessMemoryManipulator.ReadPointerChain(startAddress, lengthToRead, maxDepth);
-        }
-
-        // Used by: GMemory.WriteBytes
-        internal static int WriteBytes(int startAddress, byte[] dataToWrite, int lengthToWrite)
-        {
-            return GProcessMemoryManipulator.WriteBytes(startAddress, dataToWrite, lengthToWrite);
-        }
-
-        // Used by: GMemory.ReadBytes
-        internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadBytes(startAddress, lengthToRead, debugClue);
-        }
-
-        internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
-        {
-            return GProcessMemoryManipulator.ReadBytes(startAddress, lengthToRead, debugClue, allowPartialRead);
-        }
-
-        internal static byte[] ReadBytesRaw(int startAddress, int lengthToRead)
-        {
-            return GProcessMemoryManipulator.ReadBytesRaw(startAddress, lengthToRead);
-        }
-
-        // Used by: GMemory.ReadByte
-        internal static byte ReadByte(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadByte(startAddress, debugClue);
-        }
-
-        // Used by: GMemory.ReadInt
-        internal static int ReadInt32(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadInt32(startAddress, debugClue);
-        }
-
-        internal static uint ReadUInt32(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadUInt32(startAddress, debugClue);
-        }
-
-        internal static uint ReadUInt32(uint startAddress, string debugClue)
-        {
-            return ReadUInt32(ToAddress(startAddress), debugClue);
-        }
-
-        internal static uint ReadUInt32(long startAddress, string debugClue)
-        {
-            return ReadUInt32(ToAddress(startAddress), debugClue);
-        }
-
-        internal static int ReadInt32(uint startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadInt32(ToAddress(startAddress), debugClue);
-        }
-
-        internal static int ReadInt32(long startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadInt32(ToAddress(startAddress), debugClue);
-        }
-
-        // Used by: GMemory.ReadLong
-        internal static ulong ReadInt64(int startAddress, string debugClue)
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(startAddress, debugClue));
-        }
-
-        internal static ulong ReadInt64(uint startAddress, string debugClue)
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(startAddress, debugClue));
-        }
-
-        internal static ulong ReadInt64(long startAddress, string debugClue)
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(ToAddress(startAddress), debugClue));
-        }
-
-        // Used by: GMemory.ReadFloat
-        internal static float ReadFloat(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadFloat(startAddress, debugClue);
-        }
-
-        internal static float ReadFloatAlternate(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadFloatAlternate(startAddress, debugClue);
-        }
-
-        internal static int ReadIntFromOffset(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(startAddress, debugClue);
-        }
-
-        internal static int ReadIntFromOffset(uint startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(ToAddress(startAddress), debugClue);
-        }
-
-        internal static int ReadIntFromOffset(long startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(ToAddress(startAddress), debugClue);
-        }
-
-        // Used by: GMemory.ReadString
-        internal static string ReadString(int startAddress, int maxLength, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadString(startAddress, maxLength, debugClue);
-        }
-
-        internal static string ReadStringInternal(int startAddress, int maxLength, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadStringInternal(startAddress, maxLength, debugClue);
-        }
-
-        // Used by: GUnit.RaidTargetIcon
-        internal static ulong ReadRaidTargetGuid(int raidTargetIconOffset, int index)
-        {
-            return unchecked((ulong)GProcessMemoryManipulator.ReadInt64(raidTargetIconOffset + index * 8, "rti"));
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadPlayerCasting()
-        {
-            return GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCasting"), "PlayerCasting");
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadPlayerCastingAlt()
-        {
-            return GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCastingAlt"), "PlayerCastingAlt");
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadCreatureType(int monsterDefinition)
-        {
-            return GProcessMemoryManipulator.ReadInt32(monsterDefinition + MemoryOffsetTable.Instance.GetIntOffset("CreatureType"), "rct");
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadMovementFlags1(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags"), "movefl");
-        }
-
-        internal static int ReadMovementFlags1(uint baseAddress)
-        {
-            return ReadMovementFlags1(ToAddress(baseAddress));
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadMoveStruct2(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveStruct2"), "movest2");
-        }
-
-        internal static int ReadMoveStruct2(uint baseAddress)
-        {
-            return ReadMoveStruct2(ToAddress(baseAddress));
-        }
-
-        // Used by: GUnit.LoadFields
-        internal static int ReadMovementFlags2(int moveStruct2Address)
-        {
-            return GProcessMemoryManipulator.ReadInt32(moveStruct2Address + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags2"), "movefl2");
-        }
-
-        // Used by: GUnit.GetFactionGroupRow
-        internal static int ReadFactionSub()
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionSub"), "facsub");
-        }
-
-        // Used by: GUnit.GetFactionGroupRow
-        internal static int ReadFactionOff1(int checkBaseAddress)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(checkBaseAddress + MemoryOffsetTable.Instance.GetIntOffset("FactionOff1"), "fac1");
-        }
-
-        internal static int ReadFactionOff1(uint checkBaseAddress)
-        {
-            return ReadFactionOff1(ToAddress(checkBaseAddress));
-        }
-
-        // Used by: GUnit.GetFactionGroupRow
-        internal static int ReadFactionOff2(int factionOff1Address)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(factionOff1Address + MemoryOffsetTable.Instance.GetIntOffset("FactionOff2"), "fac2");
-        }
-
-        // Used by: GUnit.GetFactionGroupRow
-        internal static int ReadFactionBase()
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionBase"), "fac3");
-        }
-
-        // Used by: GUnit.GetFactionGroupRow
-        internal static int ReadFactionLookup(int factionBaseAddress, int factionRowDelta)
-        {
-            return GProcessMemoryManipulator.ReadIntFromOffset(factionBaseAddress + factionRowDelta * 4, "faclookup");
-        }
-
-        // Used by: GUnit.GetReaction
-        internal static int ReadReactionValue(int address, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadInt32(address, debugClue);
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static int ReadNewBuffBaseCount(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
-        }
-
-        internal static int ReadNewBuffBaseCount(uint baseAddress)
-        {
-            return ReadNewBuffBaseCount(ToAddress(baseAddress));
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static int ReadNewBuffExtCount(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
-        }
-
-        internal static int ReadNewBuffExtCount(uint baseAddress)
-        {
-            return ReadNewBuffExtCount(ToAddress(baseAddress));
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static int ReadNewBuffExtPointer(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
-        }
-
-        internal static int ReadNewBuffExtPointer(uint baseAddress)
-        {
-            return ReadNewBuffExtPointer(ToAddress(baseAddress));
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static int ReadNewBuffSpellId(int buffBaseAddress, int spellIdOffset)
-        {
-            return GProcessMemoryManipulator.ReadInt32(buffBaseAddress + spellIdOffset, "buffsid");
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static byte ReadNewBuffCharges(int buffBaseAddress, int chargesOffset)
-        {
-            return GProcessMemoryManipulator.ReadByte(buffBaseAddress + chargesOffset, "buffchgs");
-        }
-
-        // Used by: GUnit.LoadBuffList
-        internal static byte ReadNewBuffFlags(int buffBaseAddress, int flagsOffset)
-        {
-            return GProcessMemoryManipulator.ReadByte(buffBaseAddress + flagsOffset, "buffflgs");
-        }
-
-        // Used by: GUnit.LoadBuffListOld
-        internal static int ReadOldBuffSpellId(int auraBaseAddress, int index)
-        {
-            return GProcessMemoryManipulator.ReadInt32(auraBaseAddress + index * 4, "BuffSpell" + index);
-        }
-
-        internal static int ReadOldBuffSpellId(long auraBaseAddress, int index)
-        {
-            return ReadOldBuffSpellId(ToAddress(auraBaseAddress), index);
-        }
-
-        internal static string GenerateRandomString()
-        {
-            return GProcessMemoryManipulator.GenerateRandomString();
-        }
-
-        internal static string smethod_0()
-        {
-            return GProcessMemoryManipulator.smethod_0();
-        }
-
-        internal static string smethod_10(int startAddress, int maxLength, string debugClue)
-        {
-            return GProcessMemoryManipulator.smethod_10(startAddress, maxLength, debugClue);
-        }
-
-        internal static int smethod_11(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.smethod_11(startAddress, debugClue);
-        }
-
-        internal static long smethod_12(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.smethod_12(startAddress, debugClue);
-        }
-
-        internal static double smethod_13(int startAddress, string debugClue)
-        {
-            return GProcessMemoryManipulator.ReadDouble(startAddress, debugClue);
-        }
-
-        internal static bool IsWowProcessRunning()
-        {
-            return GProcessMemoryManipulator.IsWowProcessRunning();
-        }
-
-        internal static int AttachToWowProcess()
-        {
-            return GProcessMemoryManipulator.AttachToWowProcess();
-        }
-
-        internal static void SetProcessId(int processId)
-        {
-            GProcessMemoryManipulator.SetProcessId(processId);
-        }
-
-        internal static IntPtr OpenProcessHandle(int processId)
-        {
-            return GProcessMemoryManipulator.OpenProcessHandle(processId);
-        }
-
-        internal static IntPtr OpenProcessWithAccess(int processId)
-        {
-            return GProcessMemoryManipulator.OpenProcessWithAccess(processId);
-        }
-
-        internal static void CloseProcessHandle(IntPtr processHandle)
-        {
-            GProcessMemoryManipulator.CloseProcessHandle(processHandle);
-        }
-
-        internal static void CloseCurrentProcessHandle()
-        {
-            GProcessMemoryManipulator.CloseCurrentProcessHandle();
-        }
-
-        internal static IntPtr GetWindowHandle()
-        {
-            return GProcessMemoryManipulator.GetWindowHandle();
-        }
-
-        internal static IntPtr GetMainWindowHandle(int processId)
-        {
-            return GProcessMemoryManipulator.GetMainWindowHandle(processId);
-        }
-
-        internal static GProcessMemoryManipulator.GStruct22 GetCursorPosition()
-        {
-            return GProcessMemoryManipulator.GetCursorPosition();
-        }
-
-        internal static IntPtr GetForegroundWindow()
-        {
-            return GProcessMemoryManipulator.GetForegroundWindow();
-        }
-
-        internal static void GetForegroundWindow(IntPtr windowHandle, Size size, Point point)
-        {
-            GProcessMemoryManipulator.GetForegroundWindow(windowHandle, size, point);
-        }
-
-        internal static int GetCurrentProcessId()
-        {
-            return GProcessMemoryManipulator.GetCurrentProcessId();
-        }
-
-        internal static int GetProcessId()
-        {
-            return GProcessMemoryManipulator.GetProcessId();
-        }
-
-        internal static int GetProcessIdFromWindow()
-        {
-            return GProcessMemoryManipulator.GetProcessIdFromWindow();
-        }
-
-        internal static string GetProcessExecutablePath()
-        {
-            return GProcessMemoryManipulator.GetProcessExecutablePath();
-        }
-
-        internal static void WorldToScreen(double x, double y, out int sx, out int sy)
-        {
-            GProcessMemoryManipulator.WorldToScreen(x, y, out sx, out sy);
-        }
-
-        internal static void ScreenToWorld(out double x, out double y, int sx, int sy)
-        {
-            GProcessMemoryManipulator.ScreenToWorld(out x, out y, sx, sy);
-        }
-
-        internal static void Sleep(uint milliseconds)
-        {
-            GProcessMemoryManipulator.Sleep(milliseconds);
-        }
-
-        internal static bool SetForegroundWindow(IntPtr windowHandle)
-        {
-            return GProcessMemoryManipulator.SetForegroundWindow(windowHandle);
-        }
-
-        internal static void ShowWindow(IntPtr windowHandle)
-        {
-            GProcessMemoryManipulator.ShowWindow(windowHandle);
-        }
-
-        internal static bool GetWindowPosition(IntPtr windowHandle, out Point point)
-        {
-            return GProcessMemoryManipulator.GetWindowPosition(windowHandle, out point);
-        }
-
-        internal static bool GetWindowSize(IntPtr windowHandle, out Size size)
-        {
-            return GProcessMemoryManipulator.GetWindowSize(windowHandle, out size);
-        }
-
-        internal static void SetWindowSize(IntPtr windowHandle, Size size)
-        {
-            GProcessMemoryManipulator.SetWindowSize(windowHandle, size);
-        }
-
-        internal static void IsWindowVisible(Control control, string helpFile, HelpNavigator navigator, object parameter)
-        {
-            GProcessMemoryManipulator.IsWindowVisible(control, helpFile, navigator, parameter);
-        }
-
-        internal static void IsWindowMinimized()
-        {
-            GProcessMemoryManipulator.IsWindowMinimized();
-        }
-
-        internal static byte[] smethod_17(int address, int size, string debugClue)
-        {
-            return GProcessMemoryManipulator.smethod_17(address, size, debugClue);
-        }
-
-        internal static byte[] smethod_20(int address, int size)
-        {
-            return GProcessMemoryManipulator.smethod_20(address, size);
-        }
-
-        internal static void smethod_48(Form form)
-        {
-            GProcessMemoryManipulator.smethod_48(form);
-        }
-
-        internal static void smethod_51(HelpProvider helpProvider)
-        {
-            GProcessMemoryManipulator.smethod_51(helpProvider);
-        }
-
-        internal static bool smethod_52(out ulong playerGuid, out int mainTable)
-        {
-            long signedPlayerGuid;
-            var result = GProcessMemoryManipulator.smethod_52(out signedPlayerGuid, out mainTable);
-            playerGuid = unchecked((ulong)signedPlayerGuid);
-            return result;
-        }
-
-        internal static void smethod_53()
-        {
-            GProcessMemoryManipulator.smethod_53();
-        }
-
-        internal static void smethod_54()
-        {
-            GProcessMemoryManipulator.smethod_54();
-        }
-
-        internal static void smethod_55(int processId)
-        {
-            GProcessMemoryManipulator.smethod_55(processId);
-        }
-
-        internal static bool smethod_56(int processId)
-        {
-            return GProcessMemoryManipulator.smethod_56(processId);
-        }
-    }
+    internal static bool bool_2 { get { return MemoryRequestHandler.bool_2; } set { MemoryRequestHandler.bool_2 = value; } }
+    internal static bool bool_3 { get { return MemoryRequestHandler.bool_3; } set { MemoryRequestHandler.bool_3 = value; } }
+    internal static int int_27 { get { return MemoryRequestHandler.int_27; } }
+
+    internal static uint ReadObjectStorageAddress(uint baseAddress) => MemoryRequestHandler.ReadObjectStorageAddress(baseAddress);
+    internal static ulong ReadObjectGuid(int baseAddress) => MemoryRequestHandler.ReadObjectGuid(baseAddress);
+    internal static ulong ReadObjectGuid(uint baseAddress) => MemoryRequestHandler.ReadObjectGuid(baseAddress);
+    internal static ulong ReadUnderCursorGuid() => MemoryRequestHandler.ReadUnderCursorGuid();
+    internal static int ReadQuickObjectType(int baseAddress) => MemoryRequestHandler.ReadQuickObjectType(baseAddress);
+    internal static int ReadQuickObjectType(uint baseAddress) => MemoryRequestHandler.ReadQuickObjectType(baseAddress);
+    internal static int ReadRefreshStorageAddress(int baseAddress) => MemoryRequestHandler.ReadRefreshStorageAddress(baseAddress);
+    internal static uint ReadRefreshStorageAddress(uint baseAddress) => MemoryRequestHandler.ReadRefreshStorageAddress(baseAddress);
+    internal static int ReadStorageInt(int storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageInt(storageAddress, descriptorOffset, fieldName);
+    internal static int ReadStorageInt(uint storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageInt(storageAddress, descriptorOffset, fieldName);
+    internal static ulong ReadStorageULong(int storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageULong(storageAddress, descriptorOffset, fieldName);
+    internal static ulong ReadStorageULong(uint storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageULong(storageAddress, descriptorOffset, fieldName);
+    internal static float ReadStorageFloat(int storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageFloat(storageAddress, descriptorOffset, fieldName);
+    internal static float ReadStorageFloat(uint storageAddress, int descriptorOffset, string fieldName) => MemoryRequestHandler.ReadStorageFloat(storageAddress, descriptorOffset, fieldName);
+    internal static int ReadBaseInt(int baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseInt(baseAddress, offsetName);
+    internal static int ReadBaseInt(uint baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseInt(baseAddress, offsetName);
+    internal static ulong ReadBaseLong(int baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseLong(baseAddress, offsetName);
+    internal static ulong ReadBaseLong(uint baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseLong(baseAddress, offsetName);
+    internal static float ReadBaseFloat(int baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseFloat(baseAddress, offsetName);
+    internal static float ReadBaseFloat(uint baseAddress, string offsetName) => MemoryRequestHandler.ReadBaseFloat(baseAddress, offsetName);
+    internal static bool IsMemoryReadable(int startAddress) => MemoryRequestHandler.IsMemoryReadable(startAddress);
+    internal static int ReadPointerChain(int startAddress, int lengthToRead, int maxDepth) => MemoryRequestHandler.ReadPointerChain(startAddress, lengthToRead, maxDepth);
+    internal static int WriteBytes(int startAddress, byte[] dataToWrite, int lengthToWrite) => MemoryRequestHandler.WriteBytes(startAddress, dataToWrite, lengthToWrite);
+    internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue) => MemoryRequestHandler.ReadBytes(startAddress, lengthToRead, debugClue);
+    internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue, bool allowPartialRead) => MemoryRequestHandler.ReadBytes(startAddress, lengthToRead, debugClue, allowPartialRead);
+    internal static byte[] ReadBytesRaw(int startAddress, int lengthToRead) => MemoryRequestHandler.ReadBytesRaw(startAddress, lengthToRead);
+    internal static byte ReadByte(int startAddress, string debugClue) => MemoryRequestHandler.ReadByte(startAddress, debugClue);
+    internal static int ReadInt32(int startAddress, string debugClue) => MemoryRequestHandler.ReadInt32(startAddress, debugClue);
+    internal static uint ReadUInt32(int startAddress, string debugClue) => MemoryRequestHandler.ReadUInt32(startAddress, debugClue);
+    internal static uint ReadUInt32(uint startAddress, string debugClue) => MemoryRequestHandler.ReadUInt32(startAddress, debugClue);
+    internal static uint ReadUInt32(long startAddress, string debugClue) => MemoryRequestHandler.ReadUInt32(startAddress, debugClue);
+    internal static int ReadInt32(uint startAddress, string debugClue) => MemoryRequestHandler.ReadInt32(startAddress, debugClue);
+    internal static int ReadInt32(long startAddress, string debugClue) => MemoryRequestHandler.ReadInt32(startAddress, debugClue);
+    internal static ulong ReadInt64(int startAddress, string debugClue) => MemoryRequestHandler.ReadInt64(startAddress, debugClue);
+    internal static ulong ReadInt64(uint startAddress, string debugClue) => MemoryRequestHandler.ReadInt64(startAddress, debugClue);
+    internal static ulong ReadInt64(long startAddress, string debugClue) => MemoryRequestHandler.ReadInt64(startAddress, debugClue);
+    internal static float ReadFloat(int startAddress, string debugClue) => MemoryRequestHandler.ReadFloat(startAddress, debugClue);
+    internal static float ReadFloatAlternate(int startAddress, string debugClue) => MemoryRequestHandler.ReadFloatAlternate(startAddress, debugClue);
+    internal static int ReadIntFromOffset(int startAddress, string debugClue) => MemoryRequestHandler.ReadIntFromOffset(startAddress, debugClue);
+    internal static int ReadIntFromOffset(uint startAddress, string debugClue) => MemoryRequestHandler.ReadIntFromOffset(startAddress, debugClue);
+    internal static int ReadIntFromOffset(long startAddress, string debugClue) => MemoryRequestHandler.ReadIntFromOffset(startAddress, debugClue);
+    internal static string ReadString(int startAddress, int maxLength, string debugClue) => MemoryRequestHandler.ReadString(startAddress, maxLength, debugClue);
+    internal static string ReadStringInternal(int startAddress, int maxLength, string debugClue) => MemoryRequestHandler.ReadStringInternal(startAddress, maxLength, debugClue);
+    internal static ulong ReadRaidTargetGuid(int raidTargetIconOffset, int index) => MemoryRequestHandler.ReadRaidTargetGuid(raidTargetIconOffset, index);
+    internal static int ReadPlayerCasting() => MemoryRequestHandler.ReadPlayerCasting();
+    internal static int ReadPlayerCastingAlt() => MemoryRequestHandler.ReadPlayerCastingAlt();
+    internal static int ReadCreatureType(int monsterDefinition) => MemoryRequestHandler.ReadCreatureType(monsterDefinition);
+    internal static int ReadMovementFlags1(int baseAddress) => MemoryRequestHandler.ReadMovementFlags1(baseAddress);
+    internal static int ReadMovementFlags1(uint baseAddress) => MemoryRequestHandler.ReadMovementFlags1(baseAddress);
+    internal static int ReadMoveStruct2(int baseAddress) => MemoryRequestHandler.ReadMoveStruct2(baseAddress);
+    internal static int ReadMoveStruct2(uint baseAddress) => MemoryRequestHandler.ReadMoveStruct2(baseAddress);
+    internal static int ReadMovementFlags2(int moveStruct2Address) => MemoryRequestHandler.ReadMovementFlags2(moveStruct2Address);
+    internal static int ReadFactionSub() => MemoryRequestHandler.ReadFactionSub();
+    internal static int ReadFactionOff1(int checkBaseAddress) => MemoryRequestHandler.ReadFactionOff1(checkBaseAddress);
+    internal static int ReadFactionOff1(uint checkBaseAddress) => MemoryRequestHandler.ReadFactionOff1(checkBaseAddress);
+    internal static int ReadFactionOff2(int factionOff1Address) => MemoryRequestHandler.ReadFactionOff2(factionOff1Address);
+    internal static int ReadFactionBase() => MemoryRequestHandler.ReadFactionBase();
+    internal static int ReadFactionLookup(int factionBaseAddress, int factionRowDelta) => MemoryRequestHandler.ReadFactionLookup(factionBaseAddress, factionRowDelta);
+    internal static int ReadReactionValue(int address, string debugClue) => MemoryRequestHandler.ReadReactionValue(address, debugClue);
+    internal static int ReadNewBuffBaseCount(int baseAddress) => MemoryRequestHandler.ReadNewBuffBaseCount(baseAddress);
+    internal static int ReadNewBuffBaseCount(uint baseAddress) => MemoryRequestHandler.ReadNewBuffBaseCount(baseAddress);
+    internal static int ReadNewBuffExtCount(int baseAddress) => MemoryRequestHandler.ReadNewBuffExtCount(baseAddress);
+    internal static int ReadNewBuffExtCount(uint baseAddress) => MemoryRequestHandler.ReadNewBuffExtCount(baseAddress);
+    internal static int ReadNewBuffExtPointer(int baseAddress) => MemoryRequestHandler.ReadNewBuffExtPointer(baseAddress);
+    internal static int ReadNewBuffExtPointer(uint baseAddress) => MemoryRequestHandler.ReadNewBuffExtPointer(baseAddress);
+    internal static int ReadNewBuffSpellId(int buffBaseAddress, int spellIdOffset) => MemoryRequestHandler.ReadNewBuffSpellId(buffBaseAddress, spellIdOffset);
+    internal static byte ReadNewBuffCharges(int buffBaseAddress, int chargesOffset) => MemoryRequestHandler.ReadNewBuffCharges(buffBaseAddress, chargesOffset);
+    internal static byte ReadNewBuffFlags(int buffBaseAddress, int flagsOffset) => MemoryRequestHandler.ReadNewBuffFlags(buffBaseAddress, flagsOffset);
+    internal static int ReadOldBuffSpellId(int auraBaseAddress, int index) => MemoryRequestHandler.ReadOldBuffSpellId(auraBaseAddress, index);
+    internal static int ReadOldBuffSpellId(long auraBaseAddress, int index) => MemoryRequestHandler.ReadOldBuffSpellId(auraBaseAddress, index);
+    internal static string GenerateRandomString() => MemoryRequestHandler.GenerateRandomString();
+    internal static string smethod_0() => MemoryRequestHandler.smethod_0();
+    internal static string smethod_10(int startAddress, int maxLength, string debugClue) => MemoryRequestHandler.smethod_10(startAddress, maxLength, debugClue);
+    internal static int smethod_11(int startAddress, string debugClue) => MemoryRequestHandler.smethod_11(startAddress, debugClue);
+    internal static long smethod_12(int startAddress, string debugClue) => MemoryRequestHandler.smethod_12(startAddress, debugClue);
+    internal static double smethod_13(int startAddress, string debugClue) => MemoryRequestHandler.smethod_13(startAddress, debugClue);
+    internal static bool IsWowProcessRunning() => MemoryRequestHandler.IsWowProcessRunning();
+    internal static int AttachToWowProcess() => MemoryRequestHandler.AttachToWowProcess();
+    internal static void SetProcessId(int processId) => MemoryRequestHandler.SetProcessId(processId);
+    internal static IntPtr OpenProcessHandle(int processId) => MemoryRequestHandler.OpenProcessHandle(processId);
+    internal static IntPtr OpenProcessWithAccess(int processId) => MemoryRequestHandler.OpenProcessWithAccess(processId);
+    internal static void CloseProcessHandle(IntPtr processHandle) => MemoryRequestHandler.CloseProcessHandle(processHandle);
+    internal static void CloseCurrentProcessHandle() => MemoryRequestHandler.CloseCurrentProcessHandle();
+    internal static IntPtr GetWindowHandle() => MemoryRequestHandler.GetWindowHandle();
+    internal static IntPtr GetMainWindowHandle(int processId) => MemoryRequestHandler.GetMainWindowHandle(processId);
+    internal static GProcessMemoryManipulator.GStruct22 GetCursorPosition() => MemoryRequestHandler.GetCursorPosition();
+    internal static IntPtr GetForegroundWindow() => MemoryRequestHandler.GetForegroundWindow();
+    internal static void GetForegroundWindow(IntPtr windowHandle, Size size, Point point) => MemoryRequestHandler.GetForegroundWindow(windowHandle, size, point);
+    internal static int GetCurrentProcessId() => MemoryRequestHandler.GetCurrentProcessId();
+    internal static int GetProcessId() => MemoryRequestHandler.GetProcessId();
+    internal static int GetProcessIdFromWindow() => MemoryRequestHandler.GetProcessIdFromWindow();
+    internal static string GetProcessExecutablePath() => MemoryRequestHandler.GetProcessExecutablePath();
+    internal static void WorldToScreen(double x, double y, out int sx, out int sy) => MemoryRequestHandler.WorldToScreen(x, y, out sx, out sy);
+    internal static void ScreenToWorld(out double x, out double y, int sx, int sy) => MemoryRequestHandler.ScreenToWorld(out x, out y, sx, sy);
+    internal static void Sleep(uint milliseconds) => MemoryRequestHandler.Sleep(milliseconds);
+    internal static bool SetForegroundWindow(IntPtr windowHandle) => MemoryRequestHandler.SetForegroundWindow(windowHandle);
+    internal static void ShowWindow(IntPtr windowHandle) => MemoryRequestHandler.ShowWindow(windowHandle);
+    internal static bool GetWindowPosition(IntPtr windowHandle, out Point point) => MemoryRequestHandler.GetWindowPosition(windowHandle, out point);
+    internal static bool GetWindowSize(IntPtr windowHandle, out Size size) => MemoryRequestHandler.GetWindowSize(windowHandle, out size);
+    internal static void SetWindowSize(IntPtr windowHandle, Size size) => MemoryRequestHandler.SetWindowSize(windowHandle, size);
+    internal static void IsWindowVisible(Control control, string helpFile, HelpNavigator navigator, object parameter) => MemoryRequestHandler.IsWindowVisible(control, helpFile, navigator, parameter);
+    internal static void IsWindowMinimized() => MemoryRequestHandler.IsWindowMinimized();
+    internal static byte[] smethod_17(int address, int size, string debugClue) => MemoryRequestHandler.smethod_17(address, size, debugClue);
+    internal static byte[] smethod_20(int address, int size) => MemoryRequestHandler.smethod_20(address, size);
+    internal static void smethod_48(Form form) => MemoryRequestHandler.smethod_48(form);
+    internal static void smethod_51(HelpProvider helpProvider) => MemoryRequestHandler.smethod_51(helpProvider);
+    internal static bool smethod_52(out ulong playerGuid, out int mainTable) => MemoryRequestHandler.smethod_52(out playerGuid, out mainTable);
+    internal static void smethod_53() => MemoryRequestHandler.smethod_53();
+    internal static void smethod_54() => MemoryRequestHandler.smethod_54();
+    internal static void smethod_55(int processId) => MemoryRequestHandler.smethod_55(processId);
+    internal static bool smethod_56(int processId) => MemoryRequestHandler.smethod_56(processId);
+}

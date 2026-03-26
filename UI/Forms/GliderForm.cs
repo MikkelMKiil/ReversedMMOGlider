@@ -155,7 +155,7 @@ public class GliderForm : Form, ILogger
         this.method_13();
         StartupClass.MainForm = (Form)this;
         StartupClass.InitStartupMode(AppMode.Normal);
-        MemoryMaster.GetWoWHandle();
+        MemoryRequestHandler.GetWoWHandle();
         this.InitializeComponent();
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
             this.method_26();
