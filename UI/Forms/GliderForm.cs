@@ -1624,8 +1624,6 @@ public class GliderForm : Form, Logger.IUiSink
         base.OnClosing(cancelEventArgs_0);
     }
 
-    public void OnLoggerRefreshRequested() => this.bool_1 = true;
-
     public void method_20()
     {
         if (!this.bool_1)
@@ -1646,16 +1644,7 @@ public class GliderForm : Form, Logger.IUiSink
         this.LabelManaHeader_1.Text = StartupClass.CurrentGameClass.PowerLabel + ":";
     }
 
-    public void OnLoggerToggleRequested() => this.label11.Checked = !this.label11.Checked;
-
     public static void smethod_2() => Logger.smethod_0();
-
-    public void OnLoggerShutdownRequested()
-    {
-        this.bool_5 = true;
-        Logger.LogMessage("Setting stop flag in Gliderform");
-        Thread.Sleep(1200);
-    }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {

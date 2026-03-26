@@ -158,13 +158,10 @@
     <Compile Include="Automation\StepConditionType.cs" />
     <Compile Include="Automation\StepStopAction.cs" />
     <Compile Include="Core\ApplicationInitializer.cs" />
-    <Compile Include="Core\ApplicationLogger.cs" />
     <Compile Include="Core\AssemblyInfo.cs" />
     <Compile Include="Core\ConfigManager.cs" />
     <Compile Include="Core\CrashHandler.cs" />
-    <Compile Include="Core\FileLogger.cs" />
     <Compile Include="Core\GlideMainThread.cs" />
-    <Compile Include="Core\ILogger.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\MessageProvider.cs" />
     <Compile Include="Core\StartupClass.cs" />
