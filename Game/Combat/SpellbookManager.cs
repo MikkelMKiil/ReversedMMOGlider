@@ -119,10 +119,10 @@ public class SpellbookManager
         var numArray = method_16(int_1);
         if (numArray != null)
         {
-            var int32_1 = BitConverter.ToInt32(numArray, method_5("SpellNameRLE"));
+            var int32_1 = BitConverter.ToInt32(numArray, (int)GameMemoryConstants.Spellbook.SpellNameRLE);
             if (int32_1 > 0)
                 gclass64.string_0 = method_2(int32_1, "spname");
-            var num1 = BitConverter.ToInt32(numArray, method_5("BuffTypeRLE"));
+            var num1 = BitConverter.ToInt32(numArray, (int)GameMemoryConstants.Spellbook.BuffTypeRLE);
             if (num1 > 6)
             {
                 method_3("Don't like bufftype for spell 0x" + int_1.ToString("x") + ": " + gclass64.gbuffType_0);
@@ -130,8 +130,8 @@ public class SpellbookManager
             }
 
             gclass64.gbuffType_0 = (GBuffType)num1;
-            gclass64.int_1 = BitConverter.ToInt32(numArray, method_5("SpellGroupRLE"));
-            var int32_2 = BitConverter.ToInt32(numArray, method_5("SpellRankRLE"));
+            gclass64.int_1 = BitConverter.ToInt32(numArray, (int)GameMemoryConstants.Spellbook.SpellGroupRLE);
+            var int32_2 = BitConverter.ToInt32(numArray, (int)GameMemoryConstants.Spellbook.SpellRankRLE);
             if (int32_2 > 0)
             {
                 var str = method_2(int32_2, "sprank");
