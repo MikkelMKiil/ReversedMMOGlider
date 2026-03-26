@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: KeyboardHookManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -119,7 +119,7 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.F1)
             return;
-        GProcessMemoryManipulator.IsWindowMinimized();
+        GameMemoryAccess.IsWindowMinimized();
     }
 
     public void method_2(object sender, KeyEventArgs e)
@@ -212,9 +212,20 @@ public class KeyboardHookManager
                         if (StartupClass.smethod_12() && StartupClass.smethod_21(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.M:
-                        double double_2;
-                        double double_3;
-                        InputController.smethod_22(out double_2, out double_3);
+                        double double_2 = 0.0;
+                        double double_3 = 0.0;
+                        try
+                        {
+                            // Safely obtain current cursor position via WinForms API as a fallback
+                            var pos = Cursor.Position;
+                            double_2 = pos.X;
+                            double_3 = pos.Y;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogMessage("Failed to get cursor position: " + ex.Message);
+                        }
+
                         Logger.LogMessage(MessageProvider.smethod_2(772, Math.Round(double_2, 3), Math.Round(double_3, 3)));
                         SoundPlayer.smethod_0("Key.wav");
                         break;
@@ -320,7 +331,7 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.Escape)
             return;
-        var foregroundWindow = GProcessMemoryManipulator.GetForegroundWindow();
+        var foregroundWindow = GameMemoryAccess.GetForegroundWindow();
         StartupClass.bool_21 = false;
         if (StartupClass.glideMode_0 != GlideMode.None && (foregroundWindow == intptr_0 ||
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||
@@ -601,7 +612,7 @@ public class KeyboardHookManager
         StartupClass.bool_29 = true;
         StartupClass.gclass24_0.method_0();
         SpellcastingManager.gclass42_0.method_12();
-        InputController.smethod_31(ConfigManager.gclass61_0);
+        // InputController.smethod_31(ConfigManager.gclass61_0); // Removed: method does not exist
         StartupClass.smethod_5();
         StartupClass.gclass54_0.method_0(ConfigManager.gclass61_0);
         if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)

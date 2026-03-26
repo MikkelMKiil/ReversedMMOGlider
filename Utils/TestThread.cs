@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompile with JetBrains decompiler
 // Type: TestThread
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -30,13 +30,11 @@ public class TestThread
         {
             bool_0 = true;
             Logger.LogMessage("TestoThread starting");
-            if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&
-                StartupClass.GliderManager != null)
+            if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             {
-                StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-                StartupClass.IsGliderInitialized = true;
-                Logger.LogMessage("Setting up for background mode!");
+                StartupClass.smethod_62();
+                if (StartupClass.IsGliderInitialized)
+                    Logger.LogMessage("Setting up for background mode!");
             }
             else
             {
@@ -44,14 +42,8 @@ public class TestThread
                 Thread.Sleep(2000);
             }
 
-            if (StartupClass.GliderManager != null)
-                StartupClass.GliderManager.method_33(true);
             smethod_52();
             Thread.Sleep(4000);
-            StartupClass.gclass68_0.method_7();
-            InputController.smethod_21(false);
-            if (StartupClass.GliderManager != null)
-                StartupClass.GliderManager.method_33(false);
             Logger.LogMessage("TestoThread done");
         }
         catch (Exception ex)
@@ -71,17 +63,17 @@ public class TestThread
             if (!StartupClass.IsGliderInitialized)
                 Thread.Sleep(3000);
             var gspellTimer = new GSpellTimer(5000, false);
-            StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
+            //StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
             while (!gspellTimer.IsReady)
             {
                 Thread.Sleep(20);
-                if (StartupClass.gclass68_0.method_8(true))
-                    break;
+                //if (StartupClass.gclass68_0.method_8(true))
+                //    break;
             }
 
             if (gspellTimer.IsReady)
                 Logger.LogMessage("Futility in test mouse spin");
-            StartupClass.gclass68_0.method_3(false);
+            //StartupClass.gclass68_0.method_3(false);
         }
         else
         {
@@ -105,7 +97,7 @@ public class TestThread
         else
         {
             Logger.LogMessage("Moving camera to target pitch of: " + Math.Round(float_0, 3));
-            StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
+            //StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
         }
     }
 
@@ -135,7 +127,7 @@ public class TestThread
     {
         var equippedGuid = GContext.Main.Items.GetEquippedGUID(string_0);
         Logger.LogMessage("Item in \"" + string_0 + "\": 0x" + equippedGuid.ToString("x"));
-        if (equippedGuid == 0L)
+        if (equippedGuid == 0UL)
             return;
         GContext.Main.Items.DebugItem(equippedGuid);
     }
@@ -184,7 +176,7 @@ public class TestThread
             do
             {
                 Thread.Sleep(100);
-                num2 = GProcessMemoryManipulator.ReadInt32(11257960, "bst");
+                num2 = GameMemoryAccess.ReadInt32(11257960, "bst");
             } while (num2 == num1);
 
             Logger.LogMessage("new value for bst: " + num2);
@@ -209,7 +201,7 @@ public class TestThread
                 for (var index = 0; index < bagContents2.Length; ++index)
                 {
                     var str = "0x" + bagContents2[index].ToString("x");
-                    if (bagContents2[index] != 0L)
+                    if (bagContents2[index] != 0UL)
                         str = ((GItem)GObjectList.FindObject(bagContents2[index])).ToString();
                     Logger.LogMessage("Bag " + bag.ToString("x") + "/" + index + " = " + str);
                 }
@@ -366,7 +358,7 @@ public class TestThread
         Logger.LogMessage("Put cursor on item!");
         Thread.Sleep(3000);
         Logger.LogMessage("Cursor Type: " +
-                           GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
+                           GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"));
     }
 
     private static void smethod_24()
@@ -558,9 +550,9 @@ public class TestThread
             if (WorldToScreenProjector.smethod_0(GPlayerSelf.Me.Target.Location, 0.0, out double_1, out double_2))
             {
                 Logger.LogMessage("Conversion good, positioning cursor");
-                InputController.smethod_18(double_1, double_2);
+                //InputController.smethod_18(double_1, double_2);
                 Thread.Sleep(1000);
-                InputController.smethod_23(true);
+                //InputController.smethod_23(true);
             }
             else
             {
@@ -579,7 +571,7 @@ public class TestThread
 
     private static void smethod_42()
     {
-        InputController.smethod_28("/w dirtymeat woo! YeAhhh!  Money$$!!??");
+        //InputController.smethod_28("/w dirtymeat woo! YeAhhh!  Money$$!!??");
     }
 
     private static void smethod_43()

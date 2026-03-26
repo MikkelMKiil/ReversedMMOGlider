@@ -74,7 +74,7 @@ namespace Glider.Common.Objects
 
         bool GotStone;
         bool Polyd;
-        long PolyGUID;
+        ulong PolyGUID;
         #endregion
 
         #region GGameClass overrides

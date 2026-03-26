@@ -1,4 +1,3 @@
-﻿// Decompiled with JetBrains decompiler
 // Type: ChatLogManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -391,7 +390,7 @@ public class ChatLogManager
         var num2 = MemoryOffsetTable.Instance.GetIntOffset("ChatFrameSize");
         for (var index = 0; index <= 10; ++index)
         {
-            var str = GProcessMemoryManipulator.ReadString(num1 + index * num2, 100, "ChatFrameName");
+            var str = GameMemoryAccess.ReadString(num1 + index * num2, 100, "ChatFrameName");
             Logger.smethod_1(MessageProvider.smethod_2(821, index + 1, str));
             if (str.ToLower() == string_2.ToLower())
                 return index + 1;

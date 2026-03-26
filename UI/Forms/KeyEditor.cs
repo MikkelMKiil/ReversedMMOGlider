@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: KeyEditor
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -51,7 +51,7 @@ public class KeyEditor : Form
         InitializeComponent();
         MessageProvider.smethod_3(this, nameof(KeyEditor));
         var keyEditor = this;
-        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GProcessMemoryManipulator.GenerateRandomString() + "]";
+        keyEditor.Text = keyEditor.Text + " " + string_3 + " [" + GameMemoryAccess.GenerateRandomString() + "]";
         foreach (var key in SpellcastingManager.gclass42_0.Offsets.Keys)
             if (key.StartsWith(string_2))
                 KeysList.Items.Add(key);
@@ -425,6 +425,11 @@ public class KeyEditor : Form
         Spell.Items.Clear();
         if (GContext.Main.IsAttached)
         {
+            if (StartupClass.gclass63_0 == null)
+            {
+                StartupClass.gclass63_0 = new SpellbookManager();
+            }
+
             gkey_0.FilloutKey();
             for (var SlotNumber = 1; SlotNumber <= 108; ++SlotNumber)
             {
@@ -436,11 +441,13 @@ public class KeyEditor : Form
                     switch (gshortcut_0.ShortcutType)
                     {
                         case GShortcutType.Spell:
-                            class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
+                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
+                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
                                               StartupClass.gclass63_0.method_11(gshortcut_0.ShortcutValue);
                             break;
                         case GShortcutType.Item:
-                            class0.string_0 = "0x" + gshortcut_0.ShortcutValue.ToString("x") + " " +
+                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
+                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
                                               new GItemDefinition(gshortcut_0.ShortcutValue).Name + " (item)";
                             break;
                         case GShortcutType.Macro:
@@ -555,7 +562,7 @@ public class KeyEditor : Form
     {
         if (!bool_0)
             return false;
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GProcessMemoryManipulator.GenerateRandomString() + "]",
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4(string_2), "Key Error [" + GameMemoryAccess.GenerateRandomString() + "]",
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
         return true;
@@ -570,6 +577,6 @@ public class KeyEditor : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
     }
 }

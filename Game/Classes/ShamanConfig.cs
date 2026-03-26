@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ShamanConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -86,7 +86,7 @@ public class ShamanConfig : Form
         }
 
         MessageProvider.smethod_3(this, "Shaman");
-        GProcessMemoryManipulator.smethod_48(this);
+        GameMemoryAccess.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -495,7 +495,7 @@ public class ShamanConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Shaman.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Shaman.html");
     }
 
     private void ShockMode_SelectedIndexChanged(object sender, EventArgs e)

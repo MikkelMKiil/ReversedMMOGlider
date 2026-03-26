@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GInterfaceObject
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -58,7 +58,7 @@ namespace Glider.Common.Objects
                 }
 
                 if (_icon != null)
-                    return GProcessMemoryManipulator.ReadByte(_icon._inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIDisabled"),
+                    return GameMemoryAccess.ReadByte(_icon._inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIDisabled"),
                         "UIDisabled") == 0;
                 Logger.smethod_1("No icon for object: " + _inner.string_0 + ", can't check enabled!");
                 return false;
@@ -66,10 +66,10 @@ namespace Glider.Common.Objects
         }
 
         private bool InnerIsReady =>
-            GProcessMemoryManipulator.ReadByte(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIReady"), "UIReady") == 0;
+            GameMemoryAccess.ReadByte(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIReady"), "UIReady") == 0;
 
         public bool IsFiring =>
-            GProcessMemoryManipulator.ReadByte(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIFiring"), "UIFiring") != 0;
+            GameMemoryAccess.ReadByte(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("UIFiring"), "UIFiring") != 0;
 
         public bool IsVisible => _inner.method_10();
 
@@ -88,7 +88,7 @@ namespace Glider.Common.Objects
         }
 
         public bool IsEnabledInFrame =>
-            GProcessMemoryManipulator.ReadInt32(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("MBEnabled"), "ieif") != 0;
+            GameMemoryAccess.ReadInt32(_inner.int_0 + MemoryOffsetTable.Instance.GetIntOffset("MBEnabled"), "ieif") != 0;
 
         public override string ToString()
         {

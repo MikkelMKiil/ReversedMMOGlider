@@ -29,7 +29,7 @@ namespace Glider.Common.Objects
         bool ApproachPull;
         bool GotAspect;
         bool DotShot;
-        long LastMarkGUID;
+        ulong LastMarkGUID;
         double MinHappiness;
         bool FoodAllGone = false;
         bool SetTrap = false;

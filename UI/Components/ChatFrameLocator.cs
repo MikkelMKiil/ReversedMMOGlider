@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ChatFrameLocator
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -68,7 +68,7 @@ public class ChatFrameLocator
         bool_0 = false;
         int_2 = 0;
         int_3 = ushort.MaxValue;
-        int_0 = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
+        int_0 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_0 == 0)
         {
             string_1 = "UIParent is null - no top object!";
@@ -78,9 +78,9 @@ public class ChatFrameLocator
         var num = int_0;
         do
         {
-            var int_29 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onameui");
-            if (int_29 == 0 || !(GProcessMemoryManipulator.ReadString(int_29, 200, "objectnamec1") == string_0))
-                num = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onext");
+            var int_29 = GameMemoryAccess.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UIName"), "onameui");
+            if (int_29 == 0 || !(GameMemoryAccess.ReadString(int_29, 200, "objectnamec1") == string_0))
+                num = GameMemoryAccess.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("UINext"), "onext");
             else
                 goto label_5;
         } while (num != 0);
@@ -115,13 +115,13 @@ public class ChatFrameLocator
         if (!bool_0 && !method_0())
             return null;
         var stringList = new List<string>();
-        var num1 = GProcessMemoryManipulator.ReadInt32(int_1 + int_4, "tablebomb");
-        var num2 = GProcessMemoryManipulator.ReadInt32(int_1 + int_5, "capacity");
-        var num3 = GProcessMemoryManipulator.ReadInt32(int_1 + int_6, "insertpos");
+        var num1 = GameMemoryAccess.ReadInt32(int_1 + int_4, "tablebomb");
+        var num2 = GameMemoryAccess.ReadInt32(int_1 + int_5, "capacity");
+        var num3 = GameMemoryAccess.ReadInt32(int_1 + int_6, "insertpos");
         if (num3 == int_3)
             return stringList.ToArray();
         int_3 = num3;
-        var num4 = GProcessMemoryManipulator.ReadInt32(int_1 + int_7, "tablebomb");
+        var num4 = GameMemoryAccess.ReadInt32(int_1 + int_7, "tablebomb");
         if (num4 == 0)
         {
             string_1 = "Object has no pointer to bomb of strings!";
@@ -137,12 +137,12 @@ public class ChatFrameLocator
         {
             if (num5 >= num2)
                 num5 -= num2;
-            num6 = GProcessMemoryManipulator.ReadInt32(num4 + num5 * int_8, "chatlinepointer");
+            num6 = GameMemoryAccess.ReadInt32(num4 + num5 * int_8, "chatlinepointer");
             if (num6 != 0)
             {
                 if (flag)
                 {
-                    var str = GProcessMemoryManipulator.ReadStringInternal(num6, 1024, "chatline3");
+                    var str = GameMemoryAccess.ReadStringInternal(num6, 1024, "chatline3");
                     if (!(str == "(read failed)"))
                     {
                         stringList.Add(str);
@@ -151,7 +151,7 @@ public class ChatFrameLocator
                     else
                     {
                         int_2 = num6;
-                        Logger.smethod_1("! Chat read failed (" + GProcessMemoryManipulator.int_27 + ") for " + string_0 + " @ 0x" +
+                        Logger.smethod_1("! Chat read failed (" + GameMemoryAccess.int_27 + ") for " + string_0 + " @ 0x" +
                                            num6.ToString("x") + ", ri/ca/ip=" + num5 + "/" + num2 + "/" + num3);
                         GStruct20 gstruct20_0;
                         if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, num6, out gstruct20_0, 28) != 28)

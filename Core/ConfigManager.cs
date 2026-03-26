@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ConfigManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -98,8 +98,6 @@ public class ConfigManager
         method_0("MaxStartDistance", "50");
         method_0("TurboLoot", "True");
         method_0("SpellLeadDelay", "333");
-        method_0("LogWW", "True");
-        method_0("AllowWW", "True");
         method_0("AllowNetCheck", "True");
         method_0("AlertOnPopup", "True");
         method_0("CorpseShortCircuit", "30");
@@ -131,6 +129,8 @@ public class ConfigManager
         method_0("WardenLinkTest", "False");
         method_0("StopOnVanish", "True");
         method_0("LogMonsterChecks", "False");
+        method_0("VerboseMainLoopLogging", "False");
+        method_0("Log_Memory", "False");
         method_0("UnloadShadow", "False");
         method_0("ExitOnWardenChangeReal", "False");
         method_0("ExitOnWardenChange", "True");

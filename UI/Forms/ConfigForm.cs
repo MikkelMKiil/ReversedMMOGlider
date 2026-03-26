@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ConfigForm
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -22,7 +22,6 @@ public class ConfigForm : Form
     private Button AccountCreate;
     private CheckBox AllowAutoSecCheck;
     private CheckBox AllowNetCheck;
-    private CheckBox AllowWW;
     private CheckBox AltLayout;
     private TextBox AmmoAmount;
     private ComboBox AutoLogCharacter;
@@ -295,7 +294,6 @@ public class ConfigForm : Form
         if (ClassList.SelectedIndex == -1)
             ClassList.SelectedIndex = (int)StartupClass.gameClass_0;
         AltLayout.Enabled = true;
-        AllowWW.Enabled = true;
         if (bool_4)
             tabControl1.Controls.Add(TabInvisible);
         ChatLogFrame.Text = ConfigManager.gclass61_0.method_2(nameof(ChatLogFrame));
@@ -305,7 +303,7 @@ public class ConfigForm : Form
         WebNotifyURL.Text = ConfigManager.gclass61_0.method_2(nameof(WebNotifyURL));
         UseTray.Checked = ConfigManager.gclass61_0.method_2(nameof(UseTray)) == "True";
         BackgroundEnable.Checked = ConfigManager.gclass61_0.method_2(nameof(BackgroundEnable)) == "True";
-        BackgroundEnable.Enabled = StartupClass.GliderManager != null;
+        BackgroundEnable.Enabled = true;
         ShiftLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(ShiftLoot)) == "True";
         UseHook.Checked = ConfigManager.gclass61_0.method_2(nameof(UseHook)) == "True";
         MouseSpin.Checked = ConfigManager.gclass61_0.method_2(nameof(MouseSpin)) == "True";
@@ -347,7 +345,6 @@ public class ConfigForm : Form
         BandageHealth.Text = ConfigManager.gclass61_0.method_2(nameof(BandageHealth));
         JumpMore.Checked = ConfigManager.gclass61_0.method_2(nameof(JumpMore)) == "True";
         Strafe.Checked = ConfigManager.gclass61_0.method_2(nameof(Strafe)) == "True";
-        AllowWW.Checked = ConfigManager.gclass61_0.method_5(nameof(AllowWW));
         SkipLoot.Checked = ConfigManager.gclass61_0.method_2(nameof(SkipLoot)) == "True";
         HarvestRange.Text = ConfigManager.gclass61_0.method_2(nameof(HarvestRange));
         PickupJunk.Checked = ConfigManager.gclass61_0.method_2(nameof(PickupJunk)) == "True";
@@ -466,8 +463,8 @@ public class ConfigForm : Form
         method_11();
         method_16();
         method_18();
-        GProcessMemoryManipulator.smethod_48(this);
-        GProcessMemoryManipulator.smethod_51(helpProvider_0);
+        GameMemoryAccess.smethod_48(this);
+        GameMemoryAccess.smethod_51(helpProvider_0);
         StartupClass.gclass54_0.bool_4 = false;
         bool_3 = true;
         StartupClass.MainWindowHandle = this;
@@ -600,7 +597,6 @@ public class ConfigForm : Form
         DoSecCheck = new Button();
         AllowNetCheck = new CheckBox();
         StopOnVanish = new CheckBox();
-        AllowWW = new CheckBox();
         TeleportLogout = new CheckBox();
         TeleportStop = new CheckBox();
         groupBox9 = new GroupBox();
@@ -1661,7 +1657,6 @@ public class ConfigForm : Form
         groupBox21.Controls.Add(DoSecCheck);
         groupBox21.Controls.Add(AllowNetCheck);
         groupBox21.Controls.Add(StopOnVanish);
-        groupBox21.Controls.Add(AllowWW);
         groupBox21.Controls.Add(TeleportLogout);
         groupBox21.Controls.Add(TeleportStop);
         groupBox21.Location = new Point(357, 8);
@@ -1670,38 +1665,12 @@ public class ConfigForm : Form
         groupBox21.TabIndex = 9;
         groupBox21.TabStop = false;
         groupBox21.Text = "Other";
-        AllowAutoSecCheck.AutoSize = true;
-        AllowAutoSecCheck.Location = new Point(12, 139);
-        AllowAutoSecCheck.Name = "AllowAutoSecCheck";
-        AllowAutoSecCheck.Size = new Size(188, 17);
-        AllowAutoSecCheck.TabIndex = 6;
-        AllowAutoSecCheck.Text = "Prompt for SecCheck occasionally";
-        DoSecCheck.Location = new Point(80, 191);
-        DoSecCheck.Name = "DoSecCheck";
-        DoSecCheck.Size = new Size(117, 25);
-        DoSecCheck.TabIndex = 3;
-        DoSecCheck.Text = "SecCheck";
-        DoSecCheck.Click += DoSecCheck_Click;
-        AllowNetCheck.AutoSize = true;
-        AllowNetCheck.Location = new Point(12, 116);
-        AllowNetCheck.Name = "AllowNetCheck";
-        AllowNetCheck.Size = new Size(115, 17);
-        AllowNetCheck.TabIndex = 5;
-        AllowNetCheck.Text = "NetCheck enabled";
         StopOnVanish.AutoSize = true;
         StopOnVanish.Location = new Point(12, 93);
         StopOnVanish.Name = "StopOnVanish";
         StopOnVanish.Size = new Size(151, 17);
         StopOnVanish.TabIndex = 4;
         StopOnVanish.Text = "Stop on vanishing monster";
-        AllowWW.AutoSize = true;
-        AllowWW.Location = new Point(12, 23);
-        AllowWW.Name = "AllowWW";
-        AllowWW.Size = new Size(99, 17);
-        AllowWW.TabIndex = 1;
-        AllowWW.Text = "Enable Tripwire";
-        AllowWW.UseVisualStyleBackColor = true;
-        AllowWW.CheckedChanged += AllowWW_CheckedChanged;
         TeleportLogout.AutoSize = true;
         TeleportLogout.Enabled = false;
         TeleportLogout.Location = new Point(12, 69);
@@ -2880,7 +2849,6 @@ public class ConfigForm : Form
         var selectedItem = (SpellActionData)ClassList.SelectedItem;
         ConfigManager.gclass61_0.method_0("CustomClassName", selectedItem.string_1);
         ConfigManager.gclass61_0.method_0("AllowNetCheck", AllowNetCheck.Checked.ToString());
-        ConfigManager.gclass61_0.method_0("AllowWW", AllowWW.Checked.ToString());
         ConfigManager.gclass61_0.method_0("ManageGamePos", ManageGamePos.Checked.ToString());
         ConfigManager.gclass61_0.method_0("UseMediaKeys", MediaKeysBox.Checked.ToString());
         ConfigManager.gclass61_0.method_0("AutoSkin", AutoSkin.Checked.ToString());
@@ -3111,7 +3079,7 @@ public class ConfigForm : Form
         switch (gconfigResult)
         {
             case GConfigResult.NotSupported:
-                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GProcessMemoryManipulator.GenerateRandomString(),
+                var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(852), GameMemoryAccess.GenerateRandomString(),
                     MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 break;
             case GConfigResult.Accept:
@@ -3131,7 +3099,7 @@ public class ConfigForm : Form
         var helpString = helpProvider_0.GetHelpString(tabControl1.SelectedTab);
         if (helpString == null || helpString.Length <= 0)
             return;
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
     }
 
     private void StopAfter_CheckedChanged(object sender, EventArgs e)
@@ -3317,11 +3285,8 @@ public class ConfigForm : Form
     private void BackgroundEnable_CheckedChanged(object sender, EventArgs e)
     {
         groupBox25.Enabled = BackgroundEnable.Checked;
-        if (bool_1 || !AllowWW.Checked || WardenProtocol.smethod_2(false) != WardenStateValue.const_1)
+        if (bool_1)
             return;
-        var num = (int)MessageBox.Show(this, MessageProvider.GetMessage(858), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK,
-            MessageBoxIcon.Hand);
-        BackgroundEnable.Checked = false;
     }
 
     private void method_11()
@@ -3422,7 +3387,7 @@ public class ConfigForm : Form
                 {
                     var num = (int)MessageBox.Show(this,
                         "This class cannot be unloaded because it is in use.  Switch Glider to another class in the \"General\" tab before unloading this class.",
-                        GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     e.NewValue = CheckState.Checked;
                     return;
                 }
@@ -3460,15 +3425,11 @@ public class ConfigForm : Form
         MaxResurrect.Enabled = Resurrect.Checked;
     }
 
-    private void AllowWW_CheckedChanged(object sender, EventArgs e)
-    {
-    }
-
     private void AccountCreate_Click(object sender, EventArgs e)
     {
         if (Directory.GetFiles("Accounts\\", "*.xml").Length == 0 && MessageBox.Show(this, MessageProvider.GetMessage(867),
-                GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
-            GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
+                GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
         var num = (int)new AccountInfo().ShowDialog(this);
         method_16();
     }
@@ -3513,12 +3474,6 @@ public class ConfigForm : Form
         if (!bool_2)
             ;
     }
-
-    private void DoSecCheck_Click(object sender, EventArgs e)
-    {
-        StartupClass.smethod_58();
-    }
-
     private void GliderDebug_CheckedChanged(object sender, EventArgs e)
     {
         ConfigManager.gclass61_0.method_0("GliderDebug", GliderDebug.Checked.ToString());

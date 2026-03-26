@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GMemory
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -28,14 +28,14 @@ namespace Glider.Common.Objects
                 return false;
             }
 
-            if (!GProcessMemoryManipulator.IsMemoryReadable(StartAddress))
-                int_31 = GProcessMemoryManipulator.ReadPointerChain(StartAddress, LengthToWrite, 64);
-            var num = GProcessMemoryManipulator.WriteBytes(StartAddress, DataToWrite, LengthToWrite);
+            if (!GameMemoryAccess.IsMemoryReadable(StartAddress))
+                int_31 = GameMemoryAccess.ReadPointerChain(StartAddress, LengthToWrite, 64);
+            var num = GameMemoryAccess.WriteBytes(StartAddress, DataToWrite, LengthToWrite);
             if (num != LengthToWrite)
                 GContext.Main.Log("! WriteBytes to 0x" + StartAddress.ToString("x") + " failed, last error: " +
                                   Marshal.GetLastWin32Error() + ",  (clue = " + DebugClue + ")");
             if (int_31 != 0)
-                GProcessMemoryManipulator.ReadPointerChain(StartAddress, LengthToWrite, int_31);
+                GameMemoryAccess.ReadPointerChain(StartAddress, LengthToWrite, int_31);
             return num == LengthToWrite;
         }
 
@@ -45,37 +45,32 @@ namespace Glider.Common.Objects
             string DebugClue,
             bool DieIfFailed)
         {
-            if (DieIfFailed)
-                return GProcessMemoryManipulator.ReadBytes(StartAddress, LengthToRead, DebugClue);
-            var numArray = GProcessMemoryManipulator.ReadBytesRaw(StartAddress, LengthToRead);
-            if (numArray == null)
-                GContext.Main.Log("! Read failed at 0x" + StartAddress.ToString("x") + ", debug clue = " + DebugClue);
-            return numArray;
+            return GameMemoryAccess.ReadBytes(StartAddress, LengthToRead, DebugClue);
         }
 
         public byte ReadByte(int StartAddress, string DebugClue)
         {
-            return GProcessMemoryManipulator.ReadByte(StartAddress, DebugClue);
+            return GameMemoryAccess.ReadByte(StartAddress, DebugClue);
         }
 
         public int ReadInt(int StartAddress, string DebugClue)
         {
-            return GProcessMemoryManipulator.ReadInt32(StartAddress, DebugClue);
+            return GameMemoryAccess.ReadInt32(StartAddress, DebugClue);
         }
 
-        public long ReadLong(int StartAddress, string DebugClue)
+        public ulong ReadLong(int StartAddress, string DebugClue)
         {
-            return GProcessMemoryManipulator.ReadInt64(StartAddress, DebugClue);
+            return GameMemoryAccess.ReadInt64(StartAddress, DebugClue);
         }
 
         public float ReadFloat(int StartAddress, string DebugClue)
         {
-            return GProcessMemoryManipulator.ReadFloat(StartAddress, DebugClue);
+            return GameMemoryAccess.ReadFloat(StartAddress, DebugClue);
         }
 
         public string ReadString(int StartAddress, int MaxLength, string DebugClue)
         {
-            return GProcessMemoryManipulator.ReadString(StartAddress, MaxLength, DebugClue);
+            return GameMemoryAccess.ReadString(StartAddress, MaxLength, DebugClue);
         }
     }
 }

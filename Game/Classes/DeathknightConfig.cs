@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: DeathknightConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -36,12 +36,12 @@ public class DeathknightConfig : Form
         UseGhoul.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseGhoul");
         UseCorpseDust.Checked = ConfigManager.gclass61_0.method_5("Deathknight.UseCorpseDust");
         MessageProvider.smethod_3(this, "Deathknight");
-        GProcessMemoryManipulator.smethod_48(this);
+        GameMemoryAccess.smethod_48(this);
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Deathknight.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Deathknight.html");
     }
 
     private void MyCancelButton_Click(object sender, EventArgs e)

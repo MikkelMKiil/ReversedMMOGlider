@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Vector3
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -64,8 +64,8 @@ public class Vector3
 
     public void method_0(int int_0)
     {
-        float_0 = GProcessMemoryManipulator.ReadFloat(int_0, "v3dx");
-        float_1 = GProcessMemoryManipulator.ReadFloat(int_0 + 4, "v3dy");
-        float_2 = GProcessMemoryManipulator.ReadFloat(int_0 + 8, "v3dz");
+        float_0 = GameMemoryAccess.ReadFloat(int_0, "v3dx");
+        float_1 = GameMemoryAccess.ReadFloat(int_0 + 4, "v3dy");
+        float_2 = GameMemoryAccess.ReadFloat(int_0 + 8, "v3dz");
     }
 }

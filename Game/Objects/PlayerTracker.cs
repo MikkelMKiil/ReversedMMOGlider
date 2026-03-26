@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PlayerTracker
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -115,7 +115,7 @@ public class PlayerTracker
         return false;
     }
 
-    private static PlayerTracker smethod_5(long long_0)
+    private static PlayerTracker smethod_5(ulong long_0)
     {
         foreach (var gclass21 in list_0)
             if (gclass21.gplayer_0.GUID == long_0)

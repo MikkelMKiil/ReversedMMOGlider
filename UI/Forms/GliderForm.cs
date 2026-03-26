@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GliderForm
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -103,6 +103,8 @@ public class GliderForm : Form, ILogger
     private ContextMenuStrip ContextMenuStripWindow;
     private ToolStripMenuItem alwaysOnTopToolStripMenuItem1;
     private ToolStripMenuItem minimizeToTrayToolStripMenuItem;
+    private ToolStripMenuItem verboseMainLoopLoggingToolStripMenuItem;
+    private ToolStripMenuItem logMemoryToolStripMenuItem;
     private ToolStripMenuItem exitToolStripMenuItem1;
     private ToolStripSeparator toolStripSeparator1;
     private ToolTip toolTip_0;
@@ -123,6 +125,12 @@ public class GliderForm : Form, ILogger
     private int int_5;
     private Point point_0;
     private bool bool_10;
+    private ulong long_1 = 0;
+    private uint int_6 = 0;
+    private uint int_7 = 0;
+    private int int_8;
+    private int int_9;
+    private readonly object object_0 = new object();
 
     public GliderForm()
     {
@@ -147,7 +155,7 @@ public class GliderForm : Form, ILogger
         this.method_13();
         StartupClass.MainForm = (Form)this;
         StartupClass.InitStartupMode(AppMode.Normal);
-        new ProcessEnumerator().method_0();
+        MemoryMaster.GetWoWHandle();
         this.method_5();
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
             this.method_26();
@@ -156,8 +164,10 @@ public class GliderForm : Form, ILogger
             this.TopMost = true;
             this.alwaysOnTopToolStripMenuItem1.Checked = true;
         }
+        this.verboseMainLoopLoggingToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
+        this.logMemoryToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("Log_Memory");
         if (!ConfigManager.gclass61_0.bool_0)
-            GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"Welcome.html");
+            GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"Welcome.html");
         MessageProvider.smethod_3((Form)this, nameof(GliderForm));
         KeyboardHookManager.intptr_0 = this.Handle;
         this.VersionLabel.Text = "Glider 1.8.0 (Release) -- January 21, 2009";
@@ -195,31 +205,15 @@ public class GliderForm : Form, ILogger
         this.method_24();
         StartupClass.MainForm = (Form)this;
         this.method_1();
-        StartupClass.smethod_59();
+        StartupClass.smethod_56();
     }
 
     private void method_1()
     {
-        bool flag1 = File.Exists("TWfail.txt");
-        bool flag2 = File.Exists("TWunsafe.txt");
-        bool flag3 = File.Exists("DeadSession.txt");
-        if (flag1)
-        {
-            File.Delete("TWfail.txt");
-            GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"TripwireFailed.html");
-        }
-        else if (flag2)
-        {
-            File.Delete("TWunsafe.txt");
-            GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"TripwireUnsafe.html");
-        }
-        else
-        {
-            if (!flag3)
-                return;
-            File.Delete("DeadSession.txt");
-            GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"DeadSession.html");
-        }
+        if (!File.Exists("DeadSession.txt"))
+            return;
+        File.Delete("DeadSession.txt");
+        GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"DeadSession.html");
     }
 
     private void method_2(object sender, KeyEventArgs e)
@@ -253,7 +247,7 @@ public class GliderForm : Form, ILogger
             if (ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True")
             {
                 if (this.string_1 == null)
-                    this.string_1 = GProcessMemoryManipulator.GenerateRandomString();
+                    this.string_1 = GameMemoryAccess.GenerateRandomString();
                 this.StatusLabel.Text = this.string_1 + " " + string_2;
             }
             else
@@ -372,6 +366,8 @@ public class GliderForm : Form, ILogger
         this.ContextMenuStripWindow = new ContextMenuStrip(this.icontainer_0);
         this.alwaysOnTopToolStripMenuItem1 = new ToolStripMenuItem();
         this.minimizeToTrayToolStripMenuItem = new ToolStripMenuItem();
+        this.verboseMainLoopLoggingToolStripMenuItem = new ToolStripMenuItem();
+        this.logMemoryToolStripMenuItem = new ToolStripMenuItem();
         this.toolStripSeparator1 = new ToolStripSeparator();
         this.exitToolStripMenuItem1 = new ToolStripMenuItem();
         this.Location_3d = new Label();
@@ -933,15 +929,17 @@ public class GliderForm : Form, ILogger
         this.exitToolStripMenuItem.Size = new Size(148, 22);
         this.exitToolStripMenuItem.Text = "Exit";
         this.exitToolStripMenuItem.Click += new EventHandler(this.exitToolStripMenuItem_Click);
-        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[4]
+        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[6]
         {
       (ToolStripItem) this.alwaysOnTopToolStripMenuItem1,
       (ToolStripItem) this.minimizeToTrayToolStripMenuItem,
+      (ToolStripItem) this.verboseMainLoopLoggingToolStripMenuItem,
+      (ToolStripItem) this.logMemoryToolStripMenuItem,
       (ToolStripItem) this.toolStripSeparator1,
       (ToolStripItem) this.exitToolStripMenuItem1
         });
         this.ContextMenuStripWindow.Name = "ContextMenuStripWindow";
-        this.ContextMenuStripWindow.Size = new Size(161, 76);
+        this.ContextMenuStripWindow.Size = new Size(220, 120);
         this.alwaysOnTopToolStripMenuItem1.Name = "alwaysOnTopToolStripMenuItem1";
         this.alwaysOnTopToolStripMenuItem1.Size = new Size(160, 22);
         this.alwaysOnTopToolStripMenuItem1.Text = "Always on top";
@@ -950,6 +948,16 @@ public class GliderForm : Form, ILogger
         this.minimizeToTrayToolStripMenuItem.Size = new Size(160, 22);
         this.minimizeToTrayToolStripMenuItem.Text = "Minimize to tray";
         this.minimizeToTrayToolStripMenuItem.Click += new EventHandler(this.minimizeToTrayToolStripMenuItem_Click);
+        this.verboseMainLoopLoggingToolStripMenuItem.CheckOnClick = true;
+        this.verboseMainLoopLoggingToolStripMenuItem.Name = "verboseMainLoopLoggingToolStripMenuItem";
+        this.verboseMainLoopLoggingToolStripMenuItem.Size = new Size(219, 22);
+        this.verboseMainLoopLoggingToolStripMenuItem.Text = "Verbose main loop logging";
+        this.verboseMainLoopLoggingToolStripMenuItem.Click += new EventHandler(this.verboseMainLoopLoggingToolStripMenuItem_Click);
+        this.logMemoryToolStripMenuItem.CheckOnClick = true;
+        this.logMemoryToolStripMenuItem.Name = "logMemoryToolStripMenuItem";
+        this.logMemoryToolStripMenuItem.Size = new Size(219, 22);
+        this.logMemoryToolStripMenuItem.Text = "Log_Memory";
+        this.logMemoryToolStripMenuItem.Click += new EventHandler(this.logMemoryToolStripMenuItem_Click);
         this.toolStripSeparator1.Name = "toolStripSeparator1";
         this.toolStripSeparator1.Size = new Size(157, 6);
         this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
@@ -1014,7 +1022,7 @@ public class GliderForm : Form, ILogger
 
     void ILogger.imethod_2(string string_2)
     {
-        lock (this)
+        lock (this.object_0)
         {
             this.method_6(string_2);
             if (!string_2.StartsWith("[Debug]"))
@@ -1093,7 +1101,7 @@ public class GliderForm : Form, ILogger
             {
                 this.timer_0.Enabled = false;
                 Logger.LogMessage("Timer exception in Glider: The exception is: " + ex.Message + ", " + ex.StackTrace);
-                int num = (int)MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                int num = (int)MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 StartupClass.smethod_27(false, "TimerExcep");
                 Environment.Exit(0);
             }
@@ -1129,15 +1137,23 @@ public class GliderForm : Form, ILogger
         {
             GObjectList.SetCacheDirty();
             GObjectList.GetObjects();
-            currentPlayer = (GContext.Main != null ? GContext.Main.Me : (GPlayerSelf)null) ?? GPlayerSelf.Me;
+            currentPlayer = GPlayerSelf.Me;
+            if (currentPlayer != null && !currentPlayer.IsValid)
+            {
+                GPlayerSelf.Me = null;
+                if (GContext.Main != null)
+                    GContext.Main.Me = null;
+                currentPlayer = null;
+            }
         }
 
         if (StartupClass.bool_13 && currentPlayer != null)
         {
+            this.method_31(currentPlayer);
             GLocation location = currentPlayer.Location;
             if (location != null && this.glocation_0 != null && Environment.TickCount - this.int_3 > 1200)
             {
-                this.SpeedLabel_1.Text = Math.Round((double)this.glocation_0.GetDistanceTo(location) / ((double)(Environment.TickCount - this.int_3) / 1000.0), 2).ToString();
+                this.method_30(this.SpeedLabel_1, "SpeedLabel", Math.Round((double)this.glocation_0.GetDistanceTo(location) / ((double)(Environment.TickCount - this.int_3) / 1000.0), 2).ToString());
                 this.int_3 = Environment.TickCount;
                 this.glocation_0 = location;
             }
@@ -1145,68 +1161,60 @@ public class GliderForm : Form, ILogger
             {
                 this.int_3 = Environment.TickCount;
                 this.glocation_0 = location;
-                this.SpeedLabel_1.Text = "0";
+                this.method_30(this.SpeedLabel_1, "SpeedLabel", "0");
             }
-            this.LabelHealth_1.Text = MessageProvider.smethod_2(653, (object)currentPlayer.HealthPoints.ToString(), (object)(int)(currentPlayer.Health * 100.0));
-            this.LabelKills_1.Text = MessageProvider.smethod_2(654, (object)StartupClass.int_7, (object)StartupClass.int_8, (object)StartupClass.int_9);
-            this.XPHour_1.Text = StartupClass.smethod_29().ToString();
-            bool isCasting = false;
-            try
-            {
-                isCasting = currentPlayer.IsCasting;
-            }
-            catch (Exception)
-            {
-            }
+            this.method_30(this.LabelHealth_1, "LabelHealth", MessageProvider.smethod_2(653, (object)currentPlayer.HealthPoints.ToString(), (object)(int)(currentPlayer.Health * 100.0)));
+            string killsText = MessageProvider.smethod_2(654, (object)StartupClass.int_7, (object)StartupClass.int_8, (object)StartupClass.int_9);
+            bool isCasting = currentPlayer.IsCasting;
             if (isCasting)
-                this.LabelKills_1.Text += " *";
+                killsText += " *";
+            this.method_30(this.LabelKills_1, "LabelKills", killsText);
+            this.method_30(this.XPHour_1, "XPHour", StartupClass.smethod_29().ToString());
             if (StartupClass.CurrentGameClass != null)
-                this.LabelMana_1.Text = StartupClass.CurrentGameClass.PowerValue;
+                this.method_30(this.LabelMana_1, "LabelMana", StartupClass.CurrentGameClass.PowerValue);
             else
-                this.LabelMana_1.Text = currentPlayer.Power2.ToString() + " / " + (object)currentPlayer.Power2Max;
-            GUnit target = (GUnit)null;
-            try
-            {
-                target = currentPlayer.Target;
-            }
-            catch (Exception)
-            {
-            }
+                this.method_30(this.LabelMana_1, "LabelMana", currentPlayer.Power2.ToString() + " / " + (object)currentPlayer.Power2Max);
+            ulong targetGUID;
+            GUnit target = GObjectList.ResolveCurrentTarget(currentPlayer, out targetGUID);
             if (target != null)
             {
                 this.AddFactionButton.Enabled = true;
-                this.THealthLabel_1.Text = target.Health.ToString() + MessageProvider.GetMessage(104);
-                this.TDistanceLabel_1.Text = Math.Round((double)target.DistanceToSelf, 2).ToString();
-                this.TFactionLabel_1.Text = target.FactionID.ToString();
+                this.method_30(this.THealthLabel_1, "THealthLabel", ((int)(target.Health * 100.0)).ToString() + MessageProvider.GetMessage(104));
+                this.method_30(this.TDistanceLabel_1, "TDistanceLabel", Math.Round((double)target.DistanceToSelf, 2).ToString());
+                this.method_30(this.TFactionLabel_1, "TFactionLabel", target.FactionID.ToString());
                 if (StartupClass.gprofile_0.CheckFaction(target.FactionID, true))
                 {
                     this.AddFactionButton.Text = "Del Faction";
-                    this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!AlreadyGot");
+                    this.method_30(this.FactionLabel, "FactionLabel", MessageProvider.smethod_4("GliderForm.FactionLabel!AlreadyGot"));
                 }
                 else
                 {
                     this.AddFactionButton.Text = "Add Faction";
-                    this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!NotFound");
+                    this.method_30(this.FactionLabel, "FactionLabel", MessageProvider.smethod_4("GliderForm.FactionLabel!NotFound"));
                 }
             }
             else
             {
-                this.THealthLabel_1.Text = "";
-                this.TDistanceLabel_1.Text = "";
-                this.TFactionLabel_1.Text = "";
+                this.method_30(this.THealthLabel_1, "THealthLabel", "");
+                this.method_30(this.TDistanceLabel_1, "TDistanceLabel", "");
+                this.method_30(this.TFactionLabel_1, "TFactionLabel", "");
                 this.AddFactionButton.Enabled = false;
-                this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!NoTarget");
+                this.method_30(this.FactionLabel, "FactionLabel", MessageProvider.smethod_4("GliderForm.FactionLabel!NoTarget"));
             }
             if (StartupClass.gclass73_0 != null && StartupClass.gclass73_0.int_8 > 0 && StartupClass.gclass73_0.bool_9)
             {
-                this.XPHour_1.Text = Math.Round((double)StartupClass.gclass73_0.int_8 / (DateTime.Now - StartupClass.dateTime_0).TotalSeconds * 3600.0, 0).ToString();
+                this.method_30(this.XPHour_1, "XPHour", Math.Round((double)StartupClass.gclass73_0.int_8 / (DateTime.Now - StartupClass.dateTime_0).TotalSeconds * 3600.0, 0).ToString());
                 StartupClass.gclass73_0.bool_9 = false;
             }
-            if (GPlayerSelf.Me != null)
-                this.method_18();
+            this.method_18();
         }
         else if (StartupClass.bool_13)
         {
+            if (Environment.TickCount - this.int_9 > 1000)
+            {
+                ((ILogger)this).imethod_2("[Debug] [PTR] Me is null while attached");
+                this.int_9 = Environment.TickCount;
+            }
         }
         StartupClass.smethod_38();
         if (StartupClass.bool_21 && StartupClass.gclass36_1.method_3())
@@ -1234,7 +1242,7 @@ public class GliderForm : Form, ILogger
         if (size_0.Height <= 32 || size_0.Width <= 32)
             return;
         Logger.LogMessage("Positioning game window: location=" + point_0.ToString() + ", size=" + size_0.ToString());
-        GProcessMemoryManipulator.GetForegroundWindow(StartupClass.MainApplicationHandle, size_0, point_0);
+        GameMemoryAccess.GetForegroundWindow(StartupClass.MainApplicationHandle, size_0, point_0);
     }
 
     private void method_9()
@@ -1242,7 +1250,7 @@ public class GliderForm : Form, ILogger
         this.gclass36_0.method_4();
         Point point_0;
         Size size_0;
-        if (StartupClass.bool_41 || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GProcessMemoryManipulator.GetWindowPosition(StartupClass.MainApplicationHandle, out point_0) || !GProcessMemoryManipulator.GetWindowSize(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
+        if (StartupClass.bool_41 || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GameMemoryAccess.GetWindowPosition(StartupClass.MainApplicationHandle, out point_0) || !GameMemoryAccess.GetWindowSize(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
             return;
         ConfigManager.gclass61_0.method_0("GameWindowPos", point_0.X.ToString() + "," + (object)point_0.Y);
         ConfigManager.gclass61_0.method_0("GameWindowSize", size_0.Width.ToString() + "," + (object)size_0.Height);
@@ -1382,7 +1390,37 @@ public class GliderForm : Form, ILogger
         StartupClass.smethod_24(false);
     }
 
-    private void KillButton_Click(object sender, EventArgs e) => StartupClass.smethod_21(false);
+    private void KillButton_Click(object sender, EventArgs e)
+    {
+        GPlayerSelf me = GPlayerSelf.Me;
+        if (me == null)
+        {
+            Logger.LogMessage("1-Kill requested, but player context is unavailable.");
+            StartupClass.smethod_21(false);
+            return;
+        }
+
+        ulong targetGuid;
+        GUnit target = GObjectList.ResolveCurrentTarget(me, out targetGuid);
+        if (target == null)
+        {
+            if (targetGuid == 0UL)
+                Logger.LogMessage("1-Kill requested with no target selected. TargetGUID=0x0");
+            else
+                Logger.LogMessage("1-Kill requested but selected target could not be resolved. TargetGUID=0x" + targetGuid.ToString("x"));
+            StartupClass.smethod_21(false);
+            return;
+        }
+
+        string resolvedTargetName = target.Name;
+        if ((resolvedTargetName == null || resolvedTargetName.StartsWith("(")) && me.TargetName != null && me.TargetName != "(none)")
+            resolvedTargetName = me.TargetName;
+
+        Logger.LogMessage("1-Kill target object: " + target);
+        Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + targetGuid.ToString("x"));
+        Logger.LogMessage("1-Kill target info: Name=\"" + resolvedTargetName + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
+        StartupClass.smethod_21(false);
+    }
 
     private void method_13()
     {
@@ -1484,13 +1522,13 @@ public class GliderForm : Form, ILogger
         if (StartupClass.gprofile_0.Waypoints.Count > 2)
         {
             string[] waypointNotes = StartupClass.gprofile_0.GetWaypointNotes();
-            this.WP_FirstLabel_1.Text = waypointNotes[0];
-            this.WP_ClosestLabel_1.Text = waypointNotes[1];
-            this.WP_NewestLabel_1.Text = waypointNotes[2];
+            this.method_30(this.WP_FirstLabel_1, "WP_FirstLabel", waypointNotes[0]);
+            this.method_30(this.WP_ClosestLabel_1, "WP_ClosestLabel", waypointNotes[1]);
+            this.method_30(this.WP_NewestLabel_1, "WP_NewestLabel", waypointNotes[2]);
         }
         if (this.Location_3d.Text != GPlayerSelf.Me.Location.ToString3D())
         {
-            this.Location_3d.Text = GPlayerSelf.Me.Location.ToString3D().Replace(" ", ", ");
+            this.method_30(this.Location_3d, "Location_3d", GPlayerSelf.Me.Location.ToString3D().Replace(" ", ", "));
             this.Location_3d.ForeColor = SystemColors.Highlight;
         }
         if (!this.label11.Checked || StartupClass.glideMode_0 != GlideMode.None)
@@ -1585,10 +1623,6 @@ public class GliderForm : Form, ILogger
         Logger.smethod_1("Shutdown: KillAction");
         StartupClass.smethod_27(true, "WindowClosing");
         Logger.smethod_1("Shutdown: Done");
-        if (StartupClass.GliderManager != null && !StartupClass.bool_33)
-        {
-            StartupClass.GliderManager.method_11();
-        }
         base.OnClosing(cancelEventArgs_0);
     }
 
@@ -1627,7 +1661,7 @@ public class GliderForm : Form, ILogger
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"MainWindow.html");
+        GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"MainWindow.html");
     }
 
     private void QuickLoadButton_Click(object sender, EventArgs e) => this.method_11();
@@ -1680,20 +1714,22 @@ public class GliderForm : Form, ILogger
     {
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
             return;
-        Graphics graphics = this.tabControl1.CreateGraphics();
-        this.rectangle_0.Width = this.tabControl1.Right - this.rectangle_0.Left;
-        this.rectangle_0.Location = new Point(this.rectangle_0.Left, 0);
-        Point screen = this.tabControl1.PointToScreen(this.rectangle_0.Location);
-        int y1 = this.tabControl1.Location.Y;
-        Point upperLeftSource = new Point(screen.X, screen.Y - y1);
-        int num;
-        for (int y2 = 0; y2 < this.rectangle_0.Height; y2 += num)
+        using (Graphics graphics = this.tabControl1.CreateGraphics())
         {
-            num = y1;
-            if (y2 + num > this.rectangle_0.Height)
-                num = this.rectangle_0.Height - y2;
-            Size blockRegionSize = new Size(this.rectangle_0.Width, y1);
-            graphics.CopyFromScreen(upperLeftSource, new Point(this.rectangle_0.X, y2), blockRegionSize);
+            this.rectangle_0.Width = this.tabControl1.Right - this.rectangle_0.Left;
+            this.rectangle_0.Location = new Point(this.rectangle_0.Left, 0);
+            Point screen = this.tabControl1.PointToScreen(this.rectangle_0.Location);
+            int y1 = this.tabControl1.Location.Y;
+            Point upperLeftSource = new Point(screen.X, screen.Y - y1);
+            int num;
+            for (int y2 = 0; y2 < this.rectangle_0.Height; y2 += num)
+            {
+                num = y1;
+                if (y2 + num > this.rectangle_0.Height)
+                    num = this.rectangle_0.Height - y2;
+                Size blockRegionSize = new Size(this.rectangle_0.Width, y1);
+                graphics.CopyFromScreen(upperLeftSource, new Point(this.rectangle_0.X, y2), blockRegionSize);
+            }
         }
     }
 
@@ -2189,6 +2225,20 @@ public class GliderForm : Form, ILogger
             this.Visible = false;
     }
 
+    private void verboseMainLoopLoggingToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool isEnabled = this.verboseMainLoopLoggingToolStripMenuItem.Checked;
+        ConfigManager.gclass61_0.method_0("VerboseMainLoopLogging", isEnabled.ToString());
+        Logger.LogMessage("Verbose main loop logging " + (isEnabled ? "enabled" : "disabled"));
+    }
+
+    private void logMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool isEnabled = this.logMemoryToolStripMenuItem.Checked;
+        ConfigManager.gclass61_0.method_0("Log_Memory", isEnabled.ToString());
+        Logger.LogMessage("Log_Memory " + (isEnabled ? "enabled" : "disabled"));
+    }
+
     private void exitToolStripMenuItem1_Click(object sender, EventArgs e) => this.Close();
 
     private void ShrinkButton_Click(object sender, EventArgs e)
@@ -2242,4 +2292,52 @@ public class GliderForm : Form, ILogger
     }
 
     private bool method_29(Point point_1) => SystemInformation.VirtualScreen.Contains(point_1);
+
+    private void method_30(Label label_13, string string_2, string string_3)
+    {
+        if (label_13.Text != string_3)
+        {
+            ((ILogger)this).imethod_2("[Debug] [UI] " + string_2 + " <= " + string_3);
+            label_13.Text = string_3;
+        }
+    }
+
+    private void method_31(GPlayerSelf gplayerSelf_0)
+    {
+        ulong guid = gplayerSelf_0.GUID;
+        uint baseAddress = (uint)gplayerSelf_0.BaseAddress;
+        uint storageAddress = (uint)gplayerSelf_0.StorageAddress;
+        bool flag = guid != this.long_1 || baseAddress != this.int_6 || storageAddress != this.int_7;
+        if (!flag && Environment.TickCount - this.int_8 < 1000)
+            return;
+
+        GLocation location = gplayerSelf_0.Location;
+        string meCoords = location != null ? location.ToString3D() : "(unknown)";
+        ulong targetGuid;
+        GUnit target = GObjectList.ResolveCurrentTarget(gplayerSelf_0, out targetGuid);
+        string targetInfo = "none";
+        if (target != null)
+        {
+            GLocation targetLocation = target.Location;
+            string targetCoords = targetLocation != null ? targetLocation.ToString3D() : "(unknown)";
+            string resolvedTargetName = target.Name;
+            if ((resolvedTargetName == null || resolvedTargetName.StartsWith("(")) && gplayerSelf_0.TargetName != null && gplayerSelf_0.TargetName != "(none)")
+                resolvedTargetName = gplayerSelf_0.TargetName;
+            targetInfo = "GUID=0x" + target.GUID.ToString("x") +
+                         ", Name=\"" + resolvedTargetName + "\"" +
+                         ", HP=" + target.HealthPoints + "/" + target.HealthMax +
+                         ", Dist=" + Math.Round(gplayerSelf_0.GetDistanceTo(target), 2).ToString("0.00") +
+                         ", Coords=" + targetCoords;
+        }
+        else if (targetGuid != 0UL)
+        {
+            targetInfo = "GUID=0x" + targetGuid.ToString("x") + " (unresolved)";
+        }
+
+        ((ILogger)this).imethod_2("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x") + ", HP=" + gplayerSelf_0.HealthPoints + "/" + gplayerSelf_0.HealthMax + ", Rage=" + gplayerSelf_0.Rage + ", Coords=" + meCoords + ", Target=" + targetInfo);
+        this.long_1 = guid;
+        this.int_6 = baseAddress;
+        this.int_7 = storageAddress;
+        this.int_8 = Environment.TickCount;
+    }
 }

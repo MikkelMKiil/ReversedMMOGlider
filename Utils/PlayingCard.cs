@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PlayingCard
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -58,36 +58,36 @@ public class PlayingCard
 
     public void method_0()
     {
-        var num1 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_11, "md1");
+        var num1 = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_11, "md1");
         int_2 = num1 / 13;
         int_1 = num1 % 13;
         int_3 = 0;
         int_4 = 0;
-        var num2 = GProcessMemoryManipulator.ReadInt32(int_0 + SolitaireMemoryOffsets.int_14, "md2");
-        int_3 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_15, "md3");
-        int_4 = GProcessMemoryManipulator.ReadInt32(num2 + SolitaireMemoryOffsets.int_16, "md4");
-        bool_0 = GProcessMemoryManipulator.ReadByte(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
+        var num2 = GameMemoryAccess.ReadInt32(int_0 + SolitaireMemoryOffsets.int_14, "md2");
+        int_3 = GameMemoryAccess.ReadInt32(num2 + SolitaireMemoryOffsets.int_15, "md3");
+        int_4 = GameMemoryAccess.ReadInt32(num2 + SolitaireMemoryOffsets.int_16, "md4");
+        bool_0 = GameMemoryAccess.ReadByte(int_0 + SolitaireMemoryOffsets.int_12, "md5") != 0;
     }
 
     // Removed the incomplete line at line 71
 
     public void method_1()
     {
-        InputController.smethod_18(int_3 / 800.0 + 0.045, int_4 / 500.0 + 0.01);
+        InputControllerShim.MoveNormalized(int_3 / 800.0 + 0.045, int_4 / 500.0 + 0.01);
     }
 
     public void method_2()
     {
         method_1();
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
     }
 
     public void method_3()
     {
         method_1();
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
         Thread.Sleep(100);
-        InputController.smethod_23(false);
+        InputControllerShim.Click(false);
     }
 
     public void method_4()

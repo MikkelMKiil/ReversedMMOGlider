@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: WorldToScreenProjector
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -12,16 +12,24 @@ public class WorldToScreenProjector
 {
     private const float float_0 = 0.0174532924f;
 
+    private static void smethod_1(string string_0)
+    {
+        if (ConfigManager.gclass61_0 == null || !ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging"))
+            return;
+        Logger.LogMessage("[VerboseMainLoop] " + string_0);
+    }
+
     public static bool smethod_0(
         GLocation glocation_0,
         double double_0,
         out double double_1,
         out double double_2)
     {
+        smethod_1("[WorldToScreen/Projector] begin location=" + glocation_0 + ", zOffset=" + double_0);
         double_1 = 0.0;
         double_2 = 0.0;
-        var num1 = GProcessMemoryManipulator.ReadInt32(
-            GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "camerabase") +
+        var num1 = GameMemoryAccess.ReadInt32(
+            GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CameraBase"), "camerabase") +
             MemoryOffsetTable.Instance.GetIntOffset("CameraOff1"), "camerasub");
         var gclass4 = new Matrix3();
         gclass4.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_ViewMatrix"));
@@ -30,10 +38,10 @@ public class WorldToScreenProjector
         var gclass2_1 = new Vector3();
         gclass2_1.method_0(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_Position"));
         var gclass2_0_2 = Vector3.smethod_1(gclass2_0_1, gclass2_1);
-        var num2 = GProcessMemoryManipulator.ReadFloat(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
+        var num2 = GameMemoryAccess.ReadFloat(num1 + MemoryOffsetTable.Instance.GetIntOffset("CC_FOV"), "camerafov");
         if (Vector3.smethod_2(gclass2_0_2, gclass4.method_1(0)) < 0.0)
         {
-            Logger.smethod_1("! Screen coord lookup failed, dotproduct is no good");
+            smethod_1("[WorldToScreen/Projector] failed: dot product behind camera");
             return false;
         }
 
@@ -42,11 +50,11 @@ public class WorldToScreenProjector
         var gclass2_3 = new Vector3(-gclass2_2.float_1, -gclass2_2.float_2, gclass2_2.float_0);
         if (gclass2_3.float_2 <= 0.0)
         {
-            Logger.smethod_1("! Screen coord lookup failed, cameraz is no good");
+            smethod_1("[WorldToScreen/Projector] failed: camera Z <= 0 (" + gclass2_3.float_2 + ")");
             return false;
         }
 
-        var gstruct22 = GProcessMemoryManipulator.GetCursorPosition();
+        var gstruct22 = GameMemoryAccess.GetCursorPosition();
         var num3 = gstruct22.method_1() / 2f;
         var num4 = gstruct22.method_0() / 2f;
         var num5 = num3 / (float)Math.Tan(num2 * 44.0 / 2.0 * (Math.PI / 180.0));
@@ -57,10 +65,17 @@ public class WorldToScreenProjector
         {
             double_1 = num7 / (double)gstruct22.method_1();
             double_2 = num8 / (double)gstruct22.method_0();
+            smethod_1("[WorldToScreen/Projector] success: relative=(" + double_1 + "," + double_2 +
+                      "), pixel=(" + (gstruct22.int_0 + num7) + "," + (gstruct22.int_1 + num8) +
+                      "), window=(" + gstruct22.int_0 + "," + gstruct22.int_1 + "," + gstruct22.method_1() +
+                      "," + gstruct22.method_0() + ")");
             return true;
         }
 
-        Logger.smethod_1("! Screen coord lookup failed, would be clicking out of window");
+        smethod_1("[WorldToScreen/Projector] failed: projected click outside window, pixel=(" +
+                  (gstruct22.int_0 + num7) + "," + (gstruct22.int_1 + num8) + "), window=(" +
+                  gstruct22.int_0 + "," + gstruct22.int_1 + "," + gstruct22.method_1() + "," +
+                  gstruct22.method_0() + ")");
         return false;
     }
 }

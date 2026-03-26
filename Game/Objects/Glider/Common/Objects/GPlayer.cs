@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GPlayer
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -13,7 +13,7 @@ namespace Glider.Common.Objects
     {
         protected int _energy;
         protected int _energyMax;
-        protected long _petGuid;
+        protected ulong _petGuid;
         protected GPlayerClass _playerClass;
         protected GPlayerRace _playerRace;
         protected int _rage;
@@ -104,7 +104,7 @@ namespace Glider.Common.Objects
 
         public bool HasLivePet => Pet != null && !Pet.IsDead;
 
-        public long PetGUID
+        public ulong PetGUID
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        public GUnit Pet => PetGUID == 0L ? null : GObjectList.FindUnit(PetGUID);
+        public GUnit Pet => PetGUID == 0 ? null : GObjectList.FindUnit(PetGUID);
 
         public bool IsSameFaction => PlayerFaction == GContext.Main.Me.PlayerFaction;
 
@@ -192,11 +192,11 @@ namespace Glider.Common.Objects
             base.LoadFields();
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("ClassPtrOffset"))
-                num = GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
+                num = GameMemoryAccess.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("ClassIdOffset"))
-                _playerClass = (GPlayerClass)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
+                _playerClass = (GPlayerClass)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("RaceIdOffset"))
-                _playerRace = (GPlayerRace)(GProcessMemoryManipulator.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
+                _playerRace = (GPlayerRace)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
             if (num == 0)
             {
                 var storageInt = GetStorageInt("UNIT_FIELD_BYTES_0");
@@ -206,9 +206,9 @@ namespace Glider.Common.Objects
                     _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
                 }
             }
-            _petGuid = GetStorageLong("UNIT_FIELD_SUMMON");
-            if (_petGuid == 0L)
-                _petGuid = GetStorageLong("UNIT_FIELD_CHARM");
+            _petGuid = GetStorageULong("UNIT_FIELD_SUMMON");
+            if (_petGuid == 0)
+                _petGuid = GetStorageULong("UNIT_FIELD_CHARM");
             _energy = GetStorageInt("UNIT_FIELD_POWER4");
             _energyMax = GetStorageInt("UNIT_FIELD_MAXPOWER4");
             _rage = GetStorageInt("UNIT_FIELD_POWER2") / 10;
@@ -219,22 +219,22 @@ namespace Glider.Common.Objects
         protected override void SetName()
         {
             var nameStoreBase = MemoryOffsetTable.Instance.GetIntOffset("PlayerNames") + 8;
-            var num1 = GProcessMemoryManipulator.ReadInt32(nameStoreBase + 0x1C, "PlayerNamesBase");
+            var num1 = GameMemoryAccess.ReadInt32(nameStoreBase + 0x1C, "PlayerNamesBase");
             while ((num1 & 1) == 0 && num1 != 0 && num1 != 28)
             {
-                var num2 = GProcessMemoryManipulator.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // GUID offset wait
+                var num2 = GameMemoryAccess.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // GUID offset wait
                 // wait, if I don't know the guid offset, previously it was + 24 (0x18), let me leave it.
                 // Ah, let's keep the existing logic and just use the correct offsets.py values.
 
-                var num2Guid = GProcessMemoryManipulator.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // A common layout is GUID at 0x10 or 0x18
-                var targetGuid = GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID_Legacy");
+                var num2Guid = GameMemoryAccess.ReadInt64(num1 + 0x10, "PlayerNamesGUID"); // A common layout is GUID at 0x10 or 0x18
+                var targetGuid = GameMemoryAccess.ReadInt64(num1 + 24, "PlayerNamesGUID_Legacy");
                 targetGuid = num2Guid != 0 ? num2Guid : targetGuid;
 
-                var str = GProcessMemoryManipulator.ReadString(num1 + 0x20, 32, "PlayerName"); // NAME_NODE_NAME_OFFSET = 0x20
-                if (targetGuid != GUID && GProcessMemoryManipulator.ReadInt64(num1 + 24, "PlayerNamesGUID") != GUID)
+                var str = GameMemoryAccess.ReadString(num1 + 0x20, 32, "PlayerName"); // NAME_NODE_NAME_OFFSET = 0x20
+                if (targetGuid != GUID && (ulong)GameMemoryAccess.ReadInt64(num1 + 24, "PlayerNamesGUID") != GUID)
                 {
                     var num3 = num1;
-                    num1 = GProcessMemoryManipulator.ReadInt32(num1 + 0xC, "PlayerNext"); // NAME_NODE_NEXT_OFFSET = 0xC
+                    num1 = GameMemoryAccess.ReadInt32(num1 + 0xC, "PlayerNext"); // NAME_NODE_NEXT_OFFSET = 0xC
                     if (num1 == num3)
                         break;
                 }

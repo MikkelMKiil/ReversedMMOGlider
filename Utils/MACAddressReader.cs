@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: MACAddressReader
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -6,7 +6,7 @@
 
 #nullable disable
 using System;
-using System.Runtime.InteropServices;
+using System.Net.NetworkInformation;
 
 public class MACAddressReader
 {
@@ -22,51 +22,23 @@ public class MACAddressReader
     private const int int_9 = 28;
     private const int int_10 = 111;
 
-    [DllImport("iphlpapi.dll", CharSet = CharSet.Ansi)]
-    private static extern int GetAdaptersInfo(IntPtr intptr_0, ref long long_0);
-
     public static byte[] smethod_0()
     {
         var destinationArray = new byte[6];
-        long long_0 = Marshal.SizeOf(typeof(ProcessListEntry));
-        var num = Marshal.AllocHGlobal(new IntPtr(long_0));
-        var adaptersInfo = GetAdaptersInfo(num, ref long_0);
-        if (adaptersInfo == 111)
+        foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
         {
-            num = Marshal.ReAllocHGlobal(num, new IntPtr(long_0));
-            adaptersInfo = GetAdaptersInfo(num, ref long_0);
-        }
+            if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback ||
+                networkInterface.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
+                continue;
 
-        if (adaptersInfo == 0)
-        {
-            var ptr = num;
-            ProcessListEntry structure;
-            do
-            {
-                structure = (ProcessListEntry)Marshal.PtrToStructure(ptr, typeof(ProcessListEntry));
-                switch (structure.uint_1)
-                {
-                    default:
-                        if (structure.gstruct10_0.gstruct9_0.string_0 == null ||
-                            structure.gstruct10_1.gstruct9_0.string_0.Length <= 0)
-                        {
-                            ptr = structure.intptr_0;
-                            continue;
-                        }
+            var addressBytes = networkInterface.GetPhysicalAddress().GetAddressBytes();
+            if (addressBytes.Length < destinationArray.Length)
+                continue;
 
-                        goto label_7;
-                }
-            } while (ptr != IntPtr.Zero);
-
-            goto label_9;
-        label_7:
-            Array.Copy(structure.byte_0, destinationArray, destinationArray.Length);
-        label_9:
-            Marshal.FreeHGlobal(num);
+            Array.Copy(addressBytes, destinationArray, destinationArray.Length);
             return destinationArray;
         }
 
-        Marshal.FreeHGlobal(num);
-        throw new InvalidOperationException("GetAdaptersInfo failed: " + adaptersInfo);
+        return destinationArray;
     }
 }

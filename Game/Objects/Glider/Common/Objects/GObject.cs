@@ -1,9 +1,3 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Glider.Common.Objects.GObject
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
 #nullable disable
 using System;
 using System.Threading;
@@ -20,12 +14,12 @@ namespace Glider.Common.Objects
         protected int _tickFirstSeen;
         protected string _title;
         protected GObjectType _type;
-        public int BaseAddress;
+        public uint BaseAddress;
         public int FrameNumber;
-        public long GUID;
+        public ulong GUID;
         private int LastUpdate;
         public object ObjectTag;
-        public int StorageAddress;
+        public uint StorageAddress;
         public string Tag;
 
         protected GObject(int BaseAddress, int FrameNumber)
@@ -40,9 +34,9 @@ namespace Glider.Common.Objects
             _culled = false;
             Tag = null;
             ObjectTag = null;
-            this.BaseAddress = BaseAddress;
-            StorageAddress = GProcessMemoryManipulator.ReadInt32(BaseAddress + 8, "GameObjStorage");
-            GUID = GProcessMemoryManipulator.ReadInt64(BaseAddress + 48, "NewObjGUID");
+            this.BaseAddress = unchecked((uint)BaseAddress);
+            StorageAddress = unchecked((uint)GameMemoryAccess.ReadObjectStorageAddress(BaseAddress));
+            GUID = GameMemoryAccess.ReadObjectGuid(BaseAddress);
             this.FrameNumber = FrameNumber;
         }
 
@@ -93,7 +87,7 @@ namespace Glider.Common.Objects
         public float DistanceToSelf => GContext.Main.Me != null ? GContext.Main.Me.GetDistanceTo(this) : 0.0f;
 
         public bool IsCursorOnObject =>
-            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
+            GameMemoryAccess.ReadUnderCursorGuid() == GUID;
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
@@ -118,7 +112,7 @@ namespace Glider.Common.Objects
 
         private static GObjectType QuickGetType(int BaseAddress)
         {
-            return (GObjectType)GProcessMemoryManipulator.ReadInt32(BaseAddress + 20, "QuickType");
+            return (GObjectType)GameMemoryAccess.ReadQuickObjectType(BaseAddress);
         }
 
         public bool Refresh()
@@ -140,13 +134,17 @@ namespace Glider.Common.Objects
 
             try
             {
+                var storageAddress = GameMemoryAccess.ReadRefreshStorageAddress(BaseAddress);
+                if (storageAddress != 0)
+                    StorageAddress = storageAddress;
+
                 LoadFields();
             }
-            catch (MemoryReadException ex)
+            catch (InvalidOperationException ex)
             {
+                Logger.LogMessage("!! CRITICAL: Refresh memory read failed for object GUID=0x" + GUID.ToString("x") +
+                                  ", BaseAddr=0x" + BaseAddress.ToString("x8") + ": " + ex);
                 Cull();
-                Logger.smethod_1("Catching readfailed in GObject.Refresh, object is no longer valid (rf: " + ex +
-                                   ", object data: " + ToString() + ")");
                 return false;
             }
 
@@ -171,17 +169,23 @@ namespace Glider.Common.Objects
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
                 ? 0
-                : GProcessMemoryManipulator.ReadIntFromOffset(StorageAddress + descriptorOffset, "ReadSI." + Name);
+                : GameMemoryAccess.ReadStorageInt(StorageAddress, descriptorOffset, Name);
         }
 
-        protected long GetStorageLong(string Name)
+        protected ulong GetStorageULong(string Name)
         {
             var descriptorOffset = FindDescriptorOffset(Name);
-            if (descriptorOffset == 0 && MemoryOffsetTable.Instance.HasOffset(Name))
+            var isMissing = descriptorOffset == 0 && !string.Equals(Name, "OBJECT_FIELD_GUID", StringComparison.Ordinal);
+
+            if (isMissing && MemoryOffsetTable.Instance.HasOffset(Name))
+            {
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
-            return descriptorOffset == 0
-                ? 0L
-                : GProcessMemoryManipulator.ReadLongFromOffset(StorageAddress + descriptorOffset, "ReadSL." + Name);
+                isMissing = false;
+            }
+
+            return isMissing
+                ? 0UL
+                : GameMemoryAccess.ReadStorageULong(StorageAddress, descriptorOffset, Name);
         }
 
         protected float GetStorageFloat(string Name)
@@ -191,22 +195,22 @@ namespace Glider.Common.Objects
                 descriptorOffset = MemoryOffsetTable.Instance.GetIntOffset(Name);
             return descriptorOffset == 0
                 ? 0.0f
-                : GProcessMemoryManipulator.ReadFloatFromOffset(StorageAddress + descriptorOffset, "ReadSF." + Name);
+                : GameMemoryAccess.ReadStorageFloat(StorageAddress, descriptorOffset, Name);
         }
 
         protected int GetBaseInt(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBI." + OffsetName);
+            return GameMemoryAccess.ReadBaseInt(BaseAddress, OffsetName);
         }
 
-        protected long GetBaseLong(string OffsetName)
+        protected ulong GetBaseLong(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadLongFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBL." + OffsetName);
+            return GameMemoryAccess.ReadBaseLong(BaseAddress, OffsetName);
         }
 
         protected float GetBaseFloat(string OffsetName)
         {
-            return GProcessMemoryManipulator.ReadFloatFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset(OffsetName), "ReadBF." + OffsetName);
+            return GameMemoryAccess.ReadBaseFloat(BaseAddress, OffsetName);
         }
 
         protected void SetType(GObjectType Type)
@@ -250,19 +254,60 @@ namespace Glider.Common.Objects
 
         public bool Hover()
         {
+            // read paw speed and enforce a minimum to avoid zero-sleep oddities
             PawSpeedMS = ConfigManager.gclass61_0.method_3("PawSpeed");
-            StartupClass.gclass68_0.method_3(true);
-            if (StartupClass.IsGliderInitialized)
-                InputController.smethod_18(InputController.double_0, InputController.double_1);
-            if ((IsCursorOnObject && !StartupClass.IsGliderInitialized) || TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) ||
-                TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
-                return true;
-            foreach (var glocation in StartupClass.gclass33_0.list_0)
+            if (PawSpeedMS < 1) PawSpeedMS = 1;
+
+            // ensure camera rotator is enabled (keep original behavior), but don't let exceptions bubble
+            try
             {
-                InputController.smethod_18(glocation.X, glocation.Y);
-                Thread.Sleep(PawSpeedMS);
-                if (IsCursorOnObject)
-                    return true;
+                StartupClass.gclass68_0.method_3(true);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogMessage("CameraRotator enable failed: " + ex);
+            }
+
+            // If cursor is already on the object, return true immediately (avoid moving it away)
+            if (IsCursorOnObject)
+                return true;
+
+            // restore stored cursor position only when Glider initialized (preserve previous behavior)
+            if (StartupClass.IsGliderInitialized)
+            {
+                try
+                {
+                    InputController.smethod_18(InputController.double_0, InputController.double_1);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogMessage("InputController restore failed: " + ex);
+                }
+            }
+
+            // try a set of Z adjustments
+            if (TryPaw(0.5) || TryPaw(0.0) || TryPaw(1.0) || TryPaw(-0.5) || TryPaw(1.5) || TryPaw(2.0))
+                return true;
+
+            // fall back to the configured list of screen positions, if present
+            var list = StartupClass.gclass33_0 != null ? StartupClass.gclass33_0.list_0 : null;
+            if (list != null)
+            {
+                foreach (var glocation in list)
+                {
+                    try
+                    {
+                        InputController.smethod_18(glocation.X, glocation.Y);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogMessage("InputController move failed: " + ex);
+                    }
+
+                    Thread.Sleep(PawSpeedMS);
+                    if (IsCursorOnObject)
+                        return true;
+                }
             }
 
             return false;

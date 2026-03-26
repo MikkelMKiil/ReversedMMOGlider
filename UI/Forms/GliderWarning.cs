@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: GliderWarning
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -69,7 +69,7 @@ public class GliderWarning : Form
     private void GliderWarning_Load(object sender, EventArgs e)
     {
         MessageProvider.smethod_3(this, nameof(GliderWarning));
-        Text = GProcessMemoryManipulator.GenerateRandomString();
+        Text = GameMemoryAccess.GenerateRandomString();
     }
 
     private void MyYesButton_Click(object sender, EventArgs e)

@@ -1,76 +1,85 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: CameraRotator
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
-#nullable disable
 using Glider.Common.Objects;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-public class CameraRotator
+public class CameraRotator // Original: CameraRotator
 {
-    private const double double_0 = 0.15;
-    private const double double_1 = 120.0;
-    private const double double_2 = 0.087266462599716474;
-    private bool bool_0;
-    private bool bool_1;
-    private bool bool_2;
-    private double double_3 = byte.MaxValue;
-    private double double_4;
-    private GSpellTimer gspellTimer_0;
-    private int int_0;
-    private int int_1;
-    private int int_2;
-    private int int_3;
+    // Constants (Original: double_0, double_1, double_2)
+    private const double HeadingTolerance = 0.15; // double_0
+    private const double MaxPixelsPerPulse = 120.0; // double_1
+    private const double MinRadianDelta = 0.087266462599716474; // double_2
 
-    private void method_0(string string_0)
+    // Windows Message Constants
+    private const uint WM_MOUSEMOVE = 0x0200;
+    private const uint MK_LBUTTON = 0x0001;
+    private const uint MK_RBUTTON = 0x0002;
+
+    // State Flags
+    private bool IsRightButtonDown; // Original: bool_0
+    private bool IsSpinStopping;    // Original: bool_1
+    private bool IsSpinActive;      // Original: bool_2
+
+    private double PixelsPerRadian = 255.0; // Original: double_3 (byte.MaxValue)
+    private double TargetHeading;           // Original: double_4
+
+    private GSpellTimer ActionTimer;        // Original: gspellTimer_0
+    private int RetryCount;                 // Original: int_0
+    private int HeadingMemoryAddress;       // Original: int_1
+
+    // Virtual Cursor Tracking for Background Panning
+    private int VirtualCursorX;             // Original: int_2
+    private int VirtualCursorY;             // Original: int_3
+
+    // P/Invoke for Background Mouse Moves
+    [DllImport("user32.dll")]
+    private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
+
+    private void Log(string message) // Original: method_0
     {
-        Logger.smethod_1(string_0);
+        Logger.smethod_1(message);
     }
 
-    public void method_1()
+    public void Initialize() // Original: method_1
     {
-        gspellTimer_0 = new GSpellTimer(ConfigManager.gclass61_0.method_3("MouseHoldMS"), true);
-        bool_0 = false;
+        ActionTimer = new GSpellTimer(ConfigManager.gclass61_0.method_3("MouseHoldMS"), true);
+        IsRightButtonDown = false;
     }
 
     [SpecialName]
-    public bool method_2()
+    public bool IsIdle() // Original: method_2
     {
         lock (this)
         {
-            return !bool_0;
+            return !IsRightButtonDown;
         }
     }
 
-    public void method_3(bool bool_3)
+    public void StopSpin(bool force) // Original: method_3
     {
         lock (this)
         {
-            if (bool_2)
+            if (IsSpinActive)
             {
-                method_0("Stopping mouse spin, force = " + bool_3);
-                bool_1 = true;
-                bool_2 = false;
-                InputController.smethod_21(false);
+                Log("Stopping mouse spin, force = " + force);
+                IsSpinStopping = true;
+                IsSpinActive = false;
+                InputController.IsCursorHooked = false; // Original: InputController.smethod_21(false)
             }
 
-            method_6(bool_3);
+            ReleaseRightButton(force); // Original: method_6
         }
     }
 
-    public void method_4(double double_5)
+    public void StartSpin(double targetHeading) // Original: method_4
     {
         lock (this)
         {
-            if (bool_2)
+            if (IsSpinActive)
             {
-                method_0("New heading received by mousespin helper, updating field");
-                double_4 = double_5;
+                Log("New heading received by mousespin helper, updating field");
+                TargetHeading = targetHeading;
             }
             else
             {
@@ -81,250 +90,235 @@ public class CameraRotator
                     Thread.Sleep(1211);
                 }
 
-                method_0("Starting mouse spin, new heading = " + double_5 + ", my heading = " + GPlayerSelf.Me.Heading);
-                int_1 = GContext.Main.Me.GetHeadingAddress();
-                method_11();
-                bool_2 = true;
-                bool_1 = false;
-                double_4 = double_5;
-                method_5();
+                Log("Starting mouse spin, new heading = " + targetHeading + ", my heading = " + GPlayerSelf.Me.Heading);
+                HeadingMemoryAddress = GContext.Main.Me.GetHeadingAddress();
+
+                CenterVirtualCursor(); // Original: method_11 / method_12
+
+                IsSpinActive = true;
+                IsSpinStopping = false;
+                TargetHeading = targetHeading;
+                PushRightButton(); // Original: method_5
             }
         }
     }
 
-    private void method_5()
+    private void PushRightButton() // Original: method_5
     {
         lock (this)
         {
-            if (!bool_0)
+            if (!IsRightButtonDown)
             {
-                bool_0 = true;
-                method_0("Pushing down right button");
-                InputController.smethod_24(true);
-                gspellTimer_0.Reset();
+                IsRightButtonDown = true;
+                Log("Pushing down right button");
+                InputController.SendMouseEvent(8); // Original: smethod_24(true) -> Right Down
+                ActionTimer.Reset();
                 Thread.Sleep(199);
             }
             else
             {
-                method_0("Skipping button push, already down");
+                Log("Skipping button push, already down");
             }
         }
     }
 
-    private void method_6(bool bool_3)
+    private void ReleaseRightButton(bool waitOutTimer) // Original: method_6
     {
         lock (this)
         {
-            var flag = false;
-            if (!bool_0)
+            var interrupted = false;
+            if (!IsRightButtonDown)
                 return;
-            if (bool_3)
+
+            if (waitOutTimer)
             {
-                method_0("Waiting out timer on force call");
-                flag = gspellTimer_0.WaitNoInterrupt();
+                Log("Waiting out timer on force call");
+                interrupted = ActionTimer.WaitNoInterrupt();
             }
 
-            if (gspellTimer_0.IsReady)
+            if (ActionTimer.IsReady)
             {
-                method_0("Releasing right button");
-                bool_0 = false;
-                InputController.smethod_25(true);
+                Log("Releasing right button");
+                IsRightButtonDown = false;
+                InputController.SendMouseEvent(16); // Original: smethod_25(true) -> Right Up
             }
 
-            if (flag)
+            if (interrupted)
                 throw new ThreadInterruptedException();
         }
     }
 
-    public void method_7()
+    public void ConsiderReleaseButton() // Original: method_7
     {
         lock (this)
         {
-            if (!bool_0 || !bool_1 || !gspellTimer_0.IsReady)
+            if (!IsRightButtonDown || !IsSpinStopping || !ActionTimer.IsReady)
                 return;
-            method_6(false);
-            method_0("Releasing cursor in ConsiderReleaseButton, also");
-            InputController.smethod_21(false);
+
+            ReleaseRightButton(false);
+            Log("Releasing cursor in ConsiderReleaseButton");
+            InputController.IsCursorHooked = false; // Original: smethod_21(false)
         }
     }
 
-    public bool method_8(bool bool_3)
+    public bool PulseSpin(bool isPrecision) // Original: method_8
     {
         lock (this)
         {
-            double num1 = GProcessMemoryManipulator.ReadFloat(int_1, "Quickheading");
-            var num2 = GContext.Main.Movement.CompareHeadings(num1, double_4);
-            if (Math.Abs(num2) < 0.15)
+            double currentHeading = GameMemoryAccess.ReadFloat(HeadingMemoryAddress, "Quickheading");
+            var headingDelta = GContext.Main.Movement.CompareHeadings(currentHeading, TargetHeading);
+
+            if (Math.Abs(headingDelta) < HeadingTolerance)
             {
-                method_3(false);
+                StopSpin(false);
                 return true;
             }
 
-            var int_4 = method_10(Math.Abs(num2), bool_3) * double_3;
-            if (int_4 > 120.0)
-                int_4 = 120.0;
-            if (num2 < 0.0)
-                int_4 *= -1.0;
-            var gspellTimer = new GSpellTimer(2000, false);
-            method_0("Pulsing cursor: " + int_4 + " pixels");
-            method_13((int)int_4, 0);
-            var H1 = 0.0;
-            while (!gspellTimer.IsReady)
+            var pixelDelta = CalculateRadianDelta(Math.Abs(headingDelta), isPrecision) * PixelsPerRadian; // Original: method_10
+            if (pixelDelta > MaxPixelsPerPulse)
+                pixelDelta = MaxPixelsPerPulse;
+
+            if (headingDelta < 0.0)
+                pixelDelta *= -1.0;
+
+            var movementTimer = new GSpellTimer(2000, false);
+            Log("Pulsing cursor: " + pixelDelta + " pixels");
+
+            // Move mouse horizontally to adjust heading
+            MoveVirtualMouseRelative((int)pixelDelta, 0, true); // Original: method_13
+
+            var newHeading = 0.0;
+            while (!movementTimer.IsReady)
             {
-                H1 = GProcessMemoryManipulator.ReadFloat(int_1, "QuickHeadingCheck");
-                if (H1 == num1)
+                newHeading = GameMemoryAccess.ReadFloat(HeadingMemoryAddress, "QuickHeadingCheck");
+                if (newHeading == currentHeading)
                     Thread.Sleep(6);
                 else
                     break;
             }
 
-            if (H1 == num1)
+            if (newHeading == currentHeading)
             {
-                ++int_0;
-                if (int_0 == 3)
+                ++RetryCount;
+                if (RetryCount == 3)
                     throw new Exception("never able to change heading in mouse spin!");
-                method_0("Restarting spin, heading did not change");
-                method_3(false);
-                method_4(double_4);
-                return method_8(bool_3);
+
+                Log("Restarting spin, heading did not change");
+                StopSpin(false);
+                StartSpin(TargetHeading);
+                return PulseSpin(isPrecision);
             }
 
-            int_0 = 0;
-            var num3 = 1.0 / Math.Abs(GContext.Main.Movement.CompareHeadings(H1, num1) / int_4);
-            if (num3 > 50.0)
-                double_3 = num3;
-            var num4 = GContext.Main.Movement.CompareHeadings(H1, double_4);
-            if ((num4 <= 0.0 || num2 >= 0.0) && (num4 >= 0.0 || num2 <= 0.0))
-                if (Math.Abs(num4) >= 0.15)
-                    goto label_21;
-            method_3(false);
+            RetryCount = 0;
+            var scalingAdjustment = 1.0 / Math.Abs(GContext.Main.Movement.CompareHeadings(newHeading, currentHeading) / pixelDelta);
+            if (scalingAdjustment > 50.0)
+                PixelsPerRadian = scalingAdjustment;
+
+            var remainingDelta = GContext.Main.Movement.CompareHeadings(newHeading, TargetHeading);
+            if ((remainingDelta <= 0.0 || headingDelta >= 0.0) && (remainingDelta >= 0.0 || headingDelta <= 0.0))
+            {
+                if (Math.Abs(remainingDelta) >= HeadingTolerance)
+                    return false;
+            }
+
+            StopSpin(false);
             return true;
         }
-
-    label_21:
-        return false;
     }
 
     [SpecialName]
-    public bool method_9()
+    public bool IsActive() // Original: method_9
     {
-        return bool_2;
+        return IsSpinActive;
     }
 
-    private double method_10(double double_5, bool bool_3)
+    private double CalculateRadianDelta(double delta, bool isPrecision) // Original: method_10
     {
-        double num1;
-        if (double_5 > Math.PI / 2.0)
-            num1 = Math.PI / 4.0;
-        if (double_5 > Math.PI / 4.0)
-            num1 = Math.PI / 8.0;
-        var num2 = Math.PI / 16.0;
-        if (bool_3 && num2 > Math.PI / 16.0)
-            num2 *= 0.66;
-        if (!bool_3)
-            num2 *= 0.44;
-        return num2;
+        double adjustedDelta = delta;
+        if (delta > Math.PI / 2.0)
+            adjustedDelta = Math.PI / 4.0;
+        else if (delta > Math.PI / 4.0)
+            adjustedDelta = Math.PI / 8.0;
+
+        var baseRadian = Math.PI / 16.0;
+        if (isPrecision && adjustedDelta > Math.PI / 16.0)
+            adjustedDelta = baseRadian * 0.66;
+        else if (!isPrecision)
+            adjustedDelta = baseRadian * 0.44;
+
+        return adjustedDelta;
     }
 
-    private void method_11()
+    private void CenterVirtualCursor() // Original: method_11 & method_12
     {
-        method_12();
-    }
+        Log("Centering virtual cursor for background spin.");
+        // By relying strictly on the game's internal resolution mapping rather than Desktop.
+        GameMemoryAccess.WorldToScreen(0.5, 0.5, out int centerX, out int centerY);
+        VirtualCursorX = centerX;
+        VirtualCursorY = centerY;
 
-    private void method_12()
-    {
-        int int_4;
-        int int_5;
-        double double_2;
-        double double_3;
-        if (!StartupClass.IsGliderInitialized)
-        {
-            method_15(out int_4, out int_5);
-            if (int_4 == int_2 && int_5 == int_3)
-            {
-                method_0("Cursor hasn't moved since last time we moved it, should be over the game ok");
-                return;
-            }
-
-            method_0("Cursor seems to have moved, our last coords are: " + int_2 + "," + int_3);
-            InputController.smethod_22(out double_2, out double_3);
-            if (double_2 >= 0.0 && double_2 < 1.0 && double_3 >= 0.0 && double_3 < 1.0)
-            {
-                method_0("Cursor is already over the game window at " + double_2 + "/" + double_3 +
-                         " relative, should be ok");
-                int_2 = int_4;
-                int_3 = int_5;
-                return;
-            }
-        }
-        else
-        {
-            InputController.smethod_22(out double_2, out double_3);
-        }
-
-        method_0("Moving cursor to center of game window (Relative pos was: " + double_2 + "/" + double_3 + ")");
-        GProcessMemoryManipulator.WorldToScreen(0.5, 0.5, out int_4, out int_5);
-        method_14(int_4, int_5);
+        SetVirtualMousePosition(VirtualCursorX, VirtualCursorY, false);
         Thread.Sleep(201);
     }
 
-    private void method_13(int int_4, int int_5)
+    private void MoveVirtualMouseRelative(int dx, int dy, bool isRightClick) // Original: method_13
     {
-        if (StartupClass.IsGliderInitialized)
+        VirtualCursorX += dx;
+        VirtualCursorY += dy;
+        SetVirtualMousePosition(VirtualCursorX, VirtualCursorY, isRightClick);
+    }
+
+    private void SetVirtualMousePosition(int x, int y, bool isRightClick) // Original: method_14
+    {
+        Log("SetVirtualMousePosition: " + x + "," + y);
+        VirtualCursorX = x;
+        VirtualCursorY = y;
+
+        if (StartupClass.IsGliderInitialized && StartupClass.MainApplicationHandle != IntPtr.Zero)
         {
-            InputController.smethod_16(int_4, int_5);
-        }
-        else
-        {
-            method_15(out int_2, out int_3);
-            method_14(int_2 + int_4, int_3 + int_5);
+            uint wParam = isRightClick ? MK_RBUTTON : MK_LBUTTON;
+            uint lParam = (uint)((y << 16) | (x & 0xFFFF));
+            SendMessage(StartupClass.MainApplicationHandle, WM_MOUSEMOVE, wParam, lParam);
         }
     }
 
-    private void method_14(int int_4, int int_5)
+    public void SetCameraPitch(GGameCamera camera, float targetPitch) // Original: method_16
     {
-        method_0("SetMousePosition: " + int_4 + "," + int_5);
-        if (StartupClass.IsGliderInitialized)
-            InputController.smethod_17(int_4, int_5);
-        else
-            SetCursorPos(int_4, int_5);
-        int_2 = int_4;
-        int_3 = int_5;
-    }
+        var startingPitchDelta = camera.Pitch - (double)targetPitch;
+        CenterVirtualCursor();
 
-    private void method_15(out int int_4, out int int_5)
-    {
-        GStruct17 gstruct17_0;
-        GetCursorPos(out gstruct17_0);
-        int_4 = gstruct17_0.int_0;
-        int_5 = gstruct17_0.int_1;
-    }
-
-    public void method_16(GGameCamera ggameCamera_0, float float_0)
-    {
-        var num1 = ggameCamera_0.Pitch - (double)float_0;
-        method_12();
-        var gspellTimer1 = new GSpellTimer(ConfigManager.gclass61_0.method_3("MouseHoldMS"), false);
-        InputController.smethod_24(false);
+        var actionTimer = new GSpellTimer(ConfigManager.gclass61_0.method_3("MouseHoldMS"), false);
+        InputController.SendMouseEvent(2); // Original: smethod_24(false) -> Left Down
         Thread.Sleep(122);
-        while (!gspellTimer1.IsReady)
+
+        while (!actionTimer.IsReady)
         {
-            var pitch = ggameCamera_0.Pitch;
-            var num2 = pitch - (double)float_0;
-            if ((num2 >= 0.0 || num1 <= 0.0) && (num2 <= 0.0 || num1 >= 0.0) && Math.Abs(num2) >= Math.PI / 36.0)
+            var currentPitch = camera.Pitch;
+            var currentPitchDelta = currentPitch - (double)targetPitch;
+
+            if ((currentPitchDelta >= 0.0 || startingPitchDelta <= 0.0) &&
+                (currentPitchDelta <= 0.0 || startingPitchDelta >= 0.0) &&
+                Math.Abs(currentPitchDelta) >= Math.PI / 36.0)
             {
-                Logger.smethod_1("Delta on pulse: " + num2 + ", oldpitch: " + pitch);
-                var int_5 = method_10(Math.Abs(num2), false) * double_3;
-                if (int_5 > 120.0)
-                    int_5 = 120.0;
-                if (num2 > 0.0)
-                    int_5 *= -1.0;
-                Logger.smethod_1("Pulsing cursor: " + int_5);
-                method_13(0, (int)int_5);
-                var gspellTimer2 = new GSpellTimer(1000, false);
-                while (!gspellTimer2.IsReady && ggameCamera_0.Pitch == (double)pitch)
+                Log("Delta on pulse: " + currentPitchDelta + ", oldpitch: " + currentPitch);
+                var pixelDelta = CalculateRadianDelta(Math.Abs(currentPitchDelta), false) * PixelsPerRadian;
+
+                if (pixelDelta > MaxPixelsPerPulse)
+                    pixelDelta = MaxPixelsPerPulse;
+
+                if (currentPitchDelta > 0.0)
+                    pixelDelta *= -1.0;
+
+                Log("Pulsing cursor: " + pixelDelta);
+
+                // Move mouse vertically to adjust pitch (Left Click Down)
+                MoveVirtualMouseRelative(0, (int)pixelDelta, false); // Original: method_13(0, (int)int_5)
+
+                var verificationTimer = new GSpellTimer(1000, false);
+                while (!verificationTimer.IsReady && camera.Pitch == (double)currentPitch)
                     Thread.Sleep(9);
-                if (gspellTimer2.IsReady)
+
+                if (verificationTimer.IsReady)
                     throw new Exception("Camera pitch never changed in SetCameraPitch!");
             }
             else
@@ -333,26 +327,8 @@ public class CameraRotator
             }
         }
 
-        gspellTimer1.Wait();
-        InputController.smethod_25(false);
+        actionTimer.Wait();
+        InputController.SendMouseEvent(4); // Original: smethod_25(false) -> Left Up
         Logger.LogMessage("SetCameraPitch all done!");
-    }
-
-    [DllImport("user32.dll")]
-    private static extern bool GetCursorPos(out GStruct17 gstruct17_0);
-
-    [DllImport("user32.dll")]
-    public static extern bool SetCursorPos(int int_4, int int_5);
-
-    public struct GStruct17
-    {
-        public int int_0;
-        public int int_1;
-
-        public GStruct17(int int_2, int int_3)
-        {
-            int_0 = int_2;
-            int_1 = int_3;
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: AutoLoginManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -7,6 +7,7 @@
 #nullable disable
 using Glider.Common.Objects;
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -41,13 +42,28 @@ public class AutoLoginManager
     {
         try
         {
+            if (string_1 == null || string_1.Trim().Length == 0)
+            {
+                Logger.LogMessage("[Critical] Auto-login aborted: account profile name is empty.");
+                return false;
+            }
+
             string_0 = string_1;
             gclass14_0 = new EncryptedAccountStorage();
             if (!StartupClass.IsSomeConditionMet)
                 return false;
-            if (!gclass14_0.method_1("Accounts\\" + string_1 + ".xml"))
-                throw new Exception("Unable to read XML file (encrypted on another machine?)");
-            GProcessMemoryManipulator.GetProcessId();
+
+            var accountPath = Path.Combine("Accounts", string_1 + ".xml");
+            if (!File.Exists(accountPath))
+            {
+                Logger.LogMessage("[Critical] Auto-login aborted: account profile file not found: " + accountPath);
+                return false;
+            }
+
+            if (!gclass14_0.method_1(accountPath))
+                throw new InvalidOperationException("Unable to read XML file (encrypted on another machine?)");
+
+            GameMemoryAccess.GetProcessId();
             return method_3();
         }
         catch (ThreadInterruptedException ex)
@@ -139,7 +155,7 @@ public class AutoLoginManager
             method_4();
         if (!method_10().ToLower().StartsWith(gclass14_0.string_2.ToLower()))
             method_5();
-        GProcessMemoryManipulator.GetProcessId();
+        GameMemoryAccess.GetProcessId();
         var flag = false;
         GInterfaceObject ginterfaceObject = null;
         for (var index = 1; index <= 9; ++index)
@@ -161,7 +177,7 @@ public class AutoLoginManager
             return false;
         }
 
-        GProcessMemoryManipulator.GetProcessId();
+        GameMemoryAccess.GetProcessId();
         ginterfaceObject.ClickMouse(false);
         Thread.Sleep(500);
         gcontext_0.Interface.GetByNamePreWorld("CharSelectEnterWorldButton").ClickMouse(false);

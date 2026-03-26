@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: ProfileWizard
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -450,7 +450,7 @@ public class ProfileWizard : Form
 
     public DialogResult method_0(Form form_0)
     {
-        Text = GProcessMemoryManipulator.GenerateRandomString();
+        Text = GameMemoryAccess.GenerateRandomString();
         string_2 = MessageProvider.smethod_4("ProfileWizard.Left");
         string_3 = MessageProvider.smethod_4("ProfileWizard.Right");
         string_4 = MessageProvider.smethod_4("ProfileWizard.Yards");
@@ -609,7 +609,7 @@ public class ProfileWizard : Form
         var path = ConfigManager.gclass61_0.method_2("ProfilesDir") + ProfileNameBox.Text.Trim() + ".xml";
         if (File.Exists(path))
             if (MessageBox.Show(this, MessageProvider.smethod_6("ProfileWizard.ProfileExists", ProfileNameBox.Text.Trim()),
-                    GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
+                    GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
             {
                 ProfileNameBox.Focus();
                 return false;
@@ -630,7 +630,7 @@ public class ProfileWizard : Form
 
     private void method_6(string string_5, Control control_0)
     {
-        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4("ProfileWizard." + string_5), GProcessMemoryManipulator.GenerateRandomString(),
+        var num = (int)MessageBox.Show(this, MessageProvider.smethod_4("ProfileWizard." + string_5), GameMemoryAccess.GenerateRandomString(),
             MessageBoxButtons.OK, MessageBoxIcon.Hand);
         control_0?.Focus();
     }
@@ -884,7 +884,7 @@ public class ProfileWizard : Form
     private void SkipVendorBox_CheckedChanged(object sender, EventArgs e)
     {
         if (SkipVendorBox.Checked || StartupClass.IsSomeConditionMet || MessageBox.Show(this,
-                MessageProvider.smethod_4("ProfileWizard.Elite"), GProcessMemoryManipulator.GenerateRandomString(), MessageBoxButtons.YesNo,
+                MessageProvider.smethod_4("ProfileWizard.Elite"), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             return;
         SkipVendorBox.Checked = true;

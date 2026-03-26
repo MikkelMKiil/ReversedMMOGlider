@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: PriestConfig
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -56,7 +56,7 @@ public class PriestConfig : Form
         UseVampiric.Checked = ConfigManager.gclass61_0.method_2("Priest.UseVampiric") == "True";
         ExtraFlay.Checked = ConfigManager.gclass61_0.method_2("Priest.ExtraFlay") == "True";
         MessageProvider.smethod_3(this, "Priest");
-        GProcessMemoryManipulator.smethod_48(this);
+        GameMemoryAccess.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -338,7 +338,7 @@ public class PriestConfig : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Priest.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Priest.html");
     }
 
     private void PreShield_CheckedChanged(object sender, EventArgs e)

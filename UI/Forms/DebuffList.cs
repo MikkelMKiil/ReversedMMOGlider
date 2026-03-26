@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: DebuffList
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -28,7 +28,7 @@ public class DebuffList : Form
     {
         InitializeComponent();
         MessageProvider.smethod_3(this, nameof(DebuffList));
-        GProcessMemoryManipulator.smethod_48(this);
+        GameMemoryAccess.smethod_48(this);
     }
 
     protected override void Dispose(bool disposing)
@@ -161,6 +161,6 @@ public class DebuffList : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        GProcessMemoryManipulator.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Debuffs.html");
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Debuffs.html");
     }
 }

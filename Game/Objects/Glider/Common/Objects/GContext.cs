@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GContext
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -39,6 +39,9 @@ namespace Glider.Common.Objects
         protected string SpinningKey;
         public GTendency T_Skinnable;
         protected double TargetHeading;
+        private ulong _ambushTraceGuid;
+        private int _ambushTraceLastLogTick;
+        private bool _ambushTraceLastValid;
 
         public GContext()
         {
@@ -103,7 +106,7 @@ namespace Glider.Common.Objects
         public bool StoppedOnDetach => StartupClass.bool_36;
 
         public string RedMessage =>
-            GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
+            GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
 
         public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
 
@@ -116,19 +119,19 @@ namespace Glider.Common.Objects
 
         public GMoveHelper MoveHelper { get; private set; }
 
-        public string WorldMap => GProcessMemoryManipulator.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(WorldMap)), 64, "worldmap")
+        public string WorldMap => GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(WorldMap)), 64, "worldmap")
             .Substring(11);
 
         public string ZoneText =>
-            GProcessMemoryManipulator.ReadString(GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(ZoneText)), "zonetext"), 64,
+            GameMemoryAccess.ReadString(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(ZoneText)), "zonetext"), 64,
                 "zonetext");
 
         public string SubZoneText
         {
             get
             {
-                var str = GProcessMemoryManipulator.ReadString(
-                    GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(SubZoneText)), "subzonetext"), 64,
+                var str = GameMemoryAccess.ReadString(
+                    GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset(nameof(SubZoneText)), "subzonetext"), 64,
                     "subzonetext");
                 return str.Length > 1 ? str : "n/a";
             }
@@ -483,6 +486,8 @@ namespace Glider.Common.Objects
         {
             if (MouseSpin && StartupClass.gclass68_0.method_9())
                 StartupClass.gclass68_0.method_8(Fast);
+            if (!MouseSpin && Me != null)
+                Me.Refresh(true);
             if (MouseSpin || SpinningKey == null ||
                 Math.Abs(Movement.CompareHeadings(GPlayerSelf.Me.Heading, TargetHeading)) >= Math.PI / 18.0)
                 return;
@@ -519,8 +524,11 @@ namespace Glider.Common.Objects
 
         public GCombatResult CheckCommonCombatResult(GMonster Monster, bool WasAmbush)
         {
+            TraceAmbushCombatState(Monster, WasAmbush, "tick");
+
             if (!Monster.IsValid)
             {
+                TraceAmbushCombatState(Monster, WasAmbush, "invalid");
                 Log("Monster is gone from object list, ending combat");
                 return GCombatResult.Vanished;
             }
@@ -555,6 +563,68 @@ namespace Glider.Common.Objects
                 return GCombatResult.Unknown;
             Log("We're not in combat, this can't be working out, ending combat");
             return GCombatResult.Bugged;
+        }
+
+        private void TraceAmbushCombatState(GMonster monster, bool wasAmbush, string stage)
+        {
+            if (!wasAmbush)
+            {
+                _ambushTraceGuid = 0UL;
+                _ambushTraceLastLogTick = 0;
+                _ambushTraceLastValid = true;
+                return;
+            }
+
+            if (monster == null)
+                return;
+
+            if (_ambushTraceGuid != monster.GUID)
+            {
+                _ambushTraceGuid = monster.GUID;
+                _ambushTraceLastLogTick = 0;
+                _ambushTraceLastValid = monster.IsValid;
+                Logger.LogMessage("[Trace][Ambush] start GUID=0x" + monster.GUID.ToString("x") +
+                                  ", Base=0x" + monster.BaseAddress.ToString("x") +
+                                  ", Storage=0x" + monster.StorageAddress.ToString("x"));
+            }
+
+            var now = Environment.TickCount;
+            var validChanged = _ambushTraceLastValid != monster.IsValid;
+            if (!validChanged && now - _ambushTraceLastLogTick < 250)
+                return;
+
+            _ambushTraceLastValid = monster.IsValid;
+            _ambushTraceLastLogTick = now;
+
+            var meTargetGuid = Me != null ? Me.TargetGUID : 0UL;
+            var snapshotPresent = GObjectList.IsObjectPresent(monster.GUID);
+            var combatTicks = StartupClass.CurrentGameClass != null ? StartupClass.CurrentGameClass.TicksSinceCombatStart : 0;
+
+            if (!monster.IsValid)
+            {
+                Logger.LogMessage("[Trace][Ambush] stage=" + stage +
+                                  ", GUID=0x" + monster.GUID.ToString("x") +
+                                  ", Valid=" + monster.IsValid +
+                                  ", SnapshotPresent=" + snapshotPresent +
+                                  ", Base=0x" + monster.BaseAddress.ToString("x") +
+                                  ", Storage=0x" + monster.StorageAddress.ToString("x") +
+                                  ", MeTargetGUID=0x" + meTargetGuid.ToString("x") +
+                                  ", CombatTicks=" + combatTicks);
+                return;
+            }
+
+            Logger.LogMessage("[Trace][Ambush] stage=" + stage +
+                              ", GUID=0x" + monster.GUID.ToString("x") +
+                              ", Valid=" + monster.IsValid +
+                              ", SnapshotPresent=" + snapshotPresent +
+                              ", HP=" + monster.HealthPoints + "/" + monster.HealthMax +
+                              ", Dist=" + Math.Round((double)monster.DistanceToSelf, 2) +
+                              ", InCombat=" + monster.IsInCombat +
+                              ", MonsterTargetGUID=0x" + monster.TargetGUID.ToString("x") +
+                              ", MeTargetGUID=0x" + meTargetGuid.ToString("x") +
+                              ", Base=0x" + monster.BaseAddress.ToString("x") +
+                              ", Storage=0x" + monster.StorageAddress.ToString("x") +
+                              ", CombatTicks=" + combatTicks);
         }
 
         public bool StartGlide()
@@ -703,7 +773,7 @@ namespace Glider.Common.Objects
 
         public string GetRandomString()
         {
-            return GProcessMemoryManipulator.GenerateRandomString();
+            return GameMemoryAccess.GenerateRandomString();
         }
 
         public void DoHearthAction()
@@ -757,16 +827,12 @@ namespace Glider.Common.Objects
 
         public void EnableCursorHook()
         {
-            if (StartupClass.GliderManager == null)
-                return;
-            StartupClass.GliderManager.method_33(true);
+            InputController.smethod_21(true);
         }
 
         public void DisableCursorHook()
         {
-            if (StartupClass.GliderManager == null)
-                return;
-            StartupClass.GliderManager.method_33(false);
+            InputController.smethod_21(false);
         }
 
         public void WaitForNotFiring(string KeyName)

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: MachGlideRunner
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -53,8 +53,6 @@ public class MachGlideRunner
 
     private void method_3()
     {
-        if (StartupClass.GliderManager != null)
-            StartupClass.GliderManager.method_33(true);
         new SolitaireSolver().method_0();
     }
 }

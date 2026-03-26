@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GItemHelper
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -15,12 +15,12 @@ namespace Glider.Common.Objects
         {
         }
 
-        public long GetEquippedGUID(string SlotName)
+        public ulong GetEquippedGUID(string SlotName)
         {
             return StartupClass.gclass38_0.method_1(SlotName);
         }
 
-        public int[] GetItemEnchants(long ItemGUID)
+        public int[] GetItemEnchants(ulong ItemGUID)
         {
             var gobject = GObjectList.FindObject(ItemGUID);
             var intList = new List<int>();
@@ -33,7 +33,7 @@ namespace Glider.Common.Objects
             for (var index = 0; index < 12; ++index)
             {
                 var num1 = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT_" + (index + 1) + "_1");
-                var num2 = GProcessMemoryManipulator.ReadInt32(gobject.StorageAddress + num1, "EnchantID");
+                var num2 = GameMemoryAccess.ReadInt32(gobject.StorageAddress + num1, "EnchantID");
                 if (num2 > 0)
                     intList.Add(num2);
             }
@@ -46,7 +46,7 @@ namespace Glider.Common.Objects
             return StartupClass.gclass38_0.method_3(EnchantID);
         }
 
-        public void DebugItem(long GUID)
+        public void DebugItem(ulong GUID)
         {
             var itemEnchants = GetItemEnchants(GUID);
             GContext.Main.Log("Enchant count on 0x" + GUID.ToString("x") + ": " + itemEnchants.Length);

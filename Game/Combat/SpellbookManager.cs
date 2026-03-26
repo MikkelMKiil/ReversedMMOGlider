@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: SpellbookManager
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -43,17 +43,17 @@ public class SpellbookManager
 
     private byte[] method_0(int int_1, int int_2, string string_0)
     {
-        return GProcessMemoryManipulator.ReadBytes(int_1, int_2, string_0);
+        return GameMemoryAccess.ReadBytes(int_1, int_2, string_0);
     }
 
     private int method_1(int int_1, string string_0)
     {
-        return GProcessMemoryManipulator.ReadInt32(int_1, string_0);
+        return GameMemoryAccess.ReadInt32(int_1, string_0);
     }
 
     private string method_2(int int_1, string string_0)
     {
-        return GProcessMemoryManipulator.ReadString(int_1, 100, string_0);
+        return GameMemoryAccess.ReadString(int_1, 100, string_0);
     }
 
     private void method_3(string string_0)
@@ -185,7 +185,7 @@ public class SpellbookManager
         if (!bool_1)
             return true;
         var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
-        var num2 = GProcessMemoryManipulator.GetProcessIdFromWindow();
+        var num2 = GameMemoryAccess.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             for (; num1 != 0 && num1 % 2 == 0; num1 = method_1(num1 + 4, "c1next"))
@@ -217,7 +217,7 @@ public class SpellbookManager
             method_9(int_1);
         var gclass64 = Offsets[int_1];
         var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
-        var num2 = GProcessMemoryManipulator.GetProcessIdFromWindow();
+        var num2 = GameMemoryAccess.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             while (num1 != 0 && num1 % 2 == 0)
@@ -316,8 +316,21 @@ public class SpellbookManager
     private bool method_18(params string[] string_0)
     {
         foreach (var str in string_0)
+        {
             if (!MemoryOffsetTable.Instance.HasOffset(str))
                 return false;
+
+            var value = MemoryOffsetTable.Instance.GetIntOffset(str);
+
+            // In this project, offset "0" is widely used as a placeholder for "unknown/not reversed yet".
+            // SpellbookEx must not run with placeholders; it will read bogus memory and prevent combat.
+            if (value == 0)
+            {
+                Logger.LogMessage("SpellbookEx disabled: required spell list offsets are missing for this client build (placeholder 0x0): " + str);
+                return false;
+            }
+        }
+
         return true;
     }
 }

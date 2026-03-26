@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GMonster
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -149,13 +149,14 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                if (Health != 1.0)
+                if (Health < 0.99)
                 {
-                    SkipReason = "health != 100, probably tagged";
+                    SkipReason = "health below pull threshold, probably tagged or already damaged";
                     return false;
                 }
 
-                if (TargetGUID != 0L && TargetGUID != GUID)
+                var myGuid = GPlayerSelf.Me != null ? GPlayerSelf.Me.GUID : 0UL;
+                if (TargetGUID != 0UL && TargetGUID != GUID && TargetGUID != myGuid)
                 {
                     SkipReason = "monster already has a target";
                     return false;
@@ -228,7 +229,7 @@ namespace Glider.Common.Objects
             var baseInt = GetBaseInt("MonsterDefinition");
             if (baseInt == 0 || !MemoryOffsetTable.Instance.HasOffset("HarvestType"))
                 return;
-            _harvestFlags = GProcessMemoryManipulator.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("HarvestType"), "harvesttype");
+            _harvestFlags = GameMemoryAccess.ReadInt32(baseInt + MemoryOffsetTable.Instance.GetIntOffset("HarvestType"), "harvesttype");
         }
 
         protected override void SetName()
@@ -242,10 +243,10 @@ namespace Glider.Common.Objects
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("UnitNameSecond"))
                 num += MemoryOffsetTable.Instance.GetIntOffset("UnitNameSecond");
-            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + num, "UnitNamePtr");
+            var int_29 = GameMemoryAccess.ReadInt32(baseInt + num, "UnitNamePtr");
             if (int_29 == 0)
                 return;
-            _name = GProcessMemoryManipulator.ReadStringInternal(int_29, 64, "unitname2");
+            _name = GameMemoryAccess.ReadStringInternal(int_29, 64, "unitname2");
         }
 
         protected override void SetTitle()
@@ -259,10 +260,10 @@ namespace Glider.Common.Objects
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("UnitTitle"))
                 num += MemoryOffsetTable.Instance.GetIntOffset("UnitTitle");
-            var int_29 = GProcessMemoryManipulator.ReadInt32(baseInt + num, "UnitTitlePtr");
+            var int_29 = GameMemoryAccess.ReadInt32(baseInt + num, "UnitTitlePtr");
             if (int_29 == 0)
                 return;
-            _title = GProcessMemoryManipulator.ReadStringInternal(int_29, 64, "unittitle2");
+            _title = GameMemoryAccess.ReadStringInternal(int_29, 64, "unittitle2");
         }
 
         public bool IsInList(string[] Names)

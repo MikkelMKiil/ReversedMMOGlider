@@ -182,12 +182,25 @@ namespace Glider.Common.Objects
                     if (Target.DistanceToSelf >= (MeleeDistance + 1.0))
                     {
                         Context.ReleaseSpinRun();
-                        Context.CastSpell("Warrior.Ranged");
-                        Target.WaitForApproach(Context.MeleeDistance, 5000);//wait for it....arm thy self!//wait for it....arm thy self!
-                        Context.SendKey("Common.ToggleCombat");
+                        if (Interface.IsKeyReady("Warrior.Ranged") && Interface.IsKeyEnabled("Warrior.Ranged"))
+                        {
+                            Logger.smethod_1("[Warrior] Pull: Using ranged opener (Warrior.Ranged)");
+                            Context.CastSpell("Warrior.Ranged");
+                            Target.WaitForApproach(Context.MeleeDistance, 5000);//wait for it....arm thy self!//wait for it....arm thy self!
+                            Logger.smethod_1("[Warrior] Pull: Starting auto-attack (Common.ToggleCombat)");
+                            Context.SendKey("Common.ToggleCombat");
+                        }
+                        else
+                        {
+                            Logger.smethod_1("[Warrior] Pull: Ranged opener unavailable; approaching to melee then auto-attacking");
+                            Monster.Approach(MeleeDistance - 1.0);
+                            Logger.smethod_1("[Warrior] Pull: Starting auto-attack (Common.ToggleCombat)");
+                            Context.SendKey("Common.ToggleCombat");
+                        }
                     }
                     else
                     {
+                        Logger.smethod_1("[Warrior] Pull: In melee range; starting auto-attack (Common.ToggleCombat)");
                         Context.SendKey("Common.ToggleCombat");
                         Context.ReleaseSpinRun();
                     }
@@ -260,6 +273,7 @@ namespace Glider.Common.Objects
                 {
                     if (Interface.IsKeyReady("Common.Potion") && Interface.IsKeyEnabled("Common.Potion"))
                     {
+                        Logger.smethod_1("[Warrior] Combat: Using potion (Common.Potion)");
                         Context.CastSpell("Common.Potion");
                         continue;
                     }
@@ -269,6 +283,7 @@ namespace Glider.Common.Objects
                 if (UseHamstring && Target.Health <= .50 && Me.Rage >= 10 && !UsedHamstring)
                 {
                     UsedHamstring = true;
+                    Logger.smethod_1("[Warrior] Combat: Using Hamstring (Warrior.Hamstring)");
                     Context.CastSpell("Warrior.Hamstring");
                     continue;
                 }
@@ -278,6 +293,7 @@ namespace Glider.Common.Objects
                 {
                     if (Target.IsCasting && Target.Health <= ShieldBashLife && Interface.IsKeyReady("Warrior.ShieldBash"))
                     {
+                        Logger.smethod_1("[Warrior] Combat: Using Shield Bash (Warrior.ShieldBash)");
                         Context.CastSpell("Warrior.ShieldBash");
                         continue;
                     }
@@ -288,6 +304,7 @@ namespace Glider.Common.Objects
 
                 if (UseOverpower && Interface.IsKeyEnabled("Warrior.Overpower") && Me.Rage >= 5)
                 {
+                    Logger.smethod_1("[Warrior] Combat: Using Overpower (Warrior.Overpower)");
                     Context.CastSpell("Warrior.Overpower");
                     continue;
                 }
@@ -295,6 +312,7 @@ namespace Glider.Common.Objects
                 if (UseDemoralizing && !UsedDemoralizing && Me.Rage >= 10)
                 {
                     UsedDemoralizing = true;
+                    Logger.smethod_1("[Warrior] Combat: Using Demo Shout (Warrior.DemoShout)");
                     Context.CastSpell("Warrior.DemoShout");
                     continue;
                 }
@@ -303,6 +321,7 @@ namespace Glider.Common.Objects
                 if (BattleShout.IsReady && Me.Rage >= 10)
                 {
                     BattleShout.Reset();
+                    Logger.smethod_1("[Warrior] Combat: Using Battle Shout (Warrior.BattleShout)");
                     Context.CastSpell("Warrior.BattleShout");
                     continue;
                 }
@@ -310,6 +329,7 @@ namespace Glider.Common.Objects
                 // Execute if we can!
                 if (UseExecute && Target.Health <= .20 && Me.Rage >= 15)
                 {
+                    Logger.smethod_1("[Warrior] Combat: Using Execute (Warrior.Execute)");
                     Context.CastSpell("Warrior.Execute");
                     continue;
                 }
@@ -317,6 +337,7 @@ namespace Glider.Common.Objects
                 // No big stuff ready, see if rend is ticking:
                 if (Interface.IsKeyReady("Warrior.Rend") && Me.Rage >= 10 && Target.Health > .45 && Rend.IsReady)
                 {
+                    Logger.smethod_1("[Warrior] Combat: Using Rend (Warrior.Rend)");
                     Context.CastSpell("Warrior.Rend");
                     Rend.Reset();
                     continue;
@@ -324,6 +345,7 @@ namespace Glider.Common.Objects
 
                 if (UseConcussion && Interface.IsKeyReady("Warrior.Concussion") && Me.Rage >= 15)
                 {
+                    Logger.smethod_1("[Warrior] Combat: Using Concussion Blow (Warrior.Concussion)");
                     Context.CastSpell("Warrior.Concussion");
                     continue;
                 }
@@ -331,6 +353,7 @@ namespace Glider.Common.Objects
                 if (UseSunder && Me.Rage >= 15 && SundersLeft > 0)
                 {
                     SundersLeft--;
+                    Logger.smethod_1("[Warrior] Combat: Using Sunder Armor (Warrior.SunderArmor), left=" + SundersLeft);
                     Context.CastSpell("Warrior.SunderArmor");
                     continue;
                 }
@@ -338,6 +361,7 @@ namespace Glider.Common.Objects
                 // Spam something:
                 if (UseMortalStrike && Me.Rage >= 30 && Interface.IsKeyReady("Warrior.MortalStrike"))
                 {
+                    Logger.smethod_1("[Warrior] Combat: Using Mortal Strike (Warrior.MortalStrike)");
                     Context.CastSpell("Warrior.MortalStrike");
                     continue;
                 }
@@ -346,12 +370,14 @@ namespace Glider.Common.Objects
                 if (Interface.IsKeyReady("Warrior.HeroicStrike") && Me.Rage >= HeroicRage && Heroic.IsReady)
                 {
                     Heroic.Reset();
+                    Logger.smethod_1("[Warrior] Combat: Using Heroic Strike (Warrior.HeroicStrike)");
                     Context.CastSpell("Warrior.HeroicStrike");
                     continue;
                 }
 
                 if (!Me.IsMeleeing)
                 {
+                    Logger.smethod_1("[Warrior] Combat: Not meleeing; starting auto-attack (Common.ToggleCombat)");
                     Context.SendKey("Common.ToggleCombat");
                     Context.ReleaseSpinRun();
                     continue;

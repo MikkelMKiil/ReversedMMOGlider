@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Glider.Common.Objects.GMovement
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -307,6 +307,8 @@ namespace Glider.Common.Objects
 
         public void BasePatrolTowards(object DestOrUnit)
         {
+            if (GContext.Main.Me != null)
+                GContext.Main.Me.Refresh(true);
             var Target = DestOrUnit.GetType() != typeof(GLocation)
                 ? ((GObject)DestOrUnit).Location
                 : (GLocation)DestOrUnit;
@@ -491,7 +493,7 @@ namespace Glider.Common.Objects
         {
             var int_14 = 0;
             if (Math.Abs(Delta) < 0.25)
-                int_14 = (int)(Delta * InputController.int_19);
+                int_14 = (int)(Delta * InputController.TapSpinDelay);
             if (int_14 <= 0)
                 return false;
             var heading = GPlayerSelf.Me.Heading;
@@ -500,13 +502,16 @@ namespace Glider.Common.Objects
             SpellcastingManager.gclass42_0.method_2(SpinKey);
             GPlayerSelf.Me.Refresh(true);
             var num = CompareHeadings(heading, GPlayerSelf.Me.Heading);
-            if (Math.Abs(num) > 0.02)
+            if (Math.Abs(num) <= 0.02)
             {
-                if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
-                    InputController.int_19 -= 15;
-                else
-                    InputController.int_19 += 15;
+                Logger.smethod_1("TapSpin produced no heading change, escalating to full spin");
+                return false;
             }
+
+            if ((num < 0.0 && Delta > 0.0) || (num > 0.0 && Delta < 0.0))
+                InputController.TapSpinDelay -= 15;
+            else
+                InputController.TapSpinDelay += 15;
 
             return true;
         }

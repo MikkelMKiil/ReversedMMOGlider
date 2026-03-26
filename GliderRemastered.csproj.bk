@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BC1CD084-3AF2-44FC-8B51-8E4646020949}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>GliderRemastered</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>default</LangVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.0.0.1</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Authentication\AccountInfo.resx">
+      <DependentUpon>AccountInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\DeathknightConfig.resx">
+      <DependentUpon>DeathknightConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\DruidConfig.resx">
+      <DependentUpon>DruidConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\HunterConfig.resx">
+      <DependentUpon>HunterConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\MageConfig.resx">
+      <DependentUpon>MageConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\PaladinConfig.resx">
+      <DependentUpon>PaladinConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\PriestConfig.resx">
+      <DependentUpon>PriestConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\RogueConfig.resx">
+      <DependentUpon>RogueConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\ShamanConfig.resx">
+      <DependentUpon>ShamanConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\WarlockConfig.resx">
+      <DependentUpon>WarlockConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Classes\WarriorConfig.resx">
+      <DependentUpon>WarriorConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Game\Objects\Glider\Common\Objects\GConfigWindow.resx">
+      <DependentUpon>GConfigWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\ConfigForm.resx" />
+    <EmbeddedResource Include="UI\Forms\DebuffList.resx" />
+    <EmbeddedResource Include="UI\Forms\DebuffPick.resx" />
+    <EmbeddedResource Include="UI\Forms\EvoConfigWindow.resx" />
+    <EmbeddedResource Include="UI\Forms\FactionReminder.resx" />
+    <EmbeddedResource Include="UI\Forms\GliderForm.resx">`r`n      <LogicalName>GliderForm.resources</LogicalName>`r`n    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\GliderWarning.resx" />
+    <EmbeddedResource Include="UI\Forms\KeyEditor.resx">`r`n      <LogicalName>KeyEditor.resources</LogicalName>`r`n    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\LaunchpadReminder.resx" />
+    <EmbeddedResource Include="UI\Forms\LaunchpadReminder_1.resx" />
+    <EmbeddedResource Include="UI\Forms\PickWindow.resx" />
+    <EmbeddedResource Include="UI\Forms\ProfileProps.resx" />
+    <EmbeddedResource Include="UI\Forms\ProfileWizard.resx" />
+    <EmbeddedResource Include="UI\Forms\RemindBar.resx" />
+    <EmbeddedResource Include="UI\Forms\ResourceProvider.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authentication\AccountInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\AutoLoginManager.cs" />
+    <Compile Include="Authentication\EncryptedAccountStorage.cs" />
+    <Compile Include="Authentication\EncryptedDataTransport.cs" />
+    <Compile Include="Authentication\GDataEncryptionManager.cs" />
+    <Compile Include="Authentication\SimpleHttpClient.cs" />
+    <Compile Include="Authentication\WebNotificationService.cs" />
+    <Compile Include="Automation\AutomationStep.cs" />
+    <Compile Include="Automation\CodeCompiler.cs" />
+    <Compile Include="Automation\CompilerGeneratedCache.cs" />
+    <Compile Include="Automation\LootRouteParser.cs" />
+    <Compile Include="Automation\MachGlideRunner.cs" />
+    <Compile Include="Automation\ProfileGroupManager.cs" />
+    <Compile Include="Automation\ProfileStepCondition.cs" />
+    <Compile Include="Automation\ScriptExecutor.cs" />
+    <Compile Include="Automation\StepConditionType.cs" />
+    <Compile Include="Automation\StepStopAction.cs" />
+    <Compile Include="Core\ApplicationInitializer.cs" />
+    <Compile Include="Core\ApplicationLogger.cs" />
+    <Compile Include="Core\AssemblyInfo.cs" />
+    <Compile Include="Core\ConfigManager.cs" />
+    <Compile Include="Core\FileLogger.cs" />
+    <Compile Include="Core\GlideMainThread.cs" />
+    <Compile Include="Core\ILogger.cs" />
+    <Compile Include="Core\Logger.cs" />
+    <Compile Include="Core\MessageProvider.cs" />
+    <Compile Include="Core\StartupClass.cs" />
+    <Compile Include="Game\Classes\DeathknightConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\DruidConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\HunterConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\MageConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\PaladinConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\PriestConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\RogueConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\ShamanConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\WarlockConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Classes\WarriorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Combat\CombatController.cs" />
+    <Compile Include="Game\Combat\SpellActionData.cs" />
+    <Compile Include="Game\Combat\SpellbookManager.cs" />
+    <Compile Include="Game\Combat\SpellcastingManager.cs" />
+    <Compile Include="Game\Combat\SpellEnabledState.cs" />
+    <Compile Include="Game\Combat\SpellEntry.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Deathknight.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Druid.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Hunter.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Mage.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Paladin.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Priest.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Rogue.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Shaman.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Warlock.cs" />
+    <Compile Include="Game\GliderCommon\DefaultClasses\Warrior.cs" />
+    <Compile Include="Game\GliderCommon\DefaultScripts\DoAutoLog.cs" />
+    <Compile Include="Game\GliderCommon\DefaultScripts\OnGameFirstSeen.cs" />
+    <Compile Include="Game\GliderCommon\DefaultScripts\OnGliderStart.cs" />
+    <Compile Include="Game\GliderCommon\DefaultScripts\OnHearth.cs" />
+    <Compile Include="Game\Movement\CameraRotator.cs" />
+    <Compile Include="Game\Movement\FlightPointManager.cs" />
+    <Compile Include="Game\Movement\WorldToScreenProjector.cs" />
+    <Compile Include="Game\Objects\ChatLogManager.cs" />
+    <Compile Include="Game\Objects\DebuffDatabase.cs" />
+    <Compile Include="Game\Objects\DebuffEntry.cs" />
+    <Compile Include="Game\Objects\DebuffType.cs" />
+    <Compile Include="Game\Objects\EquipmentEnchantmentChecker.cs" />
+    <Compile Include="Game\Objects\Glider\Common\AppMode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\GameClass.cs" />
+    <Compile Include="Game\Objects\Glider\Common\GlideMode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\HealMode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\ConfigFieldType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GameMemoryAccess.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GBagItem.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GBarState.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GBuff.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GBuffType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GCombatResult.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GConfigField.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GConfigResult.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GConfigWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game\Objects\Glider\Common\Objects\GContainer.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GContext.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GCreatureType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GCursorItemTypes.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GGameCamera.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GGameClass.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GGlideMode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GHealDisposition.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GInterfaceHelper.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GInterfaceObject.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GItem.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GItemBagAction.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GItemDefinition.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GItemHelper.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GItemQuality.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GKey.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GKeyType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GLocation.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GMemory.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GMerchant.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GMonster.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GMoveHelper.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GMovement.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GNode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GObject.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GObjectList.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GObjectType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPartyHelper.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPartyMode.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPlayer.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPlayerClass.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPlayerFaction.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPlayerRace.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GPlayerSelf.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GProfile.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GRaidTargetIcon.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GReaction.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GScript.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GShortcut.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GShortcutType.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GSpells.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GSpellTimer.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GStance.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GTendency.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\GUnit.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\PartyBuff.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\PartyBuffBucket.cs" />
+    <Compile Include="Game\Objects\InventoryItem.cs" />
+    <Compile Include="Game\Objects\LootableCorpseTracker.cs" />
+    <Compile Include="Game\Objects\PartyManager.cs" />
+    <Compile Include="Game\Objects\PartyRole.cs" />
+    <Compile Include="Game\Objects\PlayerTracker.cs" />
+    <Compile Include="Game\Objects\RestStatusMonitor.cs" />
+    <Compile Include="Game\Objects\WaypointType.cs" />
+    <Compile Include="Memory\GProcessMemoryManipulator.cs" />
+    <Compile Include="Memory\MemoryMaster.cs" />
+    <Compile Include="Memory\MemoryOffsetTable.cs" />
+    <Compile Include="Memory\OffsetManager.cs" />
+    <Compile Include="Memory\WoW335aDescriptors.cs" />
+    <Compile Include="UI\Components\ChatFrameLocator.cs" />
+    <Compile Include="UI\Components\DialogMonitor.cs" />
+    <Compile Include="UI\Components\InputController.cs" />
+    <Compile Include="UI\Components\KeyboardHookManager.cs" />
+    <Compile Include="UI\Components\ScreenCapture.cs" />
+    <Compile Include="UI\Components\UIElement.cs" />
+    <Compile Include="UI\Forms\ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DebuffList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\DebuffPick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\EvoConfigWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\FactionReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\GliderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\GliderWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\KeyEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\LaunchpadReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\LaunchpadReminder_1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\PickWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ProfileProps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ProfileWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\RemindBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ResourceProvider.cs" />
+    <Compile Include="Utils\BoolStringOption.cs" />
+    <Compile Include="Utils\ByteSignaturePattern.cs" />
+    <Compile Include="Utils\CardStack.cs" />
+    <Compile Include="Utils\ClipboardHelper.cs" />
+    <Compile Include="Utils\EmptyPlaceholder.cs" />
+    <Compile Include="Utils\FixedString16.cs" />
+    <Compile Include="Utils\GameTimer.cs" />
+    <Compile Include="Utils\GDIHelper.cs" />
+    <Compile Include="Utils\GliderException.cs" />
+    <Compile Include="Utils\IntStringEntry.cs" />
+    <Compile Include="Utils\LogEntry.cs" />
+    <Compile Include="Utils\MACAddressReader.cs" />
+    <Compile Include="Utils\Matrix3.cs" />
+    <Compile Include="Utils\NetworkAdapterEntry.cs" />
+    <Compile Include="Utils\PlayingCard.cs" />
+    <Compile Include="Utils\RemoteViewerClient.cs" />
+    <Compile Include="Utils\RemoteViewerServer.cs" />
+    <Compile Include="Utils\SecurityDescriptorHelper.cs" />
+    <Compile Include="Utils\SixStateOption.cs" />
+    <Compile Include="Utils\SolitaireGameState.cs" />
+    <Compile Include="Utils\SolitaireMemoryOffsets.cs" />
+    <Compile Include="Utils\SolitaireSolver.cs" />
+    <Compile Include="Utils\SoundPlayer.cs" />
+    <Compile Include="Utils\TestThread.cs" />
+    <Compile Include="Utils\TimedStringEntry.cs" />
+    <Compile Include="Utils\TriStateOption.cs" />
+    <Compile Include="Utils\Vector3.cs" />
+    <Compile Include="Utils\WindowContextHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game\Objects\Glider\en-US.xml" />
+    <Content Include="Offsets.static.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\copilot-instructions.md" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

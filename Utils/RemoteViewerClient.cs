@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: RemoteViewerClient
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -340,29 +340,21 @@ public class RemoteViewerClient
                 {
                     method_6("BackgroundEnable not set, can't grab mouse\r\n");
                 }
-                else if (StartupClass.GliderManager == null)
-                {
-                    method_6("No Shadow driver, can't grab mouse\r\n");
-                }
                 else
                 {
                     if (!StartupClass.IsGliderInitialized)
                     {
-                        Logger.smethod_1("Setting up bg stuff");
-                        StartupClass.MainApplicationHandle = GProcessMemoryManipulator.OpenProcessWithAccess(StartupClass.AnotherIntegerValue);
-                        StartupClass.GliderManager.method_34(StartupClass.AnotherIntegerValue, StartupClass.MainApplicationHandle);
-                        StartupClass.IsGliderInitialized = true;
+                        StartupClass.smethod_62();
                     }
 
                     switch (lower3)
                     {
                         case "true":
-                            StartupClass.GliderManager.method_33(true);
+                            InputController.smethod_21(true);
                             method_6("Mouse grabbed\r\n");
                             break;
                         case "false":
                             InputController.smethod_21(false);
-                            StartupClass.GliderManager.method_33(false);
                             method_6("Mouse released\r\n");
                             break;
                         default:
@@ -435,9 +427,9 @@ public class RemoteViewerClient
                     }
                     else
                     {
-                        if (StartupClass.IsGliderInitialized || !InputController.bool_0)
+                        if (StartupClass.IsGliderInitialized || !InputController.UseClipboard)
                         {
-                            InputController.smethod_9(13);
+                            InputController.TapKey(13);
                             StartupClass.smethod_39(300);
                         }
 
@@ -499,7 +491,7 @@ public class RemoteViewerClient
                         var short_0 = smethod_1(string_1.Substring(string_1.IndexOf(" ") + 1));
                         if (short_0 > 0)
                         {
-                            InputController.smethod_0((short)short_0, true);
+                            InputController.SendKey((short)short_0, true);
                             method_6("Key down\r\n");
                         }
                         else
@@ -513,7 +505,7 @@ public class RemoteViewerClient
                         var short_0 = smethod_1(string_1.Substring(string_1.IndexOf(" ") + 1));
                         if (short_0 > 0)
                         {
-                            InputController.smethod_0((short)short_0, false);
+                            InputController.SendKey((short)short_0, false);
                             method_6("Key up\r\n");
                         }
                         else
@@ -533,7 +525,7 @@ public class RemoteViewerClient
                     if (lower1 == "/selectgame")
                     {
                         StartupClass.smethod_22();
-                        GProcessMemoryManipulator.CloseCurrentProcessHandle();
+                        GameMemoryAccess.CloseCurrentProcessHandle();
                         method_6("Game selected\r\n");
                     }
 
@@ -981,7 +973,7 @@ public class RemoteViewerClient
             MemoryStream memoryStream = null;
             try
             {
-                var intptr_0 = GProcessMemoryManipulator.GetWindowHandle();
+                var intptr_0 = GameMemoryAccess.GetWindowHandle();
                 if (intptr_0 == IntPtr.Zero)
                 {
                     Console.WriteLine("Failed: no window handle to game\r\n");

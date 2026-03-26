@@ -1,1016 +1,575 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: GClass78
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
 #nullable disable
+
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
-public class GProcessMemoryManipulator
+namespace Glider.Common.Objects
 {
-    public delegate bool GDelegate1(IntPtr intptr_0, IntPtr intptr_1);
-
-    private const uint uint_0 = 2035711;
-    private const uint uint_1 = 131088;
-    private const uint uint_2 = 16;
-    private const uint uint_3 = 32;
-    private const uint uint_4 = 8;
-    private const uint uint_5 = 1024;
-    private const uint uint_6 = 1;
-    private const uint uint_7 = 4096;
-    private const uint uint_8 = 32768;
-    private const int int_0 = 4;
-    private const int int_1 = 16;
-    public const int int_2 = 1;
-    public const int int_3 = 2;
-    public const int int_4 = 8;
-    public const int int_5 = 32;
-    public const int int_6 = 64;
-    public const int int_7 = 128;
-    public const int int_8 = 256;
-    public const int int_9 = 512;
-    public const int int_10 = 1024;
-    private const uint uint_9 = 1;
-    private const uint uint_10 = 2;
-    private const uint uint_11 = 4;
-    private const uint uint_12 = 8;
-    private const uint uint_13 = 16;
-    private const uint uint_14 = 32;
-    private const uint uint_15 = 64;
-    private const uint uint_16 = 128;
-    private const uint uint_17 = 256;
-    private const uint uint_18 = 512;
-    private const uint uint_19 = 1024;
-    private const int int_11 = 0;
-    private const int int_12 = 0;
-    private const int int_13 = 1;
-    private const int int_14 = 1;
-    private const int int_15 = 2;
-    private const int int_16 = 3;
-    private const int int_17 = 3;
-    private const int int_18 = 4;
-    private const int int_19 = 5;
-    private const int int_20 = 6;
-    private const int int_21 = 7;
-    private const int int_22 = 8;
-    private const int int_23 = 9;
-    private const int int_24 = 10;
-    private const int int_25 = 11;
-    private const int int_26 = 11;
-    private const uint uint_20 = 0;
-    private const uint uint_21 = 64;
-    private const uint uint_22 = 2;
-    public static bool bool_0 = false;
-    private static readonly bool bool_1 = true;
-    public static bool bool_2;
-    public static bool bool_3 = true;
-    public static int int_27;
-    private static readonly SortedList<int, string> Offsets = new SortedList<int, string>();
-    private static IntPtr intptr_0;
-    private static int int_28;
-    private static IntPtr intptr_1;
-
-    public static string GenerateRandomString()
+    internal static class WotlkOffsets
     {
-        var num = StartupClass.random_0.Next() % 10 + 8;
-        var stringBuilder = new StringBuilder();
-        while (stringBuilder.Length < num)
-            stringBuilder.Append((char)(StartupClass.random_0.Next() % 26 + 97));
-        return stringBuilder.ToString();
+        internal const uint ClientConnection = 0x00C79CE0;
+        internal const uint CurMgrOffset = 0x2ED0;
+        internal const uint FirstObject = 0xAC;
+        internal const uint LocalGuid = 0xC0;
+        internal const uint PlayerGuid = LocalGuid;
+        internal const uint TargetGuid = 0x00BD07B0;
+
+        internal const uint ObjStoragePointer = 0x8;
+        internal const uint ObjType = 0x14;
+        internal const uint ObjGuid = 0x30;
+        internal const uint NextObject = 0x3C;
+
+        internal const uint PosX = 0x9B8;
+        internal const uint PosY = 0x9BC;
+        internal const uint PosZ = 0x9C0;
+
+        internal const uint DescriptorBase = 0x8;
+        internal const uint UnitFieldHealth = 0x6C;
+        internal const uint UnitFieldMaxHealth = 0x74;
+        internal const uint UnitFieldPower1 = 0x70;
+        internal const uint UnitFieldMaxPower1 = 0x78;
+        internal const uint UnitFieldPower2 = 0x74;
+        internal const uint UnitFieldPower4 = 0x7C;
+        internal const uint UnitFieldFactionTemplate = 0x90;
+
+        internal const uint PlayerNameStore = 0x00C79D18;
+        internal const uint MapId = 0x00AB63BC;
     }
 
-    public static string smethod_0()
+    internal static class GProcessMemoryManipulator
     {
-        return GenerateRandomString();
-    }
+        private const int ERROR_PARTIAL_COPY = 299;
 
-    public static int smethod_1()
-    {
-        return StartupClass.smethod_18();
-    }
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, out int lpNumberOfBytesRead);
 
-    public static GStruct22 smethod_4()
-    {
-        return GetCursorPosition();
-    }
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, out int lpNumberOfBytesWritten);
 
-    public static int AttachToWowProcess()
-    {
-        var gclass65 = new ProcessEnumerator();
-        gclass65.method_0();
-        if (StartupClass.int_12 != 0)
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool CloseHandle(IntPtr hObject);
+
+        [DllImport("user32.dll", EntryPoint = "GetForegroundWindow")]
+        private static extern IntPtr GetForegroundWindowNative();
+
+        // ADDED: Replaces GetWindowRect to ignore Windows 11 invisible borders
+        [DllImport("user32.dll")]
+        private static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        // ADDED: Translates the Client area to Screen coordinates for InputController compatibility
+        [DllImport("user32.dll")]
+        private static extern bool ClientToScreen(IntPtr hWnd, ref POINT lpPoint);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos(out POINT lpPoint);
+
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow")]
+        private static extern bool SetForegroundWindowNative(IntPtr hWnd);
+
+        [DllImport("user32.dll", EntryPoint = "ShowWindow")]
+        private static extern bool ShowWindowNative(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+
+        [DllImport("kernel32.dll", EntryPoint = "Sleep")]
+        private static extern void SleepNative(uint dwMilliseconds);
+
+        // ADDED: For checking minimized state
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsIconic(IntPtr hWnd);
+
+        private const uint PROCESS_VM_READ = 0x0010;
+        private const uint PROCESS_VM_WRITE = 0x0020;
+        private const uint PROCESS_VM_OPERATION = 0x0008;
+        private const uint PROCESS_QUERY_INFORMATION = 0x0400;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
         {
-            if (gclass65.method_2(StartupClass.int_12) == 0)
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
+        public struct GStruct22
+        {
+            public int Width;
+            public int Height;
+            public int Left;
+            public int Top;
+
+            public int method_0() => Height;
+            public int method_1() => Width;
+
+            public bool method_5(int x, int y)
+            {
+                return x >= Left && x < Left + Width && y >= Top && y < Top + Height;
+            }
+
+            public int int_0 => Left;
+            public int int_1 => Top;
+        }
+
+        private static IntPtr _currentProcessHandle = IntPtr.Zero;
+        private static int _currentProcessId = 0;
+
+        internal static bool bool_2 { get; set; }
+        internal static bool bool_3 { get; set; }
+        internal static int int_27 { get; set; }
+
+        private static bool IsMemoryLoggingEnabled()
+        {
+            return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("Log_Memory");
+        }
+
+        private static string FormatAddressHex(int address)
+        {
+            return "0x" + unchecked((uint)address).ToString("x8");
+        }
+
+        private static string FormatAddressHex(uint address)
+        {
+            return "0x" + address.ToString("x8");
+        }
+
+        private static string FormatBytesForLog(byte[] bytes, int length)
+        {
+            if (bytes == null || bytes.Length == 0 || length <= 0)
+                return "<empty>";
+
+            var count = Math.Min(Math.Min(bytes.Length, length), 64);
+            var builder = new StringBuilder(count * 3);
+            for (var index = 0; index < count; ++index)
+            {
+                if (index > 0)
+                    builder.Append(' ');
+                builder.Append(bytes[index].ToString("x2"));
+            }
+
+            if (length > count)
+                builder.Append(" ...");
+
+            return builder.ToString();
+        }
+
+        private static void LogMemoryAccess(string message)
+        {
+            if (!IsMemoryLoggingEnabled())
+                return;
+
+            GContext.Main.Log("[Log_Memory] " + message);
+        }
+
+        internal static int ReadInt32(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4) return 0;
+            return BitConverter.ToInt32(bytes, 0);
+        }
+
+        internal static uint ReadUInt32(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4) return 0U;
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        internal static uint ReadUInt32(uint address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4) return 0U;
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        internal static long ReadInt64(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 8, debugClue);
+            if (bytes.Length < 8) return 0;
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        internal static long ReadInt64(uint address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 8, debugClue);
+            if (bytes.Length < 8) return 0;
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        internal static float ReadFloat(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 4, debugClue);
+            if (bytes.Length < 4) return 0f;
+            return BitConverter.ToSingle(bytes, 0);
+        }
+
+        internal static byte ReadByte(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 1, debugClue);
+            return bytes.Length > 0 ? bytes[0] : (byte)0;
+        }
+
+        internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue)
+        {
+            return ReadBytesInternal(startAddress, lengthToRead, debugClue, false);
+        }
+
+        internal static byte[] ReadBytes(uint startAddress, int lengthToRead, string debugClue)
+        {
+            return ReadBytesInternal(startAddress, lengthToRead, debugClue, false);
+        }
+
+        internal static byte[] ReadBytes(int startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
+        {
+            return ReadBytesInternal(startAddress, lengthToRead, debugClue, allowPartialRead);
+        }
+
+        internal static byte[] ReadBytesRaw(int startAddress, int lengthToRead)
+        {
+            return ReadBytesInternal(startAddress, lengthToRead, null, true);
+        }
+
+        private static byte[] ReadBytesInternal(int startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
+        {
+            var buffer = new byte[lengthToRead];
+
+            if (_currentProcessHandle == IntPtr.Zero) return buffer;
+
+            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            if (!ReadProcessMemory(_currentProcessHandle, nativeAddress, buffer, lengthToRead, out int bytesRead))
+            {
+                var lastError = Marshal.GetLastWin32Error();
+                if (lastError == ERROR_PARTIAL_COPY)
+                    return allowPartialRead ? buffer : new byte[0];
+                return allowPartialRead ? buffer : new byte[0];
+            }
+
+            if (bytesRead < lengthToRead && !allowPartialRead) return new byte[0];
+            return buffer;
+        }
+
+        private static byte[] ReadBytesInternal(uint startAddress, int lengthToRead, string debugClue, bool allowPartialRead)
+        {
+            var buffer = new byte[lengthToRead];
+            if (_currentProcessHandle == IntPtr.Zero) return buffer;
+
+            if (!ReadProcessMemory(_currentProcessHandle, new IntPtr((long)startAddress), buffer, lengthToRead, out int bytesRead))
+            {
+                var lastError = Marshal.GetLastWin32Error();
+                if (lastError == ERROR_PARTIAL_COPY)
+                    return allowPartialRead ? buffer : new byte[0];
+                return allowPartialRead ? buffer : new byte[0];
+            }
+
+            if (bytesRead < lengthToRead && !allowPartialRead) return new byte[0];
+            return buffer;
+        }
+
+        internal static int ReadIntFromOffset(int address, string debugClue) => ReadInt32(address, debugClue);
+        internal static long ReadULongFromOffset(int address, string debugClue) => ReadInt64(address, debugClue);
+        internal static float ReadFloatFromOffset(int address, string debugClue) => ReadFloat(address, debugClue);
+
+        internal static double ReadDouble(int address, string debugClue)
+        {
+            var bytes = ReadBytes(address, 8, debugClue);
+            if (bytes.Length < 8) return 0.0;
+            return BitConverter.ToDouble(bytes, 0);
+        }
+
+        internal static float ReadFloatAlternate(int address, string debugClue) => ReadFloat(address, debugClue);
+
+        internal static string ReadString(int startAddress, int maxLength, string debugClue)
+        {
+            return ReadStringInternal(startAddress, maxLength, debugClue);
+        }
+
+        internal static string ReadStringInternal(int startAddress, int maxLength, string debugClue)
+        {
+            var bytes = ReadBytesRaw(startAddress, maxLength);
+            var nullIndex = Array.IndexOf(bytes, (byte)0);
+            var length = nullIndex >= 0 ? nullIndex : bytes.Length;
+            return Encoding.ASCII.GetString(bytes, 0, length);
+        }
+
+        internal static int WriteBytes(int startAddress, byte[] dataToWrite, int lengthToWrite)
+        {
+            if (_currentProcessHandle == IntPtr.Zero) return 0;
+
+            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            if (!WriteProcessMemory(_currentProcessHandle, nativeAddress, dataToWrite, lengthToWrite, out int bytesWritten))
                 return 0;
-            StartupClass.AnotherIntegerValue = StartupClass.int_12;
-            StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
-            return StartupClass.AnotherIntegerValue;
+
+            return bytesWritten;
         }
 
-        if (StartupClass.AdditionalApplicationHandle != IntPtr.Zero)
+        internal static bool IsMemoryReadable(int startAddress)
         {
-            if (smethod_56(StartupClass.AnotherIntegerValue))
-                return StartupClass.AnotherIntegerValue;
-            CloseHandle(StartupClass.AdditionalApplicationHandle);
-            StartupClass.AdditionalApplicationHandle = IntPtr.Zero;
-            StartupClass.AnotherIntegerValue = 0;
-            StartupClass.IsForegroundEnabled = true;
-            StartupClass.IsGliderInitialized = false;
+            if (_currentProcessHandle == IntPtr.Zero) return false;
+
+            var testBuffer = new byte[1];
+            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            return ReadProcessMemory(_currentProcessHandle, nativeAddress, testBuffer, 1, out _);
         }
 
-        var str = ConfigManager.gclass61_0.method_2("AttachEXE");
-        if (StartupClass.IsAttached)
-            str = "Solitaire.exe";
-        if (gclass65.method_1(str) == 0)
-            return 0;
-        var num = 0;
-        foreach (var gclass66 in gclass65.gclass66_0)
-            if (string.Compare(gclass66.string_0, str, true) == 0 && !Offsets.ContainsKey(gclass66.int_0))
+        internal static int ReadPointerChain(int startAddress, int lengthToRead, int maxDepth)
+        {
+            int currentAddress = startAddress;
+            int depth = 0;
+
+            while (depth < maxDepth)
             {
-                num = gclass66.int_0;
-                break;
+                var pointerBytes = ReadBytesRaw(currentAddress, 4);
+                if (pointerBytes.Length < 4) return currentAddress;
+                currentAddress = BitConverter.ToInt32(pointerBytes, 0);
+                depth++;
             }
-
-        if (num == 0)
-            return 0;
-        StartupClass.AnotherIntegerValue = num;
-        StartupClass.MainApplicationHandle = smethod_29(StartupClass.AnotherIntegerValue);
-        return StartupClass.AnotherIntegerValue;
-    }
-
-    public static Rectangle GetWindowRectangle()
-    {
-        var gstruct22_0 = new GStruct22();
-        GetWindowRect(smethod_29(StartupClass.AnotherIntegerValue), out gstruct22_0);
-        return new Rectangle(gstruct22_0.int_0, gstruct22_0.int_1, gstruct22_0.int_2 - gstruct22_0.int_0,
-            gstruct22_0.int_3 - gstruct22_0.int_1);
-    }
-
-    public static IntPtr GetWindowHandle()
-    {
-        return smethod_29(StartupClass.AnotherIntegerValue);
-    }
-
-    public static GStruct22 GetCursorPosition()
-    {
-        var intptr_2 = smethod_29(StartupClass.AnotherIntegerValue);
-        var gstruct22_0 = new GStruct22(0, 0, 0, 0);
-        if (!GetClientRect(intptr_2, out gstruct22_0))
-        {
-            Logger.LogMessage("GetClientRect failed, last error: " + Marshal.GetLastWin32Error());
-            StartupClass.smethod_27(false, "GetClientRectBurp");
+            return currentAddress;
         }
 
-        var point_0_1 = new Point(gstruct22_0.int_0, gstruct22_0.int_1);
-        var point_0_2 = new Point(gstruct22_0.int_2, gstruct22_0.int_3);
-        ClientToScreen(intptr_2, ref point_0_1);
-        ClientToScreen(intptr_2, ref point_0_2);
-        gstruct22_0 = new GStruct22(point_0_1.X, point_0_1.Y, point_0_2.X, point_0_2.Y);
-        return gstruct22_0;
-    }
+        internal static string GenerateRandomString() => Guid.NewGuid().ToString("N").Substring(0, 8);
+        internal static string smethod_0() => GenerateRandomString();
+        internal static string smethod_10(int startAddress, int maxLength, string debugClue) => ReadString(startAddress, maxLength, debugClue);
+        internal static int smethod_11(int startAddress, string debugClue) => ReadInt32(startAddress, debugClue);
+        internal static long smethod_12(int startAddress, string debugClue) => ReadInt64(startAddress, debugClue);
+        internal static double smethod_13(int startAddress, string debugClue) => ReadDouble(startAddress, debugClue);
 
-    public static void SetProcessId(int int_29)
-    {
-        Logger.smethod_1("Forgetting app: " + int_29);
-        Offsets.Add(int_29, "");
-    }
+        internal static bool IsWowProcessRunning() => Process.GetProcessesByName("WoW").Length > 0;
 
-    public static IntPtr OpenProcessHandle(int int_29)
-    {
-        var num = !StartupClass.IsAttached
-            ? !ConfigManager.gclass61_0.method_5("AllowWriteBytes")
-                ? OpenProcess(24U, false, int_29)
-                : OpenProcess(1080U, false, int_29)
-            : OpenProcess(1048U, false, int_29);
-        if (!(num == IntPtr.Zero))
-            return num;
-        return StartupClass.GliderManager != null ? StartupClass.GliderManager.method_20(int_29) : IntPtr.Zero;
-    }
-
-    public static void CloseProcessHandle(IntPtr intptr_2)
-    {
-        CloseHandle(intptr_2);
-    }
-
-    public static string BytesToHexString(byte[] byte_0)
-    {
-        var stringBuilder = new StringBuilder();
-        foreach (var num in byte_0)
-            if (num < 16)
-                stringBuilder.AppendFormat("0{0:x} ", num);
-            else
-                stringBuilder.AppendFormat("{0:x} ", num);
-        stringBuilder.Remove(stringBuilder.Length - 1, 1);
-        return stringBuilder.ToString();
-    }
-
-    public static string ReadString(int int_29, int int_30, string string_0)
-    {
-        return smethod_10(int_29, int_30, string_0);
-    }
-
-    public static string smethod_10(int int_29, int int_30, string string_0)
-    {
-        return ReadStringInternal(int_29, int_30, string_0);
-    }
-
-    public static string ReadStringInternal(int int_29, int int_30, string string_0)
-    {
-        GStruct21 gstruct21_0;
-        if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) > 0)
+        internal static int AttachToWowProcess()
         {
-            var num = gstruct21_0.int_2 - (int_29 - gstruct21_0.int_0);
-            if (num < int_30)
+            var processes = Process.GetProcessesByName("WoW");
+            if (processes.Length == 0) return 0;
+
+            SetProcessId(processes[0].Id);
+            return processes[0].Id;
+        }
+
+        internal static void SetProcessId(int processId)
+        {
+            _currentProcessId = processId;
+            CloseCurrentProcessHandle();
+            _currentProcessHandle = OpenProcess(
+                PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_INFORMATION,
+                false,
+                processId);
+        }
+
+        internal static IntPtr OpenProcessHandle(int processId) => OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, processId);
+        internal static IntPtr OpenProcessWithAccess(int processId) => OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_INFORMATION, false, processId);
+
+        internal static void CloseProcessHandle(IntPtr processHandle)
+        {
+            if (processHandle != IntPtr.Zero) CloseHandle(processHandle);
+        }
+
+        internal static void CloseCurrentProcessHandle()
+        {
+            if (_currentProcessHandle != IntPtr.Zero)
             {
-                int_30 = num;
-                Logger.smethod_1("Cutting down maximum read on region end: 0x" + int_30.ToString("x"));
+                CloseHandle(_currentProcessHandle);
+                _currentProcessHandle = IntPtr.Zero;
             }
         }
 
-        var bytes = smethod_20(int_29, int_30);
-        if (bytes == null)
-            return "(read failed)";
-        var count = 0;
-        while (count < bytes.Length && bytes[count] != 0)
-            ++count;
-        if (count == bytes.Length)
-            count = bytes.Length - 1;
-        return new UTF8Encoding().GetString(bytes, 0, count);
-    }
+        internal static IntPtr GetWindowHandle() => GetForegroundWindowNative();
 
-    public static int ReadInt32(int int_29, string string_0)
-    {
-        var numArray = smethod_17(int_29, 4, string_0);
-        return numArray == null ? 0 : BitConverter.ToInt32(numArray, 0);
-    }
-
-    public static int smethod_11(int int_29, string string_0)
-    {
-        return ReadInt32(int_29, string_0);
-    }
-
-    public static long ReadInt64(int int_29, string string_0)
-    {
-        var numArray = smethod_17(int_29, 8, string_0);
-        return numArray == null ? 0L : BitConverter.ToInt64(numArray, 0);
-    }
-
-    public static long smethod_12(int int_29, string string_0)
-    {
-        return ReadInt64(int_29, string_0);
-    }
-
-    public static float ReadFloat(int int_29, string string_0)
-    {
-        var numArray = smethod_17(int_29, 4, string_0);
-        return numArray == null ? 0.0f : BitConverter.ToSingle(numArray, 0);
-    }
-
-    public static double ReadDouble(int int_29, string string_0)
-    {
-        var numArray = smethod_17(int_29, 8, string_0);
-        return numArray == null ? 0.0 : BitConverter.ToDouble(numArray, 0);
-    }
-
-    public static double smethod_14(int int_29, string string_0)
-    {
-        return ReadDouble(int_29, string_0);
-    }
-
-    public static byte ReadByte(int int_29, string string_0)
-    {
-        var numArray = smethod_17(int_29, 1, string_0);
-        return numArray == null ? (byte)0 : numArray[0];
-    }
-
-    public static int WriteBytes(int int_29, byte[] byte_0, int int_30)
-    {
-        int int_31;
-        return WriteProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31) != 0 ? int_31 : 0;
-    }
-
-    public static byte[] smethod_17(int int_29, int int_30, string string_0)
-    {
-        return smethod_19(int_29, int_30, string_0, false);
-    }
-
-    public static byte[] ReadBytes(int int_29, int int_30, string string_0)
-    {
-        return smethod_17(int_29, int_30, string_0);
-    }
-
-    public static byte[] ReadBytes(int int_29, int int_30, string string_0, bool bool_4)
-    {
-        return smethod_19(int_29, int_30, string_0, bool_4);
-    }
-
-    private static int ReadProcessMemoryInternal(int int_29, byte[] byte_0, int int_30, out int int_31)
-    {
-        if (StartupClass.bool_14 && StartupClass.GliderManager != null)
+        internal static IntPtr GetMainWindowHandle(int processId)
         {
-            var num = StartupClass.GliderManager.method_41(int_29, byte_0, int_30, out int_31);
-            int_27 = num < int_30 ? 299 : 0;
-            return num;
+            var process = Process.GetProcessById(processId);
+            return process?.MainWindowHandle ?? IntPtr.Zero;
         }
 
-        var num1 = ReadProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, int_30, out int_31);
-        if (num1 != 0)
-            int_27 = Marshal.GetLastWin32Error();
-        return num1;
-    }
-
-    private static int smethod_18(int int_29, byte[] byte_0, int int_30, out int int_31)
-    {
-        return ReadProcessMemoryInternal(int_29, byte_0, int_30, out int_31);
-    }
-
-    public static byte[] smethod_19(int int_29, int int_30, string string_0, bool bool_4)
-    {
-        var byte_0 = new byte[int_30];
-        int int_31;
-        if (smethod_18(int_29, byte_0, int_30, out int_31) == 0)
+        internal static GStruct22 GetCursorPosition()
         {
-            if (int_27 == 299 && bool_4)
+            RECT rect;
+            POINT pt = new POINT { X = 0, Y = 0 };
+            IntPtr windowHandle = StartupClass.MainApplicationHandle;
+
+            if (windowHandle == IntPtr.Zero)
+                windowHandle = GetForegroundWindowNative();
+
+            // FIX: Using GetClientRect + ClientToScreen ensures we don't include Windows 11 drop-shadow borders
+            if (windowHandle != IntPtr.Zero && GetClientRect(windowHandle, out rect))
             {
-                Logger.LogMessage("! Partial read @ " + int_29.ToString("x") + " for " + string_0 +
-                                   ": expected bytes = " + int_30 + ", got bytes = " + int_31);
-                byte_0[int_31] = 0;
-            }
-            else
-            {
-                if (!bool_2)
+                ClientToScreen(windowHandle, ref pt);
+                var width = rect.Right - rect.Left;
+                var height = rect.Bottom - rect.Top;
+
+                if (width > 0 && height > 0)
                 {
-                    bool_2 = true;
-                    Logger.smethod_1(MessageProvider.smethod_2(712, int_29.ToString("x"), string_0, int_27));
-                }
-
-                if (bool_1)
-                {
-                    if (StartupClass.bool_13)
-                        Logger.LogMessage(string.Format(MessageProvider.GetMessage(341), int_29, string_0));
-                    StartupClass.smethod_27(true, "ReadBytesFail");
-                }
-
-                return null;
-            }
-        }
-
-        return byte_0;
-    }
-
-    public static byte[] smethod_20(int int_29, int int_30)
-    {
-        var byte_0 = new byte[int_30];
-        return smethod_18(int_29, byte_0, int_30, out var _) == 0 ? null : byte_0;
-    }
-
-    public static byte[] ReadBytesRaw(int int_29, int int_30)
-    {
-        return smethod_20(int_29, int_30);
-    }
-
-    public static int ReadIntFromOffset(int int_29, string string_0)
-    {
-        var bytes = smethod_20(int_29, 4);
-        return bytes == null ? 0 : BitConverter.ToInt32(bytes, 0);
-    }
-
-    public static float ReadFloatFromOffset(int int_29, string string_0)
-    {
-        var bytes = smethod_20(int_29, 4);
-        return bytes == null ? 0f : BitConverter.ToSingle(bytes, 0);
-    }
-
-    public static float ReadFloatAlternate(int int_29, string string_0)
-    {
-        var bytes = smethod_20(int_29, 1);
-        return bytes == null ? 0f : (float)bytes[0];
-    }
-
-    public static long ReadLongFromOffset(int int_29, string string_0)
-    {
-        var bytes = smethod_20(int_29, 8);
-        return bytes == null ? 0L : BitConverter.ToInt64(bytes, 0);
-    }
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern int ResumeThread(IntPtr intptr_2);
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern int GetProcAddress(int int_29, string string_0);
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern int GetModuleHandle(string string_0);
-
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowText(IntPtr intptr_2, string string_0);
-
-    [DllImport("user32.dll")]
-    private static extern uint RealGetWindowClass(
-        IntPtr intptr_2,
-        StringBuilder stringBuilder_0,
-        int int_29);
-
-    [DllImport("User32.dll")]
-    public static extern IntPtr GetDesktopWindow();
-
-    [DllImport("User32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-
-    [DllImport("User32.dll")]
-    public static extern bool EnumChildWindows(IntPtr intptr_2, Delegate delegate_0, IntPtr intptr_3);
-
-    [DllImport("User32.dll")]
-    public static extern int GetWindowText(
-        IntPtr intptr_2,
-        StringBuilder stringBuilder_0,
-        int int_29);
-
-    [DllImport("User32.dll")]
-    public static extern bool ClientToScreen(IntPtr intptr_2, ref Point point_0);
-
-    [DllImport("kernel32.dll")]
-    public static extern int VirtualQueryEx(
-        IntPtr intptr_2,
-        int int_29,
-        out GStruct21 gstruct21_0,
-        int int_30);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr OpenProcess(uint uint_23, bool bool_4, int int_29);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool TerminateProcess(IntPtr intptr_2, uint uint_23);
-
-    [DllImport("kernel32")]
-    private static extern bool CloseHandle(IntPtr intptr_2);
-
-    [DllImport("kernel32", SetLastError = true)]
-    public static extern int ReadProcessMemory(
-        IntPtr intptr_2,
-        int int_29,
-        byte[] byte_0,
-        int int_30,
-        out int int_31);
-
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr intptr_2);
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern int VirtualProtectEx(
-        IntPtr intptr_2,
-        int int_29,
-        int int_30,
-        int int_31,
-        out int int_32);
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern int WriteProcessMemory(
-        IntPtr intptr_2,
-        int int_29,
-        byte[] byte_0,
-        int int_30,
-        out int int_31);
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr intptr_2, out GStruct22 gstruct22_0);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool GetClientRect(IntPtr intptr_2, out GStruct22 gstruct22_0);
-
-    public static void WorldToScreen(double double_0, double double_1, out int int_29, out int int_30)
-    {
-        var gstruct22 = smethod_4();
-        int_29 = gstruct22.int_0 + (int)(double_0 * gstruct22.method_1());
-        int_30 = gstruct22.int_1 + (int)(double_1 * gstruct22.method_0());
-    }
-
-    public static void ScreenToWorld(out double double_0, out double double_1, int int_29, int int_30)
-    {
-        var gstruct22 = smethod_4();
-        double_0 = (int_29 - gstruct22.int_0) / (double)gstruct22.method_1();
-        double_1 = (int_30 - gstruct22.int_1) / (double)gstruct22.method_0();
-    }
-
-    [DllImport("user32")]
-    public static extern int EnumWindows(GDelegate1 gdelegate1_0, IntPtr intptr_2);
-
-    [DllImport("kernel32.dll")]
-    public static extern int GetCurrentProcessId();
-
-    [DllImport("user32")]
-    public static extern int GetWindowThreadProcessId(IntPtr intptr_2, out int int_29);
-
-    public static IntPtr GetMainWindowHandle(int int_29)
-    {
-        var gclass36 = new GameTimer(20000);
-        gclass36.method_4();
-        while (!gclass36.method_3())
-        {
-            var num = smethod_29(int_29);
-            if (num != IntPtr.Zero)
-                return num;
-            Thread.Sleep(500);
-        }
-
-        return new IntPtr(0);
-    }
-
-    public static IntPtr smethod_29(int int_29)
-    {
-        return OpenProcessWithAccess(int_29);
-    }
-
-    public static bool IsWowProcessRunning()
-    {
-        var procAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "ReadProcessMemory");
-        if (procAddress == 0)
-            return true;
-        var num = (uint)Marshal.ReadInt32(new IntPtr(procAddress));
-        return num == 2337669003U || num == 2381089621U;
-    }
-
-    public static IntPtr OpenProcessWithAccess(int int_29)
-    {
-        if (int_29 == 0)
-            int_29 = smethod_1();
-        if (int_29 == 0)
-            return IntPtr.Zero;
-        intptr_0 = IntPtr.Zero;
-        int_28 = int_29;
-        EnumWindows(smethod_30, IntPtr.Zero);
-        return intptr_0;
-    }
-
-    private static bool smethod_30(IntPtr intptr_2, IntPtr intptr_3)
-    {
-        int int_29;
-        GetWindowThreadProcessId(intptr_2, out int_29);
-        if (int_29 != int_28)
-            return true;
-        intptr_0 = intptr_2;
-        return false;
-    }
-
-    public static int GetProcessId()
-    {
-        if (!MemoryOffsetTable.Instance.HasOffset("Julie") || StartupClass.AdditionalApplicationHandle == IntPtr.Zero || !bool_3)
-            return 0;
-        var num1 = MemoryOffsetTable.Instance.GetIntOffset("DS1");
-        var num2 = MemoryOffsetTable.Instance.GetIntOffset("DS2");
-        var num3 = MemoryOffsetTable.Instance.GetIntOffset("Julie");
-        var num4 = 0;
-        var int_29 = num1 - 4096;
-        var tickCount = Environment.TickCount;
-        var byte_0 = new byte[4096];
-        var num5 = 0;
-        while (int_29 < num2)
-        {
-            ++num5;
-            int_29 += 4096;
-            int int_31;
-            ReadProcessMemory(StartupClass.AdditionalApplicationHandle, int_29, byte_0, 4096, out int_31);
-            if (4096 == int_31 && int_29 <= num3 && int_29 + int_31 > num3)
-            {
-                var startIndex = num3 - int_29;
-                if (BitConverter.ToInt32(byte_0, startIndex) != 0)
-                    num4 = 1;
-            }
-        }
-
-        if (num4 > 0 && StartupClass.GameMemoryReader != null && MemoryOffsetTable.Instance.HasOffset("AllowFS"))
-            StartupClass.GameMemoryReader.method_6(MemoryOffsetTable.Instance.GetIntOffset("JulieDrop"),
-                MemoryOffsetTable.Instance.GetIntOffset("JulieSize"));
-        if (num4 > 0)
-            StartupClass.smethod_37(WardenCheckStatus.const_1);
-        return num4;
-    }
-
-    public static string GetProcessExecutablePath()
-    {
-        var path = StartupClass.SomeStringData + "wtf\\config.wtf";
-        var str1 = "(unknown)";
-        try
-        {
-            var streamReader = File.OpenText(path);
-            while (true)
-            {
-                string str2;
-                do
-                {
-                    str2 = streamReader.ReadLine();
-                    if (str2 == null)
-                        goto label_5;
-                } while (str2.IndexOf("realmName") <= 0);
-
-                var num1 = str2.IndexOf('"');
-                var num2 = str2.LastIndexOf('"');
-                str1 = str2.Substring(num1 + 1, num2 - num1 - 1);
-            }
-
-        label_5:
-            streamReader.Close();
-        }
-        catch (Exception)
-        {
-        }
-
-        return str1;
-    }
-
-    public static void CloseCurrentProcessHandle()
-    {
-        SetWindowPos(StartupClass.MainApplicationHandle, new IntPtr(0), 0, 0, 0, 0, 259U);
-    }
-
-    public static int GetProcessIdFromWindow()
-    {
-        var int_29 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("GameTimeType"), "gt1");
-        var num1 = smethod_11(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF1"), "gt2");
-        long long_0 = 0;
-        if (num1 >= 2)
-        {
-            int num2 = QueryPerformanceCounter(ref long_0);
-        }
-        else
-        {
-            long_0 = Environment.TickCount;
-        }
-
-        var num3 = smethod_14(int_29, "gt0");
-        var num4 = smethod_14(int_29 + MemoryOffsetTable.Instance.GetIntOffset("GameTimeTypeF2"), "gt3");
-        return (int)(long_0 * num3 + num4);
-    }
-
-    public static bool IsMemoryReadable(int int_29)
-    {
-        GStruct21 gstruct21_0;
-        if (VirtualQueryEx(StartupClass.AdditionalApplicationHandle, int_29, out gstruct21_0, 28) != 28)
-        {
-            Logger.smethod_1("! VirtualQueryEx failed at 0x" + int_29.ToString("x"));
-            return false;
-        }
-
-        return gstruct21_0.uint_0 == 4U || gstruct21_0.uint_0 == 64U;
-    }
-
-    public static int ReadPointerChain(int int_29, int int_30, int int_31)
-    {
-        int int_32;
-        VirtualProtectEx(StartupClass.AdditionalApplicationHandle, int_29, int_30, int_31, out int_32);
-        return int_32;
-    }
-
-    [DllImport("kernel32.dll")]
-    private static extern short QueryPerformanceCounter(ref long long_0);
-
-    [DllImport("kernel32.dll")]
-    public static extern void Sleep(uint uint_23);
-
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowPos(
-        IntPtr intptr_2,
-        IntPtr intptr_3,
-        int int_29,
-        int int_30,
-        int int_31,
-        int int_32,
-        uint uint_23);
-
-    [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr intptr_2, int int_29);
-
-    public static void ShowWindow(IntPtr intptr_2)
-    {
-        ShowWindow(intptr_2, 5);
-    }
-
-    public static void HideWindow(IntPtr intptr_2)
-    {
-        ShowWindow(intptr_2, 0);
-    }
-
-    //public static void SetForegroundWindow(IntPtr intptr_2)
-    //{
-    //    ShowWindow(intptr_2, 0);
-    //}
-
-    public static bool GetWindowPosition(IntPtr intptr_2, out Point point_0)
-    {
-        point_0 = new Point();
-        point_0.X = 0;
-        point_0.Y = 0;
-        GStruct22 gstruct22_0;
-        if (!GetWindowRect(intptr_2, out gstruct22_0))
-            return false;
-        point_0.X = gstruct22_0.int_0;
-        point_0.Y = gstruct22_0.int_1;
-        return true;
-    }
-
-    public static bool GetWindowSize(IntPtr intptr_2, out Size size_0)
-    {
-        size_0 = new Size();
-        size_0.Width = 0;
-        size_0.Height = 0;
-        GStruct22 gstruct22_0;
-        if (!GetWindowRect(intptr_2, out gstruct22_0))
-            return false;
-        size_0.Width = gstruct22_0.method_1() - 1;
-        size_0.Height = gstruct22_0.method_0() - 1;
-        return true;
-    }
-
-    public static void SetWindowPosition(IntPtr intptr_2, Point point_0)
-    {
-        SetWindowPos(intptr_2, IntPtr.Zero, point_0.X, point_0.Y, 0, 0, 277U);
-    }
-
-    public static void SetWindowSize(IntPtr intptr_2, Size size_0)
-    {
-        SetWindowPos(intptr_2, IntPtr.Zero, 0, 0, size_0.Width, size_0.Height, 278U);
-    }
-
-    public static void GetForegroundWindow(IntPtr intptr_2, Size size_0, Point point_0)
-    {
-        SetWindowPos(intptr_2, IntPtr.Zero, point_0.X, point_0.Y, size_0.Width, size_0.Height, 276U);
-    }
-
-    public static void IsWindowVisible(
-        Control control_0,
-        string string_0,
-        HelpNavigator helpNavigator_0,
-        object object_0)
-    {
-        var url = string_0;
-        Help.ShowHelp(control_0, url, helpNavigator_0, object_0);
-        smethod_45();
-    }
-
-    private static void smethod_45()
-    {
-        StartupClass.smethod_45();
-    }
-
-    public static void IsWindowMinimized()
-    {
-        new Thread(smethod_46).Start();
-    }
-
-    public static void smethod_46()
-    {
-        try
-        {
-            for (var index = 50; index > 0 && !smethod_47(); --index)
-                StartupClass.smethod_39(100);
-        }
-        catch (Exception ex)
-        {
-            Logger.smethod_1(MessageProvider.smethod_2(347, ex.Message));
-        }
-    }
-
-    public static bool smethod_47()
-    {
-        var intptr_2 = smethod_49();
-        if (!(intptr_2 != IntPtr.Zero))
-            return false;
-        if (ConfigManager.gclass61_0.method_2("TitleBarRename") == "True")
-        {
-            if (ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True")
-                SetWindowText(intptr_2, MessageProvider.smethod_2(348, smethod_0()));
-            else
-                SetWindowText(intptr_2, MessageProvider.smethod_2(713, "TitleBarName"));
-        }
-
-        return true;
-    }
-
-    public static void smethod_48(Form form_0)
-    {
-        if (!(ConfigManager.gclass61_0.method_2("TitleBarRename") == "True") ||
-            !(ConfigManager.gclass61_0.method_2("TitleBarRandom") == "True"))
-            return;
-        form_0.Text = smethod_0();
-    }
-
-    private static IntPtr smethod_49()
-    {
-        intptr_1 = IntPtr.Zero;
-        EnumWindows(smethod_50, IntPtr.Zero);
-        return intptr_1;
-    }
-
-    private static bool smethod_50(IntPtr intptr_2, IntPtr intptr_3)
-    {
-        var stringBuilder_0_1 = new StringBuilder(256);
-        GetWindowText(intptr_2, stringBuilder_0_1, stringBuilder_0_1.Capacity - 1);
-        if (stringBuilder_0_1.Length == 0 || stringBuilder_0_1.ToString().ToLower().IndexOf("glider") <= -1)
-            return true;
-        var stringBuilder_0_2 = new StringBuilder(256);
-        var windowClass = (int)RealGetWindowClass(intptr_2, stringBuilder_0_2, stringBuilder_0_2.Capacity - 1);
-        if (!(stringBuilder_0_2.ToString() == "HH Parent"))
-            return true;
-        intptr_1 = intptr_2;
-        return false;
-    }
-
-    public static void smethod_51(HelpProvider helpProvider_0)
-    {
-    }
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern IntPtr OpenThread(uint uint_23, bool bool_4, uint uint_24);
-
-    [DllImport("ntdll.dll", SetLastError = true)]
-    private static extern int NtQueryInformationThread(
-        IntPtr intptr_2,
-        uint uint_23,
-        IntPtr intptr_3,
-        uint uint_24,
-        out uint uint_25);
-
-    public static bool smethod_52(out long long_0, out int int_29)
-    {
-        long_0 = 0L;
-        int_29 = 0;
-        var gclass65 = new ProcessEnumerator();
-        gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
-        if (numArray.Length == 0)
-            return false;
-        var num1 = smethod_11(MemoryOffsetTable.Instance.GetIntOffset("TLSSlot"), "TLSSlot");
-        foreach (var uint_24 in numArray)
-        {
-            var intptr_2 = OpenThread(64U, false, uint_24);
-            if (intptr_2.ToInt32() > 0)
-            {
-                var structure = new Class3();
-                var num2 = Marshal.AllocHGlobal(80);
-                var num3 = NtQueryInformationThread(intptr_2, 0U, num2, (uint)Marshal.SizeOf(structure), out var _);
-                Marshal.PtrToStructure(num2, structure);
-                Marshal.FreeHGlobal(num2);
-                CloseHandle(intptr_2);
-                if (num3 == 0)
-                {
-                    var num4 = smethod_11(smethod_11(structure.int_1 + 44, "TLSOffset") + 4 * num1, "TargetTLSSlot");
-                    var num5 = smethod_12(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSPlayerID"), "TLSPlayerID");
-                    var num6 = smethod_11(num4 + MemoryOffsetTable.Instance.GetIntOffset("TLSMainTable"), "TLSMainTable");
-                    if (num5 > 0L)
+                    return new GStruct22
                     {
-                        long_0 = num5;
-                        int_29 = num6;
-                        break;
-                    }
+                        Left = pt.X,
+                        Top = pt.Y,
+                        Width = width,
+                        Height = height
+                    };
                 }
             }
-            else
+
+            var bounds = Screen.PrimaryScreen.Bounds;
+            return new GStruct22
             {
-                Logger.smethod_1("OpenThread failed, last error = " + Marshal.GetLastWin32Error());
-                return false;
+                Left = bounds.Left,
+                Top = bounds.Top,
+                Width = bounds.Width,
+                Height = bounds.Height
+            };
+        }
+
+        internal static IntPtr GetForegroundWindow() => GetForegroundWindowNative();
+
+        internal static void GetForegroundWindow(IntPtr windowHandle, Size size, Point point) { }
+
+        internal static int GetCurrentProcessId() => Process.GetCurrentProcess().Id;
+        internal static int GetProcessId() => _currentProcessId;
+
+        internal static int GetProcessIdFromWindow()
+        {
+            var fgWindow = GetForegroundWindow();
+            GetWindowThreadProcessId(fgWindow, out int processId);
+            return processId;
+        }
+
+        internal static string GetProcessExecutablePath()
+        {
+            try
+            {
+                var process = Process.GetProcessById(_currentProcessId);
+                return process.MainModule?.FileName ?? string.Empty;
             }
+            catch { return string.Empty; }
         }
 
-        return long_0 != 0L;
-    }
-
-    public static void smethod_53()
-    {
-        if (StartupClass.AnotherIntegerValue == 0)
-            return;
-        StartupClass.bool_30 = false;
-        var gclass65 = new ProcessEnumerator();
-        gclass65.method_0();
-        var numArray = gclass65.method_4(StartupClass.AnotherIntegerValue);
-        var intptr_2 = numArray.Length == 1
-            ? OpenThread(2U, false, numArray[0])
-            : throw new Exception("!! Unexpected number of threads in game: " + numArray.Length);
-        if (intptr_2.ToInt32() <= 0)
-            throw new Exception("!! Unable to open main thread in game: " + Marshal.GetLastWin32Error());
-        ResumeThread(intptr_2);
-        CloseHandle(intptr_2);
-    }
-
-    public static void smethod_54()
-    {
-        smethod_55(StartupClass.AnotherIntegerValue);
-    }
-
-    public static void smethod_55(int int_29)
-    {
-        var intptr_2 = OpenProcess(1U, false, int_29);
-        if (intptr_2.ToInt32() <= 0)
-            return;
-        TerminateProcess(intptr_2, 0U);
-        CloseHandle(intptr_2);
-    }
-
-    public static bool smethod_56(int int_29)
-    {
-        var gclass65 = new ProcessEnumerator();
-        gclass65.method_0();
-        return gclass65.method_2(int_29) > 0;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public struct GStruct21
-    {
-        [FieldOffset(0)] public int int_0;
-        [FieldOffset(4)] public int int_1;
-        [FieldOffset(8)] public uint uint_0;
-        [FieldOffset(12)] public int int_2;
-        [FieldOffset(16)] public uint uint_1;
-        [FieldOffset(20)] public uint uint_2;
-        [FieldOffset(24)] public uint uint_3;
-    }
-
-    [Serializable]
-    public struct GStruct22
-    {
-        public int int_0;
-        public int int_1;
-        public int int_2;
-        public int int_3;
-
-        public GStruct22(int int_4, int int_5, int int_6, int int_7)
+        internal static void WorldToScreen(double x, double y, out int sx, out int sy)
         {
-            int_0 = int_4;
-            int_1 = int_5;
-            int_2 = int_6;
-            int_3 = int_7;
+            var window = GetCursorPosition();
+            sx = window.int_0 + (int)(window.method_1() * x);
+            sy = window.int_1 + (int)(window.method_0() * y);
         }
 
-        [SpecialName]
-        public int method_0()
+        internal static void ScreenToWorld(out double x, out double y, int sx, int sy)
         {
-            return int_3 - int_1 + 1;
+            var window = GetCursorPosition();
+            x = window.method_1() <= 0 ? 0.0 : (sx - window.int_0) / (double)window.method_1();
+            y = window.method_0() <= 0 ? 0.0 : (sy - window.int_1) / (double)window.method_0();
         }
 
-        [SpecialName]
-        public int method_1()
+        internal static void Sleep(uint milliseconds) => SleepNative(milliseconds);
+
+        internal static bool SetForegroundWindow(IntPtr windowHandle) => SetForegroundWindowNative(windowHandle);
+
+        internal static void ShowWindow(IntPtr windowHandle) => ShowWindowNative(windowHandle, 5); // SW_SHOW = 5
+
+        internal static bool GetWindowPosition(IntPtr windowHandle, out Point point)
         {
-            return int_2 - int_0 + 1;
+            POINT pt = new POINT { X = 0, Y = 0 };
+            if (ClientToScreen(windowHandle, ref pt))
+            {
+                point = new Point(pt.X, pt.Y);
+                return true;
+            }
+            point = Point.Empty;
+            return false;
         }
 
-        [SpecialName]
-        public Size method_2()
+        internal static bool GetWindowSize(IntPtr windowHandle, out Size size)
         {
-            return new Size(method_1(), method_0());
+            if (GetClientRect(windowHandle, out RECT rect))
+            {
+                size = new Size(rect.Right - rect.Left, rect.Bottom - rect.Top);
+                return true;
+            }
+            size = Size.Empty;
+            return false;
         }
 
-        [SpecialName]
-        public Point method_3()
+        internal static void SetWindowSize(IntPtr windowHandle, Size size) { }
+
+        internal static void IsWindowVisible(Control control, string helpFile, HelpNavigator navigator, object parameter) { }
+
+        // FULLY IMPLEMENTED: Checks if WoW is minimized to allow background rotation loops to pause or adjust
+        internal static bool IsWindowMinimized()
         {
-            return new Point(int_0, int_1);
+            IntPtr windowHandle = StartupClass.MainApplicationHandle;
+            if (windowHandle == IntPtr.Zero)
+                return false;
+
+            return IsIconic(windowHandle);
         }
 
-        public Rectangle method_4()
+        internal static byte[] smethod_17(int address, int size, string debugClue) => ReadBytesRaw(address, size);
+        internal static byte[] smethod_20(int address, int size) => ReadBytesRaw(address, size);
+        internal static void smethod_48(Form form) { }
+        internal static void smethod_51(HelpProvider helpProvider) { }
+
+        internal static bool smethod_52(out long playerGuid, out int mainTable)
         {
-            return Rectangle.FromLTRB(int_0, int_1, int_2, int_3);
+            playerGuid = 0L;
+            mainTable = 0;
+
+            var clientConnection = ReadUInt32(WotlkOffsets.ClientConnection, "ClientConnection");
+            if (!IsLikelyMemoryPointer(clientConnection)) return false;
+
+            var objectManager = ReadUInt32(clientConnection + WotlkOffsets.CurMgrOffset, "CurMgrOffset");
+            if (!IsLikelyMemoryPointer(objectManager)) return false;
+
+            var firstObject = ReadUInt32(objectManager + WotlkOffsets.FirstObject, "FirstObject");
+            if (!IsLikelyMemoryPointer(firstObject)) return false;
+
+            playerGuid = ReadInt64(objectManager + WotlkOffsets.LocalGuid, "LocalGUID");
+            if (playerGuid == 0L) return false;
+
+            mainTable = unchecked((int)objectManager);
+            return true;
         }
 
-        public static GStruct22 GenerateRandomString(Rectangle rectangle_0)
+        private static uint GetWowBaseAddress()
         {
-            return new GStruct22(rectangle_0.Left, rectangle_0.Top, rectangle_0.Right, rectangle_0.Bottom);
+            if (_currentProcessId == 0) return 0U;
+            try
+            {
+                var process = Process.GetProcessById(_currentProcessId);
+                if (process == null || process.HasExited || process.MainModule == null) return 0U;
+                return unchecked((uint)process.MainModule.BaseAddress.ToInt32());
+            }
+            catch { return 0U; }
         }
 
-        public override int GetHashCode()
+        private static bool IsLikelyMemoryPointer(uint pointer)
         {
-            return int_0 ^ ((int_1 << 13) | (int_1 >> 19)) ^ ((method_1() << 26) | (method_1() >> 6)) ^
-                   ((method_0() << 7) | (method_0() >> 25));
+            return (pointer & 1U) == 0U && pointer != 0U && pointer != 28U && pointer >= 65536U;
         }
 
-        public override string ToString()
+        internal static void smethod_53() { }
+        internal static void smethod_54() { }
+        internal static void smethod_55(int processId) => SetProcessId(processId);
+
+        internal static bool smethod_56(int processId)
         {
-            return "L/R=" + int_0 + "/" + int_2 + ", T/B=" + int_1 + "/" + int_3;
-        }
-        public bool method_5(int int_4, int int_5)
-        {
-            return int_4 >= int_0 && int_4 < int_2 && int_5 >= int_1 && int_5 < int_3;
+            try
+            {
+                var process = Process.GetProcessById(processId);
+                return !process.HasExited;
+            }
+            catch { return false; }
         }
     }
-
-    private delegate int Delegate1(IntPtr intptr_0, IntPtr intptr_1);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private class Class3
-    {
-        public int int_0;
-        public int int_1;
-        public int int_2;
-        public int int_3;
-        public int int_4;
-        public int int_5;
-        public int int_6;
-    }
-
 }

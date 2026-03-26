@@ -63,7 +63,7 @@ namespace Glider.Common.Objects
         GUnit EarthbindTotem = null;
         GUnit StoneClawTotem = null;
 
-        long AddGUID;
+        ulong AddGUID;
         #endregion
 
         #region GGameClass overrides
@@ -607,7 +607,7 @@ namespace Glider.Common.Objects
             if (!Context.Party.HealParty)  // Nope!
                 return false;
 
-            long[] PartyMembers = Context.Party.GetPartyMembers();
+            ulong[] PartyMembers = Context.Party.GetPartyMembers();
 
             double SmallHealCheck = .60;
             double BigHealCheck = .40;
@@ -618,7 +618,7 @@ namespace Glider.Common.Objects
                 BigHealCheck = .25;
             }
 
-            foreach (long OneGuy in PartyMembers)
+            foreach (ulong OneGuy in PartyMembers)
             {
                 GObject TargetObject = GObjectList.FindObject(OneGuy);
 

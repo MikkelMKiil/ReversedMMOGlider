@@ -1,26 +1,34 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Glider.Common.Objects.GUnit
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
 #nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Glider.Common.Objects
 {
+    /// <summary>
+    /// Represents a generic unit in the game world (e.g., a player, monster, or NPC).
+    /// This class provides access to unit-specific information like health, mana, level, and state.
+    /// This file has been adapted for compatibility with World of Warcraft 3.3.5a (build 12340).
+    /// GUIDs are represented as 'ulong' (64-bit unsigned) to be compatible with the 32-bit client.
+    /// </summary>
     public class GUnit : GObject
     {
+        /// <summary>
+        /// Tolerance for heading comparisons, in radians.
+        /// </summary>
         public const double HEADING_TOLERANCE = 0.34;
-        protected const int MAX_BUFFS = 56;
-        protected new static int PawSpeedMS;
+
+        /// <summary>
+        /// The maximum number of auras (buffs/debuffs) a unit can have in WotLK 3.3.5a.
+        /// </summary>
+        protected const int MAX_AURAS = 56;
+
         protected int _castingID;
-        protected long _channelingID;
-        protected int _channelingSpellID;
-        protected long _createdBy;
+        protected ulong _channelingID;
+        protected ulong _createdBy;
         protected GCreatureType _creatureType;
         protected int _dflags;
         protected int _factionID;
@@ -40,13 +48,22 @@ namespace Glider.Common.Objects
         protected int _manaMax;
         protected int _manaPoints;
         protected int _monsterDefinition;
-        protected int _movementFlags1;
+        protected int _movementFlags;
         protected int _movementFlags2;
         protected double _pitch;
         protected GReaction _reaction;
-        protected long _target;
+        protected ulong _target;
+        protected int _channelingSpellID;
         protected bool _wasLootable;
+
+        /// <summary>
+        /// A time window in milliseconds to prevent wrongly assuming a unit is stuck/evading when it's just dying slowly.
+        /// </summary>
         private readonly double DYING_SANITY_TIME = 30000.0;
+
+        /// <summary>
+        /// A cache for "Well Known" buff IDs to avoid repeated lookups from memory offsets.
+        /// </summary>
         private readonly SortedList<string, int[]> WKBuffs;
 
         public GUnit(int BaseAddress, int FrameNumber)
@@ -58,8 +75,14 @@ namespace Glider.Common.Objects
             WKBuffs = new SortedList<string, int[]>();
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this unit is a player.
+        /// </summary>
         public bool IsPlayer => Type == GObjectType.Player;
 
+        /// <summary>
+        /// Gets the happiness level of the unit (typically for pets). Represented as a value from 0.0 to 1.0.
+        /// </summary>
         public double Happiness
         {
             get
@@ -69,9 +92,15 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this unit is a monster/NPC.
+        /// </summary>
         public bool IsMonster => Type == GObjectType.Monster;
 
-        public long CreatedBy
+        /// <summary>
+        /// Gets the GUID of the object that created this unit (e.g., the owner of a pet or totem).
+        /// </summary>
+        public ulong CreatedBy
         {
             get
             {
@@ -80,27 +109,22 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the reaction of this unit towards the player (e.g., Hostile, Friendly, Neutral).
+        /// </summary>
         public GReaction Reaction
         {
             get
             {
                 if (_reaction == GReaction.Unknown)
-                    try
-                    {
-                        _reaction = GetReaction(false);
-                    }
-                    catch (MemoryReadException ex)
-                    {
-                        Logger.smethod_1("!! Readfailed in GetReaction, object is no longer valid (details=" + ex +
-                                           ")");
-                        Cull();
-                        _reaction = GReaction.Unknown;
-                    }
-
+                    _reaction = GetReaction(false);
                 return _reaction;
             }
         }
 
+        /// <summary>
+        /// Gets the health of the unit as a percentage (0.0 to 1.0).
+        /// </summary>
         public double Health
         {
             get
@@ -110,6 +134,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the current health points of the unit.
+        /// </summary>
         public int HealthPoints
         {
             get
@@ -119,6 +146,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the maximum health points of the unit.
+        /// </summary>
         public int HealthMax
         {
             get
@@ -128,6 +158,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        // Gets the primary power(Mana, Rage, Energy, Runic Power) of the unit as a percentage(0.0 to 1.0).
+        /// </summary>
         public double Mana
         {
             get
@@ -137,6 +170,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the current points of the primary power resource.
+        /// </summary>
         public int ManaPoints
         {
             get
@@ -146,6 +182,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the maximum points of the primary power resource.
+        /// </summary>
         public int ManaMax
         {
             get
@@ -155,6 +194,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the level of the unit.
+        /// </summary>
         public int Level
         {
             get
@@ -164,6 +206,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the faction template ID of the unit.
+        /// </summary>
         public int FactionID
         {
             get
@@ -173,6 +218,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the direction the unit is facing, in radians.
+        /// </summary>
         public double Heading
         {
             get
@@ -182,6 +230,9 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the pitch of the unit's view, in radians.
+        /// </summary>
         public double Pitch
         {
             get
@@ -191,11 +242,20 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this unit is targeting the player.
+        /// </summary>
         public bool IsTargetingMe => TargetGUID == GPlayerSelf.Me.GUID;
 
-        public bool IsTargetingMyPet => TargetGUID == GPlayerSelf.Me.PetGUID && GPlayerSelf.Me.PetGUID != 0L;
+        /// <summary>
+        /// Gets a value indicating whether this unit is targeting the player's pet.
+        /// </summary>
+        public bool IsTargetingMyPet => GPlayerSelf.Me.PetGUID != 0 && TargetGUID == GPlayerSelf.Me.PetGUID;
 
-        public virtual long TargetGUID
+        /// <summary>
+        /// Gets the GUID of this unit's current target.
+        /// </summary>
+        public virtual ulong TargetGUID
         {
             get
             {
@@ -204,19 +264,31 @@ namespace Glider.Common.Objects
             }
         }
 
-        public GUnit Target => TargetGUID == 0L ? null : GObjectList.FindUnit(TargetGUID);
+        /// <summary>
+        /// Gets the GUnit object for this unit's target. Returns null if there is no target.
+        /// </summary>
+        public GUnit Target => GObjectList.ResolveUnitByGuid(TargetGUID);
 
-        public virtual bool IsDead => HealthPoints == 0 || (HealthPoints <= 1 && (_flags & 262144) > 0);
+        /// <summary>
+        /// Gets a value indicating whether the unit is dead.
+        /// </summary>
+        public virtual bool IsDead => HealthPoints <= 1;
 
+        /// <summary>
+        /// Gets a value indicating whether the unit is in combat.
+        /// </summary>
         public bool IsInCombat
         {
             get
             {
                 Refresh();
-                return (_flags & 524288) != 0;
+                return (_flags & 0x80000) != 0; // UNIT_FLAG_IN_COMBAT
             }
         }
 
+        /// <summary>
+        /// Gets the ID of the spell the unit is currently casting.
+        /// </summary>
         public int CastingID
         {
             get
@@ -226,7 +298,10 @@ namespace Glider.Common.Objects
             }
         }
 
-        public long ChannelingObjectID
+        /// <summary>
+        /// Gets the GUID of the object being channeled on.
+        /// </summary>
+        public ulong ChannelingObjectID
         {
             get
             {
@@ -235,7 +310,12 @@ namespace Glider.Common.Objects
             }
         }
 
-        public long ChannelingSpellID
+        /// <summary>
+        /// Gets a value indicating whether the unit is actively casting or channeling a spell.
+        /// </summary>
+        public bool IsCasting => CastingID != 0 || ChannelingObjectID != 0;
+
+        public int ChannelingSpellID
         {
             get
             {
@@ -244,8 +324,9 @@ namespace Glider.Common.Objects
             }
         }
 
-        public bool IsCasting => CastingID != 0 || ChannelingObjectID != 0L || ChannelingSpellID != 0L;
-
+        /// <summary>
+        /// Gets the creature type of the unit (e.g., Beast, Humanoid, Undead).
+        /// </summary>
         public virtual GCreatureType CreatureType
         {
             get
@@ -255,53 +336,79 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets the bearing (relative heading) from the player to this unit.
+        /// </summary>
         public double Bearing => GContext.Main.Me.GetHeadingDelta(Location);
 
+        /// <summary>
+        /// Gets a value indicating whether this unit is within melee range of the player.
+        /// </summary>
         public bool IsInMeleeRange => DistanceToSelf <= GContext.Main.MeleeDistance;
 
-        public bool IsCursorOnUnit =>
-            GProcessMemoryManipulator.ReadInt64(MemoryOffsetTable.Instance.GetIntOffset("UnderCursor"), "UnderCursor") == GUID;
+        /// <summary>
+        /// Gets a value indicating whether the mouse cursor is currently over this unit.
+        /// </summary>
+        public bool IsCursorOnUnit => GameMemoryAccess.ReadUnderCursorGuid() == GUID;
 
-        public bool IsFacingAway =>
-            Math.Abs(GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading)) < Math.PI / 2.0;
+        /// <summary>
+        /// Gets a value indicating whether the unit is facing away from the player.
+        /// </summary>
+        public bool IsFacingAway => Math.Abs(GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading)) < Math.PI / 2.0;
 
+        /// <summary>
+        /// Gets the number of milliseconds that have passed since the unit's health last dropped.
+        /// </summary>
         public int TicksSinceHealthDrop => Environment.TickCount - _lastHealthDrop;
 
+        /// <summary>
+        /// A sanity check to see if the unit is stuck in a dying state (e.g., evading).
+        /// </summary>
         public bool IsNotDying
         {
             get
             {
                 if (Health < 1.0 && TicksSinceHealthDrop > DYING_SANITY_TIME)
                 {
-                    Logger.smethod_1("Damaged and not dropping");
+                    Logger.smethod_1("Unit is damaged but health has not changed for a while, assuming evaded.");
                     return true;
                 }
 
                 if (Health > 0.99 && StartupClass.CurrentGameClass.TicksSinceCombatStart > DYING_SANITY_TIME)
                 {
-                    Logger.smethod_1("Undamaged and combat taking too long");
+                    Logger.smethod_1("Unit is undamaged and combat is taking too long, assuming evaded.");
                     return true;
                 }
 
+                // This check is likely specific to the Glider bot's internal logic.
                 if (StartupClass.GameClass69Instance.method_10() >= 4)
                     return false;
-                Logger.smethod_1("Recent evade entry in combat log");
+
+                Logger.smethod_1("Recent evade entry in combat log indicates bugged state.");
                 return true;
             }
         }
 
-        public bool IsApproaching => _lastLocation != null && GContext.Main.Me.Location.GetDistanceTo(Location) <
-            (double)GContext.Main.Me.Location.GetDistanceTo(_lastLocation);
+        /// <summary>
+        /// Gets a value indicating whether this unit is moving towards the player.
+        /// </summary>
+        public bool IsApproaching => _lastLocation != null && Location.GetDistanceTo(GContext.Main.Me.Location) < _lastLocation.GetDistanceTo(GContext.Main.Me.Location);
 
+        /// <summary>
+        /// Gets a value indicating whether the unit's corpse is lootable.
+        /// </summary>
         public bool IsLootable
         {
             get
             {
                 Refresh();
-                return (_dflags & 1) > 0;
+                return (_dflags & 1) > 0; // UNIT_DYNAMIC_FLAG_LOOTABLE
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the unit was ever lootable during its existence.
+        /// </summary>
         public bool WasLootable
         {
             get
@@ -311,35 +418,46 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the unit can be skinned.
+        /// </summary>
         public bool IsSkinnable
         {
             get
             {
                 Refresh();
-                return (_flags & 67108864) != 0;
+                return (_flags & 0x4000000) != 0; // UNIT_FLAG_SKINNABLE
             }
         }
 
+        /// <summary>
+        /// Gets the raid target icon (star, circle, etc.) assigned to this unit.
+        /// </summary>
         public GRaidTargetIcon RaidTargetIcon
         {
             get
             {
                 var num = MemoryOffsetTable.Instance.GetIntOffset(nameof(RaidTargetIcon));
                 for (var index = 0; index < 8; ++index)
-                    if (GProcessMemoryManipulator.ReadInt64(num + index * 8, "rti") == GUID)
+                    if (GameMemoryAccess.ReadRaidTargetGuid(num, index) == GUID)
                         return (GRaidTargetIcon)(index + 1);
                 return GRaidTargetIcon.NotSpecified;
             }
         }
 
-        public int MovementFlags1
+        /// <summary>
+        /// Gets the movement flags for this unit.
+        /// </summary>
+        public int MovementFlags
         {
             get
             {
                 Refresh();
-                return _movementFlags1;
+                return _movementFlags;
             }
         }
+
+        public int MovementFlags1 => MovementFlags;
 
         public int MovementFlags2
         {
@@ -350,69 +468,82 @@ namespace Glider.Common.Objects
             }
         }
 
+        /// <summary>
+        /// Reloads all fields for this object from game memory.
+        /// </summary>
         protected override void LoadFields()
         {
             base.LoadFields();
+
+            // Read descriptor fields, which are version-specific. These are for 3.3.5a.
             _flags = GetStorageInt("UNIT_FIELD_FLAGS");
             _dflags = GetStorageInt("UNIT_DYNAMIC_FLAGS");
             _healthPoints = GetStorageInt("UNIT_FIELD_HEALTH");
             _healthMax = GetStorageInt("UNIT_FIELD_MAXHEALTH");
-            _health = _healthMax <= 0 ? 0.0 : _healthPoints / (double)_healthMax;
             _manaPoints = GetStorageInt("UNIT_FIELD_POWER1");
             _manaMax = GetStorageInt("UNIT_FIELD_MAXPOWER1");
-            _mana = _manaMax <= 0 ? 0.0 : _manaPoints / (double)_manaMax;
             _level = GetStorageInt("UNIT_FIELD_LEVEL");
             _factionID = GetStorageInt("UNIT_FIELD_FACTIONTEMPLATE");
+            _castingID = GetStorageInt("UNIT_FIELD_CASTING");
+            _channelingSpellID = GetStorageInt("UNIT_CHANNEL_SPELL");
+
+            // Calculate percentages
+            _health = _healthMax <= 0 ? 0.0 : _healthPoints / (double)_healthMax;
+            _mana = _manaMax <= 0 ? 0.0 : _manaPoints / (double)_manaMax;
+
+            // Pet happiness is stored in the "FOCUS" power field for 3.3.5a
+            var currentHappiness = GetStorageFloat("UNIT_FIELD_POWER4");
+            var maxHappiness = GetStorageFloat("UNIT_FIELD_MAXPOWER4");
+            _happiness = maxHappiness != 0.0 ? currentHappiness / maxHappiness : 0.0;
+
+            // Read GUID fields
+            _createdBy = GetStorageULong("UNIT_FIELD_CREATEDBY");
+            _target = GetStorageULong("UNIT_FIELD_TARGET");
+            _channelingID = GetStorageULong("UNIT_FIELD_CHANNEL_OBJECT");
+
+            // Read base address offsets
             _heading = GetBaseFloat("Heading");
             _pitch = GetBaseFloat("Pitch");
-            var baseFloat1 = GetBaseFloat("X");
-            var baseFloat2 = GetBaseFloat("Y");
-            var baseFloat3 = GetBaseFloat("Z");
+            var x = GetBaseFloat("X");
+            var y = GetBaseFloat("Y");
+            var z = GetBaseFloat("Z");
+
             _lastLocation = _location;
-            _location = new GLocation(baseFloat1, baseFloat2, baseFloat3);
-            _createdBy = GetStorageLong("UNIT_FIELD_CREATEDBY");
-            _target = GetStorageLong("UNIT_FIELD_TARGET");
-            _channelingID = GetStorageLong("UNIT_FIELD_CHANNEL_OBJECT");
-            _castingID = 0;
-            _channelingSpellID = 0;
-            if (GUID == StartupClass.long_0)
-            {
-                if (MemoryOffsetTable.Instance.HasOffset("PlayerCasting"))
-                    _castingID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCasting"), "PlayerCasting");
-                if (MemoryOffsetTable.Instance.HasOffset("PlayerCastingAlt"))
-                    _channelingSpellID = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("PlayerCastingAlt"), "PlayerCastingAlt");
-            }
+            _location = new GLocation(x, y, z);
+
             _monsterDefinition = GetBaseInt("MonsterDefinition");
-            _creatureType = _monsterDefinition == 0
-                ? GCreatureType.NoDefinition
-                : (GCreatureType)GProcessMemoryManipulator.ReadInt32(_monsterDefinition + MemoryOffsetTable.Instance.GetIntOffset("CreatureType"),
-                    "rct");
-            var storageFloat1 = GetStorageFloat("UNIT_FIELD_POWER5");
-            var storageFloat2 = GetStorageFloat("UNIT_FIELD_MAXPOWER5");
-            _happiness = storageFloat2 != 0.0 ? storageFloat1 / (double)storageFloat2 : 0.0;
+            _creatureType = _monsterDefinition == 0 ? GCreatureType.NoDefinition : (GCreatureType)GameMemoryAccess.ReadCreatureType(_monsterDefinition);
+            _movementFlags = GameMemoryAccess.ReadMovementFlags1(BaseAddress);
+            var moveStruct2Address = GameMemoryAccess.ReadMoveStruct2(BaseAddress);
+            _movementFlags2 = moveStruct2Address != 0 ? GameMemoryAccess.ReadMovementFlags2(moveStruct2Address) : 0;
+
+            // Health drop tracking
             if (_healthPoints < _lastHealthPoints)
             {
                 _lastHealthPoints = _healthPoints;
                 _lastHealthDrop = Environment.TickCount;
             }
-
             _lastHealthPoints = _healthPoints;
+
+            // Lootable flag tracking
             if ((_dflags & 1) > 0)
                 _wasLootable = true;
-            _movementFlags1 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags"), "movefl");
-            var num = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("MoveStruct2"), "movest2");
-            if (num != 0)
-                _movementFlags2 = GProcessMemoryManipulator.ReadInt32(num + MemoryOffsetTable.Instance.GetIntOffset("MoveFlags2"), "movefl2");
-            else
-                _movementFlags2 = 0;
         }
 
+        /// <summary>
+        /// Sets this unit as the player's current target.
+        /// </summary>
+        /// <param name="WasLastHostile">If true, attempts to use "Target Last Hostile" first.</param>
+        /// <returns>True if the unit was successfully targeted.</returns>
         public bool SetAsTarget(bool WasLastHostile)
         {
             if (DistanceToSelf > 10.0)
                 Face();
+
             if (GUID == GPlayerSelf.Me.TargetGUID)
                 return true;
+
+            // Attempt mouse-based targeting if configured
             if (ConfigManager.gclass61_0.method_5("TargetWithMouse"))
             {
                 Select();
@@ -420,6 +551,7 @@ namespace Glider.Common.Objects
                     return true;
             }
 
+            // Attempt key-based targeting multiple times
             for (var index = 4; index > 0; --index)
             {
                 var KeyName = "Common.Target";
@@ -432,71 +564,101 @@ namespace Glider.Common.Objects
             return false;
         }
 
-        private long TargetSomething(string KeyName)
+        /// <summary>
+        /// Sends a keybind to target a unit and waits briefly for the target to change.
+        /// </summary>
+        private ulong TargetSomething(string KeyName)
         {
-            var targetGuid = GContext.Main.Me.TargetGUID;
-            var gspellTimer = new GSpellTimer(1000, false);
+            var initialTargetGuid = GContext.Main.Me.TargetGUID;
+            var timer = new GSpellTimer(1000, false);
             GContext.Main.SendKey(KeyName);
+
+            // Wait until the timer is up or the target has changed
             do
             {
-                ;
-            } while (!gspellTimer.IsReadySlow && GContext.Main.Me.TargetGUID == targetGuid);
+                Thread.Sleep(15);
+            } while (!timer.IsReadySlow && GContext.Main.Me.TargetGUID == initialTargetGuid);
 
             return GContext.Main.Me.TargetGUID;
         }
 
+        /// <summary>
+        /// Calculates the difference in heading between this unit's orientation and the direction to a target location.
+        /// </summary>
         public double GetHeadingDelta(GLocation Target)
         {
             var headingTo = GContext.Main.Movement.GetHeadingTo(Location, Target);
             return GContext.Main.Movement.CompareHeadings(Heading, headingTo);
         }
 
+        /// <summary>
+        /// Gets the heading from this unit to a target unit.
+        /// </summary>
         public double GetHeadingTo(GUnit Target)
         {
             return GetHeadingTo(Target.Location);
         }
 
+        /// <summary>
+        /// Gets the heading from this unit to a target location.
+        /// </summary>
         public double GetHeadingTo(GLocation TargetLocation)
         {
             var headingTo = GContext.Main.Movement.GetHeadingTo(Location, TargetLocation);
             return headingTo == -1.0 ? Heading : headingTo;
         }
 
+        /// <summary>
+        /// Initiates a smooth turn towards this unit.
+        /// </summary>
         public void StartSpinTowards()
         {
             GContext.Main.StartSpinTowards(Bearing);
         }
 
+        /// <summary>
+        /// Instantly faces this unit.
+        /// </summary>
         public void Face()
         {
-            if (!IsValid)
-                return;
-            GContext.Main.Movement.SetHeading(GContext.Main.Me.GetHeadingTo(this), 0.34);
+            if (!IsValid) return;
+            GContext.Main.Movement.SetHeading(GContext.Main.Me.GetHeadingTo(this), HEADING_TOLERANCE);
         }
 
+        /// <summary>
+        /// Instantly faces this unit within a given tolerance.
+        /// </summary>
+        /// <param name="Tolerance">The allowed deviation in radians.</param>
         public void Face(double Tolerance)
         {
-            if (!IsValid)
-                return;
+            if (!IsValid) return;
             GContext.Main.Movement.SetHeading(GContext.Main.Me.GetHeadingTo(this), Tolerance);
         }
 
+        /// <summary>
+        /// Waits for the player to get within a certain distance of this unit.
+        /// </summary>
         public void WaitForApproach(double Distance, int Milliseconds)
         {
-            if (!IsValid)
-                return;
-            var gspellTimer = new GSpellTimer(Milliseconds, false);
+            if (!IsValid) return;
+            var timer = new GSpellTimer(Milliseconds, false);
             do
             {
-                ;
-            } while (!gspellTimer.IsReadySlow && DistanceToSelf > Distance);
+                Thread.Sleep(25);
+            } while (!timer.IsReadySlow && DistanceToSelf > Distance);
         }
 
+        /// <summary>
+        /// Moves the player towards this unit until within melee range.
+        /// </summary>
         public bool Approach()
         {
             return Approach(ConfigManager.gclass61_0.method_4("MeleeDistance"));
         }
 
+        /// <summary>
+        /// Moves the player towards this unit until within a specified distance.
+        /// </summary>
         public bool Approach(double Distance)
         {
             return Approach(Distance, false);
@@ -507,23 +669,32 @@ namespace Glider.Common.Objects
             return Approach(ConfigManager.gclass61_0.method_4("MeleeDistance"), LeaveRunning);
         }
 
+        /// <summary>
+        /// Moves the player towards this unit.
+        /// </summary>
+        /// <param name="Distance">The desired distance to stop at.</param>
+        /// <param name="LeaveRunning">If true, does not stop autorun upon arrival.</param>
+        /// <returns>True on success.</returns>
         public bool Approach(double Distance, bool LeaveRunning)
         {
             Logger.smethod_1("Approaching \"" + Name + "\" to distance of " + Distance);
             return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
         }
 
-        public bool ApproachSafe(double Distance, bool LeaveRunning)
-        {
-            Logger.smethod_1("Approaching (safe) \"" + Name + "\" to distance of " + Distance);
-            return GContext.Main.Movement.MoveToUnit(this, Distance, LeaveRunning);
-        }
-
+        /// <summary>
+        /// Moves behind the unit, useful for backstabbing classes.
+        /// </summary>
+        /// <param name="Sneaking">Whether to use a slower, more precise method for sneaking.</param>
+        /// <returns>True if successfully positioned behind the target.</returns>
         public bool GetBehind(bool Sneaking)
         {
             Logger.smethod_1("GetBehind: \"" + Name + "\", sneaking = " + Sneaking);
+
+            // We are already behind the target and in melee range.
             if (IsFacingAway && DistanceToSelf < ConfigManager.gclass61_0.method_4("MeleeDistance"))
                 return true;
+
+            // Target is too far away to reasonably get behind.
             if (DistanceToSelf > 20.0)
             {
                 Logger.smethod_1("Too far away to GetBehind: \"" + Name + "\"");
@@ -538,79 +709,62 @@ namespace Glider.Common.Objects
 
             if (Sneaking)
             {
-                var KeyName = GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading) > 0.0
+                // Sneaking logic: strafe carefully around the target while facing it.
+                var strafeKey = GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading) > 0.0
                     ? "Common.StrafeLeft"
                     : "Common.StrafeRight";
-                GContext.Main.PressKey(KeyName);
-                var gspellTimer = new GSpellTimer(8000);
-                while (!gspellTimer.IsReady)
+                GContext.Main.PressKey(strafeKey);
+                var timer = new GSpellTimer(8000);
+                while (!timer.IsReady)
                 {
                     GContext.Main.Me.Refresh(true);
                     Refresh(true);
-                    Face();
-                    var num = GContext.Main.Movement.CompareHeadings(GContext.Main.Me.Heading, Heading);
-                    if (Math.Abs(num) >= 0.4)
-                    {
-                        if (Math.Abs(num) < Math.PI / 4.0)
-                            GContext.Main.StartRun();
-                        else
-                            GContext.Main.ReleaseRun();
-                        Thread.Sleep(61);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    Face(); // Continuously face the target while strafing.
+                    if (IsFacingAway) break; // We are behind, exit loop.
+                    Thread.Sleep(50);
                 }
+                GContext.Main.ReleaseKey(strafeKey);
 
-                if (gspellTimer.IsReady)
+                if (timer.IsReady) // Timed out
                 {
                     GContext.Main.ReleaseAllKeys();
                     return false;
                 }
 
-                GContext.Main.ReleaseKey(KeyName);
-                Approach();
+                Approach(); // Move into melee range now that we are behind.
                 GContext.Main.ReleaseAllKeys();
                 return IsFacingAway && DistanceToSelf < GContext.Main.MeleeDistance;
             }
-
-            bool flag;
-            var KeyName1 = (flag = StartupClass.random_0.Next() % 2 == 0) ? "Common.StrafeRight" : "Common.StrafeLeft";
-            var DeltaRads = flag ? Math.PI / 2.0 : -1.0 * Math.PI / 2.0;
-            var NewHeading = GContext.Main.Movement.AdjustHeading(GContext.Main.Me.Heading, DeltaRads);
-            GContext.Main.StartRun();
-            GContext.Main.StartSpinTowards(NewHeading);
-            GContext.Main.PressKey(KeyName1);
-            var gspellTimer1 = new GSpellTimer(4000);
-            while (!gspellTimer1.IsReady)
+            else
             {
-                GContext.Main.PulseSpin();
-                GContext.Main.Me.Refresh(true);
-                Refresh(true);
-                var headingTo = GContext.Main.Movement.GetHeadingTo(GContext.Main.Me.Location, Location);
-                if (Math.Abs(GContext.Main.Movement.CompareHeadings(headingTo, Heading)) >= Math.PI / 2.0)
+                // Non-sneaking logic: quickly run/strafe around the target.
+                bool goRight = StartupClass.random_0.Next() % 2 == 0;
+                var strafeKey = goRight ? "Common.StrafeRight" : "Common.StrafeLeft";
+
+                GContext.Main.StartRun();
+                GContext.Main.PressKey(strafeKey);
+                var timer = new GSpellTimer(4000);
+                while (!timer.IsReady)
+                {
+                    GContext.Main.Me.Refresh(true);
+                    Refresh(true);
+                    if (IsFacingAway) break; // We are behind, exit loop.
                     Thread.Sleep(25);
-                else
-                    break;
-            }
+                }
 
-            if (gspellTimer1.IsReady)
-            {
                 GContext.Main.ReleaseAllKeys();
-                return false;
-            }
 
-            GContext.Main.ReleaseRun();
-            Thread.Sleep(250 + StartupClass.random_0.Next() % 250);
-            GContext.Main.ReleaseKey(KeyName1);
-            Face();
-            GContext.Main.Me.Refresh(true);
-            Refresh(true);
-            GetToMeleeDistance();
-            return IsFacingAway && DistanceToSelf < GContext.Main.MeleeDistance;
+                if (timer.IsReady) return false; // Timed out
+
+                Face();
+                GetToMeleeDistance();
+                return IsFacingAway && DistanceToSelf < GContext.Main.MeleeDistance;
+            }
         }
 
+        /// <summary>
+        /// Adjusts player position to be within melee range but not too close.
+        /// </summary>
         private void GetToMeleeDistance()
         {
             if (DistanceToSelf < GContext.Main.MeleeDistance - 2.5)
@@ -619,161 +773,134 @@ namespace Glider.Common.Objects
                 Approach();
         }
 
+        /// <summary>
+        /// Backs away from the unit until a specific distance is reached.
+        /// </summary>
         private void BackAwayFrom(double RequestedDistance)
         {
-            if (DistanceToSelf >= RequestedDistance)
-                return;
-            var gspellTimer = new GSpellTimer(3000);
+            if (DistanceToSelf >= RequestedDistance) return;
+            var timer = new GSpellTimer(3000);
             GContext.Main.PressKey("Common.Back");
             do
             {
-                ;
-            } while (!gspellTimer.IsReadySlow && DistanceToSelf < RequestedDistance);
-
+                Thread.Sleep(25);
+            } while (!timer.IsReadySlow && DistanceToSelf < RequestedDistance);
             GContext.Main.ReleaseKey("Common.Back");
         }
 
+        /// <summary>
+        /// Manually updates the last health drop timestamp to the current time.
+        /// </summary>
         public void TouchHealthDrop()
         {
             _lastHealthDrop = Environment.TickCount;
         }
 
+        /// <summary>
+        /// Waits for a corpse to become lootable.
+        /// </summary>
         public void WaitForLootable()
         {
-            var gspellTimer = new GSpellTimer(3000, false);
+            var timer = new GSpellTimer(3000, false);
             do
             {
-                ;
-            } while (gspellTimer.IsReadySlow && !IsLootable);
+                Thread.Sleep(50);
+            } while (!timer.IsReadySlow && !IsLootable);
         }
 
-        protected int GetFactionGroupRow(int CheckBaseAddress)
-        {
-            var num1 = GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionSub"), "facsub");
-            var num2 = GProcessMemoryManipulator.ReadIntFromOffset(
-                GProcessMemoryManipulator.ReadIntFromOffset(CheckBaseAddress + MemoryOffsetTable.Instance.GetIntOffset("FactionOff1"), "fac1") +
-                MemoryOffsetTable.Instance.GetIntOffset("FactionOff2"), "fac2");
-            return GProcessMemoryManipulator.ReadIntFromOffset(
-                GProcessMemoryManipulator.ReadIntFromOffset(MemoryOffsetTable.Instance.GetIntOffset("FactionBase"), "fac3") + (num2 - num1) * 4,
-                "faclookup");
-        }
-
+        /// <summary>
+        /// Reads faction data from memory to determine the reaction between this unit and the player.
+        /// This is a complex and client-version-specific operation.
+        /// </summary>
         protected GReaction GetReaction(bool Debug)
         {
             if (GContext.Main.Me == null)
             {
-                if (Debug)
-                    GContext.Main.Log("GetReaction failed, no GContext.Main.Me!");
+                if (Debug) GContext.Main.Log("GetReaction failed, no GContext.Main.Me!");
                 return GReaction.Unknown;
             }
 
-            var factionGroupRow1 = GetFactionGroupRow(GContext.Main.Me.BaseAddress);
-            var factionGroupRow2 = GetFactionGroupRow(BaseAddress);
-            if (Debug)
-                GContext.Main.Log("Faction rows: Mine = 0x" + factionGroupRow1.ToString("x8") + ", other = 0x" +
-                                  factionGroupRow2.ToString("x8"));
-            if (factionGroupRow1 != 0 && factionGroupRow2 != 0)
+            var myFactionData = GetFactionGroupRow(GContext.Main.Me.BaseAddress);
+            var otherFactionData = GetFactionGroupRow(BaseAddress);
+
+            if (Debug) GContext.Main.Log("Faction rows: Mine = 0x" + myFactionData.ToString("x8") + ", other = 0x" + otherFactionData.ToString("x8"));
+
+            if (myFactionData != 0 && otherFactionData != 0)
             {
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf0") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 20, "rf1")) > 0)
-                {
-                    if (Debug)
-                        GContext.Main.Log("Hostile at first hostile check");
+                // This logic compares faction flags to determine relationships (hostile, friendly, neutral).
+                if ((GameMemoryAccess.ReadReactionValue(myFactionData + 12, "rf0") & GameMemoryAccess.ReadReactionValue(otherFactionData + 20, "rf1")) > 0)
                     return GReaction.Hostile;
+
+                for (int i = 0, ptr = otherFactionData + 24; i < 4; ++i, ptr += 4)
+                {
+                    var val = GameMemoryAccess.ReadReactionValue(ptr, "rf2");
+                    if (val == 0) break;
+                    if (val == GameMemoryAccess.ReadReactionValue(myFactionData + 4, "rf3"))
+                        return GReaction.Hostile;
                 }
 
-                var int_29_1 = factionGroupRow2 + 24;
-                for (var index = 0; index < 4; ++index)
-                {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_1, "rf2");
-                    if (num != 0)
-                    {
-                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf3"))
-                        {
-                            int_29_1 += 4;
-                        }
-                        else
-                        {
-                            if (Debug)
-                                GContext.Main.Log("Hostile at second hostile check");
-                            return GReaction.Hostile;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 12, "rf4") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 16, "rf5")) > 0)
-                {
-                    if (Debug)
-                        GContext.Main.Log("Friendly at first friendly check");
+                if ((GameMemoryAccess.ReadReactionValue(myFactionData + 12, "rf4") & GameMemoryAccess.ReadReactionValue(otherFactionData + 16, "rf5")) > 0)
                     return GReaction.Friendly;
+
+                for (int i = 0, ptr = otherFactionData + 40; i < 4; ++i, ptr += 4)
+                {
+                    var val = GameMemoryAccess.ReadReactionValue(ptr, "rf6");
+                    if (val == 0) break;
+                    if (val == GameMemoryAccess.ReadReactionValue(myFactionData + 4, "rf7"))
+                        return GReaction.Friendly;
                 }
 
-                var int_29_2 = factionGroupRow2 + 40;
-                for (var index = 0; index < 4; ++index)
-                {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_2, "rf6");
-                    if (num != 0)
-                    {
-                        if (num != GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 4, "rf7"))
-                        {
-                            int_29_2 += 4;
-                        }
-                        else
-                        {
-                            if (Debug)
-                                GContext.Main.Log("Friendly at second friendly check");
-                            return GReaction.Friendly;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                if ((GProcessMemoryManipulator.ReadInt32(factionGroupRow1 + 20, "rf8") &
-                     GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 12, "rf9")) > 0)
-                {
-                    if (Debug)
-                        GContext.Main.Log("Friendly at third friendly check");
+                if ((GameMemoryAccess.ReadReactionValue(myFactionData + 20, "rf8") & GameMemoryAccess.ReadReactionValue(otherFactionData + 12, "rf9")) > 0)
                     return GReaction.Friendly;
-                }
 
-                var int_29_3 = factionGroupRow1 + 40;
-                for (var index = 0; index < 4; ++index)
+                for (int i = 0, ptr = myFactionData + 40; i < 4; ++i, ptr += 4)
                 {
-                    var num = GProcessMemoryManipulator.ReadInt32(int_29_3, "rfa");
-                    if (num != 0)
-                    {
-                        if (num == GProcessMemoryManipulator.ReadInt32(factionGroupRow2 + 4, "rfb"))
-                        {
-                            if (Debug)
-                                GContext.Main.Log("Friendly at fourth friendly check");
-                            return GReaction.Friendly;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    var val = GameMemoryAccess.ReadReactionValue(ptr, "rfa");
+                    if (val == 0) break;
+                    if (val == GameMemoryAccess.ReadReactionValue(otherFactionData + 4, "rfb"))
+                        return GReaction.Friendly;
                 }
 
-                if (Debug)
-                    GContext.Main.Log("Neutral at final catch-all");
                 return GReaction.Neutral;
             }
 
-            if (Debug)
-                GContext.Main.Log("GetReaction failed, missing a faction row!  Mine = 0x" +
-                                  factionGroupRow1.ToString("x8") + ", other = 0x" + factionGroupRow2.ToString("x8"));
+            if (Debug) GContext.Main.Log("GetReaction failed, missing a faction row! Mine = 0x" + myFactionData.ToString("x8") + ", other = 0x" + otherFactionData.ToString("x8"));
             return GReaction.Unknown;
         }
 
+        protected int GetFactionGroupRow(int CheckBaseAddress)
+        {
+            var factionSub = GameMemoryAccess.ReadFactionSub();
+            var factionOff1 = GameMemoryAccess.ReadFactionOff1(CheckBaseAddress);
+            if (factionSub == 0 || factionOff1 == 0)
+                return 0;
+
+            var factionOff2 = GameMemoryAccess.ReadFactionOff2(factionOff1);
+            var factionBase = GameMemoryAccess.ReadFactionBase();
+            if (factionOff2 == 0 || factionBase == 0)
+                return 0;
+
+            var sub = unchecked((uint)factionSub);
+            var off2 = unchecked((uint)factionOff2);
+            if (off2 < sub)
+                return 0;
+
+            var rowDelta = off2 - sub;
+            if (rowDelta > 131072U)
+                return 0;
+
+            return GameMemoryAccess.ReadFactionLookup(factionBase, unchecked((int)rowDelta));
+        }
+
+        protected int GetFactionGroupRow(uint CheckBaseAddress)
+        {
+            return GetFactionGroupRow(unchecked((int)CheckBaseAddress));
+        }
+
+        /// <summary>
+        /// Gets a snapshot of the unit's current auras (buffs and debuffs).
+        /// </summary>
+        /// <param name="BypassTimer">If true, forces a refresh from memory, ignoring the cache timer.</param>
         public GBuff[] GetBuffSnapshot(bool BypassTimer)
         {
             lock (this)
@@ -785,11 +912,12 @@ namespace Glider.Common.Objects
             }
         }
 
-        public GBuff[] GetBuffSnapshot()
-        {
-            return GetBuffSnapshot(false);
-        }
+        public GBuff[] GetBuffSnapshot() => GetBuffSnapshot(false);
 
+        /// <summary>
+        /// Checks if the unit has a specific buff/debuff.
+        /// </summary>
+        /// <param name="SpellID">The spell ID of the aura.</param>
         public bool HasBuff(int SpellID)
         {
             foreach (var gbuff in GetBuffSnapshot())
@@ -798,40 +926,10 @@ namespace Glider.Common.Objects
             return false;
         }
 
-        private int[] GetWellKnownBuff(string WKBuffName)
-        {
-            if (WKBuffs.ContainsKey(WKBuffName))
-                return WKBuffs[WKBuffName];
-            var strArray = MemoryOffsetTable.Instance.GetStringOffset("Buff_" + WKBuffName)
-                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            var wellKnownBuffList = new List<int>();
-            for (var index = 0; index < strArray.Length; ++index)
-            {
-                if (!int.TryParse(strArray[index], NumberStyles.HexNumber, null, out var value))
-                {
-                    Logger.smethod_1($"Invalid hex value for buff '{WKBuffName}': '{strArray[index]}'");
-                    continue;
-                }
-                wellKnownBuffList.Add(value);
-            }
-            var wellKnownBuff = wellKnownBuffList.ToArray();
-            WKBuffs.Add(WKBuffName, wellKnownBuff);
-            return wellKnownBuff;
-        }
-
-        public bool HasWellKnownBuff(string WKBuffName)
-        {
-            var wellKnownBuff = GetWellKnownBuff(WKBuffName);
-            var buffSnapshot = GetBuffSnapshot();
-            if (wellKnownBuff == null)
-                return false;
-            foreach (var gbuff in buffSnapshot)
-                foreach (var num in wellKnownBuff)
-                    if (gbuff.SpellID == num)
-                        return true;
-            return false;
-        }
-
+        /// <summary>
+        /// Checks if the unit has any of the specified buffs/debuffs.
+        /// </summary>
+        /// <param name="AnySpellID">An array of spell IDs to check for.</param>
         public bool HasBuff(int[] AnySpellID)
         {
             foreach (var gbuff in GetBuffSnapshot())
@@ -841,6 +939,53 @@ namespace Glider.Common.Objects
             return false;
         }
 
+        /// <summary>
+        /// Checks if the unit has a buff from a pre-defined group (e.g., "Food", "Drink").
+        /// </summary>
+        public bool HasWellKnownBuff(string WKBuffName)
+        {
+            var wellKnownBuffIds = GetWellKnownBuff(WKBuffName);
+            var currentBuffs = GetBuffSnapshot();
+
+            if (wellKnownBuffIds == null) return false;
+
+            foreach (var gbuff in currentBuffs)
+                foreach (var id in wellKnownBuffIds)
+                    if (gbuff.SpellID == id)
+                        return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Retrieves and caches a list of spell IDs for a "Well Known" buff category.
+        /// </summary>
+        private int[] GetWellKnownBuff(string WKBuffName)
+        {
+            if (WKBuffs.ContainsKey(WKBuffName))
+                return WKBuffs[WKBuffName];
+
+            var buffIdStrings = MemoryOffsetTable.Instance.GetStringOffset("Buff_" + WKBuffName)
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var wellKnownBuffList = new List<int>();
+            for (var index = 0; index < buffIdStrings.Length; ++index)
+            {
+                if (!int.TryParse(buffIdStrings[index], NumberStyles.HexNumber, null, out var value))
+                {
+                    Logger.smethod_1($"Invalid hex value for buff '{WKBuffName}': '{buffIdStrings[index]}'");
+                    continue;
+                }
+                wellKnownBuffList.Add(value);
+            }
+
+            var wellKnownBuff = wellKnownBuffList.ToArray();
+            WKBuffs.Add(WKBuffName, wellKnownBuff);
+            return wellKnownBuff;
+        }
+
+        /// <summary>
+        /// Marks the buff list as outdated, forcing a refresh on the next query.
+        /// </summary>
         public void SetBuffsDirty()
         {
             lock (this)
@@ -849,62 +994,10 @@ namespace Glider.Common.Objects
             }
         }
 
-        protected void LoadBuffList()
-        {
-            if (!MemoryOffsetTable.Instance.HasOffset("NB_BaseCount") ||
-                !MemoryOffsetTable.Instance.HasOffset("NB_BaseList") ||
-                !MemoryOffsetTable.Instance.HasOffset("NB_ExtCount") ||
-                !MemoryOffsetTable.Instance.HasOffset("NB_ExtListPtr"))
-            {
-                LoadBuffListOld();
-                return;
-            }
-
-            var gbuffList = new List<GBuff>();
-            var num1 = 24;
-            var num2 = 8;
-            var num3 = 14;
-            var num4 = 12;
-            var num5 = 128;
-            var num6 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseCount"), "ubuffcount");
-            var num7 = BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_BaseList");
-            var num8 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtCount"), "extbuffcount");
-            if (num6 < 0 || num6 > 256)
-            {
-                LoadBuffListOld();
-                return;
-            }
-            if (num8 > 0)
-            {
-                num6 = num8;
-                num7 = GProcessMemoryManipulator.ReadInt32(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("NB_ExtListPtr"), "extbuffptr");
-                if (num6 < 0 || num6 > 256 || num7 == 0)
-                {
-                    LoadBuffListOld();
-                    return;
-                }
-            }
-
-            for (var index = 0; index < num6; ++index)
-            {
-                var num9 = num7 + index * num1;
-                var SpellID = GProcessMemoryManipulator.ReadInt32(num9 + num2, "buffsid");
-                if (SpellID > 0 && SpellID < 200000)
-                {
-                    var IsHarmful = false;
-                    int ChargesLeft = GProcessMemoryManipulator.ReadByte(num9 + num3, "buffchgs");
-                    if ((GProcessMemoryManipulator.ReadByte(num9 + num4, "buffflgs") & num5) > 0)
-                        IsHarmful = true;
-                    if (SpellID != 0)
-                        gbuffList.Add(new GBuff(SpellID, ChargesLeft, IsHarmful));
-                }
-            }
-
-            _lastBuffs = gbuffList.ToArray();
-            _lastBuffCheck = Environment.TickCount;
-        }
-
-        protected virtual void LoadBuffListOld()
+        /// <summary>
+        /// Reads the aura list for the unit from memory. This is the correct method for 3.3.5a.
+        /// </summary>
+        protected virtual void LoadBuffList()
         {
             if (!MemoryOffsetTable.Instance.HasOffset("UNIT_FIELD_AURA"))
             {
@@ -914,16 +1007,19 @@ namespace Glider.Common.Objects
             }
 
             var gbuffList = new List<GBuff>();
-            var num1 = 16;
-            var num2 = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
-            if (IsPlayer)
-                num1 = 40;
-            for (var index = 0; index < 56; ++index)
+            // Debuffs start at index 40 for players, 16 for NPCs.
+            var debuffStartIndex = IsPlayer ? 40 : 16;
+            var auraStructAddress = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
+
+            for (var index = 0; index < MAX_AURAS; ++index)
             {
-                var SpellID = GProcessMemoryManipulator.ReadInt32(num2 + index * 4, "BuffSpell" + index);
-                var IsHarmful = index >= num1 && index < num1 + 16;
-                if (SpellID > 0 && SpellID < 200000)
-                    gbuffList.Add(new GBuff(SpellID, 0, IsHarmful));
+                var spellId = GameMemoryAccess.ReadOldBuffSpellId(auraStructAddress, index);
+                if (spellId > 0 && spellId < 200000)
+                {
+                    // In 3.3.5a, harmful auras (debuffs) are located in a specific block of the aura array.
+                    var isHarmful = index >= debuffStartIndex && index < debuffStartIndex + 16;
+                    gbuffList.Add(new GBuff(spellId, 0, isHarmful));
+                }
             }
 
             _lastBuffs = gbuffList.ToArray();

@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: LootableCorpseTracker
 // Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
 // MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
@@ -19,9 +19,9 @@ public class LootableCorpseTracker
     public GameTimer gclass36_0;
     public GLocation glocation_0;
     protected int int_0;
-    public long long_0;
+    public ulong long_0;
 
-    public LootableCorpseTracker(long long_1, bool bool_3, GLocation glocation_1, bool bool_4)
+    public LootableCorpseTracker(ulong long_1, bool bool_3, GLocation glocation_1, bool bool_4)
     {
         long_0 = long_1;
         gclass36_0 = new GameTimer(60000);
@@ -272,7 +272,7 @@ public class LootableCorpseTracker
         var flag3 = false;
         while (!gspellTimer4.IsReadySlow)
         {
-            var num = GProcessMemoryManipulator.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "lwprobe");
+            var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("LootWindow"), "lwprobe");
             if (num != 0 || !flag3)
             {
                 if (num != 0)
