@@ -115,7 +115,7 @@ public class StartupClass
     public static DateTime expiryTime;
     public static bool isTimeAdded;
     public static bool HasAppliedTimeExtension = false;
-    public static ILogger StartupLogger;
+    public static Logger StartupLogger;
     public static bool IsInitializationComplete;
     public static int LastSecurityCode;
     public static CombatController ActiveCombatController;
@@ -200,7 +200,7 @@ public class StartupClass
     public static GameClass gameClass_0 { get { return SelectedGameClass; } set { SelectedGameClass = value; } }
     public static bool bool_23 { get { return HasShownStartupNotice; } set { HasShownStartupNotice = value; } }
     public static bool bool_26 { get { return HasAppliedTimeExtension; } set { HasAppliedTimeExtension = value; } }
-    public static ILogger ginterface0_0 { get { return StartupLogger; } set { StartupLogger = value; } }
+    public static Logger ginterface0_0 { get { return StartupLogger; } set { StartupLogger = value; } }
     public static bool bool_27 { get { return IsInitializationComplete; } set { IsInitializationComplete = value; } }
     public static int int_10 { get { return LastSecurityCode; } set { LastSecurityCode = value; } }
     public static CombatController gclass73_0 { get { return ActiveCombatController; } set { ActiveCombatController = value; } }

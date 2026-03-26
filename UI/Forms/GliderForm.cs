@@ -19,7 +19,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Layout;
 
 #nullable disable
-public class GliderForm : Form, ILogger
+public class GliderForm : Form, Logger.IUiSink
 {
     public const int int_0 = 20000;
     private const uint uint_0 = 4874;
@@ -150,7 +150,8 @@ public class GliderForm : Form, ILogger
     {
         Application.ThreadException += new ThreadExceptionEventHandler(this.method_19);
         GliderForm.gliderForm_0 = this;
-        StartupClass.ginterface0_0 = (ILogger)this;
+        Logger.Instance.AttachUiSink(this);
+        StartupClass.ginterface0_0 = Logger.Instance;
         this.string_0 = "";
         this.method_13();
         StartupClass.MainForm = (Form)this;
@@ -288,7 +289,7 @@ public class GliderForm : Form, ILogger
     private static void Main()
     {
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-        StartupClass.ginterface0_0 = UnifiedLogger.Default;
+        StartupClass.ginterface0_0 = Logger.Instance;
 
         // Register our global crash handlers to capture and persist richer crash information
         try
@@ -298,7 +299,7 @@ public class GliderForm : Form, ILogger
         catch { }
 
         if (Environment.CommandLine.ToLower().IndexOf("/invisible") > -1)
-            ApplicationLogger.smethod_0();
+            Logger.smethod_0();
         else
             Application.Run((Form)new GliderForm());
     }
@@ -1022,18 +1023,10 @@ public class GliderForm : Form, ILogger
         this.ResumeLayout(false);
     }
 
-    void ILogger.imethod_3(string string_2)
-    {
-        if (!StartupClass.IsBetaAccessGranted)
-            return;
-        ((ILogger)this).imethod_2("[Debug] " + string_2);
-    }
-
-    void ILogger.imethod_2(string string_2)
+    public void OnLogMessage(string string_2)
     {
         lock (this.object_0)
         {
-            this.method_6(string_2);
             if (!string_2.StartsWith("[Debug]"))
             {
                 GliderForm gliderForm = this;
@@ -1048,21 +1041,21 @@ public class GliderForm : Form, ILogger
         StartupClass.smethod_17(2, string_2);
     }
 
-    private void method_6(string string_2)
+    public void OnLoggerRefreshRequested()
     {
-        DateTime now = DateTime.Now;
-        string path = "Glider.log";
-        try
-        {
-            StreamWriter streamWriter = File.AppendText(path);
-            streamWriter.WriteLine(now.ToString("HH:mm:ss.ffff ") + string_2);
-            streamWriter.Flush();
-            streamWriter.Close();
-        }
-        catch (IOException ex)
-        {
-            Console.WriteLine(MessageProvider.smethod_2(90, (object)ex.Message));
-        }
+        this.bool_1 = true;
+    }
+
+    public void OnLoggerToggleRequested()
+    {
+        this.label11.Checked = !this.label11.Checked;
+    }
+
+    public void OnLoggerShutdownRequested()
+    {
+        this.bool_5 = true;
+        Logger.LogMessage("Setting stop flag in Gliderform");
+        Thread.Sleep(1200);
     }
 
     private void StopButton_Click(object sender, EventArgs e)
@@ -1130,7 +1123,7 @@ public class GliderForm : Form, ILogger
         {
             StartupClass.gclass36_0 = (GameTimer)null;
             StartupClass.bool_19 = true;
-            ((ILogger)gliderForm_0).imethod_2(MessageProvider.GetMessage(103));
+            gliderForm_0.OnLogMessage(MessageProvider.GetMessage(103));
             StartupClass.smethod_27(false, "Timer1Up");
         }
         if (this.bool_2)
@@ -1221,7 +1214,7 @@ public class GliderForm : Form, ILogger
         {
             if (Environment.TickCount - this.int_9 > 1000)
             {
-                ((ILogger)this).imethod_2("[Debug] [PTR] Me is null while attached");
+                this.OnLogMessage("[Debug] [PTR] Me is null while attached");
                 this.int_9 = Environment.TickCount;
             }
         }
@@ -1229,7 +1222,7 @@ public class GliderForm : Form, ILogger
         if (StartupClass.bool_21 && StartupClass.gclass36_1.method_3())
         {
             StartupClass.bool_21 = false;
-            ((ILogger)this).imethod_2(MessageProvider.GetMessage(105));
+            this.OnLogMessage(MessageProvider.GetMessage(105));
             InputController.smethod_28(MessageProvider.GetMessage(655));
         }
         if (StartupClass.AnotherIntegerValue == 0 && StartupClass.int_12 != 0 && StartupClass.IsGliderAttached)
@@ -1271,7 +1264,7 @@ public class GliderForm : Form, ILogger
         string str = ConfigManager.gclass61_0.method_2("AppKey");
         if (dialogResult != DialogResult.OK)
             return;
-        ((ILogger)this).imethod_2(MessageProvider.GetMessage(106));
+        this.OnLogMessage(MessageProvider.GetMessage(106));
         ConfigManager.gclass61_0.method_8();
         this.method_4();
         if (!(str != ConfigManager.gclass61_0.method_2("AppKey")) && !StartupClass.gclass54_0.bool_4 && StartupClass.isInitializationSuccessful)
@@ -1300,7 +1293,7 @@ public class GliderForm : Form, ILogger
             StartupClass.gclass54_0.bool_4 = false;
             if (new ConfigForm(false).ShowDialog() != DialogResult.OK)
                 return;
-            ((ILogger)this).imethod_2(MessageProvider.GetMessage(106));
+            this.OnLogMessage(MessageProvider.GetMessage(106));
             ConfigManager.gclass61_0.method_8();
             this.method_4();
             StartupClass.gclass24_0.method_0();
@@ -1433,11 +1426,7 @@ public class GliderForm : Form, ILogger
 
     private void method_13()
     {
-        if (File.Exists("Glider.log"))
-            File.Delete("Glider.log");
-        using (File.Create("Glider.log"))
-        {
-        }
+        Logger.Instance.Reset();
     }
 
     public void method_14(bool bool_11)
@@ -1570,7 +1559,7 @@ public class GliderForm : Form, ILogger
         if (this.label11.Checked)
         {
             Logger.smethod_1("AA2");
-            ((ILogger)gliderForm_0).imethod_2(MessageProvider.GetMessage(138));
+            gliderForm_0.OnLogMessage(MessageProvider.GetMessage(138));
             Logger.smethod_1("AA3");
             if (StartupClass.bool_13)
             {
@@ -1587,7 +1576,7 @@ public class GliderForm : Form, ILogger
         else
         {
             Logger.smethod_1("AA7");
-            ((ILogger)gliderForm_0).imethod_2(MessageProvider.GetMessage(139));
+            gliderForm_0.OnLogMessage(MessageProvider.GetMessage(139));
         }
         Logger.smethod_1("AA8");
     }
@@ -1635,7 +1624,7 @@ public class GliderForm : Form, ILogger
         base.OnClosing(cancelEventArgs_0);
     }
 
-    void ILogger.imethod_0() => this.bool_1 = true;
+    public void OnLoggerRefreshRequested() => this.bool_1 = true;
 
     public void method_20()
     {
@@ -1657,11 +1646,11 @@ public class GliderForm : Form, ILogger
         this.LabelManaHeader_1.Text = StartupClass.CurrentGameClass.PowerLabel + ":";
     }
 
-    void ILogger.imethod_1() => this.label11.Checked = !this.label11.Checked;
+    public void OnLoggerToggleRequested() => this.label11.Checked = !this.label11.Checked;
 
-    public static void smethod_2() => ApplicationLogger.smethod_0();
+    public static void smethod_2() => Logger.smethod_0();
 
-    void ILogger.imethod_4()
+    public void OnLoggerShutdownRequested()
     {
         this.bool_5 = true;
         Logger.LogMessage("Setting stop flag in Gliderform");
@@ -2306,7 +2295,7 @@ public class GliderForm : Form, ILogger
     {
         if (label_13.Text != string_3)
         {
-            ((ILogger)this).imethod_2("[Debug] [UI] " + string_2 + " <= " + string_3);
+            this.OnLogMessage("[Debug] [UI] " + string_2 + " <= " + string_3);
             label_13.Text = string_3;
         }
     }
@@ -2343,7 +2332,7 @@ public class GliderForm : Form, ILogger
             targetInfo = "GUID=0x" + targetGuid.ToString("x") + " (unresolved)";
         }
 
-        ((ILogger)this).imethod_2("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x") + ", HP=" + gplayerSelf_0.HealthPoints + "/" + gplayerSelf_0.HealthMax + ", Rage=" + gplayerSelf_0.Rage + ", Coords=" + meCoords + ", Target=" + targetInfo);
+        this.OnLogMessage("[Debug] [PTR] Me " + (flag ? "changed" : "unchanged") + ": GUID=0x" + guid.ToString("x") + ", Base=0x" + baseAddress.ToString("x") + ", Storage=0x" + storageAddress.ToString("x") + ", HP=" + gplayerSelf_0.HealthPoints + "/" + gplayerSelf_0.HealthMax + ", Rage=" + gplayerSelf_0.Rage + ", Coords=" + meCoords + ", Target=" + targetInfo);
         this.long_1 = guid;
         this.int_6 = baseAddress;
         this.int_7 = storageAddress;
