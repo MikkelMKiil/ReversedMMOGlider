@@ -10,37 +10,6 @@ using System.Windows.Forms;
 
 namespace Glider.Common.Objects
 {
-    internal static class WotlkOffsets
-    {
-        internal const uint ClientConnection = 0x00C79CE0;
-        internal const uint CurMgrOffset = 0x2ED0;
-        internal const uint FirstObject = 0xAC;
-        internal const uint LocalGuid = 0xC0;
-        internal const uint PlayerGuid = LocalGuid;
-        internal const uint TargetGuid = 0x00BD07B0;
-
-        internal const uint ObjStoragePointer = 0x8;
-        internal const uint ObjType = 0x14;
-        internal const uint ObjGuid = 0x30;
-        internal const uint NextObject = 0x3C;
-
-        internal const uint PosX = 0x9B8;
-        internal const uint PosY = 0x9BC;
-        internal const uint PosZ = 0x9C0;
-
-        internal const uint DescriptorBase = 0x8;
-        internal const uint UnitFieldHealth = 0x6C;
-        internal const uint UnitFieldMaxHealth = 0x74;
-        internal const uint UnitFieldPower1 = 0x70;
-        internal const uint UnitFieldMaxPower1 = 0x78;
-        internal const uint UnitFieldPower2 = 0x74;
-        internal const uint UnitFieldPower4 = 0x7C;
-        internal const uint UnitFieldFactionTemplate = 0x90;
-
-        internal const uint PlayerNameStore = 0x00C79D18;
-        internal const uint MapId = 0x00AB63BC;
-    }
-
     internal static class GProcessMemoryManipulator
     {
         private const int ERROR_PARTIAL_COPY = 299;
@@ -597,16 +566,16 @@ namespace Glider.Common.Objects
             playerGuid = 0L;
             mainTable = 0;
 
-            var clientConnection = ReadUInt32(WotlkOffsets.ClientConnection, "ClientConnection");
+            var clientConnection = ReadUInt32(GameMemoryConstants.Wotlk.ClientConnection, "ClientConnection");
             if (!IsLikelyMemoryPointer(clientConnection)) return false;
 
-            var objectManager = ReadUInt32(clientConnection + WotlkOffsets.CurMgrOffset, "CurMgrOffset");
+            var objectManager = ReadUInt32(clientConnection + GameMemoryConstants.Wotlk.CurMgrOffset, "CurMgrOffset");
             if (!IsLikelyMemoryPointer(objectManager)) return false;
 
-            var firstObject = ReadUInt32(objectManager + WotlkOffsets.FirstObject, "FirstObject");
+            var firstObject = ReadUInt32(objectManager + GameMemoryConstants.Wotlk.FirstObject, "FirstObject");
             if (!IsLikelyMemoryPointer(firstObject)) return false;
 
-            playerGuid = ReadInt64(objectManager + WotlkOffsets.LocalGuid, "LocalGUID");
+            playerGuid = ReadInt64(objectManager + GameMemoryConstants.Wotlk.LocalGuid, "LocalGUID");
             if (playerGuid == 0L) return false;
 
             mainTable = unchecked((int)objectManager);

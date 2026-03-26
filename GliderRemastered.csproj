@@ -201,7 +201,6 @@
     <Compile Include="Game\Combat\CombatController.cs" />
     <Compile Include="Game\Combat\SpellActionData.cs" />
     <Compile Include="Game\Combat\SpellbookManager.cs" />
-    <Compile Include="Game\Combat\SpellbookOffsets.cs" />
     <Compile Include="Game\Combat\SpellcastingManager.cs" />
     <Compile Include="Game\Combat\SpellEnabledState.cs" />
     <Compile Include="Game\Combat\SpellEntry.cs" />
@@ -298,6 +297,7 @@
     <Compile Include="Game\Objects\PlayerTracker.cs" />
     <Compile Include="Game\Objects\RestStatusMonitor.cs" />
     <Compile Include="Game\Objects\WaypointType.cs" />
+    <Compile Include="Memory\GameMemoryConstants.cs" />
     <Compile Include="Memory\GProcessMemoryManipulator.cs" />
     <Compile Include="Memory\MemoryMaster.cs" />
     <Compile Include="Memory\MemoryOffsetTable.cs" />

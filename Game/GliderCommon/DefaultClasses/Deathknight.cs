@@ -33,11 +33,6 @@ namespace Glider.Common.Objects
         bool PickedUpAdd;
         bool CanHorn;                                  // Do we have Horn of Winter in the spellbook?
 
-        const int BUFF_BONESHIELD = 0xc046;
-        const int BUFF_DEATHTRANCE = 0xc522;
-        const int DEBUFF_FROSTFEVER = 0xd737;
-        const int DEBUFF_BLOODPLAGUE = 0xd726;
-        const int ITEMID_CORPSEDUST = 0x9151;
         #endregion
 
         #region Death knight runes and helpers
@@ -138,7 +133,7 @@ namespace Glider.Common.Objects
 
         public override void RunningAction()
         {
-            if (Interface.IsKeyPopulated("Deathknight.BoneShield") && !Me.HasBuff(BUFF_BONESHIELD))
+            if (Interface.IsKeyPopulated("Deathknight.BoneShield") && !Me.HasBuff(GameMemoryConstants.ClassIds.Deathknight.BoneShieldBuff))
             {
                 UpdateAvailableRunes();
 
@@ -212,10 +207,10 @@ namespace Glider.Common.Objects
                 bool BringGhoul = false;
 
                 // TODO: unit test this specially
-                Context.Log("Thinking about ghoul, corpse dust present: " + IsCarryingItem(ITEMID_CORPSEDUST));
+                Context.Log("Thinking about ghoul, corpse dust present: " + IsCarryingItem(GameMemoryConstants.ClassIds.Deathknight.CorpseDustItemId));
 
                 // See if there's a corpse handy to use.  If not, screw it.
-                if (UseCorpseDust && IsCarryingItem(ITEMID_CORPSEDUST))
+                if (UseCorpseDust && IsCarryingItem(GameMemoryConstants.ClassIds.Deathknight.CorpseDustItemId))
                     BringGhoul = true;
                 else
                     if (GetClosestHumanoidCorpse() < 20.0)
@@ -325,7 +320,7 @@ namespace Glider.Common.Objects
                 }
 
                 // Put up Frost Fever if it's not up:
-                if (!Target.HasBuff(DEBUFF_FROSTFEVER) && FrostAvailable > 0 && FutileIcy > 0)
+                if (!Target.HasBuff(GameMemoryConstants.ClassIds.Deathknight.FrostFeverDebuff) && FrostAvailable > 0 && FutileIcy > 0)
                 {
                     Context.CastSpell("Deathknight.IcyTouch");
                     FutileIcy--;
@@ -333,7 +328,7 @@ namespace Glider.Common.Objects
                 }
 
                 // Put up Blood Plague if it's not up:
-                if (!Target.HasBuff(DEBUFF_BLOODPLAGUE) && UnholyAvailable > 0 && FutileBP > 0)
+                if (!Target.HasBuff(GameMemoryConstants.ClassIds.Deathknight.BloodPlagueDebuff) && UnholyAvailable > 0 && FutileBP > 0)
                 {
                     Context.CastSpell("Deathknight.PlagueStrike");
                     FutileBP--;
@@ -348,7 +343,7 @@ namespace Glider.Common.Objects
                 }
 
                 // Fire off death coil when it's up:
-                if ((Me.RunicPower >= 40 || Me.HasBuff(BUFF_DEATHTRANCE)) && Interface.IsKeyReady("Deathknight.DeathCoil"))
+                if ((Me.RunicPower >= 40 || Me.HasBuff(GameMemoryConstants.ClassIds.Deathknight.DeathTranceBuff)) && Interface.IsKeyReady("Deathknight.DeathCoil"))
                 {
                     Context.CastSpell("Deathknight.DeathCoil");
                     continue;

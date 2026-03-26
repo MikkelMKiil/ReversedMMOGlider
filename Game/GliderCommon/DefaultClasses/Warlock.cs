@@ -26,7 +26,6 @@ namespace Glider.Common.Objects
     public class Warlock : GGameClass
     {
         const string BIG_HEALTHSTONE_LIST = "5510 19010 19011 5509 19008 19009 5511 19006 19007 9421 19012 19013 22103 22104 22105 5512 19004 19005";
-        const int SOUL_SHARD_ITEMDEF = 0x1879;
 
         #region Warlock props
         // State stuff:
@@ -489,7 +488,7 @@ namespace Glider.Common.Objects
                 {
                     Context.Debug(i.ToString());
 
-                    if (i.ItemDefID == SOUL_SHARD_ITEMDEF)
+                    if (i.ItemDefID == GameMemoryConstants.ClassIds.Warlock.SoulShardItemId)
                         Shards++;
                 }
 

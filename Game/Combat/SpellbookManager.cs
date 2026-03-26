@@ -20,17 +20,34 @@ public class SpellbookManager
     public SpellbookManager()
     {
         Offsets = new SortedList<int, SpellEntry>();
-        bool_0 = method_18("MySpells", "SpellListBase", "SpellListRowCount", "SpellListSub", "SpellNameRLE", "BuffTypeRLE", "SpellGroupRLE", "SpellRankRLE");
-        bool_1 = method_18("CooldownStart", "CooldownStep", "CD_TicksAtCast", "CD_DurationGCD", "CD_SpellID", "CD_GroupID", "CD_ActiveDuration", "CD_DurationSpell", "CD_DurationGroup");
+        bool_0 = method_18(
+            GameMemoryConstants.Spellbook.MySpells,
+            GameMemoryConstants.Spellbook.SpellListBase,
+            GameMemoryConstants.Spellbook.SpellListRowCount,
+            GameMemoryConstants.Spellbook.SpellListSub,
+            GameMemoryConstants.Spellbook.SpellNameRLE,
+            GameMemoryConstants.Spellbook.BuffTypeRLE,
+            GameMemoryConstants.Spellbook.SpellGroupRLE,
+            GameMemoryConstants.Spellbook.SpellRankRLE);
+        bool_1 = method_18(
+            GameMemoryConstants.Spellbook.CooldownStart,
+            GameMemoryConstants.Spellbook.CooldownStep,
+            GameMemoryConstants.Spellbook.CD_TicksAtCast,
+            GameMemoryConstants.Spellbook.CD_DurationGCD,
+            GameMemoryConstants.Spellbook.CD_SpellID,
+            GameMemoryConstants.Spellbook.CD_GroupID,
+            GameMemoryConstants.Spellbook.CD_ActiveDuration,
+            GameMemoryConstants.Spellbook.CD_DurationSpell,
+            GameMemoryConstants.Spellbook.CD_DurationGroup);
         if (!bool_0)
         {
             method_4("SpellbookEx disabled: required spell list offsets are missing for this client build");
             return;
         }
-        var num = MemoryOffsetTable.Instance.GetIntOffset("MySpells");
-        method_1(method_5("SpellListBase"), "slb");
-        method_1(method_5("SpellListRowCount"), "slrc");
-        method_1(method_5("SpellListSub"), "sls");
+        var num = (int)GameMemoryConstants.Spellbook.MySpells;
+        method_1((int)GameMemoryConstants.Spellbook.SpellListBase, "slb");
+        method_1((int)GameMemoryConstants.Spellbook.SpellListRowCount, "slrc");
+        method_1((int)GameMemoryConstants.Spellbook.SpellListSub, "sls");
         for (var index = 0; index < 1024; ++index)
         {
             var int_1 = method_1(num + index * 4, "sid");
@@ -64,11 +81,6 @@ public class SpellbookManager
     private void method_4(string string_0)
     {
         Logger.LogMessage(string_0);
-    }
-
-    private int method_5(string string_0)
-    {
-        return MemoryOffsetTable.Instance.GetIntOffset(string_0);
     }
 
     public void method_6()
@@ -184,14 +196,14 @@ public class SpellbookManager
     {
         if (!bool_1)
             return true;
-        var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
+        var num1 = method_1((int)(GameMemoryConstants.Spellbook.CooldownStart + GameMemoryConstants.Spellbook.CooldownStep), "cdstart");
         var num2 = GameMemoryAccess.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             for (; num1 != 0 && num1 % 2 == 0; num1 = method_1(num1 + 4, "c1next"))
             {
-                var num3 = method_1(num1 + method_5("CD_TicksAtCast"), "c1tac");
-                var num4 = method_1(num1 + method_5("CD_DurationGCD"), "c1durgcd");
+                var num3 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_TicksAtCast, "c1tac");
+                var num4 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_DurationGCD, "c1durgcd");
                 if (num4 != 0)
                 {
                     if (num3 + num4 > int_0 || int_0 == 0)
@@ -216,19 +228,19 @@ public class SpellbookManager
         if (Offsets.ContainsKey(int_1))
             method_9(int_1);
         var gclass64 = Offsets[int_1];
-        var num1 = method_1(method_5("CooldownStart") + method_5("CooldownStep"), "cdstart");
+        var num1 = method_1((int)(GameMemoryConstants.Spellbook.CooldownStart + GameMemoryConstants.Spellbook.CooldownStep), "cdstart");
         var num2 = GameMemoryAccess.GetProcessIdFromWindow();
         if (num1 != 0 && num1 % 2 == 0)
         {
             while (num1 != 0 && num1 % 2 == 0)
             {
-                var num3 = method_1(num1 + method_5("CD_SpellID"), "c1sid");
-                var num4 = method_1(num1 + method_5("CD_TicksAtCast"), "c1tac");
-                var num5 = method_1(num1 + method_5("CD_GroupID"), "c1sgid");
-                var num6 = method_1(num1 + method_5("CD_ActiveDuration"), "c1adur");
-                var num7 = method_1(num1 + method_5("CD_DurationSpell"), "c1dur1");
-                var num8 = method_1(num1 + method_5("CD_DurationGroup"), "c1dur2");
-                var num9 = method_1(num1 + method_5("CD_DurationGCD"), "c1durgcd");
+                var num3 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_SpellID, "c1sid");
+                var num4 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_TicksAtCast, "c1tac");
+                var num5 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_GroupID, "c1sgid");
+                var num6 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_ActiveDuration, "c1adur");
+                var num7 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_DurationSpell, "c1dur1");
+                var num8 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_DurationGroup, "c1dur2");
+                var num9 = method_1(num1 + (int)GameMemoryConstants.Spellbook.CD_DurationGCD, "c1durgcd");
                 if (num6 == 1)
                 {
                     if (num3 == gclass64.int_0)
@@ -262,8 +274,8 @@ public class SpellbookManager
     {
         if (!bool_0)
             return null;
-        var num1 = method_1(method_5("SpellListBase"), "slstart");
-        var num2 = method_1(method_5("SpellListSub"), "slsbottom");
+        var num1 = method_1((int)GameMemoryConstants.Spellbook.SpellListBase, "slstart");
+        var num2 = method_1((int)GameMemoryConstants.Spellbook.SpellListSub, "slsbottom");
         if (num1 == 0)
             return null;
         var int_1_1 = method_1(num1 + (int_1 - num2) * 4, "satidx");
@@ -271,8 +283,8 @@ public class SpellbookManager
             return null;
         try
         {
-            var numArray = method_17(int_1_1, method_5("SpellNameRLE") + 48);
-            if (numArray.Length >= MemoryOffsetTable.Instance.GetIntOffset("SpellNameRLE") + 4)
+            var numArray = method_17(int_1_1, (int)GameMemoryConstants.Spellbook.SpellNameRLE + 48);
+            if (numArray.Length >= (int)GameMemoryConstants.Spellbook.SpellNameRLE + 4)
                 return numArray;
             method_4("! Can't read spelldata for 0x" + int_1.ToString("x") + ", RLE data too short: 0x" +
                      numArray.Length.ToString("x") + " bytes");
@@ -313,22 +325,12 @@ public class SpellbookManager
         return memoryStream.ToArray();
     }
 
-    private bool method_18(params string[] string_0)
+    private bool method_18(params uint[] uint_0)
     {
-        foreach (var str in string_0)
+        foreach (var value in uint_0)
         {
-            if (!MemoryOffsetTable.Instance.HasOffset(str))
-                return false;
-
-            var value = MemoryOffsetTable.Instance.GetIntOffset(str);
-
-            // In this project, offset "0" is widely used as a placeholder for "unknown/not reversed yet".
-            // SpellbookEx must not run with placeholders; it will read bogus memory and prevent combat.
             if (value == 0)
-            {
-                Logger.LogMessage("SpellbookEx disabled: required spell list offsets are missing for this client build (placeholder 0x0): " + str);
                 return false;
-            }
         }
 
         return true;

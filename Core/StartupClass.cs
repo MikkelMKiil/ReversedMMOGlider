@@ -159,10 +159,6 @@ public class StartupClass
     private static int LastMainLoopTickTime;
     private static bool IsWorldUiReady;
     private const int MinMainLoopTickIntervalMs = 75;
-    private const int WotlkClientConnectionAddress = 0x00C79CE0;
-    private const int WotlkObjectManagerOffset = 0x2ED0;
-    private const int WotlkObjectManagerLocalGuidOffset = 0xC0;
-    private const int WotlkStaticPlayerGuidAddress = 0x00CA1238;
     private static string PendingErrorMessage = null;
     private static Size OriginalWindowSize;
     public static bool IsWindowHidden;
@@ -1840,13 +1836,13 @@ public class StartupClass
     private static bool TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out ulong playerGuid)
     {
         playerGuid = 0UL;
-        var clientConnection = GameMemoryAccess.ReadInt32(WotlkClientConnectionAddress, "WotlkClientConnection");
+        var clientConnection = GameMemoryAccess.ReadInt32(GameMemoryConstants.Wotlk.ClientConnection, "WotlkClientConnection");
         if (IsLikelyMemoryPointer(clientConnection))
         {
-            var objectManager = GameMemoryAccess.ReadInt32(clientConnection + WotlkObjectManagerOffset, "WotlkObjectManager");
+            var objectManager = GameMemoryAccess.ReadInt32(clientConnection + GameMemoryConstants.Wotlk.CurMgrOffset, "WotlkObjectManager");
             if (IsLikelyMemoryPointer(objectManager))
             {
-                var objectManagerGuid = GameMemoryAccess.ReadInt64(objectManager + WotlkObjectManagerLocalGuidOffset,
+                var objectManagerGuid = GameMemoryAccess.ReadInt64(objectManager + GameMemoryConstants.Wotlk.LocalGuid,
                     "WotlkObjectManagerLocalGuid");
                 if (IsLikelyPlayerGuid(objectManagerGuid))
                 {
@@ -1860,11 +1856,11 @@ public class StartupClass
             }
         }
 
-        var staticGuid = GameMemoryAccess.ReadInt64(WotlkStaticPlayerGuidAddress, "WotlkStaticPlayerGuid");
+        var staticGuid = GameMemoryAccess.ReadInt64(GameMemoryConstants.Wotlk.PlayerIdAddr, "WotlkStaticPlayerGuid");
         if (IsLikelyPlayerGuid(staticGuid))
         {
             playerGuid = staticGuid;
-            Logger.smethod_1("Attach probe: using WotLK static PlayerGUID address 0x" + WotlkStaticPlayerGuidAddress.ToString("x") +
+            Logger.smethod_1("Attach probe: using WotLK static PlayerGUID address 0x" + GameMemoryConstants.Wotlk.PlayerIdAddr.ToString("x") +
                              " = 0x" + playerGuid.ToString("x"));
             return true;
         }

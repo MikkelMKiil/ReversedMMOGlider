@@ -24,7 +24,6 @@ namespace Glider.Common.Objects
     public class Hunter : GGameClass
     {
         #region Hunter props
-        const int MINIMUM_AMMO = 30;
         int BackUpLimit;
         bool ApproachPull;
         bool GotAspect;
@@ -64,7 +63,6 @@ namespace Glider.Common.Objects
         GSpellTimer RevivePet = new GSpellTimer(10 * 1000); // 10 seconds
         GSpellTimer MendPetCast = new GSpellTimer(15 * 1000);//15 seconds
 
-        const int VIPER_BUFF = 34074;
         #endregion
 
         #region GGameClass overrides
@@ -154,7 +152,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                return Me.HasBuff(VIPER_BUFF);
+                return Me.HasBuff(GameMemoryConstants.ClassIds.Hunter.ViperBuff);
             }
         }
 
@@ -953,7 +951,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                return Me.AmmoCount >= MINIMUM_AMMO;
+                return Me.AmmoCount >= GameMemoryConstants.ClassIds.Hunter.MinimumAmmo;
             }
         }
 

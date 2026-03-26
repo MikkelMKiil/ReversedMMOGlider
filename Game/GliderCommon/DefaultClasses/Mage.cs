@@ -36,7 +36,6 @@ namespace Glider.Common.Objects
         const double PULL_MIN_DISTANCE = 20.0;  // Don't try to use slow pull spell if closer than this.
         const double WAND_MAX_RANGE = 30.0;
         const double COUNTERSPELL_RANGE = 30.0;
-        const int BUFFID_COMBUSTION = 0x700a;
 
         #region Mage properties/config
         GSpellTimer ManaShieldTimer = new GSpellTimer(60 * 1000, false);   // 60 seconds for ManaShield
