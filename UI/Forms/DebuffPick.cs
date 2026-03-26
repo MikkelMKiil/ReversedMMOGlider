@@ -141,10 +141,10 @@ public class DebuffPick : Form
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
-        Name = nameof(DebuffPick);
+        Name = "DebuffPick";
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;
-        Text = nameof(DebuffPick);
+        Text = "DebuffPick";
         ResumeLayout(false);
         PerformLayout();
     }

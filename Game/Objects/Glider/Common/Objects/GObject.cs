@@ -22,7 +22,7 @@ namespace Glider.Common.Objects
         public uint StorageAddress;
         public string Tag;
 
-        protected GObject(int BaseAddress, int FrameNumber)
+        protected GObject(uint BaseAddress, int FrameNumber)
         {
             _location = null;
             _type = GObjectType.Unknown;
@@ -91,7 +91,7 @@ namespace Glider.Common.Objects
 
         public bool IsBobbing => GetBaseInt("Bobber") == 1;
 
-        public static GObject Create(int BaseAddress, int FrameNumber)
+        public static GObject Create(uint BaseAddress, int FrameNumber)
         {
             switch (QuickGetType(BaseAddress))
             {
@@ -110,7 +110,7 @@ namespace Glider.Common.Objects
             }
         }
 
-        private static GObjectType QuickGetType(int BaseAddress)
+        private static GObjectType QuickGetType(uint BaseAddress)
         {
             return (GObjectType)GameMemoryAccess.ReadQuickObjectType(BaseAddress);
         }

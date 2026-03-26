@@ -98,12 +98,12 @@ public class CameraRotator // Original: CameraRotator
                 IsSpinActive = true;
                 IsSpinStopping = false;
                 TargetHeading = targetHeading;
-                PushRightButton(); // Original: method_5
+                PushRightButton(); // Original: InitializeComponent
             }
         }
     }
 
-    private void PushRightButton() // Original: method_5
+    private void PushRightButton() // Original: InitializeComponent
     {
         lock (this)
         {

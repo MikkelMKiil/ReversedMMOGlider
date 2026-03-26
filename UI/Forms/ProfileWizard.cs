@@ -424,7 +424,7 @@ public class ProfileWizard : Form
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
-        Name = nameof(ProfileWizard);
+        Name = "ProfileWizard";
         ShowIcon = false;
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;

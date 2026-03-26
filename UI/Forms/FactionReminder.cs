@@ -37,62 +37,77 @@ public class FactionReminder : Form
 
     private void InitializeComponent()
     {
-        DontRemindMe = new CheckBox();
-        MyYesButton = new Button();
-        label1 = new Label();
-        MyNoButton = new Button();
-        MyHelpButton = new Button();
-        SuspendLayout();
-        DontRemindMe.Location = new Point(80, 104);
-        DontRemindMe.Name = "DontRemindMe";
-        DontRemindMe.Size = new Size(200, 16);
-        DontRemindMe.TabIndex = 4;
-        DontRemindMe.Text = "Don't remind me about this again.";
-        MyYesButton.DialogResult = DialogResult.Cancel;
-        MyYesButton.Location = new Point(104, 136);
-        MyYesButton.Name = "MyYesButton";
-        MyYesButton.Size = new Size(64, 24);
-        MyYesButton.TabIndex = 5;
-        MyYesButton.Text = "Yes";
-        MyYesButton.Click += MyYesButton_Click;
-        label1.Location = new Point(8, 8);
-        label1.Name = "label1";
-        label1.Size = new Size(336, 88);
-        label1.TabIndex = 3;
-        label1.Text =
-            "This profile is configured without a faction list, which may cause Glider to attack warlock/hunter pets and friendly totems.\r\n\r\nFor more information on factions, click \"Help\".\r\n\r\nDo you want to continue?";
-        MyNoButton.DialogResult = DialogResult.Cancel;
-        MyNoButton.Location = new Point(192, 136);
-        MyNoButton.Name = "MyNoButton";
-        MyNoButton.Size = new Size(64, 24);
-        MyNoButton.TabIndex = 6;
-        MyNoButton.Text = "No";
-        MyNoButton.Click += MyNoButton_Click;
-        MyHelpButton.DialogResult = DialogResult.Cancel;
-        MyHelpButton.Location = new Point(280, 136);
-        MyHelpButton.Name = "MyHelpButton";
-        MyHelpButton.Size = new Size(64, 24);
-        MyHelpButton.TabIndex = 7;
-        MyHelpButton.Text = "Help";
-        MyHelpButton.Click += MyHelpButton_Click;
-        AcceptButton = MyYesButton;
-        AutoScaleBaseSize = new Size(5, 13);
-        CancelButton = MyNoButton;
-        ClientSize = new Size(352, 166);
-        Controls.Add(MyHelpButton);
-        Controls.Add(DontRemindMe);
-        Controls.Add(MyNoButton);
-        Controls.Add(MyYesButton);
-        Controls.Add(label1);
-        MaximizeBox = false;
-        MinimizeBox = false;
-        Name = nameof(FactionReminder);
-        ShowInTaskbar = false;
-        SizeGripStyle = SizeGripStyle.Hide;
-        StartPosition = FormStartPosition.CenterScreen;
-        Text = "No factions for this profile!";
-        Load += FactionReminder_Load;
-        ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FactionReminder));
+            this.DontRemindMe = new System.Windows.Forms.CheckBox();
+            this.MyYesButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.MyNoButton = new System.Windows.Forms.Button();
+            this.MyHelpButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // DontRemindMe
+            // 
+            this.DontRemindMe.Location = new System.Drawing.Point(128, 152);
+            this.DontRemindMe.Name = "DontRemindMe";
+            this.DontRemindMe.Size = new System.Drawing.Size(320, 23);
+            this.DontRemindMe.TabIndex = 4;
+            this.DontRemindMe.Text = "Don\'t remind me about this again.";
+            // 
+            // MyYesButton
+            // 
+            this.MyYesButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.MyYesButton.Location = new System.Drawing.Point(166, 199);
+            this.MyYesButton.Name = "MyYesButton";
+            this.MyYesButton.Size = new System.Drawing.Size(103, 35);
+            this.MyYesButton.TabIndex = 5;
+            this.MyYesButton.Text = "Yes";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(13, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(537, 128);
+            this.label1.TabIndex = 3;
+            this.label1.Text = resources.GetString("label1.Text");
+            // 
+            // MyNoButton
+            // 
+            this.MyNoButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.MyNoButton.Location = new System.Drawing.Point(307, 199);
+            this.MyNoButton.Name = "MyNoButton";
+            this.MyNoButton.Size = new System.Drawing.Size(103, 35);
+            this.MyNoButton.TabIndex = 6;
+            this.MyNoButton.Text = "No";
+            // 
+            // MyHelpButton
+            // 
+            this.MyHelpButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.MyHelpButton.Location = new System.Drawing.Point(448, 199);
+            this.MyHelpButton.Name = "MyHelpButton";
+            this.MyHelpButton.Size = new System.Drawing.Size(102, 35);
+            this.MyHelpButton.TabIndex = 7;
+            this.MyHelpButton.Text = "Help";
+            // 
+            // FactionReminder
+            // 
+            this.AcceptButton = this.MyYesButton;
+            this.AutoScaleBaseSize = new System.Drawing.Size(8, 19);
+            this.CancelButton = this.MyNoButton;
+            this.ClientSize = new System.Drawing.Size(632, 299);
+            this.Controls.Add(this.MyHelpButton);
+            this.Controls.Add(this.DontRemindMe);
+            this.Controls.Add(this.MyNoButton);
+            this.Controls.Add(this.MyYesButton);
+            this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FactionReminder";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "No factions for this profile!";
+            this.ResumeLayout(false);
+
     }
 
     private void MyYesButton_Click(object sender, EventArgs e)

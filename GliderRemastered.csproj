@@ -161,6 +161,7 @@
     <Compile Include="Core\ApplicationLogger.cs" />
     <Compile Include="Core\AssemblyInfo.cs" />
     <Compile Include="Core\ConfigManager.cs" />
+    <Compile Include="Core\CrashHandler.cs" />
     <Compile Include="Core\FileLogger.cs" />
     <Compile Include="Core\GlideMainThread.cs" />
     <Compile Include="Core\ILogger.cs" />

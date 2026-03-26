@@ -9,7 +9,7 @@ namespace Glider.Common.Objects
 {
     public class GContainer : GItem
     {
-        public GContainer(int BaseAddress, int FrameNumber)
+        public GContainer(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             SetType(GObjectType.Container);

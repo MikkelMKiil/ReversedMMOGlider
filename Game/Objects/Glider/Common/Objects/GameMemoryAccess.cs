@@ -29,27 +29,34 @@ internal static class GameMemoryAccess
         get { return GProcessMemoryManipulator.int_27; }
     }
 
-        // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
-        internal static int ReadObjectStorageAddress(int baseAddress)
-        {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + 8, "GameObjStorage");
-        }
+    internal static uint ReadObjectStorageAddress(uint baseAddress)
+    {
+        // Ensure baseAddress isn't 0 before adding offsets
+        if (baseAddress == 0) return 0;
 
-        internal static uint ReadObjectStorageAddress(uint baseAddress)
-        {
-            return unchecked((uint)ReadObjectStorageAddress(ToAddress(baseAddress)));
-        }
+        // Read the pointer at [base + 8]
+        return GProcessMemoryManipulator.ReadUInt32(baseAddress + 8, "GameObjStorage");
+    }
+    // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
+    internal static ulong ReadObjectGuid(int baseAddress)
+    {
+        var storageAddress = ReadObjectStorageAddress((uint)baseAddress);
+        if (storageAddress == 0)
+            return 0UL;
 
-        // Used by: GObject.GObject(int BaseAddress, int FrameNumber)
-        internal static ulong ReadObjectGuid(int baseAddress)
-        {
-            var storageAddress = ReadObjectStorageAddress(baseAddress);
-            if (storageAddress == 0)
-                return 0UL;
+        // OBJECT_FIELD_GUID is at descriptor offset 0x00 in WoW 3.3.5a.
+        return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
+    }
 
-            // OBJECT_FIELD_GUID is at descriptor offset 0x00 in WoW 3.3.5a.
-            return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
-        }
+    // uint overload to preserve unsigned address semantics for BaseAddress
+    internal static ulong ReadObjectGuid(uint baseAddress)
+    {
+        var storageAddress = ReadObjectStorageAddress(baseAddress);
+        if (storageAddress == 0)
+            return 0UL;
+
+        return ReadStorageULong(storageAddress, 0, "OBJECT_FIELD_GUID");
+    }
 
         // Used by: GObject.IsCursorOnObject
         // Used by: GUnit.IsCursorOnUnit
@@ -62,6 +69,12 @@ internal static class GameMemoryAccess
         internal static int ReadQuickObjectType(int baseAddress)
         {
             return GProcessMemoryManipulator.ReadInt32(baseAddress + 20, "QuickType");
+        }
+
+        // uint overload to accept unsigned base addresses without forcing signed conversion
+        internal static int ReadQuickObjectType(uint baseAddress)
+        {
+            return ReadQuickObjectType(ToAddress(baseAddress));
         }
 
         // Used by: GObject.Refresh(bool BypassTimer)
@@ -185,6 +198,21 @@ internal static class GameMemoryAccess
         internal static int ReadInt32(int startAddress, string debugClue)
         {
             return GProcessMemoryManipulator.ReadInt32(startAddress, debugClue);
+        }
+
+        internal static uint ReadUInt32(int startAddress, string debugClue)
+        {
+            return GProcessMemoryManipulator.ReadUInt32(startAddress, debugClue);
+        }
+
+        internal static uint ReadUInt32(uint startAddress, string debugClue)
+        {
+            return ReadUInt32(ToAddress(startAddress), debugClue);
+        }
+
+        internal static uint ReadUInt32(long startAddress, string debugClue)
+        {
+            return ReadUInt32(ToAddress(startAddress), debugClue);
         }
 
         internal static int ReadInt32(uint startAddress, string debugClue)

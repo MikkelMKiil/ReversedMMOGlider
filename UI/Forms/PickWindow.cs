@@ -49,7 +49,7 @@ public class PickWindow : Form
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
-        Name = nameof(PickWindow);
+        Name = "PickWindow";
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;
         Load += PickWindow_Load;

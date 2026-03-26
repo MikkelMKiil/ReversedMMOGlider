@@ -39,7 +39,7 @@ namespace Glider.Common.Objects
         protected int _restedExperience;
         protected string _targetName;
 
-        public GPlayerSelf(int BaseAddress, int FrameNumber)
+        public GPlayerSelf(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             Me = this;

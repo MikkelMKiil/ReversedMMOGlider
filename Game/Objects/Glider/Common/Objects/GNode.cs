@@ -13,7 +13,7 @@ namespace Glider.Common.Objects
         private float _heading;
         private float _rotation;
 
-        public GNode(int BaseAddress, int FrameNumber)
+        public GNode(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             SetType(GObjectType.Node);

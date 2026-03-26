@@ -18,7 +18,7 @@ namespace Glider.Common.Objects
         private int _harvestFlags;
         private string _skipReason;
 
-        public GMonster(int BaseAddress, int FrameNumber)
+        public GMonster(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             SetType(GObjectType.Monster);

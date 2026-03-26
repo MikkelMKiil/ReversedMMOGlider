@@ -66,7 +66,7 @@ namespace Glider.Common.Objects
         /// </summary>
         private readonly SortedList<string, int[]> WKBuffs;
 
-        public GUnit(int BaseAddress, int FrameNumber)
+        public GUnit(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             _lastHealthPoints = 0;

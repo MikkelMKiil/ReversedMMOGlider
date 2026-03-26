@@ -118,10 +118,10 @@ namespace Glider.Common.Objects
                     return null;
                 }
 
-                var currentObjectAddress = GetFirstObjectPointer(objectManagerBase);
+                uint currentObjectAddress = unchecked((uint)GetFirstObjectPointer(objectManagerBase));
                 var firstObjectAddress = currentObjectAddress;
                 var iterationCount = 0;
-                var visitedAddresses = new HashSet<int>();
+                var visitedAddresses = new HashSet<uint>();
                 var traversalComplete = true;
 
                 if (currentObjectAddress == 0)
@@ -156,10 +156,20 @@ namespace Glider.Common.Objects
 
                         // Some builds include sentinel/invalid nodes in the linked list. These must be skipped,
                         // not treated as end-of-list, or the snapshot will be incomplete/empty.
-                        if (currentObjectAddress == 28 || (currentObjectAddress & 1) != 0)
+                    if (currentObjectAddress == 28U || (currentObjectAddress & 1U) != 0U)
                         {
                             ++traversalSkippedCount;
-                            currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+                            // Read next pointer as uint and validate before advancing to avoid ReadBytesInternal errors
+                            var nextAddr = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+                            if (!IsLikelyObjectPointer(nextAddr))
+                            {
+                                // Abort traversal if the next pointer is implausible
+                                traversalComplete = false;
+                                Logger.smethod_1("[TRACE] Skipped sentinel/invalid nodes: " + traversalSkippedCount + ", aborting due to implausible next pointer 0x" + nextAddr.ToString("x"));
+                                break;
+                            }
+
+                            currentObjectAddress = nextAddr;
 
                             // Log sentinel skips occasionally
                             if (traversalSkippedCount % 100 == 0)
@@ -167,7 +177,7 @@ namespace Glider.Common.Objects
                             continue;
                         }
 
-                        if ((currentObjectAddress & 1) == 0)
+                        if ((currentObjectAddress & 1U) == 0U)
                         {
                             guid = QuickGetGUID(currentObjectAddress);
                             if (!newSnapshot.ContainsKey(guid))
@@ -196,7 +206,16 @@ namespace Glider.Common.Objects
                                 goto label_7;
                             }
                         }
-                        currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+                        // Read next pointer as uint and validate before advancing to avoid ReadBytesInternal errors
+                        var nextAddr2 = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+                        if (!IsLikelyObjectPointer(nextAddr2))
+                        {
+                            traversalComplete = false;
+                            Logger.smethod_1("[CRITICAL] Object list traversal aborted: implausible next pointer 0x" + nextAddr2.ToString("x"));
+                            break;
+                        }
+
+                        currentObjectAddress = nextAddr2;
                     } while (!LogObjects);
 
                     goto label_13;
@@ -222,13 +241,13 @@ namespace Glider.Common.Objects
                     var activePlayerObjectAddress = GameMemoryAccess.ReadInt32(objectManagerBase + activePlayerOffset, "MainTableActivePlayerObj");
                     if (IsLikelyObjectPointer(activePlayerObjectAddress))
                     {
-                        var activePlayerGuid = QuickGetGUID(activePlayerObjectAddress);
+                        var activePlayerGuid = QuickGetGUID(unchecked((uint)activePlayerObjectAddress));
                         if (activePlayerGuid != 0UL)
                         {
                             StartupClass.long_0 = activePlayerGuid;
                             if (!newSnapshot.ContainsKey(activePlayerGuid) || !(newSnapshot[activePlayerGuid] is GPlayerSelf))
                             {
-                                var gobject = new GPlayerSelf(activePlayerObjectAddress, FrameNumber);
+                                var gobject = new GPlayerSelf(unchecked((uint)activePlayerObjectAddress), FrameNumber);
                                 if (newSnapshot.ContainsKey(activePlayerGuid))
                                     newSnapshot.Remove(activePlayerGuid);
                                 newSnapshot.Add(activePlayerGuid, gobject);
@@ -239,7 +258,7 @@ namespace Glider.Common.Objects
                                 if (activePlayer.BaseAddress != activePlayerObjectAddress)
                                 {
                                     activePlayer.BaseAddress = unchecked((uint)activePlayerObjectAddress);
-                                    activePlayer.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(activePlayerObjectAddress + 8, "GameObjStorage"));
+                                    activePlayer.StorageAddress = unchecked((uint)GameMemoryAccess.ReadInt32(unchecked((uint)activePlayerObjectAddress) + 8, "GameObjStorage"));
                                 }
 
                                 activePlayer.FrameNumber = FrameNumber;
@@ -421,7 +440,7 @@ namespace Glider.Common.Objects
             return destinationArray;
         }
 
-        private static ulong QuickGetGUID(int BaseAddress)
+        private static ulong QuickGetGUID(uint BaseAddress)
         {
             return GameMemoryAccess.ReadObjectGuid(BaseAddress);
         }
@@ -476,7 +495,7 @@ namespace Glider.Common.Objects
             if (unit != null)
                 return true;
 
-            var refreshed = GObject.Create(unchecked((int)obj.BaseAddress), FrameNumber);
+            var refreshed = GObject.Create(obj.BaseAddress, FrameNumber);
             snapshot[guid] = refreshed;
             unit = refreshed as GUnit;
             if (unit != null)
@@ -500,11 +519,11 @@ namespace Glider.Common.Objects
             var currentObjectAddress = GetFirstObjectPointer(objectManagerBase);
             var firstObjectAddress = currentObjectAddress;
             var iterationCount = 0;
-            var visitedAddresses = new HashSet<int>();
+            var visitedAddresses = new HashSet<uint>();
             var checkCount = 0;
             var readFailures = 0;
 
-            while ((currentObjectAddress & 1) == 0 && currentObjectAddress != 0 && currentObjectAddress != 28)
+            while ((currentObjectAddress & 1U) == 0U && currentObjectAddress != 0U && currentObjectAddress != 28U)
             {
                 if (++iterationCount > 8192)
                 {
@@ -527,7 +546,7 @@ namespace Glider.Common.Objects
                 var legacyGuid = GameMemoryAccess.ReadInt64(currentObjectAddress + 48, "GameObjGUID.Legacy");
                 if (storageGuid == guid || legacyGuid == guid)
                 {
-                    var obj = GObject.Create(currentObjectAddress, FrameNumber);
+                    var obj = GObject.Create((uint)currentObjectAddress, FrameNumber);
                     lock (LastSnapshot)
                     {
                         if (LastSnapshot.ContainsKey(obj.GUID))
@@ -559,7 +578,15 @@ namespace Glider.Common.Objects
                     return false;
                 }
 
-                currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+                // Ensure we read the next pointer using uint arithmetic and validate it
+                var nextAddr3 = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+                if (!IsLikelyObjectPointer(nextAddr3))
+                {
+                    Logger.smethod_1("[CRITICAL] TryMaterializeUnitByGuid aborted: implausible next pointer 0x" + nextAddr3.ToString("x"));
+                    break;
+                }
+
+                currentObjectAddress = nextAddr3;
             }
 
             // Log if we had read failures during traversal
@@ -959,7 +986,7 @@ namespace Glider.Common.Objects
             var foundObjectCount = 0;
             var playerFound = false;
             var traversalIterations = 0;
-            var visitedAddresses = new HashSet<int>();
+            var visitedAddresses = new HashSet<uint>();
             if (int5 == 0)
                 return 0;
             var currentObjectAddress = GetFirstObjectPointer(int5);
@@ -986,7 +1013,7 @@ namespace Glider.Common.Objects
                     }
 
                     ++foundObjectCount;
-                    currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+                    currentObjectAddress = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
                 }
                 else
                 {
@@ -1008,7 +1035,7 @@ namespace Glider.Common.Objects
             var currentObjectAddress = GetFirstObjectPointer(int5);
             var firstObjectAddress = currentObjectAddress;
             var traversalIterations = 0;
-            var visitedAddresses = new HashSet<int>();
+            var visitedAddresses = new HashSet<uint>();
             while (true)
             {
                 if (++traversalIterations > 8192)
@@ -1030,22 +1057,27 @@ namespace Glider.Common.Objects
                         return true;
                     }
                 }
-                currentObjectAddress = GameMemoryAccess.ReadInt32(currentObjectAddress + GameObjNextOffset, "GameObjNext");
+                currentObjectAddress = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
             }
 
             return false;
         }
 
-        private static int GetFirstObjectPointer(int int_0)
+        private static uint GetFirstObjectPointer(int int_0)
         {
             var initialOffset = MemoryOffsetTable.Instance.GetIntOffset("InitialOffset");
             var firstObjectPointer = GameMemoryAccess.ReadInt32(int_0 + initialOffset, "GameObjFirst");
-            return IsLikelyObjectPointer(firstObjectPointer) ? firstObjectPointer : 0;
+            return IsLikelyObjectPointer(firstObjectPointer) ? unchecked((uint)firstObjectPointer) : 0U;
         }
 
         private static bool IsLikelyObjectPointer(int int_0)
         {
             var pointer = unchecked((uint)int_0);
+            return IsLikelyObjectPointer(pointer);
+        }
+
+        private static bool IsLikelyObjectPointer(uint pointer)
+        {
             return (pointer & 1U) == 0U && pointer != 0U && pointer != 28U && pointer >= 65536U;
         }
     }

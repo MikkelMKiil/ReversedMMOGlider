@@ -156,7 +156,7 @@ public class GliderForm : Form, ILogger
         StartupClass.MainForm = (Form)this;
         StartupClass.InitStartupMode(AppMode.Normal);
         MemoryMaster.GetWoWHandle();
-        this.method_5();
+        this.InitializeComponent();
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
             this.method_26();
         if (ConfigManager.gclass61_0.method_5("AlwaysOnTop"))
@@ -288,13 +288,24 @@ public class GliderForm : Form, ILogger
     private static void Main()
     {
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        // Ensure a default logger is available before any early startup logging
+        // (root-cause fix: StartupClass.StartupLogger was null when CrashHandler/Register called Logger)
+        StartupClass.ginterface0_0 = new FileLogger("Glider.log");
+
+        // Register our global crash handlers to capture and persist richer crash information
+        try
+        {
+            CrashHandler.RegisterExceptionHandlers();
+        }
+        catch { }
+
         if (Environment.CommandLine.ToLower().IndexOf("/invisible") > -1)
             ApplicationLogger.smethod_0();
         else
             Application.Run((Form)new GliderForm());
     }
 
-    private void method_5()
+    private void InitializeComponent()
     {
         this.icontainer_0 = (IContainer)new System.ComponentModel.Container();
         ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(GliderForm));

@@ -21,7 +21,7 @@ namespace Glider.Common.Objects
         protected bool _sitting;
         private int[] _stealthAuras;
 
-        public GPlayer(int BaseAddress, int FrameNumber)
+        public GPlayer(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             SetType(GObjectType.Player);

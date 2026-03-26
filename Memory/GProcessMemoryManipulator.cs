@@ -83,6 +83,8 @@ namespace Glider.Common.Objects
         [DllImport("kernel32.dll", EntryPoint = "Sleep")]
         private static extern void SleepNative(uint dwMilliseconds);
 
+
+
         // ADDED: For checking minimized state
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -178,6 +180,46 @@ namespace Glider.Common.Objects
             GContext.Main.Log("[Log_Memory] " + message);
         }
 
+        // Validate 32-bit address space for attached WoW process
+        private static bool IsValid32BitAddress(long address)
+        {
+            // In 32-bit user-mode processes, valid addresses are typically below 0x80000000 (2GB).
+            return address >= 0 && address <= 0x7FFFFFFF;
+        }
+
+        // Log invalid address attempts with caller information
+        private static void LogInvalidAddress(long address, string debugClue, string operation)
+        {
+            try
+            {
+                var st = new StackTrace(true);
+                string caller = "<unknown>";
+                var frames = st.GetFrames();
+                if (frames != null)
+                {
+                    foreach (var f in frames)
+                    {
+                        var m = f.GetMethod();
+                        if (m == null) continue;
+                        var decl = m.DeclaringType;
+                        if (decl == null) continue;
+                        if (decl != typeof(GProcessMemoryManipulator))
+                        {
+                            caller = decl.FullName + "." + m.Name;
+                            break;
+                        }
+                    }
+                }
+
+                string message = string.Format("[Memory] Invalid address 0x{0:X8} in {1} (debugClue: '{2}'), caller: {3}", address, operation, debugClue ?? "<null>", caller);
+                Logger.LogMessage(message);
+            }
+            catch
+            {
+                // Avoid throwing from logging path
+            }
+        }
+
         internal static int ReadInt32(int address, string debugClue)
         {
             var bytes = ReadBytes(address, 4, debugClue);
@@ -252,7 +294,15 @@ namespace Glider.Common.Objects
 
             if (_currentProcessHandle == IntPtr.Zero) return buffer;
 
-            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            long address = unchecked((uint)startAddress);
+            if (!IsValid32BitAddress(address))
+            {
+                LogInvalidAddress(address, debugClue, nameof(ReadBytesInternal));
+                // Don't throw here - callers expect an empty buffer on read failure.
+                return allowPartialRead ? buffer : new byte[0];
+            }
+
+            var nativeAddress = new IntPtr(address);
             if (!ReadProcessMemory(_currentProcessHandle, nativeAddress, buffer, lengthToRead, out int bytesRead))
             {
                 var lastError = Marshal.GetLastWin32Error();
@@ -270,7 +320,15 @@ namespace Glider.Common.Objects
             var buffer = new byte[lengthToRead];
             if (_currentProcessHandle == IntPtr.Zero) return buffer;
 
-            if (!ReadProcessMemory(_currentProcessHandle, new IntPtr((long)startAddress), buffer, lengthToRead, out int bytesRead))
+            long address = startAddress;
+            if (!IsValid32BitAddress(address))
+            {
+                LogInvalidAddress(address, debugClue, nameof(ReadBytesInternal));
+                // Don't throw here - callers expect an empty buffer on read failure.
+                return allowPartialRead ? buffer : new byte[0];
+            }
+
+            if (!ReadProcessMemory(_currentProcessHandle, new IntPtr(address), buffer, lengthToRead, out int bytesRead))
             {
                 var lastError = Marshal.GetLastWin32Error();
                 if (lastError == ERROR_PARTIAL_COPY)
@@ -312,7 +370,14 @@ namespace Glider.Common.Objects
         {
             if (_currentProcessHandle == IntPtr.Zero) return 0;
 
-            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            long address = unchecked((uint)startAddress);
+            if (!IsValid32BitAddress(address))
+            {
+                LogInvalidAddress(address, null, nameof(WriteBytes));
+                throw new ArgumentOutOfRangeException(nameof(startAddress), $"Address 0x{address:X8} is not valid for 32-bit process.");
+            }
+
+            var nativeAddress = new IntPtr(address);
             if (!WriteProcessMemory(_currentProcessHandle, nativeAddress, dataToWrite, lengthToWrite, out int bytesWritten))
                 return 0;
 
@@ -323,8 +388,15 @@ namespace Glider.Common.Objects
         {
             if (_currentProcessHandle == IntPtr.Zero) return false;
 
+            long address = unchecked((uint)startAddress);
+            if (!IsValid32BitAddress(address))
+            {
+                LogInvalidAddress(address, null, nameof(IsMemoryReadable));
+                return false;
+            }
+
             var testBuffer = new byte[1];
-            var nativeAddress = new IntPtr((long)unchecked((uint)startAddress));
+            var nativeAddress = new IntPtr(address);
             return ReadProcessMemory(_currentProcessHandle, nativeAddress, testBuffer, 1, out _);
         }
 

@@ -18,7 +18,7 @@ namespace Glider.Common.Objects
         private int _flags;
         private int _stackSize;
 
-        public GItem(int BaseAddress, int FrameNumber)
+        public GItem(uint BaseAddress, int FrameNumber)
             : base(BaseAddress, FrameNumber)
         {
             SetType(GObjectType.Item);

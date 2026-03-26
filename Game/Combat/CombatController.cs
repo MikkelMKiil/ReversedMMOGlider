@@ -340,7 +340,7 @@ public class CombatController
         }
     }
 
-    // Original: method_5
+    // Original: InitializeComponent
     public void PrimaryGlideLoop()
     {
         WaypointMovementLoop();

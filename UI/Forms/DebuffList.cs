@@ -89,7 +89,7 @@ public class DebuffList : Form
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
-        Name = nameof(DebuffList);
+        Name = "DebuffList";
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;
         Text = "Manage Debuffs";
