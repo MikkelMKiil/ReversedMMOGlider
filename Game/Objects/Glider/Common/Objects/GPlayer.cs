@@ -204,28 +204,32 @@ namespace Glider.Common.Objects
             base.LoadFields();
             _classDataTrusted = false;
             var classSource = "none";
+            var classTrusted = false;
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("ClassPtrOffset"))
                 num = GameMemoryAccess.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("ClassIdOffset"))
             {
                 _playerClass = (GPlayerClass)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
-                _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
+                classTrusted = IsKnownPlayerClassValue((int)_playerClass);
                 classSource = "ClassPtr";
             }
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("RaceIdOffset"))
                 _playerRace = (GPlayerRace)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
-            if (num == 0)
+
+            if (!classTrusted)
             {
                 var storageInt = GetStorageInt("UNIT_FIELD_BYTES_0");
                 if (storageInt >= 0)
                 {
                     _playerRace = (GPlayerRace)(storageInt & byte.MaxValue);
                     _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
-                    _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
+                    classTrusted = IsKnownPlayerClassValue((int)_playerClass);
                     classSource = "UNIT_FIELD_BYTES_0";
                 }
             }
+
+            _classDataTrusted = classTrusted;
 
             LogClassSourceDiagnosticOnce(classSource, (int)_playerClass, _classDataTrusted);
 

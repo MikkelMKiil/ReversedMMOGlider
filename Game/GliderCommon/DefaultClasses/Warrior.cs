@@ -31,16 +31,19 @@ namespace Glider.Common.Objects
         bool UseMortalStrike;
 
         const double ChargeReadyDistance = 8.0;
+        const double ChargeMaxDistance = 25.0;
         const double ChargeSuccessDistance = 7.0;
         const double ChargeEarlyMovementDistance = 1.5;
         const int ChargeEarlyCheckMs = 600;
         const int ChargeTotalWaitMs = 3500;
+        const int ChargeGlobalBackoffMs = 12000;
 
         int ChargeFailBudget;
         int ChargeFailResetMs;
         ulong LastChargeFailGuid;
         int LastChargeFailCount;
         int LastChargeFailTick;
+        int LastChargeGlobalFailTick;
         #endregion
 
         #region GGameClass overrides
@@ -156,6 +159,7 @@ namespace Glider.Common.Objects
             LastChargeFailGuid = 0;
             LastChargeFailCount = 0;
             LastChargeFailTick = 0;
+            LastChargeGlobalFailTick = 0;
         }
 
         #endregion
@@ -186,9 +190,14 @@ namespace Glider.Common.Objects
             {                
                 if (ChargePull && !Me.IsInCombat)
                 {
-                    if (Target.DistanceToSelf < ChargeReadyDistance)
+                    var chargeDistance = Target.DistanceToSelf;
+                    if (Target.IsInMeleeRange || chargeDistance < ChargeReadyDistance)
                     {
                         PerformFallbackPull(Monster, "target is too close to charge");
+                    }
+                    else if (chargeDistance > ChargeMaxDistance)
+                    {
+                        PerformFallbackPull(Monster, "target is too far to charge");
                     }
                     else if (ShouldSkipChargeAttempt(Target))
                     {
@@ -486,6 +495,9 @@ namespace Glider.Common.Objects
 
         bool ShouldSkipChargeAttempt(GUnit target)
         {
+            if (LastChargeGlobalFailTick != 0 && unchecked(Environment.TickCount - LastChargeGlobalFailTick) <= ChargeGlobalBackoffMs)
+                return true;
+
             if (LastChargeFailCount <= 0)
                 return false;
 
@@ -504,6 +516,7 @@ namespace Glider.Common.Objects
         {
             if (success)
             {
+                LastChargeGlobalFailTick = 0;
                 if (LastChargeFailGuid == target.GUID)
                 {
                     LastChargeFailGuid = 0;
@@ -523,6 +536,7 @@ namespace Glider.Common.Objects
             }
 
             LastChargeFailTick = Environment.TickCount;
+            LastChargeGlobalFailTick = LastChargeFailTick;
             Logger.smethod_1("[Warrior] Pull: charge failure budget " + LastChargeFailCount + "/" + ChargeFailBudget +
                             " for guid=0x" + target.GUID.ToString("x"));
         }
@@ -530,9 +544,15 @@ namespace Glider.Common.Objects
         bool DoAndCheckCharge(GUnit Target)
         {
             var initialDistance = Target.DistanceToSelf;
-            if (initialDistance < ChargeReadyDistance)
+            if (Target.IsInMeleeRange || initialDistance < ChargeReadyDistance)
             {
                 Context.Debug("Charge skipped: target too close (" + Math.Round(initialDistance, 2) + ")");
+                return false;
+            }
+
+            if (initialDistance > ChargeMaxDistance)
+            {
+                Context.Debug("Charge skipped: target too far (" + Math.Round(initialDistance, 2) + ")");
                 return false;
             }
 

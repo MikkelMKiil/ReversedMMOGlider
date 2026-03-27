@@ -477,6 +477,7 @@ namespace Glider.Common.Objects
         internal static void GetForegroundWindow(IntPtr windowHandle, Size size, Point point) => GProcessMemoryManipulator.GetForegroundWindow(windowHandle, size, point);
         internal static int GetCurrentProcessId() => GProcessMemoryManipulator.GetCurrentProcessId();
         internal static int GetProcessId() => GProcessMemoryManipulator.GetProcessId();
+        internal static uint GetWowBaseAddress() => GProcessMemoryManipulator.GetWowBaseAddress();
         internal static int GetProcessIdFromWindow() => GProcessMemoryManipulator.GetProcessIdFromWindow();
         internal static string GetProcessExecutablePath() => GProcessMemoryManipulator.GetProcessExecutablePath();
         internal static void WorldToScreen(double x, double y, out int sx, out int sy) => GProcessMemoryManipulator.WorldToScreen(x, y, out sx, out sy);
@@ -1191,7 +1192,7 @@ namespace Glider.Common.Objects
             return true;
         }
 
-        private static uint GetWowBaseAddress()
+        internal static uint GetWowBaseAddress()
         {
             if (_currentProcessId == 0) return 0U;
             try

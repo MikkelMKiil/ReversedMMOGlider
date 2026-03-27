@@ -130,7 +130,7 @@ public class ConfigManager
         method_0("StopOnVanish", "True");
         method_0("LogMonsterChecks", "False");
         method_0("VerboseMainLoopLogging", "False");
-        method_0("VerboseShortcutDetection", "False");
+        method_0("VerboseShortcutDetection", "True");
         method_0("Log_Memory", "False");
         method_0("VerboseMemoryReadFailures", "False");
         method_0("UnloadShadow", "False");

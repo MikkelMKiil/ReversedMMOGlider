@@ -52,8 +52,9 @@ namespace Glider.Common.Objects
                 return;
             }
 
-            var actionBarShortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
-            if (actionBarShortcutsBase < 65536)
+            int actionBarShortcutsBase;
+            string baseResolveDetails;
+            if (!ShortcutLayout335a.TryResolveActionBarShortcutsBase(out actionBarShortcutsBase, out baseResolveDetails))
             {
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;

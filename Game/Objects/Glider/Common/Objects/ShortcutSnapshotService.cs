@@ -107,16 +107,11 @@ namespace Glider.Common.Objects
                 return false;
             }
 
-            var shortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
-            if (shortcutsBase < 65536)
+            int shortcutsBase;
+            string resolveDetails;
+            if (!ShortcutLayout335a.TryResolveActionBarShortcutsBase(out shortcutsBase, out resolveDetails, true))
             {
-                details = "ActionBarShortcuts base implausible: 0x" + shortcutsBase.ToString("x", CultureInfo.InvariantCulture);
-                return false;
-            }
-
-            if ((shortcutsBase & 3) != 0)
-            {
-                details = "ActionBarShortcuts base unaligned: 0x" + shortcutsBase.ToString("x", CultureInfo.InvariantCulture);
+                details = resolveDetails;
                 return false;
             }
 
@@ -150,7 +145,7 @@ namespace Glider.Common.Objects
                     invalid++;
             }
 
-            details = "sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
+            details = resolveDetails + ", sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
             if (nonZero == 0)
                 return false;
 

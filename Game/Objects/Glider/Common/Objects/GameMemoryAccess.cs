@@ -101,6 +101,7 @@ internal static class GameMemoryAccess
     internal static void GetForegroundWindow(IntPtr windowHandle, Size size, Point point) => MemoryRequestHandler.GetForegroundWindow(windowHandle, size, point);
     internal static int GetCurrentProcessId() => MemoryRequestHandler.GetCurrentProcessId();
     internal static int GetProcessId() => MemoryRequestHandler.GetProcessId();
+    internal static uint GetWowBaseAddress() => MemoryRequestHandler.GetWowBaseAddress();
     internal static int GetProcessIdFromWindow() => MemoryRequestHandler.GetProcessIdFromWindow();
     internal static string GetProcessExecutablePath() => MemoryRequestHandler.GetProcessExecutablePath();
     internal static void WorldToScreen(double x, double y, out int sx, out int sy) => MemoryRequestHandler.WorldToScreen(x, y, out sx, out sy);

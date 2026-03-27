@@ -1642,16 +1642,11 @@ public class StartupClass
             return false;
         }
 
-        var shortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
-        if (shortcutsBase < 65536)
+        int shortcutsBase;
+        string resolveDetails;
+        if (!ShortcutLayout335a.TryResolveActionBarShortcutsBase(out shortcutsBase, out resolveDetails, true))
         {
-            details = "ActionBarShortcuts base is implausible: 0x" + shortcutsBase.ToString("x");
-            return false;
-        }
-
-        if ((shortcutsBase & 3) != 0)
-        {
-            details = "ActionBarShortcuts base is unaligned: 0x" + shortcutsBase.ToString("x");
+            details = resolveDetails;
             return false;
         }
 
@@ -1685,14 +1680,14 @@ public class StartupClass
                 invalid++;
         }
 
-        details = "sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
+        details = resolveDetails + "; sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
         if (nonZero == 0)
             return false;
 
-        if (plausible < 2)
+            if (plausible < 2)
             return false;
 
-        return invalid * 2 < nonZero;
+            return invalid * 2 < nonZero;
     }
 
     private static bool IsKeybindRefreshReady(GPlayerSelf player, out string reason)

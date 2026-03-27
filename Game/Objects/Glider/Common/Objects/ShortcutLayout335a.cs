@@ -1,4 +1,8 @@
 #nullable disable
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+
 namespace Glider.Common.Objects
 {
     // WoW 3.3.5a (12340) action slot layout and shortcut value encoding.
@@ -11,8 +15,14 @@ namespace Glider.Common.Objects
 
         public const uint ItemTypeMask = 0x80000000U;
         public const uint MacroTypeMask = 0x40000000U;
+        public const uint ClickTypeMask = 0x01000000U;
+        public const uint EquipmentSetTypeMask = 0x20000000U;
         public const int ActionIdMask = 0x0FFFFFFF;
         public const int MaxPlausibleSpellId = 0x0007FFFF;
+        private static readonly object ActionBarBaseLock = new object();
+        private static int CachedActionBarShortcutsOffset;
+        private static int CachedResolvedActionBarShortcutsBase;
+        private static int CachedResolveTick;
 
         public static bool IsReadableSlot(int slotNumber)
         {
@@ -27,6 +37,204 @@ namespace Glider.Common.Objects
         public static int GetSlotAddress(int actionBarShortcutsBase, int slotNumber)
         {
             return actionBarShortcutsBase + SlotStrideBytes * (slotNumber - 1);
+        }
+
+        private static bool IsPlausibleActionBarAddress(int address)
+        {
+            return address >= 65536 && (address & 3) == 0;
+        }
+
+        private static int ComputeActionBarCandidateScore(int nonZero, int plausible, int invalid)
+        {
+            var score = plausible * 4 - invalid * 3 + Math.Min(nonZero, 24);
+            if (nonZero > 0 && plausible >= 2 && invalid * 2 < nonZero)
+                score += 100;
+
+            return score;
+        }
+
+        private static bool TryEvaluateActionBarCandidate(int actionBarShortcutsBase, string debugCluePrefix,
+            out int nonZero,
+            out int plausible,
+            out int invalid,
+            out string error)
+        {
+            nonZero = 0;
+            plausible = 0;
+            invalid = 0;
+            error = "";
+
+            if (!IsPlausibleActionBarAddress(actionBarShortcutsBase))
+            {
+                error = "candidate implausible: 0x" + unchecked((uint)actionBarShortcutsBase).ToString("x", CultureInfo.InvariantCulture);
+                return false;
+            }
+
+            var maxProbeSlot = Math.Min(MaxActionSlot, MinSlot + 23);
+            for (var slotNumber = MinSlot; slotNumber <= maxProbeSlot; ++slotNumber)
+            {
+                uint rawShortcut;
+                try
+                {
+                    var shortcutAddress = GetSlotAddress(actionBarShortcutsBase, slotNumber);
+                    rawShortcut = (uint)GameMemoryAccess.ReadInt32(shortcutAddress, debugCluePrefix + "-" + slotNumber.ToString(CultureInfo.InvariantCulture));
+                }
+                catch (Exception ex)
+                {
+                    error = "read failed at slot " + slotNumber + ": " + ex.Message;
+                    return false;
+                }
+
+                if (rawShortcut == 0U)
+                    continue;
+
+                nonZero++;
+                if (IsRawShortcutPlausible(rawShortcut))
+                    plausible++;
+                else
+                    invalid++;
+            }
+
+            return true;
+        }
+
+        private static void AddOffsetCandidate(List<int> candidates, int candidate)
+        {
+            if (candidate == 0)
+                return;
+
+            if (!candidates.Contains(candidate))
+                candidates.Add(candidate);
+        }
+
+        public static bool TryResolveActionBarShortcutsBase(out int actionBarShortcutsBase, out string details, bool forceRefresh)
+        {
+            actionBarShortcutsBase = 0;
+            details = "";
+
+            if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+            {
+                details = "ActionBarShortcuts offset missing";
+                return false;
+            }
+
+            var configuredOffset = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
+            if (!IsPlausibleActionBarAddress(configuredOffset))
+            {
+                details = "ActionBarShortcuts offset implausible: 0x" + unchecked((uint)configuredOffset).ToString("x", CultureInfo.InvariantCulture);
+                return false;
+            }
+
+            var nowTick = Environment.TickCount;
+            lock (ActionBarBaseLock)
+            {
+                if (!forceRefresh && CachedResolvedActionBarShortcutsBase != 0 && CachedActionBarShortcutsOffset == configuredOffset && unchecked(nowTick - CachedResolveTick) < 1000)
+                {
+                    actionBarShortcutsBase = CachedResolvedActionBarShortcutsBase;
+                    details = "source=cached, base=0x" + unchecked((uint)actionBarShortcutsBase).ToString("x", CultureInfo.InvariantCulture);
+                    return true;
+                }
+            }
+
+            var wowBase = (int)GameMemoryAccess.GetWowBaseAddress();
+            var offsetCandidates = new List<int>();
+            AddOffsetCandidate(offsetCandidates, configuredOffset);
+            if (configuredOffset > 0 && configuredOffset < 0x01000000 && IsPlausibleActionBarAddress(wowBase))
+                AddOffsetCandidate(offsetCandidates, wowBase + configuredOffset);
+
+            var bestBase = 0;
+            var bestLabel = "none";
+            var bestNonZero = 0;
+            var bestPlausible = 0;
+            var bestInvalid = 0;
+            var bestScore = int.MinValue;
+
+            var bestError = "";
+            foreach (var offsetCandidate in offsetCandidates)
+            {
+                int directNonZero;
+                int directPlausible;
+                int directInvalid;
+                string directError;
+                if (TryEvaluateActionBarCandidate(offsetCandidate, "abshortcuts-direct", out directNonZero, out directPlausible, out directInvalid, out directError))
+                {
+                    var directScore = ComputeActionBarCandidateScore(directNonZero, directPlausible, directInvalid);
+                    if (directScore > bestScore)
+                    {
+                        bestBase = offsetCandidate;
+                        bestLabel = offsetCandidate == configuredOffset ? "direct" : "direct-module-adjusted";
+                        bestNonZero = directNonZero;
+                        bestPlausible = directPlausible;
+                        bestInvalid = directInvalid;
+                        bestScore = directScore;
+                    }
+                }
+
+                try
+                {
+                    var indirectBase = GameMemoryAccess.ReadInt32(offsetCandidate, "abshortcuts-indirect");
+                    int indirectNonZero;
+                    int indirectPlausible;
+                    int indirectInvalid;
+                    string indirectError = "";
+                    if (indirectBase != offsetCandidate &&
+                        TryEvaluateActionBarCandidate(indirectBase, "abshortcuts-indirect-base", out indirectNonZero, out indirectPlausible, out indirectInvalid, out indirectError))
+                    {
+                        var indirectScore = ComputeActionBarCandidateScore(indirectNonZero, indirectPlausible, indirectInvalid);
+                        if (indirectScore > bestScore)
+                        {
+                            bestBase = indirectBase;
+                            bestLabel = offsetCandidate == configuredOffset ? "indirect" : "indirect-module-adjusted";
+                            bestNonZero = indirectNonZero;
+                            bestPlausible = indirectPlausible;
+                            bestInvalid = indirectInvalid;
+                            bestScore = indirectScore;
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(indirectError))
+                    {
+                        bestError = indirectError;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    bestError = ex.Message;
+                }
+
+                if (!string.IsNullOrEmpty(directError))
+                    bestError = directError;
+            }
+
+            if (!IsPlausibleActionBarAddress(bestBase) || bestNonZero == 0)
+            {
+                details = "unable to resolve ActionBarShortcuts base from 0x" + unchecked((uint)configuredOffset).ToString("x", CultureInfo.InvariantCulture) +
+                          ", wowBase=0x" + unchecked((uint)wowBase).ToString("x", CultureInfo.InvariantCulture) +
+                          ", resolveError=" + (bestError ?? "") +
+                          ", bestLabel=" + bestLabel;
+                return false;
+            }
+
+            lock (ActionBarBaseLock)
+            {
+                CachedActionBarShortcutsOffset = configuredOffset;
+                CachedResolvedActionBarShortcutsBase = bestBase;
+                CachedResolveTick = nowTick;
+            }
+
+            actionBarShortcutsBase = bestBase;
+            details = "source=" + bestLabel +
+                      ", offset=0x" + unchecked((uint)configuredOffset).ToString("x", CultureInfo.InvariantCulture) +
+                      ", wowBase=0x" + unchecked((uint)wowBase).ToString("x", CultureInfo.InvariantCulture) +
+                      ", base=0x" + unchecked((uint)bestBase).ToString("x", CultureInfo.InvariantCulture) +
+                      ", nonZero=" + bestNonZero +
+                      ", plausible=" + bestPlausible +
+                      ", invalid=" + bestInvalid;
+            return true;
+        }
+
+        public static bool TryResolveActionBarShortcutsBase(out int actionBarShortcutsBase, out string details)
+        {
+            return TryResolveActionBarShortcutsBase(out actionBarShortcutsBase, out details, false);
         }
 
         public static void DecodeShortcut(uint rawShortcut, out GShortcutType shortcutType, out int shortcutValue)
@@ -75,6 +283,14 @@ namespace Glider.Common.Objects
 
         public static bool TryDecodeShortcut(uint rawShortcut, out GShortcutType shortcutType, out int shortcutValue)
         {
+            var actionType = rawShortcut & 0xFF000000U;
+            if (actionType == ClickTypeMask || actionType == EquipmentSetTypeMask)
+            {
+                shortcutType = GShortcutType.Empty;
+                shortcutValue = 0;
+                return true;
+            }
+
             DecodeShortcut(rawShortcut, out shortcutType, out shortcutValue);
             if (rawShortcut == 0U)
                 return true;
