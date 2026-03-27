@@ -65,10 +65,10 @@ namespace Glider.Common.Objects
 
         public bool IsRunning => Running;
 
-        public bool IsSpinning => MouseSpin ? StartupClass.CameraController.method_9() : SpinningKey != null;
+        public bool IsSpinning => MouseSpin ? StartupClass.CameraController.IsActive() : SpinningKey != null;
 
         public bool Overspin => MouseSpin
-            ? StartupClass.CameraController.method_9() && _spinFutility.IsReady
+            ? StartupClass.CameraController.IsActive() && _spinFutility.IsReady
             : SpinningKey != null && _spinFutility.IsReady;
 
         public double MeleeDistance { get; private set; }
@@ -159,7 +159,7 @@ namespace Glider.Common.Objects
             _spellLeadDelay = ConfigManager.gclass61_0.method_3("SpellLeadDelay");
             GMonster.LogChecks = ConfigManager.gclass61_0.method_5("LogMonsterChecks");
             if (StartupClass.CameraController != null)
-                StartupClass.CameraController.method_1();
+                StartupClass.CameraController.Initialize();
             if (GetConfigBool("AutoStop"))
                 _autoStop = new GSpellTimer(60000 * GetConfigInt("AutoStopMinutes"));
             else
@@ -211,7 +211,8 @@ namespace Glider.Common.Objects
 
             if (form == null)
                 return GConfigResult.NotSupported;
-            return form.ShowDialog() == DialogResult.OK ? GConfigResult.Accept : GConfigResult.Cancel;
+            IWin32Window owner = StartupClass.MainWindowHandle;
+            return form.ShowDialog(owner) == DialogResult.OK ? GConfigResult.Accept : GConfigResult.Cancel;
         }
 
         public void Log(string What)
@@ -416,7 +417,7 @@ namespace Glider.Common.Objects
 
         public void ReleaseAllKeys()
         {
-            StartupClass.CameraController.method_3(false);
+            StartupClass.CameraController.StopSpin(false);
             Running = false;
             SpinningKey = null;
             InputController.smethod_27();
@@ -455,7 +456,7 @@ namespace Glider.Common.Objects
             {
                 if (MouseSpin)
                 {
-                    StartupClass.CameraController.method_4(NewHeading);
+                    StartupClass.CameraController.StartSpin(NewHeading);
                 }
                 else
                 {
@@ -484,8 +485,8 @@ namespace Glider.Common.Objects
 
         public void PulseSpin(bool Fast)
         {
-            if (MouseSpin && StartupClass.CameraController.method_9())
-                StartupClass.CameraController.method_8(Fast);
+            if (MouseSpin && StartupClass.CameraController.IsActive())
+                StartupClass.CameraController.PulseSpin(Fast);
             if (!MouseSpin && Me != null)
                 Me.Refresh(true);
             if (MouseSpin || SpinningKey == null ||
@@ -497,7 +498,7 @@ namespace Glider.Common.Objects
         public void ReleaseSpin()
         {
             if (MouseSpin)
-                StartupClass.CameraController.method_3(false);
+                StartupClass.CameraController.StopSpin(false);
             else
                 lock (this)
                 {

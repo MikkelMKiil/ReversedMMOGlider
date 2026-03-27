@@ -59,7 +59,18 @@ public class ApplicationInitializer
     {
         int_0 = Glider.Common.Objects.GameMemoryConstants.LoadStaticOffsets(MemoryOffsetTable.Instance);
         Logger.LogMessage("Static offsets source: GameMemoryConstants");
-        return int_0 > 0 && Glider.Common.Objects.GameMemoryConstants.ValidateRequiredOffsets(MemoryOffsetTable.Instance);
+        if (int_0 <= 0 || !Glider.Common.Objects.GameMemoryConstants.ValidateRequiredOffsets(MemoryOffsetTable.Instance))
+            return false;
+
+        if (!MemoryOffsetTable.Instance.HasOffset("CameraBase"))
+        {
+            Logger.LogMessage("Camera base offset missing; projection and camera spin are disabled.");
+            return false;
+        }
+
+        Logger.LogMessage("Camera base validated at 0x" + MemoryOffsetTable.Instance.GetIntOffset("CameraBase").ToString("x") +
+                          " with WotLK camera block layout 0x8(position), 0x14(view matrix), 0x40(FOV)");
+        return true;
     }
 
     public static string GetRealmFromConfigFile()

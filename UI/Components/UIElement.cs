@@ -239,7 +239,7 @@ public class UIElement
 
     public void method_15()
     {
-        // StartupClass.CameraController.method_3(true);
+        // StartupClass.CameraController.StopSpin(true);
         // InputController.smethod_18(method_11() + (method_12() - method_11()) / 2.0,
         //     method_13() + (method_14() - method_13()) / 2.0);
     }

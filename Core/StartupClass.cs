@@ -1157,9 +1157,9 @@ public class StartupClass
             if (CurrentGlideMode != GlideMode.None || IsRuntimeAttached && detachAfterStop)
             {
                 ResetWindowDisplayState();
-                CameraController.method_3(true);
+                CameraController.StopSpin(true);
                 Logger.smethod_1(MessageProvider.smethod_2(652, detachAfterStop, (int)CurrentGlideMode, reason));
-                CameraController.method_3(true);
+                CameraController.StopSpin(true);
                 InputController.smethod_21(false);
                 if (CurrentGlideMode == GlideMode.Auto)
                 {
@@ -1491,7 +1491,7 @@ public class StartupClass
     private static void RunInputMaintenance()
     {
         LogMainLoopStep("Running camera/input maintenance");
-        CameraController.method_7();
+        CameraController.ConsiderReleaseButton();
         InputController.smethod_21(true);
     }
 

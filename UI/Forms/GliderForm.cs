@@ -1291,7 +1291,7 @@ public class GliderForm : Form, Logger.IUiSink
             string str = ConfigManager.gclass61_0.method_2("AppKey");
             ConfigManager.gclass61_0.method_2("PartyProductKey");
             StartupClass.PartyStateManager.bool_4 = false;
-            if (new ConfigForm(false).ShowDialog() != DialogResult.OK)
+            if (new ConfigForm(false).ShowDialog((IWin32Window)this) != DialogResult.OK)
                 return;
             this.OnLogMessage(MessageProvider.GetMessage(106));
             ConfigManager.gclass61_0.method_8();
@@ -1324,7 +1324,7 @@ public class GliderForm : Form, Logger.IUiSink
         if (StartupClass.IsProfileDirty && MessageBox.Show((IWin32Window)this, MessageProvider.GetMessage(656), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes || new ProfileWizard().method_0((Form)this) != DialogResult.No)
             return;
         ProfileProps profileProps = new ProfileProps((GProfile)null);
-        if (profileProps.ShowDialog() != DialogResult.OK)
+        if (profileProps.ShowDialog((IWin32Window)this) != DialogResult.OK)
             return;
         StartupClass.ActiveProfile = profileProps.gprofile_0;
         StartupClass.ActiveProfilePath = MessageProvider.GetMessage(70);
@@ -1335,7 +1335,7 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void EditProfileButton_Click(object sender, EventArgs e)
     {
-        int num = (int)new ProfileProps(StartupClass.ActiveProfile).ShowDialog();
+        int num = (int)new ProfileProps(StartupClass.ActiveProfile).ShowDialog((IWin32Window)this);
     }
 
     private void AddWaypointButton_Click(object sender, EventArgs e) => StartupClass.AddCurrentWaypoint();
@@ -1372,7 +1372,7 @@ public class GliderForm : Form, Logger.IUiSink
         saveFileDialog.RestoreDirectory = true;
         saveFileDialog.InitialDirectory = ".\\Profiles";
         saveFileDialog.Filter = MessageProvider.GetMessage(661);
-        if (saveFileDialog.ShowDialog() != DialogResult.OK)
+        if (saveFileDialog.ShowDialog((IWin32Window)this) != DialogResult.OK)
             return;
         StartupClass.IsProfileDirty = false;
         StartupClass.ActiveProfile.Save(saveFileDialog.FileName);
@@ -1765,13 +1765,17 @@ public class GliderForm : Form, Logger.IUiSink
     private void notifyIcon_0_MouseDoubleClick(object sender, MouseEventArgs e)
     {
         this.Visible = true;
+        this.BringToFront();
         this.Activate();
+        this.Focus();
     }
 
     private void showWindowToolStripMenuItem_Click(object sender, EventArgs e)
     {
         this.Visible = true;
+        this.BringToFront();
         this.Activate();
+        this.Focus();
     }
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e) => this.Close();
@@ -1790,6 +1794,7 @@ public class GliderForm : Form, Logger.IUiSink
             return;
         this.bool_10 = true;
         Logger.smethod_1("HandleGameGone invoked!");
+        this.BringToFront();
         this.Activate();
         this.Focus();
         if (StartupClass.HasManualPause)

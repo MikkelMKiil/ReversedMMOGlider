@@ -9,7 +9,7 @@ public class Matrix3
         float_0 = new float[3, 3];
     }
 
-    public void method_0(int int_0)
+    public void LoadFromAddress(int int_0)
     {
         for (var index1 = 0; index1 < 3; ++index1)
             for (var index2 = 0; index2 < 3; ++index2)
@@ -19,7 +19,7 @@ public class Matrix3
             }
     }
 
-    public Vector3 method_1(int int_0)
+    public Vector3 GetRow(int int_0)
     {
         return new Vector3
         {
@@ -29,7 +29,7 @@ public class Matrix3
         };
     }
 
-    public Matrix3 method_2()
+    public Matrix3 Clone()
     {
         var gclass4 = new Matrix3();
         for (var index1 = 0; index1 < 3; ++index1)
@@ -38,7 +38,7 @@ public class Matrix3
         return gclass4;
     }
 
-    public void method_3()
+    public void InvertInPlace()
     {
         var gclass4 = new Matrix3();
         gclass4.float_0[0, 0] = (float)(float_0[1, 1] * (double)float_0[2, 2] - float_0[1, 2] * (double)float_0[2, 1]);
@@ -64,7 +64,7 @@ public class Matrix3
         float_0[2, 2] = gclass4.float_0[2, 2] * num;
     }
 
-    public Vector3 method_4(Vector3 gclass2_0)
+    public Vector3 TransformVector(Vector3 gclass2_0)
     {
         return new Vector3
         {

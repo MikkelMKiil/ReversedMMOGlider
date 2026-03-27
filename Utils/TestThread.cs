@@ -12,7 +12,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Threading;
 
-epublic class TestThread
+public class TestThread
 {
     private const int ForegroundInitializationDelayMs = 2000;
     private const int PostRunDelayMs = 4000;
@@ -224,7 +224,11 @@ epublic class TestThread
 
         double screenX;
         double screenY;
-        if (WorldToScreenProjector.smethod_0(target.Location, 0.0, out screenX, out screenY))
+        int pixelX;
+        int pixelY;
+        GProcessMemoryManipulator.GStruct22 viewport;
+        string failureReason;
+        if (CameraProjection.TryProject(target.Location, 0.0, out screenX, out screenY, out pixelX, out pixelY, out viewport, out failureReason))
         {
             Logger.LogMessage("Conversion good, positioning cursor");
             //InputController.smethod_18(screenX, screenY);
@@ -233,7 +237,7 @@ epublic class TestThread
         }
         else
         {
-            Logger.LogMessage("Conversion no good, check log");
+            Logger.LogMessage("Conversion no good, check log: " + failureReason);
         }
     }
 
@@ -270,7 +274,7 @@ epublic class TestThread
         else
         {
             LogInfo("Moving camera to target pitch of: " + Math.Round(cachedCameraPitch, 3));
-            //StartupClass.CameraController.method_16(cachedCamera, cachedCameraPitch);
+            //StartupClass.CameraController.SetCameraPitch(cachedCamera, cachedCameraPitch);
         }
     }
 

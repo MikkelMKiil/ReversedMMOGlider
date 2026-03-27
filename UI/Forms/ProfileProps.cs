@@ -617,7 +617,7 @@ public class ProfileProps : Form
         MaximizeBox = false;
         MinimizeBox = false;
         Name = nameof(ProfileProps);
-        StartPosition = FormStartPosition.CenterScreen;
+        StartPosition = FormStartPosition.CenterParent;
         Text = nameof(ProfileProps);
         groupBox1.ResumeLayout(false);
         groupBox1.PerformLayout();

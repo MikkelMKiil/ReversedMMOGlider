@@ -25,18 +25,15 @@ public class GliderWarning : Form
         InitializeComponent();
     }
 
-    public static void smethod_0(string string_0, string string_1)
+    public static void smethod_0(string string_0, string string_1, IWin32Window owner = null)
     {
         if (ConfigManager.gclass61_0.method_2("NoWarn") == string_0)
             return;
+        if (owner == null && StartupClass.MainWindowHandle != null)
+            owner = StartupClass.MainWindowHandle;
         SoundPlayer.smethod_2("SystemExclamation");
-        var gliderWarning = new GliderWarning();
-        gliderWarning.LabelWarning.Text = string_0;
-        gliderWarning.method_1();
-        gliderWarning.MyOKButton.Visible = false;
-        gliderWarning.MyYesButton.Visible = true;
-        gliderWarning.MyNoButton.Visible = true;
-        var dialogResult = gliderWarning.ShowDialog();
+        var gliderWarning = CreateWarningDialog(string_0, false);
+        var dialogResult = gliderWarning.ShowDialog(owner);
         if (gliderWarning.NoMoreWarning.Checked)
         {
             ConfigManager.gclass61_0.method_0("NoWarn", string_0);
@@ -48,22 +45,30 @@ public class GliderWarning : Form
         Process.Start(string_1);
     }
 
-    public static void smethod_1(string string_0)
+    public static void smethod_1(string string_0, IWin32Window owner = null)
     {
         if (ConfigManager.gclass61_0.method_2("NoWarn") == string_0)
             return;
+        if (owner == null && StartupClass.MainWindowHandle != null)
+            owner = StartupClass.MainWindowHandle;
         SoundPlayer.smethod_2("SystemExclamation");
-        var gliderWarning = new GliderWarning();
-        gliderWarning.LabelWarning.Text = string_0;
-        gliderWarning.method_1();
-        gliderWarning.MyOKButton.Visible = true;
-        gliderWarning.MyYesButton.Visible = false;
-        gliderWarning.MyNoButton.Visible = false;
-        var num = (int)gliderWarning.ShowDialog();
+        var gliderWarning = CreateWarningDialog(string_0, true);
+        var num = (int)gliderWarning.ShowDialog(owner);
         if (!gliderWarning.NoMoreWarning.Checked)
             return;
         ConfigManager.gclass61_0.method_0("NoWarn", string_0);
         ConfigManager.gclass61_0.method_8();
+    }
+
+    private static GliderWarning CreateWarningDialog(string warningText, bool showOkButton)
+    {
+        var gliderWarning = new GliderWarning();
+        gliderWarning.LabelWarning.Text = warningText;
+        gliderWarning.method_1();
+        gliderWarning.MyOKButton.Visible = showOkButton;
+        gliderWarning.MyYesButton.Visible = !showOkButton;
+        gliderWarning.MyNoButton.Visible = !showOkButton;
+        return gliderWarning;
     }
 
     private void GliderWarning_Load(object sender, EventArgs e)

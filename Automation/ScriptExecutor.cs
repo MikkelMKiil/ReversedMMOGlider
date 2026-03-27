@@ -107,7 +107,7 @@ public class ScriptExecutor
 
         if (flag)
             thread_0 = null;
-        // StartupClass.CameraController.method_7();
+        // StartupClass.CameraController.ConsiderReleaseButton();
         // InputController.smethod_21(false);
         // InputController.smethod_21(false);
     }

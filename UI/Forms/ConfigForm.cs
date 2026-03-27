@@ -454,7 +454,7 @@ public class ConfigForm : Form
         SendMail.Checked = ConfigManager.gclass61_0.method_2(nameof(SendMail)) == "True";
         // Glider debug flag removed
         method_11();
-        method_16();
+        ReloadAutoLoginCharacters();
         method_18();
         GameMemoryAccess.smethod_48(this);
         GameMemoryAccess.smethod_51(helpProvider_0);
@@ -819,6 +819,7 @@ public class ConfigForm : Form
             this.ClassOptionsButton.Size = new System.Drawing.Size(140, 34);
             this.ClassOptionsButton.TabIndex = 1;
             this.ClassOptionsButton.Text = "Options";
+            this.ClassOptionsButton.Click += new System.EventHandler(this.ClassOptionsButton_Click);
             // 
             // ClassList
             // 
@@ -1103,6 +1104,7 @@ public class ConfigForm : Form
             this.MyHelpButton.Size = new System.Drawing.Size(114, 37);
             this.MyHelpButton.TabIndex = 2;
             this.MyHelpButton.Text = "Help";
+            this.MyHelpButton.Click += new System.EventHandler(this.MyHelpButton_Click);
             // 
             // ProductKeyBox
             // 
@@ -1267,6 +1269,7 @@ public class ConfigForm : Form
             this.LoadKeymap.Size = new System.Drawing.Size(220, 44);
             this.LoadKeymap.TabIndex = 1;
             this.LoadKeymap.Text = "Reload from disk";
+            this.LoadKeymap.Click += new System.EventHandler(this.LoadKeymap_Click);
             // 
             // PartyAttackDelay
             // 
@@ -1557,6 +1560,7 @@ public class ConfigForm : Form
             this.ButtonViewCharacters.TabIndex = 1;
             this.ButtonViewCharacters.Text = "View Characters";
             this.ButtonViewCharacters.UseVisualStyleBackColor = true;
+            this.ButtonViewCharacters.Click += new System.EventHandler(this.ButtonViewCharacters_Click);
             // 
             // AccountCreate
             // 
@@ -1566,6 +1570,7 @@ public class ConfigForm : Form
             this.AccountCreate.TabIndex = 0;
             this.AccountCreate.Text = "Create Character";
             this.AccountCreate.UseVisualStyleBackColor = true;
+            this.AccountCreate.Click += new System.EventHandler(this.AccountCreate_Click);
             // 
             // groupBox19
             // 
@@ -1847,6 +1852,7 @@ public class ConfigForm : Form
             this.EditDebuffs.TabIndex = 0;
             this.EditDebuffs.Text = "Manage";
             this.EditDebuffs.UseVisualStyleBackColor = true;
+            this.EditDebuffs.Click += new System.EventHandler(this.EditDebuffs_Click);
             // 
             // groupBox13
             // 
@@ -2185,6 +2191,7 @@ public class ConfigForm : Form
             this.EditKeymap.Size = new System.Drawing.Size(132, 44);
             this.EditKeymap.TabIndex = 4;
             this.EditKeymap.Text = "Edit";
+            this.EditKeymap.Click += new System.EventHandler(this.EditKeymap_Click);
             // 
             // KeyEditClass
             // 
@@ -2195,6 +2202,7 @@ public class ConfigForm : Form
             this.KeyEditClass.Size = new System.Drawing.Size(253, 28);
             this.KeyEditClass.Sorted = true;
             this.KeyEditClass.TabIndex = 3;
+            this.KeyEditClass.SelectedIndexChanged += new System.EventHandler(this.KeyEditClass_SelectedIndexChanged);
             // 
             // label61
             // 
@@ -3244,6 +3252,7 @@ public class ConfigForm : Form
             this.CompileButton.TabIndex = 1;
             this.CompileButton.Text = "Test Compile";
             this.CompileButton.UseVisualStyleBackColor = true;
+            this.CompileButton.Click += new System.EventHandler(this.CompileButton_Click);
             // 
             // TabInvisible
             // 
@@ -3282,6 +3291,7 @@ public class ConfigForm : Form
             this.SetProfile3.Size = new System.Drawing.Size(48, 24);
             this.SetProfile3.TabIndex = 15;
             this.SetProfile3.Text = "Set";
+            this.SetProfile3.Click += new System.EventHandler(this.SetProfile3_Click);
             // 
             // SetProfile2
             // 
@@ -3290,6 +3300,7 @@ public class ConfigForm : Form
             this.SetProfile2.Size = new System.Drawing.Size(48, 24);
             this.SetProfile2.TabIndex = 14;
             this.SetProfile2.Text = "Set";
+            this.SetProfile2.Click += new System.EventHandler(this.SetProfile2_Click);
             // 
             // SetProfile1
             // 
@@ -3298,6 +3309,7 @@ public class ConfigForm : Form
             this.SetProfile1.Size = new System.Drawing.Size(48, 24);
             this.SetProfile1.TabIndex = 13;
             this.SetProfile1.Text = "Set";
+            this.SetProfile1.Click += new System.EventHandler(this.SetProfile1_Click);
             // 
             // SetInitial
             // 
@@ -3306,6 +3318,7 @@ public class ConfigForm : Form
             this.SetInitial.Size = new System.Drawing.Size(48, 24);
             this.SetInitial.TabIndex = 12;
             this.SetInitial.Text = "Set";
+            this.SetInitial.Click += new System.EventHandler(this.SetInitial_Click);
             // 
             // Profile3
             // 
@@ -3775,10 +3788,13 @@ public class ConfigForm : Form
 
     private void MyHelpButton_Click(object sender, EventArgs e)
     {
-        var helpString = helpProvider_0.GetHelpString(tabControl1.SelectedTab);
-        if (helpString == null || helpString.Length <= 0)
-            return;
-        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, helpString);
+        var selectedTab = tabControl1.SelectedTab;
+        var topic = helpProvider_0.GetHelpString(selectedTab);
+        if (string.IsNullOrEmpty(topic))
+            topic = helpProvider_0.GetHelpKeyword(selectedTab);
+        if (string.IsNullOrEmpty(topic))
+            topic = "General.html";
+        GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, topic);
     }
 
     private void StopAfter_CheckedChanged(object sender, EventArgs e)
@@ -3909,10 +3925,10 @@ public class ConfigForm : Form
 
     private void SetInitial_Click(object sender, EventArgs e)
     {
-        method_10(InitialProfile, "LastProfile");
+        ChooseProfileFile(InitialProfile);
     }
 
-    private void method_10(Label label_0, string string_0)
+    private void ChooseProfileFile(Label profileLabel)
     {
         var openFileDialog = new OpenFileDialog();
         openFileDialog.RestoreDirectory = true;
@@ -3920,22 +3936,22 @@ public class ConfigForm : Form
         openFileDialog.Filter = MessageProvider.GetMessage(661);
         if (openFileDialog.ShowDialog(this) != DialogResult.OK)
             return;
-        label_0.Text = openFileDialog.FileName;
+        profileLabel.Text = openFileDialog.FileName;
     }
 
     private void SetProfile1_Click(object sender, EventArgs e)
     {
-        method_10(Profile1, "Profile1");
+        ChooseProfileFile(Profile1);
     }
 
     private void SetProfile2_Click(object sender, EventArgs e)
     {
-        method_10(Profile2, "Profile2");
+        ChooseProfileFile(Profile2);
     }
 
     private void SetProfile3_Click(object sender, EventArgs e)
     {
-        method_10(Profile3, "Profile3");
+        ChooseProfileFile(Profile3);
     }
 
     private void EditDebuffs_Click(object sender, EventArgs e)
@@ -4110,7 +4126,7 @@ public class ConfigForm : Form
                 GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "AutoLogin.html");
         var num = (int)new AccountInfo().ShowDialog(this);
-        method_16();
+        ReloadAutoLoginCharacters();
     }
 
     private void ButtonViewCharacters_Click(object sender, EventArgs e)
@@ -4118,7 +4134,7 @@ public class ConfigForm : Form
         Process.Start(Environment.CurrentDirectory + "\\Accounts");
     }
 
-    private void method_16()
+    private void ReloadAutoLoginCharacters()
     {
         if (!Directory.Exists("Accounts"))
             Directory.CreateDirectory("Accounts");
@@ -4130,7 +4146,7 @@ public class ConfigForm : Form
         var str1 = ConfigManager.gclass61_0.method_2("AutoLog");
         foreach (var string_0 in files)
         {
-            var str2 = method_17(string_0);
+            var str2 = GetCharacterNameFromFile(string_0);
             AutoLogCharacter.Items.Add(str2);
             if (str2 == str1)
                 AutoLogCharacter.SelectedItem = str2;
@@ -4139,7 +4155,7 @@ public class ConfigForm : Form
         bool_2 = true;
     }
 
-    private string method_17(string string_0)
+    private string GetCharacterNameFromFile(string string_0)
     {
         if (string_0.LastIndexOf("\\") > -1)
             string_0 = string_0.Substring(string_0.LastIndexOf("\\") + 1);
@@ -4177,7 +4193,8 @@ public class ConfigForm : Form
 
     private void KeyEditClass_SelectedIndexChanged(object sender, EventArgs e)
     {
-        EditKeymap.Enabled = KeyEditClass.SelectedIndex != 0;
+        var selectedItem = KeyEditClass.SelectedItem as string;
+        EditKeymap.Enabled = !string.IsNullOrEmpty(selectedItem) && selectedItem != "(Select...)";
     }
 
     private void EditKeymap_Click(object sender, EventArgs e)
@@ -4186,12 +4203,12 @@ public class ConfigForm : Form
         foreach (var key in Offsets.Keys)
             if (Offsets[key] == str)
             {
-                method_19(key, Offsets[key]);
+                OpenKeyEditor(key, Offsets[key]);
                 break;
             }
     }
 
-    protected void method_19(string string_0, string string_1)
+    protected void OpenKeyEditor(string string_0, string string_1)
     {
         var num = (int)new KeyEditor(string_0, string_1).ShowDialog(this);
     }
@@ -4201,26 +4218,6 @@ public class ConfigForm : Form
     {
         return ConfigManager.gclass61_0.method_2("AppKey").StartsWith("02") ||
                MessageProvider.gclass30_0.string_0.ToLower().IndexOf("zh") > -1;
-    }
-
-    private void DoSecCheck_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void AllowNetCheck_CheckedChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    private void AllowAutoSecCheck_CheckedChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    private void GliderDebug_CheckedChanged_1(object sender, EventArgs e)
-    {
-
     }
 
     private void DisplayHide_CheckedChanged(object sender, EventArgs e)

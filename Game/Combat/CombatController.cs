@@ -1393,7 +1393,7 @@ public class CombatController
     private void FixCameraPitch()
     {
         if (!GContext.Main.MouseSpin || _gameCamera == null || _originalCameraPitch == 0.0 || Math.Abs(_gameCamera.Pitch - _originalCameraPitch) <= Math.PI / 36.0) return;
-        GContext.Main.ReleaseSpinRun(); StartupClass.CameraController.method_16(_gameCamera, _originalCameraPitch);
+        GContext.Main.ReleaseSpinRun(); StartupClass.CameraController.SetCameraPitch(_gameCamera, _originalCameraPitch);
     }
 
     // Original: method_61

@@ -29,7 +29,7 @@ public class Vector3
                ")";
     }
 
-    public static Vector3 smethod_0(GLocation glocation_0)
+    public static Vector3 FromLocation(GLocation glocation_0)
     {
         return new Vector3
         {
@@ -39,7 +39,7 @@ public class Vector3
         };
     }
 
-    public static Vector3 smethod_1(Vector3 gclass2_0, Vector3 gclass2_1)
+    public static Vector3 Subtract(Vector3 gclass2_0, Vector3 gclass2_1)
     {
         return new Vector3
         {
@@ -49,13 +49,13 @@ public class Vector3
         };
     }
 
-    public static float smethod_2(Vector3 gclass2_0, Vector3 gclass2_1)
+    public static float Dot(Vector3 gclass2_0, Vector3 gclass2_1)
     {
         return (float)(gclass2_0.float_0 * (double)gclass2_1.float_0 + gclass2_0.float_1 * (double)gclass2_1.float_1 +
                        gclass2_0.float_2 * (double)gclass2_1.float_2);
     }
 
-    public void method_0(int int_0)
+    public void LoadFromAddress(int int_0)
     {
         float_0 = GameMemoryAccess.ReadFloat(int_0, "v3dx");
         float_1 = GameMemoryAccess.ReadFloat(int_0 + 4, "v3dy");

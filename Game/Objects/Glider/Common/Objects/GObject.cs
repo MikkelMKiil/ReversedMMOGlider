@@ -261,7 +261,7 @@ namespace Glider.Common.Objects
             // ensure camera rotator is enabled (keep original behavior), but don't let exceptions bubble
             try
             {
-                StartupClass.CameraController.method_3(true);
+                StartupClass.CameraController.StopSpin(true);
             }
             catch (Exception ex)
             {
@@ -345,7 +345,11 @@ namespace Glider.Common.Objects
         {
             double double_1;
             double double_2;
-            if (WorldToScreenProjector.smethod_0(Location, ZAdjust, out double_1, out double_2))
+            int screenX;
+            int screenY;
+            GProcessMemoryManipulator.GStruct22 viewport;
+            string failureReason;
+            if (CameraProjection.TryProject(Location, ZAdjust, out double_1, out double_2, out screenX, out screenY, out viewport, out failureReason))
             {
                 InputController.smethod_18(double_1, double_2);
                 Thread.Sleep(PawSpeedMS);
