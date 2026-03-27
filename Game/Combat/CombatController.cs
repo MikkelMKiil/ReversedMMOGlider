@@ -71,6 +71,8 @@ public class CombatController
     public string[] _noHarvestList;            // string_1
     private string _lastLogState;              // string_2
     public Thread _botThread;                  // thread_0
+    private const int StopJoinTimeoutMs = 5000;
+    private const int AbortJoinTimeoutMs = 2000;
 
     // --- CONSTRUCTOR ---
     public CombatController()
@@ -86,10 +88,13 @@ public class CombatController
     private void LogMsg(int id, params object[] args) => Log(Msg(id, args));
     private void LogDbgMsg(int id, params object[] args) => LogDbg(Msg(id, args));
     private void Sleep(int ms) => StartupClass.SleepMilliseconds(ms);
+    private bool ShouldAbort() => _interruptAction || StartupClass.CurrentGlideMode != GlideMode.Auto;
 
     // Original: method_0
     private void Initialize()
     {
+        _interruptAction = false;
+
         if (StartupClass.CurrentGameClass == null || StartupClass.CurrentProfile == null)
         {
             Log("No CurrentClass (?!), can't start glide!");
@@ -125,16 +130,39 @@ public class CombatController
 
         StartupClass.SomeIntegerValue = 0;
         _me = GPlayerSelf.Me;
+        if (_me == null)
+        {
+            Log("Glide initialization aborted: unable to resolve local player object");
+            return;
+        }
+
         _lastExperience = _me.Experience;
 
         if (ConfigManager.gclass61_0.method_5("ResetBuffs"))
             StartupClass.CurrentGameClass.ResetBuffs();
 
-        SpellcastingManager.gclass42_0.method_23();
+        try
+        {
+            SpellcastingManager.gclass42_0.method_23();
+        }
+        catch (Exception ex)
+        {
+            Log("Keybind refresh during init failed: " + ex.Message);
+        }
+
         _currentProfile = StartupClass.ProfileGroupStateManager?.method_6() ?? StartupClass.ActiveProfile;
+        if (_currentProfile == null)
+        {
+            Log("Glide initialization aborted: no active profile is available");
+            return;
+        }
 
         _chatQueued = true;
-        _botThread = new Thread(ThreadRun);
+        _botThread = new Thread(ThreadRun)
+        {
+            IsBackground = true,
+            Name = "CombatControllerThread"
+        };
         _autoStopEnabled = ConfigManager.gclass61_0.method_2("AutoStop") == "True";
         _jumpMoreEnabled = ConfigManager.gclass61_0.method_2("JumpMore") == "True";
         _strafeEnabled = ConfigManager.gclass61_0.method_2("Strafe") == "True";
@@ -204,7 +232,17 @@ public class CombatController
             return false;
         }
 
-        _botThread.Start();
+        try
+        {
+            _botThread.Start();
+            Log("Combat controller thread started");
+        }
+        catch (ThreadStateException ex)
+        {
+            Log("!! StartBotThread failed: " + ex.Message);
+            return false;
+        }
+
         return true;
     }
 
@@ -212,12 +250,65 @@ public class CombatController
     public void StopBotThread()
     {
         _interruptAction = true;
-        if (_botThread != null && Thread.CurrentThread != _botThread)
+        var thread = _botThread;
+        var stopOutcome = "no-thread";
+        if (thread != null && Thread.CurrentThread != thread)
         {
-            _botThread.Interrupt();
-            _botThread.Join();
+            stopOutcome = "interrupt-sent";
+            try
+            {
+                thread.Interrupt();
+            }
+            catch (Exception ex)
+            {
+                Log("StopBotThread interrupt failed: " + ex.Message);
+                stopOutcome = "interrupt-failed";
+            }
+
+            try
+            {
+                if (!thread.Join(StopJoinTimeoutMs))
+                {
+                    Log("StopBotThread timed out waiting for combat thread shutdown; attempting abort fallback");
+                    stopOutcome = "join-timeout";
+                    try
+                    {
+                        thread.Abort();
+                        if (!thread.Join(AbortJoinTimeoutMs))
+                        {
+                            Log("StopBotThread abort fallback did not stop the combat thread");
+                            stopOutcome = "abort-timeout";
+                        }
+                        else
+                        {
+                            stopOutcome = "abort-stopped";
+                        }
+                    }
+                    catch (Exception abortEx)
+                    {
+                        Log("StopBotThread abort fallback failed: " + abortEx.Message);
+                        stopOutcome = "abort-failed";
+                    }
+                }
+                else
+                {
+                    Log("Combat controller thread stopped");
+                    stopOutcome = "join-stopped";
+                }
+            }
+            catch (ThreadStateException ex)
+            {
+                Log("StopBotThread join skipped: " + ex.Message);
+                stopOutcome = "join-skipped";
+            }
         }
+        else if (thread != null)
+        {
+            stopOutcome = "owner-thread-stop";
+        }
+
         _botThread = null;
+        StartupClass.ReportCombatThreadStopOutcome(stopOutcome);
     }
 
     // Original: method_3
@@ -361,7 +452,7 @@ public class CombatController
     public void PrimaryGlideLoop()
     {
         WaypointMovementLoop();
-        while (true)
+        while (!ShouldAbort())
         {
             DialogMonitor.smethod_2();
             CheckAutoStop();
@@ -400,6 +491,9 @@ public class CombatController
                 boredTimer.method_4();
                 while (!boredTimer.method_3())
                 {
+                    if (ShouldAbort())
+                        return;
+
                     Sleep(2000);
                     if (ScanAndEngageTargets() > 0) break;
                 }
@@ -912,7 +1006,7 @@ public class CombatController
         if (_currentProfile.IgnoreAttackers) ProfileGroupManager.smethod_6();
         if (_vendorResumeLoc != null) VendorRunLoop(_vendorResumeLoc);
 
-        while (true)
+        while (!ShouldAbort())
         {
             if (_me.Target?.IsDead == true) ClearTarget();
             GContext.Main.PulseSpin(!GContext.Main.IsRunning);
@@ -1114,6 +1208,9 @@ public class CombatController
 
         while (!timer.method_3() && mob.IsValid)
         {
+            if (ShouldAbort())
+                break;
+
             if (mob.DistanceToSelf >= 30.0) break;
             if (_me.TargetGUID != 0L) break;
             Sleep(200);
@@ -1151,6 +1248,9 @@ public class CombatController
 
         for (int i = 0; i < 9; i++)
         {
+            if (ShouldAbort())
+                return;
+
             if (CheckPartyAggroOrSelfAggro()) return;
             if (CanHarvestCursor(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType")))
             {
@@ -1169,7 +1269,7 @@ public class CombatController
         var chatTimer = new GameTimer(5000); var trackTimer = new GameTimer(2000); var castTimer = new GameTimer(1000);
         ulong assistTarget = 0;
 
-        while (true)
+        while (!ShouldAbort())
         {
             if (castTimer.method_3())
             {
@@ -1194,6 +1294,9 @@ public class CombatController
                     var waitTimer = new GameTimer(8000); waitTimer.method_4();
                     while (!waitTimer.method_3())
                     {
+                        if (ShouldAbort())
+                            return;
+
                         if (unit.Health >= 1.0 && unit.TargetGUID != leader.GUID) { if (leader.TargetGUID != unit.GUID) ClearTarget(); else Sleep(500); }
                         else break;
                     }

@@ -21,6 +21,13 @@ namespace Glider.Common.Objects
         {
             this.SlotNumber = SlotNumber;
 
+            if (SlotNumber < 1 || SlotNumber > 132)
+            {
+                ShortcutType = GShortcutType.Empty;
+                ShortcutValue = 0;
+                return;
+            }
+
             if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
             {
                 ShortcutType = GShortcutType.Empty;
@@ -36,7 +43,19 @@ namespace Glider.Common.Objects
                 return;
             }
 
-            var num = (uint)GameMemoryAccess.ReadInt32(actionBarShortcutsBase + 4 * (SlotNumber - 1), "shortcut1");
+            uint num;
+            try
+            {
+                num = (uint)GameMemoryAccess.ReadInt32(actionBarShortcutsBase + 4 * (SlotNumber - 1), "shortcut1");
+            }
+            catch (Exception ex)
+            {
+                Logger.smethod_1("GShortcut read failed for slot " + SlotNumber + ": " + ex.Message);
+                ShortcutType = GShortcutType.Empty;
+                ShortcutValue = 0;
+                return;
+            }
+
             if (num == 0U)
             {
                 ShortcutType = GShortcutType.Empty;

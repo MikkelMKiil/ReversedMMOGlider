@@ -165,6 +165,13 @@ public class StartupClass
     private static int MainLoopTickGuard;
     private static int LastMainLoopTickTime;
     private static bool IsWorldUiReady;
+    private static int LifecycleSessionCounter;
+    public static int ActiveLifecycleSessionId;
+    public static string LastLifecycleStopReason = "";
+    public static string LastLifecycleThreadStopOutcome = "none";
+    private static readonly GameTimer KeybindRefreshTimer = new GameTimer(1200);
+    private static bool IsKeybindRefreshPending;
+    private static ulong LastKeybindRefreshGuid;
     private const int MinMainLoopTickIntervalMs = 75;
     private static string PendingErrorMessage = null;
     private static Size OriginalWindowSize;
@@ -283,6 +290,10 @@ public class StartupClass
     private static void InitializeRuntimeState()
     {
         RandomGenerator = new Random();
+        LifecycleSessionCounter = 0;
+        ActiveLifecycleSessionId = 0;
+        LastLifecycleStopReason = "";
+        LastLifecycleThreadStopOutcome = "none";
         CurrentGlideMode = GlideMode.None;
         WowVersionLabel = "0.0";
         DynamicClassCount = 0;
@@ -299,6 +310,68 @@ public class StartupClass
         SessionHeartbeatTimer = new GameTimer(30000);
         IsGliderInitialized = false;
         CameraController = new CameraRotator();
+        IsKeybindRefreshPending = true;
+        LastKeybindRefreshGuid = 0UL;
+        KeybindRefreshTimer.method_5();
+    }
+
+    private static void LogLifecycleEvent(string stage, string details)
+    {
+        var line = "[Lifecycle] Session=" + ActiveLifecycleSessionId +
+                   ", Stage=" + stage +
+                   ", Mode=" + CurrentGlideMode +
+                   ", StopReason=" + LastLifecycleStopReason +
+                   ", ThreadStop=" + LastLifecycleThreadStopOutcome;
+        if (!string.IsNullOrEmpty(details))
+            line = line + ", " + details;
+        Logger.LogMessage(line);
+    }
+
+    public static void ReportCombatThreadStopOutcome(string outcome)
+    {
+        LastLifecycleThreadStopOutcome = string.IsNullOrEmpty(outcome) ? "unknown" : outcome;
+        LogLifecycleEvent("CombatThreadStop", null);
+    }
+
+    private static bool EnsureLivePlayerObject(out GPlayerSelf player)
+    {
+        player = GPlayerSelf.Me;
+        if (player != null)
+            return true;
+
+        GObjectList.SetCacheDirty();
+        GObjectList.GetObjects();
+        player = GPlayerSelf.Me;
+        return player != null;
+    }
+
+    private static void PrepareForAutoGlideStart()
+    {
+        ActiveLifecycleSessionId = Interlocked.Increment(ref LifecycleSessionCounter);
+        LastLifecycleStopReason = "";
+        LastLifecycleThreadStopOutcome = "none";
+
+        CachedRatePerHour = 0;
+        HasQueuedPayload = false;
+        IsDetachInProgress = false;
+
+        var staleCombatController = ActiveCombatController;
+        ActiveCombatController = null;
+        if (staleCombatController != null)
+        {
+            LogLifecycleEvent("PrepareAutoStart", "Stopping stale combat controller");
+            staleCombatController.method_2();
+        }
+
+        GObjectList.SetCacheDirty();
+
+        if (SpellcastingManager.gclass42_0 != null)
+            SpellcastingManager.gclass42_0.method_3();
+
+        IsKeybindRefreshPending = true;
+        LastKeybindRefreshGuid = 0UL;
+        KeybindRefreshTimer.method_5();
+        LogLifecycleEvent("PrepareAutoStart", "Reset complete");
     }
 
     private static void LoadLastProfileOrCreateDefault()
@@ -729,6 +802,9 @@ public class StartupClass
         if (ProfileGroupStateManager != null)
             ProfileGroupStateManager.method_6();
         IsRuntimeAttached = true;
+        IsKeybindRefreshPending = true;
+        LastKeybindRefreshGuid = 0UL;
+        KeybindRefreshTimer.method_5();
         SoundPlayer.smethod_0("Attach.wav");
         DetachAfterStopRequested = false;
         Logger.smethod_1("--- Attach code out");
@@ -774,6 +850,8 @@ public class StartupClass
         }
 
         IsRuntimeAttached = false;
+        IsKeybindRefreshPending = false;
+        LastKeybindRefreshGuid = 0UL;
         if (GameClass69Instance != null)
             GameClass69Instance.method_3();
         else
@@ -998,6 +1076,9 @@ public class StartupClass
 
     public static bool StartAutoGlide(bool isHotkeyTriggered)
     {
+        Logger.smethod_1(LogCategoryStartup + "StartAutoGlide requested");
+        LogLifecycleEvent("StartRequested", "Hotkey=" + isHotkeyTriggered);
+
         if (!IsInitializationComplete)
             return false;
         if (isTimeAdded && DateTime.Now > expiryTime)
@@ -1033,7 +1114,14 @@ public class StartupClass
             return false;
         }
 
-        if (GPlayerSelf.Me.IsDead &&
+        GPlayerSelf player;
+        if (!EnsureLivePlayerObject(out player))
+        {
+            Logger.LogMessage("Unable to resolve player object while starting auto glide");
+            return false;
+        }
+
+        if (player.IsDead &&
             (ActiveProfile.GhostWaypoints.Count == 0 || !ConfigManager.gclass61_0.method_5("Resurrect")))
         {
             Logger.LogMessage(MessageProvider.GetMessage(120));
@@ -1042,10 +1130,23 @@ public class StartupClass
 
         if (!IsGliderInitialized)
             BringGameToForeground();
+
+        PrepareForAutoGlideStart();
         CurrentGlideMode = GlideMode.Auto;
         ActiveCombatController = new CombatController();
         if (ActiveCombatController.method_1())
+        {
+            LogLifecycleEvent("StartSucceeded", null);
             return true;
+        }
+
+        if (ActiveCombatController != null)
+        {
+            ActiveCombatController.method_2();
+            ActiveCombatController = null;
+        }
+
+        LogLifecycleEvent("StartFailed", "Combat controller did not start thread");
         CurrentGlideMode = GlideMode.None;
         return false;
     }
@@ -1126,6 +1227,9 @@ public class StartupClass
     {
         if (CurrentGlideMode == GlideMode.None && !detachAfterStop)
             return;
+
+        LastLifecycleStopReason = reason ?? "";
+        LogLifecycleEvent("StopRequested", "Detach=" + detachAfterStop + ", Depth=" + KillActionDepth);
         var flag = false;
         try
         {
@@ -1145,12 +1249,19 @@ public class StartupClass
             --KillActionDepth;
         }
 
+        LogLifecycleEvent("StopCompleted", "InterruptedRethrow=" + flag);
+
         if (flag)
             throw new ThreadInterruptedException();
     }
 
     private static void ExecuteStopGlideCore(bool detachAfterStop, string reason)
     {
+        var shouldRethrowInterrupt = false;
+        MachGlideRunner gameProcessToStop = null;
+        CombatController combatControllerToStop = null;
+        GlideMainThread manualControllerToStop = null;
+
         lock (killActionLock)
         {
             var flag = false;
@@ -1187,15 +1298,13 @@ public class StartupClass
                     {
                         var gameProcessManager = GameProcessManager;
                         GameProcessManager = null;
-                        if (gameProcessManager != null)
-                            gameProcessManager.method_1();
+                        gameProcessToStop = gameProcessManager;
                     }
                     else
                     {
                         var combatController = ActiveCombatController;
                         ActiveCombatController = null;
-                        if (combatController != null)
-                            combatController.method_2();
+                        combatControllerToStop = combatController;
                     }
                 }
 
@@ -1206,8 +1315,7 @@ public class StartupClass
                         flag = true;
                     Logger.smethod_1(MessageProvider.GetMessage(102));
                     CurrentGlideMode = GlideMode.None;
-                    if (ManualGlideController != null)
-                        ManualGlideController.method_0();
+                    manualControllerToStop = ManualGlideController;
                     ManualGlideController = null;
                 }
 
@@ -1217,23 +1325,38 @@ public class StartupClass
                 GContext.Main.ReleaseAllKeys();
                 InputController.smethod_21(false);
                 if (flag)
-                    throw new ThreadInterruptedException();
+                    shouldRethrowInterrupt = true;
             }
         }
+
+        if (gameProcessToStop != null)
+            gameProcessToStop.method_1();
+
+        if (combatControllerToStop != null)
+            combatControllerToStop.method_2();
+
+        if (manualControllerToStop != null)
+            manualControllerToStop.method_0();
+
+        if (shouldRethrowInterrupt)
+            throw new ThreadInterruptedException();
     }
 
     public static int GetExperiencePerHour()
     {
         if (CurrentGlideMode != GlideMode.Auto)
             return CachedRatePerHour;
-        if (ActiveCombatController == null)
+
+        var activeCombatController = ActiveCombatController;
+        if (activeCombatController == null)
             return 0;
-        lock (ActiveCombatController)
+
+        lock (activeCombatController)
         {
-            if (ActiveCombatController.bool_9)
+            if (activeCombatController.bool_9)
             {
-                CachedRatePerHour = (int)Math.Round(ActiveCombatController.int_8 / (DateTime.Now - SessionStartTime).TotalSeconds * 3600.0, 0);
-                ActiveCombatController.bool_9 = false;
+                CachedRatePerHour = (int)Math.Round(activeCombatController.int_8 / (DateTime.Now - SessionStartTime).TotalSeconds * 3600.0, 0);
+                activeCombatController.bool_9 = false;
             }
         }
 
@@ -1383,6 +1506,7 @@ public class StartupClass
         RefreshDebuffStateIfNeeded();
         UpdatePlayerStanceIfNeeded(me);
         EnsureWorldUiReady(me);
+        TryRefreshKeybindsIfNeeded(me);
 
         RunUiUpdateTick();
         ApplyBackgroundModeIfNeeded();
@@ -1458,6 +1582,57 @@ public class StartupClass
             GContext.Main.Interface.UnFillAllKeys();
 
         CurrentStance = player.Stance;
+        IsKeybindRefreshPending = true;
+        KeybindRefreshTimer.method_5();
+    }
+
+    private static bool IsKeybindRefreshReady()
+    {
+        if (SpellcastingManager.gclass42_0 == null || CurrentGameClass == null || !IsRuntimeAttached)
+            return false;
+
+        if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+            return false;
+
+        return SpellbookStateManager != null;
+    }
+
+    private static void TryRefreshKeybindsIfNeeded(GPlayerSelf player)
+    {
+        if (player == null)
+            return;
+
+        if (player.GUID != LastKeybindRefreshGuid)
+            IsKeybindRefreshPending = true;
+
+        if (!IsKeybindRefreshPending && SpellcastingManager.gclass42_0 != null)
+        {
+            if (SpellcastingManager.gclass42_0.method_15("Common.Forward") ||
+                SpellcastingManager.gclass42_0.method_15("Common.ToggleCombat"))
+            {
+                IsKeybindRefreshPending = true;
+                KeybindRefreshTimer.method_5();
+            }
+        }
+
+        if (!IsKeybindRefreshPending || !KeybindRefreshTimer.method_3())
+            return;
+
+        KeybindRefreshTimer.method_4();
+        if (!IsKeybindRefreshReady())
+            return;
+
+        try
+        {
+            SpellcastingManager.gclass42_0.method_23();
+            IsKeybindRefreshPending = false;
+            LastKeybindRefreshGuid = player.GUID;
+        }
+        catch (Exception ex)
+        {
+            Logger.smethod_1("Keybind refresh retry failed: " + ex.Message);
+            IsKeybindRefreshPending = true;
+        }
     }
 
     private static void RunUiUpdateTick()
@@ -1519,6 +1694,8 @@ public class StartupClass
         DialogMonitor.smethod_0();
         GameClass8Instance = UIElement.smethod_2("GameMenuFrame", false);
         IsWorldUiReady = true;
+        IsKeybindRefreshPending = true;
+        KeybindRefreshTimer.method_5();
     }
 
     public static void SleepMilliseconds(int milliseconds)

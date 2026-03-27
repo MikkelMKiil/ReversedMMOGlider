@@ -18,6 +18,7 @@ using System.Threading;
 
 public class ScriptExecutor
 {
+    private const int ScriptThreadJoinTimeoutMs = 5000;
     private readonly SortedList<string, GScript> Offsets;
     private Thread thread_0;
 
@@ -37,7 +38,12 @@ public class ScriptExecutor
             if (thread_0 == null)
                 return;
             thread_0.Interrupt();
-            thread_0.Join();
+            if (!thread_0.Join(ScriptThreadJoinTimeoutMs))
+            {
+                Logger.LogMessage("ScriptHelper shutdown timed out waiting for running script thread");
+                return;
+            }
+
             thread_0 = null;
         }
     }
@@ -61,7 +67,11 @@ public class ScriptExecutor
                     if (thread_0 != null)
                     {
                         Logger.LogMessage("Waiting for prior script to finish");
-                        thread_0.Join();
+                        if (!thread_0.Join(ScriptThreadJoinTimeoutMs))
+                        {
+                            Logger.LogMessage("Prior script did not finish before timeout; skipping script launch");
+                            return;
+                        }
                     }
 
                     if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") &&

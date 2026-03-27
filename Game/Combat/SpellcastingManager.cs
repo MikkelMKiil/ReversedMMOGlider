@@ -762,18 +762,21 @@ public class SpellcastingManager
 
     public void method_23()
     {
-        var gkeyList = new List<GKey>();
-        foreach (var gkey in Offsets.Values)
-            if (gkey.AutoUpdate)
-            {
-                gkey.NeedAutoUpdate = true;
-                gkeyList.Add(gkey);
-            }
+        lock (this)
+        {
+            var gkeyList = new List<GKey>();
+            foreach (var gkey in Offsets.Values)
+                if (gkey.AutoUpdate)
+                {
+                    gkey.NeedAutoUpdate = true;
+                    gkeyList.Add(gkey);
+                }
 
-        var array = gkeyList.ToArray();
-        StartupClass.CurrentGameClass.UpdateKeys(array);
-        method_24(array);
-        method_3();
+            var array = gkeyList.ToArray();
+            StartupClass.CurrentGameClass.UpdateKeys(array);
+            method_24(array);
+            method_3();
+        }
     }
 
     private void method_24(GKey[] gkey_0)

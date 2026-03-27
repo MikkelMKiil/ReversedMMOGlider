@@ -188,6 +188,10 @@ namespace Glider.Common.Objects
                 {
                     var num1 = 0;
                     var num2 = 1;
+                    var me = GPlayerSelf.Me;
+                    if (me == null)
+                        return;
+
                     if (BarState == GBarState.Combat || BarState == GBarState.Indifferent || BarState == GBarState.Rest)
                         return;
                     var num3 = StartupClass.ActionBarCharacters.IndexOf(CharCode);
@@ -196,7 +200,7 @@ namespace Glider.Common.Objects
                     var num4 = (int)(BarState - 3);
                     if (BarState == GBarState.Bar1)
                     {
-                        var stance = GPlayerSelf.Me.Stance;
+                        var stance = me.Stance;
                         if (stance == GStance.Battle || stance == GStance.Stealth || stance == GStance.Shadow ||
                             stance == GStance.Cat)
                             num1 = 72;
@@ -228,6 +232,9 @@ namespace Glider.Common.Objects
                                 if (KType == GKeyType.SpellID && gshortcut.ShortcutType == GShortcutType.Spell)
                                 {
                                     var flag = false;
+                                    if (StartupClass.SpellbookStateManager == null)
+                                        return;
+
                                     if (SameSpells == null)
                                         SameSpells = StartupClass.SpellbookStateManager.method_13(SIM);
                                     if (SameSpells == null)
@@ -275,6 +282,10 @@ namespace Glider.Common.Objects
         {
             var num = -1;
             var index = (SlotNumber - 1) % 12;
+            var me = GPlayerSelf.Me;
+            if (me == null)
+                return false;
+
             if (SlotNumber >= 13 && SlotNumber <= 72)
             {
                 num = (SlotNumber - 1) / 12;
@@ -282,7 +293,7 @@ namespace Glider.Common.Objects
             else
             {
                 var flag = false;
-                var stance = GPlayerSelf.Me.Stance;
+                var stance = me.Stance;
                 if (stance == GStance.Battle || stance == GStance.Stealth || stance == GStance.Shadow ||
                     stance == GStance.Cat)
                 {
@@ -310,6 +321,9 @@ namespace Glider.Common.Objects
                 if (num == -1)
                     return false;
             }
+
+            if (index < 0 || index >= StartupClass.ActionBarCharacters.Length)
+                return false;
 
             BarState = (GBarState)(3 + num);
             CharCode = StartupClass.ActionBarCharacters[index];

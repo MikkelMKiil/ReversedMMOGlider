@@ -17,6 +17,7 @@ using System.Xml;
 
 public class WebNotificationService
 {
+    private const int NotifyThreadJoinTimeoutMs = 5000;
     private bool bool_0;
     private bool bool_1;
     private DateTime dateTime_0;
@@ -96,7 +97,12 @@ public class WebNotificationService
             method_4("Stopping background thread");
             bool_0 = true;
             thread_0.Interrupt();
-            thread_0.Join();
+            if (!thread_0.Join(NotifyThreadJoinTimeoutMs))
+            {
+                method_4("Background thread did not stop within timeout");
+                return;
+            }
+
             thread_0 = null;
         }
 
