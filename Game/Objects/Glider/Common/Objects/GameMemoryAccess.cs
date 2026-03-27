@@ -112,7 +112,7 @@ internal static class GameMemoryAccess
     internal static bool GetWindowSize(IntPtr windowHandle, out Size size) => MemoryRequestHandler.GetWindowSize(windowHandle, out size);
     internal static void SetWindowSize(IntPtr windowHandle, Size size) => MemoryRequestHandler.SetWindowSize(windowHandle, size);
     internal static void IsWindowVisible(Control control, string helpFile, HelpNavigator navigator, object parameter) => MemoryRequestHandler.IsWindowVisible(control, helpFile, navigator, parameter);
-    internal static void IsWindowMinimized() => MemoryRequestHandler.IsWindowMinimized();
+    internal static bool IsWindowMinimized() => MemoryRequestHandler.IsWindowMinimized();
     internal static byte[] smethod_17(int address, int size, string debugClue) => MemoryRequestHandler.smethod_17(address, size, debugClue);
     internal static byte[] smethod_20(int address, int size) => MemoryRequestHandler.smethod_20(address, size);
     internal static void smethod_48(Form form) => MemoryRequestHandler.smethod_48(form);

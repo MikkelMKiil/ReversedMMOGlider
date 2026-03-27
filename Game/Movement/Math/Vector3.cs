@@ -1,12 +1,7 @@
-// Decompiled with JetBrains decompiler
-// Type: Vector3
-// Assembly: Glider, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null
-// MVID: BE61069A-03D7-40D0-A422-37FF26A0373E
-// Assembly location: C:\Users\kiilo\Desktop\WORK ON THSI\Glider_fix-cleaned.exe
-
-#nullable disable
 using Glider.Common.Objects;
 using System;
+
+#nullable disable
 
 public class Vector3
 {
@@ -34,7 +29,6 @@ public class Vector3
                ")";
     }
 
-
     public static Vector3 smethod_0(GLocation glocation_0)
     {
         return new Vector3
@@ -60,7 +54,6 @@ public class Vector3
         return (float)(gclass2_0.float_0 * (double)gclass2_1.float_0 + gclass2_0.float_1 * (double)gclass2_1.float_1 +
                        gclass2_0.float_2 * (double)gclass2_1.float_2);
     }
-
 
     public void method_0(int int_0)
     {

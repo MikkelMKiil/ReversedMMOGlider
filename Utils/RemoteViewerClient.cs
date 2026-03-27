@@ -27,46 +27,46 @@ public class RemoteViewerClient
     public const int int_5 = 8;
     public const int int_6 = 16;
     public const int int_7 = 32;
-    private const int int_8 = 8192;
-    private const int int_9 = 500000;
-    private static int int_10;
-    private bool bool_0;
-    private bool bool_1;
-    private bool bool_2;
-    private bool bool_3;
-    private readonly byte[] byte_0;
-    private byte[] byte_1;
-    private DateTime dateTime_0 = DateTime.MinValue;
-    private readonly RemoteViewerServer gclass79_0;
-    private ImageCodecInfo imageCodecInfo_0;
-    private int int_11;
-    private readonly int int_12;
-    private int int_13;
-    private int int_14 = 100;
-    private int int_15 = 100;
-    private long long_0 = 75;
-    public Socket socket_0;
-    private string string_0 = string.Empty;
-    private Thread thread_0;
+    private const int SocketChunkSize = 8192;
+    private const int CaptureBufferSize = 500000;
+    private static int nextClientId;
+    private bool isStopping;
+    private bool isAuthenticated;
+    private bool escapeHighBitCharacters;
+    private bool isCaptureInProgress;
+    private readonly byte[] streamBuffer;
+    private byte[] captureBuffer;
+    private DateTime lastCaptureTime = DateTime.MinValue;
+    private readonly RemoteViewerServer server;
+    private ImageCodecInfo jpegCodecInfo;
+    private int enabledLogChannels;
+    private readonly int clientId;
+    private int cachedCaptureLength;
+    private int captureCacheDurationMs = 100;
+    private int captureScalePercent = 100;
+    private long captureQualityPercent = 75;
+    public Socket socket;
+    private string queuedKeySequence = string.Empty;
+    private Thread workerThread;
 
-    public RemoteViewerClient(RemoteViewerServer gclass79_1, Socket socket_1)
+    public RemoteViewerClient(RemoteViewerServer remoteServer, Socket clientSocket)
     {
-        ++int_10;
-        int_12 = int_10;
-        gclass79_0 = gclass79_1;
-        socket_0 = socket_1;
-        thread_0 = null;
-        bool_0 = false;
-        bool_1 = false;
-        byte_0 = null;
-        bool_2 = false;
-        int_11 = 0;
+        ++nextClientId;
+        clientId = nextClientId;
+        server = remoteServer;
+        socket = clientSocket;
+        workerThread = null;
+        isStopping = false;
+        isAuthenticated = false;
+        streamBuffer = null;
+        escapeHighBitCharacters = false;
+        enabledLogChannels = 0;
     }
 
     public void method_0()
     {
-        thread_0 = new Thread(method_2);
-        thread_0.Start();
+        workerThread = new Thread(method_2);
+        workerThread.Start();
     }
 
     public void method_1()
@@ -74,17 +74,17 @@ public class RemoteViewerClient
         try
         {
             Logger.smethod_1("Stopping a remoteguy");
-            bool_0 = true;
-            if (socket_0 != null)
+            isStopping = true;
+            if (socket != null)
             {
-                socket_0.Close();
-                socket_0 = null;
+                socket.Close();
+                socket = null;
             }
 
-            if (thread_0 != null)
+            if (workerThread != null)
             {
                 Logger.smethod_1("Waiting for work thread");
-                thread_0.Join();
+                workerThread.Join();
                 Logger.smethod_1("Done waiting for work thread");
             }
 
@@ -104,28 +104,28 @@ public class RemoteViewerClient
         }
         catch (Exception ex1)
         {
-            if (socket_0 != null)
+            if (socket != null)
             {
                 try
                 {
-                    socket_0.Close();
+                    socket.Close();
                 }
                 catch (Exception ex2)
                 {
                     Logger.smethod_1("Exception tossing socket in cleanup, no big deal");
                 }
 
-                socket_0 = null;
+                socket = null;
             }
 
-            if (!bool_0)
+            if (!isStopping)
             {
                 Logger.LogMessage(MessageProvider.smethod_2(354, ex1.Message));
                 Logger.smethod_1("** " + ex1.Message + ex1.StackTrace);
             }
         }
 
-        thread_0 = null;
+        workerThread = null;
         StartupClass.RemoteViewer.method_3(this);
     }
 
@@ -136,7 +136,7 @@ public class RemoteViewerClient
         {
             method_6("Authenticated ok\r\n");
             Logger.LogMessage(MessageProvider.GetMessage(357));
-            bool_1 = true;
+            isAuthenticated = true;
             while (true)
             {
                 string string_1;
@@ -148,15 +148,15 @@ public class RemoteViewerClient
                 lock (this)
                 {
                     method_7(string_1);
-                    Logger.smethod_1(int_12 + " <- processing complete");
+                    Logger.smethod_1(clientId + " <- processing complete");
                     method_6("---\r\n");
                 }
             }
         }
 
         Logger.LogMessage(MessageProvider.smethod_2(355, str));
-        socket_0.Close();
-        socket_0 = null;
+        socket.Close();
+        socket = null;
     }
 
     private string method_4()
@@ -168,7 +168,7 @@ public class RemoteViewerClient
             do
             {
                 numArray = new byte[1];
-                if (socket_0.Receive(numArray, 0, 1, SocketFlags.None) != 0)
+                if (socket.Receive(numArray, 0, 1, SocketFlags.None) != 0)
                     switch (numArray[0])
                     {
                         case 8:
@@ -191,26 +191,26 @@ public class RemoteViewerClient
         }
 
     label_6:
-        Logger.smethod_1(int_10 + " -- Lost connection in read");
-        bool_0 = true;
+        Logger.smethod_1(clientId + " -- Lost connection in read");
+        isStopping = true;
         throw new Exception(MessageProvider.GetMessage(358));
     label_7:
         return stringBuilder.ToString();
     }
 
-    public void method_5(int int_16, string string_1)
+    public void method_5(int logChannel, string message)
     {
         try
         {
-            if (socket_0 != null && bool_1)
+            if (socket != null && isAuthenticated)
             {
-                if ((int_11 & int_16) <= 0)
+                if ((enabledLogChannels & logChannel) <= 0)
                     return;
-                method_6("[" + smethod_0(int_16) + "] " + string_1 + "\r\n");
+                method_6("[" + smethod_0(logChannel) + "] " + message + "\r\n");
             }
             else
             {
-                Logger.smethod_1("(skipping notify on dead/unauthed connection #" + int_12 + ")");
+                Logger.smethod_1("(skipping notify on dead/unauthed connection #" + clientId + ")");
             }
         }
         catch (Exception ex)
@@ -244,7 +244,7 @@ public class RemoteViewerClient
     public void method_6(string string_1)
     {
         int num;
-        if (bool_2)
+        if (escapeHighBitCharacters)
         {
             var stringBuilder = new StringBuilder();
             foreach (var ch in string_1)
@@ -259,35 +259,35 @@ public class RemoteViewerClient
                     stringBuilder.Append(";");
                 }
 
-            num = socket_0.Send(Encoding.ASCII.GetBytes(stringBuilder.ToString()));
+            num = socket.Send(Encoding.ASCII.GetBytes(stringBuilder.ToString()));
         }
         else
         {
-            num = socket_0.Send(Encoding.ASCII.GetBytes(string_1));
+            num = socket.Send(Encoding.ASCII.GetBytes(string_1));
         }
 
         if (num == 0)
         {
-            bool_0 = true;
-            socket_0.Close();
-            socket_0 = null;
+            isStopping = true;
+            socket.Close();
+            socket = null;
             throw new Exception(MessageProvider.GetMessage(360));
         }
     }
 
     private void method_7(string string_1)
     {
-        Logger.smethod_1(int_12 + " -> Remote cmd: [" + string_1 + "]");
+        Logger.smethod_1(clientId + " -> Remote cmd: [" + string_1 + "]");
         var strArray1 = string_1.Split(' ');
         var lower1 = strArray1[0].ToLower();
         if (lower1 == "/exit")
         {
-            int_11 = 0;
+            enabledLogChannels = 0;
             method_6("Bye!\r\n");
             StartupClass.SleepMilliseconds(1000);
-            bool_0 = true;
-            socket_0.Close();
-            socket_0 = null;
+            isStopping = true;
+            socket.Close();
+            socket = null;
             throw new Exception(MessageProvider.GetMessage(361));
         }
 
@@ -299,28 +299,28 @@ public class RemoteViewerClient
                 switch (lower2)
                 {
                     case "all":
-                        int_11 |= ushort.MaxValue;
+                        enabledLogChannels |= ushort.MaxValue;
                         break;
                     case "none":
-                        int_11 = 0;
+                        enabledLogChannels = 0;
                         break;
                     case "status":
-                        int_11 |= 1;
+                        enabledLogChannels |= 1;
                         break;
                     case "gliderlog":
-                        int_11 |= 2;
+                        enabledLogChannels |= 2;
                         break;
                     case "chat":
-                        int_11 |= 8;
+                        enabledLogChannels |= 8;
                         break;
                     case "chatsay":
-                        int_11 |= 16;
+                        enabledLogChannels |= 16;
                         break;
                     case "combat":
-                        int_11 |= 4;
+                        enabledLogChannels |= 4;
                         break;
                     case "chatraw":
-                        int_11 |= 32;
+                        enabledLogChannels |= 32;
                         break;
                     default:
                         method_6("Unknown /log mode: \"" + lower2 + "\"\r\n");
@@ -369,28 +369,28 @@ public class RemoteViewerClient
                 switch (lower4)
                 {
                     case "all":
-                        int_11 = 0;
+                        enabledLogChannels = 0;
                         goto case "none";
                     case "none":
                         method_6("Log mode removed: " + lower4 + "\r\n");
                         break;
                     case "status":
-                        int_11 &= -2;
+                        enabledLogChannels &= -2;
                         goto case "none";
                     case "gliderlog":
-                        int_11 &= -3;
+                        enabledLogChannels &= -3;
                         goto case "none";
                     case "chat":
-                        int_11 &= -9;
+                        enabledLogChannels &= -9;
                         goto case "none";
                     case "chatsay":
-                        int_11 &= -17;
+                        enabledLogChannels &= -17;
                         goto case "none";
                     case "combat":
-                        int_11 &= -5;
+                        enabledLogChannels &= -5;
                         goto case "none";
                     case "chatraw":
-                        int_11 &= -33;
+                        enabledLogChannels &= -33;
                         goto case "none";
                     default:
                         method_6("Unknown /nolog mode: \"" + lower4 + "\"\r\n");
@@ -403,10 +403,10 @@ public class RemoteViewerClient
                 switch (lower5)
                 {
                     case "on":
-                        bool_2 = true;
+                        escapeHighBitCharacters = true;
                         break;
                     case "off":
-                        bool_2 = false;
+                        escapeHighBitCharacters = false;
                         break;
                     default:
                         method_6("Unknown /escapehi value: \"" + lower5 + "\"\r\n");
@@ -602,17 +602,17 @@ public class RemoteViewerClient
                         method_6("Attached: " + bool13 + "\r\n");
                         method_6("Mode: " + glideMode0 + "\r\n");
                         method_6("Profile: " + StartupClass.ActiveProfilePath + "\r\n");
-                        if ((int_11 & 8) > 0)
+                        if ((enabledLogChannels & 8) > 0)
                             stringBuilder.Append("Chat ");
-                        if ((int_11 & 32) > 0)
+                        if ((enabledLogChannels & 32) > 0)
                             stringBuilder.Append("ChatRaw ");
-                        if ((int_11 & 16) > 0)
+                        if ((enabledLogChannels & 16) > 0)
                             stringBuilder.Append("ChatSay ");
-                        if ((int_11 & 2) > 0)
+                        if ((enabledLogChannels & 2) > 0)
                             stringBuilder.Append("GliderLog ");
-                        if ((int_11 & 1) > 0)
+                        if ((enabledLogChannels & 1) > 0)
                             stringBuilder.Append("Status ");
-                        if ((int_11 & 4) > 0)
+                        if ((enabledLogChannels & 4) > 0)
                             stringBuilder.Append("Combat ");
                         if (stringBuilder.Length == 0)
                             stringBuilder.Append("None ");
@@ -780,7 +780,7 @@ public class RemoteViewerClient
                             method_6("New capture cache set\r\n");
                             ConfigManager.gclass61_0.method_0("CaptureDelay", int_2.ToString());
                             ConfigManager.gclass61_0.method_8();
-                            gclass79_0.gclass36_0 = new GameTimer(int_2);
+                            server.gclass36_0 = new GameTimer(int_2);
                         }
                         else
                         {
@@ -832,143 +832,106 @@ public class RemoteViewerClient
         }
     }
 
-    private void method_8(string string_1)
+    private void method_8(string filePath)
     {
         try
         {
-            var buffer = new byte[1024];
-            var num = 0;
-            var fileStream = File.Open(string_1, FileMode.Open, FileAccess.Read, FileShare.Read);
-            socket_0.Send(BitConverter.GetBytes(fileStream.Length), 0, 4, SocketFlags.None);
-            while (true)
+            var readBuffer = new byte[1024];
+            using (var fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var size = fileStream.Read(buffer, 0, 1024);
-                if (size != 0)
+                socket.Send(BitConverter.GetBytes(fileStream.Length), 0, 4, SocketFlags.None);
+                while (true)
                 {
-                    socket_0.Send(buffer, 0, size, SocketFlags.None);
-                    num += size;
-                }
-                else
-                {
-                    break;
+                    var bytesRead = fileStream.Read(readBuffer, 0, 1024);
+                    if (bytesRead != 0)
+                        socket.Send(readBuffer, 0, bytesRead, SocketFlags.None);
+                    else
+                        break;
                 }
             }
-
-            fileStream.Close();
         }
         catch (Exception ex)
         {
             Logger.LogMessage("** Exception in SendFile: " + ex.Message + ex.StackTrace);
-            throw ex;
+            throw;
         }
     }
 
-    private void method_9(MemoryStream memoryStream_0)
+    private void method_9(MemoryStream stream)
     {
-        var position = (int)memoryStream_0.Position;
-        var offset = 0;
-        Logger.smethod_1("Stream length: " + position);
+        var streamLength = (int)stream.Position;
+        Logger.smethod_1("Stream length: " + streamLength);
         try
         {
-            socket_0.Send(BitConverter.GetBytes(position), 0, 4, SocketFlags.None);
-            while (true)
-            {
-                var size = position - offset;
-                if (size != 0)
-                {
-                    if (size > 1024)
-                        size = 1024;
-                    socket_0.Send(byte_0, offset, size, SocketFlags.None);
-                    offset += size;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            socket.Send(BitConverter.GetBytes(streamLength), 0, 4, SocketFlags.None);
+            SendBytesInChunks(streamBuffer, streamLength, 1024);
         }
         catch (Exception ex)
         {
             Logger.LogMessage("** Exception in SendStream: " + ex.Message + ex.StackTrace);
-            throw ex;
+            throw;
         }
     }
 
     private static int smethod_1(string string_1)
     {
-        try
-        {
-            return int.Parse(string_1);
-        }
-        catch (Exception ex)
-        {
-            return 0;
-        }
+        int parsedValue;
+        return int.TryParse(string_1, out parsedValue) ? parsedValue : 0;
     }
 
     [SpecialName]
     public string method_10()
     {
-        return string_0;
+        return queuedKeySequence;
     }
 
     [SpecialName]
     public void method_11(string string_1)
     {
-        string_0 = string_1;
+        queuedKeySequence = string_1;
     }
 
     [SpecialName]
     public int method_12()
     {
-        return int_14;
+        return captureCacheDurationMs;
     }
 
     [SpecialName]
     public void method_13(int int_16)
     {
-        int_14 = int_16;
+        captureCacheDurationMs = int_16;
     }
 
     [SpecialName]
     public long method_14()
     {
-        return long_0;
+        return captureQualityPercent;
     }
 
     [SpecialName]
     public void method_15(long long_1)
     {
-        if (long_1 > 100L)
-            long_0 = 100L;
-        else if (long_1 < 10L)
-            long_0 = 10L;
-        else
-            long_0 = long_1;
+        captureQualityPercent = ClampLong(long_1, 10L, 100L);
     }
 
     [SpecialName]
     public int method_16()
     {
-        return int_15;
+        return captureScalePercent;
     }
 
     [SpecialName]
     public void method_17(int int_16)
     {
-        if (int_16 > 100)
-            int_15 = 100;
-        else if (int_16 < 10)
-            int_15 = 10;
-        else
-            int_15 = int_16;
+        captureScalePercent = ClampInt(int_16, 10, 100);
     }
 
     public void method_18()
     {
-        if (!bool_3 && (int_13 == 0 || dateTime_0.AddMilliseconds(method_12()) < DateTime.Now))
+        if (!isCaptureInProgress && (cachedCaptureLength == 0 || lastCaptureTime.AddMilliseconds(method_12()) < DateTime.Now))
         {
-            bool_3 = true;
+            isCaptureInProgress = true;
             Bitmap image_0 = null;
             MemoryStream memoryStream = null;
             try
@@ -976,22 +939,22 @@ public class RemoteViewerClient
                 var intptr_0 = GameMemoryAccess.GetWindowHandle();
                 if (intptr_0 == IntPtr.Zero)
                 {
-                    Console.WriteLine("Failed: no window handle to game\r\n");
-                    int_13 = 0;
+                    Logger.LogMessage("Capture failed: no window handle to game");
+                    cachedCaptureLength = 0;
                     return;
                 }
 
                 image_0 = ScreenCapture.smethod_0(intptr_0);
                 if (image_0 == null)
                 {
-                    Console.WriteLine("Failed: unable to capture image (!?)\r\n");
-                    int_13 = 0;
+                    Logger.LogMessage("Capture failed: unable to capture image");
+                    cachedCaptureLength = 0;
                     return;
                 }
 
-                if (byte_1 == null)
-                    byte_1 = new byte[500000];
-                memoryStream = new MemoryStream(byte_1);
+                if (captureBuffer == null)
+                    captureBuffer = new byte[CaptureBufferSize];
+                memoryStream = new MemoryStream(captureBuffer);
                 if (method_16() < 100)
                 {
                     image_0 = ScreenCapture.smethod_2(image_0, method_16());
@@ -1005,41 +968,61 @@ public class RemoteViewerClient
                 var encoderParams = new EncoderParameters(1);
                 Logger.smethod_1("CaptureQuality: " + method_14());
                 encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, method_14());
-                if (imageCodecInfo_0 == null)
-                    imageCodecInfo_0 = ScreenCapture.smethod_1("image/jpeg");
-                image_0.Save(memoryStream, imageCodecInfo_0, encoderParams);
-                int_13 = (int)memoryStream.Position;
-                dateTime_0 = DateTime.Now;
+                if (jpegCodecInfo == null)
+                    jpegCodecInfo = ScreenCapture.smethod_1("image/jpeg");
+                image_0.Save(memoryStream, jpegCodecInfo, encoderParams);
+                cachedCaptureLength = (int)memoryStream.Position;
+                lastCaptureTime = DateTime.Now;
             }
             catch (Exception ex)
             {
                 Logger.LogMessage("Capture failed: " + ex.Message);
-                int_13 = 0;
+                cachedCaptureLength = 0;
             }
             finally
             {
                 image_0?.Dispose();
                 memoryStream?.Dispose();
-                bool_3 = false;
+                isCaptureInProgress = false;
             }
         }
 
-        if (!bool_3)
+        if (!isCaptureInProgress)
         {
-            if (int_13 <= 0)
+            if (cachedCaptureLength <= 0)
                 return;
             method_6("Success, 4-byte length and JPG image stream follow\r\n");
-            Logger.smethod_1("Sending image size: " + int_13 + " bytes");
-            socket_0.Send(BitConverter.GetBytes(int_13), 0, 4, SocketFlags.None);
-            for (var offset = 0; offset < int_13; offset += Math.Min(8192, int_13 - offset))
-                socket_0.Send(byte_1, offset, Math.Min(8192, int_13 - offset), SocketFlags.None);
+            Logger.smethod_1("Sending image size: " + cachedCaptureLength + " bytes");
+            socket.Send(BitConverter.GetBytes(cachedCaptureLength), 0, 4, SocketFlags.None);
+            SendBytesInChunks(captureBuffer, cachedCaptureLength, SocketChunkSize);
         }
         else
         {
-            Console.WriteLine("Failed: Capture cache being updated.\r\n");
+            Logger.LogMessage("Capture skipped: capture cache is being updated");
         }
     }
+
+    private static int ClampInt(int value, int minValue, int maxValue)
+    {
+        if (value < minValue)
+            return minValue;
+        return value > maxValue ? maxValue : value;
+    }
+
+    private static long ClampLong(long value, long minValue, long maxValue)
+    {
+        if (value < minValue)
+            return minValue;
+        return value > maxValue ? maxValue : value;
+    }
+
+    private void SendBytesInChunks(byte[] buffer, int totalLength, int chunkSize)
+    {
+        for (var offset = 0; offset < totalLength; offset += Math.Min(chunkSize, totalLength - offset))
+            socket.Send(buffer, offset, Math.Min(chunkSize, totalLength - offset), SocketFlags.None);
+    }
 }
+
 
 
 

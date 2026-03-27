@@ -927,9 +927,25 @@ public class StartupClass
 
     public static void BringGameToForeground()
     {
+        if (MainApplicationHandle == IntPtr.Zero)
+        {
+            MainApplicationHandle = GameMemoryAccess.GetWindowHandle();
+            if (MainApplicationHandle == IntPtr.Zero)
+            {
+                Logger.LogMessage("[Compat] Unable to bring game to foreground: window handle is unresolved");
+                return;
+            }
+        }
+
         SleepMilliseconds(500);
         GameMemoryAccess.SetForegroundWindow(MainApplicationHandle);
         SleepMilliseconds(500);
+
+        var foregroundHandle = GameMemoryAccess.GetForegroundWindow();
+        if (foregroundHandle != MainApplicationHandle)
+        {
+            Logger.LogMessage("[Compat] Foreground switch was rejected by OS policy or another app currently owns focus");
+        }
     }
 
     public static bool AddCurrentWaypoint()

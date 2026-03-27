@@ -346,34 +346,25 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\ResourceProvider.cs" />
-    <Compile Include="Utils\BoolStringOption.cs" />
-    <Compile Include="Utils\ByteSignaturePattern.cs" />
+    <Compile Include="Core\Interop\MACAddressReader.cs" />
+    <Compile Include="Core\Interop\NetworkInteropTypes.cs" />
+    <Compile Include="Core\Models\CommonValueTypes.cs" />
+    <Compile Include="Core\Platform\SoundPlayer.cs" />
+    <Compile Include="Core\Timing\GameTimer.cs" />
+    <Compile Include="Game\Movement\Math\Matrix3.cs" />
+    <Compile Include="Game\Movement\Math\Vector3.cs" />
+    <Compile Include="Memory\Patterns\ByteSignaturePattern.cs" />
     <Compile Include="Utils\CardStack.cs" />
-    <Compile Include="Utils\ClipboardHelper.cs" />
-    <Compile Include="Utils\EmptyPlaceholder.cs" />
-    <Compile Include="Utils\FixedString16.cs" />
-    <Compile Include="Utils\GameTimer.cs" />
-    <Compile Include="Utils\GDIHelper.cs" />
-    <Compile Include="Utils\GliderException.cs" />
-    <Compile Include="Utils\IntStringEntry.cs" />
-    <Compile Include="Utils\LogEntry.cs" />
-    <Compile Include="Utils\MACAddressReader.cs" />
-    <Compile Include="Utils\Matrix3.cs" />
-    <Compile Include="Utils\NetworkAdapterEntry.cs" />
     <Compile Include="Utils\PlayingCard.cs" />
     <Compile Include="Utils\RemoteViewerClient.cs" />
     <Compile Include="Utils\RemoteViewerServer.cs" />
     <Compile Include="Utils\SecurityDescriptorHelper.cs" />
-    <Compile Include="Utils\SixStateOption.cs" />
-    <Compile Include="Utils\SolitaireGameState.cs" />
-    <Compile Include="Utils\SolitaireMemoryOffsets.cs" />
+    <Compile Include="Game\Objects\Solitaire\SolitaireModels.cs" />
     <Compile Include="Utils\SolitaireSolver.cs" />
-    <Compile Include="Utils\SoundPlayer.cs" />
     <Compile Include="Utils\TestThread.cs" />
-    <Compile Include="Utils\TimedStringEntry.cs" />
-    <Compile Include="Utils\TriStateOption.cs" />
-    <Compile Include="Utils\Vector3.cs" />
-    <Compile Include="Utils\WindowContextHelper.cs" />
+    <Compile Include="UI\Components\Interop\ClipboardHelper.cs" />
+    <Compile Include="UI\Components\Interop\GDIHelper.cs" />
+    <Compile Include="UI\Components\Interop\WindowContextHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

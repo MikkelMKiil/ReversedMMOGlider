@@ -422,7 +422,7 @@ namespace Glider.Common.Objects
         internal static bool GetWindowSize(IntPtr windowHandle, out Size size) => GProcessMemoryManipulator.GetWindowSize(windowHandle, out size);
         internal static void SetWindowSize(IntPtr windowHandle, Size size) => GProcessMemoryManipulator.SetWindowSize(windowHandle, size);
         internal static void IsWindowVisible(Control control, string helpFile, HelpNavigator navigator, object parameter) => GProcessMemoryManipulator.IsWindowVisible(control, helpFile, navigator, parameter);
-        internal static void IsWindowMinimized() => GProcessMemoryManipulator.IsWindowMinimized();
+        internal static bool IsWindowMinimized() => GProcessMemoryManipulator.IsWindowMinimized();
         internal static byte[] smethod_17(int address, int size, string debugClue) => GProcessMemoryManipulator.smethod_17(address, size, debugClue);
         internal static byte[] smethod_20(int address, int size) => GProcessMemoryManipulator.smethod_20(address, size);
         internal static void smethod_48(Form form) => GProcessMemoryManipulator.smethod_48(form);

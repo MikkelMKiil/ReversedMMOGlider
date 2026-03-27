@@ -14,22 +14,21 @@ using System.Threading;
 
 public class RemoteViewerServer
 {
-    private bool bool_0;
+    private bool isStopping;
     public GameTimer gclass36_0;
-    private GameTimer gclass36_1 = new GameTimer(1000);
     public GUnit gunit_0;
     public int int_0;
-    private readonly List<RemoteViewerClient> list_0;
-    private Socket socket_0;
-    private Thread thread_0;
+    private readonly List<RemoteViewerClient> clients;
+    private Socket listenerSocket;
+    private Thread listenerThread;
 
     public RemoteViewerServer()
     {
         int_0 = ConfigManager.gclass61_0.method_3("ListenPort");
-        thread_0 = null;
-        socket_0 = null;
-        bool_0 = false;
-        list_0 = new List<RemoteViewerClient>();
+        listenerThread = null;
+        listenerSocket = null;
+        isStopping = false;
+        clients = new List<RemoteViewerClient>();
         gunit_0 = null;
         gclass36_0 = new GameTimer(ConfigManager.gclass61_0.method_3("CaptureDelay"));
         gclass36_0.method_5();
@@ -39,36 +38,36 @@ public class RemoteViewerServer
     {
         try
         {
-            socket_0 = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket_0.Bind(new IPEndPoint(IPAddress.Any, int_0));
-            socket_0.Listen(5);
-            thread_0 = new Thread(method_2);
-            thread_0.Start();
+            listenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            listenerSocket.Bind(new IPEndPoint(IPAddress.Any, int_0));
+            listenerSocket.Listen(5);
+            listenerThread = new Thread(method_2);
+            listenerThread.Start();
         }
         catch (Exception ex)
         {
             Logger.LogMessage(MessageProvider.smethod_2(295, ex.Message));
-            thread_0 = null;
+            listenerThread = null;
         }
     }
 
     public void method_1()
     {
-        bool_0 = true;
-        if (thread_0 != null)
+        isStopping = true;
+        if (listenerThread != null)
         {
-            thread_0.Interrupt();
-            thread_0 = null;
+            listenerThread.Interrupt();
+            listenerThread = null;
         }
 
-        if (socket_0 != null)
+        if (listenerSocket != null)
         {
-            socket_0.Close();
-            socket_0 = null;
+            listenerSocket.Close();
+            listenerSocket = null;
         }
 
-        while (list_0.Count > 0)
-            list_0[0].method_1();
+        while (clients.Count > 0)
+            clients[0].method_1();
     }
 
     private void method_2()
@@ -79,17 +78,17 @@ public class RemoteViewerServer
         }
         catch (Exception ex)
         {
-            if (bool_0)
+            if (isStopping)
                 return;
             Logger.LogMessage(MessageProvider.smethod_2(296, ex.Message + ex.StackTrace));
         }
     }
 
-    public void method_3(RemoteViewerClient gclass77_0)
+    public void method_3(RemoteViewerClient client)
     {
-        lock (list_0)
+        lock (clients)
         {
-            list_0.Remove(gclass77_0);
+            clients.Remove(client);
         }
     }
 
@@ -97,31 +96,32 @@ public class RemoteViewerServer
     {
         while (true)
         {
-            var socket_1 = socket_0.Accept();
-            Logger.LogMessage(MessageProvider.smethod_2(297, socket_1.RemoteEndPoint.ToString()));
-            lock (list_0)
+            var clientSocket = listenerSocket.Accept();
+            Logger.LogMessage(MessageProvider.smethod_2(297, clientSocket.RemoteEndPoint.ToString()));
+            lock (clients)
             {
-                var gclass77 = new RemoteViewerClient(this, socket_1);
-                list_0.Add(gclass77);
-                gclass77.method_0();
+                var client = new RemoteViewerClient(this, clientSocket);
+                clients.Add(client);
+                client.method_0();
             }
 
             Thread.Sleep(1000);
         }
     }
 
-    public void method_5(int int_1, string string_0)
+    public void method_5(int messageChannel, string message)
     {
         try
         {
-            lock (list_0)
+            lock (clients)
             {
-                foreach (var gclass77 in list_0)
-                    gclass77.method_5(int_1, string_0);
+                foreach (var client in clients)
+                    client.method_5(messageChannel, message);
             }
         }
         catch (Exception ex)
         {
+            Logger.LogMessage("Remote viewer broadcast failed: " + ex.Message);
         }
     }
 }

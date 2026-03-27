@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 
 public class InputController // Original: InputController
 {
@@ -43,6 +44,8 @@ public class InputController // Original: InputController
     private const int WM_RBUTTONUP = 0x0205;   // int_4
 
     private const uint MAPVK_VK_TO_VSC = 0;
+    private const uint MONITOR_DEFAULTTONEAREST = 2;
+    private const int MDT_EFFECTIVE_DPI = 0;
 
     // State Variables
     public static int TapSpinDelay;            // Original: int_19
@@ -71,7 +74,7 @@ public class InputController // Original: InputController
     [DllImport("user32.dll")]
     private static extern bool AttachThreadInput(int idAttach, int idAttachTo, bool fAttach);
 
-    [DllImport("user32.dll")]
+    [DllImport("user32.dll", SetLastError = true)]
     private static extern bool PostMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
 
     [DllImport("user32.dll")]
@@ -95,6 +98,21 @@ public class InputController // Original: InputController
     [DllImport("user32.dll")]
     public static extern short VkKeyScan(char ch);
 
+    [DllImport("user32.dll")]
+    private static extern bool IsIconic(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool IsProcessDPIAware();
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+    [DllImport("shcore.dll")]
+    private static extern int GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
+
+    [DllImport("user32.dll", EntryPoint = "GetDpiForWindow")]
+    private static extern uint GetDpiForWindowNative(IntPtr hwnd);
+
     // Safe wrapper for other code that expects an accessible VkKeyScan
     public static short VkKeyScanSafe(char ch) => VkKeyScan(ch);
 
@@ -106,14 +124,28 @@ public class InputController // Original: InputController
 
     public static void smethod_18(double nx, double ny)
     {
+        nx = ClampNormalized(nx);
+        ny = ClampNormalized(ny);
+
         double_0 = nx;
         double_1 = ny;
         try
         {
-            var w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-            var h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
-            var x = (int)(nx * w);
-            var y = (int)(ny * h);
+            int x;
+            int y;
+
+            if (StartupClass.IsGliderInitialized && StartupClass.MainApplicationHandle != IntPtr.Zero)
+            {
+                GameMemoryAccess.WorldToScreen(nx, ny, out x, out y);
+                ApplyDpiCorrectionIfNeeded(StartupClass.MainApplicationHandle, ref x, ref y);
+            }
+            else
+            {
+                var targetScreen = GetTargetScreen();
+                x = targetScreen.Bounds.Left + (int)(nx * targetScreen.Bounds.Width);
+                y = targetScreen.Bounds.Top + (int)(ny * targetScreen.Bounds.Height);
+            }
+
             SetCursorPos(x, y);
             LastMouseX = x;
             LastMouseY = y;
@@ -162,13 +194,21 @@ public class InputController // Original: InputController
     {
         try
         {
-            System.Drawing.Point p;
             GetCursorPos(out var pt);
-            p = new System.Drawing.Point(pt.X, pt.Y);
-            var w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-            var h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
-            nx = (double)p.X / w;
-            ny = (double)p.Y / h;
+
+            if (StartupClass.IsGliderInitialized && StartupClass.MainApplicationHandle != IntPtr.Zero)
+            {
+                GameMemoryAccess.ScreenToWorld(out nx, out ny, pt.X, pt.Y);
+                nx = ClampNormalized(nx);
+                ny = ClampNormalized(ny);
+                return;
+            }
+
+            var targetScreen = GetTargetScreen();
+            var relativeX = pt.X - targetScreen.Bounds.Left;
+            var relativeY = pt.Y - targetScreen.Bounds.Top;
+            nx = ClampNormalized((double)relativeX / targetScreen.Bounds.Width);
+            ny = ClampNormalized((double)relativeY / targetScreen.Bounds.Height);
         }
         catch
         {
@@ -239,16 +279,21 @@ public class InputController // Original: InputController
         }
 
         // Always attempt background PostMessage if initialized, regardless of focus.
-        if (StartupClass.IsGliderInitialized && StartupClass.MainApplicationHandle != IntPtr.Zero)
+        if (StartupClass.IsGliderInitialized)
         {
+            IntPtr inputWindow;
+            if (!TryGetReadyInputWindow(out inputWindow))
+                return 0;
+
             uint msg = GetKeyMessage(virtualKey, isKeyDown);
             uint lParam = BuildKeyLParam(virtualKey, isKeyDown);
 
-            bool ok = PostMessage(StartupClass.MainApplicationHandle, msg, (uint)(ushort)virtualKey, lParam);
+            bool ok = PostMessage(inputWindow, msg, (uint)(ushort)virtualKey, lParam);
 
             if (!ok)
             {
-                Logger.LogMessage("[Input] PostMessage failed for VK=0x" + virtualKey.ToString("x"));
+                Logger.LogMessage("[Input] PostMessage failed for VK=0x" + virtualKey.ToString("x") +
+                                  ", LastError=" + Marshal.GetLastWin32Error());
             }
 
             if (AntiAfkTimer.method_3()) // Keeps the bot from timing out
@@ -296,6 +341,10 @@ public class InputController // Original: InputController
         // Background clicking implementation
         if (StartupClass.IsGliderInitialized)
         {
+            IntPtr inputWindow;
+            if (!TryGetReadyInputWindow(out inputWindow))
+                return 0;
+
             uint msg;
             uint wParam;
             switch (mouseFlag)
@@ -313,9 +362,9 @@ public class InputController // Original: InputController
             }
 
             Win32Point pt = new Win32Point(LastMouseX, LastMouseY);
-            ScreenToClient(StartupClass.MainApplicationHandle, ref pt);
+            ScreenToClient(inputWindow, ref pt);
 
-            SendMessage(StartupClass.MainApplicationHandle, msg, wParam, BuildLParam((uint)pt.X, (uint)pt.Y));
+            SendMessage(inputWindow, msg, wParam, BuildLParam((uint)pt.X, (uint)pt.Y));
             ActionTimer.Reset();
             return 1;
         }
@@ -331,6 +380,116 @@ public class InputController // Original: InputController
     private static uint BuildLParam(uint lowWord, uint highWord)
     {
         return (highWord << 16) | lowWord;
+    }
+
+    private static Screen GetTargetScreen()
+    {
+        var gameWindow = StartupClass.MainApplicationHandle;
+        if (gameWindow != IntPtr.Zero)
+            return Screen.FromHandle(gameWindow);
+
+        return Screen.PrimaryScreen;
+    }
+
+    private static double ClampNormalized(double value)
+    {
+        if (value < 0.0)
+            return 0.0;
+
+        if (value > 1.0)
+            return 1.0;
+
+        return value;
+    }
+
+    private static void ApplyDpiCorrectionIfNeeded(IntPtr windowHandle, ref int x, ref int y)
+    {
+        if (windowHandle == IntPtr.Zero)
+            return;
+
+        bool isDpiAware;
+        try
+        {
+            isDpiAware = IsProcessDPIAware();
+        }
+        catch
+        {
+            isDpiAware = true;
+        }
+
+        if (isDpiAware)
+            return;
+
+        var scale = GetWindowDpiScale(windowHandle);
+        if (scale <= 1.01)
+            return;
+
+        Point windowPosition;
+        if (!GameMemoryAccess.GetWindowPosition(windowHandle, out windowPosition))
+            return;
+
+        x = windowPosition.X + (int)Math.Round((x - windowPosition.X) * scale);
+        y = windowPosition.Y + (int)Math.Round((y - windowPosition.Y) * scale);
+    }
+
+    private static double GetWindowDpiScale(IntPtr windowHandle)
+    {
+        try
+        {
+            var dpi = GetDpiForWindowNative(windowHandle);
+            if (dpi >= 96U)
+                return dpi / 96.0;
+        }
+        catch (EntryPointNotFoundException)
+        {
+        }
+        catch (DllNotFoundException)
+        {
+        }
+
+        try
+        {
+            var monitor = MonitorFromWindow(windowHandle, MONITOR_DEFAULTTONEAREST);
+            if (monitor != IntPtr.Zero)
+            {
+                uint dpiX;
+                uint dpiY;
+                if (GetDpiForMonitor(monitor, MDT_EFFECTIVE_DPI, out dpiX, out dpiY) == 0 && dpiX >= 96U)
+                    return dpiX / 96.0;
+            }
+        }
+        catch (EntryPointNotFoundException)
+        {
+        }
+        catch (DllNotFoundException)
+        {
+        }
+        catch
+        {
+        }
+
+        return 1.0;
+    }
+
+    private static bool TryGetReadyInputWindow(out IntPtr inputWindow)
+    {
+        inputWindow = StartupClass.MainApplicationHandle;
+        if (inputWindow == IntPtr.Zero)
+            inputWindow = GameMemoryAccess.GetWindowHandle();
+
+        if (inputWindow == IntPtr.Zero)
+        {
+            Logger.LogMessage("[Input] Input skipped: game window handle is unresolved");
+            return false;
+        }
+
+        if (IsIconic(inputWindow))
+        {
+            Logger.LogMessage("[Input] Input skipped: game window is minimized");
+            return false;
+        }
+
+        return true;
     }
 
     private static uint BuildKeyLParam(short vk, bool isKeyDown)
