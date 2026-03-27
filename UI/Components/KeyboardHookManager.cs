@@ -129,15 +129,15 @@ public class KeyboardHookManager
             if (e.KeyCode == Keys.MediaStop && StartupClass.CurrentGlideMode != GlideMode.None)
             {
                 StartupClass.HasQueuedPayload = false;
-                StartupClass.smethod_27(false, "StopKeyFromHook");
+                StartupClass.StopGlide(false, "StopKeyFromHook");
             }
 
             if (e.KeyCode == Keys.MediaNextTrack && StartupClass.CurrentGlideMode == GlideMode.None)
-                StartupClass.smethod_21(true);
+                StartupClass.StartManualMode(true);
             if (e.KeyCode == Keys.MediaPreviousTrack && StartupClass.CurrentGlideMode == GlideMode.None)
-                StartupClass.smethod_23();
+                StartupClass.AddCurrentWaypoint();
             if (e.KeyCode == Keys.MediaPlayPause && StartupClass.CurrentGlideMode == GlideMode.None)
-                StartupClass.smethod_24(true);
+                StartupClass.StartAutoGlide(true);
         }
 
         if (bool_5 && !bool_6)
@@ -164,7 +164,7 @@ public class KeyboardHookManager
                 if (e.KeyCode == (Keys)int_17)
                 {
                     StartupClass.HasQueuedPayload = false;
-                    StartupClass.smethod_27(false, "StopKeyFromHook2");
+                    StartupClass.StopGlide(false, "StopKeyFromHook2");
                 }
 
                 switch (e.KeyCode)
@@ -206,10 +206,10 @@ public class KeyboardHookManager
                         if (StartupClass.IsRuntimeAttached && StartupClass.TryAddCurrentTargetFaction()) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.G:
-                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_24(true)) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.StartAutoGlide(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.K:
-                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_21(true)) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.StartManualMode(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.M:
                         double double_2 = 0.0;
@@ -264,12 +264,12 @@ public class KeyboardHookManager
 
                         break;
                     case Keys.W:
-                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_23()) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.AddCurrentWaypoint()) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.X:
                         if (bool_7)
                         {
-                            StartupClass.smethod_34();
+                            StartupClass.SignalKillEventOrExit();
                             break;
                         }
 
@@ -339,7 +339,7 @@ public class KeyboardHookManager
         {
             Logger.smethod_1("Escape key picked up in hook, shutting action down");
             StartupClass.HasQueuedPayload = false;
-            StartupClass.smethod_27(false, "EscapeFromHook");
+            StartupClass.StopGlide(false, "EscapeFromHook");
         }
 
         if (!(foregroundWindow == intptr_0) || !StartupClass.GameMemoryWriter.method_1())

@@ -17,14 +17,14 @@ public class SolitaireSolver
     public void method_0()
     {
         int_0 = 100;
-        StartupClass.smethod_22();
+        StartupClass.BringGameToForeground();
         Thread.Sleep(500);
         var num = smethod_0(StartupClass.AdditionalApplicationHandle, "Solitaire.exe");
         if (num == 0)
-            StartupClass.smethod_27(false, "NoSolitaireModuleInSolitaire");
+            StartupClass.StopGlide(false, "NoSolitaireModuleInSolitaire");
         var int_1 = GameMemoryAccess.ReadInt32(num + SolitaireMemoryOffsets.int_0, "md0");
         if (int_1 == 0)
-            StartupClass.smethod_27(false, "NoGameInSolitaire");
+            StartupClass.StopGlide(false, "NoGameInSolitaire");
         var gclass34_0 = new SolitaireGameState(int_1);
         while (method_3(gclass34_0))
         {

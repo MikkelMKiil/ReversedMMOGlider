@@ -225,12 +225,12 @@ public class PaladinConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Paladin.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(FinishJudgeLife.Text))
+        if (StartupClass.IsIntegerInput(FinishJudgeLife.Text))
             ConfigManager.gclass61_0.method_0("Paladin.FinishJudgeLife",
                 (double.Parse(FinishJudgeLife.Text) / 100.0).ToString());
-        if (StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (StartupClass.IsIntegerInput(AvoidAddDistance.Text))
             ConfigManager.gclass61_0.method_0("Paladin.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Paladin.UseDivineFavor", UseDivineFavor.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Paladin.UseWrath", UseWrath.Checked.ToString());

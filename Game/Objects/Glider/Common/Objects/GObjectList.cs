@@ -114,7 +114,7 @@ namespace Glider.Common.Objects
                 if (objectManagerBase == 0)
                 {
                     Logger.LogMessage(MessageProvider.GetMessage(56));
-                    StartupClass.smethod_27(true, "GetObjectsMainTableEmpty");
+                    StartupClass.StopGlide(true, "GetObjectsMainTableEmpty");
                     return null;
                 }
 
@@ -341,7 +341,7 @@ namespace Glider.Common.Objects
             }
 
             if (snapshotIsEmpty)
-                StartupClass.smethod_27(true, "ZeroCountObjects");
+                StartupClass.StopGlide(true, "ZeroCountObjects");
 
             // Log periodic summary
             LogObjectListDebugInfo();

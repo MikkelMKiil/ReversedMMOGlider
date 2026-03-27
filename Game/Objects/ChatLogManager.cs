@@ -183,12 +183,12 @@ public class ChatLogManager
                 if (str.Length > 0)
                     InputController.smethod_28("/r " + str);
                 StartupClass.SleepMilliseconds(5000);
-                StartupClass.smethod_27(false, "GMWhisper");
+                StartupClass.StopGlide(false, "GMWhisper");
             }
             else
             {
                 Logger.LogMessage(MessageProvider.GetMessage(41));
-                StartupClass.smethod_27(false, "GMTalk");
+                StartupClass.StopGlide(false, "GMTalk");
             }
         }
     }

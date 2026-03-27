@@ -433,15 +433,15 @@ public class RogueConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Rogue.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(EvasionCooldown.Text))
+        if (StartupClass.IsIntegerInput(EvasionCooldown.Text))
             ConfigManager.gclass61_0.method_0("Rogue.EvasionCooldown", EvasionCooldown.Text);
-        if (StartupClass.smethod_19(SinisterCost.Text))
+        if (StartupClass.IsIntegerInput(SinisterCost.Text))
             ConfigManager.gclass61_0.method_0("Rogue.SinisterCost", SinisterCost.Text);
-        if (StartupClass.smethod_19(EviscMultiplier.Text))
+        if (StartupClass.IsIntegerInput(EviscMultiplier.Text))
             ConfigManager.gclass61_0.method_0("Rogue.EviscMultiplier", EviscMultiplier.Text);
-        if (StartupClass.smethod_19(KickLife.Text))
+        if (StartupClass.IsIntegerInput(KickLife.Text))
             ConfigManager.gclass61_0.method_0("Rogue.KickLife", KickLife.Text);
         ConfigManager.gclass61_0.method_0("Rogue.UseColdblood", UseColdblood.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Rogue.UseBackstab", UseBackstab.Checked.ToString());

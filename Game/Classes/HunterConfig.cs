@@ -303,9 +303,9 @@ public class HunterConfig : Form
         ConfigManager.gclass61_0.method_0("Hunter.TrapAdds", TrapAdds.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Hunter.FeedMacro", FeedMacro.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Hunter.UseViper", UseViper.Checked.ToString());
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Hunter.PullDistance", PullDistance.Text);
-        if (!StartupClass.smethod_19(MinHappiness.Text))
+        if (!StartupClass.IsIntegerInput(MinHappiness.Text))
             return;
         ConfigManager.gclass61_0.method_0("Hunter.MinHappiness", MinHappiness.Text);
     }

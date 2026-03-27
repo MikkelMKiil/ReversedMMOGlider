@@ -451,13 +451,13 @@ public class ShamanConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Shaman.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(ShockMana.Text))
+        if (StartupClass.IsIntegerInput(ShockMana.Text))
             ConfigManager.gclass61_0.method_0("Shaman.ShockMana", ShockMana.Text);
-        if (StartupClass.smethod_19(ShockLife.Text))
+        if (StartupClass.IsIntegerInput(ShockLife.Text))
             ConfigManager.gclass61_0.method_0("Shaman.ShockLife", ShockLife.Text);
-        if (StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (StartupClass.IsIntegerInput(AvoidAddDistance.Text))
             ConfigManager.gclass61_0.method_0("Shaman.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Shaman.ShootRunners", ShootRunners.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Shaman.UseSwiftness", UseSwiftness.Checked.ToString());

@@ -344,7 +344,7 @@ public class RemoteViewerClient
                 {
                     if (!StartupClass.IsGliderInitialized)
                     {
-                        StartupClass.smethod_62();
+                        StartupClass.InitializeBackgroundModeIfNeeded();
                     }
 
                     switch (lower3)
@@ -456,7 +456,7 @@ public class RemoteViewerClient
                 {
                     method_6("Exiting Glider, this connection will close very soon!\r\n");
                     Thread.Sleep(1000);
-                    StartupClass.smethod_34();
+                    StartupClass.SignalKillEventOrExit();
                 }
                 else
                 {
@@ -470,7 +470,7 @@ public class RemoteViewerClient
                         }
                         else
                         {
-                            StartupClass.smethod_20(str);
+                            StartupClass.SendInputSequence(str);
                             method_6("Keys sent\r\n");
                         }
                     }
@@ -480,7 +480,7 @@ public class RemoteViewerClient
                         var string_11 = string_1.Substring(string_1.IndexOf(" ") + 1);
                         lock (SpellcastingManager.gclass42_0)
                         {
-                            StartupClass.smethod_20(string_11);
+                            StartupClass.SendInputSequence(string_11);
                         }
 
                         method_6("Keys sent\r\n");
@@ -524,7 +524,7 @@ public class RemoteViewerClient
 
                     if (lower1 == "/selectgame")
                     {
-                        StartupClass.smethod_22();
+                        StartupClass.BringGameToForeground();
                         GameMemoryAccess.CloseCurrentProcessHandle();
                         method_6("Game selected\r\n");
                     }
@@ -547,16 +547,16 @@ public class RemoteViewerClient
                             case "normal":
                                 method_6("Setting new state: normal\r\n");
                                 if (StartupClass.IsWindowShrunk)
-                                    StartupClass.smethod_50();
-                                if (StartupClass.IsWindowHidden) StartupClass.smethod_49();
+                                    StartupClass.RestoreGameWindowSize();
+                                if (StartupClass.IsWindowHidden) StartupClass.ShowGameWindow();
                                 break;
                             case "hidden":
                                 method_6("Setting new state: hidden\r\n");
-                                StartupClass.smethod_47();
+                                StartupClass.HideGameWindow();
                                 break;
                             case "shrunk":
                                 method_6("Setting new state: shrunk\r\n");
-                                StartupClass.smethod_48();
+                                StartupClass.ShrinkGameWindow();
                                 break;
                             default:
                                 method_6("Unknown state: " + str + "\r\n");
@@ -631,7 +631,7 @@ public class RemoteViewerClient
                             method_6("Level: " + GPlayerSelf.Me.Level + "\r\n");
                             method_6("Experience: " + GPlayerSelf.Me.Experience + "\r\n");
                             method_6("Next-Experience: " + GPlayerSelf.Me.NextLevelExperience + "\r\n");
-                            method_6("XP/Hour: " + StartupClass.smethod_29() + "\r\n");
+                            method_6("XP/Hour: " + StartupClass.GetExperiencePerHour() + "\r\n");
                             method_6("Location: " + GPlayerSelf.Me.Location.ToString3D() + "\r\n");
                             method_6("Heading: " + GPlayerSelf.Me.Heading + "\r\n");
                             method_6("Pitch: " + GPlayerSelf.Me.Pitch + "\r\n");
@@ -697,7 +697,7 @@ public class RemoteViewerClient
                         }
 
                         method_6("Attempting start\r\n");
-                        StartupClass.smethod_24(false);
+                        StartupClass.StartAutoGlide(false);
                     }
 
                     if (lower1 == "/stopglide")
@@ -715,7 +715,7 @@ public class RemoteViewerClient
                         }
 
                         method_6("Attempting stop\r\n");
-                        StartupClass.smethod_27(false, "StopGlideFromRemote");
+                        StartupClass.StopGlide(false, "StopGlideFromRemote");
                     }
 
                     if (lower1 == "/getmouse")
@@ -750,8 +750,8 @@ public class RemoteViewerClient
                             return;
                         }
 
-                        var double_2 = StartupClass.smethod_6(strArray2[0]);
-                        var double_3 = StartupClass.smethod_6(strArray2[1]);
+                        var double_2 = StartupClass.ParseInvariantDouble(strArray2[0]);
+                        var double_3 = StartupClass.ParseInvariantDouble(strArray2[1]);
                         InputController.smethod_18(double_2, double_3);
                         method_6("Moved mouse to " + double_2 + "/" + double_3 + "\r\n");
                     }

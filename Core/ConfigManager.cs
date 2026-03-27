@@ -69,7 +69,7 @@ public class ConfigManager
 
     public double method_4(string string_3)
     {
-        return Offsets.ContainsKey(string_3) ? StartupClass.smethod_6((string)Offsets[string_3]) : 0.0;
+        return Offsets.ContainsKey(string_3) ? StartupClass.ParseInvariantDouble((string)Offsets[string_3]) : 0.0;
     }
 
     public bool method_5(string string_3)

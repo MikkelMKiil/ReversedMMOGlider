@@ -169,7 +169,7 @@ namespace Glider.Common.Objects
         public void KillAction(string Why, bool AlsoDetach)
         {
             Running = false;
-            StartupClass.smethod_27(AlsoDetach, Why);
+            StartupClass.StopGlide(AlsoDetach, Why);
         }
 
         public GConfigResult ShowStockConfigDialog(GPlayerClass WhichClass)
@@ -641,7 +641,7 @@ namespace Glider.Common.Objects
                 return false;
             }
 
-            if (!StartupClass.smethod_24(true))
+            if (!StartupClass.StartAutoGlide(true))
                 return false;
             Thread.Sleep(1500);
             return IsGliding;
@@ -763,12 +763,12 @@ namespace Glider.Common.Objects
         {
             if (StartupClass.IsGliderInitialized)
                 return;
-            StartupClass.smethod_22();
+            StartupClass.BringGameToForeground();
         }
 
         public void DoAutoLogin()
         {
-            StartupClass.smethod_56();
+            StartupClass.PrepareAutoLoginFromConfig();
         }
 
         public string GetRandomString()

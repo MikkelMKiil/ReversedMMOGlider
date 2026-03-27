@@ -206,7 +206,7 @@ public class GliderForm : Form, Logger.IUiSink
         this.method_24();
         StartupClass.MainForm = (Form)this;
         this.method_1();
-        StartupClass.smethod_56();
+        StartupClass.PrepareAutoLoginFromConfig();
     }
 
     private void method_1()
@@ -274,7 +274,7 @@ public class GliderForm : Form, Logger.IUiSink
         {
             if (!StartupClass.IsAttached)
                 StartupClass.KnownDebuffs.method_10();
-            StartupClass.smethod_35();
+            StartupClass.SuppressKillEventAndSignal();
             ConfigManager.gclass61_0.method_8();
             if (KeyboardHookManager.bool_0)
                 StartupClass.KeyboardHook.method_17();
@@ -1065,7 +1065,7 @@ public class GliderForm : Form, Logger.IUiSink
             if (StartupClass.CurrentGlideMode != GlideMode.None)
             {
                 StartupClass.HasQueuedPayload = false;
-                StartupClass.smethod_27(false, "StopButtonClicked");
+                StartupClass.StopGlide(false, "StopButtonClicked");
             }
             else
             {
@@ -1077,7 +1077,7 @@ public class GliderForm : Form, Logger.IUiSink
         {
             StartupClass.HasQueuedPayload = false;
             if (StartupClass.CurrentGlideMode != GlideMode.None)
-                StartupClass.smethod_27(false, "StopButtonClicked");
+                StartupClass.StopGlide(false, "StopButtonClicked");
         }
         this.method_16();
     }
@@ -1104,7 +1104,7 @@ public class GliderForm : Form, Logger.IUiSink
                 this.timer_0.Enabled = false;
                 Logger.LogMessage("Timer exception in Glider: The exception is: " + ex.Message + ", " + ex.StackTrace);
                 int num = (int)MessageBox.Show(ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace, GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                StartupClass.smethod_27(false, "TimerExcep");
+                StartupClass.StopGlide(false, "TimerExcep");
                 Environment.Exit(0);
             }
         }
@@ -1124,7 +1124,7 @@ public class GliderForm : Form, Logger.IUiSink
             StartupClass.LicenseCheckTimer = (GameTimer)null;
             StartupClass.HasClassLoadMismatch = true;
             gliderForm_0.OnLogMessage(MessageProvider.GetMessage(103));
-            StartupClass.smethod_27(false, "Timer1Up");
+            StartupClass.StopGlide(false, "Timer1Up");
         }
         if (this.bool_2)
         {
@@ -1171,7 +1171,7 @@ public class GliderForm : Form, Logger.IUiSink
             if (isCasting)
                 killsText += " *";
             this.method_30(this.LabelKills_1, "LabelKills", killsText);
-            this.method_30(this.XPHour_1, "XPHour", StartupClass.smethod_29().ToString());
+            this.method_30(this.XPHour_1, "XPHour", StartupClass.GetExperiencePerHour().ToString());
             if (StartupClass.CurrentGameClass != null)
                 this.method_30(this.LabelMana_1, "LabelMana", StartupClass.CurrentGameClass.PowerValue);
             else
@@ -1218,7 +1218,7 @@ public class GliderForm : Form, Logger.IUiSink
                 this.int_9 = Environment.TickCount;
             }
         }
-        StartupClass.smethod_38();
+        StartupClass.RunMainLoopTick();
         if (StartupClass.HasSessionWarning && StartupClass.SessionHeartbeatTimer.method_3())
         {
             StartupClass.HasSessionWarning = false;
@@ -1338,7 +1338,7 @@ public class GliderForm : Form, Logger.IUiSink
         int num = (int)new ProfileProps(StartupClass.ActiveProfile).ShowDialog();
     }
 
-    private void AddWaypointButton_Click(object sender, EventArgs e) => StartupClass.smethod_23();
+    private void AddWaypointButton_Click(object sender, EventArgs e) => StartupClass.AddCurrentWaypoint();
 
     private void LoadProfileButton_Click(object sender, EventArgs e) => this.method_11();
 
@@ -1389,7 +1389,7 @@ public class GliderForm : Form, Logger.IUiSink
         GContext.Main.ResetAutoStop();
         if (ConfigManager.gclass61_0.method_2("AutoStop") == "True")
             Logger.LogMessage(MessageProvider.smethod_2(149, (object)DateTime.Now.AddMinutes((double)int.Parse(ConfigManager.gclass61_0.method_2("AutoStopMinutes"))).ToShortTimeString()));
-        StartupClass.smethod_24(false);
+        StartupClass.StartAutoGlide(false);
     }
 
     private void KillButton_Click(object sender, EventArgs e)
@@ -1398,7 +1398,7 @@ public class GliderForm : Form, Logger.IUiSink
         if (me == null)
         {
             Logger.LogMessage("1-Kill requested, but player context is unavailable.");
-            StartupClass.smethod_21(false);
+            StartupClass.StartManualMode(false);
             return;
         }
 
@@ -1410,7 +1410,7 @@ public class GliderForm : Form, Logger.IUiSink
                 Logger.LogMessage("1-Kill requested with no target selected. TargetGUID=0x0");
             else
                 Logger.LogMessage("1-Kill requested but selected target could not be resolved. TargetGUID=0x" + targetGuid.ToString("x"));
-            StartupClass.smethod_21(false);
+            StartupClass.StartManualMode(false);
             return;
         }
 
@@ -1421,7 +1421,7 @@ public class GliderForm : Form, Logger.IUiSink
         Logger.LogMessage("1-Kill target object: " + target);
         Logger.LogMessage("1-Kill target GUID: 0x" + target.GUID.ToString("x") + ", Player.TargetGUID=0x" + targetGuid.ToString("x"));
         Logger.LogMessage("1-Kill target info: Name=\"" + resolvedTargetName + "\", Title=\"" + target.Title + "\", Type=" + target.Type + ", CreatureType=" + target.CreatureType + ", Reaction=" + target.Reaction + ", Level=" + target.Level + ", Health=" + target.HealthPoints + "/" + target.HealthMax + ", Mana=" + target.ManaPoints + "/" + target.ManaMax + ", Distance=" + Math.Round((double)target.DistanceToSelf, 2) + ", Location=" + target.Location.ToString3D() + ", IsDead=" + target.IsDead + ", IsLootable=" + target.IsLootable + ", IsCasting=" + target.IsCasting + ", IsInCombat=" + target.IsInCombat + ", TargetTargetGUID=0x" + target.TargetGUID.ToString("x"));
-        StartupClass.smethod_21(false);
+        StartupClass.StartManualMode(false);
     }
 
     private void method_13()
@@ -1547,7 +1547,7 @@ public class GliderForm : Form, Logger.IUiSink
                 StartupClass.SelectedWaypointType = WaypointType.const_2;
             if (this.WPTypeVendor_1.Checked)
                 StartupClass.SelectedWaypointType = WaypointType.const_3;
-            StartupClass.smethod_23();
+            StartupClass.AddCurrentWaypoint();
             this.glocation_1 = GPlayerSelf.Me.Location;
             SoundPlayer.smethod_0("Key.wav");
         }
@@ -1617,9 +1617,9 @@ public class GliderForm : Form, Logger.IUiSink
             StartupClass.RemoteViewer.method_1();
             StartupClass.RemoteViewer = (RemoteViewerServer)null;
         }
-        StartupClass.smethod_31();
+        StartupClass.ShutdownRuntimeServices();
         Logger.smethod_1("Shutdown: KillAction");
-        StartupClass.smethod_27(true, "WindowClosing");
+        StartupClass.StopGlide(true, "WindowClosing");
         Logger.smethod_1("Shutdown: Done");
         base.OnClosing(cancelEventArgs_0);
     }
@@ -2231,17 +2231,17 @@ public class GliderForm : Form, Logger.IUiSink
     private void ShrinkButton_Click(object sender, EventArgs e)
     {
         if (StartupClass.IsWindowShrunk)
-            StartupClass.smethod_50();
+            StartupClass.RestoreGameWindowSize();
         else
-            StartupClass.smethod_48();
+            StartupClass.ShrinkGameWindow();
     }
 
     private void HideButton_Click(object sender, EventArgs e)
     {
         if (StartupClass.IsWindowHidden)
-            StartupClass.smethod_49();
+            StartupClass.ShowGameWindow();
         else
-            StartupClass.smethod_47();
+            StartupClass.HideGameWindow();
     }
 
     private void WPTypeAuto_1_CheckedChanged(object sender, EventArgs e)

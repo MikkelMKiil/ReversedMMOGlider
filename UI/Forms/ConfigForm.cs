@@ -3576,40 +3576,40 @@ public class ConfigForm : Form
             ConfigManager.gclass61_0.method_0("AutoStop", "False");
         if (ProductKeyBox.Text.Trim().Length == 0)
             ConfigManager.gclass61_0.method_0("AppKey", "demo");
-        if (StartupClass.smethod_19(SpellLeadDelay.Text))
+        if (StartupClass.IsIntegerInput(SpellLeadDelay.Text))
             ConfigManager.gclass61_0.method_0("SpellLeadDelay", SpellLeadDelay.Text);
-        if (StartupClass.smethod_19(ExtraPull.Text))
+        if (StartupClass.IsIntegerInput(ExtraPull.Text))
             ConfigManager.gclass61_0.method_0("ExtraPull", ExtraPull.Text);
-        if (StartupClass.smethod_19(StopAfterMinutes.Text))
+        if (StartupClass.IsIntegerInput(StopAfterMinutes.Text))
             ConfigManager.gclass61_0.method_0("AutoStopMinutes", StopAfterMinutes.Text);
-        if (StartupClass.smethod_19(MaxResurrect.Text))
+        if (StartupClass.IsIntegerInput(MaxResurrect.Text))
             ConfigManager.gclass61_0.method_0("MaxResurrect", MaxResurrect.Text);
-        if (StartupClass.smethod_19(RestHealth.Text))
+        if (StartupClass.IsIntegerInput(RestHealth.Text))
             ConfigManager.gclass61_0.method_0("RestHealth", RestHealth.Text);
-        if (StartupClass.smethod_19(RestMana.Text))
+        if (StartupClass.IsIntegerInput(RestMana.Text))
             ConfigManager.gclass61_0.method_0("RestMana", RestMana.Text);
-        if (StartupClass.smethod_19(KeyDelay.Text))
+        if (StartupClass.IsIntegerInput(KeyDelay.Text))
             ConfigManager.gclass61_0.method_0("KeyDelay", KeyDelay.Text);
-        if (StartupClass.smethod_19(FoodAmount.Text))
+        if (StartupClass.IsIntegerInput(FoodAmount.Text))
             ConfigManager.gclass61_0.method_0("FoodAmount", FoodAmount.Text);
-        if (StartupClass.smethod_19(AmmoAmount.Text))
+        if (StartupClass.IsIntegerInput(AmmoAmount.Text))
             ConfigManager.gclass61_0.method_0("AmmoAmount", AmmoAmount.Text);
-        if (StartupClass.smethod_19(WaterAmount.Text))
+        if (StartupClass.IsIntegerInput(WaterAmount.Text))
             ConfigManager.gclass61_0.method_0("WaterAmount", WaterAmount.Text);
-        if (StartupClass.smethod_19(PawSpeed.Text))
+        if (StartupClass.IsIntegerInput(PawSpeed.Text))
             ConfigManager.gclass61_0.method_0("PawSpeed", PawSpeed.Text);
-        if (StartupClass.smethod_19(HarvestRange.Text))
+        if (StartupClass.IsIntegerInput(HarvestRange.Text))
             ConfigManager.gclass61_0.method_0("HarvestRange", HarvestRange.Text);
-        if (StartupClass.smethod_19(BandageHealth.Text))
+        if (StartupClass.IsIntegerInput(BandageHealth.Text))
             ConfigManager.gclass61_0.method_0("BandageHealth", BandageHealth.Text);
         if (method_2(FriendAlert.Text))
             ConfigManager.gclass61_0.method_0("FriendAlert", FriendAlert.Text);
-        if (StartupClass.smethod_19(FriendLogout.Text))
+        if (StartupClass.IsIntegerInput(FriendLogout.Text))
             ConfigManager.gclass61_0.method_0("FriendLogout", FriendLogout.Text);
-        if (StartupClass.smethod_19(MaxPopups.Text))
+        if (StartupClass.IsIntegerInput(MaxPopups.Text))
             ConfigManager.gclass61_0.method_0("MaxPopups", MaxPopups.Text);
         ConfigManager.gclass61_0.method_0("LootCheckHostiles", LootCheckHostiles.Checked.ToString());
-        if (StartupClass.smethod_19(LootSafeDistance.Text))
+        if (StartupClass.IsIntegerInput(LootSafeDistance.Text))
             ConfigManager.gclass61_0.method_0("LootCheckDistance", LootSafeDistance.Text);
         if (method_2(MeleeDistance.Text))
             ConfigManager.gclass61_0.method_0("MeleeDistance", MeleeDistance.Text);
@@ -3633,17 +3633,17 @@ public class ConfigForm : Form
                 break;
         }
 
-        if (StartupClass.smethod_19(PartyLooters.Text))
+        if (StartupClass.IsIntegerInput(PartyLooters.Text))
             ConfigManager.gclass61_0.method_0("PartyLooters", PartyLooters.Text);
-        if (StartupClass.smethod_19(PartyLootPos.Text))
+        if (StartupClass.IsIntegerInput(PartyLootPos.Text))
             ConfigManager.gclass61_0.method_0("PartyLootPos", PartyLootPos.Text);
-        if (StartupClass.smethod_19(PartyAttackDelay.Text))
+        if (StartupClass.IsIntegerInput(PartyAttackDelay.Text))
             ConfigManager.gclass61_0.method_0("PartyAttackDelay", PartyAttackDelay.Text);
-        if (StartupClass.smethod_19(PartyLeaderWait.Text))
+        if (StartupClass.IsIntegerInput(PartyLeaderWait.Text))
             ConfigManager.gclass61_0.method_0("PartyLeaderWait", PartyLeaderWait.Text);
-        if (StartupClass.smethod_19(PartyFollowerStart.Text))
+        if (StartupClass.IsIntegerInput(PartyFollowerStart.Text))
             ConfigManager.gclass61_0.method_0("PartyFollowerStart", PartyFollowerStart.Text);
-        if (StartupClass.smethod_19(PartyFollowerStop.Text))
+        if (StartupClass.IsIntegerInput(PartyFollowerStop.Text))
             ConfigManager.gclass61_0.method_0("PartyFollowerStop", PartyFollowerStop.Text);
         if (PartySolo.Checked)
             ConfigManager.gclass61_0.method_0("PartyMode", "Solo");
@@ -3657,7 +3657,7 @@ public class ConfigForm : Form
         ConfigManager.gclass61_0.method_0("PartyMember3", PartyMember3.Text.Trim());
         ConfigManager.gclass61_0.method_0("PartyMember4", PartyMember4.Text.Trim());
         ConfigManager.gclass61_0.method_0("ListenEnabled", ListenEnabled.Checked.ToString());
-        if (StartupClass.smethod_19(ListenPort.Text))
+        if (StartupClass.IsIntegerInput(ListenPort.Text))
             ConfigManager.gclass61_0.method_0("ListenPort", ListenPort.Text);
         ConfigManager.gclass61_0.method_0("ListenPassword", ListenPassword.Text);
         ConfigManager.gclass61_0.method_0("RelogEnabled", RelogEnabled.Checked.ToString());

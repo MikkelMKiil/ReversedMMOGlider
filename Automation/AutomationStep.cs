@@ -143,7 +143,7 @@ public class AutomationStep
         if (!gprofile_0.Load(string_0))
         {
             Logger.LogMessage("Can't load profile: \"" + gprofile_0 + "\", giving up!");
-            StartupClass.smethod_27(false, "LoadProfileFail");
+            StartupClass.StopGlide(false, "LoadProfileFail");
         }
         else
         {

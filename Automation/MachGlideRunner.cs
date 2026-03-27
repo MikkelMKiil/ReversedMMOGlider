@@ -38,7 +38,7 @@ public class MachGlideRunner
         try
         {
             method_3();
-            StartupClass.smethod_27(false, "MachStopClean");
+            StartupClass.StopGlide(false, "MachStopClean");
         }
         catch (ThreadInterruptedException ex)
         {
@@ -47,7 +47,7 @@ public class MachGlideRunner
         catch (Exception ex)
         {
             Logger.LogMessage("! Exception in MachThreadBody: " + ex.Message + "\r\n" + ex.StackTrace);
-            StartupClass.smethod_27(true, "MTBExcep");
+            StartupClass.StopGlide(true, "MTBExcep");
         }
     }
 

@@ -231,7 +231,7 @@ public class WebNotificationService
             method_12(element2, "SecondAttr", GPlayerSelf.Me.Power2.ToString());
             method_12(element2, "SecondAttrMax", GPlayerSelf.Me.Power2Max.ToString());
             method_12(element2, "KLD", StartupClass.DynamicClassCount + "/" + StartupClass.CompiledClassCount + "/" + StartupClass.InternalClassCount);
-            method_12(element2, "XPHour", StartupClass.smethod_29().ToString());
+            method_12(element2, "XPHour", StartupClass.GetExperiencePerHour().ToString());
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
             method_12(element2, "WorldMap: ",

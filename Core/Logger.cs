@@ -172,10 +172,10 @@ label_1:
                 StartupClass.LicenseCheckTimer = null;
                 StartupClass.HasClassLoadMismatch = true;
                 Logger.LogMessage(MessageProvider.GetMessage(103));
-                StartupClass.smethod_27(false, "Timer2Up");
+                StartupClass.StopGlide(false, "Timer2Up");
             }
 
-            StartupClass.smethod_38();
+            StartupClass.RunMainLoopTick();
             continue;
 label_6:
             if (glocation_0 == null)
@@ -184,7 +184,7 @@ label_6:
             }
             else if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) > StartupClass.AutoAddDistance)
             {
-                StartupClass.smethod_23();
+                StartupClass.AddCurrentWaypoint();
                 glocation_0 = GPlayerSelf.Me.Location;
                 SoundPlayer.smethod_0("Key.wav");
                 goto label_1;

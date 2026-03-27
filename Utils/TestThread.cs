@@ -32,13 +32,13 @@ public class TestThread
             Logger.LogMessage("TestoThread starting");
             if (!StartupClass.IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
             {
-                StartupClass.smethod_62();
+                StartupClass.InitializeBackgroundModeIfNeeded();
                 if (StartupClass.IsGliderInitialized)
                     Logger.LogMessage("Setting up for background mode!");
             }
             else
             {
-                StartupClass.smethod_22();
+                StartupClass.BringGameToForeground();
                 Thread.Sleep(2000);
             }
 

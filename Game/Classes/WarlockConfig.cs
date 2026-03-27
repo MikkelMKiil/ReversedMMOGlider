@@ -397,11 +397,11 @@ public class WarlockConfig : Form
                 MessageBoxIcon.Exclamation) != DialogResult.Yes)
             return;
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Warlock.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(SpellLockLife.Text))
+        if (StartupClass.IsIntegerInput(SpellLockLife.Text))
             ConfigManager.gclass61_0.method_0("Warlock.SpellLockLife", SpellLockLife.Text);
-        if (StartupClass.smethod_19(FarmShards.Text))
+        if (StartupClass.IsIntegerInput(FarmShards.Text))
             ConfigManager.gclass61_0.method_0("Warlock.FarmShards", FarmShards.Text);
         else
             ConfigManager.gclass61_0.method_0("Warlock.FarmShards", "0");

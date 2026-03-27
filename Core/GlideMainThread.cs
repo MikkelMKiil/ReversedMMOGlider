@@ -43,7 +43,7 @@ public class GlideMainThread
         {
             if (!StartupClass.HasClassLoadMismatch)
                 method_2();
-            StartupClass.smethod_27(false, "GlideThreadReturned");
+            StartupClass.StopGlide(false, "GlideThreadReturned");
         }
         catch (ThreadInterruptedException ex)
         {
@@ -51,13 +51,13 @@ public class GlideMainThread
         catch (Exception ex)
         {
             Logger.LogMessage(MessageProvider.smethod_2(702, ex.Message, ex.StackTrace));
-            StartupClass.smethod_27(false, "GlideThreadExcep");
+            StartupClass.StopGlide(false, "GlideThreadExcep");
         }
     }
 
     public void method_2()
     {
-        StartupClass.smethod_62();
+        StartupClass.InitializeBackgroundModeIfNeeded();
 
         var player = GPlayerSelf.Me ?? gplayerSelf_0;
         if (player == null)

@@ -51,9 +51,9 @@ public class DeathknightConfig : Form
 
     private void MyOKButton_Click(object sender, EventArgs e)
     {
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Deathknight.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Deathknight.AvoidAddDistance", AvoidAddDistance.Text);
         ConfigManager.gclass61_0.method_0("Deathknight.UseGhoul", UseGhoul.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Deathknight.UseCorpseDust", UseCorpseDust.Checked.ToString());

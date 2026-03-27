@@ -499,19 +499,19 @@ public class MageConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(FireblastCooldown.Text))
+        if (StartupClass.IsIntegerInput(FireblastCooldown.Text))
             ConfigManager.gclass61_0.method_0("Mage.FireblastCooldownSec", FireblastCooldown.Text);
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Mage.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(FinishLife.Text))
+        if (StartupClass.IsIntegerInput(FinishLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.FinishLife", FinishLife.Text);
-        if (StartupClass.smethod_19(FireblastDistance.Text))
+        if (StartupClass.IsIntegerInput(FireblastDistance.Text))
             ConfigManager.gclass61_0.method_0("Mage.FireblastDistance", FireblastDistance.Text);
-        if (StartupClass.smethod_19(CounterspellLife.Text))
+        if (StartupClass.IsIntegerInput(CounterspellLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.CounterspellLife", CounterspellLife.Text);
-        if (StartupClass.smethod_19(ShieldLife.Text))
+        if (StartupClass.IsIntegerInput(ShieldLife.Text))
             ConfigManager.gclass61_0.method_0("Mage.ShieldLife", ShieldLife.Text);
-        if (StartupClass.smethod_19(MeleeSpellCooldown.Text))
+        if (StartupClass.IsIntegerInput(MeleeSpellCooldown.Text))
             ConfigManager.gclass61_0.method_0("Mage.MeleeSpellCooldown", MeleeSpellCooldown.Text);
         ConfigManager.gclass61_0.method_0("Mage.UseManaStones", UseManaStones.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Mage.SaveBlast", SaveBlast.Checked.ToString());

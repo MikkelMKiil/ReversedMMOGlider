@@ -454,13 +454,13 @@ public class DruidConfig : Form
     private void MyOKButton_Click(object sender, EventArgs e)
     {
         DialogResult = DialogResult.OK;
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Druid.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(MaulCost.Text))
+        if (StartupClass.IsIntegerInput(MaulCost.Text))
             ConfigManager.gclass61_0.method_0("Druid.MaulCost", MaulCost.Text);
-        if (StartupClass.smethod_19(ClawCost.Text))
+        if (StartupClass.IsIntegerInput(ClawCost.Text))
             ConfigManager.gclass61_0.method_0("Druid.ClawCost", ClawCost.Text);
-        if (StartupClass.smethod_19(BiteMultiplier.Text))
+        if (StartupClass.IsIntegerInput(BiteMultiplier.Text))
             ConfigManager.gclass61_0.method_0("Druid.BiteMultiplier", BiteMultiplier.Text);
         ConfigManager.gclass61_0.method_0("Druid.BashCasters", BashCasters.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Druid.UseBash", UseBash.Checked.ToString());

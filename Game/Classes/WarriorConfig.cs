@@ -439,15 +439,15 @@ public class WarriorConfig : Form
         ConfigManager.gclass61_0.method_0("Warrior.UseShieldBash", UseShieldBash.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Warrior.AvoidAdds", AvoidAdds.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Warrior.UseMortalStrike", UseMortalStrike.Checked.ToString());
-        if (StartupClass.smethod_19(PullDistance.Text))
+        if (StartupClass.IsIntegerInput(PullDistance.Text))
             ConfigManager.gclass61_0.method_0("Warrior.PullDistance", PullDistance.Text);
-        if (StartupClass.smethod_19(HeroicRage.Text))
+        if (StartupClass.IsIntegerInput(HeroicRage.Text))
             ConfigManager.gclass61_0.method_0("Warrior.HeroicRage", HeroicRage.Text);
-        if (StartupClass.smethod_19(HeroicCooldown.Text))
+        if (StartupClass.IsIntegerInput(HeroicCooldown.Text))
             ConfigManager.gclass61_0.method_0("Warrior.HeroicCooldown", HeroicCooldown.Text);
-        if (StartupClass.smethod_19(ShieldBashLife.Text))
+        if (StartupClass.IsIntegerInput(ShieldBashLife.Text))
             ConfigManager.gclass61_0.method_0("Warrior.ShieldBashLife", ShieldBashLife.Text);
-        if (!StartupClass.smethod_19(AvoidAddDistance.Text))
+        if (!StartupClass.IsIntegerInput(AvoidAddDistance.Text))
             return;
         ConfigManager.gclass61_0.method_0("Warrior.AvoidAddDistance", AvoidAddDistance.Text);
     }

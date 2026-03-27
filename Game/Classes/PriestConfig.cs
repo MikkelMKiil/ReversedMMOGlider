@@ -320,13 +320,13 @@ public class PriestConfig : Form
         ConfigManager.gclass61_0.method_0("Priest.UseShadowform", UseShadowform.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Priest.UseVampiric", UseVampiric.Checked.ToString());
         ConfigManager.gclass61_0.method_0("Priest.ExtraFlay", ExtraFlay.Checked.ToString());
-        if (StartupClass.smethod_19(MindblastCooldown.Text))
+        if (StartupClass.IsIntegerInput(MindblastCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.MindblastCooldown", MindblastCooldown.Text);
-        if (StartupClass.smethod_19(ShadowWordCooldown.Text))
+        if (StartupClass.IsIntegerInput(ShadowWordCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.ShadowWordCooldown", ShadowWordCooldown.Text);
-        if (StartupClass.smethod_19(ShieldCooldown.Text))
+        if (StartupClass.IsIntegerInput(ShieldCooldown.Text))
             ConfigManager.gclass61_0.method_0("Priest.ShieldCooldown", ShieldCooldown.Text);
-        if (!StartupClass.smethod_19(PullDistance.Text))
+        if (!StartupClass.IsIntegerInput(PullDistance.Text))
             return;
         ConfigManager.gclass61_0.method_0("Priest.PullDistance", PullDistance.Text);
     }

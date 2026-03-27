@@ -264,14 +264,14 @@ public class ProfileGroupManager
         if (unit == null)
         {
             Logger.LogMessage(MessageProvider.smethod_2(835, gclass72_0.string_1, gclass72_0.string_0));
-            StartupClass.smethod_27(false, "NoFlightMaster");
+            StartupClass.StopGlide(false, "NoFlightMaster");
         }
 
         unit.Approach();
         if (!unit.Interact())
         {
             Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
-            StartupClass.smethod_27(false, "CantClickFM");
+            StartupClass.StopGlide(false, "CantClickFM");
         }
 
         Thread.Sleep(4000);
@@ -279,7 +279,7 @@ public class ProfileGroupManager
         if (gclass8 == null)
         {
             Logger.LogMessage(MessageProvider.smethod_2(836, gclass72_0.string_1, gclass72_0.string_0));
-            StartupClass.smethod_27(false, "NoGossipFrame");
+            StartupClass.StopGlide(false, "NoGossipFrame");
         }
 
         if (gclass8.method_10())
@@ -296,7 +296,7 @@ public class ProfileGroupManager
         if (num == 0)
         {
             Logger.LogMessage("Couldn't activate flight, stopping");
-            StartupClass.smethod_27(false, "NoTaxiButton");
+            StartupClass.StopGlide(false, "NoTaxiButton");
         }
 
         UIElement.smethod_2("TaxiButton" + num).method_16(false);
@@ -304,7 +304,7 @@ public class ProfileGroupManager
         if (!method_11())
         {
             Logger.LogMessage("!! Clicked on flightpoint, but we don't seem to be flying");
-            StartupClass.smethod_27(false, "NotFlyingVeryWell");
+            StartupClass.StopGlide(false, "NotFlyingVeryWell");
         }
 
         Logger.LogMessage("Flight is underway");
@@ -493,7 +493,7 @@ public class ProfileGroupManager
             continue;
         label_41:
             Logger.LogMessage(MessageProvider.GetMessage(834));
-            StartupClass.smethod_27(false, "FutileStepInMoveToWP");
+            StartupClass.StopGlide(false, "FutileStepInMoveToWP");
             goto label_9;
         }
     }
@@ -594,7 +594,7 @@ public class ProfileGroupManager
                 break;
             case StepStopAction.const_0:
                 Logger.LogMessage(MessageProvider.smethod_2(844, "Stop"));
-                StartupClass.smethod_27(false, "ForceStepStop");
+                StartupClass.StopGlide(false, "ForceStepStop");
                 break;
         }
     }

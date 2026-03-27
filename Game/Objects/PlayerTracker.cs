@@ -32,8 +32,8 @@ public class PlayerTracker
 
     public static void smethod_0()
     {
-        int_0 = (int)(StartupClass.smethod_6(ConfigManager.gclass61_0.method_2("FriendAlert")) * 60.0);
-        int_1 = (int)(StartupClass.smethod_6(ConfigManager.gclass61_0.method_2("FriendLogout")) * 60.0);
+        int_0 = (int)(StartupClass.ParseInvariantDouble(ConfigManager.gclass61_0.method_2("FriendAlert")) * 60.0);
+        int_1 = (int)(StartupClass.ParseInvariantDouble(ConfigManager.gclass61_0.method_2("FriendLogout")) * 60.0);
         list_0.Clear();
     }
 
