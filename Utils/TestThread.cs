@@ -46,7 +46,7 @@ public class TestThread
             }
         }
 
-        var workerThread = new Thread(delegate { RunWorker(scenarioKey); });
+        var workerThread = new Thread(new ThreadStart(delegate { RunWorker(scenarioKey); }));
         workerThread.Start();
     }
 
