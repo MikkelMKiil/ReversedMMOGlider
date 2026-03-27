@@ -21,6 +21,13 @@ using System.Windows.Forms;
 
 public class StartupClass
 {
+    private const string LogCategoryStartup = "[Startup] ";
+    private const string LogCategoryAttach = "[Attach] ";
+    private const string LogCategoryDetach = "[Detach] ";
+    private const string CommandLineFlagDiagnosticLogging = "/l1";
+    private const string CommandLineFlagMach = "/mach";
+    private const string CommandLineFlagResume = "/resume";
+
     public const string releaseDate = "January 21, 2009";
     public const string versionNumber = "1.8.0";
     public const string releaseType = "Release";
@@ -238,13 +245,13 @@ public class StartupClass
     public static bool bool_40 { get { return IsWindowHidden; } set { IsWindowHidden = value; } }
     public static bool bool_41 { get { return IsWindowShrunk; } set { IsWindowShrunk = value; } }
 
-    public static void InitStartupMode(AppMode appMode_1)
+    public static void InitStartupMode(AppMode startupMode)
     {
-        ApplicationStartupMode = appMode_1;
+        ApplicationStartupMode = startupMode;
         ProfileMapping = new SortedList<string, SpellActionData>();
         ProfileIdToProfileMap = new SortedList<ulong, LootableCorpseTracker>();
 
-        if (appMode_1 == AppMode.PGEdit)
+        if (startupMode == AppMode.PGEdit)
         {
             InitializeProfileEditorMode();
             return;
@@ -276,61 +283,75 @@ public class StartupClass
 
     private static void InitializeRuntimeMode()
     {
-        Logger.LogMessage("Glider 1.8.0 starting up (Release)");
-        ConfigManager.gclass61_0 = new ConfigManager();
-        IsBetaAccessGranted = true;
-        ProcessStartupCommandLineFlags();
-        MessageProvider.smethod_0(".\\");
-        SecurityDescriptor = new SecurityDescriptorHelper();
-        SecurityDescriptor.method_1();
-        InitializeRuntimeState();
-        LoadLastProfileOrCreateDefault();
-        GliderUIManager = new WebNotificationService();
-        new GContext();
-        if (!IsAttached)
-            CodeCompiler.smethod_10();
-        InputController.smethod_31(ConfigManager.gclass61_0);
-        smethod_5();
-        PartyStateManager = new PartyManager();
-        PartyStateManager.method_0(ConfigManager.gclass61_0);
-        smethod_52();
-        SpellcastingManager.gclass42_0 = new SpellcastingManager();
-        SpellcastingManager.gclass42_0.method_12();
-        KeyboardHook = new KeyboardHookManager();
-        LicenseCheckTimer.method_4();
-        if (!IsAttached)
-            smethod_7();
-        else
-            WowVersionLabel = "EvoStub";
+        try
+        {
+            Logger.LogMessage("Glider 1.8.0 starting up (Release)");
+            ConfigManager.gclass61_0 = new ConfigManager();
+            IsBetaAccessGranted = true;
+            ProcessStartupCommandLineFlags();
+            MessageProvider.smethod_0(".\\");
+            SecurityDescriptor = new SecurityDescriptorHelper();
+            SecurityDescriptor.method_1();
+            InitializeRuntimeState();
+            LoadLastProfileOrCreateDefault();
+            GliderUIManager = new WebNotificationService();
+            new GContext();
+            if (!IsAttached)
+                CodeCompiler.smethod_10();
+            InputController.smethod_31(ConfigManager.gclass61_0);
+            smethod_5();
+            PartyStateManager = new PartyManager();
+            PartyStateManager.method_0(ConfigManager.gclass61_0);
+            smethod_52();
+            SpellcastingManager.gclass42_0 = new SpellcastingManager();
+            SpellcastingManager.gclass42_0.method_12();
+            KeyboardHook = new KeyboardHookManager();
+            LicenseCheckTimer.method_4();
+            if (!IsAttached)
+                smethod_7();
+            else
+                WowVersionLabel = "EvoStub";
 
-        if (!IsAttached)
-            smethod_8();
+            if (!IsAttached)
+                smethod_8();
 
-        HasClassLoadMismatch = DynamicClassCount != CompiledClassCount;
-        EnsureSecurityDescriptorIsValid();
+            HasClassLoadMismatch = DynamicClassCount != CompiledClassCount;
+            EnsureSecurityDescriptorIsValid();
 
-        GameMemoryWriter = new ScriptExecutor();
-        GameClass69Instance = new ChatLogManager();
-        smethod_30();
-        smethod_53();
-        smethod_9();
+            GameMemoryWriter = new ScriptExecutor();
+            GameClass69Instance = new ChatLogManager();
+            smethod_30();
+            smethod_53();
+            smethod_9();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage(LogCategoryStartup + "Fatal runtime initialization failure: " + ex.Message);
+            Logger.LogDebug(LogCategoryStartup + ex.StackTrace);
+            throw;
+        }
     }
 
     private static void ProcessStartupCommandLineFlags()
     {
-        var commandLine = Environment.CommandLine.ToLower();
+        var commandLine = Environment.CommandLine;
 
-        if (commandLine.IndexOf("/l1") != -1)
+        if (HasCommandLineFlag(commandLine, CommandLineFlagDiagnosticLogging))
             IsDiagnosticLoggingEnabled = true;
 
-        if (commandLine.IndexOf("/mach") != -1)
+        if (HasCommandLineFlag(commandLine, CommandLineFlagMach))
         {
             IsAttached = true;
-            Logger.LogMessage("Mach flag, using open memory model");
+            Logger.LogMessage(LogCategoryStartup + "Mach flag detected, using open memory model");
         }
 
-        if (commandLine.IndexOf("/resume") != -1)
+        if (HasCommandLineFlag(commandLine, CommandLineFlagResume))
             IsResumeRequested = true;
+    }
+
+    private static bool HasCommandLineFlag(string commandLine, string flag)
+    {
+        return !string.IsNullOrEmpty(commandLine) && commandLine.IndexOf(flag, StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private static void InitializeRuntimeState()
@@ -357,18 +378,28 @@ public class StartupClass
     private static void LoadLastProfileOrCreateDefault()
     {
         var lastProfile = ConfigManager.gclass61_0.method_2("LastProfile");
-        if (lastProfile != null)
+        if (!string.IsNullOrEmpty(lastProfile))
         {
-            smethod_1(lastProfile);
-            return;
+            if (TryLoadProfileOrProfileGroup(lastProfile))
+                return;
+
+            Logger.LogMessage(LogCategoryStartup + "Failed to load last profile, falling back to default profile: " + lastProfile);
         }
 
         ActiveProfile = new GProfile();
         ActiveProfilePath = MessageProvider.GetMessage(70);
+        Logger.LogMessage(LogCategoryStartup + "Initialized with default empty profile");
     }
 
     private static void EnsureSecurityDescriptorIsValid()
     {
+        if (SecurityDescriptor == null)
+        {
+            Logger.LogMessage(LogCategoryStartup + "Security descriptor was not initialized");
+            Environment.Exit(1);
+            return;
+        }
+
         if (SecurityDescriptor.string_0 == null)
             return;
 
@@ -376,28 +407,31 @@ public class StartupClass
         Environment.Exit(1);
     }
 
-    public static bool smethod_1(string profilePath)
+    public static bool TryLoadProfileOrProfileGroup(string profilePath)
     {
-        if (smethod_2(profilePath))
+        if (IsProfileGroupPath(profilePath))
         {
             ProfileGroupStateManager = new ProfileGroupManager();
             return ProfileGroupStateManager.method_4(profilePath);
         }
 
         ProfileGroupStateManager = null;
-        return smethod_3(profilePath);
+        return TryLoadProfile(profilePath);
     }
 
-    private static bool smethod_2(string profilePath)
+    private static bool IsProfileGroupPath(string profilePath)
     {
-        if (profilePath == null)
+        return !string.IsNullOrEmpty(profilePath) && profilePath.IndexOf("groups\\", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    public static bool TryLoadProfile(string profilePath)
+    {
+        if (string.IsNullOrEmpty(profilePath))
+        {
+            Logger.LogMessage(LogCategoryStartup + "Attempted to load an empty profile path");
             return false;
+        }
 
-        return profilePath.ToLower().IndexOf("groups\\") != -1;
-    }
-
-    public static bool smethod_3(string profilePath)
-    {
         ActiveProfile = new GProfile();
         if (ActiveProfile.Load(profilePath))
         {
@@ -412,15 +446,34 @@ public class StartupClass
                 Logger.LogMessage(MessageProvider.GetMessage(110));
             }
 
-            if (IsInitializationComplete)
-                StartupLogger.imethod_0();
+            RefreshStartupUiIfReady();
             return true;
         }
 
         Logger.LogMessage(MessageProvider.smethod_2(111, profilePath));
-        if (IsInitializationComplete)
-            StartupLogger.imethod_0();
+        RefreshStartupUiIfReady();
         return false;
+    }
+
+    private static void RefreshStartupUiIfReady()
+    {
+        if (IsInitializationComplete && StartupLogger != null)
+            StartupLogger.imethod_0();
+    }
+
+    public static bool smethod_1(string profilePath)
+    {
+        return TryLoadProfileOrProfileGroup(profilePath);
+    }
+
+    private static bool smethod_2(string profilePath)
+    {
+        return IsProfileGroupPath(profilePath);
+    }
+
+    public static bool smethod_3(string profilePath)
+    {
+        return TryLoadProfile(profilePath);
     }
 
     public static string smethod_4(string string_11)
@@ -498,21 +551,28 @@ public class StartupClass
 
     private static void smethod_7()
     {
-        if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
+        var forcedVersion = ConfigManager.gclass61_0.method_2("ForceVersion");
+        if (forcedVersion != null)
         {
-            WowVersionLabel = ConfigManager.gclass61_0.method_2("ForceVersion");
+            WowVersionLabel = forcedVersion;
             Logger.LogMessage(MessageProvider.smethod_2(81, WowVersionLabel));
         }
 
-        string string_11;
-        if (!TryResolveWowInstallPath(out string_11))
+        string wowInstallPath;
+        if (!TryResolveWowInstallPath(out wowInstallPath))
         {
             Logger.LogMessage(MessageProvider.GetMessage(83));
             return;
         }
 
-        SomeStringData = string_11;
+        SomeStringData = wowInstallPath;
         var fileName = Path.Combine(SomeStringData, "WoW.exe");
+        if (!File.Exists(fileName))
+        {
+            Logger.LogMessage(LogCategoryStartup + "WoW executable was not found at resolved path: " + fileName);
+            return;
+        }
+
         Logger.smethod_1(MessageProvider.smethod_2(84, fileName));
         var versionInfo = FileVersionInfo.GetVersionInfo(fileName);
         if (versionInfo == null)
@@ -521,17 +581,17 @@ public class StartupClass
             return;
         }
 
-        if (ConfigManager.gclass61_0.method_2("ForceVersion") != null)
+        if (forcedVersion != null)
             return;
         WowVersionLabel = versionInfo.FileVersion;
         Logger.LogMessage(MessageProvider.smethod_2(86, WowVersionLabel));
     }
 
-    private static bool TryResolveWowInstallPath(out string string_11)
+    private static bool TryResolveWowInstallPath(out string wowInstallPath)
     {
-        string_11 = null;
-        var string_12 = MessageProvider.GetMessage(649);
-        RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(string_12) ?? Registry.CurrentUser.OpenSubKey(string_12);
+        wowInstallPath = null;
+        var registryPath = MessageProvider.GetMessage(649);
+        RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(registryPath) ?? Registry.CurrentUser.OpenSubKey(registryPath);
         if (registryKey != null)
             try
             {
@@ -540,8 +600,8 @@ public class StartupClass
                     var value = registryKey.GetValue(str);
                     if (value != null)
                     {
-                        string_11 = value.ToString();
-                        if (!string.IsNullOrEmpty(string_11))
+                        wowInstallPath = value.ToString();
+                        if (!string.IsNullOrEmpty(wowInstallPath))
                             break;
                     }
                 }
@@ -551,31 +611,40 @@ public class StartupClass
                 registryKey.Close();
             }
 
-        if (string.IsNullOrEmpty(string_11))
+        if (string.IsNullOrEmpty(wowInstallPath))
         {
-            var string_13 = ConfigManager.gclass61_0.method_2("GamePath");
-            if (!string.IsNullOrEmpty(string_13))
-                string_11 = string_13;
+            var configuredGamePath = ConfigManager.gclass61_0.method_2("GamePath");
+            if (!string.IsNullOrEmpty(configuredGamePath))
+                wowInstallPath = configuredGamePath;
         }
 
-        if (string.IsNullOrEmpty(string_11))
+        if (string.IsNullOrEmpty(wowInstallPath))
             try
             {
                 var processesByName = Process.GetProcessesByName("Wow");
                 if (processesByName.Length > 0 && processesByName[0].MainModule != null)
-                    string_11 = Path.GetDirectoryName(processesByName[0].MainModule.FileName);
+                    wowInstallPath = Path.GetDirectoryName(processesByName[0].MainModule.FileName);
             }
             catch (Exception ex)
             {
                 Logger.smethod_1("Unable to query running WoW path: " + ex.Message);
             }
 
-        if (string.IsNullOrEmpty(string_11))
+        if (string.IsNullOrEmpty(wowInstallPath))
+        {
+            Logger.LogMessage(LogCategoryStartup + "Unable to resolve WoW install path from registry, config, or active process");
             return false;
-        string_11 = string_11.Trim().Trim('"');
-        if (!string_11.EndsWith("\\"))
-            string_11 += "\\";
-        return Directory.Exists(string_11);
+        }
+
+        wowInstallPath = wowInstallPath.Trim().Trim('"');
+        if (!wowInstallPath.EndsWith("\\"))
+            wowInstallPath += "\\";
+
+        if (Directory.Exists(wowInstallPath))
+            return true;
+
+        Logger.LogMessage(LogCategoryStartup + "Resolved WoW path does not exist: " + wowInstallPath);
+        return false;
     }
 
     public static void smethod_8()
@@ -720,11 +789,7 @@ public class StartupClass
 
     public static void smethod_13()
     {
-        GameMemoryAccess.bool_2 = false;
-        IsRuntimeAttached = false;
-        if (!smethod_44())
-            return;
-        smethod_14();
+        TryAttachAndInitializeRuntime();
     }
 
     public static void smethod_14()
@@ -734,64 +799,90 @@ public class StartupClass
         {
             SoundPlayer.smethod_0("Attach.wav");
             IsDetached = true;
-            StartupLogger.imethod_0();
+            RefreshStartupUiIfReady();
+            Logger.smethod_1(LogCategoryAttach + "Using detached/open-memory model");
+            return;
         }
-        else
-        {
-            IsForegroundEnabled = false;
-            AttachRefreshTimer.method_4();
-            GameMemoryAccess.bool_2 = false;
-            PlayerOffsetManager = new OffsetManager("Player", MemoryOffsetTable.Instance.GetIntOffset("D_Player"));
-            PlayerOffsetManager.PopulateOffsetList();
-            ItemOffsetManager = new OffsetManager("Item", MemoryOffsetTable.Instance.GetIntOffset("D_Items"));
-            ItemOffsetManager.PopulateOffsetList();
-            NpcOffsetManager = new OffsetManager("NPC", MemoryOffsetTable.Instance.GetIntOffset("D_NPC"));
-            NpcOffsetManager.PopulateOffsetList();
-            ObjectOffsetManager = new OffsetManager("Object", MemoryOffsetTable.Instance.GetIntOffset("D_Object"));
-            ObjectOffsetManager.PopulateOffsetList();
-            ContainerOffsetManager = new OffsetManager("Container", MemoryOffsetTable.Instance.GetIntOffset("D_Container"));
-            ContainerOffsetManager.PopulateOffsetList();
-            SpellbookStateManager = new SpellbookManager();
+
+        IsForegroundEnabled = false;
+        AttachRefreshTimer.method_4();
+        GameMemoryAccess.bool_2 = false;
+        InitializeAttachOffsetManagers();
+        SpellbookStateManager = new SpellbookManager();
+
+        if (GContext.Main != null)
             GContext.Main.OnAttach();
-            if (CurrentGameClass != null)
-                CurrentGameClass.OnAttach();
-            smethod_17(1, MessageProvider.GetMessage(98));
-            StartupLogger.imethod_0();
-            EquipmentEnchantmentChecker = new EquipmentEnchantmentChecker();
-            EquipmentEnchantmentChecker.method_0();
+        else
+            Logger.LogMessage(LogCategoryAttach + "GContext.Main was null during attach");
+
+        if (CurrentGameClass != null)
+            CurrentGameClass.OnAttach();
+
+        smethod_17(1, MessageProvider.GetMessage(98));
+        RefreshStartupUiIfReady();
+        EquipmentEnchantmentChecker = new EquipmentEnchantmentChecker();
+        EquipmentEnchantmentChecker.method_0();
+        if (GameClass69Instance != null)
             GameClass69Instance.method_0();
-            IsWorldUiReady = false;
-            GameClass8Instance = null;
-            IsGliderPaused = false;
-            if (ProfileGroupStateManager != null)
-                ProfileGroupStateManager.method_6();
-            IsRuntimeAttached = true;
-            SoundPlayer.smethod_0("Attach.wav");
-            DetachAfterStopRequested = false;
-            Logger.smethod_1("--- Attach code out");
-            if (!IsStopRequested)
-                return;
-            IsStopRequested = false;
-            smethod_24(false);
-        }
+        else
+            Logger.LogMessage(LogCategoryAttach + "ChatLogManager was null during attach");
+
+        IsWorldUiReady = false;
+        GameClass8Instance = null;
+        IsGliderPaused = false;
+        if (ProfileGroupStateManager != null)
+            ProfileGroupStateManager.method_6();
+        IsRuntimeAttached = true;
+        SoundPlayer.smethod_0("Attach.wav");
+        DetachAfterStopRequested = false;
+        Logger.smethod_1("--- Attach code out");
+        if (!IsStopRequested)
+            return;
+        IsStopRequested = false;
+        smethod_24(false);
+    }
+
+    private static void InitializeAttachOffsetManagers()
+    {
+        PlayerOffsetManager = CreateOffsetManager("Player", "D_Player");
+        ItemOffsetManager = CreateOffsetManager("Item", "D_Items");
+        NpcOffsetManager = CreateOffsetManager("NPC", "D_NPC");
+        ObjectOffsetManager = CreateOffsetManager("Object", "D_Object");
+        ContainerOffsetManager = CreateOffsetManager("Container", "D_Container");
+    }
+
+    private static OffsetManager CreateOffsetManager(string name, string offsetKey)
+    {
+        var manager = new OffsetManager(name, MemoryOffsetTable.Instance.GetIntOffset(offsetKey));
+        manager.PopulateOffsetList();
+        return manager;
     }
 
     public static void smethod_15()
     {
         if (!IsRuntimeAttached)
+        {
+            Logger.smethod_1(LogCategoryDetach + "Detach requested while runtime is already detached");
             return;
+        }
+
         IsAutoLoginTriggered = false;
         IsDetachInProgress = true;
-        Logger.smethod_1("AppContext.Detach invoked");
+        Logger.smethod_1(LogCategoryDetach + "Detach invoked");
         if (AttachAttemptCount == 0 && !GameMemoryAccess.smethod_56(AnotherIntegerValue))
         {
             GameMemoryAccess.CloseProcessHandle(AdditionalApplicationHandle);
             AdditionalApplicationHandle = IntPtr.Zero;
             AnotherIntegerValue = 0;
+            Logger.smethod_1(LogCategoryDetach + "Closed secondary process handle during detach");
         }
 
         IsRuntimeAttached = false;
-        GameClass69Instance.method_3();
+        if (GameClass69Instance != null)
+            GameClass69Instance.method_3();
+        else
+            Logger.LogMessage(LogCategoryDetach + "ChatLogManager was null during detach");
+
         IsWorldUiReady = false;
         GameClass8Instance = null;
         smethod_17(1, MessageProvider.GetMessage(99));
@@ -920,7 +1011,7 @@ public class StartupClass
 
         if (!IsRuntimeAttached)
         {
-            smethod_13();
+            TryAttachAndInitializeRuntime();
             if (!IsRuntimeAttached)
                 return false;
         }
@@ -1011,7 +1102,7 @@ public class StartupClass
 
         if (!IsRuntimeAttached && !IsDetached)
         {
-            smethod_13();
+            TryAttachAndInitializeRuntime();
             if (!IsRuntimeAttached)
                 return false;
         }
@@ -1047,6 +1138,20 @@ public class StartupClass
         return false;
     }
 
+    public static bool TryAttachAndInitializeRuntime()
+    {
+        GameMemoryAccess.bool_2 = false;
+        IsRuntimeAttached = false;
+        if (!TryAttachToProcessAndResolveState())
+        {
+            Logger.smethod_1(LogCategoryAttach + "Attach probe did not resolve a valid runtime context");
+            return false;
+        }
+
+        smethod_14();
+        return IsRuntimeAttached;
+    }
+
     private static bool smethod_25()
     {
         GameProcessManager = new MachGlideRunner();
@@ -1056,47 +1161,8 @@ public class StartupClass
             return false;
         }
 
-        CurrentGlideMode = GlideMode.Auto;
-        StartupLogger.imethod_0();
-        return true;
-    }
-
-    public static bool smethod_26()
-    {
-        if (!IsRuntimeAttached)
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(130));
-            return false;
-        }
-
-        if (GPlayerSelf.Me.Target == null)
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(131));
-            return false;
-        }
-
-        if (GPlayerSelf.Me.Target.IsPlayer)
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(132));
-            return false;
-        }
-
-        if (ActiveProfile == null)
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(133));
-            return false;
-        }
-
-        if (ActiveProfile.CheckFaction(GPlayerSelf.Me.Target.FactionID, true))
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(128));
-        }
-        else
-        {
-            Logger.LogMessage(MessageProvider.GetMessage(129));
-            ActiveProfile.SetFactionsFromString(ActiveProfile.GetFactionsAsString() + " " + GPlayerSelf.Me.Target.FactionID);
-        }
-
+        Logger.LogMessage(MessageProvider.GetMessage(129));
+        ActiveProfile.SetFactionsFromString(ActiveProfile.GetFactionsAsString() + " " + GPlayerSelf.Me.Target.FactionID);
         return true;
     }
 
@@ -1110,7 +1176,7 @@ public class StartupClass
             ++KillActionDepth;
             smethod_28(bool_42, string_11);
         }
-        catch (ThreadInterruptedException ex)
+        catch (ThreadInterruptedException)
         {
             flag = true;
         }
@@ -1548,7 +1614,7 @@ public class StartupClass
         return length == -1 ? string_11 : string_11.Substring(0, length);
     }
 
-    public static bool smethod_44()
+    public static bool TryAttachToProcessAndResolveState()
     {
         AnotherIntegerValue = GameMemoryAccess.AttachToWowProcess();
         if (AnotherIntegerValue == 0)
@@ -1596,6 +1662,11 @@ public class StartupClass
         }
 
         return ValidateAttachedPlayerGuid(isObjectManagerGuidKnown);
+    }
+
+    public static bool smethod_44()
+    {
+        return TryAttachToProcessAndResolveState();
     }
 
     private static bool EnsureAttachProcessHandle()
@@ -1884,7 +1955,7 @@ public class StartupClass
 
     public static void smethod_45()
     {
-        if (IsRuntimeAttached || IsDetached || !isInitializationSuccessful || !smethod_44())
+        if (IsRuntimeAttached || IsDetached || !isInitializationSuccessful || !TryAttachToProcessAndResolveState())
             return;
         smethod_14();
     }
