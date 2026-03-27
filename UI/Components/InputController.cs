@@ -160,6 +160,20 @@ public class InputController // Original: InputController
         }
     }
 
+    public static void SetCursorPositionAbsolute(int x, int y)
+    {
+        try
+        {
+            SetCursorPos(x, y);
+            LastMouseX = x;
+            LastMouseY = y;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogMessage("SetCursorPositionAbsolute failed: " + ex.Message);
+        }
+    }
+
     public static void smethod_23(bool right)
     {
         try

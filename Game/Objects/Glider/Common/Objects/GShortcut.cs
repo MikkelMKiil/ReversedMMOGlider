@@ -13,6 +13,14 @@ namespace Glider.Common.Objects
 {
     public class GShortcut
     {
+        private struct ShortcutScanStats
+        {
+            public int TotalSlots;
+            public int NonEmptySlots;
+            public int EmptySlots;
+            public int DecodeFailures;
+        }
+
         private static readonly object SnapshotLock = new object();
         private static readonly SortedList<int, string> LastSnapshotBySlot = new SortedList<int, string>();
         private static readonly object DecodeDiagnosticLock = new object();
@@ -22,6 +30,7 @@ namespace Glider.Common.Objects
         public GShortcutType ShortcutType;
         public int ShortcutValue;
         public int SlotNumber;
+        public bool IsDecodeFailure;
 
         public GShortcut(int SlotNumber)
         {
@@ -31,6 +40,7 @@ namespace Glider.Common.Objects
             {
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;
+                IsDecodeFailure = false;
                 return;
             }
 
@@ -38,6 +48,7 @@ namespace Glider.Common.Objects
             {
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;
+                IsDecodeFailure = false;
                 return;
             }
 
@@ -46,6 +57,7 @@ namespace Glider.Common.Objects
             {
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;
+                IsDecodeFailure = false;
                 return;
             }
 
@@ -60,6 +72,7 @@ namespace Glider.Common.Objects
                 Logger.smethod_1("GShortcut read failed for slot " + SlotNumber + ": " + ex.Message);
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;
+                IsDecodeFailure = false;
                 return;
             }
 
@@ -68,7 +81,11 @@ namespace Glider.Common.Objects
                 LogDecodeFailure(SlotNumber, num);
                 ShortcutType = GShortcutType.Empty;
                 ShortcutValue = 0;
+                IsDecodeFailure = true;
+                return;
             }
+
+            IsDecodeFailure = false;
         }
 
         private static void LogDecodeFailure(int slotNumber, uint rawShortcut)
@@ -106,12 +123,30 @@ namespace Glider.Common.Objects
 
         public static GShortcut[] GetAllShortcuts()
         {
+            ShortcutScanStats stats;
+            return GetAllShortcuts(out stats);
+        }
+
+        private static GShortcut[] GetAllShortcuts(out ShortcutScanStats stats)
+        {
+            stats = new ShortcutScanStats();
             var gshortcutList = new List<GShortcut>();
             for (var SlotNumber = ShortcutLayout335a.MinSlot; SlotNumber <= ShortcutLayout335a.MaxActionSlot; ++SlotNumber)
             {
                 var gshortcut = new GShortcut(SlotNumber);
+                stats.TotalSlots++;
+                if (gshortcut.IsDecodeFailure)
+                    stats.DecodeFailures++;
+
                 if (gshortcut.ShortcutValue != 0)
+                {
+                    stats.NonEmptySlots++;
                     gshortcutList.Add(gshortcut);
+                }
+                else
+                {
+                    stats.EmptySlots++;
+                }
             }
 
             return gshortcutList.ToArray();
@@ -152,7 +187,8 @@ namespace Glider.Common.Objects
             var scanned = 0;
             var scannedType = 0;
             var sample = new List<string>();
-            foreach (var allShortcut in GetAllShortcuts())
+            ShortcutScanStats scanStats;
+            foreach (var allShortcut in GetAllShortcuts(out scanStats))
             {
                 scanned++;
                 if (allShortcut.ShortcutType == TypeSought)
@@ -173,8 +209,13 @@ namespace Glider.Common.Objects
             if (IsVerboseShortcutDetectionEnabled())
             {
                 var sampleText = sample.Count > 0 ? string.Join(" ", sample.ToArray()) : "(none)";
+                var reason = scannedType == 0 ? "no-candidates-of-type" : "target-id-not-found";
                 Logger.LogMessage("[VerboseShortcutDetection] match-fail type=" + TypeSought +
                                   ", ids=\"" + FormatPossibleIds(PossibleIDs) + "\"" +
+                                  ", reason=" + reason +
+                                  ", scannedSlots=" + scanStats.TotalSlots +
+                                  ", nonEmptySlots=" + scanStats.NonEmptySlots +
+                                  ", decodeFailSlots=" + scanStats.DecodeFailures +
                                   ", scanned=" + scanned +
                                   ", scannedType=" + scannedType +
                                   ", sample=\"" + sampleText + "\"");
@@ -217,6 +258,7 @@ namespace Glider.Common.Objects
                                   ", chars=\"" + snapshotData.ActionBarCharacters + "\"" +
                                   ", uiReady=" + snapshotData.IsWorldUiReady.ToString().ToLowerInvariant() +
                                   ", classPlausible=" + snapshotData.IsPlayerClassPlausible.ToString().ToLowerInvariant() +
+                                  ", classTrusted=" + snapshotData.IsPlayerClassTrusted.ToString().ToLowerInvariant() +
                                   ", actionBarProbe=" + snapshotData.IsActionBarDataPlausible.ToString().ToLowerInvariant() +
                                   ", actionBarProbeDetails=\"" + (snapshotData.ActionBarProbeDetails ?? "") + "\"");
 

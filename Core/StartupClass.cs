@@ -1649,6 +1649,12 @@ public class StartupClass
             return false;
         }
 
+        if ((shortcutsBase & 3) != 0)
+        {
+            details = "ActionBarShortcuts base is unaligned: 0x" + shortcutsBase.ToString("x");
+            return false;
+        }
+
         var sampled = 0;
         var nonZero = 0;
         var plausible = 0;
@@ -1681,6 +1687,9 @@ public class StartupClass
 
         details = "sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
         if (nonZero == 0)
+            return false;
+
+        if (plausible < 2)
             return false;
 
         return invalid * 2 < nonZero;

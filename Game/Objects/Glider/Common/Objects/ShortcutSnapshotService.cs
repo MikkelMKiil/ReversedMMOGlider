@@ -45,6 +45,7 @@ namespace Glider.Common.Objects
         public string ActionBarCharacters;
         public bool IsWorldUiReady;
         public bool IsPlayerClassPlausible;
+        public bool IsPlayerClassTrusted;
         public bool IsActionBarDataPlausible;
         public string ActionBarProbeDetails;
         public SortedList<int, ShortcutSnapshotEntry> Entries = new SortedList<int, ShortcutSnapshotEntry>();
@@ -113,6 +114,12 @@ namespace Glider.Common.Objects
                 return false;
             }
 
+            if ((shortcutsBase & 3) != 0)
+            {
+                details = "ActionBarShortcuts base unaligned: 0x" + shortcutsBase.ToString("x", CultureInfo.InvariantCulture);
+                return false;
+            }
+
             var sampled = 0;
             var nonZero = 0;
             var plausible = 0;
@@ -147,6 +154,9 @@ namespace Glider.Common.Objects
             if (nonZero == 0)
                 return false;
 
+            if (plausible < 2)
+                return false;
+
             return invalid * 2 < nonZero;
         }
 
@@ -171,6 +181,7 @@ namespace Glider.Common.Objects
             snapshot.PlayerClass = me != null ? me.PlayerClass : GPlayerClass.Unknown;
             snapshot.Stance = me != null ? me.Stance : GStance.Unknown;
             snapshot.IsPlayerClassPlausible = IsKnownPlayerClass(snapshot.PlayerClass);
+            snapshot.IsPlayerClassTrusted = me != null && me.IsClassDataTrusted;
 
             string actionBarProbeDetails;
             snapshot.IsActionBarDataPlausible = ProbeActionBarShortcuts(out actionBarProbeDetails);
@@ -217,7 +228,7 @@ namespace Glider.Common.Objects
                 entry.BarIndex = -1;
                 entry.BarState = GBarState.Indifferent;
                 entry.CharCode = char.MinValue;
-                entry.IsMappingTrusted = snapshot.IsPlayerClassPlausible && snapshot.IsActionBarDataPlausible;
+                entry.IsMappingTrusted = snapshot.IsPlayerClassPlausible && snapshot.IsPlayerClassTrusted && snapshot.IsActionBarDataPlausible;
                 int barIndex;
                 if (entry.IsMappingTrusted && ShortcutLayout335a.TryMapSlotToBarIndex(slotNumber, snapshot.PlayerClass, snapshot.Stance, out barIndex))
                 {
@@ -609,6 +620,7 @@ namespace Glider.Common.Objects
                               ", chars=\"" + snapshot.ActionBarCharacters + "\"" +
                               ", uiReady=" + snapshot.IsWorldUiReady.ToString().ToLowerInvariant() +
                               ", classPlausible=" + snapshot.IsPlayerClassPlausible.ToString().ToLowerInvariant() +
+                              ", classTrusted=" + snapshot.IsPlayerClassTrusted.ToString().ToLowerInvariant() +
                               ", actionBarProbe=" + snapshot.IsActionBarDataPlausible.ToString().ToLowerInvariant() +
                               ", actionBarProbeDetails=\"" + (snapshot.ActionBarProbeDetails ?? "") + "\"");
 

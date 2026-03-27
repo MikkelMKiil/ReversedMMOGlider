@@ -277,7 +277,24 @@ public class CameraRotator // Original: CameraRotator
         if (StartupClass.IsGliderInitialized && StartupClass.MainApplicationHandle != IntPtr.Zero)
         {
             uint wParam = isRightClick ? MK_RBUTTON : MK_LBUTTON;
-            uint lParam = (uint)((y << 16) | (x & 0xFFFF));
+            var clientX = x;
+            var clientY = y;
+
+            System.Drawing.Point windowOrigin;
+            System.Drawing.Size windowSize;
+            if (GameMemoryAccess.GetWindowPosition(StartupClass.MainApplicationHandle, out windowOrigin) &&
+                GameMemoryAccess.GetWindowSize(StartupClass.MainApplicationHandle, out windowSize))
+            {
+                clientX = x - windowOrigin.X;
+                clientY = y - windowOrigin.Y;
+
+                if (windowSize.Width > 0)
+                    clientX = Math.Max(0, Math.Min(windowSize.Width - 1, clientX));
+                if (windowSize.Height > 0)
+                    clientY = Math.Max(0, Math.Min(windowSize.Height - 1, clientY));
+            }
+
+            uint lParam = (uint)(((clientY & 0xFFFF) << 16) | (clientX & 0xFFFF));
             SendMessage(StartupClass.MainApplicationHandle, WM_MOUSEMOVE, wParam, lParam);
         }
     }

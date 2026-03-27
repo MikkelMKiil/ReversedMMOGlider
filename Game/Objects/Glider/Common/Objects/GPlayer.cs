@@ -11,6 +11,8 @@ namespace Glider.Common.Objects
 {
     public class GPlayer : GUnit
     {
+        private static readonly SortedList<string, bool> LoggedClassSourceDiagnostics = new SortedList<string, bool>();
+
         protected int _energy;
         protected int _energyMax;
         protected ulong _petGuid;
@@ -201,6 +203,7 @@ namespace Glider.Common.Objects
         {
             base.LoadFields();
             _classDataTrusted = false;
+            var classSource = "none";
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("ClassPtrOffset"))
                 num = GameMemoryAccess.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
@@ -208,6 +211,7 @@ namespace Glider.Common.Objects
             {
                 _playerClass = (GPlayerClass)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
                 _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
+                classSource = "ClassPtr";
             }
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("RaceIdOffset"))
                 _playerRace = (GPlayerRace)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
@@ -219,8 +223,12 @@ namespace Glider.Common.Objects
                     _playerRace = (GPlayerRace)(storageInt & byte.MaxValue);
                     _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
                     _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
+                    classSource = "UNIT_FIELD_BYTES_0";
                 }
             }
+
+            LogClassSourceDiagnosticOnce(classSource, (int)_playerClass, _classDataTrusted);
+
             _petGuid = GetStorageULong("UNIT_FIELD_SUMMON");
             if (_petGuid == 0)
                 _petGuid = GetStorageULong("UNIT_FIELD_CHARM");
@@ -229,6 +237,24 @@ namespace Glider.Common.Objects
             _rage = GetStorageInt("UNIT_FIELD_POWER2") / 10;
             _runicPower = GetStorageInt("UNIT_FIELD_POWER7") / 10;
             _sitting = (GetStorageInt("UNIT_FIELD_BYTES_1") & byte.MaxValue) != 0;
+        }
+
+        private static void LogClassSourceDiagnosticOnce(string classSource, int classValue, bool trusted)
+        {
+            if (!ShortcutSnapshotService.IsVerboseShortcutDetectionEnabled())
+                return;
+
+            var key = classSource + ":" + classValue + ":" + trusted;
+            if (LoggedClassSourceDiagnostics.ContainsKey(key))
+                return;
+
+            if (LoggedClassSourceDiagnostics.Count > 100)
+                LoggedClassSourceDiagnostics.Clear();
+
+            LoggedClassSourceDiagnostics.Add(key, true);
+            Logger.LogMessage("[VerboseShortcutDetection] class-source=" + classSource +
+                              ", classValue=" + classValue +
+                              ", trusted=" + trusted.ToString().ToLowerInvariant());
         }
 
         private static bool IsKnownPlayerClassValue(int classValue)

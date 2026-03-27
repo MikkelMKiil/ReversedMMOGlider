@@ -351,15 +351,20 @@ namespace Glider.Common.Objects
             string failureReason;
             if (CameraProjection.TryProject(Location, ZAdjust, out double_1, out double_2, out screenX, out screenY, out viewport, out failureReason))
             {
-                InputController.smethod_18(double_1, double_2);
+                var absoluteX = viewport.int_0 + screenX;
+                var absoluteY = viewport.int_1 + screenY;
+                InputController.SetCursorPositionAbsolute(absoluteX, absoluteY);
                 Thread.Sleep(PawSpeedMS);
                 if (IsCursorOnObject)
                     return true;
                 GContext.Main.ReleaseSpinRun();
-                for (var num1 = -0.02; num1 <= 0.02; num1 += 0.01)
-                    for (var num2 = -0.02; num2 <= 0.02; num2 += 0.01)
+
+                var xNudge = Math.Max(1, viewport.method_1() / 50);
+                var yNudge = Math.Max(1, viewport.method_0() / 50);
+                for (var xStep = -2; xStep <= 2; ++xStep)
+                    for (var yStep = -2; yStep <= 2; ++yStep)
                     {
-                        InputController.smethod_18(double_1 + num1, double_2 + num2);
+                        InputController.SetCursorPositionAbsolute(absoluteX + xStep * xNudge, absoluteY + yStep * yNudge);
                         Thread.Sleep(PawSpeedMS);
                         if (IsCursorOnObject)
                             return true;
