@@ -204,7 +204,7 @@ public class StartupClass
         ApplyRuntimeConfiguration();
         SpellcastingManager.gclass42_0 = new SpellcastingManager();
         SpellcastingManager.gclass42_0.method_12();
-        smethod_7();
+        ResolveAndLogWowVersion();
     }
 
     private static void InitializeRuntimeMode()
@@ -228,13 +228,13 @@ public class StartupClass
             ApplyRuntimeConfiguration();
             PartyStateManager = new PartyManager();
             PartyStateManager.method_0(ConfigManager.gclass61_0);
-            smethod_52();
+            ApplyLaunchNameOverride();
             SpellcastingManager.gclass42_0 = new SpellcastingManager();
             SpellcastingManager.gclass42_0.method_12();
             KeyboardHook = new KeyboardHookManager();
             LicenseCheckTimer.method_4();
             if (!IsAttached)
-                smethod_7();
+                ResolveAndLogWowVersion();
             else
                 WowVersionLabel = "EvoStub";
 
@@ -246,8 +246,8 @@ public class StartupClass
 
             GameMemoryWriter = new ScriptExecutor();
             GameClass69Instance = new ChatLogManager();
-            smethod_30();
-            smethod_53();
+            StartKillEventListenerIfRequested();
+            ProcessDriverAndAttachPidFlags();
             BeginBackgroundInitialization();
         }
         catch (Exception ex)
@@ -455,7 +455,7 @@ public class StartupClass
         return double.Parse(value.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat);
     }
 
-    private static void smethod_7()
+    private static void ResolveAndLogWowVersion()
     {
         var forcedVersion = ConfigManager.gclass61_0.method_2("ForceVersion");
         if (forcedVersion != null)
@@ -1224,12 +1224,12 @@ public class StartupClass
         return CachedRatePerHour;
     }
 
-    private static void smethod_30()
+    private static void StartKillEventListenerIfRequested()
     {
         if (Environment.CommandLine.ToLower().IndexOf("/kill") == -1)
             return;
 
-        new Thread(smethod_32).Start();
+        new Thread(WaitForKillEventAndShutdown).Start();
     }
 
     public static void ShutdownRuntimeServices()
@@ -1239,7 +1239,7 @@ public class StartupClass
         GliderUIManager.method_5();
     }
 
-    private static void smethod_32()
+    private static void WaitForKillEventAndShutdown()
     {
         var killEventName = GetCommandLineValue("/kill");
         KillEventHandle = CreateEvent(IntPtr.Zero, false, false, killEventName);
@@ -1286,16 +1286,16 @@ public class StartupClass
 
     [DllImport("kernel32.dll")]
     private static extern IntPtr CreateEvent(
-        IntPtr intptr_3,
-        bool bool_42,
-        bool bool_43,
-        string string_11);
+        IntPtr attributes,
+        bool manualReset,
+        bool initialState,
+        string eventName);
 
     [DllImport("kernel32", SetLastError = true)]
-    internal static extern int WaitForSingleObject(IntPtr intptr_3, uint uint_1);
+    internal static extern int WaitForSingleObject(IntPtr handle, uint timeoutMilliseconds);
 
     [DllImport("Kernel32.dll", SetLastError = true)]
-    private static extern void SetEvent(IntPtr intptr_3);
+    private static extern void SetEvent(IntPtr handle);
 
     public static string GetCommandLineValue(string argumentName)
     {
@@ -1314,7 +1314,7 @@ public class StartupClass
     }
 
     [DllImport("kernel32")]
-    private static extern bool CloseHandle(IntPtr intptr_3);
+    private static extern bool CloseHandle(IntPtr handle);
 
     public static void RunMainLoopTick()
     {
@@ -1954,16 +1954,16 @@ public class StartupClass
         RestoreGameWindowSize();
     }
 
-    private static void smethod_52()
+    private static void ApplyLaunchNameOverride()
     {
         if (Environment.CommandLine.ToLower().IndexOf("/ln") == -1)
             return;
-        var string_4 = GetCommandLineValue("/ln");
-        ConfigManager.gclass61_0.method_0("LName", string_4);
+        var launchName = GetCommandLineValue("/ln");
+        ConfigManager.gclass61_0.method_0("LName", launchName);
         ConfigManager.gclass61_0.method_8();
     }
 
-    private static void smethod_53()
+    private static void ProcessDriverAndAttachPidFlags()
     {
         if (Environment.CommandLine.ToLower().IndexOf("/driver") != -1)
         {
@@ -2004,29 +2004,19 @@ public class StartupClass
         }
         else
         {
-            var string_1 = ConfigManager.gclass61_0.method_2("AutoLog");
-            if (!new AutoLoginManager().method_1(string_1))
+            var autoLogValue = ConfigManager.gclass61_0.method_2("AutoLog");
+            if (!new AutoLoginManager().method_1(autoLogValue))
                 return;
-            AutoLoginSetting = string_1;
+            AutoLoginSetting = autoLogValue;
             Logger.smethod_1("Autolog is good!");
             IsStopRequested = true;
         }
     }
 
-    public static bool IsDecryptedStreamEmpty(GDataEncryptionManager gclass56_0)
+    public static bool IsDecryptedStreamEmpty(GDataEncryptionManager encryptedDataManager)
     {
-        return gclass56_0.ReadIntFromDecryptedStream() == 0;
+        return encryptedDataManager.ReadIntFromDecryptedStream() == 0;
     }
-
-
-    private static void smethod_60()
-    {
-        if (MessageBox.Show(MainForm, MessageProvider.GetMessage(875), GameMemoryAccess.GenerateRandomString(), MessageBoxButtons.YesNo,
-                MessageBoxIcon.Exclamation) != DialogResult.Yes)
-            return;
-    }
-
-
     public static void InitializeBackgroundModeIfNeeded()
     {
         if (!IsGliderInitialized && ConfigManager.gclass61_0.method_5("BackgroundEnable") && IsSomeConditionMet)
