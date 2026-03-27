@@ -26,8 +26,8 @@ public class DialogMonitor
     {
         bool_0 = false;
         bool_1 = false;
-        gclass8_0 = UIElement.smethod_2("TradeFrame");
-        gclass8_1 = UIElement.smethod_2("StaticPopup1");
+        gclass8_0 = UIElement.smethod_2("TradeFrame", false);
+        gclass8_1 = UIElement.smethod_2("StaticPopup1", false);
         int_2 = 0;
         int_3 = 0;
     }

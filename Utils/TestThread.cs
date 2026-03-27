@@ -324,7 +324,7 @@ public class TestThread
     private static void LogParentAndPopupState()
     {
         var uiParent = UIElement.smethod_2("UIParent");
-        var staticPopup = UIElement.smethod_2("StaticPopup1");
+        var staticPopup = UIElement.smethod_2("StaticPopup1", false);
         Logger.LogMessage("parent: " + uiParent.method_2());
         Logger.LogMessage("sp1: " + staticPopup.method_2());
     }

@@ -1517,7 +1517,7 @@ public class StartupClass
             return;
 
         DialogMonitor.smethod_0();
-        GameClass8Instance = UIElement.smethod_2("GameMenuFrame");
+        GameClass8Instance = UIElement.smethod_2("GameMenuFrame", false);
         IsWorldUiReady = true;
     }
 

@@ -27,6 +27,7 @@ namespace Glider.Common.Objects
         private static int _lastTraversalSkippedCount;
         private static int _lastLoggedTick;
         private const int LogIntervalMs = 5000; // Log every 5 seconds
+        private const int MinimumStableTraversalCount = 8;
 
         /// <summary>
         /// Gets the memory offset for the next object pointer in the linked-list traversal.
@@ -142,9 +143,14 @@ namespace Glider.Common.Objects
                     {
                         if (currentObjectAddress != firstObjectAddress)
                         {
-                            Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links at 0x" + 
-                                            currentObjectAddress.ToString("x"));
-                            traversalComplete = false;
+                            if (CanAcceptTruncatedTraversal(traversalObjectCount, priorSnapshotCount, newSnapshot.Count))
+                                Logger.smethod_1("[WARN] Object list traversal detected cycle late in pass at 0x" + currentObjectAddress.ToString("x") + ", keeping partial snapshot");
+                            else
+                            {
+                                Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links at 0x" +
+                                                currentObjectAddress.ToString("x"));
+                                traversalComplete = false;
+                            }
                         }
                         break;
                     }
@@ -159,13 +165,26 @@ namespace Glider.Common.Objects
                     if (currentObjectAddress == 28U || (currentObjectAddress & 1U) != 0U)
                         {
                             ++traversalSkippedCount;
-                            // Read next pointer as uint and validate before advancing to avoid ReadBytesInternal errors
-                            var nextAddr = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
-                            if (!IsLikelyObjectPointer(nextAddr))
+                            uint nextAddr;
+                            uint rawNextAddr;
+                            bool reachedListEnd;
+                            if (!TryReadNextObjectPointer(currentObjectAddress, out nextAddr, out reachedListEnd, out rawNextAddr))
                             {
-                                // Abort traversal if the next pointer is implausible
+                                if (CanAcceptTruncatedTraversal(traversalObjectCount, priorSnapshotCount, newSnapshot.Count))
+                                {
+                                    Logger.smethod_1("[WARN] Skipped sentinel/invalid nodes: " + traversalSkippedCount + ", truncated pass due to implausible next pointer 0x" + rawNextAddr.ToString("x") + ", keeping partial snapshot");
+                                    currentObjectAddress = 0U;
+                                    break;
+                                }
+
                                 traversalComplete = false;
-                                Logger.smethod_1("[TRACE] Skipped sentinel/invalid nodes: " + traversalSkippedCount + ", aborting due to implausible next pointer 0x" + nextAddr.ToString("x"));
+                                Logger.smethod_1("[CRITICAL] Skipped sentinel/invalid nodes: " + traversalSkippedCount + ", aborting due to implausible next pointer 0x" + rawNextAddr.ToString("x"));
+                                break;
+                            }
+
+                            if (reachedListEnd)
+                            {
+                                currentObjectAddress = 0U;
                                 break;
                             }
 
@@ -206,12 +225,26 @@ namespace Glider.Common.Objects
                                 goto label_7;
                             }
                         }
-                        // Read next pointer as uint and validate before advancing to avoid ReadBytesInternal errors
-                        var nextAddr2 = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
-                        if (!IsLikelyObjectPointer(nextAddr2))
+                        uint nextAddr2;
+                        uint rawNextAddr2;
+                        bool reachedListEnd2;
+                        if (!TryReadNextObjectPointer(currentObjectAddress, out nextAddr2, out reachedListEnd2, out rawNextAddr2))
                         {
+                            if (CanAcceptTruncatedTraversal(traversalObjectCount, priorSnapshotCount, newSnapshot.Count))
+                            {
+                                Logger.smethod_1("[WARN] Object list traversal truncated due to implausible next pointer 0x" + rawNextAddr2.ToString("x") + ", keeping partial snapshot");
+                                currentObjectAddress = 0U;
+                                break;
+                            }
+
                             traversalComplete = false;
-                            Logger.smethod_1("[CRITICAL] Object list traversal aborted: implausible next pointer 0x" + nextAddr2.ToString("x"));
+                            Logger.smethod_1("[CRITICAL] Object list traversal aborted: implausible next pointer 0x" + rawNextAddr2.ToString("x"));
+                            break;
+                        }
+
+                        if (reachedListEnd2)
+                        {
+                            currentObjectAddress = 0U;
                             break;
                         }
 
@@ -356,17 +389,9 @@ namespace Glider.Common.Objects
 
         private static GObject[] GetObjects(GObjectType ObjectType, bool BypassTimer)
         {
-            lock (LastSnapshot)
-            {
-                var all = GetAll(BypassTimer);
-                var gobjectList = new List<GObject>();
-                if (all == null)
-                    return null;
-                foreach (var gobject in all.Values)
-                    if (gobject.Type == ObjectType || ObjectType == GObjectType.Any)
-                        gobjectList.Add(gobject);
-                return gobjectList.ToArray();
-            }
+            return QuerySnapshot(BypassTimer,
+                gobject => gobject.Type == ObjectType || ObjectType == GObjectType.Any,
+                gobject => gobject);
         }
 
         public static GObject[] GetObjects()
@@ -381,29 +406,23 @@ namespace Glider.Common.Objects
 
         private static GUnit[] GetUnits(bool BypassTimer)
         {
-            var objects = GetObjects(GObjectType.Any, BypassTimer);
-            var gunitList = new List<GUnit>();
-            foreach (var gobject in objects)
-                if (gobject.Type == GObjectType.Player || gobject.Type == GObjectType.Monster)
-                    gunitList.Add((GUnit)gobject);
-            return gunitList.ToArray();
+            return QuerySnapshot(BypassTimer,
+                gobject => gobject.Type == GObjectType.Player || gobject.Type == GObjectType.Monster,
+                gobject => gobject as GUnit);
         }
 
         public static GItem[] GetItems()
         {
-            var objects = GetObjects(GObjectType.Any);
-            var gitemList = new List<GItem>();
-            foreach (var gobject in objects)
-                if (gobject.Type == GObjectType.Item || gobject.Type == GObjectType.Container)
-                    gitemList.Add((GItem)gobject);
-            return gitemList.ToArray();
+            return QuerySnapshot(false,
+                gobject => gobject.Type == GObjectType.Item || gobject.Type == GObjectType.Container,
+                gobject => gobject as GItem);
         }
 
         public static GMonster[] GetMonsters()
         {
-            var objects = GetObjects(GObjectType.Monster);
-            var destinationArray = new GMonster[objects.Length];
-            Array.Copy(objects, destinationArray, objects.Length);
+            var destinationArray = QuerySnapshot(false,
+                gobject => gobject.Type == GObjectType.Monster,
+                gobject => gobject as GMonster);
 
             // Debug log if monster count drops unexpectedly
             if (destinationArray.Length > 0 && Environment.TickCount - _lastLoggedTick < LogIntervalMs)
@@ -426,18 +445,16 @@ namespace Glider.Common.Objects
 
         public static GNode[] GetNodes()
         {
-            var objects = GetObjects(GObjectType.Node);
-            var destinationArray = new GNode[objects.Length];
-            Array.Copy(objects, destinationArray, objects.Length);
-            return destinationArray;
+            return QuerySnapshot(false,
+                gobject => gobject.Type == GObjectType.Node,
+                gobject => gobject as GNode);
         }
 
         public static GPlayer[] GetPlayers()
         {
-            var objects = GetObjects(GObjectType.Player);
-            var destinationArray = new GPlayer[objects.Length];
-            Array.Copy(objects, destinationArray, objects.Length);
-            return destinationArray;
+            return QuerySnapshot(false,
+                gobject => gobject.Type == GObjectType.Player,
+                gobject => gobject as GPlayer);
         }
 
         private static ulong QuickGetGUID(uint BaseAddress)
@@ -579,12 +596,17 @@ namespace Glider.Common.Objects
                 }
 
                 // Ensure we read the next pointer using uint arithmetic and validate it
-                var nextAddr3 = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
-                if (!IsLikelyObjectPointer(nextAddr3))
+                uint nextAddr3;
+                uint rawNextAddr3;
+                bool reachedListEnd3;
+                if (!TryReadNextObjectPointer(currentObjectAddress, out nextAddr3, out reachedListEnd3, out rawNextAddr3))
                 {
-                    Logger.smethod_1("[CRITICAL] TryMaterializeUnitByGuid aborted: implausible next pointer 0x" + nextAddr3.ToString("x"));
+                    Logger.smethod_1("[CRITICAL] TryMaterializeUnitByGuid aborted: implausible next pointer 0x" + rawNextAddr3.ToString("x"));
                     break;
                 }
+
+                if (reachedListEnd3)
+                    break;
 
                 currentObjectAddress = nextAddr3;
             }
@@ -622,12 +644,21 @@ namespace Glider.Common.Objects
 
         public static GUnit FindUnitByTarget(ulong TargetGUID)
         {
-            var units = GetUnits();
-            var gunitList = new List<GUnit>();
-            foreach (var gunit in units)
-                if (gunit.TargetGUID == TargetGUID)
-                    gunitList.Add(gunit);
-            return gunitList.Count == 0 ? null : (GUnit)GetClosest(gunitList.ToArray());
+            GUnit closestUnit = null;
+            var closestDistance = 9999.0;
+            foreach (var unit in GetUnits())
+            {
+                if (unit.TargetGUID != TargetGUID)
+                    continue;
+
+                if (unit.DistanceToSelf < closestDistance)
+                {
+                    closestDistance = unit.DistanceToSelf;
+                    closestUnit = unit;
+                }
+            }
+
+            return closestUnit;
         }
 
         public static GUnit FindUnitByTarget(long TargetGUID)
@@ -637,10 +668,12 @@ namespace Glider.Common.Objects
 
         public static GObject FindObject(ulong GUID)
         {
-            foreach (var gobject in GetObjects())
-                if (gobject.GUID == GUID)
-                    return gobject;
-            return null;
+            var all = GetAll();
+            if (all == null)
+                return null;
+
+            GObject gobject;
+            return all.TryGetValue(GUID, out gobject) ? gobject : null;
         }
 
         public static GObject FindObject(long GUID)
@@ -712,35 +745,14 @@ namespace Glider.Common.Objects
 
         public static GUnit[] GetAttackers()
         {
-            var gunitList = new List<GUnit>();
-            foreach (var unit in GetUnits())
-            {
-                var flag = false;
-                if (unit.IsMonster && unit.TargetGUID == GContext.Main.Me.GUID)
-                    flag = true;
-                if (GContext.Main.Me.PetGUID != 0UL && unit.IsMonster && unit.TargetGUID == GContext.Main.Me.PetGUID)
-                    flag = true;
-                if (unit.IsPlayer && unit.GUID == GContext.Main.Me.TargetGUID)
-                    flag = true;
-                if (flag && !unit.IsDead)
-                    gunitList.Add(unit);
-            }
-
-            return gunitList.ToArray();
+            return GetAttackers(true);
         }
 
         public static GItem[] GetEquippedItems()
         {
-            var gitemList = new List<GItem>();
-            foreach (var gobject in GetObjects())
-                if (gobject.Type == GObjectType.Item)
-                {
-                    var gitem = (GItem)gobject;
-                    if (gitem.IsEquipped)
-                        gitemList.Add(gitem);
-                }
-
-            return gitemList.ToArray();
+            return QuerySnapshot(false,
+                gobject => gobject.Type == GObjectType.Item && ((GItem)gobject).IsEquipped,
+                gobject => gobject as GItem);
         }
 
         public static GUnit[] GetAttackers(bool IncludePet)
@@ -748,15 +760,7 @@ namespace Glider.Common.Objects
             var gunitList = new List<GUnit>();
             foreach (var unit in GetUnits())
             {
-                var flag = false;
-                if (unit.IsMonster && unit.TargetGUID == GContext.Main.Me.GUID)
-                    flag = true;
-                if (IncludePet && GContext.Main.Me.PetGUID != 0UL && unit.IsMonster &&
-                    unit.TargetGUID == GContext.Main.Me.PetGUID)
-                    flag = true;
-                if (unit.IsPlayer && unit.GUID == GContext.Main.Me.TargetGUID)
-                    flag = true;
-                if (flag && !unit.IsDead)
+                if (IsAttacker(unit, IncludePet) && !unit.IsDead)
                     gunitList.Add(unit);
             }
 
@@ -837,7 +841,8 @@ namespace Glider.Common.Objects
 
         public static bool IsObjectPresent(ulong GUID)
         {
-            return GetAll().ContainsKey(GUID);
+            var all = GetAll();
+            return all != null && all.ContainsKey(GUID);
         }
 
         public static bool IsObjectPresent(long GUID)
@@ -1013,7 +1018,14 @@ namespace Glider.Common.Objects
                     }
 
                     ++foundObjectCount;
-                    currentObjectAddress = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+                    uint nextAddr;
+                    uint rawNextAddr;
+                    bool reachedListEnd;
+                    if (!TryReadNextObjectPointer(currentObjectAddress, out nextAddr, out reachedListEnd, out rawNextAddr))
+                        break;
+                    if (reachedListEnd)
+                        break;
+                    currentObjectAddress = nextAddr;
                 }
                 else
                 {
@@ -1057,7 +1069,14 @@ namespace Glider.Common.Objects
                         return true;
                     }
                 }
-                currentObjectAddress = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+                uint nextAddr;
+                uint rawNextAddr;
+                bool reachedListEnd;
+                if (!TryReadNextObjectPointer(currentObjectAddress, out nextAddr, out reachedListEnd, out rawNextAddr))
+                    break;
+                if (reachedListEnd)
+                    break;
+                currentObjectAddress = nextAddr;
             }
 
             return false;
@@ -1074,6 +1093,66 @@ namespace Glider.Common.Objects
         {
             var pointer = unchecked((uint)int_0);
             return IsLikelyObjectPointer(pointer);
+        }
+
+        private static T[] QuerySnapshot<T>(bool bypassTimer, Func<GObject, bool> predicate, Func<GObject, T> map)
+            where T : class
+        {
+            var all = GetAll(bypassTimer);
+            if (all == null || all.Count == 0)
+                return Array.Empty<T>();
+
+            var result = new List<T>(all.Count);
+            foreach (var gobject in all.Values)
+            {
+                if (!predicate(gobject))
+                    continue;
+
+                var mapped = map(gobject);
+                if (mapped != null)
+                    result.Add(mapped);
+            }
+
+            return result.ToArray();
+        }
+
+        private static bool IsAttacker(GUnit unit, bool includePet)
+        {
+            if (unit == null || GContext.Main == null || GContext.Main.Me == null)
+                return false;
+
+            var player = GContext.Main.Me;
+            if (unit.IsMonster && unit.TargetGUID == player.GUID)
+                return true;
+
+            if (includePet && player.PetGUID != 0UL && unit.IsMonster && unit.TargetGUID == player.PetGUID)
+                return true;
+
+            return unit.IsPlayer && unit.GUID == player.TargetGUID;
+        }
+
+        private static uint NormalizeObjectPointer(uint pointer)
+        {
+            return pointer & 4294967294U;
+        }
+
+        private static bool TryReadNextObjectPointer(uint currentObjectAddress, out uint nextObjectAddress, out bool reachedListEnd, out uint rawNextPointer)
+        {
+            rawNextPointer = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
+            nextObjectAddress = NormalizeObjectPointer(rawNextPointer);
+            reachedListEnd = nextObjectAddress == 0U || nextObjectAddress == 28U;
+            return reachedListEnd || IsLikelyObjectPointer(nextObjectAddress);
+        }
+
+        private static bool CanAcceptTruncatedTraversal(int traversalObjectCount, int priorSnapshotCount, int candidateSnapshotCount)
+        {
+            if (traversalObjectCount < MinimumStableTraversalCount || candidateSnapshotCount < MinimumStableTraversalCount)
+                return false;
+
+            if (priorSnapshotCount <= 0)
+                return true;
+
+            return candidateSnapshotCount >= Math.Min(priorSnapshotCount, MinimumStableTraversalCount);
         }
 
         private static bool IsLikelyObjectPointer(uint pointer)

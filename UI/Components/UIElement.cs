@@ -252,10 +252,16 @@ public class UIElement
 
     public static UIElement smethod_2(string string_1)
     {
+        return smethod_2(string_1, true);
+    }
+
+    public static UIElement smethod_2(string string_1, bool logIfMissing)
+    {
         var int_1 = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("UIParent"), "uiparent");
         if (int_1 != 0)
-            return smethod_4(int_1, string_1);
-        Logger.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
+            return smethod_4(int_1, string_1, logIfMissing);
+        if (logIfMissing)
+            Logger.smethod_1("! UIParent points to nowhere, can't find \"" + string_1 + "\"");
         return null;
     }
 
@@ -267,10 +273,10 @@ public class UIElement
         var int_29_2 = num2 + MemoryOffsetTable.Instance.GetIntOffset("UIGlueStep");
         var int_1 = GameMemoryAccess.ReadInt32(int_29_1, "uigm1");
         var num3 = GameMemoryAccess.ReadInt32(int_29_2, "uigm2");
-        return int_1 == num3 && int_1 != 0 ? smethod_4(int_1, string_1) : null;
+        return int_1 == num3 && int_1 != 0 ? smethod_4(int_1, string_1, true) : null;
     }
 
-    private static UIElement smethod_4(int int_1, string string_1)
+    private static UIElement smethod_4(int int_1, string string_1, bool logIfMissing)
     {
         do
         {
@@ -303,7 +309,8 @@ public class UIElement
     label_6:
         return new UIElement(int_1);
     label_7:
-        Logger.smethod_1(MessageProvider.smethod_2(820, string_1));
+        if (logIfMissing)
+            Logger.smethod_1(MessageProvider.smethod_2(820, string_1));
         return null;
     }
 
