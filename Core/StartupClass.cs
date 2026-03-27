@@ -201,7 +201,7 @@ public class StartupClass
 
         new GContext();
         InputController.smethod_31(ConfigManager.gclass61_0);
-        smethod_5();
+        ApplyRuntimeConfiguration();
         SpellcastingManager.gclass42_0 = new SpellcastingManager();
         SpellcastingManager.gclass42_0.method_12();
         smethod_7();
@@ -225,7 +225,7 @@ public class StartupClass
             if (!IsAttached)
                 CodeCompiler.smethod_10();
             InputController.smethod_31(ConfigManager.gclass61_0);
-            smethod_5();
+            ApplyRuntimeConfiguration();
             PartyStateManager = new PartyManager();
             PartyStateManager.method_0(ConfigManager.gclass61_0);
             smethod_52();
@@ -248,7 +248,7 @@ public class StartupClass
             GameClass69Instance = new ChatLogManager();
             smethod_30();
             smethod_53();
-            smethod_9();
+            BeginBackgroundInitialization();
         }
         catch (Exception ex)
         {
@@ -387,7 +387,7 @@ public class StartupClass
             StartupLogger.imethod_0();
     }
 
-    public static void smethod_5()
+    public static void ApplyRuntimeConfiguration()
     {
         if (IsAttached)
             return;
@@ -600,19 +600,19 @@ public class StartupClass
         CurrentProfile = ProfileMapping[str];
     }
 
-    public static void smethod_9()
+    public static void BeginBackgroundInitialization()
     {
         isInitializationSuccessful = false;
         MemoryOffsetTable.Instance = new MemoryOffsetTable();
-        InitializationThread = new Thread(smethod_10);
+        InitializationThread = new Thread(RunBackgroundInitializationSafe);
         InitializationThread.Start();
     }
 
-    private static void smethod_10()
+    private static void RunBackgroundInitializationSafe()
     {
         try
         {
-            smethod_11();
+            ExecuteBackgroundInitialization();
         }
         catch (Exception ex)
         {
@@ -620,7 +620,7 @@ public class StartupClass
         }
     }
 
-    private static void smethod_11()
+    private static void ExecuteBackgroundInitialization()
     {
         ApplicationInitializer.InitializeAndValidate(ConfigManager.gclass61_0.method_2("AppKey"), true);
         IsRuntimeAttached = false;
@@ -688,7 +688,7 @@ public class StartupClass
         IsStartupPending = false;
     }
 
-    public static void smethod_14()
+    public static void CompleteAttachSequence()
     {
         Logger.smethod_1("--- Attach code in");
         if (IsAttached)
@@ -714,7 +714,7 @@ public class StartupClass
         if (CurrentGameClass != null)
             CurrentGameClass.OnAttach();
 
-        smethod_17(1, MessageProvider.GetMessage(98));
+        PublishRuntimeMessage(1, MessageProvider.GetMessage(98));
         RefreshStartupUiIfReady();
         EquipmentEnchantmentChecker = new EquipmentEnchantmentChecker();
         EquipmentEnchantmentChecker.method_0();
@@ -781,7 +781,7 @@ public class StartupClass
 
         IsWorldUiReady = false;
         GameClass8Instance = null;
-        smethod_17(1, MessageProvider.GetMessage(99));
+        PublishRuntimeMessage(1, MessageProvider.GetMessage(99));
     }
 
     public static void smethod_16(int int_14)
@@ -803,17 +803,17 @@ public class StartupClass
         }
     }
 
-    public static void smethod_17(int int_14, string string_11)
+    public static void PublishRuntimeMessage(int messageFlags, string message)
     {
         if (RemoteViewer != null)
-            RemoteViewer.method_5(int_14, string_11);
+            RemoteViewer.method_5(messageFlags, message);
         if (GliderUIManager == null)
             return;
-        if ((int_14 & 32) > 0)
-            GliderUIManager.method_1(string_11);
-        if ((int_14 & 2) <= 0)
+        if ((messageFlags & 32) > 0)
+            GliderUIManager.method_1(message);
+        if ((messageFlags & 2) <= 0)
             return;
-        GliderUIManager.method_0(string_11);
+        GliderUIManager.method_0(message);
     }
 
     public static int smethod_18()
@@ -1044,7 +1044,7 @@ public class StartupClass
             return false;
         }
 
-        smethod_14();
+        CompleteAttachSequence();
         return IsRuntimeAttached;
     }
 
@@ -1151,7 +1151,7 @@ public class StartupClass
                         DetachAfterStopRequested = true;
                     if (CurrentGameClass != null)
                         CurrentGameClass.OnStopGlide();
-                    smethod_17(1, MessageProvider.GetMessage(100));
+                    PublishRuntimeMessage(1, MessageProvider.GetMessage(100));
                     if (IsAttached)
                     {
                         var gameProcessManager = GameProcessManager;
@@ -1185,7 +1185,7 @@ public class StartupClass
 
                 if (CurrentGlideMode == GlideMode.Manual)
                 {
-                    smethod_17(1, MessageProvider.GetMessage(101));
+                    PublishRuntimeMessage(1, MessageProvider.GetMessage(101));
                     if (ManualGlideController != null && Thread.CurrentThread == ManualGlideController.thread_0)
                         flag = true;
                     Logger.smethod_1(MessageProvider.GetMessage(102));
@@ -1196,7 +1196,7 @@ public class StartupClass
                 }
 
                 if (bool_42)
-                    smethod_15();
+                    DetachRuntime();
                 StartupLogger.imethod_0();
                 GContext.Main.ReleaseAllKeys();
                 InputController.smethod_21(false);
@@ -1348,7 +1348,7 @@ public class StartupClass
             return;
         }
 
-        smethod_45();
+        TryAutoAttachIfReady();
         LogMainLoopStep("Attach/refresh check completed");
 
         RunResumeHandshakeIfNeeded();
@@ -1494,7 +1494,7 @@ public class StartupClass
 
     private static void EnsureWorldUiReady(GPlayerSelf player)
     {
-        if (IsWorldUiReady || player == null || long_0 <= 0L || player.BaseAddress == 0)
+        if (IsWorldUiReady || player == null || CurrentPlayerGuid == 0UL || player.BaseAddress == 0)
             return;
 
         if (GContext.Main == null || GContext.Main.Interface == null || GContext.Main.Interface.IsPreWorldVisible)
@@ -1893,11 +1893,11 @@ public class StartupClass
         return objectType >= 1 && objectType <= 7;
     }
 
-    public static void smethod_45()
+    public static void TryAutoAttachIfReady()
     {
         if (IsRuntimeAttached || IsDetached || !isInitializationSuccessful || !TryAttachToProcessAndResolveState())
             return;
-        smethod_14();
+        CompleteAttachSequence();
     }
 
     public static void smethod_46()

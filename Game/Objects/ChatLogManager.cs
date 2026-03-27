@@ -119,9 +119,9 @@ public class ChatLogManager
                     }
                     else
                     {
-                        StartupClass.smethod_17(32, str1);
+                        StartupClass.PublishRuntimeMessage(32, str1);
                         var str2 = smethod_0(str1);
-                        StartupClass.smethod_17(8, str2);
+                        StartupClass.PublishRuntimeMessage(8, str2);
                         GContext.Main.FireChatLog(str1, str2);
                         str2.ToLower();
                         var strArray = str2.Split(' ');
@@ -209,7 +209,7 @@ public class ChatLogManager
             var lower1 = MessageProvider.smethod_2(813, string_1).ToLower();
             foreach (var str in string_3)
             {
-                StartupClass.smethod_17(4, str);
+                StartupClass.PublishRuntimeMessage(4, str);
                 if (string_1 != null)
                 {
                     var lower2 = str.ToLower();

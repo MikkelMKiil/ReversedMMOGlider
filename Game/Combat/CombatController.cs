@@ -206,7 +206,7 @@ public class CombatController
     // Original: method_3
     public void ThreadRun()
     {
-        StartupClass.smethod_17(1, Msg(151));
+        StartupClass.PublishRuntimeMessage(1, Msg(151));
         StartupClass.HasQueuedPayload = true;
         StartupClass.IsDetachInProgress = false;
         try

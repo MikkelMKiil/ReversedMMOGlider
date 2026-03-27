@@ -579,14 +579,14 @@ public class RemoteViewerClient
                             StartupClass.KeyboardHook.method_0();
                             SpellcastingManager.gclass42_0.method_12();
                             InputController.smethod_31(ConfigManager.gclass61_0);
-                            StartupClass.smethod_5();
+                            StartupClass.ApplyRuntimeConfiguration();
                             StartupClass.PartyStateManager.method_0(ConfigManager.gclass61_0);
                             if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.PartyStateManager.bool_4 ||
                                 !StartupClass.isInitializationSuccessful)
                             {
                                 StartupClass.PartyStateManager.bool_4 = false;
                                 StartupClass.DetachRuntime();
-                                StartupClass.smethod_9();
+                                StartupClass.BeginBackgroundInitialization();
                             }
 
                             method_6("Success: loaded config\r\n");

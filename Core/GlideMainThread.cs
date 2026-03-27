@@ -81,7 +81,7 @@ public class GlideMainThread
             }
             else
             {
-                StartupClass.smethod_17(1, MessageProvider.GetMessage(308));
+                StartupClass.PublishRuntimeMessage(1, MessageProvider.GetMessage(308));
                 StartupClass.GameClass69Instance.method_9(unit.Name);
                 SpellcastingManager.gclass42_0.method_23();
                 GContext.Main.Me.SetTargetName(unit.Name);

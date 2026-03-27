@@ -99,7 +99,7 @@ public sealed class Logger
         if (uiSink != null)
             uiSink.OnLogMessage(string_0);
         else
-            StartupClass.smethod_17(2, string_0);
+            StartupClass.PublishRuntimeMessage(2, string_0);
     }
 
     public void imethod_3(string string_0)

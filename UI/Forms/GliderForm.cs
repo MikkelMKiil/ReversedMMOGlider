@@ -1038,7 +1038,7 @@ public class GliderForm : Form, Logger.IUiSink
         }
         if (string_2.StartsWith("[Debug]"))
             return;
-        StartupClass.smethod_17(2, string_2);
+        StartupClass.PublishRuntimeMessage(2, string_2);
     }
 
     public void OnLoggerRefreshRequested()
@@ -1277,7 +1277,7 @@ public class GliderForm : Form, Logger.IUiSink
             Logger.smethod_1("- Need offsets");
         StartupClass.PartyStateManager.bool_4 = false;
         StartupClass.DetachRuntime();
-        StartupClass.smethod_9();
+        StartupClass.BeginBackgroundInitialization();
     }
 
     private void ConfigButton_Click(object sender, EventArgs e)
@@ -1298,7 +1298,7 @@ public class GliderForm : Form, Logger.IUiSink
             this.method_4();
             StartupClass.KeyboardHook.method_0();
             InputController.smethod_31(ConfigManager.gclass61_0);
-            StartupClass.smethod_5();
+            StartupClass.ApplyRuntimeConfiguration();
             StartupClass.PartyStateManager.method_0(ConfigManager.gclass61_0);
             if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.PartyStateManager.bool_4 || !StartupClass.isInitializationSuccessful)
             {
@@ -1310,7 +1310,7 @@ public class GliderForm : Form, Logger.IUiSink
                     Logger.smethod_1("- Need offsets");
                 StartupClass.PartyStateManager.bool_4 = false;
                 StartupClass.DetachRuntime();
-                StartupClass.smethod_9();
+                StartupClass.BeginBackgroundInitialization();
             }
             if (StartupClass.CurrentGameClass != null)
                 this.LabelManaHeader_1.Text = StartupClass.CurrentGameClass.PowerLabel + ":";
