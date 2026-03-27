@@ -215,10 +215,9 @@
     <Compile Include="Game\GliderCommon\DefaultScripts\OnGameFirstSeen.cs" />
     <Compile Include="Game\GliderCommon\DefaultScripts\OnGliderStart.cs" />
     <Compile Include="Game\GliderCommon\DefaultScripts\OnHearth.cs" />
+    <Compile Include="Game\Movement\CameraProjection.cs" />
     <Compile Include="Game\Movement\CameraRotator.cs" />
-    <Compile Include="Game\Movement\CameraRotatorExtensions.cs" />
     <Compile Include="Game\Movement\FlightPointManager.cs" />
-    <Compile Include="Game\Movement\WorldToScreenProjector.cs" />
     <Compile Include="Game\Objects\ChatLogManager.cs" />
     <Compile Include="Game\Objects\DebuffDatabase.cs" />
     <Compile Include="Game\Objects\DebuffEntry.cs" />
