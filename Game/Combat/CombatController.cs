@@ -85,7 +85,7 @@ public class CombatController
     private string Msg(int id, params object[] args) => args.Length > 0 ? MessageProvider.smethod_2(id, args) : MessageProvider.GetMessage(id);
     private void LogMsg(int id, params object[] args) => Log(Msg(id, args));
     private void LogDbgMsg(int id, params object[] args) => LogDbg(Msg(id, args));
-    private void Sleep(int ms) => StartupClass.smethod_39(ms);
+    private void Sleep(int ms) => StartupClass.SleepMilliseconds(ms);
 
     // Original: method_0
     private void Initialize()
@@ -111,7 +111,7 @@ public class CombatController
             _stuckLimit = ConfigManager.gclass61_0.method_3("StuckLimit");
             StartupClass.ProfileIdToProfileMap.Clear();
             Sleep(200);
-            StartupClass.ginterface0_0.imethod_0();
+            StartupClass.StartupLogger.imethod_0();
 
             _partyManager = PartyManager.gclass54_0;
             if (GContext.Main.MouseSpin)
@@ -128,7 +128,7 @@ public class CombatController
                 StartupClass.CurrentGameClass.ResetBuffs();
 
             SpellcastingManager.gclass42_0.method_23();
-            _currentProfile = StartupClass.gclass48_0?.method_6() ?? StartupClass.gprofile_0;
+            _currentProfile = StartupClass.ProfileGroupStateManager?.method_6() ?? StartupClass.ActiveProfile;
 
             _chatQueued = true;
             _botThread = new Thread(ThreadRun);
@@ -152,7 +152,7 @@ public class CombatController
             if (StartupClass.isTimeAdded && DateTime.Now > StartupClass.expiryTime) return;
 
             _killsOrLoots = 0;
-            PlayerTracker.dateTime_1 = StartupClass.dateTime_0 = DateTime.Now;
+            PlayerTracker.dateTime_1 = StartupClass.SessionStartTime = DateTime.Now;
             _maxResurrects = int.Parse(ConfigManager.gclass61_0.method_2("MaxResurrect"));
             _harvestRange = int.Parse(ConfigManager.gclass61_0.method_2("HarvestRange"));
             _mailboxRange = int.Parse(ConfigManager.gclass61_0.method_2("MailBoxRange"));
@@ -207,27 +207,27 @@ public class CombatController
     public void ThreadRun()
     {
         StartupClass.smethod_17(1, Msg(151));
-        StartupClass.bool_28 = true;
-        StartupClass.bool_32 = false;
+        StartupClass.HasQueuedPayload = true;
+        StartupClass.IsDetachInProgress = false;
         try
         {
-            if (StartupClass.bool_19) return;
+            if (StartupClass.HasClassLoadMismatch) return;
             GlideSetupAndLoopDispatch();
         }
         catch (ThreadInterruptedException)
         {
             LogDbg("Catching ThreadInterrupted in GliderThread");
-            if (!StartupClass.bool_28) return;
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0) SoundPlayer.smethod_0("GlideStop.wav");
+            if (!StartupClass.HasQueuedPayload) return;
+            if ((DateTime.Now - StartupClass.SessionStartTime).TotalMinutes >= 2.0) SoundPlayer.smethod_0("GlideStop.wav");
 
-            if (!ConfigManager.gclass61_0.method_5("RelogEnabled") || !StartupClass.IsSomeConditionMet || StartupClass.string_9 == null || !StartupClass.bool_32) return;
+            if (!ConfigManager.gclass61_0.method_5("RelogEnabled") || !StartupClass.IsSomeConditionMet || StartupClass.AutoLoginSetting == null || !StartupClass.IsDetachInProgress) return;
             Log("Queuing up relog");
-            StartupClass.gspellTimer_1 = new GSpellTimer((int)(StartupClass.random_0.NextDouble() * 8000.0) + 8000, false);
-            StartupClass.bool_31 = true;
+            StartupClass.AutoLoginTimer = new GSpellTimer((int)(StartupClass.RandomGenerator.NextDouble() * 8000.0) + 8000, false);
+            StartupClass.IsAutoLoginArmed = true;
         }
         catch (Exception ex)
         {
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 2.0 && StartupClass.bool_28) SoundPlayer.smethod_0("GlideStop.wav");
+            if ((DateTime.Now - StartupClass.SessionStartTime).TotalMinutes >= 2.0 && StartupClass.HasQueuedPayload) SoundPlayer.smethod_0("GlideStop.wav");
             LogMsg(668, ex.Message, ex.StackTrace);
             try { StartupClass.smethod_27(false, "GThreadException"); } catch (ThreadInterruptedException) { }
         }
@@ -250,7 +250,7 @@ public class CombatController
     {
         GameMemoryAccess.GetCursorPosition();
         InputController.smethod_21(true);
-        _stopLooting = _needsVendorRun = StartupClass.bool_21 = false;
+        _stopLooting = _needsVendorRun = StartupClass.HasSessionWarning = false;
         LogMsg(152); LogDbgMsg(153);
 
         var location = _me.Location;
@@ -311,7 +311,7 @@ public class CombatController
         if (StartupClass.IsGliderInitialized && StartupClass.MainForm != null && GameMemoryAccess.GetForegroundWindow() == StartupClass.MainApplicationHandle)
             StartupClass.MainForm.Activate();
 
-        StartupClass.int_7 = StartupClass.int_8 = StartupClass.int_9 = 0;
+        StartupClass.DynamicClassCount = StartupClass.CompiledClassCount = StartupClass.InternalClassCount = 0;
         _generalList = new ArrayList();
         StartupClass.IsGliderRunning = false;
 
@@ -330,7 +330,7 @@ public class CombatController
 
         if (_me.Location.GetDistanceTo(location) > 0.5) SpellcastingManager.gclass42_0.method_0("Common.Back");
 
-        if (StartupClass.gclass48_0 != null) StartupClass.gclass48_0.method_18();
+        if (StartupClass.ProfileGroupStateManager != null) StartupClass.ProfileGroupStateManager.method_18();
         else if (_partyManager.genum7_0 == PartyRole.const_2) AssistModeLoop();
         else if (_currentProfile.NaturalRun && !_currentProfile.Fishing) NaturalRunLoop();
         else
@@ -370,7 +370,7 @@ public class CombatController
             else
             {
                 if (!_currentProfile.IgnoreAttackers) ProfileGroupManager.smethod_4();
-                _currentProfile = StartupClass.gprofile_0;
+                _currentProfile = StartupClass.ActiveProfile;
                 continue;
             }
 
@@ -395,7 +395,7 @@ public class CombatController
         LogMsg(157);
         if (ConfigManager.gclass61_0.method_2("Resurrect") != "True") { LogMsg(158); ReleaseCorpse(); StartupClass.smethod_27(false, "ResurrectConfigOff"); return; }
         if (_currentProfile.GhostWaypoints.Count == 0) { LogMsg(159); ReleaseCorpse(); StartupClass.smethod_27(false, "NoGhostWPs"); return; }
-        if (StartupClass.int_9 >= _maxResurrects) { LogMsg(160); ReleaseCorpse(); StartupClass.smethod_27(false, "TooManyDeaths"); return; }
+        if (StartupClass.InternalClassCount >= _maxResurrects) { LogMsg(160); ReleaseCorpse(); StartupClass.smethod_27(false, "TooManyDeaths"); return; }
         GhostRecovery(GPlayerSelf.Me.Location, true);
     }
 
@@ -427,7 +427,7 @@ public class CombatController
         DialogMonitor.smethod_2();
         BandageAndRest();
         bool healed = StartupClass.CurrentGameClass.CheckPartyHeal(null);
-        bool buffed = StartupClass.gclass54_0.genum7_0 != PartyRole.const_0 && StartupClass.CurrentGameClass.CheckPartyBuffs();
+        bool buffed = StartupClass.PartyStateManager.genum7_0 != PartyRole.const_0 && StartupClass.CurrentGameClass.CheckPartyBuffs();
         StartupClass.CurrentGameClass.RunningAction();
 
         if (healed || buffed) RestAndBuff();
@@ -512,11 +512,11 @@ public class CombatController
                         return 0; // Return pattern matched original logic
                     }
                     LogDbgMsg(670, target.GUID.ToString("x"), _me.TargetGUID.ToString("x"));
-                    StartupClass.gprofile_0.AddToBlacklist(target.GUID);
+                    StartupClass.ActiveProfile.AddToBlacklist(target.GUID);
                     LogMsg(175); ClearTarget(); LogDbgMsg(176); return 0;
                 }
                 LogMsg(174);
-                StartupClass.gprofile_0.AddToBlacklist(target.GUID);
+                StartupClass.ActiveProfile.AddToBlacklist(target.GUID);
                 return 0;
             }
             LogDbgMsg(171); return 0;
@@ -564,7 +564,7 @@ public class CombatController
         if (unit.GUID == GContext.Main.Me.PetGUID || unit.IsDead) { ClearTarget(); Sleep(1500); ResetJumpTimer(); return; }
 
         GContext.Main.Me.LockCombatLocation();
-        if (StartupClass.gclass79_0 != null) StartupClass.gclass79_0.gunit_0 = unit;
+        if (StartupClass.RemoteViewer != null) StartupClass.RemoteViewer.gunit_0 = unit;
         StartupClass.GameClass69Instance.method_9(unit.Name);
 
         if (!SpellcastingManager.gclass42_0.method_15("Common.PreCombat"))
@@ -586,8 +586,8 @@ public class CombatController
                 ClearTarget();
                 if (ConfigManager.gclass61_0.method_5("StopOnVanish")) { SoundPlayer.smethod_0("GMWhisper.wav"); GContext.Main.Movement.LookConfused(); StartupClass.smethod_27(false, "TargetVanished"); }
                 return;
-            case GCombatResult.Success: StartupClass.int_7++; break;
-            case GCombatResult.SuccessWithAdd: StartupClass.int_7++; hasAdd = true; break;
+            case GCombatResult.Success: StartupClass.DynamicClassCount++; break;
+            case GCombatResult.SuccessWithAdd: StartupClass.DynamicClassCount++; hasAdd = true; break;
             case GCombatResult.Died: return;
             case GCombatResult.Bugged: ClearTarget(); Thread.Sleep(1000); ClearTarget(); _currentProfile.ForceBlacklist(unit.GUID); return;
             case GCombatResult.OtherPlayerTag: HandleBadTag(unit); return;
@@ -611,10 +611,10 @@ public class CombatController
 
         if (_partyManager.genum7_0 == PartyRole.const_1) Sleep(_partyManager.int_3 * 1000);
 
-        if (CheckPartyAggroOrSelfAggro()) { if (StartupClass.gclass79_0 != null) StartupClass.gclass79_0.gunit_0 = null; return; }
+        if (CheckPartyAggroOrSelfAggro()) { if (StartupClass.RemoteViewer != null) StartupClass.RemoteViewer.gunit_0 = null; return; }
 
         FixCameraPitch();
-        if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 20.0 && MemoryOffsetTable.Instance.HasOffset("ArmorAlt2") && !char.IsDigit(ConfigManager.gclass61_0.method_2("AppKey")[0])) Environment.Exit(0);
+        if ((DateTime.Now - StartupClass.SessionStartTime).TotalMinutes >= 20.0 && MemoryOffsetTable.Instance.HasOffset("ArmorAlt2") && !char.IsDigit(ConfigManager.gclass61_0.method_2("AppKey")[0])) Environment.Exit(0);
 
         if (_me.Experience > _lastExperience)
         {
@@ -624,7 +624,7 @@ public class CombatController
         }
         _lastExperience = _me.Experience;
 
-        if (StartupClass.gclass79_0 != null) StartupClass.gclass79_0.gunit_0 = null;
+        if (StartupClass.RemoteViewer != null) StartupClass.RemoteViewer.gunit_0 = null;
         if (_me.Health > 0.35 && shouldLoot)
         {
             var lootWait = new GameTimer(3000); lootWait.method_4();
@@ -639,14 +639,14 @@ public class CombatController
     // Original: method_77
     private bool ValidateAmbushTarget(GUnit unit)
     {
-        if (unit.IsTargetingMe || unit.IsTargetingMyPet || StartupClass.gclass54_0.method_13(unit.TargetGUID)) return true;
+        if (unit.IsTargetingMe || unit.IsTargetingMyPet || StartupClass.PartyStateManager.method_13(unit.TargetGUID)) return true;
         if (!unit.IsMonster || unit.IsDead) return false;
 
         bool likelyAggro = unit.DistanceToSelf <= StartupClass.CurrentGameClass.PullDistance + _extraPullRange + 8;
         if (likelyAggro && (unit.Reaction == GReaction.Hostile || unit.Reaction == GReaction.Unknown)) return true;
 
         unit.Refresh(true); _me.Refresh(true);
-        if (unit.IsTargetingMe || unit.IsTargetingMyPet || StartupClass.gclass54_0.method_13(unit.TargetGUID)) return true;
+        if (unit.IsTargetingMe || unit.IsTargetingMyPet || StartupClass.PartyStateManager.method_13(unit.TargetGUID)) return true;
 
         return unit.IsInCombat && (unit.Reaction == GReaction.Hostile || unit.Reaction == GReaction.Unknown) && unit.DistanceToSelf <= StartupClass.CurrentGameClass.PullDistance + _extraPullRange;
     }
@@ -665,7 +665,7 @@ public class CombatController
     {
         if (releaseSpirt)
         {
-            LogMsg(188); StartupClass.int_9++; ReleaseCorpse();
+            LogMsg(188); StartupClass.InternalClassCount++; ReleaseCorpse();
             if (!WaitForTeleportAfterRelease()) StartupClass.smethod_27(false, "NoTeleportAfterRelease");
         }
 
@@ -748,19 +748,19 @@ public class CombatController
     public void HearthAndExit(bool isHearth)
     {
         int retries = 1;
-        GContext.Main.ReleaseSpinRun(); StartupClass.bool_21 = true; StartupClass.CurrentGameClass.LeaveForm();
+        GContext.Main.ReleaseSpinRun(); StartupClass.HasSessionWarning = true; StartupClass.CurrentGameClass.LeaveForm();
         while (retries <= 3)
         {
-            ClearTarget(); StartupClass.gclass36_1.method_4(); GContext.Main.CastSpell("Common.Hearth");
+            ClearTarget(); StartupClass.SessionHeartbeatTimer.method_4(); GContext.Main.CastSpell("Common.Hearth");
             if (_me.TargetGUID != 0L)
             {
-                if (_me.IsUnderAttack) { GContext.Main.SendKey("Common.Back"); StartupClass.gclass73_0.method_12(true); }
+                if (_me.IsUnderAttack) { GContext.Main.SendKey("Common.Back"); StartupClass.ActiveCombatController.method_12(true); }
                 retries++;
             }
             else break;
         }
         if (retries > 3) StartupClass.smethod_27(false, "HearthFutility");
-        if (!isHearth) { StartupClass.string_9 = null; StartupClass.bool_31 = false; StartupClass.smethod_27(false, "HearthAndExit"); throw new ThreadInterruptedException(); }
+        if (!isHearth) { StartupClass.AutoLoginSetting = null; StartupClass.IsAutoLoginArmed = false; StartupClass.smethod_27(false, "HearthAndExit"); throw new ThreadInterruptedException(); }
         StartupClass.GameMemoryWriter.method_2("OnHearth", false);
     }
 
@@ -797,7 +797,7 @@ public class CombatController
     // Original: method_28
     public GameTimer CreateJumpTimer()
     {
-        var timer = new GameTimer((!_jumpMoreEnabled ? 40 + StartupClass.random_0.Next() % 160 : 10 + StartupClass.random_0.Next() % 30) * 1000);
+        var timer = new GameTimer((!_jumpMoreEnabled ? 40 + StartupClass.RandomGenerator.Next() % 160 : 10 + StartupClass.RandomGenerator.Next() % 30) * 1000);
         timer.method_4(); return timer;
     }
 
@@ -813,7 +813,7 @@ public class CombatController
 
             if (ProfileGroupManager.smethod_3())
             {
-                _currentProfile = StartupClass.gprofile_0;
+                _currentProfile = StartupClass.ActiveProfile;
                 if (!_currentProfile.IgnoreAttackers) ProfileGroupManager.smethod_4();
             }
 
@@ -868,11 +868,11 @@ public class CombatController
         RandomSleep(200, 600);
         if (!bobber.IsCursorOnObject) { Sleep(1000); return; }
 
-        StartupClass.int_8++; HoldShiftForLoot(); RandomSleep(2000, 5000);
+        StartupClass.CompiledClassCount++; HoldShiftForLoot(); RandomSleep(2000, 5000);
     }
 
     // Original: method_34
-    public void RandomSleep(int min, int max) => Sleep(StartupClass.random_0.Next() % (max - min) + min);
+    public void RandomSleep(int min, int max) => Sleep(StartupClass.RandomGenerator.Next() % (max - min) + min);
 
     // Original: method_36
     private void CastIfReady(GameTimer timer, string spell)
@@ -978,7 +978,7 @@ public class CombatController
         {
             if (GContext.Main.Movement.CompareHeadings(_me.Heading, _me.Location.GetHeadingTo(nextTarget.Location)) > Math.PI / 6.0) GContext.Main.ReleaseRun();
             GContext.Main.ReleaseSpin(); nextTarget.Face(); _stuckTimer.method_4();
-            if (!nextTarget.SetAsTarget(false)) { ClearTarget(); StartupClass.gprofile_0.AddToBlacklist(nextTarget.GUID); return true; }
+            if (!nextTarget.SetAsTarget(false)) { ClearTarget(); StartupClass.ActiveProfile.AddToBlacklist(nextTarget.GUID); return true; }
             StartupClass.CurrentGameClass.TargetAcquired(nextTarget); target = null; EngageTarget(false);
             _lastMovementLoc = _me.Location; _currentProfile.ConsiderWaypointSkip(); return true;
         }
@@ -993,13 +993,13 @@ public class CombatController
         {
             if (ConfigManager.gclass61_0.method_5("StrafeObstacles") && !strafeFlag)
             {
-                var dir = StartupClass.random_0.Next() % 2 == 0 ? "Common.StrafeRight" : "Common.StrafeLeft";
+                var dir = StartupClass.RandomGenerator.Next() % 2 == 0 ? "Common.StrafeRight" : "Common.StrafeLeft";
                 SpellcastingManager.gclass42_0.method_1(dir); Sleep(1200); SpellcastingManager.gclass42_0.method_2(dir); strafeFlag = true;
             }
             else
             {
                 GContext.Main.ReleaseSpinRun(); Sleep(600); GContext.Main.PressKey("Common.Back"); Sleep(2000); GContext.Main.ReleaseKey("Common.Back");
-                var rads = (StartupClass.random_0.Next() % 2 == 0 ? -1.0 : 1.0) * (Math.PI / 2.0);
+                var rads = (StartupClass.RandomGenerator.Next() % 2 == 0 ? -1.0 : 1.0) * (Math.PI / 2.0);
                 GContext.Main.Movement.SetHeading(GContext.Main.Movement.AdjustHeading(_me.Heading, rads)); GContext.Main.StartRun(); RandomSleep(1000, 2500);
                 _stuckTimer.method_4(); _stuckCheckLoc = null;
             }
@@ -1024,30 +1024,30 @@ public class CombatController
         if (dist < threshold && target == null)
         {
             stuckFlag = strafeFlag = false; _currentProfile.OneShotStepCheck++; _currentProfile.ConsumeCurrentWaypoint(); stuckCount = 0;
-            if (_currentProfile.OneShotHit && StartupClass.gclass48_0 == null) { GContext.Main.ReleaseSpinRun(); StartupClass.smethod_27(false, "EndOfOneShotProfile"); }
+            if (_currentProfile.OneShotHit && StartupClass.ProfileGroupStateManager == null) { GContext.Main.ReleaseSpinRun(); StartupClass.smethod_27(false, "EndOfOneShotProfile"); }
             GContext.Main.ReleaseSpin(); _waypointAdvances++; _stuckTimer.method_4(); _stuckCheckLoc = null;
         }
 
         if (dist > 15.0 && !GContext.Main.IsSpinning && _jumpTimer.method_3())
         {
             SpellcastingManager.gclass42_0.method_0("Common.Jump"); Sleep(1800); ResetJumpTimer();
-            if (_jumpMoreEnabled && StartupClass.random_0.Next() % 10 == 0) _jumpTimer.method_5();
+            if (_jumpMoreEnabled && StartupClass.RandomGenerator.Next() % 10 == 0) _jumpTimer.method_5();
         }
         else if (dist > 20.0 && _strafeEnabled && _strafeTimer.method_3() && GContext.Main.IsRunning)
         {
-            if (StartupClass.random_0.Next() % 10 == 0)
+            if (StartupClass.RandomGenerator.Next() % 10 == 0)
             {
-                var dir = StartupClass.random_0.Next() % 2 == 0 ? "Common.StrafeLeft" : "Common.StrafeRight";
+                var dir = StartupClass.RandomGenerator.Next() % 2 == 0 ? "Common.StrafeLeft" : "Common.StrafeRight";
                 SpellcastingManager.gclass42_0.method_1(dir); RandomSleep(500, 1200); SpellcastingManager.gclass42_0.method_2(dir);
             }
-            _strafeTimer = new GameTimer(1000 + StartupClass.random_0.Next() % 1500); _strafeTimer.method_4();
+            _strafeTimer = new GameTimer(1000 + StartupClass.RandomGenerator.Next() % 1500); _strafeTimer.method_4();
         }
     }
 
     // Original: method_40
     protected bool RunFromAvoids()
     {
-        if (StartupClass.gprofile_0.AvoidList != null)
+        if (StartupClass.ActiveProfile.AvoidList != null)
         {
             var avoidTarget = GetNearestAvoidMonster();
             if (avoidTarget != null && avoidTarget.DistanceToSelf < 32.0) { AvoidMonster(avoidTarget); return true; }
@@ -1075,7 +1075,7 @@ public class CombatController
         if (mob.DistanceToSelf < 20.0 || Math.Abs(GContext.Main.Movement.CompareHeadings(_me.Heading, headingTo)) < Math.PI / 2.0) useBack = false;
 
         double targetHeading = _me.Location.GetHeadingTo(mob.Location);
-        targetHeading += (StartupClass.random_0.NextDouble() * (Math.PI / 2.0) - Math.PI / 4.0);
+        targetHeading += (StartupClass.RandomGenerator.NextDouble() * (Math.PI / 2.0) - Math.PI / 4.0);
         if (targetHeading < 0.0) targetHeading += 2.0 * Math.PI;
         if (targetHeading >= Math.PI) targetHeading -= 2.0 * Math.PI;
 
@@ -1104,7 +1104,7 @@ public class CombatController
         GContext.Main.ReleaseSpinRun();
         GContext.Main.Movement.MoveToLocation(node.Location, GContext.Main.MeleeDistance, false);
 
-        if (node.DistanceToSelf > GContext.Main.MeleeDistance) { StartupClass.sortedList_2.Add(node.GUID, ""); return true; }
+        if (node.DistanceToSelf > GContext.Main.MeleeDistance) { StartupClass.RuntimeProfileCache.Add(node.GUID, ""); return true; }
 
         _me.Refresh();
         if (CheckPartyAggroOrSelfAggro()) return true;
@@ -1115,10 +1115,10 @@ public class CombatController
     public void DoHarvestNode(GNode node)
     {
         FixCameraPitch();
-        if ((node.IsFlower && !_me.HasHerbalism) || (node.IsMineral && !_me.HasMining)) { StartupClass.sortedList_2.Add(node.GUID, ""); return; }
+        if ((node.IsFlower && !_me.HasHerbalism) || (node.IsMineral && !_me.HasMining)) { StartupClass.RuntimeProfileCache.Add(node.GUID, ""); return; }
 
         node.Hover();
-        if (!CanHarvestCursor(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"))) { StartupClass.sortedList_2.Add(node.GUID, ""); return; }
+        if (!CanHarvestCursor(GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("CursorType"), "CursorType"))) { StartupClass.RuntimeProfileCache.Add(node.GUID, ""); return; }
 
         for (int i = 0; i < 9; i++)
         {
@@ -1129,9 +1129,9 @@ public class CombatController
                 while (_me.IsCasting) Thread.Sleep(200);
                 Thread.Sleep(2000);
             }
-            else { StartupClass.sortedList_2.Add(node.GUID, ""); return; }
+            else { StartupClass.RuntimeProfileCache.Add(node.GUID, ""); return; }
         }
-        StartupClass.sortedList_2.Add(node.GUID, "");
+        StartupClass.RuntimeProfileCache.Add(node.GUID, "");
     }
 
     // Original: method_46
@@ -1328,7 +1328,7 @@ public class CombatController
                 if (ConfigManager.gclass61_0.method_5("RunPostLoot")) _runPostLoot = true;
                 else GContext.Main.CastSpell("Common.PostLoot");
             }
-            StartupClass.int_8++;
+            StartupClass.CompiledClassCount++;
             if (StartupClass.SomeIntegerValue > 0) StartupClass.SomeIntegerValue--;
             if (!_me.HasSkinning || !ConfigManager.gclass61_0.method_5("AutoSkin")) corpseTracker.method_1();
         }
@@ -1340,7 +1340,7 @@ public class CombatController
     {
         SoundPlayer.smethod_0("BadTag.wav"); StartupClass.SomeIntegerValue++;
         if (GContext.Main.Me.Pet != null) SpellcastingManager.gclass42_0.method_0("Common.PetFollow");
-        if (StartupClass.SomeIntegerValue >= ConfigManager.gclass61_0.method_3("BadTagLimit")) StartupClass.gclass73_0.bool_2 = true;
+        if (StartupClass.SomeIntegerValue >= ConfigManager.gclass61_0.method_3("BadTagLimit")) StartupClass.ActiveCombatController.bool_2 = true;
 
         if (!unit.IsTargetingMe && !ConfigManager.gclass61_0.method_5("IgnoreTags")) ClearTarget();
         else
@@ -1364,7 +1364,7 @@ public class CombatController
     private void FixCameraPitch()
     {
         if (!GContext.Main.MouseSpin || _gameCamera == null || _originalCameraPitch == 0.0 || Math.Abs(_gameCamera.Pitch - _originalCameraPitch) <= Math.PI / 36.0) return;
-        GContext.Main.ReleaseSpinRun(); StartupClass.gclass68_0.method_16(_gameCamera, _originalCameraPitch);
+        GContext.Main.ReleaseSpinRun(); StartupClass.CameraController.method_16(_gameCamera, _originalCameraPitch);
     }
 
     // Original: method_61
@@ -1500,7 +1500,7 @@ public class CombatController
     private void SellJunk()
     {
         _sellItems = GPlayerSelf.Me.GetBagCollection(GItemBagAction.Sell);
-        if (_sellItems.Length > 0) foreach (var item in _sellItems) { Thread.Sleep(500 + StartupClass.random_0.Next() % 1000); item.Click(true); }
+        if (_sellItems.Length > 0) foreach (var item in _sellItems) { Thread.Sleep(500 + StartupClass.RandomGenerator.Next() % 1000); item.Click(true); }
     }
 
     // Original: method_75
@@ -1615,3 +1615,4 @@ public class CombatController
     public void method_58() { /* no-op compatibility */ }
 
 }
+

@@ -356,7 +356,7 @@ namespace Glider.Common.Objects
             var longList = new List<ulong>();
             for (var index = 1; index < 5; ++index)
             {
-                var num1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
+                var num1 = StartupClass.PlayerOffsetManager.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
                 var num2 = GameMemoryAccess.ReadInt64(Me.StorageAddress + num1, "BagGuid1");
                 longList.Add(num2);
             }
@@ -429,3 +429,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

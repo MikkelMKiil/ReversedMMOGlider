@@ -34,7 +34,7 @@ public class DialogMonitor
 
     public static void smethod_1()
     {
-        if (!StartupClass.bool_13)
+        if (!StartupClass.IsRuntimeAttached)
             return;
         if (gclass8_0 != null && gclass8_0.method_10())
         {
@@ -104,9 +104,9 @@ public class DialogMonitor
         }
 
         GContext.Main.ReleaseAllKeys();
-        Thread.Sleep(StartupClass.random_0.Next() % 1000 + 1000);
+        Thread.Sleep(StartupClass.RandomGenerator.Next() % 1000 + 1000);
         InputController.TapKey(27);
-        Thread.Sleep(StartupClass.random_0.Next() % 800 + 500);
+        Thread.Sleep(StartupClass.RandomGenerator.Next() % 800 + 500);
         if (smethod_3(string_1))
             return;
         ++int_3;
@@ -114,6 +114,7 @@ public class DialogMonitor
         if (int_3 < ConfigManager.gclass61_0.method_3("MaxPopups"))
             return;
         Logger.LogMessage(MessageProvider.smethod_2(855, ConfigManager.gclass61_0.method_3("MaxPopups"), int_3));
-        StartupClass.gclass73_0.method_21(true);
+        StartupClass.ActiveCombatController.method_21(true);
     }
 }
+

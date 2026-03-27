@@ -521,7 +521,7 @@ public class ProfileWizard : Form
                 break;
             case Enum0.const_8:
                 gprofile_0.Save(string_0);
-                StartupClass.smethod_1(string_0);
+                StartupClass.TryLoadProfileOrProfileGroup(string_0);
                 method_2(PanelDone);
                 PrevButton.Enabled = false;
                 NextButton.Text = MessageProvider.smethod_4("ProfileWizard.Finished");
@@ -652,7 +652,7 @@ public class ProfileWizard : Form
     {
         try
         {
-            if (!StartupClass.bool_13 || enum0_0 == Enum0.const_0)
+            if (!StartupClass.IsRuntimeAttached || enum0_0 == Enum0.const_0)
                 return;
             switch (enum0_0)
             {
@@ -903,3 +903,5 @@ public class ProfileWizard : Form
         const_8
     }
 }
+
+

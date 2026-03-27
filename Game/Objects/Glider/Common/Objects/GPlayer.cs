@@ -182,7 +182,7 @@ namespace Glider.Common.Objects
                 if (HasAura(buffSnapshot, 768))
                     return GStance.Cat;
                 if (_stealthAuras == null)
-                    _stealthAuras = StartupClass.gclass63_0.method_13(1784);
+                    _stealthAuras = StartupClass.SpellbookStateManager.method_13(1784);
                 return HasAura(buffSnapshot, _stealthAuras) ? GStance.Stealth : GStance.None;
             }
         }
@@ -274,3 +274,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

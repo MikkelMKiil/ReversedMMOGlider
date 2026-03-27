@@ -151,7 +151,7 @@ public class GliderForm : Form, Logger.IUiSink
         Application.ThreadException += new ThreadExceptionEventHandler(this.method_19);
         GliderForm.gliderForm_0 = this;
         Logger.Instance.AttachUiSink(this);
-        StartupClass.ginterface0_0 = Logger.Instance;
+        StartupClass.StartupLogger = Logger.Instance;
         this.string_0 = "";
         this.method_13();
         StartupClass.MainForm = (Form)this;
@@ -261,11 +261,11 @@ public class GliderForm : Form, Logger.IUiSink
     public void method_4()
     {
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
-            this.Text = StartupClass.string_5 == null ? MessageProvider.smethod_4("GliderForm.StatusLabel!NewProfile") : StartupClass.string_5;
-        else if (StartupClass.string_5 == null)
+            this.Text = StartupClass.ActiveProfilePath == null ? MessageProvider.smethod_4("GliderForm.StatusLabel!NewProfile") : StartupClass.ActiveProfilePath;
+        else if (StartupClass.ActiveProfilePath == null)
             this.StatusLabel.Text = MessageProvider.smethod_4("GliderForm.StatusLabel!NewProfile");
         else
-            this.StatusLabel.Text = GliderForm.smethod_0(StartupClass.string_5);
+            this.StatusLabel.Text = GliderForm.smethod_0(StartupClass.ActiveProfilePath);
     }
 
     protected override void Dispose(bool disposing)
@@ -273,12 +273,12 @@ public class GliderForm : Form, Logger.IUiSink
         if (disposing)
         {
             if (!StartupClass.IsAttached)
-                StartupClass.DebuffsKnown_string.method_10();
+                StartupClass.KnownDebuffs.method_10();
             StartupClass.smethod_35();
             ConfigManager.gclass61_0.method_8();
             if (KeyboardHookManager.bool_0)
-                StartupClass.gclass24_0.method_17();
-            StartupClass.smethod_15();
+                StartupClass.KeyboardHook.method_17();
+            StartupClass.DetachRuntime();
             if (this.icontainer_0 != null)
                 this.icontainer_0.Dispose();
         }
@@ -289,7 +289,7 @@ public class GliderForm : Form, Logger.IUiSink
     private static void Main()
     {
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-        StartupClass.ginterface0_0 = Logger.Instance;
+        StartupClass.StartupLogger = Logger.Instance;
 
         // Register our global crash handlers to capture and persist richer crash information
         try
@@ -1062,9 +1062,9 @@ public class GliderForm : Form, Logger.IUiSink
     {
         if (ConfigManager.gclass61_0.method_5("AltLayout"))
         {
-            if (StartupClass.glideMode_0 != GlideMode.None)
+            if (StartupClass.CurrentGlideMode != GlideMode.None)
             {
-                StartupClass.bool_28 = false;
+                StartupClass.HasQueuedPayload = false;
                 StartupClass.smethod_27(false, "StopButtonClicked");
             }
             else
@@ -1075,8 +1075,8 @@ public class GliderForm : Form, Logger.IUiSink
         }
         else
         {
-            StartupClass.bool_28 = false;
-            if (StartupClass.glideMode_0 != GlideMode.None)
+            StartupClass.HasQueuedPayload = false;
+            if (StartupClass.CurrentGlideMode != GlideMode.None)
                 StartupClass.smethod_27(false, "StopButtonClicked");
         }
         this.method_16();
@@ -1119,10 +1119,10 @@ public class GliderForm : Form, Logger.IUiSink
     {
         this.method_20();
         this.method_8();
-        if (StartupClass.gclass36_0 != null && StartupClass.gclass36_0.method_3())
+        if (StartupClass.LicenseCheckTimer != null && StartupClass.LicenseCheckTimer.method_3())
         {
-            StartupClass.gclass36_0 = (GameTimer)null;
-            StartupClass.bool_19 = true;
+            StartupClass.LicenseCheckTimer = (GameTimer)null;
+            StartupClass.HasClassLoadMismatch = true;
             gliderForm_0.OnLogMessage(MessageProvider.GetMessage(103));
             StartupClass.smethod_27(false, "Timer1Up");
         }
@@ -1135,7 +1135,7 @@ public class GliderForm : Form, Logger.IUiSink
             this.LogBox.Refresh();
         }
         GPlayerSelf currentPlayer = (GPlayerSelf)null;
-        if (StartupClass.bool_13)
+        if (StartupClass.IsRuntimeAttached)
         {
             GObjectList.SetCacheDirty();
             GObjectList.GetObjects();
@@ -1149,7 +1149,7 @@ public class GliderForm : Form, Logger.IUiSink
             }
         }
 
-        if (StartupClass.bool_13 && currentPlayer != null)
+        if (StartupClass.IsRuntimeAttached && currentPlayer != null)
         {
             this.method_31(currentPlayer);
             GLocation location = currentPlayer.Location;
@@ -1166,7 +1166,7 @@ public class GliderForm : Form, Logger.IUiSink
                 this.method_30(this.SpeedLabel_1, "SpeedLabel", "0");
             }
             this.method_30(this.LabelHealth_1, "LabelHealth", MessageProvider.smethod_2(653, (object)currentPlayer.HealthPoints.ToString(), (object)(int)(currentPlayer.Health * 100.0)));
-            string killsText = MessageProvider.smethod_2(654, (object)StartupClass.int_7, (object)StartupClass.int_8, (object)StartupClass.int_9);
+            string killsText = MessageProvider.smethod_2(654, (object)StartupClass.DynamicClassCount, (object)StartupClass.CompiledClassCount, (object)StartupClass.InternalClassCount);
             bool isCasting = currentPlayer.IsCasting;
             if (isCasting)
                 killsText += " *";
@@ -1184,7 +1184,7 @@ public class GliderForm : Form, Logger.IUiSink
                 this.method_30(this.THealthLabel_1, "THealthLabel", ((int)(target.Health * 100.0)).ToString() + MessageProvider.GetMessage(104));
                 this.method_30(this.TDistanceLabel_1, "TDistanceLabel", Math.Round((double)target.DistanceToSelf, 2).ToString());
                 this.method_30(this.TFactionLabel_1, "TFactionLabel", target.FactionID.ToString());
-                if (StartupClass.gprofile_0.CheckFaction(target.FactionID, true))
+                if (StartupClass.ActiveProfile.CheckFaction(target.FactionID, true))
                 {
                     this.AddFactionButton.Text = "Del Faction";
                     this.method_30(this.FactionLabel, "FactionLabel", MessageProvider.smethod_4("GliderForm.FactionLabel!AlreadyGot"));
@@ -1203,14 +1203,14 @@ public class GliderForm : Form, Logger.IUiSink
                 this.AddFactionButton.Enabled = false;
                 this.method_30(this.FactionLabel, "FactionLabel", MessageProvider.smethod_4("GliderForm.FactionLabel!NoTarget"));
             }
-            if (StartupClass.gclass73_0 != null && StartupClass.gclass73_0.int_8 > 0 && StartupClass.gclass73_0.bool_9)
+            if (StartupClass.ActiveCombatController != null && StartupClass.ActiveCombatController.int_8 > 0 && StartupClass.ActiveCombatController.bool_9)
             {
-                this.method_30(this.XPHour_1, "XPHour", Math.Round((double)StartupClass.gclass73_0.int_8 / (DateTime.Now - StartupClass.dateTime_0).TotalSeconds * 3600.0, 0).ToString());
-                StartupClass.gclass73_0.bool_9 = false;
+                this.method_30(this.XPHour_1, "XPHour", Math.Round((double)StartupClass.ActiveCombatController.int_8 / (DateTime.Now - StartupClass.SessionStartTime).TotalSeconds * 3600.0, 0).ToString());
+                StartupClass.ActiveCombatController.bool_9 = false;
             }
             this.method_18();
         }
-        else if (StartupClass.bool_13)
+        else if (StartupClass.IsRuntimeAttached)
         {
             if (Environment.TickCount - this.int_9 > 1000)
             {
@@ -1219,13 +1219,13 @@ public class GliderForm : Form, Logger.IUiSink
             }
         }
         StartupClass.smethod_38();
-        if (StartupClass.bool_21 && StartupClass.gclass36_1.method_3())
+        if (StartupClass.HasSessionWarning && StartupClass.SessionHeartbeatTimer.method_3())
         {
-            StartupClass.bool_21 = false;
+            StartupClass.HasSessionWarning = false;
             this.OnLogMessage(MessageProvider.GetMessage(105));
             InputController.smethod_28(MessageProvider.GetMessage(655));
         }
-        if (StartupClass.AnotherIntegerValue == 0 && StartupClass.int_12 != 0 && StartupClass.IsGliderAttached)
+        if (StartupClass.AnotherIntegerValue == 0 && StartupClass.AttachAttemptCount != 0 && StartupClass.IsGliderAttached)
             this.method_25();
         if (!this.gclass36_0.method_3() || !(StartupClass.MainApplicationHandle != IntPtr.Zero))
             return;
@@ -1252,7 +1252,7 @@ public class GliderForm : Form, Logger.IUiSink
         this.gclass36_0.method_4();
         Point point_0;
         Size size_0;
-        if (StartupClass.bool_41 || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GameMemoryAccess.GetWindowPosition(StartupClass.MainApplicationHandle, out point_0) || !GameMemoryAccess.GetWindowSize(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
+        if (StartupClass.IsWindowShrunk || !this.bool_6 && ConfigManager.gclass61_0.method_2("GameWindowPos") != null || !GameMemoryAccess.GetWindowPosition(StartupClass.MainApplicationHandle, out point_0) || !GameMemoryAccess.GetWindowSize(StartupClass.MainApplicationHandle, out size_0) || size_0.Width <= 100 || size_0.Height <= 100)
             return;
         ConfigManager.gclass61_0.method_0("GameWindowPos", point_0.X.ToString() + "," + (object)point_0.Y);
         ConfigManager.gclass61_0.method_0("GameWindowSize", size_0.Width.ToString() + "," + (object)size_0.Height);
@@ -1267,16 +1267,16 @@ public class GliderForm : Form, Logger.IUiSink
         this.OnLogMessage(MessageProvider.GetMessage(106));
         ConfigManager.gclass61_0.method_8();
         this.method_4();
-        if (!(str != ConfigManager.gclass61_0.method_2("AppKey")) && !StartupClass.gclass54_0.bool_4 && StartupClass.isInitializationSuccessful)
+        if (!(str != ConfigManager.gclass61_0.method_2("AppKey")) && !StartupClass.PartyStateManager.bool_4 && StartupClass.isInitializationSuccessful)
             return;
         if (str != ConfigManager.gclass61_0.method_2("AppKey"))
             Logger.smethod_1("- Key changed");
-        if (StartupClass.gclass54_0.bool_4)
+        if (StartupClass.PartyStateManager.bool_4)
             Logger.smethod_1("- Party dirty");
         if (!StartupClass.isInitializationSuccessful)
             Logger.smethod_1("- Need offsets");
-        StartupClass.gclass54_0.bool_4 = false;
-        StartupClass.smethod_15();
+        StartupClass.PartyStateManager.bool_4 = false;
+        StartupClass.DetachRuntime();
         StartupClass.smethod_9();
     }
 
@@ -1290,26 +1290,26 @@ public class GliderForm : Form, Logger.IUiSink
         {
             string str = ConfigManager.gclass61_0.method_2("AppKey");
             ConfigManager.gclass61_0.method_2("PartyProductKey");
-            StartupClass.gclass54_0.bool_4 = false;
+            StartupClass.PartyStateManager.bool_4 = false;
             if (new ConfigForm(false).ShowDialog() != DialogResult.OK)
                 return;
             this.OnLogMessage(MessageProvider.GetMessage(106));
             ConfigManager.gclass61_0.method_8();
             this.method_4();
-            StartupClass.gclass24_0.method_0();
+            StartupClass.KeyboardHook.method_0();
             InputController.smethod_31(ConfigManager.gclass61_0);
             StartupClass.smethod_5();
-            StartupClass.gclass54_0.method_0(ConfigManager.gclass61_0);
-            if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)
+            StartupClass.PartyStateManager.method_0(ConfigManager.gclass61_0);
+            if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.PartyStateManager.bool_4 || !StartupClass.isInitializationSuccessful)
             {
                 if (str != ConfigManager.gclass61_0.method_2("AppKey"))
                     Logger.smethod_1("- Key changed");
-                if (StartupClass.gclass54_0.bool_4)
+                if (StartupClass.PartyStateManager.bool_4)
                     Logger.smethod_1("- Party dirty");
                 if (!StartupClass.isInitializationSuccessful)
                     Logger.smethod_1("- Need offsets");
-                StartupClass.gclass54_0.bool_4 = false;
-                StartupClass.smethod_15();
+                StartupClass.PartyStateManager.bool_4 = false;
+                StartupClass.DetachRuntime();
                 StartupClass.smethod_9();
             }
             if (StartupClass.CurrentGameClass != null)
@@ -1321,21 +1321,21 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void NewProfileButton_Click(object sender, EventArgs e)
     {
-        if (StartupClass.bool_16 && MessageBox.Show((IWin32Window)this, MessageProvider.GetMessage(656), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes || new ProfileWizard().method_0((Form)this) != DialogResult.No)
+        if (StartupClass.IsProfileDirty && MessageBox.Show((IWin32Window)this, MessageProvider.GetMessage(656), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes || new ProfileWizard().method_0((Form)this) != DialogResult.No)
             return;
         ProfileProps profileProps = new ProfileProps((GProfile)null);
         if (profileProps.ShowDialog() != DialogResult.OK)
             return;
-        StartupClass.gprofile_0 = profileProps.gprofile_0;
-        StartupClass.string_5 = MessageProvider.GetMessage(70);
+        StartupClass.ActiveProfile = profileProps.gprofile_0;
+        StartupClass.ActiveProfilePath = MessageProvider.GetMessage(70);
         this.method_4();
         this.method_12(true);
-        StartupClass.sortedList_2.Clear();
+        StartupClass.RuntimeProfileCache.Clear();
     }
 
     private void EditProfileButton_Click(object sender, EventArgs e)
     {
-        int num = (int)new ProfileProps(StartupClass.gprofile_0).ShowDialog();
+        int num = (int)new ProfileProps(StartupClass.ActiveProfile).ShowDialog();
     }
 
     private void AddWaypointButton_Click(object sender, EventArgs e) => StartupClass.smethod_23();
@@ -1344,7 +1344,7 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void method_11()
     {
-        if (StartupClass.bool_16 && MessageBox.Show((IWin32Window)this, MessageProvider.GetMessage(660), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+        if (StartupClass.IsProfileDirty && MessageBox.Show((IWin32Window)this, MessageProvider.GetMessage(660), MessageProvider.GetMessage(657), MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             return;
         this.timer_0.Enabled = false;
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -1352,7 +1352,7 @@ public class GliderForm : Form, Logger.IUiSink
         openFileDialog.InitialDirectory = ".\\Profiles";
         openFileDialog.Filter = MessageProvider.GetMessage(661);
         if (openFileDialog.ShowDialog((IWin32Window)this) == DialogResult.OK)
-            StartupClass.smethod_1(openFileDialog.FileName);
+            StartupClass.TryLoadProfileOrProfileGroup(openFileDialog.FileName);
         this.timer_0.Enabled = true;
     }
 
@@ -1374,17 +1374,17 @@ public class GliderForm : Form, Logger.IUiSink
         saveFileDialog.Filter = MessageProvider.GetMessage(661);
         if (saveFileDialog.ShowDialog() != DialogResult.OK)
             return;
-        StartupClass.bool_16 = false;
-        StartupClass.gprofile_0.Save(saveFileDialog.FileName);
-        StartupClass.string_5 = saveFileDialog.FileName;
-        Logger.LogMessage(MessageProvider.smethod_2(112, (object)StartupClass.string_5));
+        StartupClass.IsProfileDirty = false;
+        StartupClass.ActiveProfile.Save(saveFileDialog.FileName);
+        StartupClass.ActiveProfilePath = saveFileDialog.FileName;
+        Logger.LogMessage(MessageProvider.smethod_2(112, (object)StartupClass.ActiveProfilePath));
         ConfigManager.gclass61_0.method_0("LastProfile", saveFileDialog.FileName);
         this.method_4();
     }
 
     private void GlideButton_Click(object sender, EventArgs e)
     {
-        if ((StartupClass.gprofile_0.Factions == null || StartupClass.gprofile_0.Factions.Length == 0) && ConfigManager.gclass61_0.method_2("RemindFaction") == null && !StartupClass.IsAttached && new FactionReminder().ShowDialog((IWin32Window)this) == DialogResult.No)
+        if ((StartupClass.ActiveProfile.Factions == null || StartupClass.ActiveProfile.Factions.Length == 0) && ConfigManager.gclass61_0.method_2("RemindFaction") == null && !StartupClass.IsAttached && new FactionReminder().ShowDialog((IWin32Window)this) == DialogResult.No)
             return;
         GContext.Main.ResetAutoStop();
         if (ConfigManager.gclass61_0.method_2("AutoStop") == "True")
@@ -1459,12 +1459,12 @@ public class GliderForm : Form, Logger.IUiSink
 
     public void method_16()
     {
-        this.LabelAttached.Text = MessageProvider.smethod_4("GliderForm.LabelAttached!" + StartupClass.bool_13.ToString());
+        this.LabelAttached.Text = MessageProvider.smethod_4("GliderForm.LabelAttached!" + StartupClass.IsRuntimeAttached.ToString());
         if (StartupClass.IsDetached)
             this.LabelAttached.Text = "Yes*";
         if (!StartupClass.isInputStringFourCharacters)
-            StartupClass.gclass36_0 = (GameTimer)null;
-        if (StartupClass.thread_0 != null)
+            StartupClass.LicenseCheckTimer = (GameTimer)null;
+        if (StartupClass.InitializationThread != null)
         {
             this.method_14(false);
             this.StopButton.Enabled = false;
@@ -1474,8 +1474,8 @@ public class GliderForm : Form, Logger.IUiSink
             this.FactionLabel.Text = MessageProvider.smethod_4("GliderForm.FactionLabel!Idle");
         }
         else if (StartupClass.IsDetached)
-            this.method_15(StartupClass.glideMode_0 == GlideMode.None);
-        else if (!StartupClass.bool_13)
+            this.method_15(StartupClass.CurrentGlideMode == GlideMode.None);
+        else if (!StartupClass.IsRuntimeAttached)
         {
             this.ConfigButton.Enabled = true;
             this.method_14(false);
@@ -1488,13 +1488,13 @@ public class GliderForm : Form, Logger.IUiSink
             if (ConfigManager.gclass61_0.method_5("AltLayout"))
             {
                 this.StopButton.Enabled = true;
-                if (StartupClass.glideMode_0 == GlideMode.None)
+                if (StartupClass.CurrentGlideMode == GlideMode.None)
                     this.StopButton.Text = this.WaypointsPanel.Visible ? MessageProvider.smethod_4("GliderForm.StopButton.Default") : MessageProvider.smethod_4("GliderForm.StopButton.Waypoints");
                 else
                     this.StopButton.Text = MessageProvider.smethod_4("GliderForm.StopButton.Stop");
             }
-            this.method_15(StartupClass.glideMode_0 == GlideMode.None);
-            this.method_12(StartupClass.glideMode_0 == GlideMode.None);
+            this.method_15(StartupClass.CurrentGlideMode == GlideMode.None);
+            this.method_12(StartupClass.CurrentGlideMode == GlideMode.None);
         }
     }
 
@@ -1513,13 +1513,13 @@ public class GliderForm : Form, Logger.IUiSink
 
     public void method_18()
     {
-        if (StartupClass.gprofile_0 == null || StartupClass.gprofile_0.Waypoints == null)
+        if (StartupClass.ActiveProfile == null || StartupClass.ActiveProfile.Waypoints == null)
             return;
         if (GPlayerSelf.Me == null)
             return;
-        if (StartupClass.gprofile_0.Waypoints.Count > 2)
+        if (StartupClass.ActiveProfile.Waypoints.Count > 2)
         {
-            string[] waypointNotes = StartupClass.gprofile_0.GetWaypointNotes();
+            string[] waypointNotes = StartupClass.ActiveProfile.GetWaypointNotes();
             this.method_30(this.WP_FirstLabel_1, "WP_FirstLabel", waypointNotes[0]);
             this.method_30(this.WP_ClosestLabel_1, "WP_ClosestLabel", waypointNotes[1]);
             this.method_30(this.WP_NewestLabel_1, "WP_NewestLabel", waypointNotes[2]);
@@ -1529,7 +1529,7 @@ public class GliderForm : Form, Logger.IUiSink
             this.method_30(this.Location_3d, "Location_3d", GPlayerSelf.Me.Location.ToString3D().Replace(" ", ", "));
             this.Location_3d.ForeColor = SystemColors.Highlight;
         }
-        if (!this.label11.Checked || StartupClass.glideMode_0 != GlideMode.None)
+        if (!this.label11.Checked || StartupClass.CurrentGlideMode != GlideMode.None)
             return;
         if (this.glocation_1 == null)
         {
@@ -1537,16 +1537,16 @@ public class GliderForm : Form, Logger.IUiSink
         }
         else
         {
-            if ((double)GPlayerSelf.Me.Location.GetDistanceTo(this.glocation_1) <= StartupClass.double_0)
+            if ((double)GPlayerSelf.Me.Location.GetDistanceTo(this.glocation_1) <= StartupClass.AutoAddDistance)
                 return;
             if (this.WPTypeAuto_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_0;
+                StartupClass.SelectedWaypointType = WaypointType.const_0;
             if (this.WPTypeNormal_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_1;
+                StartupClass.SelectedWaypointType = WaypointType.const_1;
             if (this.WPTypeGhost_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_2;
+                StartupClass.SelectedWaypointType = WaypointType.const_2;
             if (this.WPTypeVendor_1.Checked)
-                StartupClass.genum2_0 = WaypointType.const_3;
+                StartupClass.SelectedWaypointType = WaypointType.const_3;
             StartupClass.smethod_23();
             this.glocation_1 = GPlayerSelf.Me.Location;
             SoundPlayer.smethod_0("Key.wav");
@@ -1561,7 +1561,7 @@ public class GliderForm : Form, Logger.IUiSink
             Logger.smethod_1("AA2");
             gliderForm_0.OnLogMessage(MessageProvider.GetMessage(138));
             Logger.smethod_1("AA3");
-            if (StartupClass.bool_13)
+            if (StartupClass.IsRuntimeAttached)
             {
                 Logger.smethod_1("AA4");
                 this.glocation_1 = GPlayerSelf.Me.Location;
@@ -1596,7 +1596,7 @@ public class GliderForm : Form, Logger.IUiSink
 
     protected override void OnClosing(CancelEventArgs cancelEventArgs_0)
     {
-        Logger.LogMessage("Kills/Loots/Deaths: " + MessageProvider.smethod_2(654, (object)StartupClass.int_7, (object)StartupClass.int_8, (object)StartupClass.int_9));
+        Logger.LogMessage("Kills/Loots/Deaths: " + MessageProvider.smethod_2(654, (object)StartupClass.DynamicClassCount, (object)StartupClass.CompiledClassCount, (object)StartupClass.InternalClassCount));
         this.notifyIcon_0.Dispose();
         this.notifyIcon_0 = (NotifyIcon)null;
         Logger.smethod_1("Shutdown: SavePos");
@@ -1604,18 +1604,18 @@ public class GliderForm : Form, Logger.IUiSink
         if (!StartupClass.IsAttached)
         {
             Logger.smethod_1("Shutdown: NewDebuffs");
-            StartupClass.DebuffsKnown_string.method_10();
+            StartupClass.KnownDebuffs.method_10();
         }
-        if (StartupClass.gprofile_0 != null && StartupClass.bool_16)
+        if (StartupClass.ActiveProfile != null && StartupClass.IsProfileDirty)
         {
             Logger.smethod_1("Shutdown: SaveProfile");
-            StartupClass.gprofile_0.Save("Profiles\\LastChangedProfile.xml");
+            StartupClass.ActiveProfile.Save("Profiles\\LastChangedProfile.xml");
         }
-        if (StartupClass.gclass79_0 != null)
+        if (StartupClass.RemoteViewer != null)
         {
             Logger.smethod_1("Shutdown: StopRemote");
-            StartupClass.gclass79_0.method_1();
-            StartupClass.gclass79_0 = (RemoteViewerServer)null;
+            StartupClass.RemoteViewer.method_1();
+            StartupClass.RemoteViewer = (RemoteViewerServer)null;
         }
         StartupClass.smethod_31();
         Logger.smethod_1("Shutdown: KillAction");
@@ -1629,12 +1629,12 @@ public class GliderForm : Form, Logger.IUiSink
         if (!this.bool_1)
             return;
         this.bool_1 = false;
-        if (StartupClass.gclass24_0.bool_5)
+        if (StartupClass.KeyboardHook.bool_5)
         {
             if (ConfigManager.gclass61_0.method_5("AltLayout"))
-                this.Text = StartupClass.gclass24_0.string_0 + "_";
+                this.Text = StartupClass.KeyboardHook.string_0 + "_";
             else
-                this.StatusLabel.Text = StartupClass.gclass24_0.string_0 + "_";
+                this.StatusLabel.Text = StartupClass.KeyboardHook.string_0 + "_";
         }
         else
             this.method_4();
@@ -1655,22 +1655,22 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void AddFactionButton_Click(object sender, EventArgs e)
     {
-        if (!StartupClass.bool_13)
+        if (!StartupClass.IsRuntimeAttached)
             return;
         GUnit target = GPlayerSelf.Me.Target;
         if (target == null)
             return;
-        if (!StartupClass.gprofile_0.CheckFaction(target.FactionID, true))
+        if (!StartupClass.ActiveProfile.CheckFaction(target.FactionID, true))
         {
-            StartupClass.bool_16 = true;
-            StartupClass.gprofile_0.AddFaction(target.FactionID);
+            StartupClass.IsProfileDirty = true;
+            StartupClass.ActiveProfile.AddFaction(target.FactionID);
             Logger.LogMessage(MessageProvider.smethod_2(850, (object)target.FactionID));
             this.AddFactionButton.Text = "Del Faction";
         }
         else
         {
-            StartupClass.bool_16 = true;
-            StartupClass.gprofile_0.RemoveFaction(target.FactionID);
+            StartupClass.IsProfileDirty = true;
+            StartupClass.ActiveProfile.RemoveFaction(target.FactionID);
             Logger.LogMessage(MessageProvider.smethod_2(851, (object)target.FactionID));
             this.AddFactionButton.Text = "Add Faction";
         }
@@ -1792,7 +1792,7 @@ public class GliderForm : Form, Logger.IUiSink
         Logger.smethod_1("HandleGameGone invoked!");
         this.Activate();
         this.Focus();
-        if (StartupClass.bool_33)
+        if (StartupClass.HasManualPause)
         {
             this.Close();
         }
@@ -2230,7 +2230,7 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void ShrinkButton_Click(object sender, EventArgs e)
     {
-        if (StartupClass.bool_41)
+        if (StartupClass.IsWindowShrunk)
             StartupClass.smethod_50();
         else
             StartupClass.smethod_48();
@@ -2238,7 +2238,7 @@ public class GliderForm : Form, Logger.IUiSink
 
     private void HideButton_Click(object sender, EventArgs e)
     {
-        if (StartupClass.bool_40)
+        if (StartupClass.IsWindowHidden)
             StartupClass.smethod_49();
         else
             StartupClass.smethod_47();
@@ -2248,28 +2248,28 @@ public class GliderForm : Form, Logger.IUiSink
     {
         if (!this.WPTypeAuto_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_0;
+        StartupClass.SelectedWaypointType = WaypointType.const_0;
     }
 
     private void WPTypeNormal_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeNormal_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_1;
+        StartupClass.SelectedWaypointType = WaypointType.const_1;
     }
 
     private void WPTypeGhost_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeGhost_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_2;
+        StartupClass.SelectedWaypointType = WaypointType.const_2;
     }
 
     private void WPTypeVendor_1_CheckedChanged(object sender, EventArgs e)
     {
         if (!this.WPTypeVendor_1.Checked)
             return;
-        StartupClass.genum2_0 = WaypointType.const_3;
+        StartupClass.SelectedWaypointType = WaypointType.const_3;
     }
 
     private void Location_3d_Click(object sender, EventArgs e)
@@ -2328,3 +2328,6 @@ public class GliderForm : Form, Logger.IUiSink
         this.int_8 = Environment.TickCount;
     }
 }
+
+
+

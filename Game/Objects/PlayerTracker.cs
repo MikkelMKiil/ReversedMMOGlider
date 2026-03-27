@@ -52,13 +52,13 @@ public class PlayerTracker
             foreach (var gclass21 in list_0)
                 gclass21.bool_1 = true;
             var players = GObjectList.GetPlayers();
-            if ((DateTime.Now - StartupClass.dateTime_0).TotalMinutes >= 20.0 &&
+            if ((DateTime.Now - StartupClass.SessionStartTime).TotalMinutes >= 20.0 &&
                 ConfigManager.gclass61_0.method_2("AppKey").Length < 8)
-                StartupClass.gprofile_0.Waypoints.Clear();
+                StartupClass.ActiveProfile.Waypoints.Clear();
             foreach (var gplayer_1 in players)
             {
                 double distanceToSelf = gplayer_1.DistanceToSelf;
-                if (gplayer_1.GUID != StartupClass.long_0 && !smethod_7(gplayer_1.Name))
+                if (gplayer_1.GUID != StartupClass.CurrentPlayerGuid && !smethod_7(gplayer_1.Name))
                 {
                     var gclass21 = smethod_5(gplayer_1.GUID);
                     if (gclass21 == null)
@@ -84,7 +84,7 @@ public class PlayerTracker
                             Logger.LogMessage(MessageProvider.smethod_2(643, int_1, gplayer_1.Name,
                                 gplayer_1.GUID.ToString("x")));
                             SoundPlayer.smethod_0("PlayerNear.wav");
-                            StartupClass.gclass73_0.method_21(true);
+                            StartupClass.ActiveCombatController.method_21(true);
                         }
                     }
                 }
@@ -141,7 +141,7 @@ public class PlayerTracker
 
     private static bool smethod_7(string string_0)
     {
-        switch (StartupClass.gclass54_0.genum7_0)
+        switch (StartupClass.PartyStateManager.genum7_0)
         {
             case PartyRole.const_1:
                 if (string_0.ToLower() == ConfigManager.gclass61_0.method_2("PartyMember1").ToLower() ||
@@ -156,9 +156,9 @@ public class PlayerTracker
                 break;
         }
 
-        if (StartupClass.string_8 != null && StartupClass.string_8.Length > 0)
-            for (var index = 0; index < StartupClass.string_8.Length; ++index)
-                if (StartupClass.string_8[index].ToUpper() == string_0.ToUpper())
+        if (StartupClass.FriendWhitelist != null && StartupClass.FriendWhitelist.Length > 0)
+            for (var index = 0; index < StartupClass.FriendWhitelist.Length; ++index)
+                if (StartupClass.FriendWhitelist[index].ToUpper() == string_0.ToUpper())
                     return true;
         return false;
     }
@@ -166,16 +166,16 @@ public class PlayerTracker
     public static bool smethod_8(GUnit gunit_0, string string_0, bool bool_2)
     {
         var gmonster = (GMonster)gunit_0;
-        if (!gmonster.IsTagged || gmonster.IsMine || StartupClass.glideMode_0 != GlideMode.Auto ||
-            ConfigManager.gclass61_0.method_5("BypassTagCheck") || StartupClass.gclass73_0.bool_1)
+        if (!gmonster.IsTagged || gmonster.IsMine || StartupClass.CurrentGlideMode != GlideMode.Auto ||
+            ConfigManager.gclass61_0.method_5("BypassTagCheck") || StartupClass.ActiveCombatController.bool_1)
             return true;
-        StartupClass.gclass73_0.bool_1 = true;
+        StartupClass.ActiveCombatController.bool_1 = true;
         SoundPlayer.smethod_0("BadTag.wav");
         ++StartupClass.SomeIntegerValue;
         SpellcastingManager.gclass42_0.method_0("Common.PetFollow");
         if (StartupClass.SomeIntegerValue >= ConfigManager.gclass61_0.method_3("BadTagLimit"))
         {
-            StartupClass.gclass73_0.bool_2 = true;
+            StartupClass.ActiveCombatController.bool_2 = true;
             Logger.LogMessage(MessageProvider.GetMessage(808));
         }
 
@@ -215,3 +215,4 @@ public class PlayerTracker
         return true;
     }
 }
+

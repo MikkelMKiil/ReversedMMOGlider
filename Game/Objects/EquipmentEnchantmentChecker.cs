@@ -79,7 +79,7 @@ public class EquipmentEnchantmentChecker
         }
 
         var num1 = (int)Offsets[string_0] - 1;
-        var num2 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD");
+        var num2 = StartupClass.PlayerOffsetManager.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD");
         return GameMemoryAccess.ReadInt64(GPlayerSelf.Me.StorageAddress + num2 + num1 * 8, "Equipped/" + string_0);
     }
 
@@ -94,7 +94,7 @@ public class EquipmentEnchantmentChecker
         Logger.smethod_1("Check item " + gobject_0.GUID.ToString("x") + " for buffs");
         for (var index = 0; index < 8; ++index)
         {
-            var num = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
+            var num = StartupClass.ItemOffsetManager.GetOffsetValue("ITEM_FIELD_ENCHANTMENT") + index * 4 * 3;
             var int_2 = GameMemoryAccess.ReadInt32(gobject_0.StorageAddress + num, "EnchantID");
             if (int_2 > 0)
             {
@@ -140,11 +140,11 @@ public class EquipmentEnchantmentChecker
     public InventoryItem[] method_4()
     {
         var list_0 = new List<InventoryItem>();
-        var int_4_1 = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_PACK_SLOT_1");
+        var int_4_1 = StartupClass.PlayerOffsetManager.GetOffsetValue("PLAYER_FIELD_PACK_SLOT_1");
         method_5(list_0, GPlayerSelf.Me.StorageAddress, 16, int_4_1);
         for (var index = 1; index < 5; ++index)
         {
-            var num = StartupClass.gclass43_0.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
+            var num = StartupClass.PlayerOffsetManager.GetOffsetValue("PLAYER_FIELD_INV_SLOT_HEAD") + 144 + index * 8;
             var GUID = GameMemoryAccess.ReadInt64(GPlayerSelf.Me.StorageAddress + num, "BagGuid1");
             if (GUID != 0UL)
             {
@@ -156,9 +156,9 @@ public class EquipmentEnchantmentChecker
                 else
                 {
                     var int_3 = GameMemoryAccess.ReadInt32(
-                        gobject.StorageAddress + StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_NUM_SLOTS"),
+                        gobject.StorageAddress + StartupClass.ContainerOffsetManager.GetOffsetValue("CONTAINER_FIELD_NUM_SLOTS"),
                         "NumSlots");
-                    var int_4_2 = StartupClass.gclass43_4.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
+                    var int_4_2 = StartupClass.ContainerOffsetManager.GetOffsetValue("CONTAINER_FIELD_SLOT_1");
                     method_5(list_0, gobject.StorageAddress, int_3, int_4_2);
                 }
             }
@@ -183,7 +183,7 @@ public class EquipmentEnchantmentChecker
                 else
                 {
                     var int_1 = GameMemoryAccess.ReadInt32(
-                        gobject.StorageAddress + StartupClass.gclass43_3.GetOffsetValue("OBJECT_FIELD_ENTRY"), "ItemEntry");
+                        gobject.StorageAddress + StartupClass.ItemOffsetManager.GetOffsetValue("OBJECT_FIELD_ENTRY"), "ItemEntry");
                     var string_1 = "(unknown)";
                     var gclass39 = new InventoryItem(num2, int_1, string_1);
                     list_0.Add(gclass39);
@@ -192,3 +192,4 @@ public class EquipmentEnchantmentChecker
         }
     }
 }
+

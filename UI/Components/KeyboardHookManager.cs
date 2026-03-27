@@ -126,17 +126,17 @@ public class KeyboardHookManager
     {
         if (bool_1)
         {
-            if (e.KeyCode == Keys.MediaStop && StartupClass.glideMode_0 != GlideMode.None)
+            if (e.KeyCode == Keys.MediaStop && StartupClass.CurrentGlideMode != GlideMode.None)
             {
-                StartupClass.bool_28 = false;
+                StartupClass.HasQueuedPayload = false;
                 StartupClass.smethod_27(false, "StopKeyFromHook");
             }
 
-            if (e.KeyCode == Keys.MediaNextTrack && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaNextTrack && StartupClass.CurrentGlideMode == GlideMode.None)
                 StartupClass.smethod_21(true);
-            if (e.KeyCode == Keys.MediaPreviousTrack && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaPreviousTrack && StartupClass.CurrentGlideMode == GlideMode.None)
                 StartupClass.smethod_23();
-            if (e.KeyCode == Keys.MediaPlayPause && StartupClass.glideMode_0 == GlideMode.None)
+            if (e.KeyCode == Keys.MediaPlayPause && StartupClass.CurrentGlideMode == GlideMode.None)
                 StartupClass.smethod_24(true);
         }
 
@@ -163,14 +163,14 @@ public class KeyboardHookManager
                 bool_3 = false;
                 if (e.KeyCode == (Keys)int_17)
                 {
-                    StartupClass.bool_28 = false;
+                    StartupClass.HasQueuedPayload = false;
                     StartupClass.smethod_27(false, "StopKeyFromHook2");
                 }
 
                 switch (e.KeyCode)
                 {
                     case Keys.Return:
-                        if (StartupClass.smethod_12())
+                        if (StartupClass.IsRuntimeAttached)
                         {
                             method_3();
                             Logger.smethod_1(MessageProvider.GetMessage(287));
@@ -191,10 +191,10 @@ public class KeyboardHookManager
                         method_20("Profile3");
                         break;
                     case Keys.B:
-                        if (StartupClass.smethod_12())
+                        if (StartupClass.IsRuntimeAttached)
                         {
                             Logger.LogMessage("Logging debuffs");
-                            StartupClass.DebuffsKnown_string.method_11();
+                            StartupClass.KnownDebuffs.method_11();
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
@@ -203,13 +203,13 @@ public class KeyboardHookManager
                         method_21();
                         break;
                     case Keys.F:
-                        if (StartupClass.smethod_12() && StartupClass.smethod_26()) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.TryAddCurrentTargetFaction()) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.G:
-                        if (StartupClass.smethod_12() && StartupClass.smethod_24(true)) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_24(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.K:
-                        if (StartupClass.smethod_12() && StartupClass.smethod_21(true)) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_21(true)) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.M:
                         double double_2 = 0.0;
@@ -230,41 +230,41 @@ public class KeyboardHookManager
                         SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.N:
-                        if (StartupClass.smethod_12())
+                        if (StartupClass.IsRuntimeAttached)
                         {
-                            StartupClass.gprofile_0 = new GProfile();
-                            StartupClass.string_5 = "Profiles\\NewProfile.xml";
-                            StartupClass.ginterface0_0.imethod_0();
+                            StartupClass.ActiveProfile = new GProfile();
+                            StartupClass.ActiveProfilePath = "Profiles\\NewProfile.xml";
+                            StartupClass.StartupLogger.imethod_0();
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
                         break;
                     case Keys.P:
-                        if (StartupClass.smethod_12() && StartupClass.gprofile_0 != null)
+                        if (StartupClass.IsRuntimeAttached && StartupClass.ActiveProfile != null)
                         {
-                            StartupClass.gprofile_0.Factions = null;
+                            StartupClass.ActiveProfile.Factions = null;
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
                         break;
                     case Keys.Q:
-                        if (StartupClass.smethod_12())
+                        if (StartupClass.IsRuntimeAttached)
                         {
-                            StartupClass.ginterface0_0.imethod_1();
+                            StartupClass.StartupLogger.imethod_1();
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
                         break;
                     case Keys.S:
-                        if (StartupClass.smethod_12() && StartupClass.gprofile_0 != null)
+                        if (StartupClass.IsRuntimeAttached && StartupClass.ActiveProfile != null)
                         {
-                            StartupClass.gprofile_0.Save(StartupClass.string_5);
+                            StartupClass.ActiveProfile.Save(StartupClass.ActiveProfilePath);
                             SoundPlayer.smethod_0("Key.wav");
                         }
 
                         break;
                     case Keys.W:
-                        if (StartupClass.smethod_12() && StartupClass.smethod_23()) SoundPlayer.smethod_0("Key.wav");
+                        if (StartupClass.IsRuntimeAttached && StartupClass.smethod_23()) SoundPlayer.smethod_0("Key.wav");
                         break;
                     case Keys.X:
                         if (bool_7)
@@ -277,35 +277,35 @@ public class KeyboardHookManager
                         bool_7 = true;
                         break;
                     case Keys.OemMinus:
-                        if (StartupClass.smethod_12())
+                        if (StartupClass.IsRuntimeAttached)
                         {
-                            if (!StartupClass.smethod_12())
+                            if (!StartupClass.IsRuntimeAttached)
                             {
                                 Logger.LogMessage(MessageProvider.GetMessage(769));
                                 return;
                             }
 
-                            if (StartupClass.gprofile_0 != null)
+                            if (StartupClass.ActiveProfile != null)
                             {
                                 if (GPlayerSelf.Me.IsDead)
                                 {
-                                    if (StartupClass.gprofile_0.GhostWaypoints.Count > 0)
+                                    if (StartupClass.ActiveProfile.GhostWaypoints.Count > 0)
                                     {
                                         Logger.LogMessage(MessageProvider.smethod_2(767,
-                                            StartupClass.gprofile_0.GhostWaypoints.Count - 1));
-                                        StartupClass.gprofile_0.GhostWaypoints.RemoveAt(
-                                            StartupClass.gprofile_0.GhostWaypoints.Count - 1);
+                                            StartupClass.ActiveProfile.GhostWaypoints.Count - 1));
+                                        StartupClass.ActiveProfile.GhostWaypoints.RemoveAt(
+                                            StartupClass.ActiveProfile.GhostWaypoints.Count - 1);
                                         SoundPlayer.smethod_0("Key.wav");
                                     }
 
                                     break;
                                 }
 
-                                if (StartupClass.gprofile_0.Waypoints.Count > 0)
+                                if (StartupClass.ActiveProfile.Waypoints.Count > 0)
                                 {
                                     Logger.LogMessage(MessageProvider.smethod_2(766,
-                                        StartupClass.gprofile_0.Waypoints.Count - 1));
-                                    StartupClass.gprofile_0.Waypoints.RemoveAt(StartupClass.gprofile_0.Waypoints.Count -
+                                        StartupClass.ActiveProfile.Waypoints.Count - 1));
+                                    StartupClass.ActiveProfile.Waypoints.RemoveAt(StartupClass.ActiveProfile.Waypoints.Count -
                                                                                1);
                                     SoundPlayer.smethod_0("Key.wav");
                                 }
@@ -332,13 +332,13 @@ public class KeyboardHookManager
         if (e.KeyCode != Keys.Escape)
             return;
         var foregroundWindow = GameMemoryAccess.GetForegroundWindow();
-        StartupClass.bool_21 = false;
-        if (StartupClass.glideMode_0 != GlideMode.None && (foregroundWindow == intptr_0 ||
+        StartupClass.HasSessionWarning = false;
+        if (StartupClass.CurrentGlideMode != GlideMode.None && (foregroundWindow == intptr_0 ||
                                                            foregroundWindow == StartupClass.MainApplicationHandle ||
                                                            !StartupClass.IsGliderInitialized))
         {
             Logger.smethod_1("Escape key picked up in hook, shutting action down");
-            StartupClass.bool_28 = false;
+            StartupClass.HasQueuedPayload = false;
             StartupClass.smethod_27(false, "EscapeFromHook");
         }
 
@@ -363,9 +363,9 @@ public class KeyboardHookManager
     private void method_5()
     {
         bool_5 = false;
-        if (StartupClass.glideMode_0 == GlideMode.Auto)
-            StartupClass.gclass73_0.method_23(string_0, false);
-        StartupClass.ginterface0_0.imethod_0();
+        if (StartupClass.CurrentGlideMode == GlideMode.Auto)
+            StartupClass.ActiveCombatController.method_23(string_0, false);
+        StartupClass.StartupLogger.imethod_0();
     }
 
     private void method_6(object sender, KeyPressEventArgs e)
@@ -379,7 +379,7 @@ public class KeyboardHookManager
 
     private void method_7()
     {
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.StartupLogger.imethod_0();
     }
 
     [SpecialName]
@@ -597,11 +597,11 @@ public class KeyboardHookManager
     private void method_20(string string_1)
     {
         var string_11 = ConfigManager.gclass61_0.method_2(string_1);
-        if (string_11 == null || !StartupClass.smethod_1(string_11))
+        if (string_11 == null || !StartupClass.TryLoadProfileOrProfileGroup(string_11))
             return;
-        Logger.LogMessage("Loaded profile: " + StartupClass.string_5);
+        Logger.LogMessage("Loaded profile: " + StartupClass.ActiveProfilePath);
         SoundPlayer.smethod_0("Key.wav");
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.StartupLogger.imethod_0();
     }
 
     private void method_21()
@@ -609,16 +609,16 @@ public class KeyboardHookManager
         var str = ConfigManager.gclass61_0.method_2("AppKey");
         ConfigManager.gclass61_0.method_3("Class");
         ConfigManager.gclass61_0.method_7(true);
-        StartupClass.bool_29 = true;
-        StartupClass.gclass24_0.method_0();
+        StartupClass.RequiresConfigReload = true;
+        StartupClass.KeyboardHook.method_0();
         SpellcastingManager.gclass42_0.method_12();
         // InputController.smethod_31(ConfigManager.gclass61_0); // Removed: method does not exist
         StartupClass.smethod_5();
-        StartupClass.gclass54_0.method_0(ConfigManager.gclass61_0);
-        if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 || !StartupClass.isInitializationSuccessful)
+        StartupClass.PartyStateManager.method_0(ConfigManager.gclass61_0);
+        if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.PartyStateManager.bool_4 || !StartupClass.isInitializationSuccessful)
         {
-            StartupClass.gclass54_0.bool_4 = false;
-            StartupClass.smethod_15();
+            StartupClass.PartyStateManager.bool_4 = false;
+            StartupClass.DetachRuntime();
             StartupClass.smethod_9();
         }
 
@@ -651,3 +651,7 @@ public class KeyboardHookManager
         public int int_4;
     }
 }
+
+
+
+

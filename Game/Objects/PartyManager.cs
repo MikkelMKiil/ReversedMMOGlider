@@ -92,7 +92,7 @@ public class PartyManager
 
     public static PartyRole smethod_0()
     {
-        return StartupClass.glideMode_0 != GlideMode.Auto ? PartyRole.const_0 : gclass54_0.genum7_0;
+        return StartupClass.CurrentGlideMode != GlideMode.Auto ? PartyRole.const_0 : gclass54_0.genum7_0;
     }
 
     public void method_1()
@@ -190,10 +190,10 @@ public class PartyManager
                     if (GPlayerSelf.Me.TargetGUID != 0UL)
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(319));
-                        StartupClass.gclass73_0.method_12(true);
+                        StartupClass.ActiveCombatController.method_12(true);
                     }
 
-                    StartupClass.smethod_39(1000);
+                    StartupClass.SleepMilliseconds(1000);
                 }
                 else
                 {
@@ -255,7 +255,7 @@ public class PartyManager
                 flag1 = true;
                 if (!flag2)
                 {
-                    StartupClass.smethod_39(1300);
+                    StartupClass.SleepMilliseconds(1300);
                     var gunit_0 = method_3();
                     if (gunit_0 != null)
                         method_7(gunit_0);
@@ -286,23 +286,23 @@ public class PartyManager
         gunit_0.SetAsTarget(false);
         if (GPlayerSelf.Me.TargetGUID == gunit_0.GUID)
         {
-            StartupClass.gclass73_0.method_12(true);
+            StartupClass.ActiveCombatController.method_12(true);
             return true;
         }
 
-        StartupClass.gprofile_0.ForceBlacklist(gunit_0.GUID);
+        StartupClass.ActiveProfile.ForceBlacklist(gunit_0.GUID);
         return false;
     }
 
     private void method_8()
     {
-        switch (StartupClass.random_0.Next() % 2)
+        switch (StartupClass.RandomGenerator.Next() % 2)
         {
             case 0:
                 SpellcastingManager.gclass42_0.method_0("Common.Jump");
                 break;
             case 1:
-                GContext.Main.Movement.SetHeading(StartupClass.random_0.NextDouble() * 2.0 * Math.PI);
+                GContext.Main.Movement.SetHeading(StartupClass.RandomGenerator.NextDouble() * 2.0 * Math.PI);
                 break;
         }
     }
@@ -327,9 +327,9 @@ public class PartyManager
         for (var index = 1; index <= 4; ++index)
         {
             CombatController.smethod_1();
-            StartupClass.smethod_39(200);
+            StartupClass.SleepMilliseconds(200);
             SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + index);
-            StartupClass.smethod_39(500);
+            StartupClass.SleepMilliseconds(500);
             if (GPlayerSelf.Me.TargetGUID != 0UL)
             {
                 var unit = (GPlayer)GObjectList.FindUnit(GPlayerSelf.Me.TargetGUID);
@@ -383,7 +383,7 @@ public class PartyManager
     {
         Logger.smethod_1(MessageProvider.smethod_2(709, string_2, int_8 + 1));
         SpellcastingManager.gclass42_0.method_0("Common.TargetParty" + (int_8 + 1));
-        StartupClass.smethod_39(300);
+        StartupClass.SleepMilliseconds(300);
         if (gplayer_0[int_8].DistanceToSelf > 29.0)
             gplayer_0[int_8].Approach(29.0);
         GContext.Main.CastSpell(string_2);
@@ -459,3 +459,5 @@ public class PartyManager
         return gunit_0.SetAsTarget(false);
     }
 }
+
+

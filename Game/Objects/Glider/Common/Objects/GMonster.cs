@@ -74,7 +74,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                if (StartupClass.gprofile_0 != null)
+                if (StartupClass.ActiveProfile != null)
                 {
                     if (CreatureType == GCreatureType.Critter)
                     {
@@ -100,37 +100,37 @@ namespace Glider.Common.Objects
                         return false;
                     }
 
-                    if (Level < StartupClass.gprofile_0.MinLevel && StartupClass.gprofile_0.MinLevel != 0)
+                    if (Level < StartupClass.ActiveProfile.MinLevel && StartupClass.ActiveProfile.MinLevel != 0)
                     {
                         SkipReason = "level below min";
                         return false;
                     }
 
-                    if (Level > StartupClass.gprofile_0.MaxLevel && StartupClass.gprofile_0.MaxLevel != 0)
+                    if (Level > StartupClass.ActiveProfile.MaxLevel && StartupClass.ActiveProfile.MaxLevel != 0)
                     {
                         SkipReason = "level above max";
                         return false;
                     }
 
-                    if (!StartupClass.gprofile_0.CheckFaction(FactionID))
+                    if (!StartupClass.ActiveProfile.CheckFaction(FactionID))
                     {
                         SkipReason = "CheckFaction does not like (" + FactionID + ")";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.Beach && Math.Abs(GContext.Main.Me.Location.Z - Location.Z) > 5.0)
+                    if (StartupClass.ActiveProfile.Beach && Math.Abs(GContext.Main.Me.Location.Z - Location.Z) > 5.0)
                     {
                         SkipReason = "altitude too low for beach profile";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.AvoidList != null && IsInList(StartupClass.gprofile_0.AvoidList))
+                    if (StartupClass.ActiveProfile.AvoidList != null && IsInList(StartupClass.ActiveProfile.AvoidList))
                     {
                         SkipReason = "on avoid list for profile";
                         return false;
                     }
 
-                    if (StartupClass.gprofile_0.IsBlacklisted(GUID))
+                    if (StartupClass.ActiveProfile.IsBlacklisted(GUID))
                     {
                         SkipReason = "blacklisted";
                         return false;
@@ -290,3 +290,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

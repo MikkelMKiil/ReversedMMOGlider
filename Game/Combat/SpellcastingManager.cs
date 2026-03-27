@@ -740,8 +740,8 @@ public class SpellcastingManager
     {
         if (!Offsets.ContainsKey("Common.BarCombat"))
             return;
-        var num1 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarCombat"].CharCode);
-        var num2 = StartupClass.numbers_string.IndexOf(Offsets["Common.BarRest"].CharCode);
+        var num1 = StartupClass.ActionBarCharacters.IndexOf(Offsets["Common.BarCombat"].CharCode);
+        var num2 = StartupClass.ActionBarCharacters.IndexOf(Offsets["Common.BarRest"].CharCode);
         foreach (var gkey in Offsets.Values)
         {
             var num3 = 0;
@@ -910,3 +910,4 @@ public class SpellcastingManager
         }
     }
 }
+

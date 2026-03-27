@@ -98,8 +98,8 @@ public class RestStatusMonitor
     [SpecialName]
     public bool method_4()
     {
-        return StartupClass.glideMode_0 == GlideMode.Auto && StartupClass.gclass54_0.healMode_0 == HealMode.Dedicated &&
-               StartupClass.gclass54_0.genum7_0 != PartyRole.const_0;
+        return StartupClass.CurrentGlideMode == GlideMode.Auto && StartupClass.PartyStateManager.healMode_0 == HealMode.Dedicated &&
+               StartupClass.PartyStateManager.genum7_0 != PartyRole.const_0;
     }
 
     public bool method_5(GMonster gmonster_0, double double_7, int int_2)
@@ -246,12 +246,12 @@ public class RestStatusMonitor
     {
         for (var index = 0; index < 5; ++index)
         {
-            GContext.Main.Movement.SetHeading(StartupClass.random_0.NextDouble() * 6.14);
-            StartupClass.gclass73_0.method_34(1500, 5000);
-            if (StartupClass.random_0.Next() % 3 == 0)
+            GContext.Main.Movement.SetHeading(StartupClass.RandomGenerator.NextDouble() * 6.14);
+            StartupClass.ActiveCombatController.method_34(1500, 5000);
+            if (StartupClass.RandomGenerator.Next() % 3 == 0)
             {
                 SpellcastingManager.gclass42_0.method_0("Common.Jump");
-                StartupClass.gclass73_0.method_34(1500, 3000);
+                StartupClass.ActiveCombatController.method_34(1500, 3000);
             }
         }
     }
@@ -263,14 +263,14 @@ public class RestStatusMonitor
 
     public void method_12()
     {
-        if (StartupClass.glideMode_0 != GlideMode.Auto || glocation_0 == null)
+        if (StartupClass.CurrentGlideMode != GlideMode.Auto || glocation_0 == null)
             return;
         double distanceTo = glocation_0.GetDistanceTo(gplayerSelf_0.Location);
         if (distanceTo <= 100.0)
             return;
         Logger.LogMessage(MessageProvider.smethod_2(634, distanceTo));
         glocation_0 = gplayerSelf_0.Location;
-        StartupClass.gclass73_0.method_58();
+        StartupClass.ActiveCombatController.method_58();
     }
 
     public void method_13()
@@ -295,9 +295,9 @@ public class RestStatusMonitor
             if (actionInventory == 0)
                 return false;
             var gclass36 = new GameTimer(8000);
-            StartupClass.smethod_39(200);
+            StartupClass.SleepMilliseconds(200);
             SpellcastingManager.gclass42_0.method_0("Common.ApplyBandage");
-            StartupClass.smethod_39(500);
+            StartupClass.SleepMilliseconds(500);
             method_9("Common.TargetSelf");
             gspellTimer_0.Reset();
             CombatController.smethod_1();
@@ -306,3 +306,5 @@ public class RestStatusMonitor
         return true;
     }
 }
+
+

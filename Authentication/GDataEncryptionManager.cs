@@ -100,9 +100,9 @@ public class GDataEncryptionManager
         var int_3_2 = 0;
         try
         {
-            if (StartupClass.WowVersionLabel_string.Length > 3)
+            if (StartupClass.WowVersionLabel.Length > 3)
                 int_3_2 = int.Parse(
-                    StartupClass.WowVersionLabel_string.Substring(StartupClass.WowVersionLabel_string.Length - 4));
+                    StartupClass.WowVersionLabel.Substring(StartupClass.WowVersionLabel.Length - 4));
         }
         catch (Exception ex)
         {
@@ -110,7 +110,7 @@ public class GDataEncryptionManager
             int_3_2 = 0;
         }
 
-        WriteIntToStream(StartupClass.int_4);
+        WriteIntToStream(StartupClass.ProfileEditorVersion);
         WriteStringToStream(ConfigManager.gclass61_0.method_2("AppKey"));
         if (GameMemoryAccess.bool_3)
             WriteIntToStream(int_3_1);
@@ -256,3 +256,4 @@ public class GDataEncryptionManager
         return buffer;
     }
 }
+

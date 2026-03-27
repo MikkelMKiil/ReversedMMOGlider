@@ -20,7 +20,7 @@ public class GameTimer
 
     public GameTimer(int int_2, int int_3)
     {
-        int_0 = StartupClass.random_0.Next() % (int_3 - int_2);
+        int_0 = StartupClass.RandomGenerator.Next() % (int_3 - int_2);
         int_0 += int_2;
         method_4();
     }
@@ -40,7 +40,7 @@ public class GameTimer
         var int_14 = method_0();
         if (int_14 <= 0)
             return;
-        StartupClass.smethod_39(int_14);
+        StartupClass.SleepMilliseconds(int_14);
     }
 
     public bool method_3()
@@ -58,3 +58,5 @@ public class GameTimer
         int_1 = Environment.TickCount - (int_0 + 1);
     }
 }
+
+

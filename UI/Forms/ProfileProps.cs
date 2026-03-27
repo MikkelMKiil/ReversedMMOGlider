@@ -665,8 +665,8 @@ public class ProfileProps : Form
         gprofile_0.VendorAR = VendorAR.Text.Length <= 0 ? null : VendorAR.Text;
         gprofile_0.VendorRepair = VendorRepair.Text.Length <= 0 ? null : VendorRepair.Text;
         gprofile_0.VendorFW = VendorFW.Text.Length <= 0 ? null : VendorFW.Text;
-        StartupClass.bool_16 = true;
-        StartupClass.int_6 = !gprofile_0.ReverseWaypoints || gprofile_0.Reversible ? 1 : -1;
+        StartupClass.IsProfileDirty = true;
+        StartupClass.StartupAttemptCount = !gprofile_0.ReverseWaypoints || gprofile_0.Reversible ? 1 : -1;
         gprofile_0.AvoidList = null;
         if (AvoidList.Text.Length > 2)
         {
@@ -809,3 +809,5 @@ public class ProfileProps : Form
         VendorWaypointsLabel.Text = MessageProvider.smethod_4("ProfileProps.VendorWaypointsLabel");
     }
 }
+
+

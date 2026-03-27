@@ -77,7 +77,7 @@ public class MessageProvider
         try
         {
             gclass30_0 = new MessageProvider(string_6);
-            StartupClass.numbers_string = GetMessage(2);
+            StartupClass.ActionBarCharacters = GetMessage(2);
         }
         catch (Exception ex)
         {
@@ -235,3 +235,4 @@ public class MessageProvider
         return regex_0.Match(string_6).Success;
     }
 }
+

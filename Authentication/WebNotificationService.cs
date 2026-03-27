@@ -212,11 +212,11 @@ public class WebNotificationService
         xmlDocument.AppendChild(element1);
         method_12(element1, "CustomerID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials"));
         method_12(element1, "QueryID", ConfigManager.gclass61_0.method_2("WebNotifyCredentials") + "-" + Guid.NewGuid());
-        method_12(element1, "Profile", StartupClass.string_5 == null ? "(no profile)" : StartupClass.string_5);
-        method_12(element1, "Gliding", StartupClass.glideMode_0 == GlideMode.Auto ? "1" : "0");
+        method_12(element1, "Profile", StartupClass.ActiveProfilePath == null ? "(no profile)" : StartupClass.ActiveProfilePath);
+        method_12(element1, "Gliding", StartupClass.CurrentGlideMode == GlideMode.Auto ? "1" : "0");
         method_12(element1, "GliderVersion", "1.8.0");
         method_12(element1, "GliderSubVersion", "Release");
-        if (StartupClass.bool_13)
+        if (StartupClass.IsRuntimeAttached)
         {
             var element2 = xmlDocument.CreateElement("Player");
             method_12(element2, "Name", GPlayerSelf.Me.Name);
@@ -230,7 +230,7 @@ public class WebNotificationService
             method_12(element2, "HealthMax", GPlayerSelf.Me.HealthMax.ToString());
             method_12(element2, "SecondAttr", GPlayerSelf.Me.Power2.ToString());
             method_12(element2, "SecondAttrMax", GPlayerSelf.Me.Power2Max.ToString());
-            method_12(element2, "KLD", StartupClass.int_7 + "/" + StartupClass.int_8 + "/" + StartupClass.int_9);
+            method_12(element2, "KLD", StartupClass.DynamicClassCount + "/" + StartupClass.CompiledClassCount + "/" + StartupClass.InternalClassCount);
             method_12(element2, "XPHour", StartupClass.smethod_29().ToString());
             method_12(element2, "Location: ", GPlayerSelf.Me.Location.ToString());
             method_12(element2, "Heading: ", GPlayerSelf.Me.Heading.ToString());
@@ -299,3 +299,4 @@ public class WebNotificationService
         xmlElement_0.Attributes.Append(attribute);
     }
 }
+

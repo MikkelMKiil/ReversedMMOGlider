@@ -130,14 +130,14 @@ public class ChatLogManager
                             if (strArray[1].Trim() == MessageProvider.GetMessage(34))
                             {
                                 Logger.LogMessage(MessageProvider.smethod_2(35, strArray[0].Trim()));
-                                if (StartupClass.glideMode_0 == GlideMode.Auto)
+                                if (StartupClass.CurrentGlideMode == GlideMode.Auto)
                                     method_7(strArray[1].Trim(), str1);
                             }
 
                             if (strArray[1].Trim() == MessageProvider.GetMessage(743))
                             {
                                 Logger.LogMessage(MessageProvider.smethod_2(744, strArray[0].Trim()));
-                                if (StartupClass.glideMode_0 == GlideMode.Auto)
+                                if (StartupClass.CurrentGlideMode == GlideMode.Auto)
                                     method_6(strArray[1].Trim(), str1);
                             }
                         }
@@ -182,7 +182,7 @@ public class ChatLogManager
                 var str = ConfigManager.gclass61_0.method_2("ChatAutoReplyText");
                 if (str.Length > 0)
                     InputController.smethod_28("/r " + str);
-                StartupClass.smethod_39(5000);
+                StartupClass.SleepMilliseconds(5000);
                 StartupClass.smethod_27(false, "GMWhisper");
             }
             else
@@ -400,3 +400,5 @@ public class ChatLogManager
         return 1;
     }
 }
+
+

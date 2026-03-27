@@ -63,17 +63,17 @@ public class TestThread
             if (!StartupClass.IsGliderInitialized)
                 Thread.Sleep(3000);
             var gspellTimer = new GSpellTimer(5000, false);
-            //StartupClass.gclass68_0.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
+            //StartupClass.CameraController.method_4(GContext.Main.Me.GetHeadingTo(GContext.Main.Me.Target));
             while (!gspellTimer.IsReady)
             {
                 Thread.Sleep(20);
-                //if (StartupClass.gclass68_0.method_8(true))
+                //if (StartupClass.CameraController.method_8(true))
                 //    break;
             }
 
             if (gspellTimer.IsReady)
                 Logger.LogMessage("Futility in test mouse spin");
-            //StartupClass.gclass68_0.method_3(false);
+            //StartupClass.CameraController.method_3(false);
         }
         else
         {
@@ -97,7 +97,7 @@ public class TestThread
         else
         {
             Logger.LogMessage("Moving camera to target pitch of: " + Math.Round(float_0, 3));
-            //StartupClass.gclass68_0.method_16(ggameCamera_0, float_0);
+            //StartupClass.CameraController.method_16(ggameCamera_0, float_0);
         }
     }
 
@@ -665,3 +665,4 @@ public class TestThread
         smethod_40();
     }
 }
+

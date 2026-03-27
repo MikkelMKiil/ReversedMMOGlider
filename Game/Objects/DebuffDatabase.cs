@@ -186,7 +186,7 @@ public class DebuffDatabase
 
     public void method_8()
     {
-        if (!StartupClass.bool_13)
+        if (!StartupClass.IsRuntimeAttached)
             return;
         var me = GPlayerSelf.Me;
         if (me == null)
@@ -258,3 +258,4 @@ public class DebuffDatabase
         }
     }
 }
+

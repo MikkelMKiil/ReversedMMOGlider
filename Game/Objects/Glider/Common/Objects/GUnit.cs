@@ -738,7 +738,7 @@ namespace Glider.Common.Objects
             else
             {
                 // Non-sneaking logic: quickly run/strafe around the target.
-                bool goRight = StartupClass.random_0.Next() % 2 == 0;
+                bool goRight = StartupClass.RandomGenerator.Next() % 2 == 0;
                 var strafeKey = goRight ? "Common.StrafeRight" : "Common.StrafeLeft";
 
                 GContext.Main.StartRun();
@@ -1009,7 +1009,7 @@ namespace Glider.Common.Objects
             var gbuffList = new List<GBuff>();
             // Debuffs start at index 40 for players, 16 for NPCs.
             var debuffStartIndex = IsPlayer ? 40 : 16;
-            var auraStructAddress = StorageAddress + StartupClass.gclass43_1.GetOffsetValue("UNIT_FIELD_AURA");
+            var auraStructAddress = StorageAddress + StartupClass.NpcOffsetManager.GetOffsetValue("UNIT_FIELD_AURA");
 
             for (var index = 0; index < MAX_AURAS; ++index)
             {

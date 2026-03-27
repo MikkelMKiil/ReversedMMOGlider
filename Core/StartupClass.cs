@@ -171,80 +171,6 @@ public class StartupClass
     public static bool IsWindowHidden;
     public static bool IsWindowShrunk;
 
-    public static bool bool_13 { get { return IsRuntimeAttached; } set { IsRuntimeAttached = value; } }
-    public static GProfile gprofile_0 { get { return ActiveProfile; } set { ActiveProfile = value; } }
-    public static string string_5 { get { return ActiveProfilePath; } set { ActiveProfilePath = value; } }
-    public static bool bool_14 { get { return SkipHandleOpen; } set { SkipHandleOpen = value; } }
-    public static CameraRotator gclass68_0 { get { return CameraController; } set { CameraController = value; } }
-    public static OffsetManager gclass43_0 { get { return PlayerOffsetManager; } set { PlayerOffsetManager = value; } }
-    public static OffsetManager gclass43_1 { get { return NpcOffsetManager; } set { NpcOffsetManager = value; } }
-    public static OffsetManager gclass43_2 { get { return ObjectOffsetManager; } set { ObjectOffsetManager = value; } }
-    public static OffsetManager gclass43_3 { get { return ItemOffsetManager; } set { ItemOffsetManager = value; } }
-    public static OffsetManager gclass43_4 { get { return ContainerOffsetManager; } set { ContainerOffsetManager = value; } }
-    public static int int_4 { get { return ProfileEditorVersion; } set { ProfileEditorVersion = value; } }
-    public static ulong long_0 { get { return CurrentPlayerGuid; } set { CurrentPlayerGuid = value; } }
-    public static int int_5 { get { return ResolvedMainTableAddress; } set { ResolvedMainTableAddress = value; } }
-    public static SortedList sortedList_2 { get { return RuntimeProfileCache; } set { RuntimeProfileCache = value; } }
-    public static bool bool_15 { get { return IsStartupPending; } set { IsStartupPending = value; } }
-    public static int int_6 { get { return StartupAttemptCount; } set { StartupAttemptCount = value; } }
-    public static DateTime dateTime_0 { get { return SessionStartTime; } set { SessionStartTime = value; } }
-    public static string WowVersionLabel_string { get { return WowVersionLabel; } set { WowVersionLabel = value; } }
-    public static bool bool_16 { get { return IsProfileDirty; } set { IsProfileDirty = value; } }
-    public static GameTimer gclass36_0 { get { return LicenseCheckTimer; } set { LicenseCheckTimer = value; } }
-    public static GlideMode glideMode_0 { get { return CurrentGlideMode; } set { CurrentGlideMode = value; } }
-    public static int int_7 { get { return DynamicClassCount; } set { DynamicClassCount = value; } }
-    public static int int_8 { get { return CompiledClassCount; } set { CompiledClassCount = value; } }
-    public static int int_9 { get { return InternalClassCount; } set { InternalClassCount = value; } }
-    public static bool bool_19 { get { return HasClassLoadMismatch; } set { HasClassLoadMismatch = value; } }
-    public static Thread thread_0 { get { return InitializationThread; } set { InitializationThread = value; } }
-    public static PartyManager gclass54_0 { get { return PartyStateManager; } set { PartyStateManager = value; } }
-    public static bool bool_20 { get { return IsAutoLoginTriggered; } set { IsAutoLoginTriggered = value; } }
-    public static bool bool_21 { get { return HasSessionWarning; } set { HasSessionWarning = value; } }
-    public static GameTimer gclass36_1 { get { return SessionHeartbeatTimer; } set { SessionHeartbeatTimer = value; } }
-    public static KeyboardHookManager gclass24_0 { get { return KeyboardHook; } set { KeyboardHook = value; } }
-    public static SecurityDescriptorHelper gclass11_0 { get { return SecurityDescriptor; } set { SecurityDescriptor = value; } }
-    public static RemoteViewerServer gclass79_0 { get { return RemoteViewer; } set { RemoteViewer = value; } }
-    public static GameClass gameClass_0 { get { return SelectedGameClass; } set { SelectedGameClass = value; } }
-    public static bool bool_23 { get { return HasShownStartupNotice; } set { HasShownStartupNotice = value; } }
-    public static bool bool_26 { get { return HasAppliedTimeExtension; } set { HasAppliedTimeExtension = value; } }
-    public static Logger ginterface0_0 { get { return StartupLogger; } set { StartupLogger = value; } }
-    public static bool bool_27 { get { return IsInitializationComplete; } set { IsInitializationComplete = value; } }
-    public static int int_10 { get { return LastSecurityCode; } set { LastSecurityCode = value; } }
-    public static CombatController gclass73_0 { get { return ActiveCombatController; } set { ActiveCombatController = value; } }
-    public static byte[] byte_0 { get { return RuntimePayloadBuffer; } set { RuntimePayloadBuffer = value; } }
-    public static bool bool_28 { get { return HasQueuedPayload; } set { HasQueuedPayload = value; } }
-    public static GlideMainThread gclass60_0 { get { return ManualGlideController; } set { ManualGlideController = value; } }
-    public static string numbers_string { get { return ActionBarCharacters; } set { ActionBarCharacters = value; } }
-    public static int int_11 { get { return CachedRatePerHour; } set { CachedRatePerHour = value; } }
-    public static WaypointType genum2_0 { get { return SelectedWaypointType; } set { SelectedWaypointType = value; } }
-    public static bool bool_29 { get { return RequiresConfigReload; } set { RequiresConfigReload = value; } }
-    public static EquipmentEnchantmentChecker gclass38_0 { get { return EquipmentEnchantmentChecker; } set { EquipmentEnchantmentChecker = value; } }
-    public static double double_0 { get { return AutoAddDistance; } set { AutoAddDistance = value; } }
-    public static DebuffDatabase DebuffsKnown_string { get { return KnownDebuffs; } set { KnownDebuffs = value; } }
-    public static string[] string_8 { get { return FriendWhitelist; } set { FriendWhitelist = value; } }
-    public static ProfileGroupManager gclass48_0 { get { return ProfileGroupStateManager; } set { ProfileGroupStateManager = value; } }
-    public static int int_12 { get { return AttachAttemptCount; } set { AttachAttemptCount = value; } }
-    public static Random random_0 { get { return RandomGenerator; } set { RandomGenerator = value; } }
-    public static LootRouteParser gclass33_0 { get { return LootRoutePattern; } set { LootRoutePattern = value; } }
-    public static GameTimer gclass36_2 { get { return AttachRefreshTimer; } set { AttachRefreshTimer = value; } }
-    public static bool bool_30 { get { return IsResumeRequested; } set { IsResumeRequested = value; } }
-    public static bool bool_31 { get { return IsAutoLoginArmed; } set { IsAutoLoginArmed = value; } }
-    public static GSpellTimer gspellTimer_1 { get { return AutoLoginTimer; } set { AutoLoginTimer = value; } }
-    public static bool bool_32 { get { return IsDetachInProgress; } set { IsDetachInProgress = value; } }
-    public static string string_9 { get { return AutoLoginSetting; } set { AutoLoginSetting = value; } }
-    public static bool bool_33 { get { return HasManualPause; } set { HasManualPause = value; } }
-    public static bool bool_34 { get { return IsDiagnosticLoggingEnabled; } set { IsDiagnosticLoggingEnabled = value; } }
-    public static bool bool_35 { get { return HasLoggedMissingProcess; } set { HasLoggedMissingProcess = value; } }
-    public static bool bool_36 { get { return DetachAfterStopRequested; } set { DetachAfterStopRequested = value; } }
-    public static bool bool_37 { get { return HasDeferredCompileRun; } set { HasDeferredCompileRun = value; } }
-    public static bool bool_38 { get { return NeedsDeferredCompile; } set { NeedsDeferredCompile = value; } }
-    public static SpellbookManager gclass63_0 { get { return SpellbookStateManager; } set { SpellbookStateManager = value; } }
-    public static IntPtr intptr_2 { get { return KillEventHandle; } set { KillEventHandle = value; } }
-    public static bool bool_39 { get { return ShouldProcessKillEvent; } set { ShouldProcessKillEvent = value; } }
-    public static uint uint_0 { get { return KillEventWaitTimeout; } set { KillEventWaitTimeout = value; } }
-    public static bool bool_40 { get { return IsWindowHidden; } set { IsWindowHidden = value; } }
-    public static bool bool_41 { get { return IsWindowShrunk; } set { IsWindowShrunk = value; } }
-
     public static void InitStartupMode(AppMode startupMode)
     {
         ApplicationStartupMode = startupMode;
@@ -459,26 +385,6 @@ public class StartupClass
     {
         if (IsInitializationComplete && StartupLogger != null)
             StartupLogger.imethod_0();
-    }
-
-    public static bool smethod_1(string profilePath)
-    {
-        return TryLoadProfileOrProfileGroup(profilePath);
-    }
-
-    private static bool smethod_2(string profilePath)
-    {
-        return IsProfileGroupPath(profilePath);
-    }
-
-    public static bool smethod_3(string profilePath)
-    {
-        return TryLoadProfile(profilePath);
-    }
-
-    public static string smethod_4(string string_11)
-    {
-        return string_11.LastIndexOf('\\') == -1 ? string_11 : string_11.Substring(string_11.LastIndexOf('\\') + 1);
     }
 
     public static void smethod_5()
@@ -722,7 +628,7 @@ public class StartupClass
         {
             HasShownStartupNotice = true;
             Logger.LogMessage(MessageProvider.GetMessage(75));
-            smethod_39(1000);
+            SleepMilliseconds(1000);
         }
 
         InitializationThread = null;
@@ -770,7 +676,7 @@ public class StartupClass
             {
                 IsBetaAccessGranted = true;
                 Logger.LogMessage(MessageProvider.GetMessage(78));
-                smethod_39(2000);
+                SleepMilliseconds(2000);
                 LicenseCheckTimer.method_5();
             }
         }
@@ -780,16 +686,6 @@ public class StartupClass
         IsInitializationComplete = true;
         StartupLogger.imethod_0();
         IsStartupPending = false;
-    }
-
-    public static bool smethod_12()
-    {
-        return IsRuntimeAttached;
-    }
-
-    public static void smethod_13()
-    {
-        TryAttachAndInitializeRuntime();
     }
 
     public static void smethod_14()
@@ -858,7 +754,7 @@ public class StartupClass
         return manager;
     }
 
-    public static void smethod_15()
+    public static void DetachRuntime()
     {
         if (!IsRuntimeAttached)
         {
@@ -1031,9 +927,9 @@ public class StartupClass
 
     public static void smethod_22()
     {
-        smethod_39(500);
+        SleepMilliseconds(500);
         GameMemoryAccess.SetForegroundWindow(MainApplicationHandle);
-        smethod_39(500);
+        SleepMilliseconds(500);
     }
 
     public static bool smethod_23()
@@ -1114,7 +1010,7 @@ public class StartupClass
         }
 
         if (IsDetached)
-            return smethod_25();
+            return TryStartDetachedMachGlide();
         if (ProfileGroupStateManager == null && (ActiveProfile == null || (ActiveProfile.Waypoints.Count < 2 && !ActiveProfile.Fishing)))
         {
             Logger.LogMessage(MessageProvider.GetMessage(119));
@@ -1152,7 +1048,7 @@ public class StartupClass
         return IsRuntimeAttached;
     }
 
-    private static bool smethod_25()
+    private static bool TryStartDetachedMachGlide()
     {
         GameProcessManager = new MachGlideRunner();
         if (!GameProcessManager.method_0())
@@ -1161,9 +1057,53 @@ public class StartupClass
             return false;
         }
 
-        Logger.LogMessage(MessageProvider.GetMessage(129));
-        ActiveProfile.SetFactionsFromString(ActiveProfile.GetFactionsAsString() + " " + GPlayerSelf.Me.Target.FactionID);
         return true;
+    }
+
+    public static bool TryAddCurrentTargetFaction()
+    {
+        if (!IsRuntimeAttached)
+            return false;
+
+        if (ActiveProfile == null)
+            return false;
+
+        var target = GPlayerSelf.Me.Target;
+        if (target == null || !target.IsValid)
+        {
+            Logger.smethod_1(LogCategoryStartup + "Unable to add faction: no valid target selected");
+            return false;
+        }
+
+        var factionId = target.FactionID;
+        if (factionId == 0)
+        {
+            Logger.smethod_1(LogCategoryStartup + "Unable to add faction: target faction id is zero");
+            return false;
+        }
+
+        if (HasFaction(ActiveProfile.Factions, factionId))
+        {
+            Logger.smethod_1(LogCategoryStartup + "Faction already present in profile: " + factionId);
+            return true;
+        }
+
+        ActiveProfile.AddFaction(factionId);
+        IsProfileDirty = true;
+        Logger.LogMessage(MessageProvider.GetMessage(129));
+        return true;
+    }
+
+    private static bool HasFaction(int[] factions, int factionId)
+    {
+        if (factions == null)
+            return false;
+
+        foreach (var faction in factions)
+            if (faction == factionId)
+                return true;
+
+        return false;
     }
 
     public static void smethod_27(bool bool_42, string string_11)
@@ -1565,9 +1505,9 @@ public class StartupClass
         IsWorldUiReady = true;
     }
 
-    public static void smethod_39(int int_14)
+    public static void SleepMilliseconds(int milliseconds)
     {
-        Thread.Sleep(int_14);
+        Thread.Sleep(milliseconds);
     }
 
     public static void smethod_40()
@@ -1602,16 +1542,16 @@ public class StartupClass
         return true;
     }
 
-    public static string smethod_42(string string_11)
+    public static string GetFileNameFromPath(string path)
     {
-        var num = string_11.LastIndexOf("\\");
-        return num == -1 ? string_11 : string_11.Substring(num + 1);
+        var separatorIndex = path.LastIndexOf("\\");
+        return separatorIndex == -1 ? path : path.Substring(separatorIndex + 1);
     }
 
-    public static string smethod_43(string string_11)
+    public static string GetDirectoryFromPath(string path)
     {
-        var length = string_11.LastIndexOf("\\");
-        return length == -1 ? string_11 : string_11.Substring(0, length);
+        var separatorIndex = path.LastIndexOf("\\");
+        return separatorIndex == -1 ? path : path.Substring(0, separatorIndex);
     }
 
     public static bool TryAttachToProcessAndResolveState()

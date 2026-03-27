@@ -61,14 +61,14 @@ namespace Glider.Common.Objects
 
         public bool MouseSpin { get; private set; }
 
-        public Random RNG => StartupClass.random_0;
+        public Random RNG => StartupClass.RandomGenerator;
 
         public bool IsRunning => Running;
 
-        public bool IsSpinning => MouseSpin ? StartupClass.gclass68_0.method_9() : SpinningKey != null;
+        public bool IsSpinning => MouseSpin ? StartupClass.CameraController.method_9() : SpinningKey != null;
 
         public bool Overspin => MouseSpin
-            ? StartupClass.gclass68_0.method_9() && _spinFutility.IsReady
+            ? StartupClass.CameraController.method_9() && _spinFutility.IsReady
             : SpinningKey != null && _spinFutility.IsReady;
 
         public double MeleeDistance { get; private set; }
@@ -83,7 +83,7 @@ namespace Glider.Common.Objects
         {
             get
             {
-                switch (StartupClass.glideMode_0)
+                switch (StartupClass.CurrentGlideMode)
                 {
                     case GlideMode.None:
                         return GGlideMode.None;
@@ -92,25 +92,25 @@ namespace Glider.Common.Objects
                     case GlideMode.Auto:
                         return GGlideMode.Glide;
                     default:
-                        throw new NotImplementedException("Don't know about GlideMode: " + StartupClass.glideMode_0);
+                        throw new NotImplementedException("Don't know about GlideMode: " + StartupClass.CurrentGlideMode);
                 }
             }
         }
 
         public int MaxCombatDuration => 90000;
 
-        public bool IsGliding => StartupClass.glideMode_0 != GlideMode.None;
+        public bool IsGliding => StartupClass.CurrentGlideMode != GlideMode.None;
 
-        public bool IsAttached => StartupClass.bool_13;
+        public bool IsAttached => StartupClass.IsRuntimeAttached;
 
-        public bool StoppedOnDetach => StartupClass.bool_36;
+        public bool StoppedOnDetach => StartupClass.DetachAfterStopRequested;
 
         public string RedMessage =>
             GameMemoryAccess.ReadString(MemoryOffsetTable.Instance.GetIntOffset(nameof(RedMessage)), 128, nameof(RedMessage));
 
-        public bool IsManualKill => StartupClass.glideMode_0 == GlideMode.Manual;
+        public bool IsManualKill => StartupClass.CurrentGlideMode == GlideMode.Manual;
 
-        public GProfile Profile => StartupClass.gprofile_0;
+        public GProfile Profile => StartupClass.ActiveProfile;
 
         public bool IsCorpseNearby => LootableCorpseTracker.smethod_1();
 
@@ -158,8 +158,8 @@ namespace Glider.Common.Objects
             MouseSpin = ConfigManager.gclass61_0.method_5("MouseSpin");
             _spellLeadDelay = ConfigManager.gclass61_0.method_3("SpellLeadDelay");
             GMonster.LogChecks = ConfigManager.gclass61_0.method_5("LogMonsterChecks");
-            if (StartupClass.gclass68_0 != null)
-                StartupClass.gclass68_0.method_1();
+            if (StartupClass.CameraController != null)
+                StartupClass.CameraController.method_1();
             if (GetConfigBool("AutoStop"))
                 _autoStop = new GSpellTimer(60000 * GetConfigInt("AutoStopMinutes"));
             else
@@ -416,7 +416,7 @@ namespace Glider.Common.Objects
 
         public void ReleaseAllKeys()
         {
-            StartupClass.gclass68_0.method_3(false);
+            StartupClass.CameraController.method_3(false);
             Running = false;
             SpinningKey = null;
             InputController.smethod_27();
@@ -455,7 +455,7 @@ namespace Glider.Common.Objects
             {
                 if (MouseSpin)
                 {
-                    StartupClass.gclass68_0.method_4(NewHeading);
+                    StartupClass.CameraController.method_4(NewHeading);
                 }
                 else
                 {
@@ -484,8 +484,8 @@ namespace Glider.Common.Objects
 
         public void PulseSpin(bool Fast)
         {
-            if (MouseSpin && StartupClass.gclass68_0.method_9())
-                StartupClass.gclass68_0.method_8(Fast);
+            if (MouseSpin && StartupClass.CameraController.method_9())
+                StartupClass.CameraController.method_8(Fast);
             if (!MouseSpin && Me != null)
                 Me.Refresh(true);
             if (MouseSpin || SpinningKey == null ||
@@ -497,7 +497,7 @@ namespace Glider.Common.Objects
         public void ReleaseSpin()
         {
             if (MouseSpin)
-                StartupClass.gclass68_0.method_3(false);
+                StartupClass.CameraController.method_3(false);
             else
                 lock (this)
                 {
@@ -519,7 +519,7 @@ namespace Glider.Common.Objects
 
         public bool RemoveDebuffs(GBuffType DType, string SpellName, bool InCombat)
         {
-            return StartupClass.DebuffsKnown_string.method_7((DebuffType)DType, SpellName, InCombat);
+            return StartupClass.KnownDebuffs.method_7((DebuffType)DType, SpellName, InCombat);
         }
 
         public GCombatResult CheckCommonCombatResult(GMonster Monster, bool WasAmbush)
@@ -649,7 +649,7 @@ namespace Glider.Common.Objects
 
         public bool LoadProfile(string Filename)
         {
-            return StartupClass.smethod_1(Filename);
+            return StartupClass.TryLoadProfileOrProfileGroup(Filename);
         }
 
         public void FireChatLog(string RawText, string ParsedText)
@@ -730,18 +730,18 @@ namespace Glider.Common.Objects
 
         public void HearthSoon()
         {
-            StartupClass.gclass73_0.bool_2 = true;
+            StartupClass.ActiveCombatController.bool_2 = true;
         }
 
         public void HearthAndExit()
         {
-            StartupClass.gclass73_0.method_21(false);
+            StartupClass.ActiveCombatController.method_21(false);
         }
 
         public void HearthSoon(bool AllowResume)
         {
-            StartupClass.gclass73_0.bool_2 = true;
-            StartupClass.gclass73_0.bool_3 = AllowResume;
+            StartupClass.ActiveCombatController.bool_2 = true;
+            StartupClass.ActiveCombatController.bool_3 = AllowResume;
         }
 
         public string GetLocal(int StringID)
@@ -778,7 +778,7 @@ namespace Glider.Common.Objects
 
         public void DoHearthAction()
         {
-            StartupClass.gclass73_0.method_62();
+            StartupClass.ActiveCombatController.method_62();
         }
 
         public void HandlePopups()
@@ -849,3 +849,5 @@ namespace Glider.Common.Objects
         }
     }
 }
+
+

@@ -173,7 +173,7 @@ namespace Glider.Common.Objects
         {
             if (Filled)
                 return;
-            if (!StartupClass.bool_13)
+            if (!StartupClass.IsRuntimeAttached)
             {
                 UnFill();
             }
@@ -190,7 +190,7 @@ namespace Glider.Common.Objects
                     var num2 = 1;
                     if (BarState == GBarState.Combat || BarState == GBarState.Indifferent || BarState == GBarState.Rest)
                         return;
-                    var num3 = StartupClass.numbers_string.IndexOf(CharCode);
+                    var num3 = StartupClass.ActionBarCharacters.IndexOf(CharCode);
                     if (num3 == -1)
                         return;
                     var num4 = (int)(BarState - 3);
@@ -229,7 +229,7 @@ namespace Glider.Common.Objects
                                 {
                                     var flag = false;
                                     if (SameSpells == null)
-                                        SameSpells = StartupClass.gclass63_0.method_13(SIM);
+                                        SameSpells = StartupClass.SpellbookStateManager.method_13(SIM);
                                     if (SameSpells == null)
                                         return;
                                     foreach (var sameSpell in SameSpells)
@@ -246,7 +246,7 @@ namespace Glider.Common.Objects
                             else
                             {
                                 LiveSIM = new GItemDefinition(SIM).SpellID;
-                                StartupClass.gclass63_0.method_9(LiveSIM);
+                                StartupClass.SpellbookStateManager.method_9(LiveSIM);
                                 Filled = true;
                                 return;
                             }
@@ -312,7 +312,7 @@ namespace Glider.Common.Objects
             }
 
             BarState = (GBarState)(3 + num);
-            CharCode = StartupClass.numbers_string[index];
+            CharCode = StartupClass.ActionBarCharacters[index];
             return true;
         }
 
@@ -383,3 +383,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

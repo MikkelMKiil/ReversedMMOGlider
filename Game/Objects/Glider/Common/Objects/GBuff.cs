@@ -16,7 +16,7 @@ namespace Glider.Common.Objects
             this.SpellID = SpellID;
             this.ChargesLeft = ChargesLeft;
             this.IsHarmful = IsHarmful;
-            var gclass64 = StartupClass.gclass63_0.method_7(SpellID);
+            var gclass64 = StartupClass.SpellbookStateManager.method_7(SpellID);
             if (gclass64 != null)
             {
                 _spellName = gclass64.string_0;
@@ -54,3 +54,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

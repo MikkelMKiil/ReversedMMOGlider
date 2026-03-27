@@ -17,7 +17,7 @@ namespace Glider.Common.Objects
 
         public ulong GetEquippedGUID(string SlotName)
         {
-            return StartupClass.gclass38_0.method_1(SlotName);
+            return StartupClass.EquipmentEnchantmentChecker.method_1(SlotName);
         }
 
         public int[] GetItemEnchants(ulong ItemGUID)
@@ -32,7 +32,7 @@ namespace Glider.Common.Objects
 
             for (var index = 0; index < 12; ++index)
             {
-                var num1 = StartupClass.gclass43_3.GetOffsetValue("ITEM_FIELD_ENCHANTMENT_" + (index + 1) + "_1");
+                var num1 = StartupClass.ItemOffsetManager.GetOffsetValue("ITEM_FIELD_ENCHANTMENT_" + (index + 1) + "_1");
                 var num2 = GameMemoryAccess.ReadInt32(gobject.StorageAddress + num1, "EnchantID");
                 if (num2 > 0)
                     intList.Add(num2);
@@ -43,7 +43,7 @@ namespace Glider.Common.Objects
 
         public string GetEnchantName(int EnchantID)
         {
-            return StartupClass.gclass38_0.method_3(EnchantID);
+            return StartupClass.EquipmentEnchantmentChecker.method_3(EnchantID);
         }
 
         public void DebugItem(ulong GUID)
@@ -55,3 +55,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

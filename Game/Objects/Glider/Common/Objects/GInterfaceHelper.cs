@@ -88,7 +88,7 @@ namespace Glider.Common.Objects
                 var gkey = SpellcastingManager.gclass42_0.Offsets[KeyName];
                 if (gkey.BarState == GBarState.Indifferent)
                     throw new Exception("BarState indifferent for that key, can only look up Combat/Rest");
-                var num = StartupClass.numbers_string.IndexOf(gkey.CharCode);
+                var num = StartupClass.ActionBarCharacters.IndexOf(gkey.CharCode);
                 var ObjectName = "BonusActionButton" + (num + 1);
                 var byName = GetByName(ObjectName);
                 if (byName == null || !byName.IsVisible)
@@ -123,7 +123,7 @@ namespace Glider.Common.Objects
             var num1 = MemoryOffsetTable.Instance.GetIntOffset("BarBase");
             var num2 = MemoryOffsetTable.Instance.GetIntOffset("BarSize");
             var num3 = 0;
-            var num4 = StartupClass.numbers_string.IndexOf(gkey.CharCode);
+            var num4 = StartupClass.ActionBarCharacters.IndexOf(gkey.CharCode);
             if (num4 == -1)
                 return -1;
             int int_29;
@@ -214,7 +214,7 @@ namespace Glider.Common.Objects
             }
 
             gkey.FilloutKey();
-            return StartupClass.gclass63_0.method_15(gkey.LiveSIM);
+            return StartupClass.SpellbookStateManager.method_15(gkey.LiveSIM);
         }
 
         public static void DumpUIDebug(bool RequireVisible)
@@ -352,3 +352,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

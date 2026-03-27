@@ -349,7 +349,7 @@ public class CodeCompiler
         else
             Logger.LogMessage("Compile successful on \"" + string_0 + "\"");
         var ggameClass = smethod_7(string_0, assembly_0, true, true);
-        if (ggameClass != null && StartupClass.bool_13)
+        if (ggameClass != null && StartupClass.IsRuntimeAttached)
             ggameClass.OnAttach();
         return ggameClass != null;
     }
@@ -381,3 +381,4 @@ public class CodeCompiler
         return null;
     }
 }
+

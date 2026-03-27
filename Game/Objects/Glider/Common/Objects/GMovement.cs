@@ -256,7 +256,7 @@ namespace Glider.Common.Objects
                         if (!flag1)
                         {
                             flag1 = true;
-                            var StrafeKey = StartupClass.random_0.Next() % 2 == 0
+                            var StrafeKey = StartupClass.RandomGenerator.Next() % 2 == 0
                                 ? "Common.StrafeLeft"
                                 : "Common.StrafeRight";
                             if (!StrafeTilUnstuck(StrafeKey))
@@ -269,7 +269,7 @@ namespace Glider.Common.Objects
                             ++num1;
                             Logger.LogMessage(MessageProvider.GetMessage(19));
                             GContext.Main.ReleaseRun();
-                            var num2 = StartupClass.random_0.Next() % 2 != 0
+                            var num2 = StartupClass.RandomGenerator.Next() % 2 != 0
                                 ? GPlayerSelf.Me.Heading + Math.PI / 2.0
                                 : GPlayerSelf.Me.Heading - Math.PI / 2.0;
                             if (num2 > 2.0 * Math.PI)
@@ -279,7 +279,7 @@ namespace Glider.Common.Objects
 
                             Target.Face(Distance > 20.0 ? 0.5 : 0.3);
                             GContext.Main.StartRun();
-                            Thread.Sleep(1000 + StartupClass.random_0.Next() % 1500);
+                            Thread.Sleep(1000 + StartupClass.RandomGenerator.Next() % 1500);
                             flag1 = false;
                         }
                     }
@@ -288,7 +288,7 @@ namespace Glider.Common.Objects
                     gspellTimer1.Reset();
                 }
 
-                StartupClass.smethod_39(107);
+                StartupClass.SleepMilliseconds(107);
                 if (num1 >= 4)
                 {
                     Logger.LogMessage("Stuck too many times in MoveToMonster, giving up");
@@ -376,7 +376,7 @@ namespace Glider.Common.Objects
                         if (!flag1)
                         {
                             flag1 = true;
-                            var StrafeKey = StartupClass.random_0.Next() % 2 == 0
+                            var StrafeKey = StartupClass.RandomGenerator.Next() % 2 == 0
                                 ? "Common.StrafeLeft"
                                 : "Common.StrafeRight";
                             if (!StrafeTilUnstuck(StrafeKey))
@@ -391,7 +391,7 @@ namespace Glider.Common.Objects
                             GContext.Main.PressKey("Common.Back");
                             Thread.Sleep(600);
                             GContext.Main.ReleaseKey("Common.Back");
-                            var NewHeading = StartupClass.random_0.Next() % 2 != 0
+                            var NewHeading = StartupClass.RandomGenerator.Next() % 2 != 0
                                 ? GPlayerSelf.Me.Heading + Math.PI / 2.0
                                 : GPlayerSelf.Me.Heading - Math.PI / 2.0;
                             if (NewHeading > 2.0 * Math.PI)
@@ -401,7 +401,7 @@ namespace Glider.Common.Objects
                             Logger.smethod_1("Current: " + GPlayerSelf.Me.Heading + ", new: " + NewHeading);
                             SetHeading(NewHeading, Distance > 20.0 ? 0.5 : 0.3);
                             GContext.Main.StartRun();
-                            Thread.Sleep(1000 + StartupClass.random_0.Next() % 1500);
+                            Thread.Sleep(1000 + StartupClass.RandomGenerator.Next() % 1500);
                             flag1 = false;
                         }
                     }
@@ -410,7 +410,7 @@ namespace Glider.Common.Objects
                     gspellTimer1.Reset();
                 }
 
-                StartupClass.smethod_39(50);
+                StartupClass.SleepMilliseconds(50);
             }
 
             if (!LeaveRunning)
@@ -448,12 +448,12 @@ namespace Glider.Common.Objects
         {
             for (var index = 0; index < 5; ++index)
             {
-                SetHeading(StartupClass.random_0.NextDouble() * 6.14);
-                StartupClass.gclass73_0.method_34(1500, 5000);
-                if (StartupClass.random_0.Next() % 3 == 0)
+                SetHeading(StartupClass.RandomGenerator.NextDouble() * 6.14);
+                StartupClass.ActiveCombatController.method_34(1500, 5000);
+                if (StartupClass.RandomGenerator.Next() % 3 == 0)
                 {
                     SpellcastingManager.gclass42_0.method_0("Common.Jump");
-                    StartupClass.gclass73_0.method_34(1500, 3000);
+                    StartupClass.ActiveCombatController.method_34(1500, 3000);
                 }
             }
         }
@@ -498,7 +498,7 @@ namespace Glider.Common.Objects
                 return false;
             var heading = GPlayerSelf.Me.Heading;
             SpellcastingManager.gclass42_0.method_1(SpinKey);
-            StartupClass.smethod_39(int_14);
+            StartupClass.SleepMilliseconds(int_14);
             SpellcastingManager.gclass42_0.method_2(SpinKey);
             GPlayerSelf.Me.Refresh(true);
             var num = CompareHeadings(heading, GPlayerSelf.Me.Heading);
@@ -613,3 +613,5 @@ namespace Glider.Common.Objects
         }
     }
 }
+
+

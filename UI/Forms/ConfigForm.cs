@@ -288,7 +288,7 @@ public class ConfigForm : Form
         }
 
         if (ClassList.SelectedIndex == -1)
-            ClassList.SelectedIndex = (int)StartupClass.gameClass_0;
+            ClassList.SelectedIndex = (int)StartupClass.SelectedGameClass;
         AltLayout.Enabled = true;
         if (bool_4)
             tabControl1.Controls.Add(TabInvisible);
@@ -410,8 +410,8 @@ public class ConfigForm : Form
         if (method_20())
             linkLabel1.Text = "http://www.mmoglider.com.cn";
         GliderVersionLabel.Text = MessageProvider.smethod_6("Config.GliderVersionLabel", "1.8.0", "Release");
-        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel_string);
-        DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+        WowVersionLabel.Text = MessageProvider.smethod_6("Config.WowVersionLabel", StartupClass.WowVersionLabel);
+        DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.KnownDebuffs.method_9());
         if (ConfigManager.gclass61_0.method_2("LastProfile") != null)
             InitialProfile.Text = ConfigManager.gclass61_0.method_2("LastProfile");
         else
@@ -458,7 +458,7 @@ public class ConfigForm : Form
         method_18();
         GameMemoryAccess.smethod_48(this);
         GameMemoryAccess.smethod_51(helpProvider_0);
-        StartupClass.gclass54_0.bool_4 = false;
+        StartupClass.PartyStateManager.bool_4 = false;
         bool_3 = true;
         StartupClass.MainWindowHandle = this;
     }
@@ -3768,7 +3768,7 @@ public class ConfigForm : Form
             return;
         if (ConfigManager.gclass61_0.method_2("RemindActionBars") == null)
             method_3();
-        StartupClass.bool_29 = true;
+        StartupClass.RequiresConfigReload = true;
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -3856,42 +3856,42 @@ public class ConfigForm : Form
 
     private void PartyMember1_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void method_6(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void PartyMember2_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void method_7(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void PartyMember3_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void method_8(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void PartyMember4_TextChanged(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void method_9(object sender, EventArgs e)
     {
-        StartupClass.gclass54_0.bool_4 = true;
+        StartupClass.PartyStateManager.bool_4 = true;
     }
 
     private void ListenEnabled_CheckedChanged(object sender, EventArgs e)
@@ -3902,7 +3902,7 @@ public class ConfigForm : Form
 
     private void ClassList_SelectedIndexChanged(object sender, EventArgs e)
     {
-        StartupClass.bool_29 = true;
+        StartupClass.RequiresConfigReload = true;
     }
 
     private void SetInitial_Click(object sender, EventArgs e)
@@ -3939,7 +3939,7 @@ public class ConfigForm : Form
     private void EditDebuffs_Click(object sender, EventArgs e)
     {
         if (StartupClass.ApplicationStartupMode == AppMode.Normal)
-            StartupClass.DebuffsKnown_string.method_10();
+            StartupClass.KnownDebuffs.method_10();
         var debuffList = new DebuffList();
         debuffList.method_0();
         if (debuffList.Offsets.Keys.Count == 0)
@@ -3950,7 +3950,7 @@ public class ConfigForm : Form
         else
         {
             var num2 = (int)debuffList.ShowDialog(this);
-            DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.DebuffsKnown_string.method_9());
+            DebuffsKnown.Text = MessageProvider.smethod_6("Config.DebuffsKnown", StartupClass.KnownDebuffs.method_9());
         }
     }
 
@@ -4226,3 +4226,5 @@ public class ConfigForm : Form
 
     }
 }
+
+

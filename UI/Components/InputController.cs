@@ -268,7 +268,7 @@ public class InputController // Original: InputController
 
         var result = SendInput(1U, ref input, Marshal.SizeOf(input));
         if (KeyDelay > 0)
-            StartupClass.smethod_39(KeyDelay);
+            StartupClass.SleepMilliseconds(KeyDelay);
         return result;
     }
 
@@ -286,7 +286,7 @@ public class InputController // Original: InputController
     public static void TapKey(short virtualKey)
     {
         SendKey(virtualKey, true);
-        StartupClass.smethod_39(20); // Hold delay
+        StartupClass.SleepMilliseconds(20); // Hold delay
         SendKey(virtualKey, false);
     }
 

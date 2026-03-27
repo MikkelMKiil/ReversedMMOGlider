@@ -126,7 +126,7 @@ public class RemoteViewerClient
         }
 
         thread_0 = null;
-        StartupClass.gclass79_0.method_3(this);
+        StartupClass.RemoteViewer.method_3(this);
     }
 
     public void method_3()
@@ -284,7 +284,7 @@ public class RemoteViewerClient
         {
             int_11 = 0;
             method_6("Bye!\r\n");
-            StartupClass.smethod_39(1000);
+            StartupClass.SleepMilliseconds(1000);
             bool_0 = true;
             socket_0.Close();
             socket_0 = null;
@@ -420,9 +420,9 @@ public class RemoteViewerClient
                 if (lower1 == "/say" && strArray1.Length > 1)
                 {
                     var str = string_1.Substring(4);
-                    if (StartupClass.glideMode_0 == GlideMode.Auto)
+                    if (StartupClass.CurrentGlideMode == GlideMode.Auto)
                     {
-                        StartupClass.gclass73_0.method_23(str, false);
+                        StartupClass.ActiveCombatController.method_23(str, false);
                         method_6("Queued for sending\r\n");
                     }
                     else
@@ -430,7 +430,7 @@ public class RemoteViewerClient
                         if (StartupClass.IsGliderInitialized || !InputController.UseClipboard)
                         {
                             InputController.TapKey(13);
-                            StartupClass.smethod_39(300);
+                            StartupClass.SleepMilliseconds(300);
                         }
 
                         InputController.smethod_28(str);
@@ -440,14 +440,14 @@ public class RemoteViewerClient
 
                 if (lower1 == "/loadprofile" && strArray1.Length > 1)
                 {
-                    if (StartupClass.glideMode_0 != GlideMode.None)
+                    if (StartupClass.CurrentGlideMode != GlideMode.None)
                     {
                         method_6("Failed: can't load a profile while gliding!\r\n");
                         return;
                     }
 
                     var str = string_1.Substring(string_1.IndexOf(" ") + 1);
-                    method_6(StartupClass.smethod_1(str[1] != ':' ? "Profiles\\" + str : str)
+                    method_6(StartupClass.TryLoadProfileOrProfileGroup(str[1] != ':' ? "Profiles\\" + str : str)
                         ? "Loaded profile ok\r\n"
                         : "Load profile failed - bogus name?\r\n");
                 }
@@ -463,9 +463,9 @@ public class RemoteViewerClient
                     if (lower1 == "/queuekeys" && strArray1.Length > 1)
                     {
                         var str = string_1.Substring(string_1.IndexOf(" ") + 1);
-                        if (StartupClass.glideMode_0 == GlideMode.Auto)
+                        if (StartupClass.CurrentGlideMode == GlideMode.Auto)
                         {
-                            StartupClass.gclass73_0.method_23(str, true);
+                            StartupClass.ActiveCombatController.method_23(str, true);
                             method_6("Queued for sending\r\n");
                         }
                         else
@@ -519,7 +519,7 @@ public class RemoteViewerClient
                         method_6("Version: 1.8.0\r\n");
                         method_6("Subversion: Release\r\n");
                         method_6("Elite: " + StartupClass.IsSomeConditionMet + "\r\n");
-                        method_6("Game: " + StartupClass.WowVersionLabel_string + "\r\n");
+                        method_6("Game: " + StartupClass.WowVersionLabel + "\r\n");
                     }
 
                     if (lower1 == "/selectgame")
@@ -532,9 +532,9 @@ public class RemoteViewerClient
                     if (lower1 == "/getgamews")
                     {
                         var str = "normal";
-                        if (StartupClass.bool_40)
+                        if (StartupClass.IsWindowHidden)
                             str = "hidden";
-                        if (StartupClass.bool_41)
+                        if (StartupClass.IsWindowShrunk)
                             str = "shrunk";
                         method_6("Game window state: " + str + "\r\n");
                     }
@@ -546,9 +546,9 @@ public class RemoteViewerClient
                         {
                             case "normal":
                                 method_6("Setting new state: normal\r\n");
-                                if (StartupClass.bool_41)
+                                if (StartupClass.IsWindowShrunk)
                                     StartupClass.smethod_50();
-                                if (StartupClass.bool_40) StartupClass.smethod_49();
+                                if (StartupClass.IsWindowHidden) StartupClass.smethod_49();
                                 break;
                             case "hidden":
                                 method_6("Setting new state: hidden\r\n");
@@ -566,7 +566,7 @@ public class RemoteViewerClient
 
                     if (lower1 == "/config")
                     {
-                        if (StartupClass.glideMode_0 != GlideMode.None)
+                        if (StartupClass.CurrentGlideMode != GlideMode.None)
                         {
                             method_6("Failed: can't reconfigure while gliding, stop first!\r\n");
                         }
@@ -575,17 +575,17 @@ public class RemoteViewerClient
                             var str = ConfigManager.gclass61_0.method_2("AppKey");
                             ConfigManager.gclass61_0.method_3("Class");
                             ConfigManager.gclass61_0.method_7(false);
-                            StartupClass.bool_29 = true;
-                            StartupClass.gclass24_0.method_0();
+                            StartupClass.RequiresConfigReload = true;
+                            StartupClass.KeyboardHook.method_0();
                             SpellcastingManager.gclass42_0.method_12();
                             InputController.smethod_31(ConfigManager.gclass61_0);
                             StartupClass.smethod_5();
-                            StartupClass.gclass54_0.method_0(ConfigManager.gclass61_0);
-                            if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.gclass54_0.bool_4 ||
+                            StartupClass.PartyStateManager.method_0(ConfigManager.gclass61_0);
+                            if (str != ConfigManager.gclass61_0.method_2("AppKey") || StartupClass.PartyStateManager.bool_4 ||
                                 !StartupClass.isInitializationSuccessful)
                             {
-                                StartupClass.gclass54_0.bool_4 = false;
-                                StartupClass.smethod_15();
+                                StartupClass.PartyStateManager.bool_4 = false;
+                                StartupClass.DetachRuntime();
                                 StartupClass.smethod_9();
                             }
 
@@ -595,13 +595,13 @@ public class RemoteViewerClient
 
                     if (lower1 == "/status")
                     {
-                        var bool13 = StartupClass.bool_13;
-                        var glideMode0 = StartupClass.glideMode_0;
+                        var bool13 = StartupClass.IsRuntimeAttached;
+                        var glideMode0 = StartupClass.CurrentGlideMode;
                         var stringBuilder = new StringBuilder();
                         method_6("Version: 1.8.0\r\n");
                         method_6("Attached: " + bool13 + "\r\n");
                         method_6("Mode: " + glideMode0 + "\r\n");
-                        method_6("Profile: " + StartupClass.string_5 + "\r\n");
+                        method_6("Profile: " + StartupClass.ActiveProfilePath + "\r\n");
                         if ((int_11 & 8) > 0)
                             stringBuilder.Append("Chat ");
                         if ((int_11 & 32) > 0)
@@ -635,8 +635,8 @@ public class RemoteViewerClient
                             method_6("Location: " + GPlayerSelf.Me.Location.ToString3D() + "\r\n");
                             method_6("Heading: " + GPlayerSelf.Me.Heading + "\r\n");
                             method_6("Pitch: " + GPlayerSelf.Me.Pitch + "\r\n");
-                            method_6("KLD: " + StartupClass.int_7 + "/" + StartupClass.int_8 + "/" +
-                                     StartupClass.int_9 + "\r\n");
+                            method_6("KLD: " + StartupClass.DynamicClassCount + "/" + StartupClass.CompiledClassCount + "/" +
+                                     StartupClass.InternalClassCount + "\r\n");
                             var target = GPlayerSelf.Me.Target;
                             if (target != null)
                             {
@@ -652,7 +652,7 @@ public class RemoteViewerClient
 
                     if (lower1 == "/attach")
                     {
-                        if (StartupClass.bool_13)
+                        if (StartupClass.IsRuntimeAttached)
                             method_6("Already attached\r\n");
                         else
                             method_6("Attach command not supported any more, passive attach is automatic\r\n");
@@ -660,15 +660,15 @@ public class RemoteViewerClient
 
                     if (lower1 == "/clearsay")
                     {
-                        if (StartupClass.glideMode_0 != GlideMode.Auto)
+                        if (StartupClass.CurrentGlideMode != GlideMode.Auto)
                         {
                             method_6("Not gliding, nothing to clear\r\n");
                             return;
                         }
 
-                        if (StartupClass.gclass73_0.method_25())
+                        if (StartupClass.ActiveCombatController.method_25())
                         {
-                            StartupClass.gclass73_0.method_24();
+                            StartupClass.ActiveCombatController.method_24();
                             method_6("Queue cleared\r\n");
                         }
                         else
@@ -679,18 +679,18 @@ public class RemoteViewerClient
 
                     if (lower1 == "/startglide")
                     {
-                        if (!StartupClass.bool_13)
+                        if (!StartupClass.IsRuntimeAttached)
                         {
                             method_6("Attaching\r\n");
-                            StartupClass.smethod_13();
-                            if (!StartupClass.bool_13)
+                            StartupClass.TryAttachAndInitializeRuntime();
+                            if (!StartupClass.IsRuntimeAttached)
                             {
                                 method_6("Could not attach\r\n");
                                 return;
                             }
                         }
 
-                        if (StartupClass.glideMode_0 != GlideMode.None)
+                        if (StartupClass.CurrentGlideMode != GlideMode.None)
                         {
                             method_6("Can't start glide, already in auto mode\r\n");
                             return;
@@ -702,13 +702,13 @@ public class RemoteViewerClient
 
                     if (lower1 == "/stopglide")
                     {
-                        if (!StartupClass.bool_13)
+                        if (!StartupClass.IsRuntimeAttached)
                         {
                             method_6("Not attached, nothing to stop\r\n");
                             return;
                         }
 
-                        if (StartupClass.glideMode_0 == GlideMode.None)
+                        if (StartupClass.CurrentGlideMode == GlideMode.None)
                         {
                             method_6("Already stopped\r\n");
                             return;
@@ -1040,3 +1040,6 @@ public class RemoteViewerClient
         }
     }
 }
+
+
+

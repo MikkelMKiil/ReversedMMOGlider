@@ -219,19 +219,19 @@ namespace Glider.Common.Objects
             switch (_type)
             {
                 case GObjectType.Item:
-                    _descriptor = StartupClass.gclass43_3;
+                    _descriptor = StartupClass.ItemOffsetManager;
                     break;
                 case GObjectType.Container:
-                    _descriptor = StartupClass.gclass43_4;
+                    _descriptor = StartupClass.ContainerOffsetManager;
                     break;
                 case GObjectType.Monster:
-                    _descriptor = StartupClass.gclass43_1;
+                    _descriptor = StartupClass.NpcOffsetManager;
                     break;
                 case GObjectType.Player:
-                    _descriptor = StartupClass.gclass43_0;
+                    _descriptor = StartupClass.PlayerOffsetManager;
                     break;
                 case GObjectType.Node:
-                    _descriptor = StartupClass.gclass43_2;
+                    _descriptor = StartupClass.ObjectOffsetManager;
                     break;
             }
         }
@@ -261,7 +261,7 @@ namespace Glider.Common.Objects
             // ensure camera rotator is enabled (keep original behavior), but don't let exceptions bubble
             try
             {
-                StartupClass.gclass68_0.method_3(true);
+                StartupClass.CameraController.method_3(true);
             }
             catch (Exception ex)
             {
@@ -290,7 +290,7 @@ namespace Glider.Common.Objects
                 return true;
 
             // fall back to the configured list of screen positions, if present
-            var list = StartupClass.gclass33_0 != null ? StartupClass.gclass33_0.list_0 : null;
+            var list = StartupClass.LootRoutePattern != null ? StartupClass.LootRoutePattern.list_0 : null;
             if (list != null)
             {
                 foreach (var glocation in list)
@@ -378,3 +378,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

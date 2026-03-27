@@ -125,7 +125,7 @@ public class DebuffList : Form
                                 continue;
                         }
 
-                    if (!Offsets.ContainsKey(num) && !StartupClass.DebuffsKnown_string.method_6(num))
+                    if (!Offsets.ContainsKey(num) && !StartupClass.KnownDebuffs.method_6(num))
                     {
                         Logger.smethod_1(num.ToString("x") + " = \"" + str2 + "\"");
                         Offsets.Add(num, str2);
@@ -151,12 +151,12 @@ public class DebuffList : Form
         if (debuffPick.ShowDialog(this) != DialogResult.OK)
             return;
         DebuffBox.Items.RemoveAt(DebuffBox.SelectedIndex);
-        StartupClass.DebuffsKnown_string.method_1(int_0, str, debuffPick.genum4_0);
+        StartupClass.KnownDebuffs.method_1(int_0, str, debuffPick.genum4_0);
     }
 
     private void MyOKButton_Click(object sender, EventArgs e)
     {
-        StartupClass.DebuffsKnown_string.method_4();
+        StartupClass.KnownDebuffs.method_4();
     }
 
     private void MyHelpButton_Click(object sender, EventArgs e)
@@ -164,3 +164,4 @@ public class DebuffList : Form
         GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "Debuffs.html");
     }
 }
+

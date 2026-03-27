@@ -219,10 +219,10 @@ namespace Glider.Common.Objects
 
         public void Select()
         {
-            StartupClass.int_6 = 1;
+            StartupClass.StartupAttemptCount = 1;
             if (ReverseWaypoints)
-                StartupClass.int_6 = -1;
-            StartupClass.sortedList_2.Clear();
+                StartupClass.StartupAttemptCount = -1;
+            StartupClass.RuntimeProfileCache.Clear();
         }
 
         public bool IsBlacklisted(ulong GUID)
@@ -592,8 +592,8 @@ namespace Glider.Common.Objects
         public string[] GetWaypointNotes()
         {
             var closestWaypointIndex = GetClosestWaypointIndex(GPlayerSelf.Me.Location);
-            var WPIndex1 = closestWaypointIndex + StartupClass.int_6;
-            var WPIndex2 = closestWaypointIndex - StartupClass.int_6;
+            var WPIndex1 = closestWaypointIndex + StartupClass.StartupAttemptCount;
+            var WPIndex2 = closestWaypointIndex - StartupClass.StartupAttemptCount;
             if (WPIndex1 < 0)
                 WPIndex1 = Waypoints.Count - 1;
             if (WPIndex1 == Waypoints.Count)
@@ -717,7 +717,7 @@ namespace Glider.Common.Objects
             }
             else
             {
-                CurrentIndex += StartupClass.int_6;
+                CurrentIndex += StartupClass.StartupAttemptCount;
                 if (CurrentIndex < 0 || CurrentIndex >= Waypoints.Count)
                 {
                     ProfileGroupManager.smethod_2();
@@ -730,7 +730,7 @@ namespace Glider.Common.Objects
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(67));
                         CurrentIndex = 1;
-                        StartupClass.int_6 = 1;
+                        StartupClass.StartupAttemptCount = 1;
                     }
                     else
                     {
@@ -745,7 +745,7 @@ namespace Glider.Common.Objects
                     {
                         Logger.LogMessage(MessageProvider.GetMessage(65));
                         CurrentIndex = Waypoints.Count - 2;
-                        StartupClass.int_6 = -1;
+                        StartupClass.StartupAttemptCount = -1;
                     }
                     else
                     {
@@ -760,7 +760,7 @@ namespace Glider.Common.Objects
 
         private int PeekNextWaypointIndex(int StartIndex)
         {
-            StartIndex += StartupClass.int_6;
+            StartIndex += StartupClass.StartupAttemptCount;
             if (StartIndex < 0)
                 StartIndex = !Reversible ? Waypoints.Count - 1 : 1;
             if (StartIndex == Waypoints.Count)
@@ -782,9 +782,10 @@ namespace Glider.Common.Objects
                 Breadcrumbs.Pop();
             if (Breadcrumbs.Count != 0)
                 return;
-            StartupClass.int_6 *= -1;
+            StartupClass.StartupAttemptCount *= -1;
             ConsumeCurrentWaypoint();
-            StartupClass.int_6 *= -1;
+            StartupClass.StartupAttemptCount *= -1;
         }
     }
 }
+

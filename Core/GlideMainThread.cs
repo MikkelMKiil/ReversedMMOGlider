@@ -18,7 +18,7 @@ public class GlideMainThread
     public GlideMainThread()
     {
         gplayerSelf_0 = GPlayerSelf.Me;
-        StartupClass.ginterface0_0.imethod_0();
+        StartupClass.StartupLogger.imethod_0();
         thread_0 = null;
         thread_0 = new Thread(method_1);
         thread_0.IsBackground = true;
@@ -41,7 +41,7 @@ public class GlideMainThread
     {
         try
         {
-            if (!StartupClass.bool_19)
+            if (!StartupClass.HasClassLoadMismatch)
                 method_2();
             StartupClass.smethod_27(false, "GlideThreadReturned");
         }
@@ -92,3 +92,4 @@ public class GlideMainThread
         }
     }
 }
+

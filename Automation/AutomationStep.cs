@@ -31,7 +31,7 @@ public class AutomationStep
         return new string[2]
         {
             int_0.ToString(),
-            StartupClass.smethod_42(string_0)
+            StartupClass.GetFileNameFromPath(string_0)
         };
     }
 
@@ -151,3 +151,4 @@ public class AutomationStep
         }
     }
 }
+

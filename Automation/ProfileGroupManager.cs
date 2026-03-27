@@ -131,45 +131,45 @@ public class ProfileGroupManager
         }
 
         Logger.LogMessage("Closest profile: " + gclass72_0.string_0 + ", distance: " + num);
-        StartupClass.gprofile_0 = gclass72_0.gprofile_0;
+        StartupClass.ActiveProfile = gclass72_0.gprofile_0;
         return gclass72_0.gprofile_0;
     }
 
     public static void smethod_0()
     {
-        if (StartupClass.gclass48_0 == null)
+        if (StartupClass.ProfileGroupStateManager == null)
             return;
-        ++StartupClass.gclass48_0.int_2;
-        Logger.smethod_1("LogDeath, new count: " + StartupClass.gclass48_0.int_2);
+        ++StartupClass.ProfileGroupStateManager.int_2;
+        Logger.smethod_1("LogDeath, new count: " + StartupClass.ProfileGroupStateManager.int_2);
     }
 
     public static void smethod_1()
     {
-        if (StartupClass.gclass48_0 == null)
+        if (StartupClass.ProfileGroupStateManager == null)
             return;
-        ++StartupClass.gclass48_0.int_1;
-        Logger.smethod_1("LogFollower, new count: " + StartupClass.gclass48_0.int_1);
+        ++StartupClass.ProfileGroupStateManager.int_1;
+        Logger.smethod_1("LogFollower, new count: " + StartupClass.ProfileGroupStateManager.int_1);
     }
 
     public static void smethod_2()
     {
-        if (StartupClass.gclass48_0 == null)
+        if (StartupClass.ProfileGroupStateManager == null)
             return;
-        ++StartupClass.gclass48_0.int_0;
-        Logger.smethod_1("LogLoop, new count: " + StartupClass.gclass48_0.int_0);
+        ++StartupClass.ProfileGroupStateManager.int_0;
+        Logger.smethod_1("LogLoop, new count: " + StartupClass.ProfileGroupStateManager.int_0);
     }
 
     public static bool smethod_3()
     {
-        return StartupClass.gclass48_0 != null && StartupClass.gclass48_0.method_8() &&
-               StartupClass.gclass48_0.method_7();
+        return StartupClass.ProfileGroupStateManager != null && StartupClass.ProfileGroupStateManager.method_8() &&
+               StartupClass.ProfileGroupStateManager.method_7();
     }
 
     private bool method_7()
     {
         if (gclass51_0 == null || GPlayerSelf.Me.TargetGUID != 0L)
             return false;
-        while (StartupClass.gclass73_0.method_19() || StartupClass.gclass73_0.method_52(true))
+        while (StartupClass.ActiveCombatController.method_19() || StartupClass.ActiveCombatController.method_52(true))
             Logger.LogMessage(MessageProvider.GetMessage(832));
         if (gclass72_0.bool_0)
             method_9();
@@ -197,7 +197,7 @@ public class ProfileGroupManager
         }
 
         gclass72_0 = gclass72;
-        StartupClass.smethod_3(gclass72_0.string_0);
+        StartupClass.TryLoadProfile(gclass72_0.string_0);
         gclass72_0.gprofile_0.Select();
         method_0();
         if (gclass72_0.gprofile_0.IgnoreAttackers && gclass72_0.bool_1 && !method_13())
@@ -443,10 +443,10 @@ public class ProfileGroupManager
                         {
                             Logger.LogMessage(MessageProvider.GetMessage(742));
                             var string_1 = "Common.StrafeLeft";
-                            if (StartupClass.random_0.Next() % 2 == 0)
+                            if (StartupClass.RandomGenerator.Next() % 2 == 0)
                                 string_1 = "Common.StrafeRight";
                             SpellcastingManager.gclass42_0.method_1(string_1);
-                            StartupClass.smethod_39(1200);
+                            StartupClass.SleepMilliseconds(1200);
                             SpellcastingManager.gclass42_0.method_2(string_1);
                             flag2 = true;
                         }
@@ -454,11 +454,11 @@ public class ProfileGroupManager
                         {
                             Logger.LogMessage(MessageProvider.GetMessage(256));
                             GContext.Main.ReleaseSpinRun();
-                            StartupClass.smethod_39(600);
+                            StartupClass.SleepMilliseconds(600);
                             GContext.Main.PressKey("Common.Back");
-                            StartupClass.smethod_39(2000);
+                            StartupClass.SleepMilliseconds(2000);
                             GContext.Main.ReleaseKey("Common.Back");
-                            var NewHeading = StartupClass.random_0.Next() % 2 != 0
+                            var NewHeading = StartupClass.RandomGenerator.Next() % 2 != 0
                                 ? GPlayerSelf.Me.Heading + Math.PI / 2.0
                                 : GPlayerSelf.Me.Heading - Math.PI / 2.0;
                             if (NewHeading > 2.0 * Math.PI)
@@ -500,14 +500,14 @@ public class ProfileGroupManager
 
     public static void smethod_4()
     {
-        if (StartupClass.gclass48_0 == null)
+        if (StartupClass.ProfileGroupStateManager == null)
             return;
-        StartupClass.gclass48_0.method_14();
+        StartupClass.ProfileGroupStateManager.method_14();
     }
 
     public static bool smethod_5()
     {
-        return StartupClass.gclass48_0 != null && StartupClass.gclass48_0.method_13();
+        return StartupClass.ProfileGroupStateManager != null && StartupClass.ProfileGroupStateManager.method_13();
     }
 
     [SpecialName]
@@ -534,8 +534,8 @@ public class ProfileGroupManager
         {
             if (GPlayerSelf.Me.TargetGUID != 0L)
             {
-                StartupClass.gclass73_0.method_12(true);
-                StartupClass.gclass73_0.method_52(true);
+                StartupClass.ActiveCombatController.method_12(true);
+                StartupClass.ActiveCombatController.method_52(true);
             }
 
             Thread.Sleep(500);
@@ -576,9 +576,9 @@ public class ProfileGroupManager
 
     public static void smethod_6()
     {
-        if (StartupClass.gclass48_0 == null || !StartupClass.gclass48_0.gclass72_0.bool_1)
+        if (StartupClass.ProfileGroupStateManager == null || !StartupClass.ProfileGroupStateManager.gclass72_0.bool_1)
             return;
-        StartupClass.gclass48_0.method_15();
+        StartupClass.ProfileGroupStateManager.method_15();
     }
 
     private void method_17(StepStopAction genum15_0)
@@ -587,10 +587,10 @@ public class ProfileGroupManager
         {
             case StepStopAction.const_2:
                 Logger.LogMessage(MessageProvider.smethod_2(844, "HearthAndLog"));
-                StartupClass.gclass73_0.method_21(true);
+                StartupClass.ActiveCombatController.method_21(true);
                 break;
             case StepStopAction.const_1:
-                StartupClass.gclass73_0.method_22();
+                StartupClass.ActiveCombatController.method_22();
                 break;
             case StepStopAction.const_0:
                 Logger.LogMessage(MessageProvider.smethod_2(844, "Stop"));
@@ -603,7 +603,7 @@ public class ProfileGroupManager
     {
         while (true)
         {
-            StartupClass.gclass73_0.gprofile_0 = gclass72_0.gprofile_0;
+            StartupClass.ActiveCombatController.gprofile_0 = gclass72_0.gprofile_0;
             gclass72_0.gprofile_0.Select();
             gclass72_0.gprofile_0.BeginProfile(GPlayerSelf.Me.Location);
             Logger.smethod_1("Going into run loop for: " + gclass72_0.string_0);
@@ -611,18 +611,18 @@ public class ProfileGroupManager
             {
                 if (gclass72_0.gprofile_0.NaturalRun)
                 {
-                    StartupClass.gclass73_0.method_39();
+                    StartupClass.ActiveCombatController.method_39();
                 }
                 else
                 {
                     GContext.Main.ReleaseSpinRun();
-                    StartupClass.gclass73_0.method_5();
+                    StartupClass.ActiveCombatController.method_5();
                 }
             }
             else
             {
                 GContext.Main.ReleaseSpinRun();
-                StartupClass.gclass73_0.method_29();
+                StartupClass.ActiveCombatController.method_29();
             }
         }
     }
@@ -647,3 +647,6 @@ public class ProfileGroupManager
         return gbuffList.ToArray();
     }
 }
+
+
+

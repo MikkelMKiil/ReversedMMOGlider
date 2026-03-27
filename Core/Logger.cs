@@ -134,9 +134,9 @@ public sealed class Logger
     public void method_0()
     {
         Reset();
-        StartupClass.ginterface0_0 = this;
+        StartupClass.StartupLogger = this;
         StartupClass.InitStartupMode(AppMode.Normal);
-        StartupClass.genum2_0 = WaypointType.const_0;
+        StartupClass.SelectedWaypointType = WaypointType.const_0;
         workThread = new Thread(method_3);
         workThread.Start();
     }
@@ -162,15 +162,15 @@ public sealed class Logger
         while (true)
         {
             Thread.Sleep(200);
-            if (bool_0 && StartupClass.bool_13)
+            if (bool_0 && StartupClass.IsRuntimeAttached)
                 goto label_6;
 label_1:
             if (!StartupClass.isInputStringFourCharacters)
-                StartupClass.gclass36_0 = null;
-            if (StartupClass.gclass36_0 != null && StartupClass.gclass36_0.method_3())
+                StartupClass.LicenseCheckTimer = null;
+            if (StartupClass.LicenseCheckTimer != null && StartupClass.LicenseCheckTimer.method_3())
             {
-                StartupClass.gclass36_0 = null;
-                StartupClass.bool_19 = true;
+                StartupClass.LicenseCheckTimer = null;
+                StartupClass.HasClassLoadMismatch = true;
                 Logger.LogMessage(MessageProvider.GetMessage(103));
                 StartupClass.smethod_27(false, "Timer2Up");
             }
@@ -182,7 +182,7 @@ label_6:
             {
                 glocation_0 = GPlayerSelf.Me.Location;
             }
-            else if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) > StartupClass.double_0)
+            else if (GPlayerSelf.Me.Location.GetDistanceTo(glocation_0) > StartupClass.AutoAddDistance)
             {
                 StartupClass.smethod_23();
                 glocation_0 = GPlayerSelf.Me.Location;
@@ -240,3 +240,4 @@ label_6:
         return dateTime_0.ToString("HH:mm:ss.ffff ") + string_0;
     }
 }
+

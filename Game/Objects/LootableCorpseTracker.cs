@@ -69,12 +69,12 @@ public class LootableCorpseTracker
     {
         var gclass5 = smethod_2(GPlayerSelf.Me.Location);
         return gclass5 != null && gclass5.glocation_0.DistanceToSelf <
-            (double)(StartupClass.CurrentGameClass.PullDistance + StartupClass.gclass73_0.int_5);
+            (double)(StartupClass.CurrentGameClass.PullDistance + StartupClass.ActiveCombatController.int_5);
     }
 
     public static LootableCorpseTracker smethod_2(GLocation glocation_1)
     {
-        if (ConfigManager.gclass61_0.method_5("SkipLoot") || StartupClass.gclass73_0.bool_5)
+        if (ConfigManager.gclass61_0.method_5("SkipLoot") || StartupClass.ActiveCombatController.bool_5)
             return null;
         LootableCorpseTracker gclass5 = null;
         var num = 9999.0;
@@ -174,7 +174,7 @@ public class LootableCorpseTracker
             Logger.smethod_1("LootFute loop top");
             if (GContext.Main.Me.IsUnderAttack || !gunit_0.Hover())
                 return false;
-            StartupClass.gclass73_0.method_56();
+            StartupClass.ActiveCombatController.method_56();
             gspellTimer2.Reset();
             while (!gspellTimer2.IsReadySlow)
                 if (gunit_0.WasLootable && !gunit_0.IsLootable)
@@ -214,12 +214,12 @@ public class LootableCorpseTracker
         if (!SpellcastingManager.gclass42_0.method_15("Common.PostLoot"))
         {
             if (ConfigManager.gclass61_0.method_5("RunPostLoot"))
-                StartupClass.gclass73_0.bool_7 = true;
+                StartupClass.ActiveCombatController.bool_7 = true;
             else
                 GContext.Main.CastSpell("Common.PostLoot");
         }
 
-        ++StartupClass.int_8;
+        ++StartupClass.CompiledClassCount;
         if (!ConfigManager.gclass61_0.method_5("AutoSkin"))
         {
             Logger.smethod_1("Skinning disabled, won't try it");
@@ -240,7 +240,7 @@ public class LootableCorpseTracker
             {
                 if (GContext.Main.Me.IsUnderAttack || !gunit_0.Hover())
                     return false;
-                StartupClass.gclass73_0.method_56();
+                StartupClass.ActiveCombatController.method_56();
                 gspellTimer2.Reset();
                 while (!gspellTimer2.IsReadySlow)
                     if (GContext.Main.Me.IsCasting)
@@ -305,3 +305,4 @@ public class LootableCorpseTracker
         return true;
     }
 }
+

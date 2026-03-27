@@ -45,7 +45,7 @@ public class KeyEditor : Form
 
     public KeyEditor(string string_2, string string_3)
     {
-        if (StartupClass.bool_13)
+        if (StartupClass.IsRuntimeAttached)
             SpellcastingManager.gclass42_0.method_23();
         string_0 = string_2;
         InitializeComponent();
@@ -425,9 +425,9 @@ public class KeyEditor : Form
         Spell.Items.Clear();
         if (GContext.Main.IsAttached)
         {
-            if (StartupClass.gclass63_0 == null)
+            if (StartupClass.SpellbookStateManager == null)
             {
-                StartupClass.gclass63_0 = new SpellbookManager();
+                StartupClass.SpellbookStateManager = new SpellbookManager();
             }
 
             gkey_0.FilloutKey();
@@ -443,7 +443,7 @@ public class KeyEditor : Form
                         case GShortcutType.Spell:
                             class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
                                               gshortcut_0.ShortcutValue.ToString("x") + " " +
-                                              StartupClass.gclass63_0.method_11(gshortcut_0.ShortcutValue);
+                                              StartupClass.SpellbookStateManager.method_11(gshortcut_0.ShortcutValue);
                             break;
                         case GShortcutType.Item:
                             class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
@@ -471,7 +471,7 @@ public class KeyEditor : Form
             var class0_1 = new IntStringEntry();
             class0_1.int_0 = -1;
             class0_1.string_0 = "0x" + gkey_0.SIM.ToString("x") + " ";
-            class0_1.string_0 += StartupClass.gclass63_0.method_11(gkey_0.SIM);
+            class0_1.string_0 += StartupClass.SpellbookStateManager.method_11(gkey_0.SIM);
             class0_1.string_0 += " (not on visible bar!)";
             Spell.Items.Add(class0_1);
             Spell.SelectedIndex = Spell.Items.Count - 1;
@@ -580,3 +580,4 @@ public class KeyEditor : Form
         GameMemoryAccess.IsWindowVisible(this, "Glider.chm", HelpNavigator.Topic, "LoadingAndSaving.html");
     }
 }
+

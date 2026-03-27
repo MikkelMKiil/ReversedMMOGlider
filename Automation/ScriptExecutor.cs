@@ -51,7 +51,7 @@ public class ScriptExecutor
     public void method_2(string string_0, bool bool_0)
     {
         Logger.smethod_1("ScriptHelper.Execute: " + string_0);
-        if (StartupClass.glideMode_0 == GlideMode.None)
+        if (StartupClass.CurrentGlideMode == GlideMode.None)
         {
             if (thread_0 != null && thread_0 == Thread.CurrentThread)
                 method_4(string_0, bool_0);
@@ -107,7 +107,7 @@ public class ScriptExecutor
 
         if (flag)
             thread_0 = null;
-        // StartupClass.gclass68_0.method_7();
+        // StartupClass.CameraController.method_7();
         // InputController.smethod_21(false);
         // InputController.smethod_21(false);
     }
@@ -330,3 +330,4 @@ public class ScriptExecutor
         return null;
     }
 }
+

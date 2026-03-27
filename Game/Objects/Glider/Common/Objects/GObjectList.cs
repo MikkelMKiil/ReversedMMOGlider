@@ -110,7 +110,7 @@ namespace Glider.Common.Objects
                 ++FrameNumber;
 
                 newSnapshot = new SortedList<ulong, GObject>(priorSnapshotCount > 0 ? priorSnapshotCount : 16);
-                var objectManagerBase = StartupClass.int_5;
+                var objectManagerBase = StartupClass.ResolvedMainTableAddress;
                 if (objectManagerBase == 0)
                 {
                     Logger.LogMessage(MessageProvider.GetMessage(56));
@@ -184,7 +184,7 @@ namespace Glider.Common.Objects
                             {
                                 ++traversalObjectCount;
                                 GObject gobject;
-                                if (guid == StartupClass.long_0)
+                                if (guid == StartupClass.CurrentPlayerGuid)
                                 {
                                     gobject = new GPlayerSelf(currentObjectAddress, FrameNumber);
                                     if (GContext.Main.Me == null)
@@ -244,7 +244,7 @@ namespace Glider.Common.Objects
                         var activePlayerGuid = QuickGetGUID(unchecked((uint)activePlayerObjectAddress));
                         if (activePlayerGuid != 0UL)
                         {
-                            StartupClass.long_0 = activePlayerGuid;
+                            StartupClass.CurrentPlayerGuid = activePlayerGuid;
                             if (!newSnapshot.ContainsKey(activePlayerGuid) || !(newSnapshot[activePlayerGuid] is GPlayerSelf))
                             {
                                 var gobject = new GPlayerSelf(unchecked((uint)activePlayerObjectAddress), FrameNumber);
@@ -301,13 +301,13 @@ namespace Glider.Common.Objects
                                 continue;
                             }
 
-                            if (gobject is GPlayerSelf && gobject.GUID == StartupClass.long_0)
+                            if (gobject is GPlayerSelf && gobject.GUID == StartupClass.CurrentPlayerGuid)
                             {
                                 gobject.FrameNumber = FrameNumber;
                                 continue;
                             }
 
-                            if (gobject is GPlayerSelf || gobject.GUID == StartupClass.long_0)
+                            if (gobject is GPlayerSelf || gobject.GUID == StartupClass.CurrentPlayerGuid)
                             {
                                 GPlayerSelf.Me = null;
                                 if (GContext.Main != null)
@@ -512,7 +512,7 @@ namespace Glider.Common.Objects
         {
             unit = null;
 
-            var objectManagerBase = StartupClass.int_5;
+            var objectManagerBase = StartupClass.ResolvedMainTableAddress;
             if (objectManagerBase == 0)
                 return false;
 
@@ -847,7 +847,7 @@ namespace Glider.Common.Objects
 
         public static GMonster GetNextProfileTarget()
         {
-            if (StartupClass.gprofile_0.IgnoreAttackers)
+            if (StartupClass.ActiveProfile.IgnoreAttackers)
                 return null;
             var monsters = GetMonsters();
             if (monsters == null || monsters.Length == 0)
@@ -913,8 +913,8 @@ namespace Glider.Common.Objects
                 return null;
             var extraPullDistance = ConfigManager.gclass61_0.method_3("ExtraPull");
             var withinPull = targetMonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + extraPullDistance);
-            var withinProfile = StartupClass.gprofile_0.Wander ||
-                                StartupClass.gprofile_0.GetDistanceTo(targetMonster.Location) <=
+            var withinProfile = StartupClass.ActiveProfile.Wander ||
+                                StartupClass.ActiveProfile.GetDistanceTo(targetMonster.Location) <=
                                 StartupClass.CurrentGameClass.PullDistance + extraPullDistance;
             if (!withinPull || !withinProfile)
             {
@@ -928,7 +928,7 @@ namespace Glider.Common.Objects
                                       ", guid=0x" + targetMonster.GUID.ToString("x") +
                                       ", dist=" + Math.Round(targetMonster.DistanceToSelf, 2) +
                                       ", pullMax=" + (StartupClass.CurrentGameClass.PullDistance + extraPullDistance) +
-                                      ", profileDist=" + Math.Round(StartupClass.gprofile_0.GetDistanceTo(targetMonster.Location), 2) +
+                                      ", profileDist=" + Math.Round(StartupClass.ActiveProfile.GetDistanceTo(targetMonster.Location), 2) +
                                       ", profileMax=" + (StartupClass.CurrentGameClass.PullDistance + extraPullDistance) +
                                       ", reason=\"outside pull/profile envelope\"");
                 }
@@ -946,7 +946,7 @@ namespace Glider.Common.Objects
             foreach (var gnode in nodes)
             {
                 var canHarvest = true;
-                if (!StartupClass.sortedList_2.ContainsKey(gnode.GUID) &&
+                if (!StartupClass.RuntimeProfileCache.ContainsKey(gnode.GUID) &&
                     Math.Abs(gnode.Location.Z - GPlayerSelf.Me.Location.Z) <= 10.0)
                 {
                     if (gnode.IsFlower && GPlayerSelf.Me.HasHerbalism)
@@ -972,9 +972,9 @@ namespace Glider.Common.Objects
 
         private static bool IsHarvestBanned(string ObjectName)
         {
-            if (StartupClass.gclass73_0.string_1 == null)
+            if (StartupClass.ActiveCombatController.string_1 == null)
                 return false;
-            foreach (var str in StartupClass.gclass73_0.string_1)
+            foreach (var str in StartupClass.ActiveCombatController.string_1)
                 if (ObjectName.ToLower().IndexOf(str.ToLower()) > -1)
                     return true;
             return false;
@@ -982,7 +982,7 @@ namespace Glider.Common.Objects
 
         public static int StealthCountGameObjects(ulong SeekPlayerID)
         {
-            var int5 = StartupClass.int_5;
+            var int5 = StartupClass.ResolvedMainTableAddress;
             var foundObjectCount = 0;
             var playerFound = false;
             var traversalIterations = 0;
@@ -1029,7 +1029,7 @@ namespace Glider.Common.Objects
         public static bool TryGetLikelyPlayerGuid(out ulong guid_0)
         {
             guid_0 = 0UL;
-            var int5 = StartupClass.int_5;
+            var int5 = StartupClass.ResolvedMainTableAddress;
             if (int5 == 0)
                 return false;
             var currentObjectAddress = GetFirstObjectPointer(int5);
@@ -1082,3 +1082,4 @@ namespace Glider.Common.Objects
         }
     }
 }
+

@@ -239,7 +239,7 @@ public class UIElement
 
     public void method_15()
     {
-        // StartupClass.gclass68_0.method_3(true);
+        // StartupClass.CameraController.method_3(true);
         // InputController.smethod_18(method_11() + (method_12() - method_11()) / 2.0,
         //     method_13() + (method_14() - method_13()) / 2.0);
     }
@@ -356,3 +356,4 @@ public class UIElement
         // InputController.smethod_25(bool_1);
     }
 }
+
