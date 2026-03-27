@@ -12,6 +12,7 @@ namespace Glider.Common.Objects
         public const uint ItemTypeMask = 0x80000000U;
         public const uint MacroTypeMask = 0x40000000U;
         public const int ActionIdMask = 0x0FFFFFFF;
+        public const int MaxPlausibleSpellId = 0x0007FFFF;
 
         public static bool IsReadableSlot(int slotNumber)
         {
@@ -53,6 +54,44 @@ namespace Glider.Common.Objects
 
             shortcutType = GShortcutType.Spell;
             shortcutValue = (int)rawShortcut;
+        }
+
+        public static bool IsDecodedShortcutPlausible(GShortcutType shortcutType, int shortcutValue)
+        {
+            if (shortcutType == GShortcutType.Empty)
+                return shortcutValue == 0;
+
+            if (shortcutValue <= 0)
+                return false;
+
+            if (shortcutType == GShortcutType.Spell)
+                return shortcutValue <= MaxPlausibleSpellId;
+
+            if (shortcutType == GShortcutType.Item || shortcutType == GShortcutType.Macro)
+                return shortcutValue <= ActionIdMask;
+
+            return false;
+        }
+
+        public static bool TryDecodeShortcut(uint rawShortcut, out GShortcutType shortcutType, out int shortcutValue)
+        {
+            DecodeShortcut(rawShortcut, out shortcutType, out shortcutValue);
+            if (rawShortcut == 0U)
+                return true;
+
+            var hasItemMask = (rawShortcut & ItemTypeMask) != 0U;
+            var hasMacroMask = (rawShortcut & MacroTypeMask) != 0U;
+            if (hasItemMask && hasMacroMask)
+                return false;
+
+            return IsDecodedShortcutPlausible(shortcutType, shortcutValue);
+        }
+
+        public static bool IsRawShortcutPlausible(uint rawShortcut)
+        {
+            GShortcutType shortcutType;
+            int shortcutValue;
+            return TryDecodeShortcut(rawShortcut, out shortcutType, out shortcutValue);
         }
 
         public static int GetPrimaryBarStartSlot(GPlayerClass playerClass, GStance stance)

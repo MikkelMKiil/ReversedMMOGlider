@@ -10,6 +10,7 @@ namespace Glider.Common.Objects
     public class GItemDefinition
     {
         private byte _conjureFlag;
+        private static bool _loggedMissingItemDbOffsets;
 
         public GItemDefinition(int ItemID)
         {
@@ -59,7 +60,15 @@ namespace Glider.Common.Objects
             if (!MemoryOffsetTable.Instance.HasOffset("ItemDBBase") ||
                 !MemoryOffsetTable.Instance.HasOffset("ItemDBMask") ||
                 !MemoryOffsetTable.Instance.HasOffset("ItemDBList"))
+            {
+                if (!_loggedMissingItemDbOffsets)
+                {
+                    _loggedMissingItemDbOffsets = true;
+                    Logger.LogMessage("Item definition lookup disabled: ItemDB offsets are missing (ItemDBBase/ItemDBMask/ItemDBList)");
+                }
+
                 return 0;
+            }
             var num1 = 10;
             var num2 = GameMemoryAccess.ReadInt32(
                 MemoryOffsetTable.Instance.GetIntOffset("ItemDBBase") + MemoryOffsetTable.Instance.GetIntOffset("ItemDBMask"), "itemdbm");

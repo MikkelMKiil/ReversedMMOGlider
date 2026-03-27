@@ -15,6 +15,8 @@ namespace Glider.Common.Objects
     {
         private static readonly object SnapshotLock = new object();
         private static readonly SortedList<int, string> LastSnapshotBySlot = new SortedList<int, string>();
+        private static readonly object DecodeDiagnosticLock = new object();
+        private static readonly SortedList<string, bool> LoggedDecodeFailures = new SortedList<string, bool>();
 
         public string Description;
         public GShortcutType ShortcutType;
@@ -61,7 +63,45 @@ namespace Glider.Common.Objects
                 return;
             }
 
-            ShortcutLayout335a.DecodeShortcut(num, out ShortcutType, out ShortcutValue);
+            if (!ShortcutLayout335a.TryDecodeShortcut(num, out ShortcutType, out ShortcutValue))
+            {
+                LogDecodeFailure(SlotNumber, num);
+                ShortcutType = GShortcutType.Empty;
+                ShortcutValue = 0;
+            }
+        }
+
+        private static void LogDecodeFailure(int slotNumber, uint rawShortcut)
+        {
+            if (!IsVerboseShortcutDetectionEnabled())
+                return;
+
+            var key = slotNumber.ToString(CultureInfo.InvariantCulture) + ":" + rawShortcut.ToString("x", CultureInfo.InvariantCulture);
+            lock (DecodeDiagnosticLock)
+            {
+                if (LoggedDecodeFailures.ContainsKey(key))
+                    return;
+
+                if (LoggedDecodeFailures.Count > 200)
+                    LoggedDecodeFailures.Clear();
+
+                LoggedDecodeFailures.Add(key, true);
+            }
+
+            Logger.LogMessage("[VerboseShortcutDetection] decode-fail slot=" + slotNumber +
+                              ", raw=0x" + rawShortcut.ToString("x", CultureInfo.InvariantCulture));
+        }
+
+        private static string FormatPossibleIds(int[] possibleIds)
+        {
+            if (possibleIds == null || possibleIds.Length == 0)
+                return "";
+
+            var parts = new string[possibleIds.Length];
+            for (var index = 0; index < possibleIds.Length; ++index)
+                parts[index] = "0x" + possibleIds[index].ToString("x", CultureInfo.InvariantCulture);
+
+            return string.Join(" ", parts);
         }
 
         public static GShortcut[] GetAllShortcuts()
@@ -109,11 +149,37 @@ namespace Glider.Common.Objects
 
         public static GShortcut FindMatchingShortcut(GShortcutType TypeSought, int[] PossibleIDs)
         {
+            var scanned = 0;
+            var scannedType = 0;
+            var sample = new List<string>();
             foreach (var allShortcut in GetAllShortcuts())
+            {
+                scanned++;
                 if (allShortcut.ShortcutType == TypeSought)
+                {
+                    scannedType++;
+                    if (sample.Count < 8)
+                    {
+                        sample.Add("slot=" + allShortcut.SlotNumber +
+                                   ":0x" + allShortcut.ShortcutValue.ToString("x", CultureInfo.InvariantCulture));
+                    }
+
                     foreach (var possibleId in PossibleIDs)
                         if (possibleId == allShortcut.ShortcutValue)
                             return allShortcut;
+                }
+            }
+
+            if (IsVerboseShortcutDetectionEnabled())
+            {
+                var sampleText = sample.Count > 0 ? string.Join(" ", sample.ToArray()) : "(none)";
+                Logger.LogMessage("[VerboseShortcutDetection] match-fail type=" + TypeSought +
+                                  ", ids=\"" + FormatPossibleIds(PossibleIDs) + "\"" +
+                                  ", scanned=" + scanned +
+                                  ", scannedType=" + scannedType +
+                                  ", sample=\"" + sampleText + "\"");
+            }
+
             return null;
         }
 
@@ -148,7 +214,11 @@ namespace Glider.Common.Objects
                                   ", class=" + snapshotData.PlayerClass +
                                   ", stance=" + snapshotData.Stance +
                                   ", page=" + snapshotData.ActionBarPage +
-                                  ", chars=\"" + snapshotData.ActionBarCharacters + "\"");
+                                  ", chars=\"" + snapshotData.ActionBarCharacters + "\"" +
+                                  ", uiReady=" + snapshotData.IsWorldUiReady.ToString().ToLowerInvariant() +
+                                  ", classPlausible=" + snapshotData.IsPlayerClassPlausible.ToString().ToLowerInvariant() +
+                                  ", actionBarProbe=" + snapshotData.IsActionBarDataPlausible.ToString().ToLowerInvariant() +
+                                  ", actionBarProbeDetails=\"" + (snapshotData.ActionBarProbeDetails ?? "") + "\"");
 
                 var snapshot = new SortedList<int, string>();
                 foreach (var slotNumber in snapshotData.Entries.Keys)

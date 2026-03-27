@@ -173,11 +173,22 @@ public class StartupClass
     private static bool IsKeybindRefreshPending;
     private static bool HasLoggedStartupShortcutHealthReport;
     private static ulong LastKeybindRefreshGuid;
+    private static string LastKeybindRefreshBlockReason = "";
+    private const int RequiredActionBarProbePasses = 2;
+    private static int ConsecutiveActionBarProbePasses;
+    private static string LastAttachMainTableSource = "unresolved";
+    private static string LastAttachGuidSource = "unresolved";
+    private static bool LastAttachProbeTrusted;
     private const int MinMainLoopTickIntervalMs = 75;
     private static string PendingErrorMessage = null;
     private static Size OriginalWindowSize;
     public static bool IsWindowHidden;
     public static bool IsWindowShrunk;
+
+    public static bool IsWorldUiReadyForShortcuts
+    {
+        get { return IsWorldUiReady; }
+    }
 
     public static void InitStartupMode(AppMode startupMode)
     {
@@ -314,6 +325,10 @@ public class StartupClass
         IsKeybindRefreshPending = true;
         HasLoggedStartupShortcutHealthReport = false;
         LastKeybindRefreshGuid = 0UL;
+        ConsecutiveActionBarProbePasses = 0;
+        LastAttachMainTableSource = "unresolved";
+        LastAttachGuidSource = "unresolved";
+        LastAttachProbeTrusted = false;
         KeybindRefreshTimer.method_5();
     }
 
@@ -372,6 +387,7 @@ public class StartupClass
 
         IsKeybindRefreshPending = true;
         LastKeybindRefreshGuid = 0UL;
+        ConsecutiveActionBarProbePasses = 0;
         KeybindRefreshTimer.method_5();
         LogLifecycleEvent("PrepareAutoStart", "Reset complete");
     }
@@ -806,6 +822,7 @@ public class StartupClass
         IsRuntimeAttached = true;
         IsKeybindRefreshPending = true;
         LastKeybindRefreshGuid = 0UL;
+        ConsecutiveActionBarProbePasses = 0;
         KeybindRefreshTimer.method_5();
         SoundPlayer.smethod_0("Attach.wav");
         DetachAfterStopRequested = false;
@@ -1591,15 +1608,169 @@ public class StartupClass
         KeybindRefreshTimer.method_5();
     }
 
-    private static bool IsKeybindRefreshReady()
+    private static bool IsKnownPlayerClass(GPlayerClass playerClass)
     {
-        if (SpellcastingManager.gclass42_0 == null || CurrentGameClass == null || !IsRuntimeAttached)
+        switch (playerClass)
+        {
+            case GPlayerClass.Warrior:
+            case GPlayerClass.Paladin:
+            case GPlayerClass.Hunter:
+            case GPlayerClass.Rogue:
+            case GPlayerClass.Priest:
+            case GPlayerClass.Deathknight:
+            case GPlayerClass.Shaman:
+            case GPlayerClass.Mage:
+            case GPlayerClass.Warlock:
+            case GPlayerClass.Druid:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static bool IsActionBarCurrentPlausible(int actionBarCurrent)
+    {
+        return actionBarCurrent >= 0 && actionBarCurrent <= 9;
+    }
+
+    private static bool TryProbeActionBarShortcuts(out string details)
+    {
+        details = "";
+        if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+        {
+            details = "ActionBarShortcuts offset missing";
             return false;
+        }
+
+        var shortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
+        if (shortcutsBase < 65536)
+        {
+            details = "ActionBarShortcuts base is implausible: 0x" + shortcutsBase.ToString("x");
+            return false;
+        }
+
+        var sampled = 0;
+        var nonZero = 0;
+        var plausible = 0;
+        var invalid = 0;
+        var maxProbeSlot = Math.Min(ShortcutLayout335a.MaxActionSlot, ShortcutLayout335a.MinSlot + 23);
+        for (var slotNumber = ShortcutLayout335a.MinSlot; slotNumber <= maxProbeSlot; ++slotNumber)
+        {
+            sampled++;
+            uint rawShortcut;
+            try
+            {
+                var shortcutAddress = ShortcutLayout335a.GetSlotAddress(shortcutsBase, slotNumber);
+                rawShortcut = (uint)GameMemoryAccess.ReadInt32(shortcutAddress, "abprobe");
+            }
+            catch (Exception ex)
+            {
+                details = "slot read failed at slot " + slotNumber + ": " + ex.Message;
+                return false;
+            }
+
+            if (rawShortcut == 0U)
+                continue;
+
+            nonZero++;
+            if (ShortcutLayout335a.IsRawShortcutPlausible(rawShortcut))
+                plausible++;
+            else
+                invalid++;
+        }
+
+        details = "sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
+        if (nonZero == 0)
+            return false;
+
+        return invalid * 2 < nonZero;
+    }
+
+    private static bool IsKeybindRefreshReady(GPlayerSelf player, out string reason)
+    {
+        reason = "";
+        if (player == null)
+        {
+            reason = "player object unavailable";
+            return false;
+        }
+
+        if (SpellcastingManager.gclass42_0 == null || CurrentGameClass == null || !IsRuntimeAttached)
+        {
+            reason = "runtime is not fully attached";
+            return false;
+        }
+
+        if (SpellbookStateManager == null)
+        {
+            reason = "SpellbookStateManager unavailable";
+            return false;
+        }
+
+        if (!player.IsClassDataTrusted)
+        {
+            reason = "player class data is untrusted";
+            return false;
+        }
+
+        if (!IsKnownPlayerClass(player.PlayerClass))
+        {
+            reason = "player class is implausible: " + (int)player.PlayerClass;
+            return false;
+        }
+
+        if (!IsWorldUiReady)
+        {
+            reason = "world UI is not ready";
+            return false;
+        }
 
         if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+        {
+            reason = "ActionBarShortcuts offset missing";
             return false;
+        }
 
-        return SpellbookStateManager != null;
+        if (!MemoryOffsetTable.Instance.HasOffset("ActionBarCurrent"))
+        {
+            reason = "ActionBarCurrent offset missing";
+            return false;
+        }
+
+        int actionBarCurrent;
+        try
+        {
+            actionBarCurrent = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "curbar-ready");
+        }
+        catch (Exception ex)
+        {
+            reason = "ActionBarCurrent read failed: " + ex.Message;
+            return false;
+        }
+
+        if (!IsActionBarCurrentPlausible(actionBarCurrent))
+        {
+            reason = "ActionBarCurrent is implausible: " + actionBarCurrent;
+            return false;
+        }
+
+        string probeDetails;
+        if (!TryProbeActionBarShortcuts(out probeDetails))
+        {
+            ConsecutiveActionBarProbePasses = 0;
+            reason = "action bar probe failed: " + probeDetails;
+            return false;
+        }
+
+        ConsecutiveActionBarProbePasses = Math.Min(RequiredActionBarProbePasses, ConsecutiveActionBarProbePasses + 1);
+        if (ConsecutiveActionBarProbePasses < RequiredActionBarProbePasses)
+        {
+            reason = "action bar probe warming up: " + ConsecutiveActionBarProbePasses + "/" + RequiredActionBarProbePasses +
+                     " (" + probeDetails + ")";
+            return false;
+        }
+
+        return true;
     }
 
     private static void TryRefreshKeybindsIfNeeded(GPlayerSelf player)
@@ -1608,7 +1779,10 @@ public class StartupClass
             return;
 
         if (player.GUID != LastKeybindRefreshGuid)
+        {
             IsKeybindRefreshPending = true;
+            ConsecutiveActionBarProbePasses = 0;
+        }
 
         if (!IsKeybindRefreshPending && SpellcastingManager.gclass42_0 != null)
         {
@@ -1624,14 +1798,25 @@ public class StartupClass
             return;
 
         KeybindRefreshTimer.method_4();
-        if (!IsKeybindRefreshReady())
+        string blockedReason;
+        if (!IsKeybindRefreshReady(player, out blockedReason))
+        {
+            IsKeybindRefreshPending = true;
+            KeybindRefreshTimer.method_5();
+            if (blockedReason != LastKeybindRefreshBlockReason)
+            {
+                Logger.smethod_1("Keybind refresh deferred: " + blockedReason);
+                LastKeybindRefreshBlockReason = blockedReason;
+            }
             return;
+        }
 
         try
         {
             SpellcastingManager.gclass42_0.method_23();
             IsKeybindRefreshPending = false;
             LastKeybindRefreshGuid = player.GUID;
+            LastKeybindRefreshBlockReason = "";
 
             if (!HasLoggedStartupShortcutHealthReport && ShortcutSnapshotService.IsVerboseShortcutDetectionEnabled())
             {
@@ -1644,6 +1829,7 @@ public class StartupClass
         {
             Logger.smethod_1("Keybind refresh retry failed: " + ex.Message);
             IsKeybindRefreshPending = true;
+            KeybindRefreshTimer.method_5();
         }
     }
 
@@ -1774,20 +1960,42 @@ public class StartupClass
         HasLoggedMissingProcess = false;
         IsGliderAttached = true;
 
+        LastAttachProbeTrusted = false;
+        LastAttachMainTableSource = "unresolved";
+        LastAttachGuidSource = "unresolved";
+        ResolvedMainTableAddress = 0;
+        CurrentPlayerGuid = 0UL;
+
         if (!EnsureAttachProcessHandle())
+        {
+            LogAttachProbeSummary("failed", "process handle unavailable");
             return false;
+        }
 
         if (IsAttached)
+        {
+            LastAttachProbeTrusted = true;
+            LastAttachMainTableSource = "open-memory-model";
+            LastAttachGuidSource = "open-memory-model";
+            LogAttachProbeSummary("success", "detached/open-memory attach mode");
             return true;
+        }
 
         TryAutoLoginFromUiParentProbe();
 
         if (TryDirectAttachProbe())
+        {
+            LastAttachProbeTrusted = true;
+            LogAttachProbeSummary("success", "direct attach probe path");
             return true;
+        }
 
         CurrentPlayerGuid = 0UL;
         if (!TryResolveObjectManagerPointer())
+        {
+            LogAttachProbeSummary("failed", "unable to resolve object manager pointer");
             return false;
+        }
 
         var isObjectManagerGuidKnown = TryResolvePlayerGuidFromObjectManager();
         if (CurrentPlayerGuid == 0UL)
@@ -1803,10 +2011,19 @@ public class StartupClass
         if (CurrentPlayerGuid == 0UL && !TryResolvePlayerGuidFromPlayerIdAddresses())
         {
             Logger.smethod_1("Attach probe failed: Player GUID is zero across local and static sources");
+            LogAttachProbeSummary("failed", "unable to resolve player guid");
             return false;
         }
 
-        return ValidateAttachedPlayerGuid(isObjectManagerGuidKnown);
+        LastAttachProbeTrusted = ValidateAttachedPlayerGuid(isObjectManagerGuidKnown);
+        if (!LastAttachProbeTrusted)
+        {
+            LogAttachProbeSummary("failed", "player guid did not validate against object list");
+            return false;
+        }
+
+        LogAttachProbeSummary("success", "fallback object manager/static path");
+        return true;
     }
 
     public static bool TryAttachRuntimeProbe()
@@ -1880,7 +2097,11 @@ public class StartupClass
         }
 
         if (GObjectList.StealthCountGameObjects(CurrentPlayerGuid) > 0)
+        {
+            LastAttachMainTableSource = "direct-clientconnection";
+            LastAttachGuidSource = "direct-localguid";
             return true;
+        }
 
         Logger.smethod_1("Direct attach probe failed object validation, trying static offsets fallback");
         return false;
@@ -1890,6 +2111,7 @@ public class StartupClass
     {
         var baseMainTable = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("MainTable"), "MainTable");
         var resolvedMainTable = baseMainTable;
+        LastAttachMainTableSource = "main-table-base";
 
         if (MemoryOffsetTable.Instance.HasOffset("MainTableProbe") && MemoryOffsetTable.Instance.GetIntOffset("MainTableProbe") > 0)
         {
@@ -1898,11 +2120,20 @@ public class StartupClass
             var candidateAddress = baseMainTable + probeOffset;
 
             if (IsValidMainTablePointer(candidatePointer))
+            {
                 resolvedMainTable = candidatePointer;
+                LastAttachMainTableSource = "main-table-probe-pointer";
+            }
             else if (IsValidMainTablePointer(candidateAddress))
+            {
                 resolvedMainTable = candidateAddress;
+                LastAttachMainTableSource = "main-table-probe-address";
+            }
             else
+            {
                 resolvedMainTable = candidatePointer;
+                LastAttachMainTableSource = "main-table-probe-untrusted";
+            }
         }
 
         ResolvedMainTableAddress = resolvedMainTable;
@@ -1933,6 +2164,7 @@ public class StartupClass
                     CurrentPlayerGuid = activePlayerGuid;
                     usedActivePlayerPointer = true;
                     hasKnownObjectManagerGuid = true;
+                    LastAttachGuidSource = "active-player-pointer";
                     Logger.smethod_1("Attach probe: using active player object GUID = 0x" + CurrentPlayerGuid.ToString("x"));
                 }
             }
@@ -1949,6 +2181,7 @@ public class StartupClass
             {
                 CurrentPlayerGuid = localGuid;
                 hasKnownObjectManagerGuid = true;
+                LastAttachGuidSource = "object-manager-localguid";
                 Logger.smethod_1("Attach probe: using object manager local GUID = 0x" + CurrentPlayerGuid.ToString("x"));
             }
             else if (localGuid != 0UL)
@@ -1978,6 +2211,9 @@ public class StartupClass
                 if (playerGuid != 0UL && IsLikelyPlayerGuid(playerGuid))
                 {
                     CurrentPlayerGuid = playerGuid;
+                    LastAttachGuidSource = candidateAddress == configuredPlayerIdAddress
+                        ? "playerid-static"
+                        : "playerid-fallback";
                     if (candidateAddress != configuredPlayerIdAddress)
                         Logger.smethod_1("Attach probe: using fallback PlayerIdAddr 0x" + candidateAddress.ToString("x"));
 
@@ -1994,6 +2230,7 @@ public class StartupClass
                 continue;
 
             CurrentPlayerGuid = playerObjectGuid;
+            LastAttachGuidSource = "playerid-object-pointer";
             Logger.smethod_1("Attach probe: using PlayerIdAddr object pointer path at 0x" + candidateAddress.ToString("x") +
                              " -> object 0x" + playerObjectPointer.ToString("x") + " -> GUID 0x" + CurrentPlayerGuid.ToString("x"));
             return true;
@@ -2018,6 +2255,7 @@ public class StartupClass
             }
 
             CurrentPlayerGuid = inferredGuid;
+            LastAttachGuidSource = "object-list-inferred";
             Logger.smethod_1("Attach probe: inferred player GUID from object list = 0x" + CurrentPlayerGuid.ToString("x"));
             validationCount = GObjectList.StealthCountGameObjects(CurrentPlayerGuid);
             if (validationCount > 1)
@@ -2049,6 +2287,21 @@ public class StartupClass
         return (pointer & 1) == 0 && pointer != 0 && pointer != 28 && pointer >= 65536;
     }
 
+    private static void LogAttachProbeSummary(string outcome, string details)
+    {
+        var message = "[AttachProbe] outcome=" + outcome +
+                      ", trusted=" + LastAttachProbeTrusted.ToString().ToLowerInvariant() +
+                      ", mainTableSource=" + LastAttachMainTableSource +
+                      ", guidSource=" + LastAttachGuidSource +
+                      ", mainTable=0x" + ResolvedMainTableAddress.ToString("x") +
+                      ", guid=0x" + CurrentPlayerGuid.ToString("x");
+
+        if (!string.IsNullOrEmpty(details))
+            message += ", details=" + details;
+
+        Logger.smethod_1(message);
+    }
+
     private static bool TryResolvePlayerGuidFromGuaranteedWotlkOffsets(out ulong playerGuid)
     {
         playerGuid = 0UL;
@@ -2063,6 +2316,7 @@ public class StartupClass
                 if (IsLikelyPlayerGuid(objectManagerGuid))
                 {
                     playerGuid = objectManagerGuid;
+                    LastAttachGuidSource = "wotlk-objectmanager-localguid";
                     Logger.smethod_1("Attach probe: using WotLK ClientConnection/ObjectManager GUID path = 0x" + playerGuid.ToString("x"));
                     return true;
                 }
@@ -2076,6 +2330,7 @@ public class StartupClass
         if (IsLikelyPlayerGuid(staticGuid))
         {
             playerGuid = staticGuid;
+            LastAttachGuidSource = "wotlk-static-playerid";
             Logger.smethod_1("Attach probe: using WotLK static PlayerGUID address 0x" + GameMemoryConstants.Wotlk.PlayerIdAddr.ToString("x") +
                              " = 0x" + playerGuid.ToString("x"));
             return true;

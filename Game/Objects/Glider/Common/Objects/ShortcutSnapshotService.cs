@@ -23,7 +23,9 @@ namespace Glider.Common.Objects
         public bool IsPresent;
         public bool IsOnVisiblePage;
         public bool IsVisible;
+        public bool IsVisibilityTrusted;
         public bool IsUsable;
+        public bool IsMappingTrusted;
         public int BarIndex;
         public GBarState BarState;
         public char CharCode;
@@ -41,6 +43,10 @@ namespace Glider.Common.Objects
         public int ActionBarPage;
         public int VisibleMainStartSlot;
         public string ActionBarCharacters;
+        public bool IsWorldUiReady;
+        public bool IsPlayerClassPlausible;
+        public bool IsActionBarDataPlausible;
+        public string ActionBarProbeDetails;
         public SortedList<int, ShortcutSnapshotEntry> Entries = new SortedList<int, ShortcutSnapshotEntry>();
 
         public ShortcutSnapshotEntry GetEntry(int slotNumber)
@@ -66,6 +72,84 @@ namespace Glider.Common.Objects
 
     public static class ShortcutSnapshotService
     {
+        private static bool IsKnownPlayerClass(GPlayerClass playerClass)
+        {
+            switch (playerClass)
+            {
+                case GPlayerClass.Warrior:
+                case GPlayerClass.Paladin:
+                case GPlayerClass.Hunter:
+                case GPlayerClass.Rogue:
+                case GPlayerClass.Priest:
+                case GPlayerClass.Deathknight:
+                case GPlayerClass.Shaman:
+                case GPlayerClass.Mage:
+                case GPlayerClass.Warlock:
+                case GPlayerClass.Druid:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsActionBarCurrentPlausible(int actionBarCurrent)
+        {
+            return actionBarCurrent >= 0 && actionBarCurrent <= 9;
+        }
+
+        private static bool ProbeActionBarShortcuts(out string details)
+        {
+            details = "";
+            if (!MemoryOffsetTable.Instance.HasOffset("ActionBarShortcuts"))
+            {
+                details = "ActionBarShortcuts offset missing";
+                return false;
+            }
+
+            var shortcutsBase = MemoryOffsetTable.Instance.GetIntOffset("ActionBarShortcuts");
+            if (shortcutsBase < 65536)
+            {
+                details = "ActionBarShortcuts base implausible: 0x" + shortcutsBase.ToString("x", CultureInfo.InvariantCulture);
+                return false;
+            }
+
+            var sampled = 0;
+            var nonZero = 0;
+            var plausible = 0;
+            var invalid = 0;
+            var maxProbeSlot = Math.Min(ShortcutLayout335a.MaxActionSlot, ShortcutLayout335a.MinSlot + 23);
+            for (var slotNumber = ShortcutLayout335a.MinSlot; slotNumber <= maxProbeSlot; ++slotNumber)
+            {
+                sampled++;
+                var shortcutAddress = ShortcutLayout335a.GetSlotAddress(shortcutsBase, slotNumber);
+                uint rawShortcut;
+                try
+                {
+                    rawShortcut = (uint)GameMemoryAccess.ReadInt32(shortcutAddress, "abprobe-snapshot");
+                }
+                catch (Exception ex)
+                {
+                    details = "read failed at slot " + slotNumber + ": " + ex.Message;
+                    return false;
+                }
+
+                if (rawShortcut == 0U)
+                    continue;
+
+                nonZero++;
+                if (ShortcutLayout335a.IsRawShortcutPlausible(rawShortcut))
+                    plausible++;
+                else
+                    invalid++;
+            }
+
+            details = "sampled=" + sampled + ", nonZero=" + nonZero + ", plausible=" + plausible + ", invalid=" + invalid;
+            if (nonZero == 0)
+                return false;
+
+            return invalid * 2 < nonZero;
+        }
+
         public static bool IsVerboseShortcutDetectionEnabled()
         {
             return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseShortcutDetection");
@@ -81,10 +165,16 @@ namespace Glider.Common.Objects
             var snapshot = new ShortcutSnapshot();
             snapshot.Source = source;
             snapshot.ActionBarCharacters = StartupClass.ActionBarCharacters;
+            snapshot.IsWorldUiReady = StartupClass.IsWorldUiReadyForShortcuts;
 
             var me = GPlayerSelf.Me;
             snapshot.PlayerClass = me != null ? me.PlayerClass : GPlayerClass.Unknown;
             snapshot.Stance = me != null ? me.Stance : GStance.Unknown;
+            snapshot.IsPlayerClassPlausible = IsKnownPlayerClass(snapshot.PlayerClass);
+
+            string actionBarProbeDetails;
+            snapshot.IsActionBarDataPlausible = ProbeActionBarShortcuts(out actionBarProbeDetails);
+            snapshot.ActionBarProbeDetails = actionBarProbeDetails;
 
             var actionBarCurrent = 0;
             if (MemoryOffsetTable.Instance.HasOffset("ActionBarCurrent"))
@@ -98,6 +188,9 @@ namespace Glider.Common.Objects
                     actionBarCurrent = 0;
                 }
             }
+
+            if (!IsActionBarCurrentPlausible(actionBarCurrent))
+                actionBarCurrent = 0;
 
             snapshot.ActionBarPage = actionBarCurrent + 1;
             snapshot.VisibleMainStartSlot = actionBarCurrent == 0
@@ -118,13 +211,15 @@ namespace Glider.Common.Objects
 
                 entry.ButtonName = ResolveButtonNameForSlot(slotNumber, snapshot.VisibleMainStartSlot);
                 entry.IsOnVisiblePage = entry.ButtonName != null;
-                entry.IsVisible = IsButtonVisible(entry.ButtonName);
+                entry.IsVisibilityTrusted = snapshot.IsWorldUiReady;
+                entry.IsVisible = snapshot.IsWorldUiReady && IsButtonVisible(entry.ButtonName);
 
                 entry.BarIndex = -1;
                 entry.BarState = GBarState.Indifferent;
                 entry.CharCode = char.MinValue;
+                entry.IsMappingTrusted = snapshot.IsPlayerClassPlausible && snapshot.IsActionBarDataPlausible;
                 int barIndex;
-                if (ShortcutLayout335a.TryMapSlotToBarIndex(slotNumber, snapshot.PlayerClass, snapshot.Stance, out barIndex))
+                if (entry.IsMappingTrusted && ShortcutLayout335a.TryMapSlotToBarIndex(slotNumber, snapshot.PlayerClass, snapshot.Stance, out barIndex))
                 {
                     entry.BarIndex = barIndex;
                     entry.BarState = (GBarState)(3 + barIndex);
@@ -133,7 +228,7 @@ namespace Glider.Common.Objects
                         entry.CharCode = snapshot.ActionBarCharacters[index];
                 }
 
-                entry.IsUsable = entry.IsPresent && entry.BarIndex >= 0 && entry.CharCode != char.MinValue;
+                entry.IsUsable = entry.IsPresent && entry.IsMappingTrusted && entry.BarIndex >= 0 && entry.CharCode != char.MinValue;
                 ResolveDisplayData(entry);
                 snapshot.Entries.Add(slotNumber, entry);
             }
@@ -194,6 +289,12 @@ namespace Glider.Common.Objects
                 var manager = StartupClass.SpellbookStateManager;
                 if (manager != null)
                 {
+                    if (!manager.IsSpellListEnabled)
+                    {
+                        entry.DisplayName = "(spellbook offsets unavailable)";
+                        return;
+                    }
+
                     try
                     {
                         manager.method_9(entry.ShortcutValue);
@@ -292,8 +393,10 @@ namespace Glider.Common.Objects
 
             if (entry.IsUsable)
                 score += 100000;
-            if (entry.IsVisible)
+            if (entry.IsVisibilityTrusted && entry.IsVisible)
                 score += 50000;
+            if (!entry.IsVisibilityTrusted && entry.IsOnVisiblePage)
+                score += 25000;
             if (entry.IsOnVisiblePage)
                 score += 20000;
             if (key.BarState != GBarState.Indifferent && entry.BarState == key.BarState)
@@ -336,7 +439,7 @@ namespace Glider.Common.Objects
                     continue;
 
                 candidates.Add(entry);
-                if (entry.IsVisible)
+                if (entry.IsVisibilityTrusted && entry.IsVisible)
                     result.VisibleCandidateCount++;
                 if (entry.IsUsable)
                     result.UsableCandidateCount++;
@@ -375,7 +478,7 @@ namespace Glider.Common.Objects
                     secondBestScore = score;
                 }
 
-                if (!entry.IsVisible)
+                if (!entry.IsVisibilityTrusted || !entry.IsVisible)
                     continue;
 
                 if (score > bestVisibleScore || score == bestVisibleScore && result.BestVisibleEntry != null && entry.SlotNumber < result.BestVisibleEntry.SlotNumber)
@@ -467,7 +570,9 @@ namespace Glider.Common.Objects
                        ", type=" + entry.ShortcutType +
                        ", present=" + entry.IsPresent.ToString().ToLowerInvariant() +
                        ", visible=" + entry.IsVisible.ToString().ToLowerInvariant() +
-                       ", usable=" + entry.IsUsable.ToString().ToLowerInvariant();
+                       ", usable=" + entry.IsUsable.ToString().ToLowerInvariant() +
+                       ", visTrusted=" + entry.IsVisibilityTrusted.ToString().ToLowerInvariant() +
+                       ", mapTrusted=" + entry.IsMappingTrusted.ToString().ToLowerInvariant();
 
             if (!entry.IsPresent)
                 return line;
@@ -501,7 +606,11 @@ namespace Glider.Common.Objects
                               ", class=" + snapshot.PlayerClass +
                               ", stance=" + snapshot.Stance +
                               ", page=" + snapshot.ActionBarPage +
-                              ", chars=\"" + snapshot.ActionBarCharacters + "\"");
+                              ", chars=\"" + snapshot.ActionBarCharacters + "\"" +
+                              ", uiReady=" + snapshot.IsWorldUiReady.ToString().ToLowerInvariant() +
+                              ", classPlausible=" + snapshot.IsPlayerClassPlausible.ToString().ToLowerInvariant() +
+                              ", actionBarProbe=" + snapshot.IsActionBarDataPlausible.ToString().ToLowerInvariant() +
+                              ", actionBarProbeDetails=\"" + (snapshot.ActionBarProbeDetails ?? "") + "\"");
 
             foreach (var keyName in keyMap.Keys)
             {

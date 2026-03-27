@@ -15,6 +15,7 @@ namespace Glider.Common.Objects
         private static readonly SortedList RuntimeOffsets = new SortedList();
         private static readonly SortedList MissingOffsetsLogged = new SortedList();
         private static readonly SortedList DescriptorOffsetsByType = new SortedList();
+        private static readonly SortedList LoggedPointerTrustFailures = new SortedList();
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr OpenProcess(uint desiredAccess, bool inheritHandle, int processId);
@@ -137,6 +138,57 @@ namespace Glider.Common.Objects
             Logger.LogMessage(MessageProvider.smethod_2(314, offsetName));
         }
 
+        private static bool IsLikelyPointer32(uint pointer)
+        {
+            return pointer >= 65536U && pointer != 28U && (pointer & 1U) == 0U && pointer <= 0x7FFFFFFFU;
+        }
+
+        private static void LogPointerTrustFailureOnce(string key, string message)
+        {
+            if (LoggedPointerTrustFailures.ContainsKey(key))
+                return;
+
+            if (LoggedPointerTrustFailures.Count > 200)
+                LoggedPointerTrustFailures.Clear();
+
+            LoggedPointerTrustFailures.Add(key, true);
+            Logger.LogMessage(message);
+        }
+
+        internal static bool TryReadObjectStorageAddress(uint baseAddress, out uint storageAddress, out string reason)
+        {
+            storageAddress = 0U;
+            reason = "";
+
+            if (!IsLikelyPointer32(baseAddress))
+            {
+                reason = "base pointer implausible: 0x" + baseAddress.ToString("X8");
+                return false;
+            }
+
+            var storagePointerAddress = baseAddress + GameMemoryConstants.Wotlk.ObjStoragePointer;
+            if (!IsLikelyPointer32(storagePointerAddress))
+            {
+                reason = "storage pointer address implausible: 0x" + storagePointerAddress.ToString("X8");
+                return false;
+            }
+
+            storageAddress = GProcessMemoryManipulator.ReadUInt32(storagePointerAddress, "GameObjStorage");
+            if (!IsLikelyPointer32(storageAddress))
+            {
+                reason = "storage pointer value implausible: 0x" + storageAddress.ToString("X8");
+                return false;
+            }
+
+            if (!GProcessMemoryManipulator.IsMemoryReadable(unchecked((int)storageAddress)))
+            {
+                reason = "storage target unreadable: 0x" + storageAddress.ToString("X8");
+                return false;
+            }
+
+            return true;
+        }
+
         private static string GetWindowTextSafe(IntPtr hWnd)
         {
             var builder = new StringBuilder(256);
@@ -229,10 +281,14 @@ namespace Glider.Common.Objects
 
         internal static uint ReadObjectStorageAddress(uint baseAddress)
         {
-            if (baseAddress == 0)
-                return 0;
+            uint storageAddress;
+            string reason;
+            if (TryReadObjectStorageAddress(baseAddress, out storageAddress, out reason))
+                return storageAddress;
 
-            return GProcessMemoryManipulator.ReadUInt32(baseAddress + GameMemoryConstants.Wotlk.ObjStoragePointer, "GameObjStorage");
+            LogPointerTrustFailureOnce("storage:" + baseAddress.ToString("X8"),
+                "[Memory] Rejected object storage read for base=0x" + baseAddress.ToString("X8") + ", reason=" + reason);
+            return 0U;
         }
 
         internal static ulong ReadObjectGuid(int baseAddress)
@@ -270,7 +326,17 @@ namespace Glider.Common.Objects
 
         internal static int ReadRefreshStorageAddress(int baseAddress)
         {
-            return GProcessMemoryManipulator.ReadInt32(baseAddress + (int)GameMemoryConstants.Wotlk.ObjStoragePointer, "GameObjStorage.Refresh");
+            uint storageAddress;
+            string reason;
+            if (!TryReadObjectStorageAddress(unchecked((uint)baseAddress), out storageAddress, out reason))
+            {
+                LogPointerTrustFailureOnce("storage-refresh:" + unchecked((uint)baseAddress).ToString("X8"),
+                    "[Memory] Rejected refresh storage read for base=0x" + unchecked((uint)baseAddress).ToString("X8") +
+                    ", reason=" + reason);
+                return 0;
+            }
+
+            return unchecked((int)storageAddress);
         }
 
         internal static uint ReadRefreshStorageAddress(uint baseAddress)

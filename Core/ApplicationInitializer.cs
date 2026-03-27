@@ -59,8 +59,20 @@ public class ApplicationInitializer
     {
         int_0 = Glider.Common.Objects.GameMemoryConstants.LoadStaticOffsets(MemoryOffsetTable.Instance);
         Logger.LogMessage("Static offsets source: GameMemoryConstants");
-        if (int_0 <= 0 || !Glider.Common.Objects.GameMemoryConstants.ValidateRequiredOffsets(MemoryOffsetTable.Instance))
+        if (int_0 <= 0)
             return false;
+
+        if (!Glider.Common.Objects.GameMemoryConstants.ValidateRequiredOffsets(MemoryOffsetTable.Instance))
+        {
+            Logger.LogMessage("Required static offset validation failed. MainTable=" + FormatOffsetValue("MainTable") +
+                              ", InitialOffset=" + FormatOffsetValue("InitialOffset") +
+                              ", PlayerIdAddr=" + FormatOffsetValue("PlayerIdAddr") +
+                              ", ActionBarShortcuts=" + FormatOffsetValue("ActionBarShortcuts") +
+                              ", ActionBarCurrent=" + FormatOffsetValue("ActionBarCurrent") +
+                              ", MySpells=" + FormatOffsetValue("MySpells") +
+                              ", CameraBase=" + FormatOffsetValue("CameraBase"));
+            return false;
+        }
 
         if (!MemoryOffsetTable.Instance.HasOffset("CameraBase"))
         {
@@ -71,6 +83,14 @@ public class ApplicationInitializer
         Logger.LogMessage("Camera base validated at 0x" + MemoryOffsetTable.Instance.GetIntOffset("CameraBase").ToString("x") +
                           " with WotLK camera block layout 0x8(position), 0x14(view matrix), 0x40(FOV)");
         return true;
+    }
+
+    private static string FormatOffsetValue(string offsetName)
+    {
+        if (!MemoryOffsetTable.Instance.HasOffset(offsetName))
+            return "(missing)";
+
+        return "0x" + MemoryOffsetTable.Instance.GetIntOffset(offsetName).ToString("x");
     }
 
     public static string GetRealmFromConfigFile()

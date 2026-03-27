@@ -121,7 +121,16 @@ namespace Glider.Common.Objects
                    table.HasOffset("InitialOffset") &&
                    table.HasOffset("PlayerIdAddr") &&
                    table.HasOffset("D_Player") &&
-                   table.HasOffset("D_Object");
+                   table.HasOffset("D_Object") &&
+                   HasNonZeroOffset(table, "ActionBarShortcuts") &&
+                   HasNonZeroOffset(table, "ActionBarCurrent") &&
+                   HasNonZeroOffset(table, "MySpells") &&
+                   HasNonZeroOffset(table, "CameraBase");
+        }
+
+        private static bool HasNonZeroOffset(MemoryOffsetTable table, string offsetName)
+        {
+            return table.HasOffset(offsetName) && table.GetIntOffset(offsetName) != 0;
         }
 
         internal static void PopulateOffsetManager(OffsetManager manager, string descriptorType)

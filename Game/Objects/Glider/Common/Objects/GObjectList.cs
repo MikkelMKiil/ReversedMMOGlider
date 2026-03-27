@@ -1199,6 +1199,23 @@ namespace Glider.Common.Objects
 
         private static bool TryReadNextObjectPointer(uint currentObjectAddress, out uint nextObjectAddress, out bool reachedListEnd, out uint rawNextPointer)
         {
+            if (!IsLikelyObjectPointer(currentObjectAddress) || GameObjNextOffset <= 0)
+            {
+                rawNextPointer = 0U;
+                nextObjectAddress = 0U;
+                reachedListEnd = false;
+                return false;
+            }
+
+            var nextPointerAddress = currentObjectAddress + (uint)GameObjNextOffset;
+            if (!GProcessMemoryManipulator.IsMemoryReadable(unchecked((int)nextPointerAddress)))
+            {
+                rawNextPointer = 0U;
+                nextObjectAddress = 0U;
+                reachedListEnd = false;
+                return false;
+            }
+
             rawNextPointer = GameMemoryAccess.ReadUInt32(currentObjectAddress + (uint)GameObjNextOffset, "GameObjNext");
             nextObjectAddress = NormalizeObjectPointer(rawNextPointer);
             reachedListEnd = nextObjectAddress == 0U || nextObjectAddress == 28U;

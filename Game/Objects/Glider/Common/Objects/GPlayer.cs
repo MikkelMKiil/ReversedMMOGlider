@@ -19,6 +19,7 @@ namespace Glider.Common.Objects
         protected int _rage;
         protected int _runicPower;
         protected bool _sitting;
+        protected bool _classDataTrusted;
         private int[] _stealthAuras;
 
         public GPlayer(uint BaseAddress, int FrameNumber)
@@ -58,6 +59,15 @@ namespace Glider.Common.Objects
             {
                 Refresh();
                 return _playerClass;
+            }
+        }
+
+        public bool IsClassDataTrusted
+        {
+            get
+            {
+                Refresh();
+                return _classDataTrusted;
             }
         }
 
@@ -190,11 +200,15 @@ namespace Glider.Common.Objects
         protected override void LoadFields()
         {
             base.LoadFields();
+            _classDataTrusted = false;
             var num = 0;
             if (MemoryOffsetTable.Instance.HasOffset("ClassPtrOffset"))
                 num = GameMemoryAccess.ReadIntFromOffset(BaseAddress + MemoryOffsetTable.Instance.GetIntOffset("ClassPtrOffset"), "ClassPtr");
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("ClassIdOffset"))
+            {
                 _playerClass = (GPlayerClass)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("ClassIdOffset"), "ClassId") & byte.MaxValue);
+                _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
+            }
             if (num != 0 && MemoryOffsetTable.Instance.HasOffset("RaceIdOffset"))
                 _playerRace = (GPlayerRace)(GameMemoryAccess.ReadIntFromOffset(num + MemoryOffsetTable.Instance.GetIntOffset("RaceIdOffset"), "Race") & byte.MaxValue);
             if (num == 0)
@@ -204,6 +218,7 @@ namespace Glider.Common.Objects
                 {
                     _playerRace = (GPlayerRace)(storageInt & byte.MaxValue);
                     _playerClass = (GPlayerClass)(storageInt >> 8 & byte.MaxValue);
+                    _classDataTrusted = IsKnownPlayerClassValue((int)_playerClass);
                 }
             }
             _petGuid = GetStorageULong("UNIT_FIELD_SUMMON");
@@ -214,6 +229,26 @@ namespace Glider.Common.Objects
             _rage = GetStorageInt("UNIT_FIELD_POWER2") / 10;
             _runicPower = GetStorageInt("UNIT_FIELD_POWER7") / 10;
             _sitting = (GetStorageInt("UNIT_FIELD_BYTES_1") & byte.MaxValue) != 0;
+        }
+
+        private static bool IsKnownPlayerClassValue(int classValue)
+        {
+            switch ((GPlayerClass)classValue)
+            {
+                case GPlayerClass.Warrior:
+                case GPlayerClass.Paladin:
+                case GPlayerClass.Hunter:
+                case GPlayerClass.Rogue:
+                case GPlayerClass.Priest:
+                case GPlayerClass.Deathknight:
+                case GPlayerClass.Shaman:
+                case GPlayerClass.Mage:
+                case GPlayerClass.Warlock:
+                case GPlayerClass.Druid:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         protected override void SetName()

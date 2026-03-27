@@ -18,6 +18,11 @@ public class SpellbookManager
     private bool bool_1;
     public SortedList<int, SpellEntry> Offsets;
 
+    public bool IsSpellListEnabled
+    {
+        get { return bool_0; }
+    }
+
     public SpellbookManager()
     {
         Offsets = new SortedList<int, SpellEntry>();
