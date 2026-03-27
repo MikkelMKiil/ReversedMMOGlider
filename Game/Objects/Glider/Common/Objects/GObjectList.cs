@@ -10,6 +10,20 @@ using System.Collections.Generic;
 
 namespace Glider.Common.Objects
 {
+    public enum GDecisionActionKind
+    {
+        None,
+        EngageMonster,
+        HarvestNode
+    }
+
+    public struct GDecisionAction
+    {
+        public GDecisionActionKind Kind;
+        public GMonster Monster;
+        public GNode Node;
+    }
+
     public class GObjectList
     {
         private static readonly bool LogObjects = false;
@@ -850,10 +864,41 @@ namespace Glider.Common.Objects
             return IsObjectPresent(unchecked((ulong)GUID));
         }
 
-        public static GMonster GetNextProfileTarget()
+        public static GDecisionAction SelectNextAction(bool includeHarvest, int harvestRange)
         {
+            var decision = new GDecisionAction
+            {
+                Kind = GDecisionActionKind.None,
+                Monster = null,
+                Node = null
+            };
+
+            GMonster targetMonster;
+            if (TrySelectProfileTargetCandidate(out targetMonster))
+            {
+                decision.Kind = GDecisionActionKind.EngageMonster;
+                decision.Monster = targetMonster;
+                return decision;
+            }
+
+            if (!includeHarvest || harvestRange <= 0)
+                return decision;
+
+            GNode node;
+            if (!TrySelectHarvestNodeCandidate(out node) || node.Location.DistanceToSelf > harvestRange)
+                return decision;
+
+            decision.Kind = GDecisionActionKind.HarvestNode;
+            decision.Node = node;
+            return decision;
+        }
+
+        private static bool TrySelectProfileTargetCandidate(out GMonster targetMonster)
+        {
+            targetMonster = null;
             if (StartupClass.ActiveProfile.IgnoreAttackers)
-                return null;
+                return false;
+
             var monsters = GetMonsters();
             if (monsters == null || monsters.Length == 0)
             {
@@ -866,17 +911,18 @@ namespace Glider.Common.Objects
                     Logger.LogMessage("[Loop] skipping target scan: no monsters found in current object snapshot.");
                 }
 
-                return null;
+                return false;
             }
+
             var closestDistance = 9999.0;
-            GMonster targetMonster = null;
             GMonster skippedClosest = null;
             var skippedClosestDistance = 9999.0;
             var skippedCount = 0;
             foreach (var monster in monsters)
+            {
                 if (monster.IsValidProfileTarget)
                 {
-                    double monsterDistance = monster.DistanceToSelf;
+                    var monsterDistance = monster.DistanceToSelf;
                     if (monsterDistance < closestDistance)
                     {
                         closestDistance = monsterDistance;
@@ -893,6 +939,7 @@ namespace Glider.Common.Objects
                         skippedClosest = monster;
                     }
                 }
+            }
 
             if (targetMonster == null && ConfigManager.gclass61_0.method_5("LogMonsterChecks"))
                 Logger.smethod_1("FindClosestToMe is returning null, nobody worth killing right now");
@@ -915,7 +962,8 @@ namespace Glider.Common.Objects
                 }
             }
             if (targetMonster == null)
-                return null;
+                return false;
+
             var extraPullDistance = ConfigManager.gclass61_0.method_3("ExtraPull");
             var withinPull = targetMonster.DistanceToSelf <= (double)(StartupClass.CurrentGameClass.PullDistance + extraPullDistance);
             var withinProfile = StartupClass.ActiveProfile.Wander ||
@@ -937,17 +985,18 @@ namespace Glider.Common.Objects
                                       ", profileMax=" + (StartupClass.CurrentGameClass.PullDistance + extraPullDistance) +
                                       ", reason=\"outside pull/profile envelope\"");
                 }
-                return null;
+                targetMonster = null;
+                return false;
             }
 
-            return targetMonster;
+            return true;
         }
 
-        public static GNode GetClosestHarvestable()
+        private static bool TrySelectHarvestNodeCandidate(out GNode closestHarvestable)
         {
+            closestHarvestable = null;
             var nodes = GetNodes();
             var closestDistance = 9999.0;
-            GNode closestHarvestable = null;
             foreach (var gnode in nodes)
             {
                 var canHarvest = true;
@@ -962,7 +1011,7 @@ namespace Glider.Common.Objects
                         canHarvest = false;
                     if ((!canHarvest || ConfigManager.gclass61_0.method_5("PickupJunk")) && !IsHarvestBanned(gnode.Name))
                     {
-                        double distanceToNode = gnode.Location.DistanceToSelf;
+                        var distanceToNode = gnode.Location.DistanceToSelf;
                         if (distanceToNode < closestDistance)
                         {
                             closestHarvestable = gnode;
@@ -972,7 +1021,7 @@ namespace Glider.Common.Objects
                 }
             }
 
-            return closestHarvestable;
+            return closestHarvestable != null;
         }
 
         private static bool IsHarvestBanned(string ObjectName)

@@ -491,7 +491,7 @@ public class CombatController
         while (!_me.IsDead)
         {
             DialogMonitor.smethod_2();
-            var target = GObjectList.GetNextProfileTarget();
+            var target = TryGetNextCombatTarget();
             if (target == null) { LogDbgMsg(170); return 0; }
 
             if (target.DistanceToSelf <= StartupClass.CurrentGameClass.PullDistance + _extraPullRange)
@@ -960,7 +960,7 @@ public class CombatController
     // Helper extracted from method_39
     private bool CheckAndEngageProfileTarget(ref GMonster target, GameTimer approachTimer)
     {
-        var nextTarget = GObjectList.GetNextProfileTarget();
+        var nextTarget = TryGetNextCombatTarget();
         if (nextTarget == null) { target = null; return false; }
 
         if (target == null || nextTarget.GUID != target.GUID)
@@ -983,6 +983,18 @@ public class CombatController
             _lastMovementLoc = _me.Location; _currentProfile.ConsiderWaypointSkip(); return true;
         }
         return false;
+    }
+
+    private GMonster TryGetNextCombatTarget()
+    {
+        var decision = GObjectList.SelectNextAction(false, _harvestRange);
+        return decision.Kind == GDecisionActionKind.EngageMonster ? decision.Monster : null;
+    }
+
+    private GNode TryGetNextHarvestNode()
+    {
+        var decision = GObjectList.SelectNextAction(true, _harvestRange);
+        return decision.Kind == GDecisionActionKind.HarvestNode ? decision.Node : null;
     }
 
     // Helper extracted from method_39
@@ -1098,8 +1110,8 @@ public class CombatController
     public bool HarvestClosestNode()
     {
         if (_harvestRange == 0) return false;
-        var node = GObjectList.GetClosestHarvestable();
-        if (node == null || node.Location.DistanceToSelf > _harvestRange) return false;
+        var node = TryGetNextHarvestNode();
+        if (node == null) return false;
 
         GContext.Main.ReleaseSpinRun();
         GContext.Main.Movement.MoveToLocation(node.Location, GContext.Main.MeleeDistance, false);
