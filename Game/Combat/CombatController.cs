@@ -99,73 +99,79 @@ public class CombatController
         if (!StartupClass.IsSomeConditionMet && ConfigManager.gclass61_0.method_5("BackgroundEnable"))
         {
             ShowEliteLinkPrompt(865);
+            Log("Glide initialization aborted: Background mode requires Elite Link condition");
+            return;
         }
         else if (!StartupClass.IsSomeConditionMet && !StartupClass.CurrentProfile.bool_0)
         {
             ShowEliteLinkPrompt(866);
+            Log("Glide initialization aborted: profile requires Elite Link condition");
+            return;
         }
-        else
+
+        StartupClass.InitializeBackgroundModeIfNeeded();
+        _waypointProximity = ConfigManager.gclass61_0.method_4("WaypointCloseness");
+        _stuckLimit = ConfigManager.gclass61_0.method_3("StuckLimit");
+        StartupClass.ProfileIdToProfileMap.Clear();
+        Sleep(200);
+        StartupClass.StartupLogger.imethod_0();
+
+        _partyManager = PartyManager.gclass54_0;
+        if (GContext.Main.MouseSpin)
         {
-            StartupClass.InitializeBackgroundModeIfNeeded();
-            _waypointProximity = ConfigManager.gclass61_0.method_4("WaypointCloseness");
-            _stuckLimit = ConfigManager.gclass61_0.method_3("StuckLimit");
-            StartupClass.ProfileIdToProfileMap.Clear();
-            Sleep(200);
-            StartupClass.StartupLogger.imethod_0();
-
-            _partyManager = PartyManager.gclass54_0;
-            if (GContext.Main.MouseSpin)
-            {
-                _gameCamera = new GGameCamera();
-                _originalCameraPitch = _gameCamera.Pitch;
-            }
-
-            StartupClass.SomeIntegerValue = 0;
-            _me = GPlayerSelf.Me;
-            _lastExperience = _me.Experience;
-
-            if (ConfigManager.gclass61_0.method_5("ResetBuffs"))
-                StartupClass.CurrentGameClass.ResetBuffs();
-
-            SpellcastingManager.gclass42_0.method_23();
-            _currentProfile = StartupClass.ProfileGroupStateManager?.method_6() ?? StartupClass.ActiveProfile;
-
-            _chatQueued = true;
-            _botThread = new Thread(ThreadRun);
-            _autoStopEnabled = ConfigManager.gclass61_0.method_2("AutoStop") == "True";
-            _jumpMoreEnabled = ConfigManager.gclass61_0.method_2("JumpMore") == "True";
-            _strafeEnabled = ConfigManager.gclass61_0.method_2("Strafe") == "True";
-
-            if (_partyManager.genum7_0 != PartyRole.const_0)
-                _partyManager.method_1();
-
-            _extraPullRange = ConfigManager.gclass61_0.method_3("ExtraPull");
-
-            if (MemoryOffsetTable.Instance.HasOffset("ActionBarEnabled")) Environment.Exit(0);
-
-            if (_autoStopEnabled)
-            {
-                _autoStopTime = DateTime.Now.AddMinutes(int.Parse(ConfigManager.gclass61_0.method_2("AutoStopMinutes")));
-                LogMsg(149, _autoStopTime.ToShortTimeString());
-            }
-
-            if (StartupClass.isTimeAdded && DateTime.Now > StartupClass.expiryTime) return;
-
-            _killsOrLoots = 0;
-            PlayerTracker.dateTime_1 = StartupClass.SessionStartTime = DateTime.Now;
-            _maxResurrects = int.Parse(ConfigManager.gclass61_0.method_2("MaxResurrect"));
-            _harvestRange = int.Parse(ConfigManager.gclass61_0.method_2("HarvestRange"));
-            _mailboxRange = int.Parse(ConfigManager.gclass61_0.method_2("MailBoxRange"));
-            _fastEatEnabled = ConfigManager.gclass61_0.method_2("FastEat") == "True";
-
-            ResetJumpTimer();
-            var strNoHarvest = ConfigManager.gclass61_0.method_2("NoHarvest");
-            if (strNoHarvest.Length > 0) _noHarvestList = strNoHarvest.Split(';');
-
-            LootableCorpseTracker.smethod_6();
-            _stopLootWhenFull = false;
-            _isInitialized = true;
+            _gameCamera = new GGameCamera();
+            _originalCameraPitch = _gameCamera.Pitch;
         }
+
+        StartupClass.SomeIntegerValue = 0;
+        _me = GPlayerSelf.Me;
+        _lastExperience = _me.Experience;
+
+        if (ConfigManager.gclass61_0.method_5("ResetBuffs"))
+            StartupClass.CurrentGameClass.ResetBuffs();
+
+        SpellcastingManager.gclass42_0.method_23();
+        _currentProfile = StartupClass.ProfileGroupStateManager?.method_6() ?? StartupClass.ActiveProfile;
+
+        _chatQueued = true;
+        _botThread = new Thread(ThreadRun);
+        _autoStopEnabled = ConfigManager.gclass61_0.method_2("AutoStop") == "True";
+        _jumpMoreEnabled = ConfigManager.gclass61_0.method_2("JumpMore") == "True";
+        _strafeEnabled = ConfigManager.gclass61_0.method_2("Strafe") == "True";
+
+        if (_partyManager.genum7_0 != PartyRole.const_0)
+            _partyManager.method_1();
+
+        _extraPullRange = ConfigManager.gclass61_0.method_3("ExtraPull");
+
+        if (MemoryOffsetTable.Instance.HasOffset("ActionBarEnabled")) Environment.Exit(0);
+
+        if (_autoStopEnabled)
+        {
+            _autoStopTime = DateTime.Now.AddMinutes(int.Parse(ConfigManager.gclass61_0.method_2("AutoStopMinutes")));
+            LogMsg(149, _autoStopTime.ToShortTimeString());
+        }
+
+        if (StartupClass.isTimeAdded && DateTime.Now > StartupClass.expiryTime)
+        {
+            Log("Glide initialization aborted: trial period expired");
+            return;
+        }
+
+        _killsOrLoots = 0;
+        PlayerTracker.dateTime_1 = StartupClass.SessionStartTime = DateTime.Now;
+        _maxResurrects = int.Parse(ConfigManager.gclass61_0.method_2("MaxResurrect"));
+        _harvestRange = int.Parse(ConfigManager.gclass61_0.method_2("HarvestRange"));
+        _mailboxRange = int.Parse(ConfigManager.gclass61_0.method_2("MailBoxRange"));
+        _fastEatEnabled = ConfigManager.gclass61_0.method_2("FastEat") == "True";
+
+        ResetJumpTimer();
+        var strNoHarvest = ConfigManager.gclass61_0.method_2("NoHarvest");
+        if (strNoHarvest.Length > 0) _noHarvestList = strNoHarvest.Split(';');
+
+        LootableCorpseTracker.smethod_6();
+        _stopLootWhenFull = false;
+        _isInitialized = true;
     }
 
     // Original: smethod_0
@@ -186,7 +192,18 @@ public class CombatController
     // Original: method_1
     public bool StartBotThread()
     {
-        if (_botThread == null || !_isInitialized) return false;
+        if (_botThread == null)
+        {
+            Log("!! StartBotThread failed: bot thread was not created");
+            return false;
+        }
+
+        if (!_isInitialized)
+        {
+            Log("!! StartBotThread failed: controller initialization did not complete");
+            return false;
+        }
+
         _botThread.Start();
         return true;
     }
@@ -1588,7 +1605,7 @@ public class CombatController
 
     // Basic instance methods expected by many callers. Implementations are minimal
     // and try to reuse existing logic where applicable.
-    public bool method_1() => _isInitialized; // was likely an "IsInitialized" check
+    public bool method_1() => StartBotThread(); // Start bot thread (legacy obfuscated call path)
     public void method_2() => StopBotThread(); // wrapper for stopping the bot
     public void method_12(bool val) { _interruptAction = val; }
     public void method_21(bool val) { bool_2 = val; }

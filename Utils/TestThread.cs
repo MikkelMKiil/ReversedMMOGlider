@@ -12,7 +12,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Threading;
 
-public class TestThread
+epublic class TestThread
 {
     private const int ForegroundInitializationDelayMs = 2000;
     private const int PostRunDelayMs = 4000;

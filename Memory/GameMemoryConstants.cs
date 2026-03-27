@@ -188,9 +188,11 @@ namespace Glider.Common.Objects
             internal const uint ObjGuid = 0x30;
             internal const uint NextObject = 0x3C;
 
-            internal const uint PosX = 0x9B8;
-            internal const uint PosY = 0x9BC;
-            internal const uint PosZ = 0x9C0;
+            // 3.3.5a (12340) unit base position in object movement struct.
+            // Keep aligned with Heading/Pitch at 0x7A8/0x7AC.
+            internal const uint PosX = 0x798;
+            internal const uint PosY = 0x79C;
+            internal const uint PosZ = 0x7A0;
 
             internal const uint DescriptorBase = 0x8;
             internal const uint UnitFieldHealth = 0x6C;

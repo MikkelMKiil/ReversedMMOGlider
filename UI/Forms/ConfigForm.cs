@@ -786,6 +786,7 @@ public class ConfigForm : Form
             this.OKButton.Size = new System.Drawing.Size(115, 37);
             this.OKButton.TabIndex = 0;
             this.OKButton.Text = "OK";
+            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
             // MyCancelButton
             // 
@@ -795,6 +796,7 @@ public class ConfigForm : Form
             this.MyCancelButton.Size = new System.Drawing.Size(115, 37);
             this.MyCancelButton.TabIndex = 1;
             this.MyCancelButton.Text = "Cancel";
+            this.MyCancelButton.Click += new System.EventHandler(this.MyCancelButton_Click);
             // 
             // groupBox1
             // 

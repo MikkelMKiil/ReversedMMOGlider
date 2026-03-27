@@ -508,6 +508,16 @@ namespace Glider.Common.Objects
             var y = GetBaseFloat("Y");
             var z = GetBaseFloat("Z");
 
+            // Safety fallback for 3.3.5a: if configured base position offsets read as zero,
+            // try direct movement-struct offsets to keep coords/speed usable.
+            if (x == 0.0f && y == 0.0f && z == 0.0f)
+            {
+                var baseAddress = unchecked((int)BaseAddress);
+                x = GameMemoryAccess.ReadFloat(baseAddress + 0x798, "UnitPosX_fallback");
+                y = GameMemoryAccess.ReadFloat(baseAddress + 0x79C, "UnitPosY_fallback");
+                z = GameMemoryAccess.ReadFloat(baseAddress + 0x7A0, "UnitPosZ_fallback");
+            }
+
             _lastLocation = _location;
             _location = new GLocation(x, y, z);
 
