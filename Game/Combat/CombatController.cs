@@ -1,4 +1,5 @@
 #nullable disable
+using Glider.Common;
 using Glider.Common.Objects;
 using System;
 using System.Collections;
@@ -853,7 +854,7 @@ public class CombatController
     }
 
     // Original: smethod_1
-    public static void ClearTarget() { if (GPlayerSelf.Me.TargetGUID != 0L) InputController.TapKey(27); }
+    public static void ClearTarget() { if (GPlayerSelf.Me.TargetGUID != 0L) InputController.TapKeyWithoutHookStop(27); }
 
     // Original: method_21
     public void HearthAndExit(bool isHearth)

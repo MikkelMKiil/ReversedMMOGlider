@@ -278,6 +278,8 @@
     <Compile Include="Game\Objects\Glider\Common\Objects\GReaction.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GScript.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GShortcut.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\ShortcutLayout335a.cs" />
+    <Compile Include="Game\Objects\Glider\Common\Objects\ShortcutSnapshotService.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GShortcutType.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GSpells.cs" />
     <Compile Include="Game\Objects\Glider\Common\Objects\GSpellTimer.cs" />

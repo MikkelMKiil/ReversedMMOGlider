@@ -331,6 +331,12 @@ public class KeyboardHookManager
 
         if (e.KeyCode != Keys.Escape)
             return;
+        if (InputController.IsEscapeHookStopSuppressed())
+        {
+            Logger.smethod_1("Escape key picked up in hook from internal input, stop suppressed");
+            return;
+        }
+
         var foregroundWindow = GameMemoryAccess.GetForegroundWindow();
         StartupClass.HasSessionWarning = false;
         if (StartupClass.CurrentGlideMode != GlideMode.None && (foregroundWindow == intptr_0 ||

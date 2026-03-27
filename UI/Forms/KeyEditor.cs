@@ -430,49 +430,68 @@ public class KeyEditor : Form
                 StartupClass.SpellbookStateManager = new SpellbookManager();
             }
 
-            gkey_0.FilloutKey();
-            for (var SlotNumber = 1; SlotNumber <= 108; ++SlotNumber)
+            var snapshot = ShortcutSnapshotService.CaptureSnapshot("KeyEditor", false);
+            gkey_0.FilloutKey(false, snapshot);
+            for (var SlotNumber = ShortcutLayout335a.MinSlot; SlotNumber <= ShortcutLayout335a.MaxActionSlot; ++SlotNumber)
             {
-                var gshortcut_0 = new GShortcut(SlotNumber);
+                var entry = snapshot.GetEntry(SlotNumber);
                 var class0 = new IntStringEntry();
-                if (gshortcut_0.ShortcutValue > 0)
+                if (entry != null && entry.IsPresent)
                 {
-                    class0.int_0 = gshortcut_0.SlotNumber;
-                    switch (gshortcut_0.ShortcutType)
+                    class0.int_0 = entry.SlotNumber;
+                    var stateLabel = ShortcutSnapshotService.GetEntryStateLabel(entry);
+                    switch (entry.ShortcutType)
                     {
                         case GShortcutType.Spell:
-                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
-                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
-                                              StartupClass.SpellbookStateManager.method_11(gshortcut_0.ShortcutValue);
+                            class0.string_0 = "Slot " + entry.SlotNumber + ": 0x" +
+                                              entry.ShortcutValue.ToString("x") + " " +
+                                              entry.DisplayName;
+                            if (entry.RankText != null && entry.RankText.Length > 0)
+                                class0.string_0 += " (" + entry.RankText + ")";
+                            class0.string_0 += " [spell, " + stateLabel + "]";
                             break;
                         case GShortcutType.Item:
-                            class0.string_0 = "Slot " + gshortcut_0.SlotNumber + ": 0x" +
-                                              gshortcut_0.ShortcutValue.ToString("x") + " " +
-                                              new GItemDefinition(gshortcut_0.ShortcutValue).Name + " (item)";
+                            class0.string_0 = "Slot " + entry.SlotNumber + ": 0x" +
+                                              entry.ShortcutValue.ToString("x") + " " +
+                                              entry.DisplayName + " [item, " + stateLabel + "]";
                             break;
                         case GShortcutType.Macro:
-                            continue;
+                            class0.string_0 = "Slot " + entry.SlotNumber + ": 0x" +
+                                              entry.ShortcutValue.ToString("x") + " " +
+                                              entry.DisplayName + " [macro, " + stateLabel + "]";
+                            break;
                     }
 
                     if (class0.string_0 != null)
                     {
                         Spell.Items.Add(class0);
-                        if (gkey_0.MatchesShortcut(gshortcut_0))
-                        {
-                            flag = true;
-                            Spell.SelectedIndex = Spell.Items.Count - 1;
-                        }
+                    }
+                }
+            }
+
+            var match = ShortcutSnapshotService.MatchKey(gkey_0, snapshot);
+            if (match.BestEntry != null)
+            {
+                for (var index = 0; index < Spell.Items.Count; ++index)
+                {
+                    var item = Spell.Items[index] as IntStringEntry;
+                    if (item != null && item.int_0 == match.BestEntry.SlotNumber)
+                    {
+                        flag = true;
+                        Spell.SelectedIndex = index;
+                        break;
                     }
                 }
             }
 
             if (flag)
                 return;
+
             var class0_1 = new IntStringEntry();
             class0_1.int_0 = -1;
             class0_1.string_0 = "0x" + gkey_0.SIM.ToString("x") + " ";
             class0_1.string_0 += StartupClass.SpellbookStateManager.method_11(gkey_0.SIM);
-            class0_1.string_0 += " (not on visible bar!)";
+            class0_1.string_0 += " (state=" + gkey_0.LastShortcutMatchState + ")";
             Spell.Items.Add(class0_1);
             Spell.SelectedIndex = Spell.Items.Count - 1;
         }
@@ -481,6 +500,8 @@ public class KeyEditor : Form
             Spell.Items.Add("0x" + gkey_0.SIM.ToString("x") + " (not attached)");
             Spell.SelectedIndex = 0;
         }
+
+        GShortcut.LogShortcutDetectionSnapshot("KeyEditor", true);
     }
 
     private bool method_2()
@@ -530,19 +551,24 @@ public class KeyEditor : Form
 
                 if (((IntStringEntry)Spell.SelectedItem).int_0 != -1)
                 {
-                    var gshortcut = new GShortcut(((IntStringEntry)Spell.SelectedItem).int_0);
-                    gkey_0.SIM = gshortcut.ShortcutValue;
-                    switch (gshortcut.ShortcutType)
+                    var selectedSlot = ((IntStringEntry)Spell.SelectedItem).int_0;
+                    var snapshot = ShortcutSnapshotService.CaptureSnapshot("KeyEditor.Save", false);
+                    var entry = snapshot.GetEntry(selectedSlot);
+                    if (entry != null && entry.IsPresent)
                     {
-                        case GShortcutType.Spell:
-                            gkey_0.KType = GKeyType.SpellID;
-                            break;
-                        case GShortcutType.Item:
-                            gkey_0.KType = GKeyType.ItemDefID;
-                            break;
-                        case GShortcutType.Macro:
-                            gkey_0.KType = GKeyType.Macro;
-                            break;
+                        gkey_0.SIM = entry.ShortcutValue;
+                        switch (entry.ShortcutType)
+                        {
+                            case GShortcutType.Spell:
+                                gkey_0.KType = GKeyType.SpellID;
+                                break;
+                            case GShortcutType.Item:
+                                gkey_0.KType = GKeyType.ItemDefID;
+                                break;
+                            case GShortcutType.Macro:
+                                gkey_0.KType = GKeyType.Macro;
+                                break;
+                        }
                     }
                 }
             }

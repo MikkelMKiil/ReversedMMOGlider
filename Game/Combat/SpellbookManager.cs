@@ -9,6 +9,7 @@ using Glider.Common.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 public class SpellbookManager
 {
@@ -137,15 +138,34 @@ public class SpellbookManager
                 var str = method_2(int32_2, "sprank");
                 if (str != null && str.Length > 0)
                 {
-                    var num2 = str.LastIndexOf(' ');
-                    int result;
-                    if (num2 > 0 && int.TryParse(str.Substring(num2 + 1), out result))
-                        gclass64.int_2 = result;
+                    gclass64.int_2 = ParseRankFromSpellSubName(str);
                 }
             }
         }
 
         return gclass64;
+    }
+
+    private static int ParseRankFromSpellSubName(string spellSubName)
+    {
+        if (string.IsNullOrEmpty(spellSubName))
+            return 0;
+
+        var digits = new StringBuilder();
+        for (var index = 0; index < spellSubName.Length; ++index)
+        {
+            var ch = spellSubName[index];
+            if (char.IsDigit(ch))
+                digits.Append(ch);
+            else if (digits.Length > 0)
+                break;
+        }
+
+        int parsedRank;
+        if (digits.Length > 0 && int.TryParse(digits.ToString(), out parsedRank))
+            return parsedRank;
+
+        return 0;
     }
 
     public string method_11(int int_1)

@@ -29,6 +29,18 @@ namespace Glider.Common.Objects
         bool AvoidAdds;
         int AvoidAddDistance;
         bool UseMortalStrike;
+
+        const double ChargeReadyDistance = 8.0;
+        const double ChargeSuccessDistance = 7.0;
+        const double ChargeEarlyMovementDistance = 1.5;
+        const int ChargeEarlyCheckMs = 600;
+        const int ChargeTotalWaitMs = 3500;
+
+        int ChargeFailBudget;
+        int ChargeFailResetMs;
+        ulong LastChargeFailGuid;
+        int LastChargeFailCount;
+        int LastChargeFailTick;
         #endregion
 
         #region GGameClass overrides
@@ -93,6 +105,8 @@ namespace Glider.Common.Objects
         {
             Context.SetConfigValue("Warrior.PullDistance", "30", false);
             Context.SetConfigValue("Warrior.ChargePull", "False", false);
+            Context.SetConfigValue("Warrior.ChargeFailBudget", "2", false);
+            Context.SetConfigValue("Warrior.ChargeFailResetMs", "45000", false);
             Context.SetConfigValue("Warrior.UseExecute", "True", false);
             Context.SetConfigValue("Warrior.ChaseRunners", "True", false);
             Context.SetConfigValue("Warrior.UseBloodrage", "True", false);
@@ -136,6 +150,12 @@ namespace Glider.Common.Objects
             AvoidAdds = Context.GetConfigBool("Warrior.AvoidAdds");
             AvoidAddDistance = Context.GetConfigInt("Warrior.AvoidAddDistance");
             UseMortalStrike = Context.GetConfigBool("Warrior.UseMortalStrike");
+            ChargeFailBudget = Math.Max(1, Context.GetConfigInt("Warrior.ChargeFailBudget"));
+            ChargeFailResetMs = Math.Max(10000, Context.GetConfigInt("Warrior.ChargeFailResetMs"));
+
+            LastChargeFailGuid = 0;
+            LastChargeFailCount = 0;
+            LastChargeFailTick = 0;
         }
 
         #endregion
@@ -166,16 +186,30 @@ namespace Glider.Common.Objects
             {                
                 if (ChargePull && !Me.IsInCombat)
                 {
-                    if (Target.DistanceToSelf < 8.0)
+                    if (Target.DistanceToSelf < ChargeReadyDistance)
                     {
-                        Monster.Approach();
-                        Context.SendKey("Common.ToggleCombat");
+                        PerformFallbackPull(Monster, "target is too close to charge");
+                    }
+                    else if (ShouldSkipChargeAttempt(Target))
+                    {
+                        PerformFallbackPull(Monster, "charge temporarily skipped for this target after repeated failures");
                     }
                     else if (Interface.IsKeyReady("Warrior.Charge"))
+                    {
+                        if (DoAndCheckCharge(Target))
                         {
-                            if (!DoAndCheckCharge(Target))             // Never got there, fuggit.
-                                return GCombatResult.Retry;
+                            RegisterChargeOutcome(Target, true);
                         }
+                        else
+                        {
+                            RegisterChargeOutcome(Target, false);
+                            PerformFallbackPull(Monster, "charge failed");
+                        }
+                    }
+                    else
+                    {
+                        PerformFallbackPull(Monster, "charge unavailable");
+                    }
                 }
                 else
                 {
@@ -443,25 +477,98 @@ namespace Glider.Common.Objects
             return false;
         }
 
+        void PerformFallbackPull(GMonster monster, string reason)
+        {
+            Logger.smethod_1("[Warrior] Pull: " + reason + "; using approach pull");
+            monster.Approach(Math.Max(1.5, MeleeDistance - 1.0));
+            Context.SendKey("Common.ToggleCombat");
+        }
+
+        bool ShouldSkipChargeAttempt(GUnit target)
+        {
+            if (LastChargeFailCount <= 0)
+                return false;
+
+            if (unchecked(Environment.TickCount - LastChargeFailTick) > ChargeFailResetMs)
+            {
+                LastChargeFailGuid = 0;
+                LastChargeFailCount = 0;
+                LastChargeFailTick = 0;
+                return false;
+            }
+
+            return LastChargeFailGuid == target.GUID && LastChargeFailCount >= ChargeFailBudget;
+        }
+
+        void RegisterChargeOutcome(GUnit target, bool success)
+        {
+            if (success)
+            {
+                if (LastChargeFailGuid == target.GUID)
+                {
+                    LastChargeFailGuid = 0;
+                    LastChargeFailCount = 0;
+                    LastChargeFailTick = 0;
+                }
+
+                return;
+            }
+
+            if (LastChargeFailGuid == target.GUID)
+                LastChargeFailCount++;
+            else
+            {
+                LastChargeFailGuid = target.GUID;
+                LastChargeFailCount = 1;
+            }
+
+            LastChargeFailTick = Environment.TickCount;
+            Logger.smethod_1("[Warrior] Pull: charge failure budget " + LastChargeFailCount + "/" + ChargeFailBudget +
+                            " for guid=0x" + target.GUID.ToString("x"));
+        }
+
         bool DoAndCheckCharge(GUnit Target)
         {
+            var initialDistance = Target.DistanceToSelf;
+            if (initialDistance < ChargeReadyDistance)
+            {
+                Context.Debug("Charge skipped: target too close (" + Math.Round(initialDistance, 2) + ")");
+                return false;
+            }
+
             GLocation Anchor = Me.Location;
-            GSpellTimer ChargeWait = new GSpellTimer(2000, false);
+            GSpellTimer ChargeWait = new GSpellTimer(ChargeTotalWaitMs, false);
+            GSpellTimer EarlyCheck = new GSpellTimer(ChargeEarlyCheckMs, false);
+            var earlyCheckPerformed = false;
 
             Context.CastSpell("Warrior.Charge");
             Context.ReleaseSpinRun();
 
             while (!ChargeWait.IsReadySlow)
             {
-                if (Me.Location.GetDistanceTo(Anchor) >= 7.0)
+                var movedDistance = Me.Location.GetDistanceTo(Anchor);
+                if (movedDistance >= ChargeSuccessDistance)
                 {
                     Context.Debug("Charge is moving us, excellent!");
-                    Target.WaitForApproach(Context.MeleeDistance, 2000);
+                    Target.WaitForApproach(Context.MeleeDistance, 2500);
                     return true;
                 }
+
+                if (!earlyCheckPerformed && EarlyCheck.IsReadySlow)
+                {
+                    earlyCheckPerformed = true;
+                    if (movedDistance < ChargeEarlyMovementDistance)
+                    {
+                        Context.Log("Charge failed to start movement (moved " + Math.Round(movedDistance, 2) + " yards)");
+                        return false;
+                    }
+                }
+
+                Thread.Sleep(25);
             }
 
-            Context.Log("Never seemed to get anywhere on charge");
+            Context.Log("Never seemed to get anywhere on charge (start=" + Math.Round(initialDistance, 2) +
+                        ", moved=" + Math.Round(Me.Location.GetDistanceTo(Anchor), 2) + ")");
             return false;
         }
         #endregion

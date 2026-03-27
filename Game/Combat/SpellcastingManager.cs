@@ -776,6 +776,7 @@ public class SpellcastingManager
             StartupClass.CurrentGameClass.UpdateKeys(array);
             method_24(array);
             method_3();
+            GShortcut.LogShortcutDetectionSnapshot("SpellcastingManager.method_23", true);
         }
     }
 

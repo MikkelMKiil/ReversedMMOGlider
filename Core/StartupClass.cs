@@ -171,6 +171,7 @@ public class StartupClass
     public static string LastLifecycleThreadStopOutcome = "none";
     private static readonly GameTimer KeybindRefreshTimer = new GameTimer(1200);
     private static bool IsKeybindRefreshPending;
+    private static bool HasLoggedStartupShortcutHealthReport;
     private static ulong LastKeybindRefreshGuid;
     private const int MinMainLoopTickIntervalMs = 75;
     private static string PendingErrorMessage = null;
@@ -311,6 +312,7 @@ public class StartupClass
         IsGliderInitialized = false;
         CameraController = new CameraRotator();
         IsKeybindRefreshPending = true;
+        HasLoggedStartupShortcutHealthReport = false;
         LastKeybindRefreshGuid = 0UL;
         KeybindRefreshTimer.method_5();
     }
@@ -1077,6 +1079,9 @@ public class StartupClass
     public static bool StartAutoGlide(bool isHotkeyTriggered)
     {
         Logger.smethod_1(LogCategoryStartup + "StartAutoGlide requested");
+        LastLifecycleStopReason = "";
+        LastLifecycleThreadStopOutcome = "none";
+        HasLoggedStartupShortcutHealthReport = false;
         LogLifecycleEvent("StartRequested", "Hotkey=" + isHotkeyTriggered);
 
         if (!IsInitializationComplete)
@@ -1627,6 +1632,13 @@ public class StartupClass
             SpellcastingManager.gclass42_0.method_23();
             IsKeybindRefreshPending = false;
             LastKeybindRefreshGuid = player.GUID;
+
+            if (!HasLoggedStartupShortcutHealthReport && ShortcutSnapshotService.IsVerboseShortcutDetectionEnabled())
+            {
+                ShortcutSnapshotService.LogStartupShortcutHealth("StartupClass.TryRefreshKeybindsIfNeeded",
+                    SpellcastingManager.gclass42_0.Offsets);
+                HasLoggedStartupShortcutHealthReport = true;
+            }
         }
         catch (Exception ex)
         {
@@ -1644,7 +1656,7 @@ public class StartupClass
             return;
 
         LogMainLoopStep("Auto mode popup dismiss");
-        InputController.TapKey(27);
+        InputController.TapKeyWithoutHookStop(27);
     }
 
     private static void ApplyBackgroundModeIfNeeded()

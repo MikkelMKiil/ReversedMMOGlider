@@ -71,6 +71,9 @@ namespace Glider.Common.Objects
         /// </summary>
         private static void LogObjectListDebugInfo()
         {
+            if (!IsVerboseMainLoopLoggingEnabled())
+                return;
+
             var currentTick = Environment.TickCount;
             if (currentTick - _lastLoggedTick < LogIntervalMs)
                 return;
@@ -102,6 +105,11 @@ namespace Glider.Common.Objects
                             ", Players=" + players + 
                             ", Nodes=" + nodes + 
                             ", Other=" + other);
+        }
+
+        private static bool IsVerboseMainLoopLoggingEnabled()
+        {
+            return ConfigManager.gclass61_0 != null && ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
         }
 
         private static SortedList<ulong, GObject> GetAll()
@@ -158,7 +166,10 @@ namespace Glider.Common.Objects
                         if (currentObjectAddress != firstObjectAddress)
                         {
                             if (CanAcceptTruncatedTraversal(traversalObjectCount, priorSnapshotCount, newSnapshot.Count))
-                                Logger.smethod_1("[WARN] Object list traversal detected cycle late in pass at 0x" + currentObjectAddress.ToString("x") + ", keeping partial snapshot");
+                            {
+                                if (IsVerboseMainLoopLoggingEnabled())
+                                    Logger.smethod_1("[WARN] Object list traversal detected cycle late in pass at 0x" + currentObjectAddress.ToString("x") + ", keeping partial snapshot");
+                            }
                             else
                             {
                                 Logger.LogMessage("[CRITICAL] Object list traversal aborted: detected cycle in object links at 0x" +
@@ -231,7 +242,8 @@ namespace Glider.Common.Objects
                                 newSnapshot.Add(guid, gobject);
 
                                 // Log enemy additions
-                                if (gobject.Type == GObjectType.Monster && traversalObjectCount % 10 == 0)
+                                if (gobject.Type == GObjectType.Monster && traversalObjectCount % 10 == 0 &&
+                                    IsVerboseMainLoopLoggingEnabled())
                                     Logger.smethod_1("[TRACE] Added monster: 0x" + guid.ToString("x") + " (" + gobject.Name + ")");
                             }
                             else

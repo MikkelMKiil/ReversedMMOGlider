@@ -22,6 +22,8 @@ namespace Glider.Common.Objects
         private bool Filled;
         public string KeyName;
         public GKeyType KType;
+        public ShortcutMatchState LastShortcutMatchState;
+        public string LastShortcutMatchDetails;
         public int LiveSIM;
         public bool NeedAutoUpdate;
         private int[] SameSpells;
@@ -38,6 +40,8 @@ namespace Glider.Common.Objects
             BarState = GBarState.Indifferent;
             SIM = 0;
             LiveSIM = 0;
+            LastShortcutMatchState = ShortcutMatchState.Missing;
+            LastShortcutMatchDetails = "";
             AutoUpdate = false;
         }
 
@@ -171,6 +175,11 @@ namespace Glider.Common.Objects
 
         public void FilloutKey(bool FailQuietly)
         {
+            FilloutKey(FailQuietly, null);
+        }
+
+        public void FilloutKey(bool FailQuietly, ShortcutSnapshot snapshot)
+        {
             if (Filled)
                 return;
             if (!StartupClass.IsRuntimeAttached)
@@ -180,14 +189,16 @@ namespace Glider.Common.Objects
             else
             {
                 LiveSIM = 0;
+                LastShortcutMatchState = ShortcutMatchState.Missing;
+                LastShortcutMatchDetails = "";
                 if (KType == GKeyType.VChar)
                 {
                     Filled = true;
+                    LastShortcutMatchState = ShortcutMatchState.Usable;
+                    LastShortcutMatchDetails = "virtual key";
                 }
                 else if (KType == GKeyType.Char)
                 {
-                    var num1 = 0;
-                    var num2 = 1;
                     var me = GPlayerSelf.Me;
                     if (me == null)
                         return;
@@ -198,75 +209,28 @@ namespace Glider.Common.Objects
                     if (num3 == -1)
                         return;
                     var num4 = (int)(BarState - 3);
-                    if (BarState == GBarState.Bar1)
-                    {
-                        var stance = me.Stance;
-                        if (stance == GStance.Battle || stance == GStance.Stealth || stance == GStance.Shadow ||
-                            stance == GStance.Cat)
-                            num1 = 72;
-                        if (stance == GStance.Defensive)
-                            num1 = 84;
-                        if (stance == GStance.Berserker || stance == GStance.Bear)
-                            num1 = 96;
-                    }
+                    var primaryBarStart = ShortcutLayout335a.GetPrimaryBarStartSlot(me.PlayerClass, me.Stance);
+                    var slotNumber = primaryBarStart + num4 * 12 + num3;
 
-                    var gshortcut = new GShortcut(num2 + num1 + num4 * 12 + num3);
-                    if (gshortcut.ShortcutType != GShortcutType.Macro)
-                        LiveSIM = gshortcut.ShortcutValue;
+                    var activeSnapshot = snapshot ?? ShortcutSnapshotService.CaptureSnapshot("GKey.FilloutKey.Char", false);
+                    var entry = activeSnapshot.GetEntry(slotNumber);
+                    if (entry != null && entry.ShortcutType != GShortcutType.Macro)
+                        LiveSIM = entry.ShortcutValue;
+
                     Filled = true;
+                    LastShortcutMatchState = ShortcutMatchState.Usable;
+                    LastShortcutMatchDetails = "char slot=" + slotNumber;
                 }
                 else
                 {
                     if (KType != GKeyType.ItemDefID && KType != GKeyType.Macro && KType != GKeyType.SpellID)
                         return;
-                    LiveSIM = 0;
-                    for (var SlotNumber = 1; SlotNumber < 109; ++SlotNumber)
-                    {
-                        var gshortcut = new GShortcut(SlotNumber);
-                        if (KType != GKeyType.Macro || gshortcut.ShortcutType != GShortcutType.Macro ||
-                            SIM != gshortcut.ShortcutValue || !MapSlotToBars(SlotNumber))
-                        {
-                            if (KType != GKeyType.ItemDefID || gshortcut.ShortcutType != GShortcutType.Item ||
-                                SIM != gshortcut.ShortcutValue || !MapSlotToBars(SlotNumber))
-                            {
-                                if (KType == GKeyType.SpellID && gshortcut.ShortcutType == GShortcutType.Spell)
-                                {
-                                    var flag = false;
-                                    if (StartupClass.SpellbookStateManager == null)
-                                        return;
 
-                                    if (SameSpells == null)
-                                        SameSpells = StartupClass.SpellbookStateManager.method_13(SIM);
-                                    if (SameSpells == null)
-                                        return;
-                                    foreach (var sameSpell in SameSpells)
-                                        if (sameSpell == gshortcut.ShortcutValue)
-                                            flag = true;
-                                    if (flag && MapSlotToBars(SlotNumber))
-                                    {
-                                        LiveSIM = gshortcut.ShortcutValue;
-                                        Filled = true;
-                                        return;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                LiveSIM = new GItemDefinition(SIM).SpellID;
-                                StartupClass.SpellbookStateManager.method_9(LiveSIM);
-                                Filled = true;
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            Filled = true;
-                            return;
-                        }
-                    }
-
-                    if (!FailQuietly)
-                        Logger.smethod_1("! Could not find this spell on any action bar: " + ToString());
+                    var activeSnapshot = snapshot ?? ShortcutSnapshotService.CaptureSnapshot("GKey.FilloutKey", false);
+                    var matchResult = ShortcutSnapshotService.MatchKey(this, activeSnapshot);
+                    ShortcutSnapshotService.ApplyBestMatchToKey(this, matchResult, FailQuietly);
+                    LastShortcutMatchState = matchResult.State;
+                    LastShortcutMatchDetails = matchResult.Details;
                     Filled = true;
                 }
             }
@@ -276,51 +240,20 @@ namespace Glider.Common.Objects
         {
             Filled = false;
             SameSpells = null;
+            LastShortcutMatchState = ShortcutMatchState.Missing;
+            LastShortcutMatchDetails = "";
         }
 
         protected bool MapSlotToBars(int SlotNumber)
         {
-            var num = -1;
             var index = (SlotNumber - 1) % 12;
             var me = GPlayerSelf.Me;
             if (me == null)
                 return false;
 
-            if (SlotNumber >= 13 && SlotNumber <= 72)
-            {
-                num = (SlotNumber - 1) / 12;
-            }
-            else
-            {
-                var flag = false;
-                var stance = me.Stance;
-                if (stance == GStance.Battle || stance == GStance.Stealth || stance == GStance.Shadow ||
-                    stance == GStance.Cat)
-                {
-                    flag = true;
-                    if (SlotNumber >= 73 && SlotNumber <= 84)
-                        num = 0;
-                }
-
-                if (stance == GStance.Berserker || stance == GStance.Bear)
-                {
-                    flag = true;
-                    if (SlotNumber >= 97 && SlotNumber <= 108)
-                        num = 0;
-                }
-
-                if (stance == GStance.Defensive)
-                {
-                    flag = true;
-                    if (SlotNumber >= 85 && SlotNumber <= 96)
-                        num = 0;
-                }
-
-                if (SlotNumber >= 1 && SlotNumber <= 12 && !flag)
-                    num = 0;
-                if (num == -1)
-                    return false;
-            }
+            int num;
+            if (!ShortcutLayout335a.TryMapSlotToBarIndex(SlotNumber, me.PlayerClass, me.Stance, out num))
+                return false;
 
             if (index < 0 || index >= StartupClass.ActionBarCharacters.Length)
                 return false;
@@ -335,30 +268,13 @@ namespace Glider.Common.Objects
             FilloutKey();
             if (SIM == 0)
                 return null;
-            var StartSlotIndex = 1;
-            var num = GameMemoryAccess.ReadInt32(MemoryOffsetTable.Instance.GetIntOffset("ActionBarCurrent"), "abcurrent");
-            if (num == 0)
-            {
-                var stance = GPlayerSelf.Me.Stance;
-                if (stance == GStance.Battle || stance == GStance.Stealth || stance == GStance.Shadow ||
-                    stance == GStance.Cat)
-                    StartSlotIndex += 72;
-                if (stance == GStance.Defensive)
-                    StartSlotIndex += 84;
-                if (stance == GStance.Bear || stance == GStance.Battle)
-                    StartSlotIndex += 96;
-            }
-            else
-            {
-                StartSlotIndex += 12 * num;
-            }
 
-            string HitName = null;
-            if (ScanForShortcut(StartSlotIndex >= 72 ? "BonusAction" : "Action", StartSlotIndex, out HitName) ||
-                ScanForShortcut("MultiBarBottomLeft", 61, out HitName) ||
-                ScanForShortcut("MultiBarBottomRight", 49, out HitName) ||
-                ScanForShortcut("MultiBarRight", 25, out HitName) || ScanForShortcut("MultiBarLeft", 37, out HitName))
-                return HitName;
+            var snapshot = ShortcutSnapshotService.CaptureSnapshot("GKey.FindVisibleInterfaceObject", false);
+            var match = ShortcutSnapshotService.MatchKey(this, snapshot);
+            var visibleEntry = match.BestVisibleEntry;
+            if (visibleEntry != null && visibleEntry.IsVisible && visibleEntry.ButtonName != null)
+                return visibleEntry.ButtonName;
+
             if (!ComplainedVisible)
             {
                 ComplainedVisible = true;
@@ -367,33 +283,6 @@ namespace Glider.Common.Objects
             }
 
             return null;
-        }
-
-        private bool ScanForShortcut(string BaseObjectName, int StartSlotIndex, out string HitName)
-        {
-            HitName = null;
-            for (var index = 0; index < 12; ++index)
-                if (MatchesShortcut(new GShortcut(StartSlotIndex + index)))
-                {
-                    var string_1 = BaseObjectName + "Button" + (index + 1);
-                    var gclass8 = UIElement.smethod_2(string_1);
-                    if (gclass8 != null && gclass8.method_10())
-                    {
-                        HitName = string_1;
-                        return true;
-                    }
-                }
-
-            return false;
-        }
-
-        public bool MatchesShortcut(GShortcut gshortcut_0)
-        {
-            return (gshortcut_0.ShortcutValue == SIM &&
-                    ((gshortcut_0.ShortcutType == GShortcutType.Macro && KType == GKeyType.Macro) ||
-                     (gshortcut_0.ShortcutType == GShortcutType.Item && KType == GKeyType.ItemDefID))) ||
-                   (gshortcut_0.ShortcutValue == LiveSIM && gshortcut_0.ShortcutType == GShortcutType.Spell &&
-                    KType == GKeyType.SpellID);
         }
     }
 }

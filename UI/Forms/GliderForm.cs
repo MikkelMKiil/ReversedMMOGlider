@@ -104,6 +104,7 @@ public class GliderForm : Form, Logger.IUiSink
     private ToolStripMenuItem alwaysOnTopToolStripMenuItem1;
     private ToolStripMenuItem minimizeToTrayToolStripMenuItem;
     private ToolStripMenuItem verboseMainLoopLoggingToolStripMenuItem;
+    private ToolStripMenuItem verboseShortcutDetectionToolStripMenuItem;
     private ToolStripMenuItem logMemoryToolStripMenuItem;
     private ToolStripMenuItem exitToolStripMenuItem1;
     private ToolStripSeparator toolStripSeparator1;
@@ -166,6 +167,7 @@ public class GliderForm : Form, Logger.IUiSink
             this.alwaysOnTopToolStripMenuItem1.Checked = true;
         }
         this.verboseMainLoopLoggingToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("VerboseMainLoopLogging");
+        this.verboseShortcutDetectionToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("VerboseShortcutDetection");
         this.logMemoryToolStripMenuItem.Checked = ConfigManager.gclass61_0.method_5("Log_Memory");
         if (!ConfigManager.gclass61_0.bool_0)
             GameMemoryAccess.IsWindowVisible((Control)this, "Glider.chm", HelpNavigator.Topic, (object)"Welcome.html");
@@ -377,6 +379,7 @@ public class GliderForm : Form, Logger.IUiSink
         this.alwaysOnTopToolStripMenuItem1 = new ToolStripMenuItem();
         this.minimizeToTrayToolStripMenuItem = new ToolStripMenuItem();
         this.verboseMainLoopLoggingToolStripMenuItem = new ToolStripMenuItem();
+        this.verboseShortcutDetectionToolStripMenuItem = new ToolStripMenuItem();
         this.logMemoryToolStripMenuItem = new ToolStripMenuItem();
         this.toolStripSeparator1 = new ToolStripSeparator();
         this.exitToolStripMenuItem1 = new ToolStripMenuItem();
@@ -939,17 +942,18 @@ public class GliderForm : Form, Logger.IUiSink
         this.exitToolStripMenuItem.Size = new Size(148, 22);
         this.exitToolStripMenuItem.Text = "Exit";
         this.exitToolStripMenuItem.Click += new EventHandler(this.exitToolStripMenuItem_Click);
-        this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[6]
+                this.ContextMenuStripWindow.Items.AddRange(new ToolStripItem[7]
         {
       (ToolStripItem) this.alwaysOnTopToolStripMenuItem1,
       (ToolStripItem) this.minimizeToTrayToolStripMenuItem,
       (ToolStripItem) this.verboseMainLoopLoggingToolStripMenuItem,
+            (ToolStripItem) this.verboseShortcutDetectionToolStripMenuItem,
       (ToolStripItem) this.logMemoryToolStripMenuItem,
       (ToolStripItem) this.toolStripSeparator1,
       (ToolStripItem) this.exitToolStripMenuItem1
         });
         this.ContextMenuStripWindow.Name = "ContextMenuStripWindow";
-        this.ContextMenuStripWindow.Size = new Size(220, 120);
+                this.ContextMenuStripWindow.Size = new Size(220, 142);
         this.alwaysOnTopToolStripMenuItem1.Name = "alwaysOnTopToolStripMenuItem1";
         this.alwaysOnTopToolStripMenuItem1.Size = new Size(160, 22);
         this.alwaysOnTopToolStripMenuItem1.Text = "Always on top";
@@ -963,6 +967,11 @@ public class GliderForm : Form, Logger.IUiSink
         this.verboseMainLoopLoggingToolStripMenuItem.Size = new Size(219, 22);
         this.verboseMainLoopLoggingToolStripMenuItem.Text = "Verbose main loop logging";
         this.verboseMainLoopLoggingToolStripMenuItem.Click += new EventHandler(this.verboseMainLoopLoggingToolStripMenuItem_Click);
+        this.verboseShortcutDetectionToolStripMenuItem.CheckOnClick = true;
+        this.verboseShortcutDetectionToolStripMenuItem.Name = "verboseShortcutDetectionToolStripMenuItem";
+        this.verboseShortcutDetectionToolStripMenuItem.Size = new Size(219, 22);
+        this.verboseShortcutDetectionToolStripMenuItem.Text = "Verbose shortcut detection";
+        this.verboseShortcutDetectionToolStripMenuItem.Click += new EventHandler(this.verboseShortcutDetectionToolStripMenuItem_Click);
         this.logMemoryToolStripMenuItem.CheckOnClick = true;
         this.logMemoryToolStripMenuItem.Name = "logMemoryToolStripMenuItem";
         this.logMemoryToolStripMenuItem.Size = new Size(219, 22);
@@ -2222,6 +2231,15 @@ public class GliderForm : Form, Logger.IUiSink
         bool isEnabled = this.verboseMainLoopLoggingToolStripMenuItem.Checked;
         ConfigManager.gclass61_0.method_0("VerboseMainLoopLogging", isEnabled.ToString());
         Logger.LogMessage("Verbose main loop logging " + (isEnabled ? "enabled" : "disabled"));
+    }
+
+    private void verboseShortcutDetectionToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        bool isEnabled = this.verboseShortcutDetectionToolStripMenuItem.Checked;
+        ConfigManager.gclass61_0.method_0("VerboseShortcutDetection", isEnabled.ToString());
+        Logger.LogMessage("Verbose shortcut detection logging " + (isEnabled ? "enabled" : "disabled"));
+        if (isEnabled)
+            GShortcut.LogShortcutDetectionSnapshot("GliderForm.Toggle", false);
     }
 
     private void logMemoryToolStripMenuItem_Click(object sender, EventArgs e)

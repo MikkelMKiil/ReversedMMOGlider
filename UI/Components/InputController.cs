@@ -61,6 +61,9 @@ public class InputController // Original: InputController
     private static readonly GSpellTimer ActionTimer = new GSpellTimer(1000); // Original: gspellTimer_0
     private static Dictionary<short, short> ActiveKeys = new Dictionary<short, short>();                      // Original: dictionary_0
     private static readonly GameTimer AntiAfkTimer = new GameTimer(11000);   // Original: gclass36_0
+    private static readonly object EscapeHookSuppressionLock = new object();
+    private static int EscapeHookSuppressedUntilTick;
+    private const int EscapeHookSuppressionMs = 500;
 
     private static int LastMouseX; // Original: int_21
     private static int LastMouseY; // Original: int_22
@@ -334,6 +337,27 @@ public class InputController // Original: InputController
         SendKey(virtualKey, true);
         StartupClass.SleepMilliseconds(20); // Hold delay
         SendKey(virtualKey, false);
+    }
+
+    // Internal callers can use this to avoid treating synthetic Escape as a user stop hotkey.
+    public static void TapKeyWithoutHookStop(short virtualKey)
+    {
+        if (virtualKey == (short)VirtualKeyCode.Escape)
+            SuppressEscapeHookStop();
+
+        TapKey(virtualKey);
+    }
+
+    public static bool IsEscapeHookStopSuppressed()
+    {
+        lock (EscapeHookSuppressionLock)
+            return unchecked(EscapeHookSuppressedUntilTick - Environment.TickCount) > 0;
+    }
+
+    private static void SuppressEscapeHookStop()
+    {
+        lock (EscapeHookSuppressionLock)
+            EscapeHookSuppressedUntilTick = unchecked(Environment.TickCount + EscapeHookSuppressionMs);
     }
 
     // Original: smethod_26
