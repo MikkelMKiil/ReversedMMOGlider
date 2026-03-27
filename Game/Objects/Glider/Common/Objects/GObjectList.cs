@@ -1100,7 +1100,7 @@ namespace Glider.Common.Objects
         {
             var all = GetAll(bypassTimer);
             if (all == null || all.Count == 0)
-                return Array.Empty<T>();
+                return new T[0];
 
             var result = new List<T>(all.Count);
             foreach (var gobject in all.Values)
